@@ -1,0 +1,382 @@
+/*     -- GLOSSARY --
+
+    --Active Tickets Table 
+    #q153        TicketID
+    #q138        ReturnButton
+    #q139        CalibrateButton
+    #q141        PrintButton
+	  #q140		HistoryButton
+    #q142        MissingButton
+    #q154        TicketTypeID
+    #q143         TicketNumber
+    #q144        TicketType
+    #q145        Department
+    #q146         MachineName
+    #q147        MachineGroup
+    #q148        OperatorName
+    #q149        CellLeaderName
+    #q150        LastCalDate
+    #q151        Caled By
+    #q152        CalDueDate
+    #q164		 Part Number
+	#q165		 JobLotNumber
+    #q167	     Created Date
+    #q177        PinHistoryTicketID
+	#q175        BinHistoryTicketID
+	#q176        ThreadHistoryTicketID
+
+
+    --CALIBRATE PINS SECTION  (#q25)
+    #q27        CalibratePins_TicketID
+        --PINS TO CALIBRATE TABLE
+        #q34        Result_ID
+        #q84        PinCheckoutDetailID
+		#Field34	Result ID
+        #Field84    Pin Checkout Detail ID
+
+    --CALIBRATE BINS SECTION (#q44)
+    #q45        CalibrateBin_TicketID
+    #q85        CalibrateBin_BinCheckoutDetailID
+    
+    --CALIBRATE THREAD GAGE SECTION (#q59)
+    #q94		CalibrationResultID
+	#q95		ThreadCheckoutDetailID
+
+	--MISSING THREAD GAGES SECTION
+	#Field102	Missing Thread Gage Ticket ID
+
+-------------------------------------------------------------------------------------------------*/
+
+
+
+.gage-table table {
+    width: 1800px;
+    font-size: 12px;
+    padding: 1px;
+}
+
+.gage-table th {
+    font-size: 12px;
+}
+
+.gage-table td input {
+    font-size: 12px;
+    padding: 1px;
+    width: 100%;
+}
+
+.gage-table td select {
+    font-size: 12px;
+    padding: 1px;
+    width: 100%;
+    height: 26px
+}
+
+
+.history-table table {
+    width: 800px;
+    font-size: 12px;
+    padding: 1px;
+}
+
+.history-table th {
+    font-size: 12px;
+}
+
+.history-table td input {
+    font-size: 12px;
+    padding: 1px;
+    width: 100%;
+}
+
+.history-table td select {
+    font-size: 12px;
+    padding: 1px;
+    width: 100%;
+    height: 26px
+}
+
+
+.cf-table .cf-field {
+    padding: 1px;
+    font-size: 12px;
+    width: 100%;
+}
+
+;
+
+.hidden-text {
+    display: none;
+}
+
+.ui-widget {
+    font-size: 10px;
+    width: 1588px;
+}
+
+.ui-tabs-anchor {
+    font-size: 12px;
+}
+
+#q138 label {
+    /*Return Button Column Header*/
+    visibility: hidden;
+}
+
+#q139 label {
+    /*Cal Button Column Header*/
+    visibility: hidden;
+}
+
+#q140 label {
+    /*History Button Column Header*/
+    visibility: hidden;
+}
+
+#q141 label {
+    /*Print Button Column Header*/
+    visibility: hidden;
+}
+
+#q142 label {
+    /*Missing Button Column Header*/
+    visibility: hidden;
+}
+
+
+
+
+#q34, #q153, #q154, #q27, #q45, #q61, #q70, #q84, #q85, #q86, #q94, #q102, #q95, #q177, #q176, #q175 {
+    /*	
+    #q34 = Pins Cal Result_ID 
+	#q153 = TicketID
+	#q154 = TicketTypeID
+	#q27 = CalibratePins_TicketID
+	#q45 = CalibrateBin_TicketID
+	#q61 = CalibrateThreadGage_TicketID
+	#q70 = CalibrateThreadGage_CalibrationResult_ID
+	#q84 = CalibratePin_PinCheckoutDetailID
+	#q85 = CalibrateBin_BinCheckoutDetailID
+	#q86 = CalibrateThreadGage_ThreadCheckoutDetailID
+    #q94 = CalibrationResultID
+    #q95 = ThreadCheckoutDetailID
+    #q102 = MissingTicketID
+    #q177 = PinHistoryTicketID
+    #q176 = ThreadHistoryTicketID
+    #q175 = BinHistoryTicketID
+	*/
+    display: none;
+}
+
+[data-col='q94']: {
+    display: none;
+}
+
+.Gages_TicketID_Column {
+    display: none;
+}
+
+.Gages_TicketTypeID_Column {
+    display: none;
+}
+
+
+.gage-table {
+    visibility: hidden;
+}
+
+
+#pagination {
+    padding-top: 30px;
+}
+
+
+#q143, #q144, #q147, #q146, #q164, #q165 {
+    /*
+  #q1 = TicketNumber
+  #q144 = TicketType
+  #q147 = MachineGroup
+  #q146 = MachineName
+  
+  */
+    width: 100px;
+}
+
+
+#q138, #q140 {
+    /*
+  #q138 = ReturnButton
+  #q140 = HistoryButton
+  */
+    width: 62px;
+}
+
+
+#q142 {
+    /*MissingButton*/
+    width: 60px;
+}
+
+
+#q141 {
+    /*PrintButton*/
+    width: 48px;
+}
+
+
+#q139, #q150, #q152, #q167 {
+    /*
+  #q139 = CalibrateButton
+  #q150 = LastCalDate
+  #q151 = Cal'ed By
+  #q152 = CalDueDate
+  #q167 = Created Date
+  */
+    width: 75px;
+}
+
+
+#q145, #q151 {
+    /*
+  #q145 = Department
+  #q151 = Cal'ed By
+  */
+    width: 110px;
+}
+
+
+#q148, #q149 {
+    /*
+  #q148 = OperatorName
+  #q149 = CellLeaderName
+  */
+    width: 150px;
+}
+
+#q168 {
+    width: 300px;
+}
+
+#q91 {
+    width: 400px;
+}
+
+#q25, #q44, #q59, #q97 {
+    /*
+  Calibrate Pins Section
+  Calibrate Bin Section
+  Calibrate Thread Gage Section
+  Missing Thread Gage Section
+  */
+    width: 800px;
+}
+
+.ReturnButton input[type=text] {
+    display: none;
+}
+
+.HistoryButton input[type=text] {
+    display: none;
+}
+
+.CalibrateButton input[type=text] {
+    display: none;
+}
+
+.PrintButton input[type=text] {
+    display: none;
+}
+
+.MissingButton input[type=text] {
+    display: none;
+}
+
+.gobackbutton {
+    display: none;
+}
+
+[id^="Field34"] {
+    /*Calibrate Pins_Result ID*/
+    display: none;
+}
+
+[id^="Field84"] {
+    /*Calibrate Pins_Pin Checkout Detail ID*/
+    display: none;
+}
+
+[id^="Field94"] {
+    /*Calibrate Threads_Thread Result ID*/
+    display: none;
+}
+
+td[data-col="q95"] {
+    display: none;
+}
+
+[id^="Field91"] {
+    /*Calibrate Threads_Cal Result*/
+    width: 100%;
+}
+
+[id^="Field33"] {
+    /*Calibrate Pins_Cal Result*/
+    width: 100%;
+}
+
+#ticket-title {
+    font-family: "Montserrat", sans-serif !important;
+    font-weight: 500 !important;
+    padding: 0px !important;
+    font-size: 20px !important;
+    width: 250px !important;
+    background-color: #FFF !important;
+    border-width: 0px !important;
+    text-align: center !important;
+}
+
+#ticket-barcode {
+    font-family: "Libre Barcode 128" !important;
+    font-weight: 400 !important;
+    font-style: normal !important;
+    font-size: 45px !important;
+    height: 30px !important;
+    background-color: #FFF !important;
+    border-width: 0px !important;
+    width: 250px !important;
+    text-align: center !important;
+}
+
+
+#print_output ul li {
+    padding: 0px !important;
+}
+
+#print_output label {
+    font-family: "Montserrat", sans-serif !important;
+    font-size: 12px !important;
+    width: 100px !important;
+    padding 0px !important;
+    height: 18px !important;
+    margin-bottom 0px;
+}
+
+#print_output .cf-medium {
+    font-family: "Montserrat", sans-serif !important;
+    font-size: 12px !important;
+    width: 150px !important;
+    padding: 0px !important;
+    border-width: 0 !important;
+}
+
+
+#print_output > ul li.form-q {
+    padding: 0px 0px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    margin: 0px !important;
+}
+
+#print_output {
+    display: none
+}
