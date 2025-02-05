@@ -1,6 +1,4 @@
-﻿drop  PROCEDURE spTIME_GetTimeEntriesForDate
-GO
-CREATE PROCEDURE [dbo].spTIME_GetTimeEntriesForDate
+﻿CREATE PROCEDURE [dbo].spTIME_GetTimeEntriesForDate
 	@site_id smallint = 0,
 	@assignee_id int = 0,
 	@time_entry_date varchar(12),
@@ -37,9 +35,7 @@ AS
 								qryActiveTasksByPriority.ScheduledDueDate, 
 								qryActiveTasksByPriority.DueDate 
 								FROM tblTaskTimeEntry INNER JOIN qryActiveTasksByPriority 
-								ON tblTaskTimeEntry.TaskID = qryActiveTasksByPriority.TaskID WHERE qryActiveTasksByPriority.SiteID = ' + Cast(@site_id as varchar)
-
-	  SET @sql = @sql + ' AND tblTaskTimeEntry.EntryDate = ''' + @time_entry_date + ''''
+								ON tblTaskTimeEntry.TaskID = qryActiveTasksByPriority.TaskID WHERE tblTaskTimeEntry.EntryDate = ''' + @time_entry_date + ''''
 		SET @sql = @sql + ' AND qryActiveTasksByPriority.CreatedTimestamp <= ''' + @time_entry_date + ' 11:59:59 PM'''
 		SET @sql = @sql + ' AND tblTaskTimeEntry.AssignedToID = ' + Cast(@assignee_id as varchar)
 
@@ -48,10 +44,6 @@ AS
 			
 		IF (@status_id > 0) BEGIN SET @sql = @sql + ' AND qryActiveTasksByPriority.StatusID = ' + Cast(@status_id as varchar) END
 
-    IF (@include_not_scheduled is null or @include_not_scheduled = 0) BEGIN SET @sql = @sql + ' AND StatusID <> 7'; END
-
-		IF @exclude_waiting_on_part = 1 BEGIN SET @sql = @sql + ' AND StatusID <> 3'; END
-
 		IF @tasktype_id > 0 BEGIN SET @sql = @sql + ' AND qryActiveTasksByPriority.TaskTypeID = ' + Cast(@tasktype_id as varchar) END
 
 
@@ -59,12 +51,8 @@ AS
 												qryActiveTasksByPriority.TaskType, qryActiveTasksByPriority.StatusID, 0 AS Hours, 
 												''' + @time_entry_date + ''' AS EntryDate, qryActiveTasksByPriority.Status, 
 												qryActiveTasksByPriority.ScheduledDueDate, qryActiveTasksByPriority.DueDate 
-											  FROM tblTaskTimeEntry INNER JOIN qryActiveTasksByPriority 
-								ON tblTaskTimeEntry.TaskID = qryActiveTasksByPriority.TaskID WHERE qryActiveTasksByPriority.SiteID = ' + Cast(@site_id as varchar)
-
-	  SET @sql = @sql + ' AND tblTaskTimeEntry.EntryDate = ''' + @time_entry_date + ''''
-		SET @sql = @sql + ' AND qryActiveTasksByPriority.CreatedTimestamp <= ''' + @time_entry_date + ' 11:59:59 PM'''
-		SET @sql = @sql + ' AND tblTaskTimeEntry.AssignedToID = ' + Cast(@assignee_id as varchar)
+											  FROM qryActiveTasksByPriority WHERE qryActiveTasksByPriority.CreatedTimestamp <= ''' + @time_entry_date + ' 11:59:59 PM'''
+		SET @sql = @sql + ' AND qryActiveTasksByPriority.AssignedToID = ' + Cast(@assignee_id as varchar)
 
 
 		IF (@task_name <> '') BEGIN SET @sql = @sql + ' AND qryActiveTasksByPriority.TaskName LIKE ''%' + @task_name + '%''' END

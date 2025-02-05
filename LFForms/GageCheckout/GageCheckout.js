@@ -119,8 +119,6 @@ function validateForm(e) {
 
 
   $('.Submit').prop("disabled", false);
-
-
   $('.cell-leader-id input').removeClass('parsley-error');
   $('.pin-table-bin-number input').removeClass('parsley-error');
   $('.thread-gage-table-name input').removeClass('parsley-error');
@@ -150,12 +148,12 @@ function validateForm(e) {
 
   if (ticketType == 1) {
     pinRows.each(function (index) {
-      let pinTypeValue = $(this).find('.pin-table-pin-type select').val;
+      let pinTypeValue = Number($(this).find('.pin-table-pin-type-id input').val());
       let binName = $(this).find('.pin-table-bin-number input');
-      let binId = $(this).find('.pin-table-bin-id input');
       let existingBinTicketNumber = $(this).find('.pin-table-existing-bin-ticket-id input');
-
-      if ((pinTypeValue == 5) && ((binName.val().length > 0) || binName.val() == 0)) {
+      let binID = $(this).find('.pin-table-bin-id input');
+      if ((pinTypeValue == 5) && ((binName.val().length > 0) && binID.val().length == 0)) {
+        console.log('pins!');
         binName.parent().find('#bad-pin-name-error').remove();
         binName.parent().append("<ul id='bad-pin-name-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Invalid Pin Name.</li></ul>");
         binName.addClass('parsley-error');

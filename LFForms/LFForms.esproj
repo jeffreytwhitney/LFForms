@@ -1,5 +1,5 @@
 <Project Sdk="Microsoft.VisualStudio.JavaScript.Sdk/1.0.1738743">
   <ItemGroup>
-    <Folder Include="MPM\" />
+    <Folder Include="MPM\SQL\Stored Procedure\" />
   </ItemGroup>
 </Project>
