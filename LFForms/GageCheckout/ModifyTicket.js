@@ -455,6 +455,7 @@ function showDetails(ticket_id) {
 function validateForm(e) {
   var isValid = true;
   resetValidationErrors();
+
   var actionType = $('.modify-action input').val();
   if (actionType == 1) {
     return;
@@ -474,30 +475,43 @@ function validateForm(e) {
         binName.parent().find('#bad-pin-name-error').remove();
         binName.parent().append("<ul id='bad-pin-name-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Invalid Pin Name.</li></ul>");
         binName.addClass('parsley-error');
-        if (arguments.length === 1) {
-          e.preventDefault();
-          isValid = false;
-        }
+        isValid = false;
       }
       if (existingBinTicketNumber.val().length > 0) {
         binName.parent().find('#preexisting-bin-error').remove();
         binName.parent().append("<ul id='preexisting-bin-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Bin already marked as 'Checked Out'. See Metrology Calibration.</li></ul>");
         binName.addClass('parsley-error');
-
-        if (arguments.length === 1) {
-          e.preventDefault();
-          isValid = false;
-        }
+        isValid = false;
       }
     });
   }
   else if (ticketType == 2) {
-    
+    threadRows.each(function (index) {
+      let threadGageName = $(this).find('.add-thread-gages-table-thread-gage-name input');
+      let threadGageID = $(this).find('.add-thread-gages-table-new-thread-gage-id input');
+      let existingThreadGageTicketNumber = $(this).find('.add-thread-gages-table-existing-thread-gage-id input');
+
+      if ((threadGageID.val().length == 0) && (threadGageName.val().length > 0)) {
+        threadGageName.parent().find('#bad-thread-gage-error').remove();
+        threadGageName.parent().append("<ul id='bad-thread-gage-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Invalid Thread Gage Name.</li></ul>");
+        threadGageName.addClass('parsley-error');
+        isValid = false;
+      }
+      if (existingThreadGageTicketNumber.val().length > 0) {
+        threadGageName.parent().find('#preexisting-thread-gage-error').remove();
+        threadGageName.parent().append("<ul id='preexisting-thread-gage-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Thread Gage already marked as 'Checked Out'. See Metrology Calibration.</li></ul>");
+        threadGageName.addClass('parsley-error');
+        isValid = false;
+      }
+    });
   }
 
   if (isValid == true) {
     $('.modify-action input').val(2);
     $('.print-ticket-id input').val($(".details-ticket-id input").val());
+  }
+  else {
+   e.preventDefault();
   }
 
 
