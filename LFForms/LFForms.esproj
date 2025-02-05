@@ -1,5 +1,15 @@
 <Project Sdk="Microsoft.VisualStudio.JavaScript.Sdk/1.0.1738743">
   <ItemGroup>
-    <Folder Include="MPM\SQL\Stored Procedure\" />
+    <None Remove="MPM\SQL\Stored Procedure\**" />
+    <TypeScriptConfiguration Remove="MPM\SQL\Stored Procedure\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="GageCheckout\Workflows\" />
+    <Folder Include="GageCheckout\SQL\Tables\" />
+    <Folder Include="GageCheckout\SQL\Views\" />
+    <Folder Include="MPM\SQL\Tables\" />
+    <Folder Include="MPM\Workflows\" />
+    <Folder Include="MPM\SQL\Functions\Scalar-valued Functions\" />
+    <Folder Include="MPM\SQL\Views\" />
   </ItemGroup>
 </Project>
