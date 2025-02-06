@@ -1,10 +1,11 @@
-﻿
+﻿Drop PROCEDURE [dbo].[spGetFilteredOperatorList]
+GO
 
 CREATE PROCEDURE [dbo].[spGetFilteredOperatorList]
 	@site_id smallint = 0,
 	@ticket_number varchar(255) = '',
 	@ticket_type_id int = 0,
-	@cell_leader_name varchar(255) = '',
+	@cell_leader_id int = 0,
 	@department_id int = 0,
 	@machine_group_id int = 0,
 	@page_number int = 1
@@ -26,9 +27,9 @@ AS
 				SET @sql = @sql + ' AND TicketTypeID = ' + cast(@ticket_type_id as varchar);
 			END
 
-		if @cell_leader_name <> ''
+		if @cell_leader_id in (Select ID from tlkpCellLeaders)
 			BEGIN
-				SET @sql = @sql + ' AND CellLeaderName = ''' + @cell_leader_name + '''';
+				SET @sql = @sql + ' AND CellLeaderID = ' + cast(@cell_leader_id as varchar);
 			END
 
 		if @department_id in (select id from tlkpDepartment where SiteID = @site_id)

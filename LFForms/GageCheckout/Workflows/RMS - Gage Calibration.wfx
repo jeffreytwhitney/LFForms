@@ -1,0 +1,386 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Designer Version="10.4.3.139">
+    <SequentialWorkflowActivityProxy Type="Laserfiche.Workflow.Activities.Proxies.LfSequentialWorkflowProxy, Laserfiche.Workflow.Designer.Base, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="f9cdccb6-7054-42f0-81a4-dc32fa9096d9" ActivityCountHint="11">
+        <Name>RMS - Gage Calibration</Name>
+        <SafeName>RMSGageCalibration</SafeName>
+        <Enabled>True</Enabled>
+        <Description ShowDescription="null" ShowSummary="null" />
+        <AttachedProperties>
+            <Property Key="ProfileCollection" PropertyType="Profiles">
+                <LinkedProperties Default="">
+                    <LinkedProperty>
+                        <Name>RMS Admin</Name>
+                        <Id>-1</Id>
+                        <Uuid>7ef5645d-da53-4ef5-a033-a5399d799a45</Uuid>
+                        <Offline><ConnectionProfile Version="2" xmlns="http:\laserfiche\workflow\connection"><ProfileId>Czhyvklg/CmxPINkZ86YcqZGgq2Rcvw9</ProfileId><EncryptedData xmlns="http://www.w3/.org/2001/04/xmlenc#"><CipherData><CipherValue>Nkl7IER9GM674EWoZuwtuJyeClwKZL+jUY1uQMumQUctKCkb98ua4ut7Q+KOmXGxmHuGxRkxTsSQCD99fxtSNgKMG9/O3nsuA6ADVFE8FeBBdmT6UjrkcMdcPj/yi94d4Sxx9Yn0V+7jGo53tEJuco0PWG5q6vvrixS57dyPnKA+Kn7QAPVV7jjmljXBFGusWNMKA0FOyRP/Rj1Ztc0+ItJ/8s6aNqrKKVilENwvgRaKjR/2pGTRWwKv2tG5+PR9hzgIJLxOfuLIiJEhB6fvCfmTNQz6W2TtxTcvUC+wYmzW7lpBzTvx1VHB2RH8asMDHnVGP1I4UXTPON9mr+v9EqvsbRz47JZwNFZpjtEdWTi4uzrIBetBejWXAnO9cuWd2FtxDGi4xvlMl3VMA06oJ9CKxVQdOe62AM2AarIrcQVB4F/R/kvFh2vQpHU8K3gKMPiEH2xRTDq6B+/lli8otRa91S4qxzY/SwyFbLhP+St8RJemQt3KIyi5jYu5Zko8OgNBmAxJ8CcyN+1zj0uNrXznoeHpub4leVfFTr43xpVpHzVK/pYMzw1AFKmzyO82lHJpTwakvXbWG5M5YWPThkTmRCq/i4T97/llS21tccJdVY0CgqAG4bmt2nvsJK7gPizKDkEzL+I3NpuVDlTt5q7ieXWF42copJAYJl4W5oOOtE46fMdZor+4I12CcIUosSr/02qqs9G0+qcmlcFm3mq/969XtK9CzNpbiQf/Xddcc0u4q24vGgUyYrdDUO0QEydvGXcq4c82A67M9zkMVsBXow1Vg3BAAVUr8ej1IujKEM2zBKZUeyhgVtR8ZiYkjAeKtIXu5AXroqXuJPwZwys+2fEWZw3ntBNuRvW0dMoJaDqTUlJlsZBMlWVujkrS9v3gc0ngoYuI2RsTWxn244NAF+DdBE+SjQYl1s0NgUfuW+1HwMEKq8tGI1ROcJz6bCjd0pLnRFCnAIddJS+0xO+AVDkA5eQQi8Zg37/xb5Kj5BELUURMIHF3yIN1ip3Ylndt2Mpt/SE=</CipherValue></CipherData></EncryptedData></ConnectionProfile></Offline>
+                    </LinkedProperty>
+                </LinkedProperties>
+            </Property>
+            <Property Key="WorkflowWebServiceCollection" PropertyType="WebServices">
+                <LinkedProperties Default="">
+                    <LinkedProperty ServiceURL="http://rmslf/forms" User="admin" Type="Laserfiche Forms">
+                        <Name>LFForms</Name>
+                        <Id>18</Id>
+                        <Uuid>86dd662c-2548-4155-aecb-fc79e9c466f0</Uuid>
+                        <Offline />
+                    </LinkedProperty>
+                </LinkedProperties>
+            </Property>
+            <Property Key="WorkflowDataSourceCollection" PropertyType="DataSources">
+                <LinkedProperties Default="">
+                    <LinkedProperty>
+                        <Name>GageCheckout</Name>
+                        <Id>46</Id>
+                        <Uuid>d2840a2a-cb9c-46eb-866e-fc2649549246</Uuid>
+                        <Offline />
+                        <Information>
+                            <SourceInformation Flags="OdbcType, ServerDatabase, UseSSPI" Adapter="Sql">
+                                <Host>rms-corplfsql1.cretexinc.com</Host>
+                                <Database>GageCheckout</Database>
+                                <Server />
+                                <User />
+                            </SourceInformation>
+                        </Information>
+                    </LinkedProperty>
+                </LinkedProperties>
+            </Property>
+        </AttachedProperties>
+        <Projects>
+            <CSharpProject />
+            <VBProject />
+        </Projects>
+        <WorkflowBusinessProcessOptions LfProcessId="0" ProfileId="7ef5645d-da53-4ef5-a033-a5399d799a45" Flags="AllowStartingFromClients, CreateBusinessProcessEntity, RecordMilestoneEvents, RecordStepEvents, SetStartingMilestone, SetCompletedMilestone, SetCanceledMilestone" Enabled="false">
+            <Milestones>
+                <Starting>Running</Starting>
+                <Completed>Completed</Completed>
+                <Canceled>Terminated</Canceled>
+            </Milestones>
+            <CustomInstanceName />
+        </WorkflowBusinessProcessOptions>
+        <WorkflowParameters SetOutputValuesViaTokens="true" />
+        <Cultures>
+            <Culture>en-us</Culture>
+        </Cultures>
+        <MetadataStore Attributes="ExpectsStartingEntry, ValidateDesign">
+            <VersionHistory>
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp33AC.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="09/10/2024 20:15:07" EndTime="09/10/2024 20:15:22" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpB2AD.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="09/16/2024 20:06:02" EndTime="09/16/2024 20:25:02" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp3806.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="10/25/2024 04:01:28" EndTime="10/25/2024 04:10:45" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp835A.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="10/25/2024 04:10:45" EndTime="10/25/2024 04:14:21" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp6C25.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="10/27/2024 11:53:01" EndTime="10/27/2024 12:00:40" />
+                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS - Gage Calibration.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/05/2025 14:46:59" EndTime="02/05/2025 14:47:10" />
+            </VersionHistory>
+            <Metadata>
+                <Value Item="Author" Type="String">JTWhitney</Value>
+                <Value Item="PublishedDate" Type="DateTime">2024-10-27T17:00:52.677Z</Value>
+                <Value Item="WorkflowId" Type="Int32">111</Value>
+                <Value Item="WorkflowVersion" Type="Int32">5</Value>
+                <Value Item="WorkflowServerURL" Type="String">RMS-CORPLF1</Value>
+                <Value Item="WorkflowServerId" Type="String">8f6ebc76-1c3a-4b6f-b657-d705dfc3c51f</Value>
+                <Value Item="WorkflowFilePath" Type="String">C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS - Gage Calibration.wfx</Value>
+            </Metadata>
+        </MetadataStore>
+        <Activities>
+            <Activity Type="Laserfiche.Workflow.Activities.Forms.RetrieveFormFieldValueProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="000af53d-5576-4734-a97f-e2c285b31f19">
+                <Name>Retrieve Business Process Variables</Name>
+                <SafeName>RetrieveBusinessProcessVariables</SafeName>
+                <Enabled>True</Enabled>
+                <Description ShowDescription="null" ShowSummary="null">Retrieves the values from a Laserfiche Forms business process instance and stores those values as tokens.</Description>
+                <RetrieveFormFieldValueOptions Id="86dd662c-2548-4155-aecb-fc79e9c466f0" OPT123332="true">
+                    <SubmissionOptions UseStarting="true" SubmissionId="" InstanceId="" UseStartingInstance="true" />
+                    <ProcessOptions ProcessId="42" ProcessName="RMS - Gage Calibration" />
+                    <Fields>
+                        <Attribute AttributeId="2138" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="BinCheckoutDetailID" AttributeName="BinCheckoutDetailID" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2144" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="2126" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Bin Number:" AttributeName="BinNumber" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2132" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="2121" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Department:" AttributeName="Department" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2127" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="2116" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Employee Number:" AttributeName="Employee_Number" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2122" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="2124" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Job/Lot Number:" AttributeName="JobLotNumber" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2130" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="2123" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Machine Name:" AttributeName="MachineName" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2129" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="2115" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="UserName" AttributeName="NetworkUserName" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2121" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="2127" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Notes:" AttributeName="Notes" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2133" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="2122" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Operator Name:" AttributeName="OperatorName" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2128" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="2125" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Part Number:" AttributeName="PartNumber" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2131" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="2417" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Print_TicketID" AttributeName="Print_TicketID" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2423" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="2128" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Table" Label="Pins To Calibrate" AttributeName="Table_PinsToCalibrate" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2134_" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false">
+                            <Choices>
+                                <FormAttributeFieldChoice Label="row 1" Value="row_1" />
+                            </Choices>
+                            <Children>
+                                <Attribute AttributeId="2129" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Pin Diameter" AttributeName="PinDiameter" ParentLabel="Pins To Calibrate" ParentName="Table_PinsToCalibrate" ParentPath="2134_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2134_.2135" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="2130" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Pin Type" AttributeName="PinType" ParentLabel="Pins To Calibrate" ParentName="Table_PinsToCalibrate" ParentPath="2134_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2134_.2136" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="2131" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Radio" Label="Result" AttributeName="PinCalibrationResult" ParentLabel="Pins To Calibrate" ParentName="Table_PinsToCalibrate" ParentPath="2134_" AreChoiceValuesUsed="true" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2134_.2137" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false">
+                                    <Choices>
+                                        <FormAttributeFieldChoice Label="Good" Value="1" />
+                                        <FormAttributeFieldChoice Label="Missing" Value="2" />
+                                        <FormAttributeFieldChoice Label="Returned" Value="3" />
+                                        <FormAttributeFieldChoice Label="Replaced" Value="4" />
+                                    </Choices>
+                                </Attribute>
+                                <Attribute AttributeId="2132" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="PinCheckoutDetailID" AttributeName="PinCheckoutDetailID" ParentLabel="Pins To Calibrate" ParentName="Table_PinsToCalibrate" ParentPath="2134_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2134_.2138" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                            </Children>
+                        </Attribute>
+                        <Attribute AttributeId="2131" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Radio" Label="Result" AttributeName="PinCalibrationResult" ParentLabel="Pins To Calibrate" ParentName="Table_PinsToCalibrate" ParentPath="2134_" AreChoiceValuesUsed="true" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2134_.2137" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false">
+                            <Choices>
+                                <FormAttributeFieldChoice Label="Good" Value="1" />
+                                <FormAttributeFieldChoice Label="Missing" Value="2" />
+                                <FormAttributeFieldChoice Label="Returned" Value="3" />
+                                <FormAttributeFieldChoice Label="Replaced" Value="4" />
+                            </Choices>
+                        </Attribute>
+                        <Attribute AttributeId="2132" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="PinCheckoutDetailID" AttributeName="PinCheckoutDetailID" ParentLabel="Pins To Calibrate" ParentName="Table_PinsToCalibrate" ParentPath="2134_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2134_.2138" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="2129" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Pin Diameter" AttributeName="PinDiameter" ParentLabel="Pins To Calibrate" ParentName="Table_PinsToCalibrate" ParentPath="2134_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2134_.2135" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="2130" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Pin Type" AttributeName="PinType" ParentLabel="Pins To Calibrate" ParentName="Table_PinsToCalibrate" ParentPath="2134_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2134_.2136" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="2133" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Table" Label="Thread Gages:" AttributeName="Table_ThreadGages" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2139_" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false">
+                            <Choices>
+                                <FormAttributeFieldChoice Label="row 1" Value="row_1" />
+                            </Choices>
+                            <Children>
+                                <Attribute AttributeId="2134" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Thread Gage Name:" AttributeName="ThreadGageName" ParentLabel="Thread Gages:" ParentName="Table_ThreadGages" ParentPath="2139_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2139_.2140" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="2135" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Radio" Label="Cal Result" AttributeName="ThreadCalibrationResult" ParentLabel="Thread Gages:" ParentName="Table_ThreadGages" ParentPath="2139_" AreChoiceValuesUsed="true" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2139_.2141" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false">
+                                    <Choices>
+                                        <FormAttributeFieldChoice Label="Replace, Send SOT" Value="1" />
+                                        <FormAttributeFieldChoice Label="Good" Value="2" />
+                                        <FormAttributeFieldChoice Label="Replace, No SOT" Value="3" />
+                                        <FormAttributeFieldChoice Label="Missing" Value="4" />
+                                    </Choices>
+                                </Attribute>
+                                <Attribute AttributeId="2136" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Number" Label="Pitch Diameter" AttributeName="PitchDiameter" ParentLabel="Thread Gages:" ParentName="Table_ThreadGages" ParentPath="2139_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2139_.2142" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="2137" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="ThreadCheckoutDetailID" AttributeName="ThreadCheckoutDetailID" ParentLabel="Thread Gages:" ParentName="Table_ThreadGages" ParentPath="2139_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2139_.2143" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                            </Children>
+                        </Attribute>
+                        <Attribute AttributeId="2136" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Number" Label="Pitch Diameter" AttributeName="PitchDiameter" ParentLabel="Thread Gages:" ParentName="Table_ThreadGages" ParentPath="2139_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2139_.2142" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="2135" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Radio" Label="Cal Result" AttributeName="ThreadCalibrationResult" ParentLabel="Thread Gages:" ParentName="Table_ThreadGages" ParentPath="2139_" AreChoiceValuesUsed="true" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2139_.2141" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false">
+                            <Choices>
+                                <FormAttributeFieldChoice Label="Replace, Send SOT" Value="1" />
+                                <FormAttributeFieldChoice Label="Good" Value="2" />
+                                <FormAttributeFieldChoice Label="Replace, No SOT" Value="3" />
+                                <FormAttributeFieldChoice Label="Missing" Value="4" />
+                            </Choices>
+                        </Attribute>
+                        <Attribute AttributeId="2137" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="ThreadCheckoutDetailID" AttributeName="ThreadCheckoutDetailID" ParentLabel="Thread Gages:" ParentName="Table_ThreadGages" ParentPath="2139_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2139_.2143" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="2134" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Thread Gage Name:" AttributeName="ThreadGageName" ParentLabel="Thread Gages:" ParentName="Table_ThreadGages" ParentPath="2139_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2139_.2140" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="2119" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Ticket_ID" AttributeName="Ticket_ID" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2125" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="2118" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Ticket Number:" AttributeName="Ticket_Number" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2124" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="2120" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Ticket_TypeID" AttributeName="Ticket_TypeID" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2126" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="2414" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Print_TicketTypeID" AttributeName="TicketTypeID" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2420" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="2117" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="UserIsActive" AttributeName="UserIsActive" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2123" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                    </Fields>
+                    <AdditionalVariableOptions>
+                        <RetrievePaymentVariables>false</RetrievePaymentVariables>
+                    </AdditionalVariableOptions>
+                </RetrieveFormFieldValueOptions>
+            </Activity>
+            <Activity Type="Laserfiche.Workflow.Activities.Condition.IfElseConditionProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="999f9b01-5e81-4779-a03e-e9d858d7ead7">
+                <Name>Ticket Type</Name>
+                <SafeName>TicketType</SafeName>
+                <Enabled>True</Enabled>
+                <Description ShowDescription="null" ShowSummary="null">Runs the FIRST branch that has satisfied conditions.</Description>
+                <ProfileId>7ef5645d-da53-4ef5-a033-a5399d799a45</ProfileId>
+                <Activities>
+                    <Activity Type="Laserfiche.Workflow.Activities.Condition.RoutingDecisionBranchProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="0afa01ae-f9ec-4e49-88c3-914dc53257d1">
+                        <Name>Branch_Pin</Name>
+                        <SafeName>Branch_Pin</SafeName>
+                        <Enabled>True</Enabled>
+                        <Description ShowDescription="null" ShowSummary="null">Contains activities that will run if the branch conditions are satisfied.</Description>
+                        <Condition Version="10.4.3.139" Name="" Negated="false" IsConjunction="true" ConditionType="Composite" Description="">
+                            <Conditions>
+                                <Condition ConditionType="Token" Operator="Equal">
+                                    <Token Name="Ticket_TypeID" Length="0" MetaType="String, Field">
+                                        <Activity Display="Retrieve Business Process Variables" Append="true">RetrieveBusinessProcessVariables</Activity>
+                                    </Token>
+                                    <Values>
+                                        <Value>1</Value>
+                                    </Values>
+                                </Condition>
+                            </Conditions>
+                        </Condition>
+                        <Activities>
+                            <Activity Type="Laserfiche.Workflow.Activities.ForEach.ForEachResultActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="9746ba81-7654-4ff2-9dfc-ef8f4c4a3d1f">
+                                <Name>For Each Pin</Name>
+                                <SafeName>ForEachPin</SafeName>
+                                <Enabled>True</Enabled>
+                                <Description ShowDescription="true" ShowSummary="null" />
+                                <Binding Name="Collection">
+                                    <BindingPath Activity="Retrieve Business Process Variables" Property="Attribute:Table_PinsToCalibrate" />
+                                </Binding>
+                                <Activities>
+                                    <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="9be1cff7-2f0f-4016-a2a9-e260c2e029ab">
+                                        <Name>spCalibratePin</Name>
+                                        <SafeName>spCalibratePin</SafeName>
+                                        <Enabled>True</Enabled>
+                                        <Description ShowDescription="null" ShowSummary="null">Performs the specified query in the selected data source.</Description>
+                                        <DataSourceId>d2840a2a-cb9c-46eb-866e-fc2649549246</DataSourceId>
+                                        <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+                                            <CustomQuery>exec spCalibratePin ?, ?, ?</CustomQuery>
+                                            <InputParameter DbType="Int32">
+                                                <Name>?</Name>
+                                                <Value>%(ForEachPin_PinCheckoutDetailID)</Value>
+                                            </InputParameter>
+                                            <InputParameter DbType="Int32">
+                                                <Name>?</Name>
+                                                <Value>%(ForEachPin_PinCalibrationResult)</Value>
+                                            </InputParameter>
+                                            <InputParameter DbType="String">
+                                                <Name>?</Name>
+                                                <Value>%(RetrieveBusinessProcessVariables_Employee_Number)</Value>
+                                            </InputParameter>
+                                        </Criteria>
+                                        <ResultSetSize Rows="ReturnAllRows" Count="2" />
+                                        <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+                                    </Activity>
+                                </Activities>
+                                <FaultHandlers />
+                            </Activity>
+                        </Activities>
+                        <FaultHandlers />
+                    </Activity>
+                    <Activity Type="Laserfiche.Workflow.Activities.Condition.RoutingDecisionBranchProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="3b2c0811-514d-4cd5-a4eb-1e65e0dc0291">
+                        <Name>Branch_Bin</Name>
+                        <SafeName>Branch_Bin</SafeName>
+                        <Enabled>True</Enabled>
+                        <Description ShowDescription="null" ShowSummary="null">Contains activities that will run if the branch conditions are satisfied.</Description>
+                        <Condition Version="10.4.3.139" Name="" Negated="false" IsConjunction="true" ConditionType="Composite" Description="">
+                            <Conditions>
+                                <Condition ConditionType="Token" Operator="Equal">
+                                    <Token Name="Ticket_TypeID" Length="0" MetaType="String, Field">
+                                        <Activity Display="Retrieve Business Process Variables" Append="true">RetrieveBusinessProcessVariables</Activity>
+                                    </Token>
+                                    <Values>
+                                        <Value>2</Value>
+                                    </Values>
+                                </Condition>
+                            </Conditions>
+                        </Condition>
+                        <Activities>
+                            <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="98da9264-2470-4559-9740-a41de064e64d">
+                                <Name>spCalibrateBin</Name>
+                                <SafeName>spCalibrateBin</SafeName>
+                                <Enabled>True</Enabled>
+                                <Description ShowDescription="null" ShowSummary="null">Performs the specified query in the selected data source.</Description>
+                                <DataSourceId>d2840a2a-cb9c-46eb-866e-fc2649549246</DataSourceId>
+                                <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+                                    <CustomQuery>exec spCalibrateBin ?, ?, ?</CustomQuery>
+                                    <InputParameter DbType="Int32">
+                                        <Name>?</Name>
+                                        <Value>%(RetrieveBusinessProcessVariables_BinCheckoutDetailID)</Value>
+                                    </InputParameter>
+                                    <InputParameter DbType="String">
+                                        <Name>?</Name>
+                                        <Value>%(RetrieveBusinessProcessVariables_Notes)</Value>
+                                    </InputParameter>
+                                    <InputParameter DbType="String">
+                                        <Name>?</Name>
+                                        <Value>%(RetrieveBusinessProcessVariables_Employee_Number)</Value>
+                                    </InputParameter>
+                                </Criteria>
+                                <ResultSetSize Rows="ReturnAllRows" Count="2" />
+                                <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+                            </Activity>
+                        </Activities>
+                        <FaultHandlers />
+                    </Activity>
+                    <Activity Type="Laserfiche.Workflow.Activities.Condition.RoutingDecisionBranchProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="6b889a71-4046-4ed7-b872-4733976f8852">
+                        <Name>Branch_ThreadGage</Name>
+                        <SafeName>Branch_ThreadGage</SafeName>
+                        <Enabled>True</Enabled>
+                        <Description ShowDescription="null" ShowSummary="null">Contains activities that will run if the branch conditions are satisfied.</Description>
+                        <Condition Version="10.4.3.139" Name="" Negated="false" IsConjunction="true" ConditionType="Composite" Description="">
+                            <Conditions>
+                                <Condition ConditionType="Token" Operator="Equal">
+                                    <Token Name="Ticket_TypeID" Length="0" MetaType="String, Field">
+                                        <Activity Display="Retrieve Business Process Variables" Append="true">RetrieveBusinessProcessVariables</Activity>
+                                    </Token>
+                                    <Values>
+                                        <Value>3</Value>
+                                    </Values>
+                                </Condition>
+                            </Conditions>
+                        </Condition>
+                        <Activities>
+                            <Activity Type="Laserfiche.Workflow.Activities.ForEach.ForEachResultActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="01796cb1-6571-44df-a1a5-d527ac722def">
+                                <Name>For Each ThreadGage</Name>
+                                <SafeName>ForEachThreadGage</SafeName>
+                                <Enabled>True</Enabled>
+                                <Description ShowDescription="true" ShowSummary="null" />
+                                <Binding Name="Collection">
+                                    <BindingPath Activity="Retrieve Business Process Variables" Property="Attribute:Table_ThreadGages" />
+                                </Binding>
+                                <Activities>
+                                    <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="22ef29ec-e95b-4850-b49b-c24210840a76">
+                                        <Name>spCalibrateThreadGage</Name>
+                                        <SafeName>spCalibrateThreadGage</SafeName>
+                                        <Enabled>True</Enabled>
+                                        <Description ShowDescription="true" ShowSummary="null" />
+                                        <DataSourceId>d2840a2a-cb9c-46eb-866e-fc2649549246</DataSourceId>
+                                        <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+                                            <CustomQuery>exec spCalibrateThreadGage ?, ?, ?, ?</CustomQuery>
+                                            <InputParameter DbType="Int32">
+                                                <Name>?</Name>
+                                                <Value>%(ForEachThreadGage_ThreadCheckoutDetailID)</Value>
+                                            </InputParameter>
+                                            <InputParameter DbType="Int32">
+                                                <Name>?</Name>
+                                                <Value>%(ForEachThreadGage_ThreadCalibrationResult)</Value>
+                                            </InputParameter>
+                                            <InputParameter DbType="Decimal">
+                                                <Name>?</Name>
+                                                <Value>%(ForEachThreadGage_PitchDiameter)</Value>
+                                            </InputParameter>
+                                            <InputParameter DbType="String">
+                                                <Name>?</Name>
+                                                <Value>%(RetrieveBusinessProcessVariables_Employee_Number)</Value>
+                                            </InputParameter>
+                                        </Criteria>
+                                        <ResultSetSize Rows="ReturnAllRows" Count="2" />
+                                        <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+                                    </Activity>
+                                </Activities>
+                                <FaultHandlers />
+                            </Activity>
+                        </Activities>
+                        <FaultHandlers />
+                    </Activity>
+                </Activities>
+                <FaultHandlers />
+            </Activity>
+            <Activity Type="Laserfiche.Workflow.Activities.Tracking.TrackTokenActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="c3b67cfd-5cf2-4a9a-8a81-19cc803be275">
+                <Name>Track Tokens</Name>
+                <SafeName>TrackTokens</SafeName>
+                <Enabled>True</Enabled>
+                <Description ShowDescription="null" ShowSummary="null">Records the values of selected tokens when the workflow runs. You can view these values in the Tokens tab in the workflow's Search Details pane.</Description>
+                <Options TrackTokenManager="true">
+                    <Tokens />
+                </Options>
+            </Activity>
+        </Activities>
+        <FaultHandlers />
+    </SequentialWorkflowActivityProxy>
+    <CanvasUI>
+        <Expanded>True</Expanded>
+        <Activity Name="Retrieve Business Process Variables" Key="000af53d-5576-4734-a97f-e2c285b31f19" />
+        <Activity Name="Ticket Type" Key="999f9b01-5e81-4779-a03e-e9d858d7ead7">
+            <Expanded>True</Expanded>
+            <Activity Name="Branch_Pin" Key="0afa01ae-f9ec-4e49-88c3-914dc53257d1">
+                <Expanded>True</Expanded>
+                <Activity Name="For Each Pin" Key="9746ba81-7654-4ff2-9dfc-ef8f4c4a3d1f">
+                    <Expanded>True</Expanded>
+                    <Activity Name="spCalibratePin" Key="9be1cff7-2f0f-4016-a2a9-e260c2e029ab" />
+                </Activity>
+            </Activity>
+            <Activity Name="Branch_Bin" Key="3b2c0811-514d-4cd5-a4eb-1e65e0dc0291">
+                <Expanded>True</Expanded>
+                <Activity Name="spCalibrateBin" Key="98da9264-2470-4559-9740-a41de064e64d" />
+            </Activity>
+            <Activity Name="Branch_ThreadGage" Key="6b889a71-4046-4ed7-b872-4733976f8852">
+                <Expanded>True</Expanded>
+                <Activity Name="For Each ThreadGage" Key="01796cb1-6571-44df-a1a5-d527ac722def">
+                    <Expanded>True</Expanded>
+                    <Activity Name="spCalibrateThreadGage" Key="22ef29ec-e95b-4850-b49b-c24210840a76" />
+                </Activity>
+            </Activity>
+        </Activity>
+        <Activity Name="Track Tokens" Key="c3b67cfd-5cf2-4a9a-8a81-19cc803be275" />
+        <UseCompactLayout>false</UseCompactLayout>
+        <ZoomLevel>1.0</ZoomLevel>
+    </CanvasUI>
+</Designer>

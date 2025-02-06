@@ -1,5 +1,9 @@
-﻿USE [GageCheckout]
+﻿
+
+USE [GageCheckout]
+
 GO
+
 
 /****** Object: SqlProcedure [dbo].[spAddTicket] Script Date: 2/5/2025 6:03:55 AM ******/
 SET ANSI_NULLS ON
@@ -24,7 +28,7 @@ CREATE PROCEDURE [dbo].[spAddTicket]
 	@department_id					INT,
 	@operator_employee_number		VARCHAR(10),
 	@operator_name					VARCHAR(150),
-	@cell_leader_name				VARCHAR(150),
+	@cell_leader_id				INT,
 	@joblot_number					VARCHAR(50),
 	@part_number					VARCHAR(50),
 	@new_identity					INT OUTPUT,
@@ -41,7 +45,7 @@ BEGIN
 							OperatorEmployeeNumber, 
 							OperatorName, 
 							TicketStatusID, 
-							CellLeaderName,
+							CellLeaderID,
 							JobLotNumber,
 							PartNumber,
 							UpdateUserID ) 
@@ -52,7 +56,7 @@ BEGIN
 							@operator_employee_number,
 							@operator_name,
 							1,
-							@cell_leader_name,
+							@cell_leader_id,
 							@joblot_number,
 							@part_number,
 							@operator_employee_number)

@@ -2,6 +2,8 @@ var departmentMap = new Map();
 var departmentNameMap = new Map();
 var machineGroupMap = new Map();
 var machineGroupNameMap = new Map();
+var cellLeaderMap = new Map();
+var cellLeaderNameMap = new Map();
 
 
 var should_print_receipt = true;
@@ -26,7 +28,7 @@ $(document).ready(function () {
   var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
   $.fn.bootstrapBtn = bootstrapButton;
   
-  $('#q0').append("<div class='hidden-text' id='popUpDiv'></div>");
+  $('#q0').append("<div class='hidden' id='popUpDiv'></div>");
 
   var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
   var printEvent = window[eventMethod];
@@ -48,12 +50,23 @@ $(document).ready(function () {
   });
 
   $(document).on('lookupcomplete', function (e) {
+    if (e.triggerId == 'Field2') {
+      console.log('hey');
+      if ($('#Field2').val()) {
+        if ($('#Field2').val() != "0") {
+          print_receipt();
+        }
+      }
+    }
+
+
     if ($('.pg input').val() == '999') {
       $('.pg input').val(1).change();
     }
 
     loadDepartmentMap();
     loadMachineGroupMap();
+    loadCellLeaderMap();
 
 
     $('.ticket-table-created-on input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
@@ -81,6 +94,7 @@ $(document).ready(function () {
   $(document).on('keyup', '[id^="Field83"]', function () {
     this.value = this.value.toLocaleUpperCase();
   });
+
   $(document).on('keyup', '[id^="Field92"]', function () {
     this.value = this.value.toLocaleUpperCase();
   });
@@ -149,6 +163,16 @@ function callPrevPage() {
 
 
 function callReturnTicket() {
+
+  if ($('.details-modifier-employee-name input').val().length == 0) {
+    $.alert({
+      title: 'Enter Your Employee Number!',
+      content: 'You have to enter your employee number before you can check this ticket in.',
+    });
+    return;
+  }
+
+
   $.confirm({
     title: 'Are you sure?',
     content: 'Are you sure you wish to check this ticket in? It cannot be undone.',
@@ -158,8 +182,9 @@ function callReturnTicket() {
         text: "OK",
         keys: ['enter'],
         action: function () {
-          $('.action').val(1);
-          $('.Submit').click();
+          $('.modify-action input').val(1);
+          $('.print-ticket-id input').val(0).change();
+          $('#form1').submit();
         }
       },
       cancel: function () {
@@ -206,6 +231,9 @@ function filterTicketTable() {
     let machineGroupID = machineGroupNameMap.get(machineGroupFilterVal);
     $('.fmgid input').val(machineGroupID);
   }
+  else {
+    $('.fmgid input').val(null);
+  }
 
   if ((operatorFilterVal != null) && (operatorFilterVal.length > 0)) {
     $('.fopname input').val(operatorFilterVal);
@@ -214,11 +242,13 @@ function filterTicketTable() {
     $('.fopname input').val(null);
   }
 
-  if ((cellLeaderFilterVal != null) && (cellLeaderFilterVal.length > 0)) {
-    $('.fclname input').val(cellLeaderFilterVal);
+  if ((cellLeaderFilterVal != 0) && (cellLeaderFilterVal.length > 0)) {
+    let cellLeaderID = cellLeaderNameMap.get(cellLeaderFilterVal);
+
+    $('.fclid input').val(cellLeaderID);
   }
   else {
-    $('.fclname input').val(null);
+    $('.fclid input').val(0);
   }
 
   $('.ticket-table').hide();
@@ -245,9 +275,9 @@ function generateFilterRow() {
     $("#txtFilter_TicketNumber").dblclick(function () { $("#txtFilter_TicketNumber").val(null).change(); });
     $("#cboFilter_TicketType").dblclick(function () { $("#cboFilter_TicketType").val(null).change(); });
     $("#cboFilter_Department").dblclick(function () { $("#cboFilter_Department").val(null).change(); });
-    $("#cboFilter_MachineGroup").dblclick(function () { $("#cboFilter_MachineGroup").val(0).change(); });
-    $("#cboFilter_Operator").dblclick(function () { $("#cboFilter_Operator").val(0).change(); });
-    $("#cboFilter_CellLeader").dblclick(function () { $("#cboFilter_CellLeader").val(0).change(); });
+    $("#cboFilter_MachineGroup").dblclick(function () { $("#cboFilter_MachineGroup").val(null).change(); });
+    $("#cboFilter_Operator").dblclick(function () { $("#cboFilter_Operator").val(null).change(); });
+    $("#cboFilter_CellLeader").dblclick(function () { $("#cboFilter_CellLeader").val(null).change(); });
   }
 
   if (($(".ticket-type-lookup-cbo select option").length > 0) && ($('#cboFilter_TicketType option' == 0))) {
@@ -318,6 +348,22 @@ function getColumnValueByTaskID(task_id, column_name) {
 function getTicketRowCount() {
   var row_count = $('.ticket-table table tbody tr').length;
   return row_count;
+}
+
+
+function loadCellLeaderMap() {
+  if (cellLeaderMap.keys.length == 0) {
+    var cellLeader_rows = $('.cellleader-lookup-table table tbody tr');
+    if (cellLeader_rows.length == 0) {
+      return;
+    }
+    cellLeader_rows.each(function (index) {
+      cellLeaderID = Number($(this).find('.cellleader-lookup-table-id input').val());
+      cellLeaderName = $(this).find('.cellleader-lookup-table-name input').val();
+      cellLeaderMap.set(cellLeaderID, cellLeaderName);
+      cellLeaderNameMap.set(cellLeaderName, cellLeaderID);
+    });
+  }
 }
 
 
@@ -394,7 +440,7 @@ function reApplyFilterValues() {
   var departmentFilterVal = Number($('.fdid input').val());
   var machineGroupFilterVal = Number($('.fmgid input').val());
   var operatorFilterVal = $('.fopname input').val();
-  var cellLeaderFilterVal = $('.fclname input').val();
+  var cellLeaderFilterVal = Number($('.fclid input').val());
 
   if ((ticketNumberFilterValue != null) && (ticketNumberFilterValue.length > 0)) {
     $('#txtFilter_TicketNumber').val(ticketNumberFilterValue);
@@ -405,21 +451,22 @@ function reApplyFilterValues() {
   }
 
   if (departmentFilterVal != 0) {
-    let departmentID = departmentMap.get(departmentFilterVal);
-    $('#cboFilter_Department').val(departmentID);
+    let departmentName = departmentMap.get(departmentFilterVal);
+    $('#cboFilter_Department').val(departmentName);
   }
 
   if (machineGroupFilterVal != 0) {
-    let machineGroupID = machineGroupMap.get(machineGroupFilterVal);
-    $('#cboFilter_MachineGroup').val(machineGroupID);
+    let machineGroupName = machineGroupMap.get(machineGroupFilterVal);
+    $('#cboFilter_MachineGroup').val(machineGroupName);
   }
 
   if ((operatorFilterVal != null) && (operatorFilterVal.length > 0)) {
     $("#cboFilter_Operator").val(operatorFilterVal);
   }
 
-  if ((cellLeaderFilterVal != null) && (cellLeaderFilterVal.length > 0)) {
-    $("#cboFilter_CellLeader").val(cellLeaderFilterVal);
+  if (cellLeaderFilterVal != 0) {
+    let cellLeaderName = cellLeaderMap.get(cellLeaderFilterVal);
+    $("#cboFilter_CellLeader").val(cellLeaderName);
   }
 }
 
@@ -456,7 +503,7 @@ function validateForm(e) {
   var isValid = true;
   resetValidationErrors();
 
-  var actionType = $('.modify-action input').val();
+  var actionType = Number($('.modify-action input').val());
   if (actionType == 1) {
     return;
   }

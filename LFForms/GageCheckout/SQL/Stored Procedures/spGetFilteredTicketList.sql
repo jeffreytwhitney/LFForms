@@ -1,10 +1,12 @@
-﻿
+﻿DROP PROCEDURE IF EXISTS [dbo].[spGetFilteredTicketList]
+GO
+
 CREATE PROCEDURE [dbo].[spGetFilteredTicketList]
 	@site_id smallint = 0,
 	@ticket_number varchar(255) = '',
 	@ticket_type_id int = 0,
 	@operator_name varchar(255) = '',
-	@cell_leader_name varchar(255) = '',
+	@cell_leader_id int = 0,
 	@department_id int = 0,
 	@machine_group_id int = 0,
 	@page_number int = 1
@@ -33,9 +35,9 @@ AS
 				SET @sql = @sql + ' AND OperatorName = ''' + @operator_name + '''';
 			END
 
-		if @cell_leader_name <> ''
+		if @cell_leader_id in (Select ID from tlkpCellLeaders)
 			BEGIN
-				SET @sql = @sql + ' AND CellLeaderName = ''' + @cell_leader_name + '''';
+				SET @sql = @sql + ' AND CellLeaderID = ' + cast(@cell_leader_id as varchar);
 			END
 
 		if @department_id in (select id from tlkpDepartment where SiteID = @site_id)
@@ -48,7 +50,8 @@ AS
 				SET @sql = @sql + ' AND MachineGroupID = ' + cast(@machine_group_id as varchar);
 			END
 
-		SET @sql = @sql + ' ORDER BY TicketNumber OFFSET ' + cast(@skip_rows as varchar) + ' ROWS FETCH NEXT 25 ROWS ONLY';
-	  EXEC(@sql);
+		SET @sql = @sql + ' ORDER BY ID OFFSET ' + cast(@skip_rows as varchar) + ' ROWS FETCH NEXT 25 ROWS ONLY';
+	  PRInt @sql;
+		EXEC(@sql);
 
 	END

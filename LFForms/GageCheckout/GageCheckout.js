@@ -18,7 +18,7 @@ $('.part-number input').keyup(function () { this.value = this.value.toLocaleUppe
 $('.pin-table-bin-number input').keyup(function () { this.value = this.value.toLocaleUpperCase(); });
 $('.thread-gage-table-name input').keyup(function () { this.value = this.value.toLocaleUpperCase(); });
 
-$('#q0').append("<div class='hidden-text' id='print_output'></div>");
+$('#q0').append("<div class='hidden' id='print_output'></div>");
 
 var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
 var printEvent = window[eventMethod];
