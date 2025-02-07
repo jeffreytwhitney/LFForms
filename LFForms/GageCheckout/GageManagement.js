@@ -1,3 +1,10 @@
+var departmentMap = new Map();
+var departmentNameMap = new Map();
+var machineGroupMap = new Map();
+var machineGroupNameMap = new Map();
+var cellLeaderMap = new Map();
+var cellLeaderNameMap = new Map();
+
 var should_print_receipt = true;
 $.getScript("https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js", function () {
   WebFont.load({
@@ -6,6 +13,7 @@ $.getScript("https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js", f
     }
   });
 });
+
 $(document).ready(function () {
 
   $('.Submit').hide();
@@ -19,19 +27,17 @@ $(document).ready(function () {
   $.fn.bootstrapBtn = bootstrapButton;
 
   $(document).prop('title', 'Gage Maintenance');
-  $('#q0').append("<div class='hidden-text' id='popUpDiv'></div>");
+  $('#q0').append("<div class='hidden' id='popUpDiv'></div>");
 
 
   var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
   var printEvent = window[eventMethod];
   var messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
-
   printEvent(messageEvent, function (e) {
 
     if (e.data === "printme" || e.message === "printme") {
-      console.log('Print Event Called');
-
-      $("#popupIFrame").get(0).contentWindow.print();
+      $("#print-iframe").get(0).contentWindow.print();
+      $('.print-ticket-id input').val(null);
     }
   });
 
@@ -42,12 +48,10 @@ $(document).ready(function () {
     //I don't refresh if you add a note, for example. But if you do anything that will show up on the page, (adding time, cloning a task, etc)
     //then I do a refresh.
     if (event.data == "CloseDialog") {
-      console.log('Task Maintenance closing dialog');
       $("#popupIFrame").dialog("destroy");
       $("#popupIFrame").remove();
     }
     if (event.data == "CloseDialogWithRefresh") {
-      console.log('Task Maintenance closing dialog');
       $("#popupIFrame").dialog("destroy");
       $("#popupIFrame").remove();
       refreshPage();
@@ -57,18 +61,12 @@ $(document).ready(function () {
 
   $(document).on("onloadlookupfinished", function () {
     $('.Submit').hide();
-
+    var sitename = $.cookie('site_name');
+    if (sitename != null) {
+      $('.site-name select').val(sitename).change();
+    }
     generateFormButtons();
-
-    formatDateFields('Field123');
-    formatDateFields('Field124');
-    formatDateFields('Field166');
-
-    $('.gage-table .cf-table_parent').append('<div id="pagination" class="paginationjs-small"></div>');
-    
-    wireupComboBoxEvents();
-
-    $('.gage-table').css("visibility", "visible");
+    $('.ticket-table').show();
 
   });
 
@@ -77,18 +75,35 @@ $(document).ready(function () {
 
     if (e.triggerId == 'Field219') {
       if ($('.print-ticket-id input').val()) {
-        if ($('.print-ticket-id input').val() != "0") {
+        if ($('.print-ticket-id input').val() != null) {
           if ($('.print-ticket-type-id input').val()) {
             print_receipt();
           }
         }
       }
     }
-  })
 
-  $('.ticket-table-created-on input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
-  $('.ticket-table-last-cal input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
-  $('.ticket-table-cal-due-date input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
+
+    if ($('.pg input').val() == '999') {
+      $('.pg input').val(1).change();
+    }
+
+    loadDepartmentMap();
+    loadMachineGroupMap();
+    loadCellLeaderMap();
+
+
+    $('.creation-date-col input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
+    $('.latest-cal-date-col input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
+    $('.cal-due-date-col input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
+
+    generateFilterRow();
+    reApplyFilterValues();
+    generateFormButtons();
+    appendPagination();
+    $('.ticket-table').show();
+
+  });
 
 });
 
@@ -148,7 +163,7 @@ function callCalibrate(ticket_id) {
 }
 
 
-function callHistory(ticket_id) {
+function callDetails(ticket_id) {
 
   var $ticketTypeID = getTicketTypeIDByTicketID(ticket_id);
 
@@ -206,7 +221,8 @@ function callPrevPage() {
 function callPrint(ticket_id) {
   should_print_receipt = true;
   var ticketTypeID = getTicketTypeIDByTicketID(ticket_id);
-  $('.print-ticket-id input').val(ticket_id);
+  var ticketGuid = getTicketGuidByTicketID(ticket_id);
+  $('.print-ticket-id input').val(ticketGuid);
   $('.print-ticket-type-id input').val(ticketTypeID);
   print_receipt();
 }
@@ -263,6 +279,92 @@ function checkPermissions() {
 }
 
 
+function executeIFrameUpdate(ticket_id, fieldToUpdate, fieldValue) {
+
+  if (typeof task_id === 'undefined') {
+    return;
+  }
+  if (typeof fieldToUpdate === 'undefined') {
+    return;
+  }
+  if (typeof fieldValue === 'undefined') {
+    return;
+  }
+
+  console.log('executeIFrameUpdate');
+  console.log(`task_id: ${task_id}`);
+  console.log(`fieldToUpdate: ${fieldToUpdate}`);
+  console.log(`fieldValue: ${fieldValue}`);
+
+  var execute_url = `http://rmslf/Forms/MPM-UpdateTask?tid=${task_id}&ftu=${fieldToUpdate}&fv=${fieldValue}`;
+
+  $("#popupIFrame").remove();
+  $("#popUpDiv").html(`<iframe id='popupIFrame' name='myname' src='${execute_url}'/>`);
+}
+
+
+function filterTicketTable() {
+
+  if ($('#filterRow').length == 0) {
+    return;
+  }
+
+  var ticketNumberFilterValue = $('#txtFilter_TicketNumber').val();
+  var ticketTypeFilterVal = $('#cboFilter_TicketType').val();
+  var departmentFilterVal = $('#cboFilter_Department').val();
+  var machineGroupFilterVal = $('#cboFilter_MachineGroup').val();
+  var operatorFilterVal = $('#cboFilter_Operator').val();
+  var cellLeaderFilterVal = $('#cboFilter_CellLeader').val();
+
+  $('.ftname input').val(ticketNumberFilterValue);
+
+  console.log(`ticketTypeFilterVal:${ticketTypeFilterVal}`);
+
+  if (ticketTypeFilterVal != null) {
+    $('.fttid input').val(ticketTypeFilterVal);
+  }
+  else {
+    $('.fttid input').val(0);
+  }
+
+  if ((departmentFilterVal != 0) && (departmentFilterVal.length > 0)) {
+    let taskDepartmentID = departmentNameMap.get(departmentFilterVal);
+    $('.fdid input').val(taskDepartmentID);
+  }
+  else {
+    $('.fdid input').val(0);
+  }
+
+  if ((machineGroupFilterVal != 0) && (machineGroupFilterVal.length > 0)) {
+    let machineGroupID = machineGroupNameMap.get(machineGroupFilterVal);
+    $('.fmgid input').val(machineGroupID);
+  }
+  else {
+    $('.fmgid input').val(null);
+  }
+
+  if ((operatorFilterVal != null) && (operatorFilterVal.length > 0)) {
+    $('.fopname input').val(operatorFilterVal);
+  }
+  else {
+    $('.fopname input').val(null);
+  }
+
+  if ((cellLeaderFilterVal != 0) && (cellLeaderFilterVal.length > 0)) {
+    let cellLeaderID = cellLeaderNameMap.get(cellLeaderFilterVal);
+    $('.fclid input').val(cellLeaderID);
+  }
+  else {
+    $('.fclid input').val(0);
+  }
+
+  $('.ticket-table').hide();
+  $('.ticket-detail-link').remove();
+  $('.pg input').val(1).change();
+
+}
+
+
 function formatDateFields(selector) {
 
   $(`[id^='${selector}']`).each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
@@ -270,70 +372,217 @@ function formatDateFields(selector) {
 }
 
 
-function generateButtons(buttonSelector, buttonClass, buttonTitle, buttonFunction) {
+function generateTableButtons(buttonSelector, buttonClass, buttonImageClass, buttonTitle, buttonFunction) {
   var selectionString = buttonSelector + " input[type=text]";
   var buttons = $(selectionString);
   buttons.each(function () {
     var btn_value = $(this).val();
-    var btn_html = "<input class='" + buttonClass + "' type='button' value='" + buttonTitle + "' onclick='" + buttonFunction + "(" + btn_value + ")' />";
-    $(this).parent().append(btn_html);
+    var btn_html = `<div class='table-button ui-button ${buttonClass}'><span title='${buttonTitle}' class='ui-button-icon ui-icon ${buttonImageClass}' onclick='${buttonFunction}(${btn_value})'/></div>`
+
+    var has_button = $(this).parent().find(`.${buttonClass}`).length;
+    if (has_button == 0) {
+      $(this).parent().append(btn_html);
+    }
   });
 }
 
 
 function generateFilterRow() {
-  var $filter_row = "<TR id='filterRow'><TD/><TD/><TD/><TD/><TD/><td><input type='text' name='txtFilter_TicketNumber' id='txtFilter_TicketNumber'></td><TD><select name='cboFilter_TicketType' id='cboFilter_TicketType' style='width:100%'/></TD><TD><select name='cboFilter_Department' id='cboFilter_Department' style='width:100%'/></td><TD/><TD><select name='cboFilter_MachineGroup' id='cboFilter_MachineGroup' style='width:100%'/></td><td><select name='cboFilter_Operator' id='cboFilter_Operator'></td><td><select name='cboFilter_CellLeader' id='cboFilter_CellLeader'></td><TD/><TD/><TD/><TD/><TD/><TD/><TD/><TD/><TD/><TD/></TR>";
-  $('.gage-table table tbody tr:first').parent().prepend($filter_row);
-  $("#cboFilter_Department").html($("#Field52").html());
-  $("#cboFilter_TicketType").html($("#Field75").html());
-  $("#cboFilter_MachineGroup").html($("#Field72").html());
-  fillComboBoxWithUniqueValues('#cboFilter_Operator', "Field121");
-  fillComboBoxWithUniqueValues('#cboFilter_CellLeader', "Field122");
 
+  if ($('#filterRow').length == 0) {
+
+    var filter_row = "<TR id='filterRow'><TH/><TH/><TH/><TH/><TH><input type='text' id='txtFilter_TicketNumber'></TH><TH><select id='cboFilter_TicketType'/></TH><TH><select id='cboFilter_Department'/></TH><TH/><TH><select id='cboFilter_MachineGroup'/></TH><TH><select id='cboFilter_Operator'/></TH><TH><select id='cboFilter_CellLeader'/></TH><TH/><TH/><TH/><TH/><TH/><TH/><TH/>"
+    $('.ticket-table table thead').append(filter_row);
+    $("#txtFilter_TicketNumber").on("change", function () { filterTicketTable(); });
+    $("#cboFilter_TicketType").on("change", function () { filterTicketTable(); });
+    $("#cboFilter_Department").on("change", function () { filterTicketTable(); });
+    $("#cboFilter_MachineGroup").on("change", function () { filterTicketTable(); });
+    $("#cboFilter_Operator").on("change", function () { filterTicketTable(); });
+    $("#cboFilter_CellLeader").on("change", function () { filterTicketTable(); });
+
+
+    $("#txtFilter_TicketNumber").dblclick(function () { $("#txtFilter_TicketNumber").val(null).change(); });
+    $("#cboFilter_TicketType").dblclick(function () { $("#cboFilter_TicketType").val(null).change(); });
+    $("#cboFilter_Department").dblclick(function () { $("#cboFilter_Department").val(null).change(); });
+    $("#cboFilter_MachineGroup").dblclick(function () { $("#cboFilter_MachineGroup").val(null).change(); });
+    $("#cboFilter_Operator").dblclick(function () { $("#cboFilter_Operator").val(null).change(); });
+    $("#cboFilter_CellLeader").dblclick(function () { $("#cboFilter_CellLeader").val(null).change(); });
+  }
+
+  if (($(".ticket-type-lookup-cbo select option").length > 0) && ($('#cboFilter_TicketType option' == 0))) {
+    $("#cboFilter_TicketType").html($(".ticket-type-lookup-cbo select").html());
+  }
+
+  if (($(".department-lookup-cbo select option").length > 0) && ($('#cboFilter_Department option' == 0))) {
+    $("#cboFilter_Department").html($(".department-lookup-cbo select").html());
+  }
+
+  if (($(".machine-group-lookup-cbo select option").length > 0) && ($('#cboFilter_MachineGroup option' == 0))) {
+    $("#cboFilter_MachineGroup").html($(".machine-group-lookup-cbo select").html());
+  }
+
+  if (($(".operator-lookup-cbo select option").length > 0) && ($('#cboFilter_Operator option' == 0))) {
+    $("#cboFilter_Operator").html($(".operator-lookup-cbo select").html());
+    $("#cboFilter_Operator").find('option:eq(0)').prop('selected', true);
+  }
+
+  if (($(".cell-leader-lookup-cbo select option").length > 0) && ($('#cboFilter_CellLeader option' == 0))) {
+    $("#cboFilter_CellLeader").html($(".cell-leader-lookup-cbo select").html());
+    $("#cboFilter_CellLeader").find('option:eq(0)').prop('selected', true);
+  }
 }
 
 
 function generateFormButtons() {
-  $('.gage-table table tbody tr').addClass("gage-row");
-  generateButtons(".gage-table-return-button", "return-button", "Return", "callReturn");
-  generateButtons(".gage-table-calibrate-button", "cal-button", "Calibrate", "callCalibrate");
-  generateButtons(".gage-table-history-button", "history-button", "History", "callHistory");
-  generateButtons(".gage-table-print-button", "print-button", "Print", "callPrint");
+
+  generateTableButtons(".ticket-table-return-button", "return-button", "ui-icon-arrowreturn-1-w", "Return", "callReturn");
+  generateTableButtons(".ticket-table-calibrate-button", "cal-button", "ui-icon-wrench", "Calibrate", "callCalibrate");
+  generatePrintButtons();
   generateMissingButtons();
+  generateTicketNumberColumn();
 }
 
 
 function generateMissingButtons() {
-  var missing_buttons = $(".gage-table-missing-button input[type=text]");
+  var missing_buttons = $(".ticket-table-missing-button input[type=text]");
 
   missing_buttons.each(function (index) {
 
     let ticket_id = $(this).val();
     let ticket_type = getTicketTypeIDByTicketID(ticket_id);
     if (ticket_type == "2") {
-      $(this).parent().append("<input class='return' type='button' value='Missing' onclick='callMissing(" + ticket_id + ")' />");
+      let has_button = $(this).parent().find('.missing-button').length;
+      if (has_button == 0) {
+        let btn_html = `<div class='table-button ui-button missing-button'><span title='Missing' class='ui-button-icon ui-icon ui-icon-help' onclick='callMissing(${ticket_id})'/></div>`
+        $(this).parent().append(btn_html);
+      }
     }
   });
+}
+
+
+function generatePrintButtons() {
+  var print_buttons = $(".ticket-table-print-button input[type=text]");
+  var ticket_ids = $(".ticket-id-col input[type=text]");
+  print_buttons.each(function (index) {
+    let ticket_id = ticket_ids[index].value;
+    let has_button = $(this).parent().find('.print-button').length;
+    if (has_button == 0) {
+      let btn_html = `<div class='table-button ui-button print-button'><span title='Print' class='ui-button-icon ui-icon ui-icon-print' onclick='callPrint(${ticket_id})'/></div>`
+      $(this).parent().append(btn_html);
+    }
+  });
+}
+
+
+function generateTicketNumberColumn() {
+  $('.ticket-link').remove();
+  var ticket_numbers = $('.ticket-number-col input[type="text"]');
+  var ticket_ids = $('.ticket-id-col input[type="text"]');
+  ticket_numbers.each(function (index) {
+    let ticket_id = $(ticket_ids[index]).val();
+    let ticket_number = $(this).val();
+    let ticket_number_link = $("<a>", { text: ticket_number, class: 'ticket-link', href: 'javascript:void(0);', onclick: `showDetails(${ticket_id})` });
+    let has_link = $(this).parent().find('.ticket-link').length;
+    if (has_link == 0) {
+      $(this).parent().append(ticket_number_link);
+    }
+  });
+
+}
+
+
+function getTicketGuidByTicketID(ticket_id) {
+  var ticket_guid;
+  var ticket_ids = $(".ticket-id-col input[type=text]");
+  var ticket_guids = $(".ticket-table-print-button input[type=text]");
+
+  ticket_ids.each(function (index) {
+    var row_ticket_id = $(this).val();
+    var row_ticket_guid = ticket_guids[index].value;
+    if (row_ticket_id == ticket_id) {
+      ticket_guid = row_ticket_guid;
+      return;
+    }
+  });
+  return ticket_guid;
+}
+
+
+function getTicketRowCount() {
+  var row_count = $('.ticket-table table tbody tr').length;
+  return row_count;
 }
 
 
 function getTicketTypeIDByTicketID(ticket_id) {
-  var $ticket_typeid;
-  var $ticket_ids = $(".gage-table-hidden table .Gages_TicketID_Column");
+  var ticket_type_id;
+  var ticket_ids = $(".ticket-id-col input[type=text]");
+  var ticket_type_ids = $(".ticket-type-id-col input[type=text]");
 
-  $ticket_ids.each(function (index) {
-    var $row_ticket_id = $(this).find('input[type=text]:first').val();
-    if ($row_ticket_id == ticket_id) {
-      $ticket_typeid = $(this).parent().find(".Gages_TicketTypeID_Column").find('input[type=text]:first').val();
+  ticket_ids.each(function (index) {
+    var row_ticket_id = $(this).val();
+    var row_ticket_type_id = ticket_type_ids[index].value;
+    if (row_ticket_id == ticket_id) {
+      ticket_type_id = row_ticket_type_id;
       return;
     }
   });
-  return $ticket_typeid;
+  return ticket_type_id;
 }
 
 
 function loadiFrame(src) {
-  $("#popUpDiv").html("<iframe id='popupIFrame' name='popupIFrame' src='" + src + "' />");
+  $("#popUpDiv").html("<iframe id='print-iframe' name='print-iframe' src='" + src + "' />");
+}
+
+
+function loadCellLeaderMap() {
+  if (cellLeaderMap.keys.length == 0) {
+    var cellLeader_rows = $('.cellleader-lookup-table table tbody tr');
+    if (cellLeader_rows.length == 0) {
+      return;
+    }
+    cellLeader_rows.each(function (index) {
+      cellLeaderID = Number($(this).find('.cellleader-lookup-table-id input').val());
+      cellLeaderName = $(this).find('.cellleader-lookup-table-name input').val();
+      cellLeaderMap.set(cellLeaderID, cellLeaderName);
+      cellLeaderNameMap.set(cellLeaderName, cellLeaderID);
+    });
+  }
+}
+
+
+function loadDepartmentMap() {
+  if (departmentMap.keys.length == 0) {
+    var department_rows = $('.department-lookup-table table tbody tr');
+    if (department_rows.length == 0) {
+      return;
+    }
+    department_rows.each(function (index) {
+      departmentID = Number($(this).find('.department-lookup-table-id input').val());
+      departmentName = $(this).find('.department-lookup-table-name input').val();
+      departmentMap.set(departmentID, departmentName);
+      departmentNameMap.set(departmentName, departmentID);
+    });
+  }
+}
+
+
+function loadMachineGroupMap() {
+  if (machineGroupMap.keys.length == 0) {
+    var machine_group_rows = $('.machine-group-lookup-table table tbody tr');
+    if (machine_group_rows.length == 0) {
+      return;
+    }
+    machine_group_rows.each(function (index) {
+      machineGroupID = Number($(this).find('.machine-group-lookup-table-id input').val());
+      machineGroupName = $(this).find('.machine-group-lookup-table-name input').val();
+      machineGroupMap.set(machineGroupID, machineGroupName);
+      machineGroupNameMap.set(machineGroupName, machineGroupID);
+    });
+  }
+
 }
 
 
@@ -369,20 +618,18 @@ function print_receipt() {
   var receipt_url_root = "http://" + domain + "/Forms/";
   var receipt_url = "";
 
-
-
   if ($('.print-ticket-type-id input').val() == 1) {
-    receipt_url = receipt_url_root + "PinGageReceipt?TicketID=" + $('.print-ticket-id input').val();
+    receipt_url = receipt_url_root + "PinGageReceipt?guid=" + $('.print-ticket-id input').val();
   }
   if ($('.print-ticket-type-id input').val() == 2) {
-    receipt_url = receipt_url_root + "ThreadReceipt?TicketID=" + $('.print-ticket-id input').val();
+    receipt_url = receipt_url_root + "ThreadReceipt?guid=" + $('.print-ticket-id input').val();
   }
 
   if (should_print_receipt == true) {
     if (receipt_url != "") {
       loadiFrame(receipt_url);
       should_print_receipt == false;
-      $('.print-ticket-id input').val(0).change();
+      $('.print-ticket-id input').val(null).change();
     }
   }
 }
@@ -393,172 +640,128 @@ function reApplyFilterValues() {
     return;
   }
 
-  var taskNameFilterValue = $('.ftname input').val();
-  var projectNameFilterValue = $('.fpname input').val();
-  var projectIDFilterValue = Number($('.fpid input').val());
-
-  var taskTypeFilterVal = Number($('.fttid input').val());
-  var statusFilterVal = Number($('.fsid input').val());
-  var assigneeFilterVal = Number($('.faid input').val());
+  var ticketNumberFilterValue = $('.ftname input').val();
+  var ticketTypeFilterVal = $('.fttid input').val();
   var departmentFilterVal = Number($('.fdid input').val());
-  var qeFilterVal = Number($('.fqeid input').val());
-  var initiatorFilterVal = $('.finitid input').val();
+  var machineGroupFilterVal = Number($('.fmgid input').val());
+  var operatorFilterVal = $('.fopname input').val();
+  var cellLeaderFilterVal = Number($('.fclid input').val());
 
-  if (qeFilterVal != 0) {
-    let qeName = qualityEngineerMap.get(qeFilterVal);
-
-    $('#cboFilter_QE').val(qeName);
+  if ((ticketNumberFilterValue != null) && (ticketNumberFilterValue.length > 0)) {
+    $('#txtFilter_TicketNumber').val(ticketNumberFilterValue);
   }
 
-
-  if (initiatorFilterVal != 0) {
-
-    let initiatorName = initiatorMap.get(initiatorFilterVal);
-
-    $('#cboFilter_Initiator').val(initiatorName);
-  }
-  else {
-
-    $("#cboFilter_Initiator").val($("#cboFilter_Initiator option:first").val());
+  if (ticketTypeFilterVal != 0) {
+    $("#cboFilter_TicketType").val(ticketTypeFilterVal);
   }
 
-  if ((taskNameFilterValue != null) && (taskNameFilterValue.length > 0)) {
-    $('#txtFilter_TaskName').val(taskNameFilterValue);
-  }
-
-  if ((projectNameFilterValue != null) && (projectNameFilterValue.length > 0)) {
-    $('#txtFilter_ProjectName').val(projectNameFilterValue);
-  }
-
-  if (projectIDFilterValue != 0) {
-    $('#cboFilter_TicketNumber').val(projectIDFilterValue);
-  }
-
-
-  if (taskTypeFilterVal != 0) {
-    let taskTypeName = taskTypeMap.get(taskTypeFilterVal);
-    $('#cboFilter_TaskType').val(taskTypeName);
-  }
-  if (statusFilterVal != 0) {
-    let statusName = taskStatusMap.get(statusFilterVal);
-    $('#cboFilter_Status').val(statusName);
-  }
-  if (assigneeFilterVal != 0) {
-
-    let assigneeName = assigneeMap.get(assigneeFilterVal);
-    $('#cboFilter_Assignee').val(assigneeName);
-  }
   if (departmentFilterVal != 0) {
     let departmentName = departmentMap.get(departmentFilterVal);
     $('#cboFilter_Department').val(departmentName);
   }
 
+  if (machineGroupFilterVal != 0) {
+    let machineGroupName = machineGroupMap.get(machineGroupFilterVal);
+    $('#cboFilter_MachineGroup').val(machineGroupName);
+  }
+
+  if ((operatorFilterVal != null) && (operatorFilterVal.length > 0)) {
+    $("#cboFilter_Operator").val(operatorFilterVal);
+  }
+
+  if (cellLeaderFilterVal != 0) {
+    let cellLeaderName = cellLeaderMap.get(cellLeaderFilterVal);
+    $("#cboFilter_CellLeader").val(cellLeaderName);
+  }
 }
 
 
 function refreshPage() {
 
-  var taskNameFilter = $('.ftname input').val();
-  var projectFilter = $('.fpname input').val();
-  var include_NotSched = Number($('.fincns input').val());
-  var exclude_Waiting = Number($('.fexw input').val());
-  var include_Complete = Number($('.finccom input').val());
-  var projectIDFilter = Number($('.fpid input').val());
-  var taskTypeIDFilter = Number($('fttid input').val());
-  var statusIDFilter = Number($('fsid input').val());
-  var assigneeIDFilter = Number($('faid input').val());
-  var departmentIDFilter = Number($('fdid input').val());
-  var taskListPage = Number($('.tasklist-page input').val());
-  var initiatorID = Number($('.finitid input').val());
+//  var taskNameFilter = $('.ftname input').val();
+//  var projectFilter = $('.fpname input').val();
+//  var include_NotSched = Number($('.fincns input').val());
+//  var exclude_Waiting = Number($('.fexw input').val());
+//  var include_Complete = Number($('.finccom input').val());
+//  var projectIDFilter = Number($('.fpid input').val());
+//  var taskTypeIDFilter = Number($('fttid input').val());
+//  var statusIDFilter = Number($('fsid input').val());
+//  var assigneeIDFilter = Number($('faid input').val());
+//  var departmentIDFilter = Number($('fdid input').val());
+//  var taskListPage = Number($('.tasklist-page input').val());
+//  var initiatorID = Number($('.finitid input').val());
 
-  var current_url = window.location.href;
-  if (current_url.includes('?')) {
-    indexOfQuestionMark = current_url.indexOf('?');
-    current_url = current_url.substring(0, indexOfQuestionMark);
-  }
+//  var current_url = window.location.href;
+//  if (current_url.includes('?')) {
+//    indexOfQuestionMark = current_url.indexOf('?');
+//    current_url = current_url.substring(0, indexOfQuestionMark);
+//  }
 
-  if ((taskListPage != null) && (taskListPage != NaN) && (taskListPage > 0)) {
-    current_url = current_url + `?TaskListPage=${taskListPage}`;
-  }
+//  if ((taskListPage != null) && (taskListPage != NaN) && (taskListPage > 0)) {
+//    current_url = current_url + `?TaskListPage=${taskListPage}`;
+//  }
 
-  if ((projectFilter != null) && (projectFilter.length > 0)) {
-    current_url = current_url + `&fpname=${projectFilter}`;
-  }
+//  if ((projectFilter != null) && (projectFilter.length > 0)) {
+//    current_url = current_url + `&fpname=${projectFilter}`;
+//  }
 
-  if ((taskNameFilter != null) && (taskNameFilter.length > 0)) {
-    current_url = current_url + `&ftname=${taskNameFilter}`;
-  }
+//  if ((taskNameFilter != null) && (taskNameFilter.length > 0)) {
+//    current_url = current_url + `&ftname=${taskNameFilter}`;
+//  }
 
-  if ((include_NotSched != null) && (include_NotSched != NaN) && (include_NotSched > 0)) {
-    current_url = current_url + `&fincns=${include_NotSched}`;
-  }
+//  if ((include_NotSched != null) && (include_NotSched != NaN) && (include_NotSched > 0)) {
+//    current_url = current_url + `&fincns=${include_NotSched}`;
+//  }
 
-  if ((exclude_Waiting != null) && (exclude_Waiting != NaN) && (exclude_Waiting > 0)) {
-    current_url = current_url + `&fexw=${exclude_Waiting}`;
-  }
+//  if ((exclude_Waiting != null) && (exclude_Waiting != NaN) && (exclude_Waiting > 0)) {
+//    current_url = current_url + `&fexw=${exclude_Waiting}`;
+//  }
 
-  if ((include_Complete != null) && (include_Complete != NaN) && (include_Complete > 0)) {
-    current_url = current_url + `&finccom=${include_Complete}`;
-  }
+//  if ((include_Complete != null) && (include_Complete != NaN) && (include_Complete > 0)) {
+//    current_url = current_url + `&finccom=${include_Complete}`;
+//  }
 
-  if ((projectIDFilter != null) && (projectIDFilter != NaN) && (projectIDFilter > 0)) {
-    current_url = current_url + `&fpid=${projectIDFilter}`;
-  }
+//  if ((projectIDFilter != null) && (projectIDFilter != NaN) && (projectIDFilter > 0)) {
+//    current_url = current_url + `&fpid=${projectIDFilter}`;
+//  }
 
-  if ((assigneeIDFilter != null) && (assigneeIDFilter != NaN) && (assigneeIDFilter > 0)) {
-    current_url = current_url + `&faid=${assigneeIDFilter}`;
-  }
+//  if ((assigneeIDFilter != null) && (assigneeIDFilter != NaN) && (assigneeIDFilter > 0)) {
+//    current_url = current_url + `&faid=${assigneeIDFilter}`;
+//  }
 
-  if ((statusIDFilter != null) && (statusIDFilter != NaN) && (statusIDFilter > 0)) {
-    current_url = current_url + `&fsid=${statusIDFilter}`;
-  }
+//  if ((statusIDFilter != null) && (statusIDFilter != NaN) && (statusIDFilter > 0)) {
+//    current_url = current_url + `&fsid=${statusIDFilter}`;
+//  }
 
-  if ((taskTypeIDFilter != null) && (taskTypeIDFilter != NaN) && (taskTypeIDFilter > 0)) {
-    current_url = current_url + `&fttid=${taskTypeIDFilter}`;
-  }
+//  if ((taskTypeIDFilter != null) && (taskTypeIDFilter != NaN) && (taskTypeIDFilter > 0)) {
+//    current_url = current_url + `&fttid=${taskTypeIDFilter}`;
+//  }
 
-  if ((departmentIDFilter != null) && (departmentIDFilter != NaN) && (departmentIDFilter > 0)) {
-    current_url = current_url + `&fdid=${departmentIDFilter}`;
-  }
+//  if ((departmentIDFilter != null) && (departmentIDFilter != NaN) && (departmentIDFilter > 0)) {
+//    current_url = current_url + `&fdid=${departmentIDFilter}`;
+//  }
 
-  if ((initiatorID != null) && (initiatorID != NaN) && (initiatorID > 0)) {
-    current_url = current_url + `&finitid=${initiatorID}`;
-  }
+//  if ((initiatorID != null) && (initiatorID != NaN) && (initiatorID > 0)) {
+//    current_url = current_url + `&finitid=${initiatorID}`;
+//  }
 
-  window.location = current_url;
+//  window.location = current_url;
 }
 
 
 function removeAppendedFields() {
   $('#tasklist-pagination').remove();
-  $('.clone-button').remove();
-  $('.project-link').remove();
-  $('.task-link').remove();
-  $('.note-button').remove();
-  $('.time-button').remove();
-  $('.mandate-chk').remove();
-  $('.tasklist-assignee-cbo-col select').off();
-  $('.tasklist-duedate-col input[type="text"]').off();
-  $('.tasklist-status-cbo-col select').off();
-  $('.tasklist-schedduedate-col input[type="text"]').off();
-}
+  $('.table-button').remove();
+  $('.ticket-link').remove();
+  }
 
 
 function resetPageNumber() {
-  $('.tasklist-table').hide();
+  $('.ticket-table').hide();
   removeAppendedFields();
-  $('.tasklist-page input').val(1).change();
+  $('.pg input').val(1).change();
 }
 
 
-function wireupComboBoxEvents() {
-
-  $("#cboFilter_TicketType").on("change", function () { paginateTable(); });
-  $("#cboFilter_Department").on("change", function () { paginateTable(); });
-  $("#cboFilter_MachineGroup").on("change", function () { paginateTable(); });
-  $("#txtFilter_TicketNumber").on("change", function () { paginateTable(); });
-  $("#cboFilter_Operator").on("change", function () { paginateTable(); });
-  $("#cboFilter_CellLeader").on("change", function () { paginateTable(); });
-}
 
 

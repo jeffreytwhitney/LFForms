@@ -1,11 +1,7 @@
-﻿
-
-USE [GageCheckout]
-
+﻿USE [GageCheckout]
 GO
 
-
-/****** Object: SqlProcedure [dbo].[spAddTicket] Script Date: 2/5/2025 6:03:55 AM ******/
+/****** Object: SqlProcedure [dbo].[spAddTicket] Script Date: 2/6/2025 1:11:35 PM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -22,6 +18,7 @@ GO
 
 CREATE PROCEDURE [dbo].[spAddTicket] 
 	@site_id								int,
+	@ticket_guid						varchar(255),
 	@ticket_type_id					INT,
 	@machine_name					VARCHAR(50),
 	@maching_group					INT,
@@ -38,7 +35,7 @@ BEGIN
 
 	SET NOCOUNT ON;
 
-    INSERT INTO tblTicket (	SiteID, TicketTypeID, 
+    INSERT INTO tblTicket (	SiteID, TicketGUID, TicketTypeID, 
 							MachineName, 
 							MachineGroupID, 
 							DepartmentID, 
@@ -49,7 +46,7 @@ BEGIN
 							JobLotNumber,
 							PartNumber,
 							UpdateUserID ) 
-					VALUES (@site_id, @ticket_type_id,
+					VALUES (@site_id, @ticket_guid, @ticket_type_id,
 							@machine_name,
 							@maching_group,
 							@department_id,

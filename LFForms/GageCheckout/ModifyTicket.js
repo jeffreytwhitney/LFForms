@@ -37,7 +37,7 @@ $(document).ready(function () {
 
     if (e.data === "printme" || e.message === "printme") {
       $("#print-iframe").get(0).contentWindow.print();
-      $('.print-ticket-id input').val(0);
+      $('.print-ticket-id input').val(null);
     }
   });
 
@@ -51,9 +51,8 @@ $(document).ready(function () {
 
   $(document).on('lookupcomplete', function (e) {
     if (e.triggerId == 'Field2') {
-      console.log('hey');
       if ($('#Field2').val()) {
-        if ($('#Field2').val() != "0") {
+        if ($('#Field2').val() != null) {
           print_receipt();
         }
       }
@@ -72,7 +71,7 @@ $(document).ready(function () {
     $('.ticket-table-created-on input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
     $('.ticket-table-last-cal input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
     $('.ticket-table-cal-due-date input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
-    generateTaskNumberColumn();
+    generateTicketNumberColumn();
     generateFilterRow();
     reApplyFilterValues();
     appendPagination();
@@ -183,7 +182,7 @@ function callReturnTicket() {
         keys: ['enter'],
         action: function () {
           $('.modify-action input').val(1);
-          $('.print-ticket-id input').val(0).change();
+          $('.print-ticket-id input').val(null).change();
           $('#form1').submit();
         }
       },
@@ -313,7 +312,7 @@ function generateGoBackButtons() {
 }
 
 
-function generateTaskNumberColumn() {
+function generateTicketNumberColumn() {
   $('.ticket-detail-link').remove();
   var ticket_numbers = $('.ticket-table-ticket-number input[type="text"]');
   var ticket_ids = $('.ticket-table-id input[type="text"]');
@@ -414,17 +413,17 @@ function print_receipt() {
 
 
   if ($('.print-ticket-type-id input').val() == 1) {
-    receipt_url = receipt_url_root + "PinGageReceipt?TicketID=" + $('.print-ticket-id input').val();
+    receipt_url = receipt_url_root + "PinGageReceipt?guid=" + $('.print-ticket-id input').val();
   }
   if ($('.print-ticket-type-id input').val() == 2) {
-    receipt_url = receipt_url_root + "ThreadReceipt?TicketID=" + $('.print-ticket-id input').val();
+    receipt_url = receipt_url_root + "ThreadReceipt?guid=" + $('.print-ticket-id input').val();
   }
 
   if (should_print_receipt == true) {
     if (receipt_url != "") {
       loadiFrame(receipt_url);
       should_print_receipt == false;
-      $('.print-ticket-id input').val(0).change();
+      $('.print-ticket-id input').val(null).change();
     }
   }
 }
@@ -555,7 +554,7 @@ function validateForm(e) {
 
   if (isValid == true) {
     $('.modify-action input').val(2);
-    $('.print-ticket-id input').val($(".details-ticket-id input").val());
+    $('.print-ticket-id input').val($('.details-guid input').val());
   }
   else {
    e.preventDefault();

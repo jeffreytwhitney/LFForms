@@ -11,73 +11,72 @@ $(document).ready(function () {
   $(document).prop('title', 'Gage Checkout');
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js');
 
-$('.Submit').click(function (e) { validateForm(e); });
-$('.machine-name input').keyup(function () { this.value = this.value.toLocaleUpperCase(); });
-$('.joblot-number input').keyup(function () { this.value = this.value.toLocaleUpperCase(); });
-$('.part-number input').keyup(function () { this.value = this.value.toLocaleUpperCase(); });
-$('.pin-table-bin-number input').keyup(function () { this.value = this.value.toLocaleUpperCase(); });
-$('.thread-gage-table-name input').keyup(function () { this.value = this.value.toLocaleUpperCase(); });
+  $('.Submit').click(function (e) { validateForm(e); });
+  $('.machine-name input').keyup(function () { this.value = this.value.toLocaleUpperCase(); });
+  $('.joblot-number input').keyup(function () { this.value = this.value.toLocaleUpperCase(); });
+  $('.part-number input').keyup(function () { this.value = this.value.toLocaleUpperCase(); });
+  $('.pin-table-bin-number input').keyup(function () { this.value = this.value.toLocaleUpperCase(); });
+  $('.thread-gage-table-name input').keyup(function () { this.value = this.value.toLocaleUpperCase(); });
 
-$('#q0').append("<div class='hidden' id='print_output'></div>");
+  $('#q0').append("<div class='hidden' id='print_output'></div>");
 
-var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
-var printEvent = window[eventMethod];
-var messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
-printEvent(messageEvent, function (e) {
+  var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
+  var printEvent = window[eventMethod];
+  var messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
+  printEvent(messageEvent, function (e) {
 
-  if (e.data === "printme" || e.message === "printme") {
-    $("#myiframe").get(0).contentWindow.print();
-    $('.print-ticket-id input').val(0);
-  }
-});
+    if (e.data === "printme" || e.message === "printme") {
+      $("#myiframe").get(0).contentWindow.print();
+      $('.print-ticket-id input').val(null);
+    }
+  });
 
-$(document).on('lookupcomplete', function (e) {
-  validateForm();
-  if (e.triggerId == 'Field152') {
-    console.log('hey');
-    if ($('#Field152').val()) {
-      if ($('#Field152').val() != "0") {
-        print_receipt();
+  $(document).on('lookupcomplete', function (e) {
+    validateForm();
+    if (e.triggerId == 'Field152') {
+      if ($('#Field152').val()) {
+        if ($('#Field152').val() != null) {
+          print_receipt();
+        }
       }
     }
-  }
-});
+  });
 
-$(document).on("onloadlookupfinished", function () {
-  var sitename = $.cookie('site_name');
-  if (sitename != null) {
-    $('#Field162').val(sitename).change();
-  }
-});
+  $(document).on("onloadlookupfinished", function () {
+    var sitename = $.cookie('site_name');
+    if (sitename != null) {
+      $('#Field162').val(sitename).change();
+    }
+  });
 
-$('.pin-table-pin-type select').change(function (e) {
+  $('.pin-table-pin-type select').change(function (e) {
 
-  if ($(e.currentTarget).val() == 'BIN') {
-    $(e.currentTarget).closest('tr').find('.pin-table-diameter input').val(1).addClass("ui-state-disabled");
-    $(e.currentTarget).closest('tr').find('.pin-table-number-of-pins input').val(1).addClass("ui-state-disabled");
-  }
-  else {
-    $(e.currentTarget).closest('tr').find('.pin-table-diameter input').removeClass("ui-state-disabled");
-    $(e.currentTarget).closest('tr').find('.pin-table-number-of-pins input').removeClass("ui-state-disabled");
-  }
-});
+    if ($(e.currentTarget).val() == 'BIN') {
+      $(e.currentTarget).closest('tr').find('.pin-table-diameter input').val(1).addClass("ui-state-disabled");
+      $(e.currentTarget).closest('tr').find('.pin-table-number-of-pins input').val(1).addClass("ui-state-disabled");
+    }
+    else {
+      $(e.currentTarget).closest('tr').find('.pin-table-diameter input').removeClass("ui-state-disabled");
+      $(e.currentTarget).closest('tr').find('.pin-table-number-of-pins input').removeClass("ui-state-disabled");
+    }
+  });
 
-$('.ticket-type-radio fieldset input[type="radio"]').change(function (e) {
-  $('.pin-table-bin-number input').removeClass('parsley-error');
-  $('.thread-gage-name input').removeClass('parsley-error');
-  $('#bad-pin-name-error').remove();
-  $('#preexisting-bin-error').remove();
-  $('#bad-thread-gage-error').remove();
-  $('#preexisting-thread-gage-error').remove();
-  $('.pin-table-bin-number input').val('');
-  $('.thread-gage-table-name input').val('');
+  $('.ticket-type-radio fieldset input[type="radio"]').change(function (e) {
+    $('.pin-table-bin-number input').removeClass('parsley-error');
+    $('.thread-gage-name input').removeClass('parsley-error');
+    $('#bad-pin-name-error').remove();
+    $('#preexisting-bin-error').remove();
+    $('#bad-thread-gage-error').remove();
+    $('#preexisting-thread-gage-error').remove();
+    $('.pin-table-bin-number input').val('');
+    $('.thread-gage-table-name input').val('');
 
-});
+  });
 
-$(document).on('change', '#Field162', function () {
-  var sitename = $('#Field162').val();
-  $.cookie('site_name', sitename, { expires: 365, path: '/' });
-});
+  $(document).on('change', '#Field162', function () {
+    var sitename = $('#Field162').val();
+    $.cookie('site_name', sitename, { expires: 365, path: '/' });
+  });
 
 
 });
@@ -97,17 +96,17 @@ function print_receipt() {
 
 
   if ($('.print-ticket-type-id input').val() == 1) {
-    receipt_url = receipt_url_root + "PinGageReceipt?TicketID=" + $('.print-ticket-id input').val();
+    receipt_url = receipt_url_root + "PinGageReceipt?guid=" + $('.print-ticket-id input').val();
   }
   if ($('.print-ticket-type-id input').val() == 2) {
-    receipt_url = receipt_url_root + "ThreadReceipt?TicketID=" + $('.print-ticket-id input').val();
+    receipt_url = receipt_url_root + "ThreadReceipt?guid=" + $('.print-ticket-id input').val();
   }
 
   if (should_print_receipt == true) {
     if (receipt_url != "") {
       loadiFrame(receipt_url);
       should_print_receipt == false;
-      $('.print-ticket-id input').val(0).change();
+      $('.print-ticket-id input').val(null).change();
     }
   }
 }
@@ -115,6 +114,9 @@ function print_receipt() {
 
 function validateForm(e) {
 
+  if (!$('.print-ticket-id input').val()) {
+    $('.print-ticket-id input').val($('.guid input').val());
+  }
 
   $('.Submit').prop("disabled", false);
   $('.cell-leader-id input').removeClass('parsley-error');
