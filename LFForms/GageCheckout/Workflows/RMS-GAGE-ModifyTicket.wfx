@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Designer Version="10.4.3.139">
-    <SequentialWorkflowActivityProxy Type="Laserfiche.Workflow.Activities.Proxies.LfSequentialWorkflowProxy, Laserfiche.Workflow.Designer.Base, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="6f9ada53-7cd2-463e-b934-39c623b235ab" ActivityCountHint="23">
+    <SequentialWorkflowActivityProxy Type="Laserfiche.Workflow.Activities.Proxies.LfSequentialWorkflowProxy, Laserfiche.Workflow.Designer.Base, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="1609df55-67b4-4a33-a497-0c5b234a2979" ActivityCountHint="24">
         <Name>RMS-GAGE-ModifyTicket</Name>
         <SafeName>RMSGAGEModifyTicket</SafeName>
         <Enabled>True</Enabled>
@@ -119,50 +119,50 @@
         </Cultures>
         <MetadataStore Attributes="ExpectsStartingEntry, ValidateDesign">
             <VersionHistory>
-                <Version FileName="C:\Users\meklund\AppData\Local\Temp\2\tmp7E37.tmp" Editor="MEKLUND" Machine="RMS-CORPLF1" StartTime="06/21/2024 04:42:45" EndTime="07/07/2024 04:01:03" />
-                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp904D.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="07/25/2024 07:19:05" EndTime="07/25/2024 07:57:44" />
-                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp48E5.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/15/2024 10:57:27" EndTime="08/15/2024 11:20:40" />
-                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpE089.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/16/2024 12:18:38" EndTime="08/16/2024 12:33:32" />
-                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp2D53.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/16/2024 12:33:32" EndTime="08/16/2024 12:44:47" />
-                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpE50D.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/18/2024 00:10:11" EndTime="08/18/2024 00:25:30" />
-                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpA17D.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/18/2024 20:01:35" EndTime="08/18/2024 20:17:24" />
-                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpB184.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/22/2024 04:12:15" EndTime="08/22/2024 04:54:03" />
-                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp176F.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/22/2024 04:54:03" EndTime="08/22/2024 05:09:47" />
-                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp875B.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/22/2024 05:09:47" EndTime="08/22/2024 05:22:16" />
-                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp41B2.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/23/2024 06:00:28" EndTime="08/23/2024 06:06:42" />
-                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp202D.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/23/2024 14:15:09" EndTime="08/23/2024 14:17:42" />
-                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp4961.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/23/2024 21:46:36" EndTime="08/23/2024 22:38:52" />
-                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp1998.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/25/2024 06:31:27" EndTime="08/25/2024 06:33:41" />
-                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp362B.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/26/2024 01:51:12" EndTime="08/26/2024 03:47:14" />
-                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpF9E6.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/27/2024 07:52:39" EndTime="08/27/2024 08:17:56" />
-                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp9B92.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/27/2024 13:48:41" EndTime="08/27/2024 14:41:39" />
-                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp2F66.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/27/2024 19:49:40" EndTime="08/27/2024 20:18:19" />
-                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpA879.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/27/2024 20:18:19" EndTime="08/27/2024 20:30:51" />
-                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp20CD.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/27/2024 20:30:51" EndTime="08/27/2024 20:44:28" />
-                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpC80A.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/27/2024 20:44:28" EndTime="08/27/2024 20:45:11" />
-                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp17D0.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/27/2024 20:45:11" EndTime="08/27/2024 20:56:27" />
-                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpE9D1.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="09/08/2024 05:39:23" EndTime="09/08/2024 05:43:18" />
-                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpA7A1.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="09/08/2024 10:49:25" EndTime="09/08/2024 10:51:45" />
-                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp5B12.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="09/16/2024 09:24:35" EndTime="09/16/2024 09:35:07" />
-                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp7960.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="09/16/2024 14:51:49" EndTime="09/16/2024 14:54:55" />
-                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp34FA.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="11/12/2024 13:53:17" EndTime="11/12/2024 14:01:44" />
-                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp52EE.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="11/14/2024 23:38:11" EndTime="11/14/2024 23:44:27" />
-                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp311C.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="11/14/2024 23:44:27" EndTime="11/14/2024 23:51:57" />
-                <Version FileName="C:\Users\JTWhitney\OneDrive - Cretex Companies, Inc\Documents\RMS - Gage Checkout.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="01/30/2025 02:35:42" EndTime="01/30/2025 02:36:18" />
-                <Version FileName="C:\Users\JTWhitney\OneDrive - Cretex Companies, Inc\Documents\RMS - Modify Ticket.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/04/2025 05:30:40" EndTime="02/04/2025 06:01:13" />
-                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS - Modify Ticket.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/04/2025 13:44:17" EndTime="02/04/2025 13:44:34" />
-                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS - Modify Ticket.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/04/2025 13:44:34" EndTime="02/04/2025 14:10:01" />
-                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS - Modify Ticket.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/04/2025 14:10:01" EndTime="02/04/2025 14:21:36" />
-                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS - Modify Ticket.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/04/2025 14:21:36" EndTime="02/04/2025 14:46:34" />
-                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS - Modify Ticket.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/04/2025 23:03:43" EndTime="02/04/2025 23:19:51" />
-                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpEF17.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/04/2025 23:19:51" EndTime="02/04/2025 23:19:56" />
-                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp3306.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/04/2025 23:19:56" EndTime="02/04/2025 23:31:08" />
-                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS-GAGE-ModifyTicket.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/04/2025 23:31:08" EndTime="02/04/2025 23:31:18" />
-                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS-GAGE-ModifyTicket.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/05/2025 05:47:51" EndTime="02/05/2025 05:49:37" />
-                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS-GAGE-ModifyTicket.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/05/2025 13:11:30" EndTime="02/05/2025 13:14:36" />
-                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpFA53.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/05/2025 13:14:36" EndTime="02/05/2025 13:14:40" />
-                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpA596.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/07/2025 13:32:10" EndTime="02/07/2025 13:32:33" />
-                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS-GAGE-ModifyTicket.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/07/2025 13:32:33" EndTime="02/07/2025 13:32:55" />
+                <Version FileName="C:\Users\meklund\AppData\Local\Temp\2\tmp7E37.tmp" Editor="MEKLUND" Machine="RMS-CORPLF1" StartTime="06/20/2024 23:42:45" EndTime="07/06/2024 23:01:03" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp904D.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="07/25/2024 02:19:05" EndTime="07/25/2024 02:57:44" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp48E5.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/15/2024 05:57:27" EndTime="08/15/2024 06:20:40" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpE089.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/16/2024 07:18:38" EndTime="08/16/2024 07:33:32" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp2D53.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/16/2024 07:33:32" EndTime="08/16/2024 07:44:47" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpE50D.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/17/2024 19:10:11" EndTime="08/17/2024 19:25:30" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpA17D.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/18/2024 15:01:35" EndTime="08/18/2024 15:17:24" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpB184.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/21/2024 23:12:15" EndTime="08/21/2024 23:54:03" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp176F.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/21/2024 23:54:03" EndTime="08/22/2024 00:09:47" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp875B.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/22/2024 00:09:47" EndTime="08/22/2024 00:22:16" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp41B2.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/23/2024 01:00:28" EndTime="08/23/2024 01:06:42" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp202D.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/23/2024 09:15:09" EndTime="08/23/2024 09:17:42" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp4961.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/23/2024 16:46:36" EndTime="08/23/2024 17:38:52" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp1998.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/25/2024 01:31:27" EndTime="08/25/2024 01:33:41" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp362B.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/25/2024 20:51:12" EndTime="08/25/2024 22:47:14" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpF9E6.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/27/2024 02:52:39" EndTime="08/27/2024 03:17:56" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp9B92.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/27/2024 08:48:41" EndTime="08/27/2024 09:41:39" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp2F66.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/27/2024 14:49:40" EndTime="08/27/2024 15:18:19" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpA879.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/27/2024 15:18:19" EndTime="08/27/2024 15:30:51" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp20CD.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/27/2024 15:30:51" EndTime="08/27/2024 15:44:28" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpC80A.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/27/2024 15:44:28" EndTime="08/27/2024 15:45:11" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp17D0.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/27/2024 15:45:11" EndTime="08/27/2024 15:56:27" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpE9D1.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="09/08/2024 00:39:23" EndTime="09/08/2024 00:43:18" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpA7A1.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="09/08/2024 05:49:25" EndTime="09/08/2024 05:51:45" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp5B12.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="09/16/2024 04:24:35" EndTime="09/16/2024 04:35:07" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp7960.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="09/16/2024 09:51:49" EndTime="09/16/2024 09:54:55" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp34FA.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="11/12/2024 07:53:17" EndTime="11/12/2024 08:01:44" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp52EE.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="11/14/2024 17:38:11" EndTime="11/14/2024 17:44:27" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp311C.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="11/14/2024 17:44:27" EndTime="11/14/2024 17:51:57" />
+                <Version FileName="C:\Users\JTWhitney\OneDrive - Cretex Companies, Inc\Documents\RMS - Gage Checkout.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="01/29/2025 20:35:42" EndTime="01/29/2025 20:36:18" />
+                <Version FileName="C:\Users\JTWhitney\OneDrive - Cretex Companies, Inc\Documents\RMS - Modify Ticket.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/03/2025 23:30:40" EndTime="02/04/2025 00:01:13" />
+                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS - Modify Ticket.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/04/2025 07:44:17" EndTime="02/04/2025 07:44:34" />
+                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS - Modify Ticket.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/04/2025 07:44:34" EndTime="02/04/2025 08:10:01" />
+                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS - Modify Ticket.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/04/2025 08:10:01" EndTime="02/04/2025 08:21:36" />
+                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS - Modify Ticket.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/04/2025 08:21:36" EndTime="02/04/2025 08:46:34" />
+                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS - Modify Ticket.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/04/2025 17:03:43" EndTime="02/04/2025 17:19:51" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpEF17.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/04/2025 17:19:51" EndTime="02/04/2025 17:19:56" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp3306.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/04/2025 17:19:56" EndTime="02/04/2025 17:31:08" />
+                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS-GAGE-ModifyTicket.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/04/2025 17:31:08" EndTime="02/04/2025 17:31:18" />
+                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS-GAGE-ModifyTicket.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/04/2025 23:47:51" EndTime="02/04/2025 23:49:37" />
+                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS-GAGE-ModifyTicket.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/05/2025 07:11:30" EndTime="02/05/2025 07:14:36" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpFA53.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/05/2025 07:14:36" EndTime="02/05/2025 07:14:40" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpA596.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/07/2025 07:32:10" EndTime="02/07/2025 07:32:33" />
+                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS-GAGE-ModifyTicket.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/14/2025 13:32:40" EndTime="02/14/2025 14:02:25" />
             </VersionHistory>
             <Metadata>
                 <Value Item="Author" Type="String">MEKLUND</Value>
@@ -190,10 +190,16 @@
                                 <FormAttributeFieldChoice Label="row 1" Value="row_1" />
                             </Choices>
                             <Children>
-                                <Attribute AttributeId="3019" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="ExistingThreadGageID" AttributeName="ExistingThreadGageID" ParentLabel="Add Thread Gages" ParentName="Add_Thread_Gages" ParentPath="3024_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Modify Ticket" MemberPath="3024_.3025" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
-                                <Attribute AttributeId="3020" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Thread Gage Name" AttributeName="NewThreadGageName" ParentLabel="Add Thread Gages" ParentName="Add_Thread_Gages" ParentPath="3024_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Modify Ticket" MemberPath="3024_.3026" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="3168" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Radio" Label="Daily Cal" AttributeName="NewDailyCal" ParentLabel="Add Thread Gages" ParentName="Add_Thread_Gages" ParentPath="3024_" AreChoiceValuesUsed="true" BoundPropertyName="" FormName="RMS-GAGE-Modify Ticket" MemberPath="3024_.3174" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false">
+                                    <Choices>
+                                        <FormAttributeFieldChoice Label="No" Value="0" />
+                                        <FormAttributeFieldChoice Label="Yes" Value="1" />
+                                    </Choices>
+                                </Attribute>
                                 <Attribute AttributeId="3021" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Description" AttributeName="NewThreadGageDescription" ParentLabel="Add Thread Gages" ParentName="Add_Thread_Gages" ParentPath="3024_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Modify Ticket" MemberPath="3024_.3027" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="3019" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="ExistingThreadGageID" AttributeName="ExistingThreadGageID" ParentLabel="Add Thread Gages" ParentName="Add_Thread_Gages" ParentPath="3024_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Modify Ticket" MemberPath="3024_.3025" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
                                 <Attribute AttributeId="3022" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="NewThreadGageID" AttributeName="NewThreadGageID" ParentLabel="Add Thread Gages" ParentName="Add_Thread_Gages" ParentPath="3024_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Modify Ticket" MemberPath="3024_.3028" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="3020" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Thread Gage Name" AttributeName="NewThreadGageName" ParentLabel="Add Thread Gages" ParentName="Add_Thread_Gages" ParentPath="3024_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Modify Ticket" MemberPath="3024_.3026" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
                             </Children>
                         </Attribute>
                         <Attribute AttributeId="3005" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Table" Label="Add Pins/Bins" AttributeName="AddPinsBinsTable" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Modify Ticket" MemberPath="3011_" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false">
@@ -201,13 +207,13 @@
                                 <FormAttributeFieldChoice Label="row 1" Value="row_1" />
                             </Choices>
                             <Children>
-                                <Attribute AttributeId="3006" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="PinTypeID" AttributeName="PinTypeID" ParentLabel="Add Pins/Bins" ParentName="AddPinsBinsTable" ParentPath="3011_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Modify Ticket" MemberPath="3011_.3012" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
-                                <Attribute AttributeId="3007" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="NewBinID" AttributeName="NewBinID" ParentLabel="Add Pins/Bins" ParentName="AddPinsBinsTable" ParentPath="3011_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Modify Ticket" MemberPath="3011_.3013" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
-                                <Attribute AttributeId="3008" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="ExistingBinID" AttributeName="ExistingBinID" ParentLabel="Add Pins/Bins" ParentName="AddPinsBinsTable" ParentPath="3011_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Modify Ticket" MemberPath="3011_.3014" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
-                                <Attribute AttributeId="3009" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Select" Label="Pin Type" AttributeName="Pin_Type" ParentLabel="Add Pins/Bins" ParentName="AddPinsBinsTable" ParentPath="3011_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Modify Ticket" MemberPath="3011_.3015" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
-                                <Attribute AttributeId="3011" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Number" Label="Number Of Pins" AttributeName="NewNumberOfPins" ParentLabel="Add Pins/Bins" ParentName="AddPinsBinsTable" ParentPath="3011_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Modify Ticket" MemberPath="3011_.3017" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
                                 <Attribute AttributeId="3012" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Bin Number" AttributeName="NewBinNumber" ParentLabel="Add Pins/Bins" ParentName="AddPinsBinsTable" ParentPath="3011_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Modify Ticket" MemberPath="3011_.3018" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="3008" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="ExistingBinID" AttributeName="ExistingBinID" ParentLabel="Add Pins/Bins" ParentName="AddPinsBinsTable" ParentPath="3011_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Modify Ticket" MemberPath="3011_.3014" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="3007" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="NewBinID" AttributeName="NewBinID" ParentLabel="Add Pins/Bins" ParentName="AddPinsBinsTable" ParentPath="3011_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Modify Ticket" MemberPath="3011_.3013" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="3011" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Number" Label="Number Of Pins" AttributeName="NewNumberOfPins" ParentLabel="Add Pins/Bins" ParentName="AddPinsBinsTable" ParentPath="3011_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Modify Ticket" MemberPath="3011_.3017" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
                                 <Attribute AttributeId="3010" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Number" Label="Pin Diameter" AttributeName="NewPinDiameter" ParentLabel="Add Pins/Bins" ParentName="AddPinsBinsTable" ParentPath="3011_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Modify Ticket" MemberPath="3011_.3016" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="3009" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Select" Label="Pin Type" AttributeName="Pin_Type" ParentLabel="Add Pins/Bins" ParentName="AddPinsBinsTable" ParentPath="3011_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Modify Ticket" MemberPath="3011_.3015" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="3006" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="PinTypeID" AttributeName="PinTypeID" ParentLabel="Add Pins/Bins" ParentName="AddPinsBinsTable" ParentPath="3011_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Modify Ticket" MemberPath="3011_.3012" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
                             </Children>
                         </Attribute>
                         <Attribute AttributeId="3002" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Employee Number:" AttributeName="DetailsModifierEmployeeNumber" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Modify Ticket" MemberPath="3008" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
@@ -219,10 +225,12 @@
                                 <FormAttributeFieldChoice Label="row 1" Value="row_1" />
                             </Choices>
                             <Children>
-                                <Attribute AttributeId="2997" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="PinType" AttributeName="ExistingPinType" ParentLabel="Existing Pins/Bins" ParentName="ExistingPinsBinsTable" ParentPath="2999_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Modify Ticket" MemberPath="2999_.3003" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
-                                <Attribute AttributeId="2995" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="PinTypeID" AttributeName="ExistingPinTypeID" ParentLabel="Existing Pins/Bins" ParentName="ExistingPinsBinsTable" ParentPath="2999_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Modify Ticket" MemberPath="2999_.3001" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="2999" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Bin Number" AttributeName="ExistingBinNumber" ParentLabel="Existing Pins/Bins" ParentName="ExistingPinsBinsTable" ParentPath="2999_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Modify Ticket" MemberPath="2999_.3005" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="3001" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="BinID" AttributeName="ExistingBinID" ParentLabel="Existing Pins/Bins" ParentName="ExistingPinsBinsTable" ParentPath="2999_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Modify Ticket" MemberPath="2999_.3007" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
                                 <Attribute AttributeId="3000" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Number Of Pins" AttributeName="ExistingNumberOfPins" ParentLabel="Existing Pins/Bins" ParentName="ExistingPinsBinsTable" ParentPath="2999_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Modify Ticket" MemberPath="2999_.3006" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
                                 <Attribute AttributeId="2998" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="PinDiameter" AttributeName="ExistingPinDiameter" ParentLabel="Existing Pins/Bins" ParentName="ExistingPinsBinsTable" ParentPath="2999_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Modify Ticket" MemberPath="2999_.3004" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="2997" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="PinType" AttributeName="ExistingPinType" ParentLabel="Existing Pins/Bins" ParentName="ExistingPinsBinsTable" ParentPath="2999_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Modify Ticket" MemberPath="2999_.3003" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="2995" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="PinTypeID" AttributeName="ExistingPinTypeID" ParentLabel="Existing Pins/Bins" ParentName="ExistingPinsBinsTable" ParentPath="2999_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Modify Ticket" MemberPath="2999_.3001" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
                                 <Attribute AttributeId="2996" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Radio" Label="Return Individual Pins" AttributeName="ExistingReturnChoice" ParentLabel="Existing Pins/Bins" ParentName="ExistingPinsBinsTable" ParentPath="2999_" AreChoiceValuesUsed="true" BoundPropertyName="" FormName="RMS-GAGE-Modify Ticket" MemberPath="2999_.3002" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false">
                                     <Choices>
                                         <FormAttributeFieldChoice Label="None" Value="0" />
@@ -230,8 +238,6 @@
                                         <FormAttributeFieldChoice Label="All" Value="2" />
                                     </Choices>
                                 </Attribute>
-                                <Attribute AttributeId="2999" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Bin Number" AttributeName="ExistingBinNumber" ParentLabel="Existing Pins/Bins" ParentName="ExistingPinsBinsTable" ParentPath="2999_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Modify Ticket" MemberPath="2999_.3005" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
-                                <Attribute AttributeId="3001" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="BinID" AttributeName="ExistingBinID" ParentLabel="Existing Pins/Bins" ParentName="ExistingPinsBinsTable" ParentPath="2999_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Modify Ticket" MemberPath="2999_.3007" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
                             </Children>
                         </Attribute>
                         <Attribute AttributeId="3013" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Table" Label="Existing Thread Gages" AttributeName="ExistingThreadGages" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Modify Ticket" MemberPath="3019_" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false">
@@ -239,8 +245,13 @@
                                 <FormAttributeFieldChoice Label="row 1" Value="row_1" />
                             </Choices>
                             <Children>
-                                <Attribute AttributeId="3014" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="ThreadGageID" AttributeName="ExistingThreadGageID" ParentLabel="Existing Thread Gages" ParentName="ExistingThreadGages" ParentPath="3019_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Modify Ticket" MemberPath="3019_.3020" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
-                                <Attribute AttributeId="3016" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Thread Gage Name" AttributeName="Thread_Gage_Name" ParentLabel="Existing Thread Gages" ParentName="ExistingThreadGages" ParentPath="3019_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Modify Ticket" MemberPath="3019_.3022" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="3166" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Radio" Label="Daily Cal" AttributeName="DailyCal" ParentLabel="Existing Thread Gages" ParentName="ExistingThreadGages" ParentPath="3019_" AreChoiceValuesUsed="true" BoundPropertyName="" FormName="RMS-GAGE-Modify Ticket" MemberPath="3019_.3172" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false">
+                                    <Choices>
+                                        <FormAttributeFieldChoice Label="No" Value="0" />
+                                        <FormAttributeFieldChoice Label="Yes" Value="1" />
+                                    </Choices>
+                                </Attribute>
+                                <Attribute AttributeId="3167" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="DailyCalValue" AttributeName="DailyCalValue" ParentLabel="Existing Thread Gages" ParentName="ExistingThreadGages" ParentPath="3019_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Modify Ticket" MemberPath="3019_.3173" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
                                 <Attribute AttributeId="3017" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Description" AttributeName="ExistingThreadGageDescription" ParentLabel="Existing Thread Gages" ParentName="ExistingThreadGages" ParentPath="3019_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Modify Ticket" MemberPath="3019_.3023" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
                                 <Attribute AttributeId="3015" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Radio" Label="Return" AttributeName="ReturnChoiceThreadGage" ParentLabel="Existing Thread Gages" ParentName="ExistingThreadGages" ParentPath="3019_" AreChoiceValuesUsed="true" BoundPropertyName="" FormName="RMS-GAGE-Modify Ticket" MemberPath="3019_.3021" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false">
                                     <Choices>
@@ -248,7 +259,16 @@
                                         <FormAttributeFieldChoice Label="Yes" Value="1" />
                                     </Choices>
                                 </Attribute>
+                                <Attribute AttributeId="3016" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Thread Gage Name" AttributeName="Thread_Gage_Name" ParentLabel="Existing Thread Gages" ParentName="ExistingThreadGages" ParentPath="3019_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Modify Ticket" MemberPath="3019_.3022" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="3169" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="ThreadGageDetailID" AttributeName="ThreadGageDetailID" ParentLabel="Existing Thread Gages" ParentName="ExistingThreadGages" ParentPath="3019_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Modify Ticket" MemberPath="3019_.3175" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="3014" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="ThreadGageID" AttributeName="ExistingThreadGageID" ParentLabel="Existing Thread Gages" ParentName="ExistingThreadGages" ParentPath="3019_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Modify Ticket" MemberPath="3019_.3020" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
                             </Children>
+                        </Attribute>
+                        <Attribute AttributeId="3166" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Radio" Label="Daily Cal" AttributeName="DailyCal" ParentLabel="Existing Thread Gages" ParentName="ExistingThreadGages" ParentPath="3019_" AreChoiceValuesUsed="true" BoundPropertyName="" FormName="RMS-GAGE-Modify Ticket" MemberPath="3019_.3172" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false">
+                            <Choices>
+                                <FormAttributeFieldChoice Label="No" Value="0" />
+                                <FormAttributeFieldChoice Label="Yes" Value="1" />
+                            </Choices>
                         </Attribute>
                     </Fields>
                     <AdditionalVariableOptions>
@@ -571,6 +591,30 @@
                                                     <BindingPath Activity="Retrieve Business Process Variables" Property="Attribute:ExistingThreadGages" />
                                                 </Binding>
                                                 <Activities>
+                                                    <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="6fc9c32a-15bb-4014-9da7-4c95e2e407f7">
+                                                        <Name>spUpdateTicketThread</Name>
+                                                        <SafeName>spUpdateTicketThread</SafeName>
+                                                        <Enabled>True</Enabled>
+                                                        <Description ShowDescription="null" ShowSummary="null">Performs the specified query in the selected data source.</Description>
+                                                        <DataSourceId>cd3a829a-c3ec-4c31-b8e6-72714e5d35cd</DataSourceId>
+                                                        <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+                                                            <CustomQuery>spUpdateTicketThread ?, ?, ?</CustomQuery>
+                                                            <InputParameter DbType="Int32">
+                                                                <Name>?</Name>
+                                                                <Value>%(ForEachExistingThreadGage_ThreadGageDetailID)</Value>
+                                                            </InputParameter>
+                                                            <InputParameter DbType="Int16">
+                                                                <Name>?</Name>
+                                                                <Value>%(ForEachExistingThreadGage_DailyCal)</Value>
+                                                            </InputParameter>
+                                                            <InputParameter DbType="String">
+                                                                <Name>?</Name>
+                                                                <Value>%(RetrieveBusinessProcessVariables_DetailsModifierEmployeeNumber)</Value>
+                                                            </InputParameter>
+                                                        </Criteria>
+                                                        <ResultSetSize Rows="ReturnAllRows" Count="2" />
+                                                        <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+                                                    </Activity>
                                                     <Activity Type="Laserfiche.Workflow.Activities.Condition.ConditionalSequenceActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="13a81f3e-b7d0-4950-b0f1-0e4a73e64e3e">
                                                         <Name>Conditional Sequence</Name>
                                                         <SafeName>ConditionalSequence</SafeName>
@@ -743,6 +787,7 @@
                         <Expanded>True</Expanded>
                         <Activity Name="For Each Existing Thread Gage" Key="d96b25e7-0bf7-4c07-92ec-2d5340d70389">
                             <Expanded>True</Expanded>
+                            <Activity Name="spUpdateTicketThread" Key="6fc9c32a-15bb-4014-9da7-4c95e2e407f7" />
                             <Activity Name="Conditional Sequence" Key="13a81f3e-b7d0-4950-b0f1-0e4a73e64e3e">
                                 <Expanded>True</Expanded>
                                 <Activity Name="spReturnThreadGage" Key="c274429a-84ca-48ca-a2be-b2270cefde60" />

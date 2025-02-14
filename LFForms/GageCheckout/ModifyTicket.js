@@ -7,13 +7,6 @@ var cellLeaderNameMap = new Map();
 
 
 var should_print_receipt = true;
-$.getScript("https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js", function () {
-  WebFont.load({
-    google: {
-      families: ['Montserrat', 'Libre Barcode 128']
-    }
-  });
-});
 
 
 $(document).ready(function () {
@@ -75,6 +68,9 @@ $(document).ready(function () {
     generateFilterRow();
     reApplyFilterValues();
     appendPagination();
+    if ($('.details-ticket-type-id input').val() == '2') {
+      setDailyCalValues();
+    }
     $('.ticket-table').show();
 
   });
@@ -85,7 +81,7 @@ $(document).ready(function () {
       $(e.currentTarget).closest('tr').find('.add-pins-bins-table-number-of-pins input').val(1).addClass("ui-state-disabled");
     }
     else {
-      $(e.currentTarget).closest('tr').find('.add-pins-bins-table-diameter input').removeClass("ui-state-disabled");
+      $(e.currentTarget).closest('tr').find('.add-pins-bins-table-diameter input').val(null).removeClass("ui-state-disabled");
       $(e.currentTarget).closest('tr').find('.add-pins-bins-table-number-of-pins input').removeClass("ui-state-disabled");
     }
   });
@@ -261,7 +257,7 @@ function generateFilterRow() {
 
   if ($('#filterRow').length == 0) {
 
-    var filter_row = "<TR id='filterRow'><TH><input type='text' id='txtFilter_TicketNumber'></TH><TH><select id='cboFilter_TicketType'/></TH><TH><select id='cboFilter_Department'/></TH><TH/><TH><select id='cboFilter_MachineGroup'/></TH><TH><select id='cboFilter_Operator'/></TH><TH><select id='cboFilter_CellLeader'/></TH><TH/><TH/><TH/><TH/><TH/><TH/><TH/>"
+    var filter_row = "<TR id='filterRow'><TH><input type='text' id='txtFilter_TicketNumber'></TH><TH><select id='cboFilter_TicketType'/></TH><TH><select id='cboFilter_Department'/></TH><TH/><TH><select id='cboFilter_MachineGroup'/></TH><TH><select id='cboFilter_Operator'/></TH><TH><select id='cboFilter_CellLeader'/></TH><TH/><TH/><TH/><TH/><TH/><TH/>"
     $('.ticket-table table thead').append(filter_row);
     $("#txtFilter_TicketNumber").on("change", function () { filterTicketTable(); });
     $("#cboFilter_TicketType").on("change", function () { filterTicketTable(); });
@@ -488,6 +484,24 @@ function resetValidationErrors() {
   $('#preexisting-thread-gage-error').remove();
 
 
+}
+
+
+function setDailyCalValues() {
+  var dailyCalValues = $('.existing-thread-gages-daily-cal-value input');
+  var dailyCalDisplay = $('.existing-thread-gages-daily-cal fieldset');
+
+  dailyCalValues.each(function (i) {
+    let dailyCalValue = $(this).val();
+    let dailyCalDisplayField = dailyCalDisplay[i];
+    let dailyDisplayInputs = $(dailyCalDisplayField).find('input');
+    dailyDisplayInputs.each(function (ii) {
+      let inputValue = $(this).val();
+      if (dailyCalValue == inputValue) {
+        $(this).attr('checked', 'checked');
+      }
+    });
+  });
 }
 
 

@@ -1,7 +1,7 @@
 ﻿USE [GageCheckout]
 GO
 
-/****** Object: SqlProcedure [dbo].[spCalibratePin] Script Date: 2/7/2025 7:40:31 AM ******/
+/****** Object: SqlProcedure [dbo].[spCalibratePin] Script Date: 2/10/2025 9:49:12 AM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -50,18 +50,7 @@ BEGIN
 					UpdateUserID			= @operator_employee_id,
 					UpdatedTimestamp		= CURRENT_TIMESTAMP
 			WHERE	ID						= @pin_checkout_detail_id
-
-			/* Add Cal info to History table including PinCalibrationID, which is a link to the specific calibration record*/
-			INSERT INTO tblPinCheckoutHistory (	PinCheckoutDetailID, 
-																					RecordEventTypeID, 
-																					PinCalibrationID, 
-																					GageStatusID, 
-																					LastCalibratedBy, 
-																					LastCalibrationDate, 
-																					CalibrationDueDate,
-																					UpdateUserID)
-			Select ID, 3, @calibration_id, GageStatusID, LastCalibratedBy, CURRENT_TIMESTAMP, @calibration_due_date, @operator_employee_id
-			from tblPinCheckoutDetail WHERE	ID = @pin_checkout_detail_id
+			/* The Trigger on tblPinCalibration writes the Pin History Record */
 		END
 	ELSE
 		BEGIN

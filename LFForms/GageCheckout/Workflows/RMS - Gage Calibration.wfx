@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Designer Version="10.4.3.139">
-    <SequentialWorkflowActivityProxy Type="Laserfiche.Workflow.Activities.Proxies.LfSequentialWorkflowProxy, Laserfiche.Workflow.Designer.Base, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="ecb6c61f-0147-4586-a98c-36225b97fc7d" ActivityCountHint="9">
+    <SequentialWorkflowActivityProxy Type="Laserfiche.Workflow.Activities.Proxies.LfSequentialWorkflowProxy, Laserfiche.Workflow.Designer.Base, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="5b8f44bd-4cfb-41c4-957c-c6bd8544daf9" ActivityCountHint="9">
         <Name>RMS - Gage Calibration</Name>
         <SafeName>RMSGageCalibration</SafeName>
         <Enabled>True</Enabled>
@@ -63,13 +63,13 @@
         </Cultures>
         <MetadataStore Attributes="ExpectsStartingEntry, ValidateDesign">
             <VersionHistory>
-                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp33AC.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="09/10/2024 20:15:07" EndTime="09/10/2024 20:15:22" />
-                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpB2AD.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="09/16/2024 20:06:02" EndTime="09/16/2024 20:25:02" />
-                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp3806.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="10/25/2024 04:01:28" EndTime="10/25/2024 04:10:45" />
-                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp835A.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="10/25/2024 04:10:45" EndTime="10/25/2024 04:14:21" />
-                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp6C25.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="10/27/2024 11:53:01" EndTime="10/27/2024 12:00:40" />
-                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpAB3C.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/07/2025 14:08:11" EndTime="02/07/2025 14:42:29" />
-                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS - Gage Calibration.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/07/2025 14:42:29" EndTime="02/07/2025 14:42:50" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp33AC.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="09/10/2024 15:15:07" EndTime="09/10/2024 15:15:22" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpB2AD.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="09/16/2024 15:06:02" EndTime="09/16/2024 15:25:02" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp3806.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="10/24/2024 23:01:28" EndTime="10/24/2024 23:10:45" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp835A.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="10/24/2024 23:10:45" EndTime="10/24/2024 23:14:21" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp6C25.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="10/27/2024 06:53:01" EndTime="10/27/2024 07:00:40" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpAB3C.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/07/2025 08:08:11" EndTime="02/07/2025 08:42:29" />
+                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS - Gage Calibration.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/14/2025 11:02:36" EndTime="02/14/2025 11:07:13" />
             </VersionHistory>
             <Metadata>
                 <Value Item="Author" Type="String">JTWhitney</Value>
@@ -104,8 +104,12 @@
                                 <FormAttributeFieldChoice Label="row 1" Value="row_1" />
                             </Choices>
                             <Children>
+                                <Attribute AttributeId="3053" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Bin Number" AttributeName="BinNumber" ParentLabel="Pins To Calibrate" ParentName="Table_PinsToCalibrate" ParentPath="2134_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2134_.3059" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="3159" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Notes" AttributeName="Notes" ParentLabel="Pins To Calibrate" ParentName="Table_PinsToCalibrate" ParentPath="2134_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2134_.3165" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
                                 <Attribute AttributeId="2129" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Pin Diameter" AttributeName="PinDiameter" ParentLabel="Pins To Calibrate" ParentName="Table_PinsToCalibrate" ParentPath="2134_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2134_.2135" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
                                 <Attribute AttributeId="2130" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Pin Type" AttributeName="PinType" ParentLabel="Pins To Calibrate" ParentName="Table_PinsToCalibrate" ParentPath="2134_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2134_.2136" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="2132" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="PinCheckoutDetailID" AttributeName="PinCheckoutDetailID" ParentLabel="Pins To Calibrate" ParentName="Table_PinsToCalibrate" ParentPath="2134_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2134_.2138" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="3054" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="PinTypeID" AttributeName="PinTypeID" ParentLabel="Pins To Calibrate" ParentName="Table_PinsToCalibrate" ParentPath="2134_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2134_.3060" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
                                 <Attribute AttributeId="2131" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Radio" Label="Result" AttributeName="PinCalibrationResult" ParentLabel="Pins To Calibrate" ParentName="Table_PinsToCalibrate" ParentPath="2134_" AreChoiceValuesUsed="true" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2134_.2137" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false">
                                     <Choices>
                                         <FormAttributeFieldChoice Label="Good" Value="1" />
@@ -114,11 +118,9 @@
                                         <FormAttributeFieldChoice Label="Replaced" Value="4" />
                                     </Choices>
                                 </Attribute>
-                                <Attribute AttributeId="2132" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="PinCheckoutDetailID" AttributeName="PinCheckoutDetailID" ParentLabel="Pins To Calibrate" ParentName="Table_PinsToCalibrate" ParentPath="2134_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2134_.2138" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
-                                <Attribute AttributeId="3054" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="PinTypeID" AttributeName="PinTypeID" ParentLabel="Pins To Calibrate" ParentName="Table_PinsToCalibrate" ParentPath="2134_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2134_.3060" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
-                                <Attribute AttributeId="3053" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Bin Number" AttributeName="BinNumber" ParentLabel="Pins To Calibrate" ParentName="Table_PinsToCalibrate" ParentPath="2134_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2134_.3059" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
                             </Children>
                         </Attribute>
+                        <Attribute AttributeId="3159" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Notes" AttributeName="Notes" ParentLabel="Pins To Calibrate" ParentName="Table_PinsToCalibrate" ParentPath="2134_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2134_.3165" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
                         <Attribute AttributeId="2131" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Radio" Label="Result" AttributeName="PinCalibrationResult" ParentLabel="Pins To Calibrate" ParentName="Table_PinsToCalibrate" ParentPath="2134_" AreChoiceValuesUsed="true" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2134_.2137" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false">
                             <Choices>
                                 <FormAttributeFieldChoice Label="Good" Value="1" />
@@ -135,7 +137,6 @@
                                 <FormAttributeFieldChoice Label="row 1" Value="row_1" />
                             </Choices>
                             <Children>
-                                <Attribute AttributeId="2134" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Thread Gage Name:" AttributeName="ThreadGageName" ParentLabel="Thread Gages:" ParentName="Table_ThreadGages" ParentPath="2139_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2139_.2140" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
                                 <Attribute AttributeId="2135" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Radio" Label="Cal Result" AttributeName="ThreadCalibrationResult" ParentLabel="Thread Gages:" ParentName="Table_ThreadGages" ParentPath="2139_" AreChoiceValuesUsed="true" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2139_.2141" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false">
                                     <Choices>
                                         <FormAttributeFieldChoice Label="Replace, Send SOT" Value="1" />
@@ -145,6 +146,7 @@
                                     </Choices>
                                 </Attribute>
                                 <Attribute AttributeId="2136" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Number" Label="Pitch Diameter" AttributeName="PitchDiameter" ParentLabel="Thread Gages:" ParentName="Table_ThreadGages" ParentPath="2139_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2139_.2142" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="2134" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Thread Gage Name:" AttributeName="ThreadGageName" ParentLabel="Thread Gages:" ParentName="Table_ThreadGages" ParentPath="2139_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2139_.2140" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
                                 <Attribute AttributeId="2137" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="ThreadCheckoutDetailID" AttributeName="ThreadCheckoutDetailID" ParentLabel="Thread Gages:" ParentName="Table_ThreadGages" ParentPath="2139_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Calibration" MemberPath="2139_.2143" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
                             </Children>
                         </Attribute>
@@ -211,7 +213,7 @@
                                         <Description ShowDescription="null" ShowSummary="null">Performs the specified query in the selected data source.</Description>
                                         <DataSourceId>d2840a2a-cb9c-46eb-866e-fc2649549246</DataSourceId>
                                         <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
-                                            <CustomQuery>exec spCalibratePin ?, ?, ?</CustomQuery>
+                                            <CustomQuery>exec spCalibratePin ?, ?, ?, ?</CustomQuery>
                                             <InputParameter DbType="Int32">
                                                 <Name>?</Name>
                                                 <Value>%(ForEachPin_PinCheckoutDetailID)</Value>
@@ -219,6 +221,10 @@
                                             <InputParameter DbType="Int32">
                                                 <Name>?</Name>
                                                 <Value>%(ForEachPin_PinCalibrationResult)</Value>
+                                            </InputParameter>
+                                            <InputParameter DbType="String">
+                                                <Name>?</Name>
+                                                <Value>%(ForEachPin_Notes)</Value>
                                             </InputParameter>
                                             <InputParameter DbType="String">
                                                 <Name>?</Name>

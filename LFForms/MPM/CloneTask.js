@@ -10,7 +10,7 @@ $(document).ready(function () {
   $('.network-user-name input').val($('.lf-user-name input').val().toUpperCase().substr($('.lf-user-name input').val().lastIndexOf('\\') + 1)).change();
 
   if ($('.closeme input').val() == 1) {
-    window.top.postMessage('CloseDialogWithRefresh', '*');
+    window.parent.postMessage('CloseDialogWithRefresh', '*');
   }
 
   $(document).on('blur', "input[type=text]", function () {

@@ -1,10 +1,5 @@
-﻿
-
-DROP PROCEDURE IF EXISTS [dbo].[spCalibrateThreadGage]
-
-
-GO
-
+﻿DROP PROCEDURE IF EXISTS [dbo].[spCalibrateThreadGage]
+go
 
 CREATE PROCEDURE [dbo].[spCalibrateThreadGage] 
 	@threadgage_checkout_detail_id			INT,
@@ -43,25 +38,8 @@ BEGIN
 					UpdateUserID			= @operator_employee_id,
 					UpdatedTimestamp		= CURRENT_TIMESTAMP
 			WHERE	ID						= @threadgage_checkout_detail_id
+			/* The trigger on the cal table writes the history record */
 
-			Insert into tblThreadCheckoutHistory (ThreadGageCheckoutDetailID, 
-																						RecordEventTypeID,
-																						GageStatusID,
-																						ThreadCalibrationID, 
-																						LastCalibratedBy,
-																						LastCalibrationDate,
-																						CalibrationDueDate,
-																						UpdateUserID)
-			SELECT	ID,
-							3,
-							GageStatusID,
-							@calibration_id,
-							@operator_employee_id,
-							CURRENT_TIMESTAMP,
-							@calibration_due_date,
-							@operator_employee_id
-							FROM	tblThreadCheckoutDetail
-							WHERE	ID = @threadgage_checkout_detail_id
 		END
 	ELSE
 		/*Thread Gage marked as 'missing'*/
