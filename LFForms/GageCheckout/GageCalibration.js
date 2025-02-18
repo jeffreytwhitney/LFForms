@@ -3,6 +3,15 @@ var should_print_receipt = true;
 
 $(document).ready(function () {
 
+
+
+  if ($('.closeme input').val() == 1) {
+    $('#q2').hide();
+    $('#q3').hide();
+  }
+
+
+
   $('.Submit').hide();
   $('.Submit').click(function (e) {
     if ($('.tid input').val().length > 0) {
@@ -13,6 +22,7 @@ $(document).ready(function () {
     }
     $('.print-ticket-id input').val($('.guid input').val());
   });
+
   $(document).prop('title', 'Gage Calibration');
   $('#q0').append("<div class='hidden' id='print_output'></div>");
 

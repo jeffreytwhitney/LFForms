@@ -78,10 +78,6 @@ function checkPermissions() {
     return_val = false;
   }
 
-  if (is_user_admin == 0) {
-    return_val = false;
-  }
-
   if (employee_number === '') {
     return_val = false;
   }

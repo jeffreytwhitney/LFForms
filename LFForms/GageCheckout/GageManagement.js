@@ -131,65 +131,17 @@ function appendPagination() {
 
 
 function callCalibrate(ticket_id) {
-  $("#Field219").val(ticket_id)
   var has_permissions = checkPermissions();
   if (has_permissions) {
-    var $ticketTypeID = getTicketTypeIDByTicketID(ticket_id);
-
-    $("#Field41-1").prop("checked", true);
-
-    if ($ticketTypeID == "1") {
-      $("#Field27").val(ticket_id).change();
-    }
-    else if ($ticketTypeID == "2") {
-      $("#Field45").val(ticket_id).change();
-    }
-    else if ($ticketTypeID == "3") {
-      $("#Field61").val(ticket_id).change();
-    }
-
-    $('.Submit').show();
+    var widowHeight = $(window).height();
+    widowHeight = widowHeight - 50;
+    popUpIframe(`http://rmslf/Forms/GageCalibration?tid=${ticket_id}`, 'Calibrate Ticket', widowHeight, 1200);
   }
   else {
     alert("Sorry, you do not have permissions to do this.");
   }
 }
 
-
-function callDetails(ticket_id) {
-
-  var $ticketTypeID = getTicketTypeIDByTicketID(ticket_id);
-
-  if ($ticketTypeID == "1") {
-    $("#Field177").val(ticket_id).change();
-  }
-  else if ($ticketTypeID == "2") {
-    $("#Field175").val(ticket_id).change();
-  }
-  else if ($ticketTypeID == "3") {
-    $("#Field176").val(ticket_id).change();
-  }
-
-}
-
-
-function callMissing(ticket_id) {
-
-  var has_permissions = checkPermissions();
-  if (has_permissions) {
-
-    $("#Field41-3").prop("checked", true).change();
-    $("#Field102").val(ticket_id).change();
-    $("#Field73").val(ticket_id).change();
-    $("#Field219").val(ticket_id)
-
-    $('.Submit').show();
-  }
-  else {
-    alert("Sorry, you do not have permissions to do this.");
-  }
-
-}
 
 
 function callNextPage() {
