@@ -11,12 +11,14 @@ $(document).ready(
       $('.edit-cellleader-isactive-combo select').val(Number($('.edit-cellleader-isactive-value input').val()));
     });
 
+    $('.edit-cellleader-isactive-combo select').change(function () {
+      $('.edit-cellleader-isactive-value input').val(Number($('.edit-cellleader-isactive-combo select').val()));
+    });
+
     $('.edit-cellleader-department-id input').change(function () {
       var department_name = departmentMap.get(Number($('.edit-cellleader-department-id input').val()))
       $('.edit-cellleader-department-combo select').val(department_name);
     });
-
-
 
     $(document).on("onloadlookupfinished", function () {
 
@@ -25,7 +27,7 @@ $(document).ready(
       generateGoBackButtons();
       changeNumericToYesNo();
 
-      $('.cell-leader-table').css("visibility", "visible");
+
 
     });
 

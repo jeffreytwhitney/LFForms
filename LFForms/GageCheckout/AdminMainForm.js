@@ -59,12 +59,13 @@ function generateAppliationLinks() {
   var mainWindowHTML = '<div class="row"><div class="column"><ul>';
 
   if (hasPermissions) {
-    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/GageMaintenance" title="Gage Administration" target="_blank">Gage Administration</a></li>'
+    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/GageTicketAdministration" title="Gage Administration" target="_blank">Gage Administration</a></li>'
     mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/GageCalibration" title="Gage Calibration" target="_blank">Gage Calibration</a></li>'
     mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/Gage-MissingGages" title="Missing Thread Gages" target="_blank">Missing Thread Gages</a></li>'
     mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-CheckoutMainform" title="Gage Checkout" target="_blank">Gage Checkout</a></li>'
-    mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Generate Overdue Ticket EMails" onclick="generateOverdueEmails()">Generate Overdue Ticket EMails</a></li>'
     mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-TicketHistory" title="Ticket History" target="_blank">Ticket History</a></li>'
+    mainWindowHTML = mainWindowHTML + '<li></li>'
+    mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Generate Overdue Ticket EMails" onclick="generateOverdueEmails()">Generate Overdue Ticket EMails</a></li>'
     mainWindowHTML = mainWindowHTML + '</ul></div><div class="column"><ul>'
 
     if (isAdmin) {
@@ -87,8 +88,9 @@ function generateAppliationLinks() {
     mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Gage Calibration" onclick="showPermissionAlert()">Gage Calibration</a></li>';
     mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Missing Thread Gages" onclick="showPermissionAlert()">Missing Thread Gages</a></li>';
     mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Gage Checkout" onclick="showPermissionAlert()">Gage Checkout</a></li>';
-    mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Generate Overdue Ticket EMails" onclick="showPermissionAlert()">Generate Overdue Ticket EMails</a></li>';
     mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Ticket History" onclick="showPermissionAlert()>Ticket History</a></li>'
+    mainWindowHTML = mainWindowHTML + '<li></li>'
+    mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Generate Overdue Ticket EMails" onclick="showPermissionAlert()">Generate Overdue Ticket EMails</a></li>';
     mainWindowHTML = mainWindowHTML + '</ul></div><div class="column"><ul>';
     mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="User Maintenance" onclick="showPermissionAlert()">User Maintenance</a></li>';
     mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Cell Leader Maintenance" onclick="showPermissionAlert()">Cell Leader Maintenance</a></li>';

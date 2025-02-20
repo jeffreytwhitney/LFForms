@@ -2,7 +2,14 @@ var should_print_receipt = true;
 
 
 $(document).ready(function () {
-  $('.Submit').show();
+
+  var readonly = Number($('.ro input').val());
+  if (readonly != 1) {
+    $('.Submit').show();
+  }
+  else {
+    $('.Submit').hide();
+  }
   $(document).prop('title', 'Ticket Details');
   $('.Submit').click(function (e) { validateForm(e);  });
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js');
