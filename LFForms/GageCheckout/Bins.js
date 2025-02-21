@@ -1,13 +1,17 @@
 
 $(document).ready(function () {
-  $('.Submit').click(function (e) { validateForm(e); });
+  $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js');
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
   var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
   $.fn.bootstrapBtn = bootstrapButton;
+
+
+  $('.Submit').click(function (e) { validateForm(e); });
   $('.Submit').hide();
+
   $(document).prop('title', 'Bin Maintenance');
   $('#myElement').removeAttr('style');
   $('#q2').prepend("<fieldset id='Field25' class='radio-checkbox-fieldset filter-checkboxes'><span class='choice'><input name='Field25' id='Field25-0' type='checkbox' value='IncludeInactiveBins'><label class='form-option-label' for='Field25-0'>Include Inactive Bins</label></span></fieldset>");
@@ -21,13 +25,39 @@ $(document).ready(function () {
   $('.existing-bin-name-id input').change(function () {
     validateForm();
   });
+  $('.existing-ticket-id input').change(function () {
+    if ($('.existing-ticket-id input').val().length > 0) {
+      $('.edit-bin-isactive-combo select').removeClass("ui-state-disabled").addClass("ui-state-disabled");
+    }
+    else {
+      $('.edit-bin-isactive-combo select').removeClass("ui-state-disabled");
+    }
+  });
+  
 
-
+  window.onmessage = function (event) {
+    //This is the callback from the IFrame.
+    //If the event data says "Close Dialog", it destroys the dialog, (so that the close function won't fire).
+    //If it says "CloseDialogWithRefresh", it destroys the dialog and refreshes the form.
+    //I don't refresh if you add a note, for example. But if you do anything that will show up on the page, (adding time, cloning a task, etc)
+    //then I do a refresh.
+    if (event.data == "CloseDialog") {
+      $("#popupIFrame").dialog("destroy");
+      $("#popupIFrame").remove();
+    }
+    if (event.data == "CloseDialogWithRefresh") {
+      $("#popupIFrame").dialog("destroy");
+      $("#popupIFrame").remove();
+      refreshPage();
+    }
+  };
   $(document).on("onloadlookupfinished", function () {
     generateAddButton();
     generateGoBackButtons();
-
+    $('#q0').append("<div class='hidden-text' id='popUpDiv'></div>");
     $(".filter-checkboxes input[type='checkbox']").on("change", function () { filterBinTable(); });
+    generateFilterRow();
+    $('#txtFilterBinName').keyup(function () { this.value = this.value.toLocaleUpperCase(); });
     $('.bin-table').show();
 
   });
@@ -39,7 +69,7 @@ $(document).ready(function () {
     generateEditButtons();
     changeNumericToYesNo();
     appendPagination();
-
+    generateTicketDetailButtons();
     $('.bin-table').show();
   });
   
@@ -56,19 +86,19 @@ function appendPagination() {
   if (row_count > 0) {
     $('#bin-table-pagination').remove();
     if ((current_page == 1) && (row_count < 25)) {
-      $('.bin-table table').parent().append("<div id='bin-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>‹</a></li><li><a class='page-link next isDisabled'>›</a></li></ul></div>");
+      $('.bin-table table').parent().append("<div id='bin-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>‹‹</a></li><li><a class='page-link prev isDisabled'>‹</a></li><li><a class='page-link next isDisabled'>›</a></li></ul></div>");
       return;
     }
     if ((current_page == 1) && (row_count == 25)) {
-      $('.bin-table table').parent().append("<div id='bin-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>‹</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>›</a></li></ul></div>")
+      $('.bin-table table').parent().append("<div id='bin-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>‹‹</a></li><li><a class='page-link prev isDisabled'>‹</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>›</a></li></ul></div>")
       return;
     }
     if ((current_page > 1) && (row_count == 25)) {
-      $('.bin-table table').parent().append("<div id='bin-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>‹</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>›</a></li></ul></div>")
+      $('.bin-table table').parent().append("<div id='bin-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>‹‹</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>‹</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>›</a></li></ul></div>")
       return;
     }
     if ((current_page > 1) && (row_count < 25)) {
-      $('.bin-table table').parent().append("<div id='bin-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>‹</a></li><li><a class='page-link next isDisabled'>›</a></li></ul></div>")
+      $('.bin-table table').parent().append("<div id='bin-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>‹‹</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>‹</a></li><li><a class='page-link next isDisabled'>›</a></li></ul></div>")
       return;
     }
   }
@@ -145,6 +175,8 @@ function checkPermissions() {
 
 function filterBinTable() {
 
+  var binNameFilterValue = $('#txtFilterBinName').val();
+  var noteFilterVal = $('#txtFilterNote').val();
 
   if ($("#Field25-0").is(":checked")) {
     $('.incinactive input').val(1);
@@ -152,6 +184,10 @@ function filterBinTable() {
   else {
     $('.incinactive input').val(0);
   }
+
+  $('.fbinname input').val(binNameFilterValue);
+  $('.fnote input').val(noteFilterVal);
+
   $('.bin-table').hide();
   $('.pg input').val(1).change();
 
@@ -188,10 +224,50 @@ function generateEditButtons() {
 }
 
 
+function generateFilterRow() {
+
+  if ($('#filterRow').length == 0) {
+
+    var filter_row = "<TR id='filterRow'><TH/><TH><input type='text' id='txtFilterBinName'></TH><TH/><TH/><TH><input type='text' id='txtFilterNote'></TH><TH/><TH/><TH/>"
+    $('.bin-table table thead').append(filter_row);
+    $("#txtFilterBinName").on("change", function () { filterBinTable(); });
+    $("#txtFilterNote").on("change", function () { filterBinTable(); });
+
+    $("#txtFilterBinName").dblclick(function () { $("#txtFilterBinName").val(null).change(); });
+    $("#txtFilterNote").dblclick(function () { $("#txtFilterNote").val(null).change(); });
+  }
+}
+
+
 function generateGoBackButtons() {
   var $goback_buttons = $(".gobackbutton");
   $goback_buttons.each(function (index) {
     $(this).replaceWith("<input class='return' type='button' value='Go Back' onclick='goBack()' />");
+  });
+}
+
+
+function generateTicketDetailButtons() {
+
+  $('.ticket-details-button').remove();
+  
+  var current_statuses = $(".current-status input[type=text]");
+  var ticket_id_buttons = $(".bin-ticket-id-button input[type=text]");
+  var ticket_numbers = $(".ticket-number input[type=text]");
+
+  current_statuses.each(function (index) {
+    let ticket_id_field = ticket_id_buttons[index];
+    let ticket_id_value = Number(ticket_id_buttons[index].value);
+    let ticket_number = ticket_numbers[index].value;
+
+    if (ticket_number.length > 0) {
+      var btn_html = `<div class='ui-button ticket-details-button' onclick='showDetails(${ticket_id_value})'><span title='Ticket Details' class='ui-button-icon ui-icon ui-icon-document'></span></div>`
+      $(this).val(`Checked Out. Ticket Number: ${ticket_number}.`);
+      $(ticket_id_field).parent().append(btn_html);
+    }
+    else {
+      $(this).val("Checked In");
+    }
   });
 }
 
@@ -209,9 +285,79 @@ function goBack() {
 }
 
 
+function popUpIframe(src, title, height, width) {
+  //var iframe_height = height - 100;
+
+  $("#popupIFrame").remove();
+  $("#popUpDiv").html(`<div height='${height}' width='${width}'><iframe id='popupIFrame' name='myname' src='${src}' height='${height}' width='${width}'/></div>`);
+  $("#popupIFrame").dialog({
+    title: title,
+    height: height,
+    width: width,
+    autoOpen: false,
+    resizable: true,
+    modal: true,
+    position: { my: "left top", at: "left top", of: window },
+    close: function (event, ui) {
+    }
+  });
+
+
+  $("#popupIFrame").dialog("open");
+  $('#popupIFrame').attr('style', `width: 100%; height: ${height}px;`);
+}
+
+
+function reApplyFilterValues() {
+  if ($('#filterRow').length == 0) {
+    return;
+  }
+
+  var binNameFilterValue = $('.fbinname input').val();
+  var noteFilterVal = $('.fnote input').val();
+
+  if ((binNameFilterValue != null) && (binNameFilterValue.length > 0)) {
+    $('#txtFilterBinName').val(ticketNumberFilterValue);
+  }
+
+  if ((noteFilterVal != null) && (noteFilterVal.length > 0)) {
+    $('#txtFilterNote').val(noteFilterVal);
+  }
+  
+}
+
+
+function refreshPage() {
+
+  var binNameFilterValue = $('.fbinname input').val();
+  var noteFilterVal = $('.fnote input').val();
+  var page_number = Number($('.pg input').val());
+  var current_url = window.location.href;
+
+  if (current_url.includes('?')) {
+    indexOfQuestionMark = current_url.indexOf('?');
+    current_url = current_url.substring(0, indexOfQuestionMark);
+  }
+
+  if (page_number > 0) {
+    current_url = current_url + `?pg=${page_number}`;
+  }
+
+  if ((binNameFilterValue != null) && (binNameFilterValue.length > 0)) {
+    current_url = current_url + `&fbinname=${binNameFilterValue}`;
+  }
+
+  if ((noteFilterVal != null) && (noteFilterVal.length > 0)) {
+    current_url = current_url + `&fnote=${noteFilterVal}`;
+  }
+
+  window.location = current_url;
+}
+
+
 function removeAppendedFields() {
   $('#tasklist-pagination').remove();
-  $('.table-button').remove();
+  $('.ticket-details-button').remove();
 }
 
 
@@ -226,6 +372,13 @@ function resetValidationErrors() {
   $('.add-pins-bins-table-new-bin-number input').removeClass('parsley-error');
 
   $('#preexisting-bin-error').remove();
+}
+
+
+function showDetails(ticket_id) {
+  var widowHeight = $(window).height();
+  widowHeight = widowHeight - 50;
+  popUpIframe(`http://rmslf/Forms/RMS-GAGE-TicketDetails?tid=${ticket_id}`, 'Ticket Details', widowHeight, 1200);
 }
 
 
