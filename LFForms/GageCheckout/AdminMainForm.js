@@ -64,6 +64,8 @@ function generateAppliationLinks() {
     mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/Gage-MissingGages" title="Missing Thread Gages" target="_blank">Missing Thread Gages</a></li>'
     mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-CheckoutMainform" title="Gage Checkout" target="_blank">Gage Checkout</a></li>'
     mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-TicketHistory" title="Ticket History" target="_blank">Ticket History</a></li>'
+    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-BinHistory" title="Ticket History" target="_blank">Bin History</a></li>'
+    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-ThreadGageHistory" title="Ticket History" target="_blank">Thread Gage History</a></li>'
     mainWindowHTML = mainWindowHTML + '<li></li>'
     mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Generate Overdue Ticket EMails" onclick="generateOverdueEmails()">Generate Overdue Ticket EMails</a></li>'
     mainWindowHTML = mainWindowHTML + '</ul></div><div class="column"><ul>'
@@ -80,6 +82,7 @@ function generateAppliationLinks() {
     mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-ThreadGages" title="Thread Gage Maintenance" target="_blank">Thread Gage Maintenance</a></li>'
     mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-Bins" title="Pin Bin Maintenance" target="_blank">Pin Bin Maintenance</a></li>'
     mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-PinTypes" title="Pin Type Maintenance" target="_blank">Pin Type Maintenance</a></li>'
+    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-Sites" title="Site Maintenance" target="_blank">Site Maintenance</a></li>'
     mainWindowHTML = mainWindowHTML + '</ul></div></div>'
 
   }
@@ -89,6 +92,8 @@ function generateAppliationLinks() {
     mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Missing Thread Gages" onclick="showPermissionAlert()">Missing Thread Gages</a></li>';
     mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Gage Checkout" onclick="showPermissionAlert()">Gage Checkout</a></li>';
     mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Ticket History" onclick="showPermissionAlert()>Ticket History</a></li>'
+    mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Bin History" onclick="showPermissionAlert()>Bin History</a></li>'
+    mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Thread Gage History" onclick="showPermissionAlert()>Thread Gage History</a></li>'
     mainWindowHTML = mainWindowHTML + '<li></li>'
     mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Generate Overdue Ticket EMails" onclick="showPermissionAlert()">Generate Overdue Ticket EMails</a></li>';
     mainWindowHTML = mainWindowHTML + '</ul></div><div class="column"><ul>';
@@ -99,6 +104,7 @@ function generateAppliationLinks() {
     mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Thread Gage Maintenance" onclick="showPermissionAlert()">Thread Gage Maintenance</a></li>';
     mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Pin Bin Maintenance" onclick="showPermissionAlert()">Pin Bin Maintenance</a></li>';
     mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Pin Type Maintenance" onclick="showPermissionAlert()">Pin Type Maintenance</a></li>';
+    mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Site Maintenance" onclick="showPermissionAlert()">Site Maintenance</a></li>';
   }
 
   mainWindowHTML = mainWindowHTML + `<div class="last-run-info">${overdueTicketRunMessage}</div>`;

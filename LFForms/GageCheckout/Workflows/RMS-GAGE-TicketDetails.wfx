@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Designer Version="10.4.3.139">
-    <SequentialWorkflowActivityProxy Type="Laserfiche.Workflow.Activities.Proxies.LfSequentialWorkflowProxy, Laserfiche.Workflow.Designer.Base, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="e87a86b4-9fe1-435c-b0f1-0925e4f5f427" ActivityCountHint="19">
+    <SequentialWorkflowActivityProxy Type="Laserfiche.Workflow.Activities.Proxies.LfSequentialWorkflowProxy, Laserfiche.Workflow.Designer.Base, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="0cf49da4-72a9-418a-9ebd-fc65d53cc417" ActivityCountHint="24">
         <Name>RMS-GAGE-TicketDetails</Name>
         <SafeName>RMSGAGETicketDetails</SafeName>
         <Enabled>True</Enabled>
@@ -63,18 +63,20 @@
         </Cultures>
         <MetadataStore Attributes="ExpectsStartingEntry, ValidateDesign">
             <VersionHistory>
-                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS-GAGE-TicketDetails.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/12/2025 02:36:56" EndTime="02/12/2025 05:20:59" />
-                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpC713.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/12/2025 05:20:59" EndTime="02/12/2025 05:21:05" />
-                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS-GAGE-TicketDetails.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/12/2025 11:33:01" EndTime="02/12/2025 11:44:02" />
-                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpE9E8.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/12/2025 11:44:02" EndTime="02/12/2025 11:44:10" />
-                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS-GAGE-TicketDetails.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/20/2025 11:46:11" EndTime="02/20/2025 11:49:12" />
+                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS-GAGE-TicketDetails.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/11/2025 20:36:56" EndTime="02/11/2025 23:20:59" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpC713.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/11/2025 23:20:59" EndTime="02/11/2025 23:21:05" />
+                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS-GAGE-TicketDetails.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/12/2025 05:33:01" EndTime="02/12/2025 05:44:02" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpE9E8.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/12/2025 05:44:02" EndTime="02/12/2025 05:44:10" />
+                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS-GAGE-TicketDetails.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/20/2025 05:46:11" EndTime="02/20/2025 05:49:12" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp3295.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/20/2025 05:49:12" EndTime="02/20/2025 05:49:17" />
+                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS-GAGE-TicketDetails.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/21/2025 12:35:49" EndTime="02/21/2025 12:49:41" />
             </VersionHistory>
             <Metadata>
                 <Value Item="Author" Type="String">JTWhitney</Value>
                 <Value Item="WorkflowFilePath" Type="String">C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS-GAGE-TicketDetails.wfx</Value>
-                <Value Item="PublishedDate" Type="DateTime">2025-02-12T17:44:18.503Z</Value>
+                <Value Item="PublishedDate" Type="DateTime">2025-02-20T11:49:29.007Z</Value>
                 <Value Item="WorkflowId" Type="Int32">124</Value>
-                <Value Item="WorkflowVersion" Type="Int32">3</Value>
+                <Value Item="WorkflowVersion" Type="Int32">4</Value>
                 <Value Item="WorkflowServerURL" Type="String">RMS-CORPLF1</Value>
                 <Value Item="WorkflowServerId" Type="String">8f6ebc76-1c3a-4b6f-b657-d705dfc3c51f</Value>
             </Metadata>
@@ -101,6 +103,7 @@
                                     </Choices>
                                 </Attribute>
                                 <Attribute AttributeId="3101" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Description" AttributeName="NewThreadGageDescription" ParentLabel="Add Thread Gages" ParentName="Add_Thread_Gages" ParentPath="3103_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-TicketDetails" MemberPath="3103_.3107" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="3302" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="ExistingMissingThreadGage" AttributeName="ExistingMissingThreadGage" ParentLabel="Add Thread Gages" ParentName="Add_Thread_Gages" ParentPath="3103_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-TicketDetails" MemberPath="3103_.3308" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
                                 <Attribute AttributeId="3099" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="ExistingThreadGageID" AttributeName="ExistingThreadGageID" ParentLabel="Add Thread Gages" ParentName="Add_Thread_Gages" ParentPath="3103_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-TicketDetails" MemberPath="3103_.3105" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
                                 <Attribute AttributeId="3098" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="NewThreadGageID" AttributeName="NewThreadGageID" ParentLabel="Add Thread Gages" ParentName="Add_Thread_Gages" ParentPath="3103_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-TicketDetails" MemberPath="3103_.3104" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
                                 <Attribute AttributeId="3100" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Thread Gage Name" AttributeName="NewThreadGageName" ParentLabel="Add Thread Gages" ParentName="Add_Thread_Gages" ParentPath="3103_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-TicketDetails" MemberPath="3103_.3106" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
@@ -121,6 +124,7 @@
                             </Children>
                         </Attribute>
                         <Attribute AttributeId="3156" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="closeme" AttributeName="closeme" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-TicketDetails" MemberPath="3162" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="3307" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="DepartmentID" AttributeName="DepartmentID" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-TicketDetails" MemberPath="3313" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
                         <Attribute AttributeId="3091" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="New Job Number:" AttributeName="DetailsNewJobNumber" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-TicketDetails" MemberPath="3097" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
                         <Attribute AttributeId="3075" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Table" Label="Pins/Bins" AttributeName="ExistingPinsBinsTable" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-TicketDetails" MemberPath="3081_" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false">
                             <Choices>
@@ -175,6 +179,7 @@
                                 <Attribute AttributeId="3093" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="ThreadGageDetailID" AttributeName="ExistingThreadGageID" ParentLabel="Thread Gages" ParentName="ExistingThreadGages" ParentPath="3098_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-TicketDetails" MemberPath="3098_.3099" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
                             </Children>
                         </Attribute>
+                        <Attribute AttributeId="3306" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="SiteOwnerEmailAddress" AttributeName="SiteOwnerEmailAddress" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-TicketDetails" MemberPath="3312" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
                         <Attribute AttributeId="3063" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="TicketGUID" AttributeName="TicketGUID" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-TicketDetails" MemberPath="3069" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
                         <Attribute AttributeId="3108" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="TicketStatusID" AttributeName="TicketStatusID" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-TicketDetails" MemberPath="3114" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
                         <Attribute AttributeId="3062" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="TicketTypeID" AttributeName="TicketTypeID" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-TicketDetails" MemberPath="3068" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
@@ -451,6 +456,126 @@
                                                 <ResultSetSize Rows="ReturnAllRows" Count="2" />
                                                 <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
                                             </Activity>
+                                            <Activity Type="Laserfiche.Workflow.Activities.Data.LookupActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="f6428b40-7049-4ae8-b990-295fa763ebbb">
+                                                <Name>Get Department EMail</Name>
+                                                <SafeName>GetDepartmentEMail</SafeName>
+                                                <Enabled>True</Enabled>
+                                                <Description ShowDescription="null" ShowSummary="null">Retrieves records from the selected data source and creates tokens.</Description>
+                                                <DataSourceId>28e93606-8853-4d03-a505-be8796203599</DataSourceId>
+                                                <Criteria HasCustomQuery="false" IsCreateIdentityTokenEnabled="false" Timeout="-1">
+                                                    <Table Name="tlkpDepartment" HasIdentityColumn="false">
+                                                        <Columns Generated="1/1/0001 12:00:00 AM">
+                                                            <Column Name="ID" Type="System.Int32" ReadOnly="True" />
+                                                            <Column Name="SiteID" Type="System.Int32" ReadOnly="False" />
+                                                            <Column Name="IsActive" Type="System.Int16" ReadOnly="False" />
+                                                            <Column Name="Department" Type="System.String" ReadOnly="False" />
+                                                            <Column Name="DepartmentEmailAddress" Type="System.String" ReadOnly="False" />
+                                                            <Column Name="CalibrationMonthOddEven" Type="System.Int32" ReadOnly="False" />
+                                                            <Column Name="CalibrationWeekOddEven" Type="System.Int32" ReadOnly="False" />
+                                                        </Columns>
+                                                    </Table>
+                                                    <Criterion Flags="None" Type="System.Int32" Column="ID" ReadOnly="true">
+                                                        <Value>%(RetrieveBusinessProcessVariables_DepartmentID)</Value>
+                                                    </Criterion>
+                                                </Criteria>
+                                                <ResultSetSize Rows="ReturnAllRows" Count="2" />
+                                                <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+                                            </Activity>
+                                            <Activity Type="Laserfiche.Workflow.Activities.CreateToken.CreateTokenActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="7f9a2716-24c1-482e-8166-74a611629f40">
+                                                <Name>Department EMAIL</Name>
+                                                <SafeName>DepartmentEMAIL</SafeName>
+                                                <Enabled>True</Enabled>
+                                                <Description ShowDescription="null" ShowSummary="null">Creates new tokens and updates the values of existing tokens.</Description>
+                                                <Options>
+                                                    <Tokens>
+                                                        <TokenInformation Id="279a8eaf-705f-432b-b1e5-1be66cb787dc" IsMultivalued="false" UpdateExistingToken="false" AppendValues="false" TokenType="String">
+                                                            <TokenName>DepartmentEMailAddress</TokenName>
+                                                            <TokenFullName />
+                                                            <ActivityName />
+                                                            <TokenValues>
+                                                                <TokenValue xml:space="preserve">%(GetDepartmentEMail_DepartmentEmailAddress)</TokenValue>
+                                                            </TokenValues>
+                                                        </TokenInformation>
+                                                    </Tokens>
+                                                </Options>
+                                            </Activity>
+                                            <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="0ca1542f-5374-4480-8be0-5fe01aaedaf4">
+                                                <Name>Call spGenerateMissingThreadGageEmailMessage</Name>
+                                                <SafeName>CallspGenerateMissingThreadGageEmailMessage</SafeName>
+                                                <Enabled>True</Enabled>
+                                                <Description ShowDescription="null" ShowSummary="null">Performs the specified query in the selected data source.</Description>
+                                                <DataSourceId>28e93606-8853-4d03-a505-be8796203599</DataSourceId>
+                                                <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+                                                    <Table Name="" HasIdentityColumn="false">
+                                                        <Columns Generated="1/1/0001 12:00:00 AM">
+                                                            <Column Name="" Type="System.String" ReadOnly="False" />
+                                                        </Columns>
+                                                    </Table>
+                                                    <CustomQuery>EXECUTE spGenerateMissingThreadGageEmailMessage ?, ?</CustomQuery>
+                                                    <InputParameter DbType="Int32">
+                                                        <Name>?</Name>
+                                                        <Value>%(ForEachRowExistingThreadGage_ExistingThreadGageID)</Value>
+                                                    </InputParameter>
+                                                    <InputParameter DbType="String">
+                                                        <Name>?</Name>
+                                                        <Value />
+                                                    </InputParameter>
+                                                </Criteria>
+                                                <ResultSetSize Rows="ReturnAllRows" Count="2" />
+                                                <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+                                            </Activity>
+                                            <Activity Type="Laserfiche.Workflow.Activities.CreateToken.CreateTokenActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="21bf9a4e-c357-47a5-b871-d22dfc1aabdd">
+                                                <Name>Missing Email Message</Name>
+                                                <SafeName>MissingEmailMessage</SafeName>
+                                                <Enabled>True</Enabled>
+                                                <Description ShowDescription="null" ShowSummary="null">Creates new tokens and updates the values of existing tokens.</Description>
+                                                <Options>
+                                                    <Tokens>
+                                                        <TokenInformation Id="e2f8be2f-a1d3-4a89-8b6f-d294ff928b02" IsMultivalued="false" UpdateExistingToken="false" AppendValues="false" TokenType="String">
+                                                            <TokenName>MissingEmailMessage</TokenName>
+                                                            <TokenFullName />
+                                                            <ActivityName />
+                                                            <TokenValues>
+                                                                <TokenValue xml:space="preserve">%(CallspGenerateMissingThreadGageEmailMessage_)</TokenValue>
+                                                            </TokenValues>
+                                                        </TokenInformation>
+                                                    </Tokens>
+                                                </Options>
+                                            </Activity>
+                                            <Activity Type="Laserfiche.Workflow.Activities.Email.EmailSequenceProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="4ade1545-8486-4a5d-bed1-804ef94a4e98">
+                                                <Name>Email</Name>
+                                                <SafeName>Email</SafeName>
+                                                <Enabled>True</Enabled>
+                                                <Description ShowDescription="null" ShowSummary="null">Sends an email to one or more people.</Description>
+                                                <Email TextOnlyBodyFormat="false" DeliveryReceipts="None">
+                                                    <ToAddresses>
+                                                        <Add>%(DepartmentEMailAddress)</Add>
+                                                    </ToAddresses>
+                                                    <CcAddresses>
+                                                        <Add>%(RetrieveBusinessProcessVariables_SiteOwnerEmailAddress)</Add>
+                                                    </CcAddresses>
+                                                    <BccAddresses />
+                                                    <FromAddress />
+                                                    <ReplyTo />
+                                                    <Subject>Missing Thread Gage</Subject>
+                                                    <Body>%(MissingEmailMessage#"HTML"#)</Body>
+                                                    <Priority>Normal</Priority>
+                                                    <ServerReference />
+                                                    <UseBodyLengthLimit null="true" />
+                                                    <Attachments>
+                                                        <ExportedEntries />
+                                                        <Options>
+                                                            <UseZipFile>false</UseZipFile>
+                                                            <LimitEntrySize>false</LimitEntrySize>
+                                                            <EntrySizeLimit>51200</EntrySizeLimit>
+                                                            <ReplaceBigEntriesWithShortcut>false</ReplaceBigEntriesWithShortcut>
+                                                            <NotifyForEntriesFiles>true</NotifyForEntriesFiles>
+                                                            <NotifyForNoContentEntries>true</NotifyForNoContentEntries>
+                                                            <AttachShortcutForNoContentEntries>false</AttachShortcutForNoContentEntries>
+                                                        </Options>
+                                                    </Attachments>
+                                                </Email>
+                                            </Activity>
                                         </Activities>
                                         <FaultHandlers />
                                     </Activity>
@@ -589,6 +714,11 @@
                     <Activity Name="Return Missing" Key="d973adee-3193-4f5d-b927-f1021ff05a7a">
                         <Expanded>True</Expanded>
                         <Activity Name="spMarkThreadGageAsMissing" Key="08191903-43ed-4798-a608-4ed12507de59" />
+                        <Activity Name="Get Department EMail" Key="f6428b40-7049-4ae8-b990-295fa763ebbb" />
+                        <Activity Name="Department EMAIL" Key="7f9a2716-24c1-482e-8166-74a611629f40" />
+                        <Activity Name="Call spGenerateMissingThreadGageEmailMessage" Key="0ca1542f-5374-4480-8be0-5fe01aaedaf4" />
+                        <Activity Name="Missing Email Message" Key="21bf9a4e-c357-47a5-b871-d22dfc1aabdd" />
+                        <Activity Name="Email" Key="4ade1545-8486-4a5d-bed1-804ef94a4e98" />
                     </Activity>
                 </Activity>
                 <Activity Name="For Each New Thread" Key="1458a052-da8f-4988-a737-650be014d951">

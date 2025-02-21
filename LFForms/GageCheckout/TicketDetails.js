@@ -271,7 +271,7 @@ function showPinCalibrationHistory(calibration_id) {
 
 
 function showThreadCalibrationHistory(calibration_id) {
-  popUpIframe(`http://rmslf/Forms/RMS-GAGE-ThreadCalibrationHistory?pcid=${calibration_id}`, 'Calibration History', 600, 900);
+  popUpIframe(`http://rmslf/Forms/RMS-GAGE-ThreadCalibrationHistory?pcid=${calibration_id}`, 'Calibration History', 600, 1000);
 }
 
 
@@ -311,6 +311,7 @@ function validateForm(e) {
       let threadGageName = $(this).find('.add-thread-gages-table-thread-gage-name input');
       let threadGageID = $(this).find('.add-thread-gages-table-new-thread-gage-id input');
       let existingThreadGageTicketNumber = $(this).find('.add-thread-gages-table-existing-thread-gage-id input');
+      let missingThreadGageTicketNumber = $(this).find('.existing-missing-thread-ticket-number input');
 
       if ((threadGageID.val().length == 0) && (threadGageName.val().length > 0)) {
         threadGageName.parent().find('#bad-thread-gage-error').remove();
@@ -321,6 +322,12 @@ function validateForm(e) {
       if (existingThreadGageTicketNumber.val().length > 0) {
         threadGageName.parent().find('#preexisting-thread-gage-error').remove();
         threadGageName.parent().append("<ul id='preexisting-thread-gage-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Thread Gage already marked as 'Checked Out'. See Metrology Calibration.</li></ul>");
+        threadGageName.addClass('parsley-error');
+        isValid = false;
+      }
+      if (missingThreadGageTicketNumber.val().length > 0) {
+        threadGageName.parent().find('#missing-thread-gage-error').remove();
+        threadGageName.parent().append("<ul id='missing-thread-gage-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Thread Gage marked as 'Missing' on another ticket. Bring gage to Metrology Calibration.</li></ul>");
         threadGageName.addClass('parsley-error');
         isValid = false;
       }

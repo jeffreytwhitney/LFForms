@@ -1,12 +1,3 @@
-var should_print_receipt = true;
-$.getScript("https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js", function () {
-  WebFont.load({
-    google: {
-      families: ['Montserrat', 'Libre Barcode 128']
-    }
-  });
-});
-
 $(document).ready(function () {
   $(document).prop('title', 'Gage Checkout');
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js');
@@ -68,9 +59,18 @@ $(document).ready(function () {
     $('#preexisting-bin-error').remove();
     $('#bad-thread-gage-error').remove();
     $('#preexisting-thread-gage-error').remove();
+    $('#missing-thread-gage-error').remove();
     $('.pin-table-bin-number input').val('');
     $('.thread-gage-table-name input').val('');
+    $('.existing-missing-thread-ticket-number input').val('');
+  });
 
+  $('.existing-missing-thread-ticket-number input').change(function (e) {
+    validateForm();
+  });
+
+  $('.thread-gage-table-existing-ticket-id input').change(function (e) {
+    validateForm();
   });
 
   $(document).on('change', '#Field162', function () {
@@ -128,6 +128,7 @@ function validateForm(e) {
   $('#preexisting-bin-error').remove();
   $('#bad-thread-gage-error').remove();
   $('#preexisting-thread-gage-error').remove();
+  $('#missing-thread-gage-error').remove();
 
   var ticketType = $('.ticket-type-radio fieldset input[type="radio"]:checked').val();
   var cellLeaderID = $('.cell-leader-id input');
@@ -177,6 +178,7 @@ function validateForm(e) {
     threadRows.each(function (index) {
       let threadGageName = $(this).find('.thread-gage-table-name input');
       let threadGageID = $(this).find('.thread-gage-table-id input');
+      let missingThreadGageTicketNumber = $(this).find('.existing-missing-thread-ticket-number input');
       let existingThreadGageTicketNumber = $(this).find('.thread-gage-table-existing-ticket-id input');
 
       if ((threadGageID.val().length == 0) && (threadGageName.val().length > 0)) {
@@ -191,6 +193,15 @@ function validateForm(e) {
       if (existingThreadGageTicketNumber.val().length > 0) {
         threadGageName.parent().find('#preexisting-thread-gage-error').remove();
         threadGageName.parent().append("<ul id='preexisting-thread-gage-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Thread Gage already marked as 'Checked Out'. See Metrology Calibration.</li></ul>");
+        threadGageName.addClass('parsley-error');
+        $('.Submit').prop("disabled", true);
+        if (arguments.length === 1) {
+          e.preventDefault();
+        }
+      }
+      if (missingThreadGageTicketNumber.val().length > 0) {
+        threadGageName.parent().find('#missing-thread-gage-error').remove();
+        threadGageName.parent().append("<ul id='missing-thread-gage-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Thread Gage marked as 'Missing' on another ticket. Bring gage to Metrology Calibration.</li></ul>");
         threadGageName.addClass('parsley-error');
         $('.Submit').prop("disabled", true);
         if (arguments.length === 1) {

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Designer Version="10.4.3.139">
-    <SequentialWorkflowActivityProxy Type="Laserfiche.Workflow.Activities.Proxies.LfSequentialWorkflowProxy, Laserfiche.Workflow.Designer.Base, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="e9f00fef-c9a8-46e5-8f46-250fc52a13b2" ActivityCountHint="11">
+    <SequentialWorkflowActivityProxy Type="Laserfiche.Workflow.Activities.Proxies.LfSequentialWorkflowProxy, Laserfiche.Workflow.Designer.Base, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="33b675d4-1e20-47f9-a5af-20914d379ae8" ActivityCountHint="11">
         <Name>GenerateOverDueEmails</Name>
         <SafeName>GenerateOverDueEmails</SafeName>
         <Enabled>True</Enabled>
@@ -53,11 +53,11 @@
         </Cultures>
         <MetadataStore Attributes="ExpectsStartingEntry, ValidateDesign">
             <VersionHistory>
-                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\GenerateOverDueCellLeaderEmails.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/17/2025 03:34:13" EndTime="02/17/2025 08:26:12" />
-                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\GenerateOverDueCellLeaderEmails.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/18/2025 04:58:23" EndTime="02/18/2025 06:17:43" />
-                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp1FF5.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/18/2025 06:17:43" EndTime="02/18/2025 06:17:47" />
-                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpB3F.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/19/2025 19:04:55" EndTime="02/19/2025 19:48:51" />
-                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\GenerateOverDueEmails.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/19/2025 19:48:51" EndTime="02/19/2025 19:49:25" />
+                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\GenerateOverDueCellLeaderEmails.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/16/2025 21:34:13" EndTime="02/17/2025 02:26:12" />
+                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\GenerateOverDueCellLeaderEmails.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/17/2025 22:58:23" EndTime="02/18/2025 00:17:43" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp1FF5.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/18/2025 00:17:43" EndTime="02/18/2025 00:17:47" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpB3F.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/19/2025 13:04:55" EndTime="02/19/2025 13:48:51" />
+                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\GenerateOverDueEmails.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/21/2025 13:29:11" EndTime="02/21/2025 13:29:50" />
             </VersionHistory>
             <Metadata>
                 <Value Item="Author" Type="String">JTWhitney</Value>
@@ -81,6 +81,7 @@
                     <Fields>
                         <Attribute AttributeId="3210" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="closeme" AttributeName="closeme" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-GenerateOverDueEmails" MemberPath="3216" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
                         <Attribute AttributeId="3209" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Site_ID" AttributeName="Site_ID" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-GenerateOverDueEmails" MemberPath="3215" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="3308" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="SiteOwnerEmailAddress" AttributeName="SiteOwnerEmailAddress" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-GenerateOverDueEmails" MemberPath="3314" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
                         <Attribute AttributeId="3208" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="UserEmployeeNumber" AttributeName="UserEmployeeNumber" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-GenerateOverDueEmails" MemberPath="3214" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
                     </Fields>
                     <AdditionalVariableOptions>
@@ -231,7 +232,9 @@
                             <ToAddresses>
                                 <Add>%(DepartmentEMailAddress)</Add>
                             </ToAddresses>
-                            <CcAddresses />
+                            <CcAddresses>
+                                <Add>%(RetrieveBusinessProcessVariables_SiteOwnerEmailAddress)</Add>
+                            </CcAddresses>
                             <BccAddresses />
                             <FromAddress />
                             <ReplyTo />
