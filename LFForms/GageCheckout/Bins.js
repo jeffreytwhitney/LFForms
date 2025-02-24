@@ -14,7 +14,7 @@ $(document).ready(function () {
 
   $(document).prop('title', 'Bin Maintenance');
   $('#myElement').removeAttr('style');
-  $('#q2').prepend("<fieldset id='Field25' class='radio-checkbox-fieldset filter-checkboxes'><span class='choice'><input name='Field25' id='Field25-0' type='checkbox' value='IncludeInactiveBins'><label class='form-option-label' for='Field25-0'>Include Inactive Bins</label></span></fieldset>");
+  $('#q2').prepend("<fieldset id='Field999' class='radio-checkbox-fieldset filter-checkboxes'><span class='choice'><input name='Field999' id='Field999-0' type='checkbox' value='IncludeInactiveBins'><label class='form-option-label' for='Field999-0'>Include Inactive Bins</label></span></fieldset>");
 
   $('.edit-bin-isactive-value input').change(function () {
     $('.edit-bin-isactive-combo select').val(Number($('.edit-bin-isactive-value input').val()));
@@ -51,6 +51,7 @@ $(document).ready(function () {
       refreshPage();
     }
   };
+
   $(document).on("onloadlookupfinished", function () {
     generateAddButton();
     generateGoBackButtons();
@@ -59,7 +60,8 @@ $(document).ready(function () {
     generateFilterRow();
     $('#txtFilterBinName').keyup(function () { this.value = this.value.toLocaleUpperCase(); });
     $('.bin-table').show();
-
+    reApplyFilterValues();
+    filterBinTable();
   });
 
   $(document).on('lookupcomplete', function (e) {
@@ -178,7 +180,7 @@ function filterBinTable() {
   var binNameFilterValue = $('#txtFilterBinName').val();
   var noteFilterVal = $('#txtFilterNote').val();
 
-  if ($("#Field25-0").is(":checked")) {
+  if ($("#Field999-0").is(":checked")) {
     $('.incinactive input').val(1);
   }
   else {
@@ -312,12 +314,20 @@ function reApplyFilterValues() {
   if ($('#filterRow').length == 0) {
     return;
   }
-
+  var includeInactive = $('.incinactive input').val();
   var binNameFilterValue = $('.fbinname input').val();
   var noteFilterVal = $('.fnote input').val();
 
+  if (includeInactive == 1) {
+    $('#Field999-0').prop("checked", true).change();
+  }
+  else {
+    $('#Field999-0').prop("checked", false).change();
+  }
+
+
   if ((binNameFilterValue != null) && (binNameFilterValue.length > 0)) {
-    $('#txtFilterBinName').val(ticketNumberFilterValue);
+    $('#txtFilterBinName').val(binNameFilterValue);
   }
 
   if ((noteFilterVal != null) && (noteFilterVal.length > 0)) {
@@ -329,6 +339,7 @@ function reApplyFilterValues() {
 
 function refreshPage() {
 
+  var includeInactive = Number($('.incinactive input').val());
   var binNameFilterValue = $('.fbinname input').val();
   var noteFilterVal = $('.fnote input').val();
   var page_number = Number($('.pg input').val());
@@ -349,6 +360,10 @@ function refreshPage() {
 
   if ((noteFilterVal != null) && (noteFilterVal.length > 0)) {
     current_url = current_url + `&fnote=${noteFilterVal}`;
+  }
+
+  if (includeInactive == 1) {
+    current_url = current_url + `&incinactive=${includeInactive}`;
   }
 
   window.location = current_url;
@@ -401,6 +416,9 @@ function validateForm(e) {
     if (arguments.length === 1) {
       e.preventDefault();
     }
+  }
+  else {
+    $('#Field999').remove();
   }
 
 }
