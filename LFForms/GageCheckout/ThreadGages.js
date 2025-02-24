@@ -78,6 +78,7 @@ $(document).ready(function () {
     $(".filter-checkboxes input[type='checkbox']").on("change", function () { filterThreadTable(); });
     generateFilterRow();
     $('#txtFilterThreadName').keyup(function () { this.value = this.value.toLocaleUpperCase(); });
+    $('#txtFilterDesc').keyup(function () { this.value = this.value.toLocaleUpperCase(); });
     $('.add-thread-name input').keyup(function () { this.value = this.value.toLocaleUpperCase(); });
     $('.thread-table').show();
     reApplyFilterValues();
@@ -116,14 +117,20 @@ function appendPagination() {
       return;
     }
     if ((current_page > 1) && (row_count == 25)) {
-      $('.thread-table table').parent().append("<div id='thread-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>‹‹</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>‹</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>›</a></li></ul></div>")
+      $('.thread-table table').parent().append("<div id='thread-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);'>‹‹</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);'>‹</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>›</a></li></ul></div>")
       return;
     }
     if ((current_page > 1) && (row_count < 25)) {
-      $('.thread-table table').parent().append("<div id='thread-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>‹‹</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>‹</a></li><li><a class='page-link next isDisabled'>›</a></li></ul></div>")
+      $('.thread-table table').parent().append("<div id='thread-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);'>‹‹</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);'>‹</a></li><li><a class='page-link next isDisabled'>›</a></li></ul></div>")
       return;
     }
   }
+  else {
+    $('#thread-table-pagination').remove();
+    $('.thread-table table').parent().append("<div id='thread-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled' href='javascript:void(0);'>‹‹</a></li><li><a class='page-link prev isDisabled' href='javascript:void(0);'>‹</a></li><li><a class='page-link next isDisabled'>›</a></li></ul></div>")
+    return;
+  }
+
 }
 
 
@@ -279,8 +286,8 @@ function generateTicketDetailButtons() {
 
   current_statuses.each(function (index) {
     let ticket_id_field = ticket_id_buttons[index];
-    let ticket_id_value = Number(ticket_id_buttons[index].value);
-    let ticket_number = ticket_numbers[index].value;
+    let ticket_id_value = Number($(ticket_id_field).val());
+    let ticket_number = $(ticket_numbers[index]).val();
 
     if (ticket_number.length > 0) {
       var btn_html = `<div class='ui-button ticket-details-button' onclick='showDetails(${ticket_id_value})'><span title='Ticket Details' class='ui-button-icon ui-icon ui-icon-document'></span></div>`
