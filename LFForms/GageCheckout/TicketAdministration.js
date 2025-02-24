@@ -252,8 +252,6 @@ function filterTicketTable() {
 
   $('.ftname input').val(ticketNumberFilterValue);
 
-  console.log(`ticketTypeFilterVal:${ticketTypeFilterVal}`);
-
   if (ticketTypeFilterVal != null) {
     $('.fttid input').val(ticketTypeFilterVal);
   }

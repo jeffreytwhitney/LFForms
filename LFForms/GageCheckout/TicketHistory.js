@@ -21,6 +21,7 @@ $(document).ready(function () {
 
   $(document).prop('title', 'Ticket History');
   $('#q0').append("<div class='hidden' id='popUpDiv'></div>");
+  $('#Field33').parent().append('<div class="filter-checkboxes"><fieldset class="radio-checkbox-fieldset"><legend class="screen-reader-legend">Filter Checkboxes:</legend><span class="choice"><input name="Field52" id="Field52-0" type="checkbox" value="IncludeClosedTickets" ><label class="form-option-label" for="Field52-0">Include Closed Tickets</label></span></fieldset></div>');
 
    
 
