@@ -44,7 +44,10 @@ $(document).ready(function () {
     }
   });
 
-  
+  //This is in the Add Thread section. If the user changes the value in the Thread Type text box, it updates the combo box.
+  $('.add-thread-type-combo select').change(function () {
+    $('.add-thread-type-id input').val(Number($('.add-thread-type-combo select').val()));
+  });
 
   //This is in the Add Thread section. If there is a thread with the same name, disable the submit button.
   $('.existing-thread-name-id input').change(function () {
@@ -74,7 +77,8 @@ $(document).ready(function () {
     $('#q0').append("<div class='hidden-text' id='popUpDiv'></div>");
     $(".filter-checkboxes input[type='checkbox']").on("change", function () { filterThreadTable(); });
     generateFilterRow();
-    $('#txtFilterthreadName').keyup(function () { this.value = this.value.toLocaleUpperCase(); });
+    $('#txtFilterThreadName').keyup(function () { this.value = this.value.toLocaleUpperCase(); });
+    $('.add-thread-name input').keyup(function () { this.value = this.value.toLocaleUpperCase(); });
     $('.thread-table').show();
     reApplyFilterValues();
     filterThreadTable();

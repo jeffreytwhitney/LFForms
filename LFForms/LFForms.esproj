@@ -5,8 +5,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="GageCheckout\Workflows\" />
-    <Folder Include="GageCheckout\SQL\Tables\" />
-    <Folder Include="GageCheckout\SQL\Views\" />
     <Folder Include="MPM\SQL\Tables\" />
     <Folder Include="MPM\Workflows\" />
     <Folder Include="MPM\SQL\Functions\Scalar-valued Functions\" />

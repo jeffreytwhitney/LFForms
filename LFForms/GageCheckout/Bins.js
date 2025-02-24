@@ -59,6 +59,7 @@ $(document).ready(function () {
     $(".filter-checkboxes input[type='checkbox']").on("change", function () { filterBinTable(); });
     generateFilterRow();
     $('#txtFilterBinName').keyup(function () { this.value = this.value.toLocaleUpperCase(); });
+    $('.add-bin-name input').keyup(function () { this.value = this.value.toLocaleUpperCase(); });
     $('.bin-table').show();
     reApplyFilterValues();
     filterBinTable();
@@ -384,7 +385,7 @@ function resetPageNumber() {
 
 
 function resetValidationErrors() {
-  $('.add-pins-bins-table-new-bin-number input').removeClass('parsley-error');
+  $('.add-bin-name input').removeClass('parsley-error');
 
   $('#preexisting-bin-error').remove();
 }
