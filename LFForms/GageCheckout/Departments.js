@@ -13,34 +13,13 @@ $(document).ready(function () {
 
   $(document).prop('title', 'Department Maintenance');
 
-  $('.edit-departmentisactive-value input').change(function () {
-    $('.edit-departmentisactive-combo select').val(Number($('.edit-departmentisactive-value input').val()));
-  });
-
-  $('.edit-departmentisactive-combo select').change(function () {
-    $('.edit-departmentisactive-value input').val(Number($('.edit-departmentisactive-combo select').val()));
-  });
-
-  $('.edit-departmenttype-combo select').change(function () {
-    $('.edit-departmenttype-id input').val(Number($('.edit-departmenttype-combo select').val()));
-  });
-  $('.edit-departmenttype-id input').change(function () {
-    $('.edit-departmenttype-combo select').val(Number($('.edit-departmenttype-id input').val()));
-  });
-
-  $('.existing-ticket-id input').change(function () {
-    if ($('.existing-ticket-id input').val().length > 0) {
-      $('.edit-departmentisactive-combo select').removeClass("ui-state-disabled").addClass("ui-state-disabled");
-    }
-    else {
-      $('.edit-departmentisactive-combo select').removeClass("ui-state-disabled");
-    }
-  });
+  wireUpChangeEvents();
 
   
   $(document).on("onloadlookupfinished", function () {
     generateAddButton();
     generateGoBackButtons();
+    generateEditButtons();
     $('#q0').append("<div class='hidden-text' id='popUpDiv'></div>");
     $('.department-table').show();
   });
@@ -48,7 +27,9 @@ $(document).ready(function () {
 
   $(document).on('lookupcomplete', function (e) {
 
-    changeNumericToYesNo();
+    changeNumericToYesNo('Field19');
+    changeNumericToOddEven('Field21');
+    changeNumericToOddEven('Field22');
     $('.department-table').show();
   });
 
@@ -71,9 +52,9 @@ function callEditDepartment(department_id) {
 }
 
 
-function changeNumericToYesNo() {
+function changeNumericToYesNo(selector) {
 
-  var isactive = $("[id^='Field16']");
+  var isactive = $(`[id^='${selector}']`);
   isactive.each(function (index) {
     var isactive_value = $(this).val();
     if ((isactive_value === '1') || (isactive_value === 'Yes')) {
@@ -81,6 +62,21 @@ function changeNumericToYesNo() {
     }
     else {
       $(this).val('No');
+    }
+  });
+}
+
+
+function changeNumericToOddEven(selector) {
+
+  var isactive = $(`[id^='${selector}']`);
+  isactive.each(function (index) {
+    var isactive_value = $(this).val();
+    if ((isactive_value === '1') || (isactive_value === 'Odd')) {
+      $(this).val('Odd');
+    }
+    else {
+      $(this).val('Even');
     }
   });
 }
@@ -110,7 +106,7 @@ function generateAddButton() {
 
   add_buttons.each(function (index) {
     if (is_admin) {
-      $(this).replaceWith("<input class='return' style='visibilty:visible' type='button' value='Add Thread' onclick='callAddDepartment()' />");
+      $(this).replaceWith("<input class='return' style='visibilty:visible' type='button' value='Add Department' onclick='callAddDepartment()' />");
     }
     else {
       $(this).replaceWith("");
@@ -143,8 +139,41 @@ function generateGoBackButtons() {
 
 
 function goBack() {
-  $(".edit-threadgage-id input").val("").change(); //edit
-  $(".add-threadgage-id input").val("").change(); //add
+  $(".edit-department-id input").val("").change(); 
+  $(".add-department-id input").val("").change(); 
   $('.Submit').hide();
 }
 
+
+function wireUpChangeEvents() {
+  $('.edit-isactive-value input').change(function () {
+    $('.edit-isactive-combo select').val(Number($('.edit-isactive-value input').val()));
+  });
+  $('.edit-isactive-combo select').change(function () {
+    $('.edit-isactive-value input').val(Number($('.edit-isactive-combo select').val()));
+  });
+  $('.edit-calibration-month-value input').change(function () {
+    $('.edit-calibration-month-combo select').val(Number($('.edit-calibration-month-value input').val()));
+  });
+  $('.edit-calibration-month-combo select').change(function () {
+    $('.edit-calibration-month-value input').val(Number($('.edit-calibration-month-combo select').val()));
+  });
+  $('.add-calibration-month-value input').change(function () {
+    $('.add-calibration-month-combo select').val(Number($('.add-calibration-month-value input').val()));
+  });
+  $('.add-calibration-month-combo select').change(function () {
+    $('.add-calibration-month-value input').val(Number($('.add-calibration-month-combo select').val()));
+  });
+  $('.edit-calibration-week-value input').change(function () {
+    $('.edit-calibration-week-combo select').val(Number($('.edit-calibration-week-value input').val()));
+  });
+  $('.edit-calibration-week-combo select').change(function () {
+    $('.edit-calibration-week-value input').val(Number($('.edit-calibration-week-combo select').val()));
+  });
+  $('.add-calibration-week-value input').change(function () {
+    $('.add-calibration-week-combo select').val(Number($('.add-calibration-week-value input').val()));
+  });
+  $('.add-calibration-week-combo select').change(function () {
+    $('.add-calibration-week-value input').val(Number($('.add-calibration-week-combo select').val()));
+  });
+}
