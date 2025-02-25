@@ -16,7 +16,7 @@ $(document).ready(function () {
 
 
 function generateNoteButtons() {
-
+  console.log("Generating note buttons");
   $('.notes-button').remove();
 
 

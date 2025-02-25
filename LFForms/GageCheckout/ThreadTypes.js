@@ -9,9 +9,10 @@ $(document).ready(function () {
   $.fn.bootstrapBtn = bootstrapButton;
 
 
+  $('.Submit').click(function (e) { validateForm(e); });
   $('.Submit').hide();
 
-  $(document).prop('title', 'Site Maintenance');
+  $(document).prop('title', 'Thread Type Maintenance');
 
 
 
@@ -20,29 +21,29 @@ $(document).ready(function () {
     generateAddButton();
     generateGoBackButtons();
     generateEditButtons();
-    $('.site-table').show();
+    $('.threadtype-table').show();
   });
 
   $(document).on('lookupcomplete', function (e) {
-    
-    $('.site-table').show();
+
+    $('.threadtype-table').show();
   });
 
 });
 
 
-function callAddSite() {
+function callAddPinType() {
 
   $("#Field9-1").prop("checked", true).change();
-  $(".add-site-id input").val(1).change();
+  $(".add-threadtype-id input").val(1).change();
   $('.Submit').show();
 
 }
 
 
-function callEditSite(thread_id) {
+function callEditPinType(thread_id) {
   $("#Field9-0").prop("checked", true).change();
-  $(".edit-site-id input").val(thread_id).change();
+  $(".edit-threadtype-id input").val(thread_id).change();
   $('.Submit').show();
 }
 
@@ -71,7 +72,7 @@ function generateAddButton() {
 
   add_buttons.each(function (index) {
     if (is_admin) {
-      $(this).replaceWith("<input class='return' style='visibilty:visible' type='button' value='Add Thread' onclick='callAddSite()' />");
+      $(this).replaceWith("<input class='return' style='visibilty:visible' type='button' value='Add Thread Type' onclick='callAddPinType()' />");
     }
     else {
       $(this).replaceWith("");
@@ -88,7 +89,7 @@ function generateEditButtons() {
   edit_buttons.each(function (index) {
     var btn_value = $(this).val();
     if (is_admin) {
-      $(this).parent().append("<input class='table-button' type='button' value='Edit' onclick='callEditSite(" + btn_value + ")' />");
+      $(this).parent().append("<input class='table-button' type='button' value='Edit' onclick='callEditPinType(" + btn_value + ")' />");
     }
 
   });
@@ -104,8 +105,11 @@ function generateGoBackButtons() {
 
 
 function goBack() {
-  $(".edit-site-id input").val("").change(); 
-  $(".add-site-id input").val("").change(); 
+  $(".edit-threadtype-id input").val("").change(); //edit
+  $(".add-threadtype-id input").val("").change(); //add
   $('.Submit').hide();
 }
+
+
+
 

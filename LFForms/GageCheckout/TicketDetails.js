@@ -266,12 +266,12 @@ function setDailyCalValues() {
 
 
 function showPinCalibrationHistory(calibration_id) {
-  popUpIframe(`http://rmslf/Forms/RMS-GAGE-PinCalibrationHistory?pcid=${calibration_id}`, 'Calibration History', 600, 1100);
+  popUpIframe(`http://rmslf/Forms/RMS-GAGE-TicketPinCalHistory?pcid=${calibration_id}`, 'Calibration History', 600, 1100);
 }
 
 
 function showThreadCalibrationHistory(calibration_id) {
-  popUpIframe(`http://rmslf/Forms/RMS-GAGE-ThreadCalibrationHistory?pcid=${calibration_id}`, 'Calibration History', 600, 1000);
+  popUpIframe(`http://rmslf/Forms/RMS-GAGE-TicketThreadCalHistory?pcid=${calibration_id}`, 'Calibration History', 600, 1000);
 }
 
 
