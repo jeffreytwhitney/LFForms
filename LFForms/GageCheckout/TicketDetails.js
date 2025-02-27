@@ -85,6 +85,7 @@ $(document).ready(function () {
 
 });
 
+
 function colorCodePinRows() {
   
   var pin_history_rows = $(".pin-history-table table tbody tr");

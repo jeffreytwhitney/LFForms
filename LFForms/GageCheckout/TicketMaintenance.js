@@ -127,6 +127,11 @@ function appendPagination() {
       return;
     }
   }
+  else {
+    $('#ticket-table-pagination').remove();
+    $('.ticket-table table').parent().append("<div id='ticket-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled' href='javascript:void(0);'>‹‹</a></li><li><a class='page-link prev isDisabled' href='javascript:void(0);'>‹</a></li><li><a class='page-link next isDisabled'>›</a></li></ul></div>")
+    return;
+  }
 }
 
 

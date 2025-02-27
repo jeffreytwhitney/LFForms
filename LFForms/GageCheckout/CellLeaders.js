@@ -2,40 +2,47 @@ var departmentMap = new Map();
 var departmentNameMap = new Map();
 
 
-$(document).ready(
-  function () {
-    $('.Submit').hide();
-    $(document).prop('title', 'Cell Leader Maintenance');
+$(document).ready(function () {
+  $('.Submit').hide();
+  $('.Submit').click(function (e) { validateForm(e); });
+  $(document).prop('title', 'Cell Leader Maintenance');
 
-    $('.edit-cellleader-isactive-value input').change(function () {
-      $('.edit-cellleader-isactive-combo select').val(Number($('.edit-cellleader-isactive-value input').val()));
-    });
+  $('.edit-cellleader-isactive-value input').change(function () {
+    $('.edit-cellleader-isactive-combo select').val(Number($('.edit-cellleader-isactive-value input').val()));
+  });
 
-    $('.edit-cellleader-isactive-combo select').change(function () {
-      $('.edit-cellleader-isactive-value input').val(Number($('.edit-cellleader-isactive-combo select').val()));
-    });
+  $('.edit-cellleader-isactive-combo select').change(function () {
+    $('.edit-cellleader-isactive-value input').val(Number($('.edit-cellleader-isactive-combo select').val()));
+  });
 
-    $('.edit-cellleader-department-id input').change(function () {
-      var department_name = departmentMap.get(Number($('.edit-cellleader-department-id input').val()))
-      $('.edit-cellleader-department-combo select').val(department_name);
-    });
-
-    $(document).on("onloadlookupfinished", function () {
-
-      generateEditButtons();
-      generateAddButton();
-      generateGoBackButtons();
-      changeNumericToYesNo();
+  $('.edit-cellleader-department-id input').change(function () {
+    var department_name = departmentMap.get(Number($('.edit-cellleader-department-id input').val()))
+    $('.edit-cellleader-department-combo select').val(department_name);
+  });
 
 
 
-    });
+  $(document).on("onloadlookupfinished", function () {
 
-    $(document).on('lookupcomplete', function (e) {
-      loadDepartmentMap();
+    generateEditButtons();
+    generateAddButton();
+    generateGoBackButtons();
+    changeNumericToYesNo();
+
+
+
+  });
+
+  $(document).on('lookupcomplete', function (e) {
+    loadDepartmentMap();
+    $('.assign-to-id input').off('change');
+    $('.assign-to-id input').change(function () {
+      validateForm();
     });
 
   });
+
+});
 
 
 function changeNumericToYesNo() {
@@ -145,4 +152,41 @@ function loadDepartmentMap() {
       departmentNameMap.set(departmentName, departmentID);
     });
   }
+}
+
+
+function validateForm(e) {
+  
+  var isValid = true;
+  $('.assign-to-cell-leader-combo-col input').removeClass('parsley-error');
+  $('#bad-cell-leader-error').remove();
+
+  var editedCellLeaderID = Number($('.edit-cellleader-id input').val());
+  console.log(`editedCellLeaderID: ${editedCellLeaderID}`);
+  var countOfActiveTickets = Number($('.count-of-cell-leader-tickets input').val());
+
+  if (countOfActiveTickets == 0) {
+    return;
+  }
+  var ticketRows = $('.cell-leader-ticket-table table tbody tr');
+
+  ticketRows.each(function (index) {
+    let cellLeaderAssigneeID = Number($(this).find('.assign-to-id input').val());
+    console.log(`cellLeaderAssigneeID: ${cellLeaderAssigneeID}`);
+    let cellLeaderAssigneeName = $(this).find('.assign-to-cell-leader-combo-col select');
+
+    if (cellLeaderAssigneeID == editedCellLeaderID) {
+      cellLeaderAssigneeName.parent().append("<ul id='bad-cell-leader-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Cannot assign ticket to Cell Leader you're trying to make inactive.</li></ul>");
+      cellLeaderAssigneeName.addClass('parsley-error');
+      isValid = false;
+    }
+  });
+
+  if (isValid == false) {
+    if (arguments.length === 1) {
+      e.preventDefault();
+    }
+  }
+
+
 }
