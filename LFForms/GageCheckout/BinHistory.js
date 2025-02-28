@@ -13,6 +13,14 @@ $(document).ready(function () {
     }
   });
 
+  $('.bid input').on('change', function () {
+    if (($(this).val() != null) && ($(this).val().length > 0)) {
+      $('#q8 .collapsible').trigger('click');
+    }
+  });
+  $('.bin-number input[type="text"]').dblclick(function () { $('.bin-number input[type="text"]').val(null).change(); });
+
+
   $(document).on('lookupcomplete', function (e) {
     fillIFrames();
   });
