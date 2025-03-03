@@ -28,7 +28,6 @@ var qualityEngineerNameMap = new Map();
 //-------------------DOCUMENT FUNCTIONS-------------------------
 
 $(document).ready(function () {
-  window.name = "TaskMaintenance";
   $('.Submit').hide();
   $(document).prop('title', 'Task Maintenance');
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
@@ -38,7 +37,7 @@ $(document).ready(function () {
   var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
   $.fn.bootstrapBtn = bootstrapButton;
   $('.network-user-name input').val($('.lf-username input').val().toUpperCase().substr($('.lf-username input').val().lastIndexOf('\\') + 1)).change();
- 
+
   window.onmessage = function (event) {
     //This is the callback from the IFrame.
     //If the event data says "Close Dialog", it destroys the dialog, (so that the close function won't fire).
@@ -57,11 +56,11 @@ $(document).ready(function () {
       refreshPage();
     }
   };
-  
+
 
   $(document).on('lookupcomplete', function (e) {
-    
-    
+
+
     loadAssigneeMap();
     loadStatusMap();
     loadDepartmentMap();
@@ -69,9 +68,7 @@ $(document).ready(function () {
     loadProjectMap();
     loadInitiatorMap();
     loadQualityEngineerMap();
-    if ($('.tasklist-page input').val() == '999') {
-      $('.tasklist-page input').val(1).change();
-    }
+
     $('.tasklist-datestarted-col input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
     generateTaskListColumnFields();
     reApplyFilterValues();
@@ -82,14 +79,17 @@ $(document).ready(function () {
   });
 
   $(document).on("onloadlookupfinished", function (e) {
-    
+
     $('#q0').append("<div class='hidden-text' id='popUpDiv'></div>");
     $(".tasklist-filter-checks input").on("change", function () { filterTaskListTable(); });
-    
+    if ($('.tasklist-page input').val() == '999') {
+      $('.tasklist-page input').val(1).change();
+      $('.network-user-name input').trigger("change");
+    }
 
-    
+
     generateFilterRow();
-    
+
     $('.tasklist-table').show();
     if (checkPermissions() == false) {
       lockRows();
@@ -216,12 +216,12 @@ function loadTaskTypeMap() {
 //-------------------TASK LIST FUNCTIONS----------------------
 
 function appendPagination() {
-  
+
   var current_page = Number($('.tasklist-page input').val());
   if (current_page == 999) { return; }
 
   var row_count = getTaskListRowCount();
-  
+
   if (row_count > 0) {
     $('#tasklist-pagination').remove();
     if ((current_page == 1) && (row_count < 25)) {
@@ -264,7 +264,7 @@ function checkPermissions() {
   }
 
   return return_val
-  
+
 }
 
 
@@ -309,13 +309,13 @@ function colorCodeRow(task_id) {
   }
 
 
-} 
+}
 
 
 function colorCodeRows() {
   var status_ids = $('.tasklist-status-id-col input[type="text"]');
   var tasklist_rows = $(".tasklist-table table tbody tr");
-  
+
   var currentDate = new Date();
   var aMonthAgoNumber = new Date().setDate(currentDate.getDate() - 30);
   var aMonthAgo = new Date(aMonthAgoNumber).toISOString();
@@ -330,7 +330,7 @@ function colorCodeRows() {
     let tasklist_row = tasklist_rows[index];
     let dueDateString = $(tasklist_row).find('.tasklist-date-col input[type="text"]').val();
     let dueDate = moment(dueDateString, "M/D/YYYY").toDate();
-    
+
     let dateStartedString = $(tasklist_row).find('.tasklist-datestarted-col input[type="text"]').val();
 
     if ((status_id == status_Completed) || (status_id == status_Cancelled)) {
@@ -357,17 +357,17 @@ function colorCodeRows() {
         $(tasklist_row).addClass('colorStarted');
       }
     }
-    
+
     if ((status_id == status_Waiting)) {
       $(tasklist_row).addClass('colorWaiting');
     }
-    
+
   });
 }
 
 
 function executeIFrameUpdate(task_id, fieldToUpdate, fieldValue) {
-  
+
   if (typeof task_id === 'undefined') {
     return;
   }
@@ -377,12 +377,12 @@ function executeIFrameUpdate(task_id, fieldToUpdate, fieldValue) {
   if (typeof fieldValue === 'undefined') {
     return;
   }
-  
+
   console.log('executeIFrameUpdate');
   console.log(`task_id: ${task_id}`);
   console.log(`fieldToUpdate: ${fieldToUpdate}`);
   console.log(`fieldValue: ${fieldValue}`);
-  
+
   var execute_url = `http://rmslf/Forms/MPM-UpdateTask?tid=${task_id}&ftu=${fieldToUpdate}&fv=${fieldValue}`;
 
   $("#popupIFrame").remove();
@@ -433,7 +433,7 @@ function filterTaskListTable() {
   $('.ftname input').val(taskNameFilterValue);
   $('.fpname input').val(projectNameFilterValue);
 
-  if ((ticketNumberFilterValue != null) && (ticketNumberFilterValue.length > 0))  {
+  if ((ticketNumberFilterValue != null) && (ticketNumberFilterValue.length > 0)) {
     $('.fpid input').val(ticketNumberFilterValue);
   }
   else {
@@ -450,7 +450,7 @@ function filterTaskListTable() {
 
 
   if ((statusFilterVal != null) && (statusFilterVal.length > 0)) {
-    let statusID= taskStatusNameMap.get(statusFilterVal);
+    let statusID = taskStatusNameMap.get(statusFilterVal);
     $('.fsid input').val(statusID);
   }
   else {
@@ -497,13 +497,13 @@ function filterTaskListTable() {
 
 
 function generateFilterRow() {
-  
+
   if ($('#filterRow').length == 0) {
 
     var filter_row = "<TR id='filterRow'><TH/><TH/><TH/><TH><select id='cboFilter_TicketNumber'/></TH><TH><input type='text' id='txtFilter_ProjectName'></TH><TH><input type='text' id='txtFilter_TaskName'></TH><TH><select id='cboFilter_Status'/></TH><TH><select id='cboFilter_TaskType'/></TH><TH><select id='cboFilter_Assignee'/></TH><TH/><TH/><TH/><TH/><TH/><TH><TH/><TH><select id='cboFilter_Department'/></TH><TH/><TH/><select id='cboFilter_QE'/></TH><TH><select id='cboFilter_Initiator'/></TH><TH/></TR>"
     $('.tasklist-table table thead').append(filter_row);
-    $("#cboFilter_TicketNumber").on("change", function () {filterTaskListTable(); });
-    $("#txtFilter_ProjectName").on("change", function () {filterTaskListTable(); });
+    $("#cboFilter_TicketNumber").on("change", function () { filterTaskListTable(); });
+    $("#txtFilter_ProjectName").on("change", function () { filterTaskListTable(); });
     $("#txtFilter_TaskName").on("change", function () { filterTaskListTable(); });
     $("#cboFilter_Status").on("change", function () { filterTaskListTable(); });
     $("#cboFilter_TaskType").on("change", function () { filterTaskListTable(); });
@@ -538,7 +538,7 @@ function generateFilterRow() {
   if (($(".initiator-lookup-combo select option").length > 0) && ($("#cboFilter_Initiator option" == 0))) {
     $("#cboFilter_Initiator").html($(".initiator-lookup-combo select").html());
 
-    
+
   }
 
   if (($('.ticket-number-lookup-combo select option').length > 0) && ($("#cboFilter_TicketNumber option" == 0))) {
@@ -553,7 +553,7 @@ function generateFilterRow() {
     $("#cboFilter_TicketNumber").html(selectList);
     $("#cboFilter_TicketNumber").val(null);
   }
-  
+
   if (($(".status-lookup-combo select option").length > 0) && ($("#cboFilter_Status option" == 0))) {
     $("#cboFilter_Status").html($(".status-lookup-combo select").html());
   }
@@ -565,14 +565,14 @@ function generateFilterRow() {
   }
   if (($(".department-lookup-combo select option").length > 0) && ($("#cboFilter_Department option" == 0))) {
     $("#cboFilter_Department").html($(".department-lookup-combo select").html());
-  }  
+  }
 }
 
 
 function generateTaskListColumnFields() {
   removeAppendedFields();
   if ($('.tasklist-table table tbody tr').length > 0) {
-    
+
     generateTableButtons(".task-list-clone-col", "ui-icon-newwin", "Clone Task", "callCloneTask");
 
     generateTableButtons(".tasklist-note-col", "ui-icon-document", "Add Note", "callAddNote");
@@ -699,12 +699,12 @@ function getRowByTaskID(task_id) {
 function lockCompletedRows() {
   var status_ids = $('.tasklist-status-id-col input[type="text"]');
   var tasklist_rows = $(".tasklist-table table tbody tr");
-  
+
 
   status_ids.each(function (index) {
     let status_id = $(status_ids[index]).val();
     let tasklist_row = tasklist_rows[index];
-    
+
     if ((status_id == status_Completed) || (status_id == status_Cancelled)) {
       $(tasklist_row).addClass('colorClosedCancelled');
       $(tasklist_row).find(".time-button").prop("disabled", true);
@@ -734,7 +734,7 @@ function lockRows() {
   tasklist_rows.each(function (index) {
 
     let departmentID = $(this).find('.tasklist-dept-id-col input[type="text"]').val();
-    
+
     $(this).find(".tasklist-time-col").find(".table-button").addClass("ui-state-disabled");
     if ((user_type_id == 2) || (user_type_id == 4) || (user_type_id == 5)) {
       $(this).find(".task-list-clone-col").find(".table-button").addClass("ui-state-disabled");
@@ -754,7 +754,7 @@ function lockRows() {
 
 function popUpIframe(src, title, height, width, dorefresh, task_id) {
   //var iframe_height = height - 100;
-  
+
   $("#popupIFrame").remove();
   $("#popUpDiv").html(`<div height='${height}' width='${width}'><iframe id='popupIFrame' name='myname' src='${src}' height='${height}' width='${width}'/></div>`);
   $("#popupIFrame").dialog({
@@ -772,7 +772,7 @@ function popUpIframe(src, title, height, width, dorefresh, task_id) {
     }
   });
 
-  
+
   $("#popupIFrame").dialog("open");
   $('#popupIFrame').attr('style', `width: 100%; height: ${height}px;`);
 }
@@ -820,10 +820,10 @@ function reApplyFilterValues() {
   var departmentFilterVal = Number($('.fdid input').val());
   var qeFilterVal = Number($('.fqeid input').val());
   var initiatorFilterVal = $('.finitid input').val();
-  
+
   if (qeFilterVal != 0) {
     let qeName = qualityEngineerMap.get(qeFilterVal);
-    
+
     $('#cboFilter_QE').val(qeName);
   }
 
@@ -838,7 +838,7 @@ function reApplyFilterValues() {
 
     $("#cboFilter_Initiator").val($("#cboFilter_Initiator option:first").val());
   }
-  
+
   if ((taskNameFilterValue != null) && (taskNameFilterValue.length > 0)) {
     $('#txtFilter_TaskName').val(taskNameFilterValue);
   }
@@ -861,7 +861,7 @@ function reApplyFilterValues() {
     $('#cboFilter_Status').val(statusName);
   }
   if (assigneeFilterVal != 0) {
-    
+
     let assigneeName = assigneeMap.get(assigneeFilterVal);
     $('#cboFilter_Assignee').val(assigneeName);
   }
@@ -869,7 +869,7 @@ function reApplyFilterValues() {
     let departmentName = departmentMap.get(departmentFilterVal);
     $('#cboFilter_Department').val(departmentName);
   }
-  
+
 }
 
 
@@ -1001,7 +1001,7 @@ function setAssigneeColumnValues() {
     let task_id = $(task_ids[index]).val();
     let assignee_id = $(assignee_ids[index]).val();
     let assignee_cbo = assignee_cbos[index];
-    
+
     $(assignee_cbo).val(assignee_name);
     $(assignee_cbo).on("change", function () { assigneeChanged(task_id) });
 
@@ -1010,7 +1010,7 @@ function setAssigneeColumnValues() {
 
 
 function setStatusColumnValues() {
-  
+
   $('.tasklist-status-cbo-col select option').filter(function () {
     return this.hasAttribute('value') == false;
   }).remove();
@@ -1019,7 +1019,7 @@ function setStatusColumnValues() {
   if (status_names.length == 0) {
     return;
   }
-  
+
   var status_cbos = $('.tasklist-status-cbo-col select');
   $(status_cbos).off();
   var task_ids = $('.tasklist-task-id-col input[type="text"]');
@@ -1028,7 +1028,7 @@ function setStatusColumnValues() {
     let task_id = $(task_ids[index]).val();
     let status_name = $(this).val();
     let status_cbo = $(status_cbos[index]);
-    
+
     $(status_cbo).val(status_name);
     $(status_cbo).on("change", function () { statusChanged(task_id) });
 
@@ -1072,7 +1072,7 @@ function wireUpChangeEvents(column_name, function_name) {
 //-------------------TASK LIST CALLED FUNCTIONS-------------------
 
 function assigneeChanged(task_id) {
-  
+
   original_assignee_name = getColumnValueByTaskID(task_id, '.tasklist-assignee-name-col input');
   if (typeof original_assignee_name === 'undefined') {
     return;
@@ -1088,7 +1088,7 @@ function assigneeChanged(task_id) {
     return;
   }
 
-  if (((new_assignee_name == null) || (new_assignee_name.length == 0)) && ((original_assignee_name != null) && (original_assignee_name.length > 0))){
+  if (((new_assignee_name == null) || (new_assignee_name.length == 0)) && ((original_assignee_name != null) && (original_assignee_name.length > 0))) {
     resetAssignee(task_id);
     return;
   }
@@ -1096,7 +1096,7 @@ function assigneeChanged(task_id) {
   new_assignee_id = assigneeNameMap.get(new_assignee_name);
 
   if (original_assignee_name != new_assignee_name) {
-    
+
     $.confirm({
       title: 'Are you sure?',
       content: 'Are you sure you wish to reassign this task?',
@@ -1134,7 +1134,7 @@ function callAddNote(task_id) {
 
 
 function callAddTime(task_id) {
-  if (checkPermissions() == true) { 
+  if (checkPermissions() == true) {
     var task_name = getColumnValueByTaskID(task_id, '.tasklist-task-name-col input[type="text"]');
     popUpIframe(`http://rmslf/Forms/MPMAddTaskTime?tid=${task_id}`, `Add Time to task '${task_name}'`, 300, 800, false, task_id);
   }
@@ -1252,7 +1252,7 @@ function statusChanged(task_id) {
     return;
   }
 
-  if ((new_status_id == status_NotSched) || (new_status_id == status_NotStarted) || (new_status_id == status_Started)){
+  if ((new_status_id == status_NotSched) || (new_status_id == status_NotStarted) || (new_status_id == status_Started)) {
     executeIFrameUpdate(task_id, fieldToUpdate_Status, new_status_id);
     setColumnValueByTaskID(task_id, '.tasklist-status-name-col input[type="text"]', new_status_name);
     setColumnValueByTaskID(task_id, '.tasklist-status-id-col input[type="text"]', new_status_id);

@@ -1,0 +1,165 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Designer Version="10.4.3.139">
+    <SequentialWorkflowActivityProxy Type="Laserfiche.Workflow.Activities.Proxies.LfSequentialWorkflowProxy, Laserfiche.Workflow.Designer.Base, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="34cf7698-1300-4a15-8bee-5197b534cbd8" ActivityCountHint="3">
+        <Name>RMS-TimeEntry</Name>
+        <SafeName>RMSTimeEntry</SafeName>
+        <Enabled>True</Enabled>
+        <Description ShowDescription="null" ShowSummary="null" />
+        <AttachedProperties>
+            <Property Key="WorkflowWebServiceCollection" PropertyType="WebServices">
+                <LinkedProperties Default="">
+                    <LinkedProperty ServiceURL="http://rmslf/forms" User="admin" Type="Laserfiche Forms">
+                        <Name>LFForms</Name>
+                        <Id>18</Id>
+                        <Uuid>e2a5eb1d-9ab7-4e07-b80e-8b7d0b8c263b</Uuid>
+                        <Offline />
+                    </LinkedProperty>
+                </LinkedProperties>
+            </Property>
+            <Property Key="WorkflowDataSourceCollection" PropertyType="DataSources">
+                <LinkedProperties Default="">
+                    <LinkedProperty>
+                        <Name>LF_RMS_COMMS_MPM</Name>
+                        <Id>47</Id>
+                        <Uuid>d7098bca-3bca-4813-98fa-151e71bf72b4</Uuid>
+                        <Offline />
+                        <Information>
+                            <SourceInformation Flags="OdbcType, ServerDatabase, UseSSPI" Adapter="Sql">
+                                <Host>rms-corplfsql1.cretexinc.com</Host>
+                                <Database>LF_RMS_COMMS_MPM</Database>
+                                <Server />
+                                <User />
+                            </SourceInformation>
+                        </Information>
+                    </LinkedProperty>
+                </LinkedProperties>
+            </Property>
+        </AttachedProperties>
+        <Projects>
+            <CSharpProject />
+            <VBProject />
+        </Projects>
+        <WorkflowBusinessProcessOptions LfProcessId="0" ProfileId="" Flags="AllowStartingFromClients, CreateBusinessProcessEntity, RecordMilestoneEvents, RecordStepEvents, SetStartingMilestone, SetCompletedMilestone, SetCanceledMilestone" Enabled="false">
+            <Milestones>
+                <Starting>Running</Starting>
+                <Completed>Completed</Completed>
+                <Canceled>Terminated</Canceled>
+            </Milestones>
+            <CustomInstanceName />
+        </WorkflowBusinessProcessOptions>
+        <WorkflowParameters SetOutputValuesViaTokens="true" />
+        <Cultures>
+            <Culture>en-us</Culture>
+        </Cultures>
+        <MetadataStore Attributes="ExpectsStartingEntry, ValidateDesign">
+            <VersionHistory>
+                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS-TimeEntry.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="03/03/2025 15:50:43" EndTime="03/03/2025 16:19:11" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpE263.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="03/03/2025 16:19:11" EndTime="03/03/2025 16:19:16" />
+                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS-TimeEntry.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="03/03/2025 16:19:16" EndTime="03/03/2025 16:46:44" />
+            </VersionHistory>
+            <Metadata>
+                <Value Item="Author" Type="String">JTWhitney</Value>
+                <Value Item="PublishedDate" Type="DateTime">2025-03-03T16:19:26.1Z</Value>
+                <Value Item="WorkflowId" Type="Int32">135</Value>
+                <Value Item="WorkflowVersion" Type="Int32">1</Value>
+                <Value Item="WorkflowServerURL" Type="String">RMS-CORPLF1</Value>
+                <Value Item="WorkflowServerId" Type="String">8f6ebc76-1c3a-4b6f-b657-d705dfc3c51f</Value>
+                <Value Item="WorkflowFilePath" Type="String">C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS-TimeEntry.wfx</Value>
+            </Metadata>
+        </MetadataStore>
+        <Activities>
+            <Activity Type="Laserfiche.Workflow.Activities.Forms.RetrieveFormFieldValueProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="8baf6f9a-e220-45df-88f6-e40668c7eba3">
+                <Name>Retrieve Business Process Variables</Name>
+                <SafeName>RetrieveBusinessProcessVariables</SafeName>
+                <Enabled>True</Enabled>
+                <Description ShowDescription="null" ShowSummary="null">Retrieves the values from a Laserfiche Forms business process instance and stores those values as tokens.</Description>
+                <RetrieveFormFieldValueOptions Id="e2a5eb1d-9ab7-4e07-b80e-8b7d0b8c263b" OPT123332="true">
+                    <SubmissionOptions UseStarting="true" SubmissionId="" InstanceId="" UseStartingInstance="true" />
+                    <ProcessOptions ProcessId="79" ProcessName="RMS-MPM-TimeEntry" />
+                    <Fields>
+                        <Attribute AttributeId="3565" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Table" Label="Tasks" AttributeName="Tasks" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="MPM-TimeEntry" MemberPath="3578_" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false">
+                            <Choices>
+                                <FormAttributeFieldChoice Label="row 1" Value="row_1" />
+                            </Choices>
+                            <Children>
+                                <Attribute AttributeId="3566" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Note" AttributeName="AddNote" ParentLabel="Tasks" ParentName="Tasks" ParentPath="3578_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="MPM-TimeEntry" MemberPath="3578_.3579" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="3567" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Task Name" AttributeName="TaskName" ParentLabel="Tasks" ParentName="Tasks" ParentPath="3578_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="MPM-TimeEntry" MemberPath="3578_.3580" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="3568" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Status" AttributeName="Status" ParentLabel="Tasks" ParentName="Tasks" ParentPath="3578_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="MPM-TimeEntry" MemberPath="3578_.3581" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="3569" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Task Type" AttributeName="TaskType" ParentLabel="Tasks" ParentName="Tasks" ParentPath="3578_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="MPM-TimeEntry" MemberPath="3578_.3582" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="3571" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Due Date" AttributeName="DueDate" ParentLabel="Tasks" ParentName="Tasks" ParentPath="3578_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="MPM-TimeEntry" MemberPath="3578_.3584" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="3582" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Number" Label="Hours" AttributeName="Hours_1" ParentLabel="Tasks" ParentName="Tasks" ParentPath="3578_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="MPM-TimeEntry" MemberPath="3578_.3595" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="3585" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="TimeEntryID" AttributeName="TimeEntryID" ParentLabel="Tasks" ParentName="Tasks" ParentPath="3578_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="MPM-TimeEntry" MemberPath="3578_.3598" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                            </Children>
+                        </Attribute>
+                        <Attribute AttributeId="3584" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Date" Label="ted" AttributeName="TimeEntryDate_1" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="MPM-TimeEntry" MemberPath="3597" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="2918" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="User_EmployeeNumber" AttributeName="User_EmployeeNumber" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="MPM-TimeEntry" MemberPath="2924" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="2915" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="User_ID" AttributeName="User_ID" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="MPM-TimeEntry" MemberPath="2921" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="2916" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="User_SiteID" AttributeName="User_SiteID" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="MPM-TimeEntry" MemberPath="2922" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                    </Fields>
+                    <AdditionalVariableOptions>
+                        <RetrievePaymentVariables>false</RetrievePaymentVariables>
+                    </AdditionalVariableOptions>
+                </RetrieveFormFieldValueOptions>
+            </Activity>
+            <Activity Type="Laserfiche.Workflow.Activities.ForEach.ForEachResultActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="63a0c0ea-85da-4d8d-9321-afe44b062aeb">
+                <Name>For Each Row</Name>
+                <SafeName>ForEachRow</SafeName>
+                <Enabled>True</Enabled>
+                <Description ShowDescription="null" ShowSummary="null">Runs the contained activities for each row returned by a Custom Query or Query Data activity, or for each result returned by activities that return collections of information.</Description>
+                <Binding Name="Collection">
+                    <BindingPath Activity="Retrieve Business Process Variables" Property="Attribute:Tasks" />
+                </Binding>
+                <Activities>
+                    <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="16783e76-1101-4250-bd91-5bf654db23b4">
+                        <Name>spTIME_AddEditTimeByDateAndAssignee</Name>
+                        <SafeName>spTIME_AddEditTimeByDateAndAssignee</SafeName>
+                        <Enabled>True</Enabled>
+                        <Description ShowDescription="null" ShowSummary="null">Performs the specified query in the selected data source.</Description>
+                        <DataSourceId>d7098bca-3bca-4813-98fa-151e71bf72b4</DataSourceId>
+                        <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+                            <CustomQuery>spTIME_AddEditTimeByDateAndAssignee ?, ?, ?, ?, ?, ? </CustomQuery>
+                            <InputParameter DbType="Int32">
+                                <Name>?</Name>
+                                <Value>%(ForEachRow_AddNote)</Value>
+                            </InputParameter>
+                            <InputParameter DbType="Int32">
+                                <Name>?</Name>
+                                <Value>%(ForEachRow_TimeEntryID#"NULL"#)</Value>
+                            </InputParameter>
+                            <InputParameter DbType="Int32">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_User_ID)</Value>
+                            </InputParameter>
+                            <InputParameter DbType="Decimal">
+                                <Name>?</Name>
+                                <Value>%(ForEachRow_Hours_1)</Value>
+                            </InputParameter>
+                            <InputParameter DbType="String">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_TimeEntryDate_1)</Value>
+                            </InputParameter>
+                            <InputParameter DbType="String">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_User_EmployeeNumber)</Value>
+                            </InputParameter>
+                        </Criteria>
+                        <ResultSetSize Rows="ReturnAllRows" Count="2" />
+                        <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+                    </Activity>
+                </Activities>
+                <FaultHandlers />
+            </Activity>
+        </Activities>
+        <FaultHandlers />
+    </SequentialWorkflowActivityProxy>
+    <CanvasUI>
+        <Expanded>True</Expanded>
+        <Activity Name="Retrieve Business Process Variables" Key="8baf6f9a-e220-45df-88f6-e40668c7eba3" />
+        <Activity Name="For Each Row" Key="63a0c0ea-85da-4d8d-9321-afe44b062aeb">
+            <Expanded>True</Expanded>
+            <Activity Name="spTIME_AddEditTimeByDateAndAssignee" Key="16783e76-1101-4250-bd91-5bf654db23b4" />
+        </Activity>
+        <UseCompactLayout>false</UseCompactLayout>
+        <ZoomLevel>1.0</ZoomLevel>
+    </CanvasUI>
+</Designer>
