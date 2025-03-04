@@ -70,9 +70,12 @@ $(document).ready(function () {
     loadQualityEngineerMap();
 
     $('.tasklist-datestarted-col input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
+    $('.tasklist-duedate-col input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
+    $('.tasklist-schedduedate-col input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
     generateTaskListColumnFields();
     reApplyFilterValues();
     appendPagination();
+    generateFilterRow();
     $('.tasklist-table').show();
 
 
@@ -84,11 +87,10 @@ $(document).ready(function () {
     $(".tasklist-filter-checks input").on("change", function () { filterTaskListTable(); });
     if ($('.tasklist-page input').val() == '999') {
       $('.tasklist-page input').val(1).change();
-      $('.network-user-name input').trigger("change");
     }
+    $('.network-user-name input').trigger("change");
 
-
-    generateFilterRow();
+    
 
     $('.tasklist-table').show();
     if (checkPermissions() == false) {
@@ -98,6 +100,480 @@ $(document).ready(function () {
   });
 
 });
+
+
+function appendPagination() {
+
+  var current_page = Number($('.tasklist-page input').val());
+  if (current_page == 999) { return; }
+
+  var row_count = getTaskListRowCount();
+
+  if (row_count > 0) {
+    $('#tasklist-pagination').remove();
+    if ((current_page == 1) && (row_count < 25)) {
+      $('.tasklist-table table').parent().append("<div id='tasklist-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>‹</a></li><li><a class='page-link next isDisabled'>›</a></li></ul></div>");
+      return;
+    }
+    if ((current_page == 1) && (row_count == 25)) {
+      $('.tasklist-table table').parent().append("<div id='tasklist-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>‹</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>›</a></li></ul></div>")
+      return;
+    }
+    if ((current_page > 1) && (row_count == 25)) {
+      $('.tasklist-table table').parent().append("<div id='tasklist-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>‹</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>›</a></li></ul></div>")
+      return;
+    }
+    if ((current_page > 1) && (row_count < 25)) {
+      $('.tasklist-table table').parent().append("<div id='tasklist-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>‹</a></li><li><a class='page-link next isDisabled'>›</a></li></ul></div>")
+      return;
+    }
+  }
+}
+
+
+function callAddNote(task_id) {
+  var task_name = getColumnValueByTaskID(task_id, '.tasklist-task-name-col input[type="text"]');
+  popUpIframe(`http://rmslf/Forms/MPMAddNote?TaskID=${task_id}&nt=1`, `Add Note for task '${task_name}'`, 400, 650, false, task_id);
+}
+
+
+function callAddTime(task_id) {
+  if (checkPermissions() == true) {
+    var task_name = getColumnValueByTaskID(task_id, '.tasklist-task-name-col input[type="text"]');
+    popUpIframe(`http://rmslf/Forms/MPMAddTaskTime?tid=${task_id}`, `Add Time to task '${task_name}'`, 300, 800, false, task_id);
+  }
+}
+
+
+function callCloneTask(task_id) {
+  var user_type_id = $(".user-type-id input").val();
+  var userDepartmentID = $(".user-department-id input").val();
+  var departmentID = getColumnValueByTaskID(task_id, '.tasklist-dept-id-col input[type="text"]');
+
+  if (user_type_id == 2 || user_type_id == 4 || user_type_id == 5) {
+    $.alert({ title: 'Nope!', content: 'Sorry, you do not have permissions to do this.' });
+    return;
+  }
+
+  if (user_type_id == 3) {
+    if (departmentID != userDepartmentID) {
+      $.alert({ title: 'Nope!', content: 'Sorry, you do not have permissions to do this.' });
+      return;
+    }
+  }
+
+  var task_name = getColumnValueByTaskID(task_id, '.tasklist-task-name-col input[type="text"]');
+  popUpIframe(`http://rmslf/Forms/MPMCloneTask?tid=${task_id}`, `Clone task '${task_name}'`, 300, 750, false, task_id);
+}
+
+
+function callNextPage() {
+  $('.tasklist-table').hide();
+  removeAppendedFields();
+  current_page = Number($('.tasklist-page input').val());
+  $('.tasklist-page input').val(current_page + 1).change();
+}
+
+
+function callPrevPage() {
+  $('.tasklist-table').hide();
+  removeAppendedFields();
+  current_page = Number($('.tasklist-page input').val());
+  if (current_page == 1) {
+    return;
+  }
+  $('.tasklist-page input').val(current_page - 1).change();
+}
+
+
+function callShowDetails(task_id) {
+  var widowHeight = $(window).height();
+  widowHeight = widowHeight - 50;
+  popUpIframe(`http://rmslf/Forms/MPMAddEditTask?tid=${task_id}`, 'Task Details', widowHeight, 1100, false, task_id);
+}
+
+
+function checkPermissions() {
+
+  var employee_number = $(".user-id input").val();
+  var is_active_user = $(".user-isactive input").val();
+  var user_type_id = $(".user-type-id input").val();
+  var return_val = true;
+
+  if (is_active_user == 0) {
+    return_val = false;
+  }
+
+  if (employee_number == '') {
+    return_val = false;
+  }
+
+  if (user_type_id != 1) {
+    return_val = false;
+  }
+
+  return return_val
+
+}
+
+
+function colorCodeRows() {
+  var status_ids = $('.tasklist-status-id-col input[type="text"]');
+  var tasklist_rows = $(".tasklist-table table tbody tr");
+
+  var currentDate = new Date();
+  var aMonthAgoNumber = new Date().setDate(currentDate.getDate() - 30);
+  var aMonthAgo = new Date(aMonthAgoNumber).toISOString();
+
+  $(tasklist_rows).removeClass('colorOverDue');
+  $(tasklist_rows).removeClass('colorStarted');
+  $(tasklist_rows).removeClass('colorStartedButOld');
+  $(tasklist_rows).removeClass('colorWaiting');
+
+  status_ids.each(function (index) {
+    let status_id = $(status_ids[index]).val();
+    let tasklist_row = tasklist_rows[index];
+    let dueDateString = $(tasklist_row).find('.tasklist-date-col input[type="text"]').val();
+    let dueDate = moment(dueDateString, "M/D/YYYY").toDate();
+
+    let dateStartedString = $(tasklist_row).find('.tasklist-datestarted-col input[type="text"]').val();
+
+    if ((status_id == status_Completed) || (status_id == status_Cancelled)) {
+      return;
+    }
+
+    if (dueDate <= currentDate) {
+      $(tasklist_row).addClass('colorOverDue');
+      return;
+    }
+    if (status_id == status_Started) {
+      if ((dateStartedString != null) && (dateStartedString.length > 0)) {
+        let dateStarted = new Date(dateStartedString).toISOString();
+        if (dateStarted < aMonthAgo) {
+          $(tasklist_row).addClass('colorStartedButOld');
+          return;
+        }
+        else {
+          $(tasklist_row).addClass('colorStarted');
+          return;
+        }
+      }
+      else {
+        $(tasklist_row).addClass('colorStarted');
+      }
+    }
+
+    if ((status_id == status_Waiting)) {
+      $(tasklist_row).addClass('colorWaiting');
+    }
+
+  });
+}
+
+
+function filterTaskListTable() {
+  $('.tasklist-assignee-cbo-col select').off();
+  $('.tasklist-duedate-col input[type="text"]').off();
+  $('.tasklist-schedduedate-col input[type="text"]').off();
+  $('.tasklist-status-cbo-col select').off();
+  if ($('#filterRow').length == 0) {
+    return;
+  }
+
+  if ($("#Field206-0").is(":checked")) {
+    $('.fincns input').val(1);
+  }
+  else {
+    $('.fincns input').val(0);
+  }
+
+  if ($("#Field206-1").is(":checked")) {
+    $('.finccom input').val(1);
+  }
+  else {
+    $('.finccom input').val(0);
+  }
+
+  if ($("#Field206-2").is(":checked")) {
+    $('.fexw input').val(1);
+  }
+  else {
+    $('.fexw input').val(0);
+  }
+
+  var taskNameFilterValue = $('#txtFilter_TaskName').val();
+  var projectNameFilterValue = $('#txtFilter_ProjectName').val();
+  var ticketNumberFilterValue = $('#cboFilter_TicketNumber').val();
+  var taskTypeFilterVal = $('#cboFilter_TaskType').val();
+  var statusFilterVal = $('#cboFilter_Status').val();
+  var assigneeFilterVal = $('#cboFilter_Assignee').val();
+  var departmentFilterVal = $('#cboFilter_Department').val();
+  var qeFilterVal = $('#cboFilter_QE').val();
+  var initiatorFilterVal = $('#cboFilter_Initiator').val();
+
+  $('.ftname input').val(taskNameFilterValue);
+  $('.fpname input').val(projectNameFilterValue);
+
+  if ((ticketNumberFilterValue != null) && (ticketNumberFilterValue.length > 0)) {
+    $('.fpid input').val(ticketNumberFilterValue);
+  }
+  else {
+    $('.fpid input').val(0);
+  }
+
+  if ((taskTypeFilterVal != null) && (taskTypeFilterVal.length > 0)) {
+    let taskTypeID = taskTypeByNameMap.get(taskTypeFilterVal);
+    $('.fttid input').val(taskTypeID);
+  }
+  else {
+    $('.fttid input').val(0);
+  }
+
+
+  if ((statusFilterVal != null) && (statusFilterVal.length > 0)) {
+    let statusID = taskStatusNameMap.get(statusFilterVal);
+    $('.fsid input').val(statusID);
+  }
+  else {
+    $('.fsid input').val(0);
+  }
+
+  if ((assigneeFilterVal != null) && (assigneeFilterVal.length > 0)) {
+    let assigneeID = assigneeNameMap.get(assigneeFilterVal);
+    $('.faid input').val(assigneeID);
+  }
+  else {
+    $('.faid input').val(0);
+  }
+
+  if ((departmentFilterVal != null) && (departmentFilterVal.length > 0)) {
+    let departmentID = departmentNameMap.get(departmentFilterVal);
+    $('.fdid input').val(departmentID);
+  }
+  else {
+    $('.fdid input').val(0);
+  }
+
+  if ((qeFilterVal != null) && (qeFilterVal.length > 0)) {
+    let qeID = qualityEngineerNameMap.get(qeFilterVal);
+    $('.fqeid input').val(qeID);
+  }
+  else {
+    $('.fqeid input').val(0);
+  }
+
+  if ((initiatorFilterVal != null) && (initiatorFilterVal.length > 0)) {
+    let initiatorID = initiatorNameMap.get(initiatorFilterVal);
+    $('.finitid input').val(initiatorID);
+  }
+  else {
+    $('.finitid input').val(0);
+  }
+
+  $('.tasklist-table').hide();
+  removeAppendedFields();
+  $('.tasklist-page input').val(1).change();
+
+}
+
+
+function generateFilterRow() {
+
+  if ($('#filterRow').length == 0) {
+
+    var filter_row = "<TR id='filterRow'><TH/><TH/><TH/><TH/><TH/><TH/><TH><select id='cboFilter_TicketNumber'/></TH><TH><input type='text' id='txtFilter_ProjectName'></TH><TH><input type='text' id='txtFilter_TaskName'></TH><TH><select id='cboFilter_Status'/></TH><TH><select id='cboFilter_TaskType'/></TH><TH><select id='cboFilter_Assignee'/></TH><TH/><TH/><TH/><TH/><TH/><TH><TH/><TH><select id='cboFilter_Department'/></TH><TH/><TH><select id='cboFilter_QE'/></TH><TH><select id='cboFilter_Initiator'/></TH></TR>"
+    $('.tasklist-table table thead').append(filter_row);
+    $("#cboFilter_TicketNumber").on("change", function () { filterTaskListTable(); });
+    $("#txtFilter_ProjectName").on("change", function () { filterTaskListTable(); });
+    $("#txtFilter_TaskName").on("change", function () { filterTaskListTable(); });
+    $("#cboFilter_Status").on("change", function () { filterTaskListTable(); });
+    $("#cboFilter_TaskType").on("change", function () { filterTaskListTable(); });
+    $("#cboFilter_Assignee").on("change", function () { filterTaskListTable(); });
+    $("#cboFilter_Department").on("change", function () { filterTaskListTable(); });
+    $("#cboFilter_QE").on("change", function () { filterTaskListTable(); });
+    $("#cboFilter_Initiator").on("change", function () { filterTaskListTable(); });
+
+    $("#cboFilter_TicketNumber").dblclick(function () { $("#cboFilter_TicketNumber").val(null).change(); });
+    $("#txtFilter_ProjectName").dblclick(function () { $("#txtFilter_ProjectName").val(null).change(); });
+    $("#txtFilter_TaskName").dblclick(function () { $("#txtFilter_TaskName").val(null).change(); });
+    $("#cboFilter_Status").dblclick(function () { $("#cboFilter_Status").val(0).change(); });
+    $("#cboFilter_TaskType").dblclick(function () { $("#cboFilter_TaskType").val(0).change(); });
+    $("#cboFilter_Assignee").dblclick(function () { $("#cboFilter_Assignee").val(0).change(); });
+    $("#cboFilter_Department").dblclick(function () { $("#cboFilter_Department").val(0).change(); });
+    $("#cboFilter_QE").dblclick(function () { $("#cboFilter_QE").val(0).change(); });
+    $("#cboFilter_Initiator").dblclick(function () { $("#cboFilter_Initiator").val(0).change(); });
+  }
+
+  if ((($('.ftname input').val() != null) && ($('.ftname input').val().length > 0)) && (($('#txtFilter_TaskName').val() == null) || ($('#txtFilter_TaskName').val() == ''))) {
+    $('#txtFilter_TaskName').val($('.ftname input').val());
+  }
+
+  if ((($('.fpname input').val() != null) && ($('.fpname input').val().length > 0)) && (($('#txtFilter_ProjectName').val() == null) || ($('#txtFilter_ProjectName').val() == ''))) {
+    $('#txtFilter_TaskName').val($('.fpname input').val());
+  }
+
+  if (($(".qe-lookup-combo select option").length > 1) && ($("#cboFilter_QE option").length == 0)) {
+    $("#cboFilter_QE").html($(".qe-lookup-combo select").html());
+  }
+
+  if (($(".initiator-lookup-combo select option").length > 1) && ($("#cboFilter_Initiator option").length == 0)) {
+    $("#cboFilter_Initiator").html($(".initiator-lookup-combo select").html());
+  }
+
+  if (($('.ticket-number-lookup-combo select option').length > 1) && ($("#cboFilter_TicketNumber option").length == 0)) {
+    var selectList = $('.ticket-number-lookup-combo select option');
+
+    selectList.sort(function (a, b) {
+      a = a.value;
+      b = b.value;
+
+      return a - b;
+    });
+    $("#cboFilter_TicketNumber").html(selectList);
+    $("#cboFilter_TicketNumber").val(null);
+  }
+
+  if (($(".status-lookup-combo select option").length > 1) && ($("#cboFilter_Status option").length == 0)) {
+    $("#cboFilter_Status").html($(".status-lookup-combo select").html());
+  }
+  if (($(".tasktype-lookup-combo select option").length > 1) && ($("#cboFilter_TaskType option").length == 0)) {
+    $("#cboFilter_TaskType").html($(".tasktype-lookup-combo select").html());
+  }
+  if (($(".assignee-lookup-combo select option").length > 1) && ($("#cboFilter_Assignee option").length == 0)) {
+    $("#cboFilter_Assignee").html($(".assignee-lookup-combo select").html());
+  }
+  if (($(".department-lookup-combo select option").length > 1) && ($("#cboFilter_Department option").length == 0)) {
+    $("#cboFilter_Department").html($(".department-lookup-combo select").html());
+  }
+}
+
+
+function generateTaskListColumnFields() {
+  removeAppendedFields();
+  if ($('.tasklist-table table tbody tr').length > 0) {
+
+    generateTableButtons(".task-list-clone-col", "ui-icon-newwin", "Clone Task", "callCloneTask");
+
+    generateTableButtons(".tasklist-note-col", "ui-icon-document", "Add Note", "callAddNote");
+
+    generateTableButtons(".tasklist-time-col", "ui-icon-clock", "Add Time", "callAddTime");
+
+    generateTableCheckBox(".tasklist-mandate-col", "mandate-chk");
+    generateProjectColumn();
+    generateTaskColumn();
+    lockCompletedRows();
+    colorCodeRows();
+  }
+}
+
+
+function generateProjectColumn() {
+  var project_names = $('.tasklist-project-name-col input[type="text"]');
+  var project_ids = $('.tasklist-project-id-col input[type="text"]');
+  var ticket_numbers = $('.tasklist-ticket-number-col input[type="text"]');
+  project_names.each(function (index) {
+    let project_id = $(project_ids[index]).val();
+    let ticket_number = $(ticket_numbers[index]);
+    let ticket_number_value = $(ticket_numbers[index]).val();
+    let project_name = $(this).val();
+    let project_href = `http://rmslf/Forms/MPMProjectMaintenance?pid=${project_id}`;
+    let project_link = $("<a>", { text: project_name.substr(0, 30), class: 'project-link', href: project_href, "target": "_blank" });
+    $(this).parent().append(project_link);
+    project_link = $("<a>", { text: ticket_number_value, class: 'project-link', href: project_href, "target": "_blank" });
+    $(ticket_number).parent().append(project_link);
+  });
+
+}
+
+
+function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFunction) {
+  var selectionString = buttonSelector + " input[type=text]";
+  var buttons = $(selectionString);
+  buttons.each(function () {
+    var btn_value = $(this).val();
+    var btn_html = `<div class='table-button ui-button'><span title='${buttonTitle}' class='ui-button-icon ui-icon ${buttonClass}' onclick='${buttonFunction}(${btn_value})'/></div>`
+
+    var has_button = $(this).parent().find(`.${buttonClass}`).length;
+    if (has_button == 0) {
+      $(this).parent().append(btn_html);
+    }
+  });
+}
+
+
+function generateTableCheckBox(selector, checkboxClass) {
+  var selectionString = selector + " input[type=text]";
+  var checkboxes = $(selectionString);
+  checkboxes.each(function () {
+    var btn_value = $(this).val();
+    if (btn_value == '1') {
+      var btn_html = "<input class='" + checkboxClass + "' type='checkbox' disabled checked/>";
+      var has_button = $(this).parent().find(`.${checkboxClass}`).length;
+      if (has_button == 0) {
+        $(this).parent().append(btn_html);
+      }
+    }
+    else {
+      var btn_html = "<input class='" + checkboxClass + "' type='checkbox' disabled/>";
+      var has_button = $(this).parent().find(`.${checkboxClass}`).length;
+      if (has_button == 0) {
+        $(this).parent().append(btn_html);
+      }
+    }
+  });
+}
+
+
+function generateTaskColumn() {
+  var task_names = $('.tasklist-task-name-col input[type="text"]');
+  var task_ids = $('.tasklist-task-id-col input[type="text"]');
+  task_names.each(function (index) {
+    let task_id = $(task_ids[index]).val();
+    let task_name = $(this).val();
+    let task_link = $("<a>", { text: task_name.substr(0, 30), class: 'task-link', href: `javascript:void(0);`, onclick: `callShowDetails(${task_id})` });
+    $(this).parent().append(task_link);
+  });
+}
+
+
+function getTaskListRowCount() {
+  var row_count = $('.tasklist-table table tbody tr').length;
+  return row_count;
+}
+
+
+function getColumnValueByTaskID(task_id, column_name) {
+
+  var tasklist_rows = $(".tasklist-table table tbody tr");
+  var task_ids = $('.tasklist-task-id-col input[type="text"]');
+  var column_value;
+
+  task_ids.each(function (index) {
+    let row_task_id = $(this).val();
+    if (row_task_id == task_id) {
+      let tasklist_row = tasklist_rows[index];
+      column_value = $(tasklist_row).find(column_name).val();
+      return;
+    }
+  });
+  return column_value;
+}
+
+
+function getRowByTaskID(task_id) {
+  var tasklist_rows = $(".tasklist-table table tbody tr");
+  var task_ids = $('.tasklist-task-id-col input[type="text"]');
+  var row;
+
+  task_ids.each(function (index) {
+    let row_task_id = $(this).val();
+    if (row_task_id == task_id) {
+      row = tasklist_rows[index];
+      return;
+    }
+  });
+  return row;
+}
 
 
 function loadAssigneeMap() {
@@ -213,488 +689,6 @@ function loadTaskTypeMap() {
   }
 }
 
-//-------------------TASK LIST FUNCTIONS----------------------
-
-function appendPagination() {
-
-  var current_page = Number($('.tasklist-page input').val());
-  if (current_page == 999) { return; }
-
-  var row_count = getTaskListRowCount();
-
-  if (row_count > 0) {
-    $('#tasklist-pagination').remove();
-    if ((current_page == 1) && (row_count < 25)) {
-      $('.tasklist-table table').parent().append("<div id='tasklist-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>‹</a></li><li><a class='page-link next isDisabled'>›</a></li></ul></div>");
-      return;
-    }
-    if ((current_page == 1) && (row_count == 25)) {
-      $('.tasklist-table table').parent().append("<div id='tasklist-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>‹</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>›</a></li></ul></div>")
-      return;
-    }
-    if ((current_page > 1) && (row_count == 25)) {
-      $('.tasklist-table table').parent().append("<div id='tasklist-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>‹</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>›</a></li></ul></div>")
-      return;
-    }
-    if ((current_page > 1) && (row_count < 25)) {
-      $('.tasklist-table table').parent().append("<div id='tasklist-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>‹</a></li><li><a class='page-link next isDisabled'>›</a></li></ul></div>")
-      return;
-    }
-  }
-}
-
-
-function checkPermissions() {
-
-  var employee_number = $(".user-id input").val();
-  var is_active_user = $(".user-isactive input").val();
-  var user_type_id = $(".user-type-id input").val();
-  var return_val = true;
-
-  if (is_active_user == 0) {
-    return_val = false;
-  }
-
-  if (employee_number == '') {
-    return_val = false;
-  }
-
-  if (user_type_id != 1) {
-    return_val = false;
-  }
-
-  return return_val
-
-}
-
-
-function colorCodeRow(task_id) {
-  var currentDate = new Date();
-  var aMonthAgoNumber = new Date().setDate(currentDate.getDate() - 30);
-  var aMonthAgo = new Date(aMonthAgoNumber).toISOString();
-
-  var row = getRowByTaskID(task_id);
-  var status_id = $(row).find('.tasklist-status-id-col input[type="text"]').val();
-  var dueDateString = $(row).find('.tasklist-date-col input[type="text"]').val();
-  var dueDate = moment(dueDateString, "M/D/YYYY").toDate();
-  let dateStartedString = $(row).find('.tasklist-datestarted-col input[type="text"]').val();
-
-  $(row).removeClass('colorOverDue');
-  $(row).removeClass('colorStarted');
-  $(row).removeClass('colorStartedButOld');
-  $(row).removeClass('colorWaiting');
-  if (dueDate <= currentDate) {
-    $(row).addClass('colorOverDue');
-    return;
-  }
-  if (status_id == status_Started) {
-    if ((dateStartedString != null) && (dateStartedString.length > 0)) {
-      let dateStarted = new Date(dateStartedString).toISOString();
-      if (dateStarted < aMonthAgo) {
-        $(row).addClass('colorStartedButOld');
-        return;
-      }
-      else {
-        $(row).addClass('colorStarted');
-        return;
-      }
-    }
-    else {
-      $(row).addClass('colorStarted');
-    }
-  }
-
-  if ((status_id == status_Waiting)) {
-    $(row).addClass('colorWaiting');
-  }
-
-
-}
-
-
-function colorCodeRows() {
-  var status_ids = $('.tasklist-status-id-col input[type="text"]');
-  var tasklist_rows = $(".tasklist-table table tbody tr");
-
-  var currentDate = new Date();
-  var aMonthAgoNumber = new Date().setDate(currentDate.getDate() - 30);
-  var aMonthAgo = new Date(aMonthAgoNumber).toISOString();
-
-  $(tasklist_rows).removeClass('colorOverDue');
-  $(tasklist_rows).removeClass('colorStarted');
-  $(tasklist_rows).removeClass('colorStartedButOld');
-  $(tasklist_rows).removeClass('colorWaiting');
-
-  status_ids.each(function (index) {
-    let status_id = $(status_ids[index]).val();
-    let tasklist_row = tasklist_rows[index];
-    let dueDateString = $(tasklist_row).find('.tasklist-date-col input[type="text"]').val();
-    let dueDate = moment(dueDateString, "M/D/YYYY").toDate();
-
-    let dateStartedString = $(tasklist_row).find('.tasklist-datestarted-col input[type="text"]').val();
-
-    if ((status_id == status_Completed) || (status_id == status_Cancelled)) {
-      return;
-    }
-
-    if (dueDate <= currentDate) {
-      $(tasklist_row).addClass('colorOverDue');
-      return;
-    }
-    if (status_id == status_Started) {
-      if ((dateStartedString != null) && (dateStartedString.length > 0)) {
-        let dateStarted = new Date(dateStartedString).toISOString();
-        if (dateStarted < aMonthAgo) {
-          $(tasklist_row).addClass('colorStartedButOld');
-          return;
-        }
-        else {
-          $(tasklist_row).addClass('colorStarted');
-          return;
-        }
-      }
-      else {
-        $(tasklist_row).addClass('colorStarted');
-      }
-    }
-
-    if ((status_id == status_Waiting)) {
-      $(tasklist_row).addClass('colorWaiting');
-    }
-
-  });
-}
-
-
-function executeIFrameUpdate(task_id, fieldToUpdate, fieldValue) {
-
-  if (typeof task_id === 'undefined') {
-    return;
-  }
-  if (typeof fieldToUpdate === 'undefined') {
-    return;
-  }
-  if (typeof fieldValue === 'undefined') {
-    return;
-  }
-
-  console.log('executeIFrameUpdate');
-  console.log(`task_id: ${task_id}`);
-  console.log(`fieldToUpdate: ${fieldToUpdate}`);
-  console.log(`fieldValue: ${fieldValue}`);
-
-  var execute_url = `http://rmslf/Forms/MPM-UpdateTask?tid=${task_id}&ftu=${fieldToUpdate}&fv=${fieldValue}`;
-
-  $("#popupIFrame").remove();
-  $("#popUpDiv").html(`<iframe id='popupIFrame' name='myname' src='${execute_url}'/>`);
-}
-
-
-function filterTaskListTable() {
-  $('.tasklist-assignee-cbo-col select').off();
-  $('.tasklist-duedate-col input[type="text"]').off();
-  $('.tasklist-schedduedate-col input[type="text"]').off();
-  $('.tasklist-status-cbo-col select').off();
-  if ($('#filterRow').length == 0) {
-    return;
-  }
-
-  if ($("#Field206-0").is(":checked")) {
-    $('.fincns input').val(1);
-  }
-  else {
-    $('.fincns input').val(0);
-  }
-
-  if ($("#Field206-1").is(":checked")) {
-    $('.finccom input').val(1);
-  }
-  else {
-    $('.finccom input').val(0);
-  }
-
-  if ($("#Field206-2").is(":checked")) {
-    $('.fexw input').val(1);
-  }
-  else {
-    $('.fexw input').val(0);
-  }
-
-  var taskNameFilterValue = $('#txtFilter_TaskName').val();
-  var projectNameFilterValue = $('#txtFilter_ProjectName').val();
-  var ticketNumberFilterValue = $('#cboFilter_TicketNumber').val();
-  var taskTypeFilterVal = $('#cboFilter_TaskType').val();
-  var statusFilterVal = $('#cboFilter_Status').val();
-  var assigneeFilterVal = $('#cboFilter_Assignee').val();
-  var departmentFilterVal = $('#cboFilter_Department').val();
-  var qeFilterVal = $('#cboFilter_QE').val();
-  var initiatorFilterVal = $('#cboFilter_Initiator').val();
-
-  $('.ftname input').val(taskNameFilterValue);
-  $('.fpname input').val(projectNameFilterValue);
-
-  if ((ticketNumberFilterValue != null) && (ticketNumberFilterValue.length > 0)) {
-    $('.fpid input').val(ticketNumberFilterValue);
-  }
-  else {
-    $('.fpid input').val(0);
-  }
-
-  if ((taskTypeFilterVal != null) && (taskTypeFilterVal.length > 0)) {
-    let taskTypeID = taskTypeByNameMap.get(taskTypeFilterVal);
-    $('.fttid input').val(taskTypeID);
-  }
-  else {
-    $('.fttid input').val(0);
-  }
-
-
-  if ((statusFilterVal != null) && (statusFilterVal.length > 0)) {
-    let statusID = taskStatusNameMap.get(statusFilterVal);
-    $('.fsid input').val(statusID);
-  }
-  else {
-    $('.fsid input').val(0);
-  }
-
-  if ((assigneeFilterVal != null) && (assigneeFilterVal.length > 0)) {
-    let assigneeID = assigneeNameMap.get(assigneeFilterVal);
-    $('.faid input').val(assigneeID);
-  }
-  else {
-    $('.faid input').val(0);
-  }
-
-  if ((departmentFilterVal != null) && (departmentFilterVal.length > 0)) {
-    let departmentID = departmentNameMap.get(departmentFilterVal);
-    $('.fdid input').val(departmentID);
-  }
-  else {
-    $('.fdid input').val(0);
-  }
-
-  if ((qeFilterVal != null) && (qeFilterVal.length > 0)) {
-    let qeID = qualityEngineerNameMap.get(qeFilterVal);
-    $('.fqeid input').val(qeID);
-  }
-  else {
-    $('.fqeid input').val(0);
-  }
-
-  if ((initiatorFilterVal != null) && (initiatorFilterVal.length > 0)) {
-    let initiatorID = initiatorNameMap.get(initiatorFilterVal);
-    $('.finitid input').val(initiatorID);
-  }
-  else {
-    $('.finitid input').val(0);
-  }
-
-  $('.tasklist-table').hide();
-  removeAppendedFields();
-  $('.tasklist-page input').val(1).change();
-
-}
-
-
-function generateFilterRow() {
-
-  if ($('#filterRow').length == 0) {
-
-    var filter_row = "<TR id='filterRow'><TH/><TH/><TH/><TH><select id='cboFilter_TicketNumber'/></TH><TH><input type='text' id='txtFilter_ProjectName'></TH><TH><input type='text' id='txtFilter_TaskName'></TH><TH><select id='cboFilter_Status'/></TH><TH><select id='cboFilter_TaskType'/></TH><TH><select id='cboFilter_Assignee'/></TH><TH/><TH/><TH/><TH/><TH/><TH><TH/><TH><select id='cboFilter_Department'/></TH><TH/><TH/><select id='cboFilter_QE'/></TH><TH><select id='cboFilter_Initiator'/></TH><TH/></TR>"
-    $('.tasklist-table table thead').append(filter_row);
-    $("#cboFilter_TicketNumber").on("change", function () { filterTaskListTable(); });
-    $("#txtFilter_ProjectName").on("change", function () { filterTaskListTable(); });
-    $("#txtFilter_TaskName").on("change", function () { filterTaskListTable(); });
-    $("#cboFilter_Status").on("change", function () { filterTaskListTable(); });
-    $("#cboFilter_TaskType").on("change", function () { filterTaskListTable(); });
-    $("#cboFilter_Assignee").on("change", function () { filterTaskListTable(); });
-    $("#cboFilter_Department").on("change", function () { filterTaskListTable(); });
-    $("#cboFilter_QE").on("change", function () { filterTaskListTable(); });
-    $("#cboFilter_Initiator").on("change", function () { filterTaskListTable(); });
-
-    $("#cboFilter_TicketNumber").dblclick(function () { $("#cboFilter_TicketNumber").val(null).change(); });
-    $("#txtFilter_ProjectName").dblclick(function () { $("#txtFilter_ProjectName").val(null).change(); });
-    $("#txtFilter_TaskName").dblclick(function () { $("#txtFilter_TaskName").val(null).change(); });
-    $("#cboFilter_Status").dblclick(function () { $("#cboFilter_Status").val(0).change(); });
-    $("#cboFilter_TaskType").dblclick(function () { $("#cboFilter_TaskType").val(0).change(); });
-    $("#cboFilter_Assignee").dblclick(function () { $("#cboFilter_Assignee").val(0).change(); });
-    $("#cboFilter_Department").dblclick(function () { $("#cboFilter_Department").val(0).change(); });
-    $("#cboFilter_QE").dblclick(function () { $("#cboFilter_QE").val(0).change(); });
-    $("#cboFilter_Initiator").dblclick(function () { $("#cboFilter_Initiator").val(0).change(); });
-  }
-
-  if ((($('.ftname input').val() != null) && ($('.ftname input').val().length > 0)) && (($('#txtFilter_TaskName').val() == null) || ($('#txtFilter_TaskName').val() == ''))) {
-    $('#txtFilter_TaskName').val($('.ftname input').val());
-  }
-
-  if ((($('.fpname input').val() != null) && ($('.fpname input').val().length > 0)) && (($('#txtFilter_ProjectName').val() == null) || ($('#txtFilter_ProjectName').val() == ''))) {
-    $('#txtFilter_TaskName').val($('.fpname input').val());
-  }
-
-  if (($(".qe-lookup-combo select option").length > 0) && ($("#cboFilter_QE option" == 0))) {
-    $("#cboFilter_QE").html($(".qe-lookup-combo select").html());
-  }
-
-  if (($(".initiator-lookup-combo select option").length > 0) && ($("#cboFilter_Initiator option" == 0))) {
-    $("#cboFilter_Initiator").html($(".initiator-lookup-combo select").html());
-
-
-  }
-
-  if (($('.ticket-number-lookup-combo select option').length > 0) && ($("#cboFilter_TicketNumber option" == 0))) {
-    var selectList = $('.ticket-number-lookup-combo select option');
-
-    selectList.sort(function (a, b) {
-      a = a.value;
-      b = b.value;
-
-      return a - b;
-    });
-    $("#cboFilter_TicketNumber").html(selectList);
-    $("#cboFilter_TicketNumber").val(null);
-  }
-
-  if (($(".status-lookup-combo select option").length > 0) && ($("#cboFilter_Status option" == 0))) {
-    $("#cboFilter_Status").html($(".status-lookup-combo select").html());
-  }
-  if (($(".tasktype-lookup-combo select option").length > 0) && ($("#cboFilter_TaskType option" == 0))) {
-    $("#cboFilter_TaskType").html($(".tasktype-lookup-combo select").html());
-  }
-  if (($(".assignee-lookup-combo select option").length > 0) && ($("#cboFilter_Assignee option" == 0))) {
-    $("#cboFilter_Assignee").html($(".assignee-lookup-combo select").html());
-  }
-  if (($(".department-lookup-combo select option").length > 0) && ($("#cboFilter_Department option" == 0))) {
-    $("#cboFilter_Department").html($(".department-lookup-combo select").html());
-  }
-}
-
-
-function generateTaskListColumnFields() {
-  removeAppendedFields();
-  if ($('.tasklist-table table tbody tr').length > 0) {
-
-    generateTableButtons(".task-list-clone-col", "ui-icon-newwin", "Clone Task", "callCloneTask");
-
-    generateTableButtons(".tasklist-note-col", "ui-icon-document", "Add Note", "callAddNote");
-
-    generateTableButtons(".tasklist-time-col", "ui-icon-clock", "Add Time", "callAddTime");
-
-    generateTableCheckBox(".tasklist-mandate-col", "mandate-chk");
-    generateProjectColumn();
-    generateTaskColumn();
-    setStatusColumnValues();
-    setAssigneeColumnValues();
-    wireUpChangeEvents('.tasklist-duedate-col input[type="text"]', updateDueDate);
-    wireUpChangeEvents('.tasklist-schedduedate-col input[type="text"]', updateSchedDueDate);
-    lockCompletedRows();
-    colorCodeRows();
-  }
-}
-
-
-function generateProjectColumn() {
-  var project_names = $('.tasklist-project-name-col input[type="text"]');
-  var project_ids = $('.tasklist-project-id-col input[type="text"]');
-  project_names.each(function (index) {
-    let project_id = $(project_ids[index]).val();
-    let project_name = $(this).val();
-    let project_href = `http://rmslf/Forms/MPMProjectMaintenance?pid=${project_id}`;
-    let project_link = $("<a>", { text: project_name.substr(0, 30), class: 'project-link', href: project_href, "target": "_blank" });
-    $(this).parent().append(project_link);
-  });
-
-}
-
-
-function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFunction) {
-  var selectionString = buttonSelector + " input[type=text]";
-  var buttons = $(selectionString);
-  buttons.each(function () {
-    var btn_value = $(this).val();
-    var btn_html = `<div class='table-button ui-button'><span title='${buttonTitle}' class='ui-button-icon ui-icon ${buttonClass}' onclick='${buttonFunction}(${btn_value})'/></div>`
-
-    var has_button = $(this).parent().find(`.${buttonClass}`).length;
-    if (has_button == 0) {
-      $(this).parent().append(btn_html);
-    }
-  });
-}
-
-
-function generateTableCheckBox(selector, checkboxClass) {
-  var selectionString = selector + " input[type=text]";
-  var checkboxes = $(selectionString);
-  checkboxes.each(function () {
-    var btn_value = $(this).val();
-    if (btn_value == '1') {
-      var btn_html = "<input class='" + checkboxClass + "' type='checkbox' disabled checked/>";
-      var has_button = $(this).parent().find(`.${checkboxClass}`).length;
-      if (has_button == 0) {
-        $(this).parent().append(btn_html);
-      }
-    }
-    else {
-      var btn_html = "<input class='" + checkboxClass + "' type='checkbox' disabled/>";
-      var has_button = $(this).parent().find(`.${checkboxClass}`).length;
-      if (has_button == 0) {
-        $(this).parent().append(btn_html);
-      }
-    }
-  });
-}
-
-
-function generateTaskColumn() {
-  var task_names = $('.tasklist-task-name-col input[type="text"]');
-  var task_ids = $('.tasklist-task-id-col input[type="text"]');
-  task_names.each(function (index) {
-    let task_id = $(task_ids[index]).val();
-    let task_name = $(this).val();
-    let task_link = $("<a>", { text: task_name.substr(0, 30), class: 'task-link', href: `javascript:void(0);`, onclick: `callShowDetails(${task_id})` });
-    $(this).parent().append(task_link);
-  });
-}
-
-
-function getTaskListRowCount() {
-  var row_count = $('.tasklist-table table tbody tr').length;
-  return row_count;
-}
-
-
-function getColumnValueByTaskID(task_id, column_name) {
-
-  var tasklist_rows = $(".tasklist-table table tbody tr");
-  var task_ids = $('.tasklist-task-id-col input[type="text"]');
-  var column_value;
-
-  task_ids.each(function (index) {
-    let row_task_id = $(this).val();
-    if (row_task_id == task_id) {
-      let tasklist_row = tasklist_rows[index];
-      column_value = $(tasklist_row).find(column_name).val();
-      return;
-    }
-  });
-  return column_value;
-}
-
-
-function getRowByTaskID(task_id) {
-  var tasklist_rows = $(".tasklist-table table tbody tr");
-  var task_ids = $('.tasklist-task-id-col input[type="text"]');
-  var row;
-
-  task_ids.each(function (index) {
-    let row_task_id = $(this).val();
-    if (row_task_id == task_id) {
-      row = tasklist_rows[index];
-      return;
-    }
-  });
-  return row;
-}
-
 
 function lockCompletedRows() {
   var status_ids = $('.tasklist-status-id-col input[type="text"]');
@@ -764,6 +758,7 @@ function popUpIframe(src, title, height, width, dorefresh, task_id) {
     autoOpen: false,
     resizable: true,
     modal: true,
+    position: { my: "left top", at: "left top", of: window },
     close: function (event, ui) {
       if (dorefresh) {
         resetAssignee(task_id);
@@ -812,7 +807,7 @@ function reApplyFilterValues() {
 
   var taskNameFilterValue = $('.ftname input').val();
   var projectNameFilterValue = $('.fpname input').val();
-  var projectIDFilterValue = Number($('.fpid input').val());
+  var projectIDFilterValue = $('.fpid input').val();
 
   var taskTypeFilterVal = Number($('.fttid input').val());
   var statusFilterVal = Number($('.fsid input').val());
@@ -861,9 +856,10 @@ function reApplyFilterValues() {
     $('#cboFilter_Status').val(statusName);
   }
   if (assigneeFilterVal != 0) {
-
     let assigneeName = assigneeMap.get(assigneeFilterVal);
+    console.log(`assigneeName: ${assigneeName}`);
     $('#cboFilter_Assignee').val(assigneeName);
+
   }
   if (departmentFilterVal != 0) {
     let departmentName = departmentMap.get(departmentFilterVal);
@@ -954,322 +950,5 @@ function removeAppendedFields() {
   $('.note-button').remove();
   $('.time-button').remove();
   $('.mandate-chk').remove();
-  $('.tasklist-assignee-cbo-col select').off();
-  $('.tasklist-duedate-col input[type="text"]').off();
-  $('.tasklist-status-cbo-col select').off();
-  $('.tasklist-schedduedate-col input[type="text"]').off();
-}
 
-
-function resetPageNumber() {
-  $('.tasklist-table').hide();
-  removeAppendedFields();
-  $('.tasklist-page input').val(1).change();
-}
-
-
-function resetAssignee(task_id) {
-  var original_assignee_name = getColumnValueByTaskID(task_id, '.tasklist-assignee-name-col input[type="text"]');
-  setColumnValueByTaskID(task_id, '.tasklist-assignee-cbo-col select', original_assignee_name);
-}
-
-
-function resetTaskStatus(task_id) {
-  var original_status_name = getColumnValueByTaskID(task_id, '.tasklist-status-name-col input[type="text"]');
-  setColumnValueByTaskID(task_id, '.tasklist-status-cbo-col select', original_status_name);
-}
-
-
-function setAssigneeColumnValues() {
-
-  var assignee_names = $('.tasklist-assignee-name-col input[type="text"]');
-
-  if (assignee_names.length == 0) {
-    return;
-  }
-
-  var assignee_cbos = $('.tasklist-assignee-cbo-col select');
-  $(assignee_cbos).off();
-  var assignee_ids = $('.tasklist-assignee-id-col input[type="text"]');
-  var status_ids = $('.tasklist-status-id-col input[type="text"]');
-  var task_ids = $('.tasklist-task-id-col input[type="text"]');
-
-
-  assignee_names.each(function (index) {
-    let assignee_name = $(this).val();
-    let status_id = $(status_ids[index]).val();
-    let task_id = $(task_ids[index]).val();
-    let assignee_id = $(assignee_ids[index]).val();
-    let assignee_cbo = assignee_cbos[index];
-
-    $(assignee_cbo).val(assignee_name);
-    $(assignee_cbo).on("change", function () { assigneeChanged(task_id) });
-
-  });
-}
-
-
-function setStatusColumnValues() {
-
-  $('.tasklist-status-cbo-col select option').filter(function () {
-    return this.hasAttribute('value') == false;
-  }).remove();
-
-  var status_names = $('.tasklist-status-name-col input[type="text"]');
-  if (status_names.length == 0) {
-    return;
-  }
-
-  var status_cbos = $('.tasklist-status-cbo-col select');
-  $(status_cbos).off();
-  var task_ids = $('.tasklist-task-id-col input[type="text"]');
-
-  status_names.each(function (index) {
-    let task_id = $(task_ids[index]).val();
-    let status_name = $(this).val();
-    let status_cbo = $(status_cbos[index]);
-
-    $(status_cbo).val(status_name);
-    $(status_cbo).on("change", function () { statusChanged(task_id) });
-
-  });
-}
-
-
-function setColumnValueByTaskID(task_id, column_name, value) {
-  var tasklist_rows = $(".tasklist-table table tbody tr");
-  var task_ids = $('.tasklist-task-id-col input[type="text"]');
-
-  task_ids.each(function (index) {
-    let row_task_id = $(this).val();
-    if (row_task_id == task_id) {
-      let tasklist_row = tasklist_rows[index];
-
-      $(tasklist_row).find(column_name).val(value);
-      return;
-    }
-  });
-}
-
-
-function wireUpChangeEvents(column_name, function_name) {
-
-  var task_ids = $('.tasklist-task-id-col input[type="text"]');
-  if (task_ids.length == 0) {
-    return;
-  }
-
-  var columns = $(column_name);
-  $(columns).off();
-  task_ids.each(function (index) {
-    let row_task_id = $(this).val();
-    let column = columns[index];
-    $(column).on("change", function () { function_name(row_task_id) });
-  });
-}
-
-
-//-------------------TASK LIST CALLED FUNCTIONS-------------------
-
-function assigneeChanged(task_id) {
-
-  original_assignee_name = getColumnValueByTaskID(task_id, '.tasklist-assignee-name-col input');
-  if (typeof original_assignee_name === 'undefined') {
-    return;
-  }
-
-  new_assignee_name = getColumnValueByTaskID(task_id, '.tasklist-assignee-cbo-col select');
-  if (typeof new_assignee_name === 'undefined') {
-    confirm("no new assignee name");
-    return;
-  }
-
-  if (original_assignee_name == new_assignee_name) {
-    return;
-  }
-
-  if (((new_assignee_name == null) || (new_assignee_name.length == 0)) && ((original_assignee_name != null) && (original_assignee_name.length > 0))) {
-    resetAssignee(task_id);
-    return;
-  }
-
-  new_assignee_id = assigneeNameMap.get(new_assignee_name);
-
-  if (original_assignee_name != new_assignee_name) {
-
-    $.confirm({
-      title: 'Are you sure?',
-      content: 'Are you sure you wish to reassign this task?',
-
-      buttons: {
-        ok: {
-          text: "OK",
-          keys: ['enter'],
-          action: function () {
-            var has_permissions = checkPermissions();
-            if (has_permissions) {
-              executeIFrameUpdate(task_id, fieldToUpdate_Assignee, new_assignee_id);
-              setColumnValueByTaskID(task_id, '.tasklist-assignee-name-col input[type="text"]', new_assignee_name);
-              setColumnValueByTaskID(task_id, '.tasklist-assignee-id-col input[type="text"]', new_assignee_id);
-            }
-            else {
-              $.alert({ title: 'Nope!', content: 'Sorry, you do not have permissions to do this.' });
-              resetAssignee(task_id);
-            }
-          }
-        },
-        cancel: function () {
-          resetAssignee(task_id);
-        }
-      }
-    });
-  }
-}
-
-
-function callAddNote(task_id) {
-  var task_name = getColumnValueByTaskID(task_id, '.tasklist-task-name-col input[type="text"]');
-  popUpIframe(`http://rmslf/Forms/MPMAddNote?TaskID=${task_id}&nt=1`, `Add Note for task '${task_name}'`, 400, 650, false, task_id);
-}
-
-
-function callAddTime(task_id) {
-  if (checkPermissions() == true) {
-    var task_name = getColumnValueByTaskID(task_id, '.tasklist-task-name-col input[type="text"]');
-    popUpIframe(`http://rmslf/Forms/MPMAddTaskTime?tid=${task_id}`, `Add Time to task '${task_name}'`, 300, 800, false, task_id);
-  }
-}
-
-
-function callCancelTask(task_id) {
-  if (checkPermissions() == true) {
-    var task_name = getColumnValueByTaskID(task_id, '.tasklist-task-name-col input[type="text"]');
-    popUpIframe(`http://rmslf/Forms/MPMAddNote?TaskID=${task_id}&nt=5`, `Set task '${task_name}' to 'Cancelled'`, 400, 650, false, task_id);
-  }
-}
-
-
-function callCompleteTask(task_id) {
-  if (checkPermissions() == true) {
-    var task_name = getColumnValueByTaskID(task_id, '.tasklist-task-name-col input[type="text"]');
-    popUpIframe(`http://rmslf/Forms/MPMAddNote?TaskID=${task_id}&nt=4`, `Set task '${task_name}' to 'Complete'`, 400, 650, false, task_id);
-  }
-}
-
-
-function callCloneTask(task_id) {
-  var user_type_id = $(".user-type-id input").val();
-  var userDepartmentID = $(".user-department-id input").val();
-  var departmentID = getColumnValueByTaskID(task_id, '.tasklist-dept-id-col input[type="text"]');
-
-  if (user_type_id == 2 || user_type_id == 4 || user_type_id == 5) {
-    $.alert({ title: 'Nope!', content: 'Sorry, you do not have permissions to do this.' });
-    return;
-  }
-
-  if (user_type_id == 3) {
-    if (departmentID != userDepartmentID) {
-      $.alert({ title: 'Nope!', content: 'Sorry, you do not have permissions to do this.' });
-      return;
-    }
-  }
-
-  var task_name = getColumnValueByTaskID(task_id, '.tasklist-task-name-col input[type="text"]');
-  popUpIframe(`http://rmslf/Forms/MPMCloneTask?tid=${task_id}`, `Clone task '${task_name}'`, 300, 750, false, task_id);
-}
-
-
-function callNextPage() {
-  $('.tasklist-table').hide();
-  removeAppendedFields();
-  current_page = Number($('.tasklist-page input').val());
-  $('.tasklist-page input').val(current_page + 1).change();
-}
-
-
-function callPrevPage() {
-  $('.tasklist-table').hide();
-  removeAppendedFields();
-  current_page = Number($('.tasklist-page input').val());
-  if (current_page == 1) {
-    return;
-  }
-  $('.tasklist-page input').val(current_page - 1).change();
-}
-
-
-function callShowDetails(task_id) {
-  popUpIframe(`http://rmslf/Forms/MPMAddEditTask?tid=${task_id}`, 'Task Details', 900, 1100, false, task_id);
-}
-
-
-function callSetTaskToWaiting(task_id) {
-  if (checkPermissions() == true) {
-    var task_name = getColumnValueByTaskID(task_id, '.tasklist-task-name-col input[type="text"]');
-    popUpIframe(`http://rmslf/Forms/MPMAddNote?TaskID=${task_id}&nt=6`, `Set task '${task_name}' to 'Waiting'`, 500, 750, false, task_id);
-  }
-}
-
-
-function statusChanged(task_id) {
-
-
-  var new_status_name = getColumnValueByTaskID(task_id, '.tasklist-status-cbo-col select');
-  if (typeof new_status_name === 'undefined') {
-    return;
-  }
-
-  var old_status_name = getColumnValueByTaskID(task_id, '.tasklist-status-name-col input[type="text"]');
-  if (typeof old_status_name === 'undefined') {
-    return;
-  }
-
-  if (new_status_name == old_status_name) {
-    return;
-  }
-
-  var new_status_id = taskStatusNameMap.get(new_status_name);
-  var sum_of_hours = getColumnValueByTaskID(task_id, '.tasklist-tothours-col input[type="text"]');
-
-  if ((new_status_id == status_NotStarted) && (sum_of_hours > 0)) {
-    $.alert({ title: 'Nope!', content: 'You cannot set a task to Not Started if hours have been logged.' });
-    resetTaskStatus(task_id)
-    return;
-  }
-
-  if (new_status_id == status_Completed) {
-    callCompleteTask(task_id);
-    return;
-  }
-
-  if (new_status_id == status_Cancelled) {
-    callCancelTask(task_id);
-    return;
-  }
-
-  if ((new_status_id == status_Waiting)) {
-    callSetTaskToWaiting(task_id);
-    return;
-  }
-
-  if ((new_status_id == status_NotSched) || (new_status_id == status_NotStarted) || (new_status_id == status_Started)) {
-    executeIFrameUpdate(task_id, fieldToUpdate_Status, new_status_id);
-    setColumnValueByTaskID(task_id, '.tasklist-status-name-col input[type="text"]', new_status_name);
-    setColumnValueByTaskID(task_id, '.tasklist-status-id-col input[type="text"]', new_status_id);
-    colorCodeRow(task_id);
-    return;
-  }
-}
-
-
-function updateDueDate(task_id) {
-
-  var new_due_date = getColumnValueByTaskID(task_id, '.tasklist-date-col input[type="text"]');
-  executeIFrameUpdate(task_id, fieldToUpdate_DueDate, new_due_date);
-}
-
-
-function updateSchedDueDate(task_id) {
-  var new_due_date = getColumnValueByTaskID(task_id, '.tasklist-date-col input[type="text"]');
-  executeIFrameUpdate(task_id, fieldToUpdate_SchedDueDate, new_due_date);
 }
