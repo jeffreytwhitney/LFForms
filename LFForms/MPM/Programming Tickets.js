@@ -7,7 +7,6 @@ var qualityEngineerNameMap = new Map();
 
 
 
-//-------------------DOCUMENT FUNCTIONS-------------------------
 $(document).ready(function () {
   $('.Submit').hide();
   $(document).prop('title', 'Programming Tickets');
@@ -38,12 +37,13 @@ $(document).ready(function () {
 
   $(document).on('lookupcomplete', function (e) {
     $('.projectlist-table').hide();
-
     if ($('.pg input').val() == '999') {
       $('.pg input').val(1).change();
+      console.log("lookupcomplete");
+      $('.network-user-name input').trigger("change");
     }
-
-    generateProjectListColumnFields();
+    
+    generateTicketNumberColumn();
 
     generateFilterRow();
     reApplyFilterValues();
@@ -53,11 +53,13 @@ $(document).ready(function () {
   });
 
   $(document).on("onloadlookupfinished", function (e) {
-    
+    console.log("onloadlookupfinished");
     $('.section-iframe').append("<div class='hidden-text' id='popUpDiv'></div>");
+    $('.network-user-name input').trigger("change");
   });
 
 });
+
 
 function appendPagination() {
 
@@ -87,77 +89,92 @@ function appendPagination() {
   }
 }
 
-//-------------------TASK LIST CALLED FUNCTIONS-------------------
+
+function callNextPage() {
+  $('.projectlist-table').hide();
+  removeAppendedFields();
+  current_page = Number($('.pg input').val());
+  $('.pg input').val(current_page + 1).change();
+}
+
+
+function callPrevPage() {
+  $('.projectlist-table').hide();
+  removeAppendedFields();
+  current_page = Number($('.pg input').val());
+  if (current_page == 1) {
+    return;
+  }
+  $('.pg input').val(current_page - 1).change();
+}
+
+
+function callShowDetails(ticket_id) {
+  var widowHeight = $(window).height();
+  widowHeight = widowHeight - 50;
+  popUpIframe(`http://rmslf/Forms/MPMAddEditProject?pid=${ticket_id}`, 'Project Details', widowHeight, 1100);
+}
 
 
 function generateFilterRow() {
 
-  //if ($('#filterRow').length == 0) {
+  if ($('#filterRow').length == 0) {
 
-  //  var filter_row = "<TR id='filterRow'><TH/><TH/><TH/><TH><select id='cboFilter_TicketNumber'/></TH><TH><input type='text' id='txtFilter_ProjectName'></TH><TH><input type='text' id='txtFilter_TaskName'></TH><TH><select id='cboFilter_Status'/></TH><TH><select id='cboFilter_TaskType'/></TH><TH><select id='cboFilter_Assignee'/></TH><TH/><TH/><TH/><TH/><TH/><TH/><TH/><TH><select id='cboFilter_Department'/></TH><TH/><TH/><TH/></TR>"
-  //  $('.tasklist-table table thead').append(filter_row);
-  //  $("#cboFilter_TicketNumber").on("change", function () { filterTaskListTable(); });
-  //  $("#txtFilter_ProjectName").on("change", function () { filterTaskListTable(); });
-  //  $("#txtFilter_TaskName").on("change", function () { filterTaskListTable(); });
-  //  $("#cboFilter_Status").on("change", function () { filterTaskListTable(); });
-  //  $("#cboFilter_TaskType").on("change", function () { filterTaskListTable(); });
-  //  $("#cboFilter_Assignee").on("change", function () { filterTaskListTable(); });
-  //  $("#cboFilter_Department").on("change", function () { filterTaskListTable(); });
+    var filter_row = "<TR id='filterRow'><TH><input id='txtFilter_TicketNumber'/></TH><TH><input type='text' id='txtFilter_ProjectName'></TH><TH/><TH><select id='cboFilter_Department'/></TH><TH/><TH/><TH><select id='cboFilter_QE'/></TH><TH><select id='cboFilter_Initiator'/></TH><TH/></TR>"
+    $('.projectlist-table table thead').append(filter_row);
+    $("#txtFilter_ProjectName").on("change", function () { filterTable(); });
+    $("#txtFilter_TicketNumber").on("change", function () { filterTable(); });
+    $("#txtFilter_ProjectName").on("change", function () { filterTable(); });
+    $("#cboFilter_Department").on("change", function () { filterTable(); });
+    $("#cboFilter_QE").on("change", function () { filterTable(); });
+    $("#cboFilter_Initiator").on("change", function () { filterTable(); });
 
-  //  $("#cboFilter_TicketNumber").dblclick(function () { $("#cboFilter_TicketNumber").val(null).change(); });
-  //  $("#txtFilter_ProjectName").dblclick(function () { $("#txtFilter_ProjectName").val(null).change(); });
-  //  $("#txtFilter_TaskName").dblclick(function () { $("#txtFilter_TaskName").val(null).change(); });
-  //  $("#cboFilter_Status").dblclick(function () { $("#cboFilter_Status").val(null).change(); });
-  //  $("#cboFilter_TaskType").dblclick(function () { $("#cboFilter_TaskType").val(null).change(); });
-  //  $("#cboFilter_Assignee").dblclick(function () { $("#cboFilter_Assignee").val(null).change(); });
-  //  $("#cboFilter_Department").dblclick(function () { $("#cboFilter_Department").val(null).change(); });
-  //}
 
-  //if ((($('.ftname input').val() != null) && ($('.ftname input').val().length > 0)) && (($('#txtFilter_TaskName').val() == null) || ($('#txtFilter_TaskName').val() == ''))) {
-  //  $('#txtFilter_TaskName').val($('.ftname input').val());
-  //}
+    $("#txtFilter_TicketNumber").dblclick(function () { $("#txtFilter_TicketNumber").val(null).change(); });
+    $("#txtFilter_ProjectName").dblclick(function () { $("#txtFilter_ProjectName").val(null).change(); });
+    $("#cboFilter_Department").dblclick(function () { $("#cboFilter_Department").val(null).change(); });
+    $("#cboFilter_QE").dblclick(function () { $("#cboFilter_QE").val(0).change(); });
+    $("#cboFilter_Initiator").dblclick(function () { $("#cboFilter_Initiator").val(0).change(); });
+  }
 
-  //if ((($('.fpname input').val() != null) && ($('.fpname input').val().length > 0)) && (($('#txtFilter_ProjectName').val() == null) || ($('#txtFilter_ProjectName').val() == ''))) {
-  //  $('#txtFilter_TaskName').val($('.fpname input').val());
-  //}
+  if ((($('.ftname input').val() != null) && ($('.ftname input').val().length > 0)) && (($('#txtFilter_TaskName').val() == null) || ($('#txtFilter_TaskName').val() == ''))) {
+    $('#txtFilter_TaskName').val($('.ftname input').val());
+  }
 
-  //if (($('.ticket-number-lookup-combo select option').length > 0) && ($("#cboFilter_TicketNumber option" == 0))) {
-  //  var selectList = $('.ticket-number-lookup-combo select option');
+  if ((($('.fpname input').val() != null) && ($('.fpname input').val().length > 0)) && (($('#txtFilter_ProjectName').val() == null) || ($('#txtFilter_ProjectName').val() == ''))) {
+    $('#txtFilter_TaskName').val($('.fpname input').val());
+  }
 
-  //  selectList.sort(function (a, b) {
-  //    a = a.value;
-  //    b = b.value;
+  if ((($('.fpid input').val() != null) && ($('.fpid input').val().length > 0)) && (($('#txtFilter_TicketNumber').val() == null) || ($('#txtFilter_TicketNumber').val() == ''))) {
+    $('#txtFilter_TicketNumber').val($('.fpid input').val());
+  }
 
-  //    return a - b;
-  //  });
-  //  $("#cboFilter_TicketNumber").html(selectList);
-  //}
-
-  //if (($(".status-lookup-combo select option").length > 0) && ($("#cboFilter_Status option" == 0))) {
-  //  $("#cboFilter_Status").html($(".status-lookup-combo select").html());
-  //}
-  //if (($(".tasktype-lookup-combo select option").length > 0) && ($("#cboFilter_TaskType option" == 0))) {
-  //  $("#cboFilter_TaskType").html($(".tasktype-lookup-combo select").html());
-  //}
-  //if (($(".assignee-lookup-combo select option").length > 0) && ($("#cboFilter_Assignee option" == 0))) {
-  //  $("#cboFilter_Assignee").html($(".assignee-lookup-combo select").html());
-  //}
-  //if (($(".department-lookup-combo select option").length > 0) && ($("#cboFilter_Department option" == 0))) {
-  //  $("#cboFilter_Department").html($(".department-lookup-combo select").html());
-  //}
+  if (($(".status-lookup-combo select option").length > 0) && ($("#cboFilter_Status option").length == 0)) {
+    $("#cboFilter_Status").html($(".status-lookup-combo select").html());
+  }
+  if (($(".tasktype-lookup-combo select option").length > 0) && ($("#cboFilter_TaskType option").length == 0)) {
+    $("#cboFilter_TaskType").html($(".tasktype-lookup-combo select").html());
+  }
+  if (($(".assignee-lookup-combo select option").length > 0) && ($("#cboFilter_Assignee option").length == 0)) {
+    $("#cboFilter_Assignee").html($(".assignee-lookup-combo select").html());
+  }
+  if (($(".department-lookup-combo select option").length > 0) && ($("#cboFilter_Department option").length == 0)) {
+    $("#cboFilter_Department").html($(".department-lookup-combo select").html());
+  }
 }
 
 
-function generateProjectNameColumn() {
-  var project_ids = $('.projectlist-project-id-col input[type="text"]');
-
-  var project_names = $('.projectlist-project-name-col input[type="text"]');
+function generateTicketNumberColumn() {
+  var ticket_ids = $('.projectlist-ticket-id-col input[type="text"]');
+  var ticket_numbers = $('.projectlist-ticket-number-col input[type="text"]');
   
-  task_names.each(function (index) {
-    let task_id = $(task_ids[index]).val();
-    let task_name = $(this).val();
-    let task_link = $("<a>", { text: task_name.substr(0, 30), class: 'task-link', href: `javascript:void(0);`, onclick: `callShowDetails(${task_id})` });
-    $(this).parent().append(task_link);
+  ticket_numbers.each(function (index) {
+    let ticket_id = $(ticket_ids[index]).val();
+    let ticket_number = $(this).val();
+    let project_link = $("<a>", { text: ticket_number, class: 'project-link', href: `javascript:void(0);`, onclick: `callShowDetails(${ticket_id})` });
+    if ($(this).parent().find('.project-link').length == 0) {
+      $(this).parent().append(project_link);
+    }
   });
 }
 
@@ -210,9 +227,7 @@ function loadInitiatorMap() {
 }
 
 
-function popUpIframe(src, title, height, width, dorefresh, task_id) {
-  //var iframe_height = height - 100;
-  console.log(`height:${height}`);
+function popUpIframe(src, title, height, width) {
   $("#popupIFrame").remove();
   $("#popUpDiv").html(`<div height='${height}' width='${width}'><iframe id='popupIFrame' name='myname' src='${src}' height='${height}' width='${width}'/></div>`);
   $("#popupIFrame").dialog({
@@ -222,11 +237,9 @@ function popUpIframe(src, title, height, width, dorefresh, task_id) {
     autoOpen: false,
     resizable: true,
     modal: true,
+    position: { my: "left top", at: "left top", of: window },
     close: function (event, ui) {
-      if (dorefresh) {
-        resetAssignee(task_id);
-        resetTaskStatus(task_id);
-      }
+
     }
   });
 
@@ -371,25 +384,8 @@ function refreshPage() {
 }
 
 
-
-//------------------PROJECT LIST CALLED FUNCTIONS-------------------
-function callNextPage() {
-  $('.projectlist-table').hide();
-  current_page = Number($('.pg input').val());
-  $('.pg input').val(current_page + 1).change();
+function removeAppendedFields() {
+  $('#projectlist-pagination').remove();
+  $('.project-link').remove();
 }
 
-
-function callPrevPage() {
-  $('.projectlist-table').hide();
-  current_page = Number($('.tasklist-page input').val());
-  if (current_page == 1) {
-    return;
-  }
-  $('.pg input').val(current_page - 1).change();
-}
-
-
-function callShowDetails(task_id) {
-  popUpIframe(`http://rmslf/Forms/MPMAddEditProject?pid=${task_id}`, 'Project Details', 900, 1100, false, task_id);
-}

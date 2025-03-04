@@ -18,8 +18,6 @@ var taskTypeMap = new Map();
 var taskTypeByNameMap = new Map();
 var taskStatusMap = new Map();
 var taskStatusNameMap = new Map();
-var projectMap = new Map();
-var projectNameMap = new Map();
 var initiatorMap = new Map();
 var initiatorNameMap = new Map();
 var qualityEngineerMap = new Map();
@@ -65,7 +63,6 @@ $(document).ready(function () {
     loadStatusMap();
     loadDepartmentMap();
     loadTaskTypeMap();
-    loadProjectMap();
     loadInitiatorMap();
     loadQualityEngineerMap();
 
@@ -303,7 +300,7 @@ function filterTaskListTable() {
 
   var taskNameFilterValue = $('#txtFilter_TaskName').val();
   var projectNameFilterValue = $('#txtFilter_ProjectName').val();
-  var ticketNumberFilterValue = $('#cboFilter_TicketNumber').val();
+  var ticketNumberFilterValue = $('#txtFilter_TicketNumber').val();
   var taskTypeFilterVal = $('#cboFilter_TaskType').val();
   var statusFilterVal = $('#cboFilter_Status').val();
   var assigneeFilterVal = $('#cboFilter_Assignee').val();
@@ -313,13 +310,9 @@ function filterTaskListTable() {
 
   $('.ftname input').val(taskNameFilterValue);
   $('.fpname input').val(projectNameFilterValue);
+  $('.fpid input').val(ticketNumberFilterValue);
 
-  if ((ticketNumberFilterValue != null) && (ticketNumberFilterValue.length > 0)) {
-    $('.fpid input').val(ticketNumberFilterValue);
-  }
-  else {
-    $('.fpid input').val(0);
-  }
+
 
   if ((taskTypeFilterVal != null) && (taskTypeFilterVal.length > 0)) {
     let taskTypeID = taskTypeByNameMap.get(taskTypeFilterVal);
@@ -381,9 +374,9 @@ function generateFilterRow() {
 
   if ($('#filterRow').length == 0) {
 
-    var filter_row = "<TR id='filterRow'><TH/><TH/><TH/><TH/><TH/><TH/><TH><select id='cboFilter_TicketNumber'/></TH><TH><input type='text' id='txtFilter_ProjectName'></TH><TH><input type='text' id='txtFilter_TaskName'></TH><TH><select id='cboFilter_Status'/></TH><TH><select id='cboFilter_TaskType'/></TH><TH><select id='cboFilter_Assignee'/></TH><TH/><TH/><TH/><TH/><TH/><TH><TH/><TH><select id='cboFilter_Department'/></TH><TH/><TH><select id='cboFilter_QE'/></TH><TH><select id='cboFilter_Initiator'/></TH></TR>"
+    var filter_row = "<TR id='filterRow'><TH/><TH/><TH/><TH/><TH/><TH/><TH><input id='txtFilter_TicketNumber'/></TH><TH><input type='text' id='txtFilter_ProjectName'></TH><TH><input type='text' id='txtFilter_TaskName'></TH><TH><select id='cboFilter_Status'/></TH><TH><select id='cboFilter_TaskType'/></TH><TH><select id='cboFilter_Assignee'/></TH><TH/><TH/><TH/><TH/><TH/><TH><TH/><TH><select id='cboFilter_Department'/></TH><TH/><TH><select id='cboFilter_QE'/></TH><TH><select id='cboFilter_Initiator'/></TH></TR>"
     $('.tasklist-table table thead').append(filter_row);
-    $("#cboFilter_TicketNumber").on("change", function () { filterTaskListTable(); });
+    $("#txtFilter_TicketNumber").on("change", function () { filterTaskListTable(); });
     $("#txtFilter_ProjectName").on("change", function () { filterTaskListTable(); });
     $("#txtFilter_TaskName").on("change", function () { filterTaskListTable(); });
     $("#cboFilter_Status").on("change", function () { filterTaskListTable(); });
@@ -393,7 +386,7 @@ function generateFilterRow() {
     $("#cboFilter_QE").on("change", function () { filterTaskListTable(); });
     $("#cboFilter_Initiator").on("change", function () { filterTaskListTable(); });
 
-    $("#cboFilter_TicketNumber").dblclick(function () { $("#cboFilter_TicketNumber").val(null).change(); });
+    $("#txtFilter_TicketNumber").dblclick(function () { $("#txtFilter_TicketNumber").val(null).change(); });
     $("#txtFilter_ProjectName").dblclick(function () { $("#txtFilter_ProjectName").val(null).change(); });
     $("#txtFilter_TaskName").dblclick(function () { $("#txtFilter_TaskName").val(null).change(); });
     $("#cboFilter_Status").dblclick(function () { $("#cboFilter_Status").val(0).change(); });
@@ -412,25 +405,17 @@ function generateFilterRow() {
     $('#txtFilter_TaskName').val($('.fpname input').val());
   }
 
+  if ((($('.fpid input').val() != null) && ($('.fpid input').val().length > 0)) && (($('#txtFilter_TicketNumber').val() == null) || ($('#txtFilter_TicketNumber').val() == ''))) {
+    $('#txtFilter_TicketNumber').val($('.fpid input').val());
+  }
+
+
   if (($(".qe-lookup-combo select option").length > 1) && ($("#cboFilter_QE option").length == 0)) {
     $("#cboFilter_QE").html($(".qe-lookup-combo select").html());
   }
 
   if (($(".initiator-lookup-combo select option").length > 1) && ($("#cboFilter_Initiator option").length == 0)) {
     $("#cboFilter_Initiator").html($(".initiator-lookup-combo select").html());
-  }
-
-  if (($('.ticket-number-lookup-combo select option').length > 1) && ($("#cboFilter_TicketNumber option").length == 0)) {
-    var selectList = $('.ticket-number-lookup-combo select option');
-
-    selectList.sort(function (a, b) {
-      a = a.value;
-      b = b.value;
-
-      return a - b;
-    });
-    $("#cboFilter_TicketNumber").html(selectList);
-    $("#cboFilter_TicketNumber").val(null);
   }
 
   if (($(".status-lookup-combo select option").length > 1) && ($("#cboFilter_Status option").length == 0)) {
@@ -620,22 +605,6 @@ function loadInitiatorMap() {
       initiatorName = $(this).find('.initiator-lookup-table-name input').val();
       initiatorMap.set(initiatorID, initiatorName);
       initiatorNameMap.set(initiatorName, initiatorID);
-    });
-  }
-}
-
-
-function loadProjectMap() {
-  if (projectMap.keys.length == 0) {
-    var project_rows = $('.project-lookup-table table tbody tr');
-    if (project_rows.length == 0) {
-      return;
-    }
-    project_rows.each(function (index) {
-      projectID = Number($(this).find('.project-lookup-table-id input').val());
-      projectName = $(this).find('.project-lookup-table-name input').val();
-      projectMap.set(projectID, projectName);
-      projectNameMap.set(projectName, projectID);
     });
   }
 }
@@ -842,8 +811,8 @@ function reApplyFilterValues() {
     $('#txtFilter_ProjectName').val(projectNameFilterValue);
   }
 
-  if (projectIDFilterValue != 0) {
-    $('#cboFilter_TicketNumber').val(projectIDFilterValue);
+  if ((projectIDFilterValue != null) && (projectIDFilterValue.length > 0)) {
+    $('#txtFilter_TicketNumber').val(projectIDFilterValue);
   }
 
 
