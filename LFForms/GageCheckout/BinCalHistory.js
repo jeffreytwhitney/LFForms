@@ -13,7 +13,18 @@ $(document).ready(function () {
   $.fn.bootstrapBtn = bootstrapButton;
 
   $('#q0').append("<div class='hidden' id='popUpDiv'></div>");
+  var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
+  var printEvent = window[eventMethod];
+  var messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
+  printEvent(messageEvent, function (e) {
 
+    if (e.data === "printme" || e.message === "printme") {
+      function show_print() {
+        $("#print-iframe").get(0).contentWindow.print();
+      };
+      window.setTimeout(show_print, 800); // 2 seconds
+    }
+  });
 
   $(document).on("onloadlookupfinished", function () {
     $('.Submit').hide();
@@ -149,8 +160,8 @@ function filterTable() {
 function generateFilterRow() {
 
   if ($('#filterRow').length == 0) {
-
-    var filter_row = "<TR id='filterRow'><TH/><TH/><TH/><TH><input type='text' class='date-filter' id='txtFilter_StartDate'><input type='text' class='date-filter' id='txtFilter_EndDate'></TH><TH/><TH/><TH/><TH/>"
+    var print_button = '<div class="table-button ui-button print-button" onclick="printReport()"><span title="Print" class="ui-button-icon ui-icon ui-icon-print"></span>Print</div>'
+    var filter_row = `<TR id='filterRow'><TH>${print_button}</TH><TH/><TH/><TH><input type='text' class='date-filter' id='txtFilter_StartDate'><input type='text' class='date-filter' id='txtFilter_EndDate'></TH><TH/><TH/><TH/><TH/>`
     $('.cal-table table thead').append(filter_row);
     $("#txtFilter_StartDate").on("change", function () { filterTable(); });
     $("#txtFilter_EndDate").on("change", function () { filterTable(); });
@@ -211,6 +222,56 @@ function popUpIframe(src, title, height, width) {
 
   $("#popupIFrame").dialog("open");
   $('#popupIFrame').attr('style', `width: 100%; height: ${height}px;`);
+}
+
+
+function printReport() {
+
+  should_print_report = true;
+  var domain = document.location.hostname;
+  var report_url_root = "http://" + domain + "/Forms/";
+  var report_url = "";
+
+  var bin_gage_id = $('.bid input').val();
+  var start_date = $('#txtFilter_StartDate').val();
+  var end_date = $('#txtFilter_EndDate').val();
+
+  if (bin_gage_id.length == 0) {
+    return;
+  }
+
+  report_url = report_url_root + `RMS-GAGE-BinCalHistory-Print?bid=${bin_gage_id}`;
+
+  if ((start_date != null) && (start_date != '')) {
+    if ($.datepicker.parseDate("dd/mm/yy", start_date)) {
+      report_url = report_url + "&std=" + start_date;
+    }
+    else {
+      $.alert({
+        title: 'Invalid Date!',
+        content: "The start date you entered isn't a valid date."
+      });
+      return;
+    }
+  }
+
+  if ((end_date != null) && (end_date != '')) {
+    if ($.datepicker.parseDate("dd/mm/yy", end_date)) {
+      report_url = report_url + "&ed=" + end_date;
+    }
+    else {
+      $.alert({
+        title: 'Invalid Date!',
+        content: "The end date you entered isn't a valid date."
+      });
+      return;
+    }
+  }
+
+
+
+  loadiFrame(report_url);
+  should_print_report == false;
 }
 
 

@@ -61,8 +61,7 @@ $(document).ready(function () {
     loadAssigneeMap();
     loadStatusMap();
     loadTaskTypeMap();
-    loadMfgEngineerMap();
-    loadQualEngineerMap();
+
   });
 
   $(document).on("onloadlookupfinished", function (e) {
@@ -71,7 +70,7 @@ $(document).ready(function () {
     $('#q0').append("<div class='hidden-text' id='popUpDiv'></div>");
     $('.btn-wrapper').append("<div id='add-note' class='ui-button ui-corner-all ui-widget' onclick='callAddNote()'><span class='ui-button-icon ui-icon ui-icon-document'></span>Add Note</div>");
     $('.btn-wrapper').append("<div id='view-notes' class='ui-button ui-corner-all ui-widget' onclick='callViewNotes()'><span class='ui-button-icon ui-icon ui-icon-newwin'></span>View Notes</div>");
-    $('.quality-eng select').parent().append("<div id='pester-qe' class='table-button ui-button' onclick='callPesterQE()'><span title='Pester QE' class='ui-button-icon ui-icon ui-icon-mail-closed'/></div>");
+    $('.quality-engineer-name input').parent().append("<div id='pester-qe' class='table-button ui-button' onclick='callPesterQE()'><span title='Pester QE' class='ui-button-icon ui-icon ui-icon-mail-closed'/></div>");
     $('.assigned-to select').parent().append(`<div id='pester-assignee' class='table-button ui-button' onclick='callPesterAssignee()'><span title='Pester Assignee' class='ui-button-icon ui-icon ui-icon-mail-closed'/></div>`);
 
     if (isNewTask()) {
@@ -118,7 +117,7 @@ function callPesterAssignee() {
 function callPesterQE() {
   var task_id = $('.tid input').val();
   var task_name = $('.task-name input').val();
-  var qe_name = $('.quality-eng select').val();
+  var qe_name = $('.quality-engineer-name input').val();
   popupIFrame(`http://rmslf/Forms/MPMAddNote?TaskID=${task_id}&nt=2`, `Pester '${qe_name}' regarding task '${task_name}'`, 400, 650, false);
 }
 
@@ -290,22 +289,6 @@ function loadAssigneeMap() {
 }
 
 
-function loadMfgEngineerMap() {
-  if (mfgEngineerMap.keys.length == 0) {
-    var mfgEngineer_rows = $('.manf-engineer-lookup table tbody tr');
-    if (mfgEngineer_rows.length == 0) {
-      return;
-    }
-    mfgEngineer_rows.each(function (index) {
-      mfgEngineerID = Number($(this).find('.manf-engineer-lookup-id input').val());
-      mfgEngineerName = $(this).find('.manf-engineer-lookup-name input').val();
-      mfgEngineerMap.set(mfgEngineerID, mfgEngineerName);
-      mfgEngineerNameMap.set(mfgEngineerName, mfgEngineerID);
-    });
-  }
-}
-
-
 function loadStatusMap() {
   if (taskStatusMap.keys.length == 0) {
     var status_rows = $('.status-lookup table tbody tr');
@@ -334,22 +317,6 @@ function loadTaskTypeMap() {
       tasktypeName = $(this).find('.task-type-lookup-name input').val();
       taskTypeMap.set(tasktypeID, tasktypeName);
       taskTypeByNameMap.set(tasktypeName, tasktypeID);
-    });
-  }
-}
-
-
-function loadQualEngineerMap() {
-  if (qualEngineerMap.keys.length == 0) {
-    var qualEngineer_rows = $('.quality-engineer-lookup table tbody tr');
-    if (qualEngineer_rows.length == 0) {
-      return;
-    }
-    qualEngineer_rows.each(function (index) {
-      qualEngineerID = Number($(this).find('.quality-engineer-lookup-id input').val());
-      qualEngineerName = $(this).find('.quality-engineer-lookup-name input').val();
-      qualEngineerMap.set(qualEngineerID, qualEngineerName);
-      qualEngineerNameMap.set(qualEngineerName, qualEngineerID);
     });
   }
 }
@@ -489,17 +456,6 @@ function setFormFieldEnableStateForNewTask() {
 
 function setFormFieldsForExistingTask() {
   
-  if (($('.qeid input').val() != null) && ($('.qeid input').val().length > 0)) {
-    let qe_id = Number($('.qeid input').val());
-    let qe_name = qualEngineerMap.get(qe_id);
-    $('.quality-eng select').val(qe_name);
-  }
-
-  if (($('.mfeid input').val() != null) && ($('.mfeid input').val().length > 0)) {
-    let mfe_id = Number($('.mfeid input').val());
-    let mfe_name = qualEngineerMap.get(mfe_id);
-    $('.manf-eng select').val(mfe_name);
-  }
 
   if (($('.ttid input').val() != null) && ($('.ttid input').val().length > 0)) {
     let tasktype_id = Number($('.ttid input').val());

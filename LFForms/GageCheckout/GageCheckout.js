@@ -1,3 +1,4 @@
+var should_print_receipt = true;
 $(document).ready(function () {
   $(document).prop('title', 'Gage Checkout');
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js');

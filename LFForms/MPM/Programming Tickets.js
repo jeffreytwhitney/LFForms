@@ -18,11 +18,6 @@ $(document).ready(function () {
   $.fn.bootstrapBtn = bootstrapButton;
   $('.network-user-name input').val($('.lf-user-name input').val().toUpperCase().substr($('.lf-user-name input').val().lastIndexOf('\\') + 1)).change();
   window.onmessage = function (event) {
-    //This is the callback from the IFrame.
-    //If the event data says "Close Dialog", it destroys the dialog, (so that the close function won't fire).
-    //If it says "CloseDialogWithRefresh", it destroys the dialog and refreshes the form.
-    //I don't refresh if you add a note, for example. But if you do anything that will show up on the page, (adding time, cloning a task, etc)
-    //then I do a refresh.
     if (event.data == "CloseDialog") {
       $("#popupIFrame").dialog("destroy");
       $("#popupIFrame").remove();
@@ -42,7 +37,9 @@ $(document).ready(function () {
       console.log("lookupcomplete");
       $('.network-user-name input').trigger("change");
     }
-    
+    loadDepartmentMap();
+    loadInitiatorMap();
+    loadQualityEngineerMap();
     generateTicketNumberColumn();
 
     generateFilterRow();
@@ -53,7 +50,6 @@ $(document).ready(function () {
   });
 
   $(document).on("onloadlookupfinished", function (e) {
-    console.log("onloadlookupfinished");
     $('.section-iframe').append("<div class='hidden-text' id='popUpDiv'></div>");
     $('.network-user-name input').trigger("change");
   });
@@ -116,25 +112,91 @@ function callShowDetails(ticket_id) {
 }
 
 
+function filterTable() {
+  if ($('#filterRow').length == 0) {
+    return;
+  }
+
+  if ($("#chkIncludeComplete").is(":checked")) {
+    $('.inccom input').val(1);
+  }
+  else {
+    $('.inccom input').val(0);
+  }
+
+
+
+  var taskNameFilterValue = $('#txtFilter_TaskName').val();
+  var projectNameFilterValue = $('#txtFilter_ProjectName').val();
+  var ticketNumberFilterValue = $('#txtFilter_TicketNumber').val();
+  var departmentFilterVal = $('#cboFilter_Department').val();
+  var qeFilterVal = $('#cboFilter_QE').val();
+  var initiatorFilterVal = $('#cboFilter_Initiator').val();
+
+  $('.ftname input').val(taskNameFilterValue);
+  $('.fpname input').val(projectNameFilterValue);
+  $('.fpid input').val(ticketNumberFilterValue);
+
+
+  if ((departmentFilterVal != null) && (departmentFilterVal.length > 0)) {
+    let departmentID = departmentNameMap.get(departmentFilterVal);
+    $('.fdid input').val(departmentID);
+  }
+  else {
+    $('.fdid input').val(0);
+  }
+
+  if ((qeFilterVal != null) && (qeFilterVal.length > 0)) {
+    let qeID = qualityEngineerNameMap.get(qeFilterVal);
+    $('.fqeid input').val(qeID);
+  }
+  else {
+    $('.fqeid input').val(0);
+  }
+
+  if ((initiatorFilterVal != null) && (initiatorFilterVal.length > 0)) {
+    let initiatorID = initiatorNameMap.get(initiatorFilterVal);
+    $('.finitemp input').val(initiatorID);
+  }
+  else {
+    $('.finitemp input').val(0);
+  }
+
+  $('.projectlist-table').hide();
+  removeAppendedFields();
+  $('.pg input').val(1).change();
+
+}
+
+
 function generateFilterRow() {
 
   if ($('#filterRow').length == 0) {
+    var includeCompleteCheckbox = '<div class="choice include-choice"><input name="chkIncludeComplete" id="chkIncludeComplete" type="checkbox" ><label class="form-option-label" for="chkIncludeComplete">Include Completed</label></div>'
+    $('.projectlist-table table').parent().prepend(includeCompleteCheckbox)
 
-    var filter_row = "<TR id='filterRow'><TH><input id='txtFilter_TicketNumber'/></TH><TH><input type='text' id='txtFilter_ProjectName'></TH><TH/><TH><select id='cboFilter_Department'/></TH><TH/><TH/><TH><select id='cboFilter_QE'/></TH><TH><select id='cboFilter_Initiator'/></TH><TH/></TR>"
+
+
+    var filter_row = "<TR id='filterRow'><TH><input id='txtFilter_TicketNumber'/></TH><TH><input type='text' id='txtFilter_ProjectName'></TH><TH/><TH><select id='cboFilter_Department'/></TH><TH/><TH/><TH><select id='cboFilter_QE'/></TH><TH><select id='cboFilter_Initiator'/></TH><TH><input type='text' id='txtFilter_TaskName'></TH></TR>"
+
+    $('.projectlist-table table thead th:last-child').text('Search By Task Name');
+
     $('.projectlist-table table thead').append(filter_row);
-    $("#txtFilter_ProjectName").on("change", function () { filterTable(); });
+
     $("#txtFilter_TicketNumber").on("change", function () { filterTable(); });
     $("#txtFilter_ProjectName").on("change", function () { filterTable(); });
     $("#cboFilter_Department").on("change", function () { filterTable(); });
     $("#cboFilter_QE").on("change", function () { filterTable(); });
     $("#cboFilter_Initiator").on("change", function () { filterTable(); });
-
+    $("#txtFilter_TaskName").on("change", function () { filterTable(); });
+    $("#chkIncludeComplete").on("change", function () { filterTable(); });
 
     $("#txtFilter_TicketNumber").dblclick(function () { $("#txtFilter_TicketNumber").val(null).change(); });
     $("#txtFilter_ProjectName").dblclick(function () { $("#txtFilter_ProjectName").val(null).change(); });
     $("#cboFilter_Department").dblclick(function () { $("#cboFilter_Department").val(null).change(); });
     $("#cboFilter_QE").dblclick(function () { $("#cboFilter_QE").val(0).change(); });
     $("#cboFilter_Initiator").dblclick(function () { $("#cboFilter_Initiator").val(0).change(); });
+    $("#txtFilter_TaskName").dblclick(function () { $("#txtFilter_TaskName").val(null).change(); });
   }
 
   if ((($('.ftname input').val() != null) && ($('.ftname input').val().length > 0)) && (($('#txtFilter_TaskName').val() == null) || ($('#txtFilter_TaskName').val() == ''))) {
@@ -142,25 +204,27 @@ function generateFilterRow() {
   }
 
   if ((($('.fpname input').val() != null) && ($('.fpname input').val().length > 0)) && (($('#txtFilter_ProjectName').val() == null) || ($('#txtFilter_ProjectName').val() == ''))) {
-    $('#txtFilter_TaskName').val($('.fpname input').val());
+    $('#txtFilter_ProjectName').val($('.fpname input').val());
   }
 
   if ((($('.fpid input').val() != null) && ($('.fpid input').val().length > 0)) && (($('#txtFilter_TicketNumber').val() == null) || ($('#txtFilter_TicketNumber').val() == ''))) {
     $('#txtFilter_TicketNumber').val($('.fpid input').val());
   }
 
-  if (($(".status-lookup-combo select option").length > 0) && ($("#cboFilter_Status option").length == 0)) {
-    $("#cboFilter_Status").html($(".status-lookup-combo select").html());
+  if (($(".department-lookup-combo select option").length > 1) && ($("#cboFilter_Department option").length == 0)) {
+    let departmentOptions = $(".department-lookup-combo select").html();
+    $("#cboFilter_Department").html(departmentOptions);
   }
-  if (($(".tasktype-lookup-combo select option").length > 0) && ($("#cboFilter_TaskType option").length == 0)) {
-    $("#cboFilter_TaskType").html($(".tasktype-lookup-combo select").html());
+
+  if (($(".qe-lookup-combo select option").length > 1) && ($("#cboFilter_QE option").length == 0)) {
+    $("#cboFilter_QE").html($(".qe-lookup-combo select").html());
   }
-  if (($(".assignee-lookup-combo select option").length > 0) && ($("#cboFilter_Assignee option").length == 0)) {
-    $("#cboFilter_Assignee").html($(".assignee-lookup-combo select").html());
+
+  if (($(".initiator-lookup-combo select option").length > 1) && ($("#cboFilter_Initiator option").length == 0)) {
+    $("#cboFilter_Initiator").html($(".initiator-lookup-combo select").html());
   }
-  if (($(".department-lookup-combo select option").length > 0) && ($("#cboFilter_Department option").length == 0)) {
-    $("#cboFilter_Department").html($(".department-lookup-combo select").html());
-  }
+
+
 }
 
 
@@ -324,63 +388,38 @@ function reApplyFilterValues() {
 
 function refreshPage() {
 
-  //var taskNameFilter = $('.ftname input').val();
-  //var include_NotSched = Number($('.fincns input').val());
-  //var exclude_Waiting = Number($('.fexw input').val());
-  //var include_Complete = Number($('.finccom input').val());
-  //var projectIDFilter = Number($('.fpid input').val());
-  //var taskTypeIDFilter = Number($('fttid input').val());
-  //var statusIDFilter = Number($('fsid input').val());
-  //var assigneeIDFilter = Number($('faid input').val());
-  //var departmentIDFilter = Number($('fdid input').val());
-  //var taskListPage = Number($('.tasklist-page input').val());
+  var taskNameFilter = $('.ftname input').val();
+  var include_Complete = Number($('.inccom input').val());
+  var projectIDFilter = Number($('.fpid input').val());
+  var departmentIDFilter = Number($('fdid input').val());
+  var taskListPage = Number($('.tasklist-page input').val());
 
-  //var current_url = window.location.href;
-  //if (current_url.includes('?')) {
-  //  indexOfQuestionMark = current_url.indexOf('?');
-  //  current_url = current_url.substring(0, indexOfQuestionMark);
-  //}
+  var current_url = window.location.href;
+  if (current_url.includes('?')) {
+    indexOfQuestionMark = current_url.indexOf('?');
+    current_url = current_url.substring(0, indexOfQuestionMark);
+  }
 
-  //if ((taskListPage != null) && (taskListPage != NaN) && (taskListPage > 0)) {
-  //  current_url = current_url + `?TaskListPage=${taskListPage}`;
-  //}
+  if ((taskListPage != null) && (taskListPage != NaN) && (taskListPage > 0)) {
+    current_url = current_url + `?pg=${taskListPage}`;
+  }
 
-  //if ((taskNameFilter != null) && (taskNameFilter.length > 0)) {
-  //  current_url = current_url + `&ftname=${taskNameFilter}`;
-  //}
+  if ((taskNameFilter != null) && (taskNameFilter.length > 0)) {
+    current_url = current_url + `&ftname=${taskNameFilter}`;
+  }
 
-  //if ((include_NotSched != null) && (include_NotSched != NaN) && (include_NotSched > 0)) {
-  //  current_url = current_url + `&fincns=${include_NotSched}`;
-  //}
+  if ((include_Complete != null) && (include_Complete != NaN) && (include_Complete > 0)) {
+    current_url = current_url + `&inccom=${include_Complete}`;
+  }
 
-  //if ((exclude_Waiting != null) && (exclude_Waiting != NaN) && (exclude_Waiting > 0)) {
-  //  current_url = current_url + `&fexw=${exclude_Waiting}`;
-  //}
+  if ((projectIDFilter != null) && (projectIDFilter != NaN) && (projectIDFilter > 0)) {
+    current_url = current_url + `&fpid=${projectIDFilter}`;
+  }
 
-  //if ((include_Complete != null) && (include_Complete != NaN) && (include_Complete > 0)) {
-  //  current_url = current_url + `&finccom=${include_Complete}`;
-  //}
-
-  //if ((projectIDFilter != null) && (projectIDFilter != NaN) && (projectIDFilter > 0)) {
-  //  current_url = current_url + `&fpid=${projectIDFilter}`;
-  //}
-
-  //if ((assigneeIDFilter != null) && (assigneeIDFilter != NaN) && (assigneeIDFilter > 0)) {
-  //  current_url = current_url + `&faid=${assigneeIDFilter}`;
-  //}
-
-  //if ((statusIDFilter != null) && (statusIDFilter != NaN) && (statusIDFilter > 0)) {
-  //  current_url = current_url + `&fsid=${statusIDFilter}`;
-  //}
-
-  //if ((taskTypeIDFilter != null) && (taskTypeIDFilter != NaN) && (taskTypeIDFilter > 0)) {
-  //  current_url = current_url + `&fttid=${taskTypeIDFilter}`;
-  //}
-
-  //if ((departmentIDFilter != null) && (departmentIDFilter != NaN) && (departmentIDFilter > 0)) {
-  //  current_url = current_url + `&fdid=${departmentIDFilter}`;
-  //}
-  //window.location = current_url;
+  if ((departmentIDFilter != null) && (departmentIDFilter != NaN) && (departmentIDFilter > 0)) {
+    current_url = current_url + `&fdid=${departmentIDFilter}`;
+  }
+  window.location = current_url;
 }
 
 
@@ -388,4 +427,5 @@ function removeAppendedFields() {
   $('#projectlist-pagination').remove();
   $('.project-link').remove();
 }
+
 
