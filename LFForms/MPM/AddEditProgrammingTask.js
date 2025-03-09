@@ -214,15 +214,15 @@ function checkPermissions() {
   var init_usertype_id = $(".initutid input").val();
   var return_val = true;
 
-  if (is_active_user == 0) {
+  if (is_active_user == '0') {
     return_val = false;
   }
 
-  if (user_id == 0) {
+  if (user_id == '0') {
     return_val = false;
   }
 
-  if (user_type_id != 1) {
+  if (user_type_id != '1') {
     if (user_department_id != init_department_id) {
       return_val = false;
     }
