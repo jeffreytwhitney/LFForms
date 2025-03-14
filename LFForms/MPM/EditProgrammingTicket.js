@@ -95,8 +95,9 @@ $(document).ready(function () {
       $('.cell-leader-id input').val(cellLeaderID);
     });
 
-    $('.tasklist-table .cf-section-header').prepend('<div class="ui-button group-edit-button" onclick="callGroupEdit()"><span title="Group Edit" class="ui-button-icon ui-icon ui-icon-clipboard"></span>Group Edit</div>');
-
+    if (isMetrologyUser()) {
+      $('.tasklist-table .cf-section-header').prepend('<div class="ui-button group-edit-button" onclick="callGroupEdit()"><span title="Group Edit" class="ui-button-icon ui-icon ui-icon-clipboard"></span>Group Edit</div>');
+    }
 
   });
 });

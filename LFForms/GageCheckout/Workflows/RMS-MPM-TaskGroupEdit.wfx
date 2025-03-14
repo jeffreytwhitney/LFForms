@@ -1,0 +1,1287 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Designer Version="10.4.3.139">
+    <SequentialWorkflowActivityProxy Type="Laserfiche.Workflow.Activities.Proxies.LfSequentialWorkflowProxy, Laserfiche.Workflow.Designer.Base, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="51d6946d-a311-4cd1-afbf-6117de94d1c5" ActivityCountHint="42">
+        <Name>RMS-MPM-TaskGroupEdit</Name>
+        <SafeName>RMSMPMTaskGroupEdit</SafeName>
+        <Enabled>True</Enabled>
+        <Description ShowDescription="null" ShowSummary="null" />
+        <AttachedProperties>
+            <Property Key="ProfileCollection" PropertyType="Profiles">
+                <LinkedProperties Default="">
+                    <LinkedProperty>
+                        <Name>RMS Admin</Name>
+                        <Id>-1</Id>
+                        <Uuid>d338fdc8-0975-402f-ae99-83a3d159eb15</Uuid>
+                        <Offline><ConnectionProfile Version="2" xmlns="http:\laserfiche\workflow\connection"><ProfileId>5X/3Ex+T/dhIsQnkUaWByHv6Vhl9ICEL</ProfileId><EncryptedData xmlns="http://www.w3/.org/2001/04/xmlenc#"><CipherData><CipherValue>mb8rM4Vnor8iNeZ7FyZER9Zqsvss06D6DeYyZKyfKxbogfrp9+GwDdV0MYMufKlzYkrxPhwScNwTxOaXbeVaqz6GulGH5A/WhtsjSmljI3g/XNGEcVyAxBz54EIom/TE3zIBavtl8TG5HeOm7Qr9dq8Q0Cl+DWU/3wuYp3SbQQyG/zuK1QtcjcwH2m61BemE4tlWXwZma02WjfXDb1u9hpeM2b9wr2df9uQ6b8ZRSUCZNH6KV53vhihYg/wCKFwazX2CzZQNb0pcYCkT37so3bZsyQMLw36VykBqCN5jDANUzisMCEkVtfTVmEjEJdvWlh6U/vuea2l4yYjj0tH2rSMY7eNGc1zLzJHecRdr0vInI0M+f0cDq+dlCbNaLzXjD0yUaFFbfyL5IKh4lwDxu2+IyZHraqieYgngjJbtY1BWpJ+s9wWQHK2kAU2Ze9dd2/J53QssY9aiius2SRGsv2ZGtD8ywojdN7Dac6UeVgP53A4xswFtSLaMhlJYya52uZ006KY2u89r4uoLWLA7JEJb56byIm2wEHAmBGcSO25wk9hfFOVGyNOFXGUormi3Fjeydh66BLunJB1JM5ZeTpcDGfvb9giWLaWNgCFk7w4jGIf6LWPhH1wl42Qn9h3P+hHyDhQM82iR6hk+y8p54UevI7XZv7p6OsZ5StdLIpD2MOwSZsdeAUqPkkrpzPQh19mtz979pOgHYcNi9A08PrSmYJHMQynkrhVnRlxWWVIva2WsnQe5IHmojhYPbtg3Tz2U4z0mG39/Q2c2gljmMq86ya7GnkHr6s9f0SHsolORDSRiYcu7NFtLqVmeHOLc23pvGoAiQXORmlGGQr0QZrOfdy6nKvnWyqJHKBymhiTq7fI2lcDFdN++Pdwve9rQTjEnhjKMO4s77gYomXLqs8OabhoSabY5vMwi7vF+v+IYMlGyrT3Rai8ss78lkTiq5euTkRCQT2YwRL8RokjP4oubdIFU0x1aZwwicFou6Xt+ibP+ACYEQYJKxrvJBCoCoE4omPpyC70=</CipherValue></CipherData></EncryptedData></ConnectionProfile></Offline>
+                    </LinkedProperty>
+                </LinkedProperties>
+            </Property>
+            <Property Key="WorkflowWebServiceCollection" PropertyType="WebServices">
+                <LinkedProperties Default="">
+                    <LinkedProperty ServiceURL="http://rmslf/forms" User="admin" Type="Laserfiche Forms">
+                        <Name>LFForms</Name>
+                        <Id>18</Id>
+                        <Uuid>416aa5bb-5ee5-4617-8593-86ba2c4b546b</Uuid>
+                        <Offline />
+                    </LinkedProperty>
+                </LinkedProperties>
+            </Property>
+            <Property Key="WorkflowDataSourceCollection" PropertyType="DataSources">
+                <LinkedProperties Default="">
+                    <LinkedProperty>
+                        <Name>LF_RMS_COMMS_MPM</Name>
+                        <Id>47</Id>
+                        <Uuid>49b2b9e4-d52c-475e-862a-b68cbfe7103e</Uuid>
+                        <Offline />
+                        <Information>
+                            <SourceInformation Flags="OdbcType, ServerDatabase, UseSSPI" Adapter="Sql">
+                                <Host>rms-corplfsql1.cretexinc.com</Host>
+                                <Database>LF_RMS_COMMS_MPM</Database>
+                                <Server />
+                                <User />
+                            </SourceInformation>
+                        </Information>
+                    </LinkedProperty>
+                </LinkedProperties>
+            </Property>
+            <Property Key="EmailServerReferenceCollection" PropertyType="EmailServers">
+                <LinkedProperties Default="">
+                    <LinkedProperty Host="rms-intstmprelay" IsDefault="true">
+                        <Name>LF Notfications</Name>
+                        <Id>10</Id>
+                        <Uuid>e6927ae8-4844-4e57-8184-a42b18d3798b</Uuid>
+                        <Offline />
+                    </LinkedProperty>
+                </LinkedProperties>
+            </Property>
+        </AttachedProperties>
+        <Projects>
+            <CSharpProject />
+            <VBProject />
+        </Projects>
+        <WorkflowBusinessProcessOptions LfProcessId="0" ProfileId="d338fdc8-0975-402f-ae99-83a3d159eb15" Flags="AllowStartingFromClients, CreateBusinessProcessEntity, RecordMilestoneEvents, RecordStepEvents, SetStartingMilestone, SetCompletedMilestone, SetCanceledMilestone" Enabled="false">
+            <Milestones>
+                <Starting>Running</Starting>
+                <Completed>Completed</Completed>
+                <Canceled>Terminated</Canceled>
+            </Milestones>
+            <CustomInstanceName />
+        </WorkflowBusinessProcessOptions>
+        <WorkflowParameters SetOutputValuesViaTokens="true" />
+        <Cultures>
+            <Culture>en-us</Culture>
+        </Cultures>
+        <MetadataStore Attributes="ExpectsStartingEntry, ValidateDesign">
+            <VersionHistory>
+                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS-MPM-TaskGroupEdit.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="03/12/2025 14:21:12" EndTime="03/12/2025 16:59:32" />
+                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS-MPM-TaskGroupEdit.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="03/12/2025 16:59:32" EndTime="03/12/2025 17:11:08" />
+                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS-MPM-TaskGroupEdit.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="03/12/2025 17:11:08" EndTime="03/12/2025 17:15:20" />
+                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS-MPM-TaskGroupEdit.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="03/12/2025 17:15:20" EndTime="03/12/2025 18:06:58" />
+                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS-MPM-TaskGroupEdit.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="03/13/2025 01:07:24" EndTime="03/13/2025 01:13:51" />
+                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS-MPM-TaskGroupEdit.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="03/13/2025 01:13:51" EndTime="03/13/2025 03:12:16" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp3931.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="03/13/2025 03:12:16" EndTime="03/13/2025 03:12:44" />
+                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS-MPM-TaskGroupEdit.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="03/13/2025 08:27:11" EndTime="03/13/2025 08:56:01" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpEBCA.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="03/13/2025 08:56:01" EndTime="03/13/2025 08:56:05" />
+                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS-MPM-TaskGroupEdit.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="03/14/2025 05:04:20" EndTime="03/14/2025 05:05:19" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp956A.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="03/14/2025 05:05:19" EndTime="03/14/2025 05:05:23" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp37FC.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="03/14/2025 10:24:31" EndTime="03/14/2025 10:27:52" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpF9C6.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="03/14/2025 10:27:52" EndTime="03/14/2025 11:04:44" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpDD3D.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="03/14/2025 11:04:44" EndTime="03/14/2025 11:06:48" />
+                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS-MPM-TaskGroupEdit.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="03/14/2025 11:06:48" EndTime="03/14/2025 11:16:56" />
+                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS-MPM-TaskGroupEdit.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="03/14/2025 11:16:56" EndTime="03/14/2025 11:28:41" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpF47E.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="03/14/2025 11:28:41" EndTime="03/14/2025 11:28:45" />
+                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS-MPM-TaskGroupEdit.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="03/14/2025 11:28:45" EndTime="03/14/2025 12:09:25" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp4615.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="03/14/2025 12:09:25" EndTime="03/14/2025 12:09:31" />
+                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS-MPM-TaskGroupEdit.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="03/14/2025 12:09:31" EndTime="03/14/2025 12:14:04" />
+                <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpD850.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="03/14/2025 12:14:04" EndTime="03/14/2025 12:14:30" />
+                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS-MPM-TaskGroupEdit.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="03/14/2025 12:14:30" EndTime="03/14/2025 12:14:45" />
+            </VersionHistory>
+            <Metadata>
+                <Value Item="Author" Type="String">JTWhitney</Value>
+                <Value Item="WorkflowFilePath" Type="String">C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS-MPM-TaskGroupEdit.wfx</Value>
+                <Value Item="PublishedDate" Type="DateTime">2025-03-14T12:14:39.097Z</Value>
+                <Value Item="WorkflowId" Type="Int32">136</Value>
+                <Value Item="WorkflowVersion" Type="Int32">9</Value>
+                <Value Item="WorkflowServerURL" Type="String">RMS-CORPLF1</Value>
+                <Value Item="WorkflowServerId" Type="String">8f6ebc76-1c3a-4b6f-b657-d705dfc3c51f</Value>
+            </Metadata>
+        </MetadataStore>
+        <Activities>
+            <Activity Type="Laserfiche.Workflow.Activities.Forms.RetrieveFormFieldValueProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="25959247-01a5-4b25-b132-fc35078ed7a8">
+                <Name>Get Business Process Variables</Name>
+                <SafeName>GetBusinessProcessVariables</SafeName>
+                <Enabled>True</Enabled>
+                <Description ShowDescription="null" ShowSummary="null">Retrieves the values from a Laserfiche Forms business process instance and stores those values as tokens.</Description>
+                <RetrieveFormFieldValueOptions Id="416aa5bb-5ee5-4617-8593-86ba2c4b546b" OPT123332="true">
+                    <SubmissionOptions UseStarting="true" SubmissionId="" InstanceId="" UseStartingInstance="true" />
+                    <ProcessOptions ProcessId="104" ProcessName="RMS-MPM-TaskGroupEdit" />
+                    <Fields>
+                        <Attribute AttributeId="3741" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="AssigneeEmailAddress" AttributeName="AssigneeEmailAddress" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-TaskGroupEdit" MemberPath="3754" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="3677" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="closeme" AttributeName="closeme" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-TaskGroupEdit" MemberPath="3690" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="3689" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Date" Label="Due Date:" AttributeName="DueDate" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-TaskGroupEdit" MemberPath="3702" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="3734" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Note:" AttributeName="Note" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-TaskGroupEdit" MemberPath="3747" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="3735" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Op Number:" AttributeName="OpNumber" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-TaskGroupEdit" MemberPath="3748" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="3739" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="QEEmailAddress" AttributeName="QEEmailAddress" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-TaskGroupEdit" MemberPath="3752" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="3690" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Date" Label="Schedule Due Date:" AttributeName="SchedDueDate" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-TaskGroupEdit" MemberPath="3703" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="3740" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="SelectedIDList" AttributeName="SelectedIDList" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-TaskGroupEdit" MemberPath="3753" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="3742" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="SelectedTaskCount" AttributeName="SelectedTaskCount" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-TaskGroupEdit" MemberPath="3755" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="3695" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Table" Label="Tasks:" AttributeName="Tasks_" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-TaskGroupEdit" MemberPath="3708_" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false">
+                            <Choices>
+                                <FormAttributeFieldChoice Label="row 1" Value="row_1" />
+                            </Choices>
+                            <Children>
+                                <Attribute AttributeId="3696" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="TaskID" AttributeName="TaskID" ParentLabel="Tasks:" ParentName="Tasks_" ParentPath="3708_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-TaskGroupEdit" MemberPath="3708_.3709" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="3697" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Checkbox" Label="Select" AttributeName="Select" ParentLabel="Tasks:" ParentName="Tasks_" ParentPath="3708_" AreChoiceValuesUsed="true" BoundPropertyName="" FormName="RMS-MPM-TaskGroupEdit" MemberPath="3708_.3710" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false">
+                                    <Choices>
+                                        <FormAttributeFieldChoice Label="Select" Value="Select" />
+                                    </Choices>
+                                </Attribute>
+                                <Attribute AttributeId="3698" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Task Name" AttributeName="TaskName" ParentLabel="Tasks:" ParentName="Tasks_" ParentPath="3708_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-TaskGroupEdit" MemberPath="3708_.3711" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="3699" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Task Type" AttributeName="TaskType" ParentLabel="Tasks:" ParentName="Tasks_" ParentPath="3708_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-TaskGroupEdit" MemberPath="3708_.3712" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="3700" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Assigned To" AttributeName="AssignedTo" ParentLabel="Tasks:" ParentName="Tasks_" ParentPath="3708_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-TaskGroupEdit" MemberPath="3708_.3713" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="3701" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Status" AttributeName="Status" ParentLabel="Tasks:" ParentName="Tasks_" ParentPath="3708_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-TaskGroupEdit" MemberPath="3708_.3714" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="3702" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Man Dt" AttributeName="ManDt" ParentLabel="Tasks:" ParentName="Tasks_" ParentPath="3708_" AreChoiceValuesUsed="true" BoundPropertyName="" FormName="RMS-MPM-TaskGroupEdit" MemberPath="3708_.3715" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="3703" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Due Date" AttributeName="DueDate" ParentLabel="Tasks:" ParentName="Tasks_" ParentPath="3708_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-TaskGroupEdit" MemberPath="3708_.3716" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="3704" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Sched Due Date" AttributeName="SchedDueDate" ParentLabel="Tasks:" ParentName="Tasks_" ParentPath="3708_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-TaskGroupEdit" MemberPath="3708_.3717" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="3705" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Total Hours" AttributeName="TotalHours" ParentLabel="Tasks:" ParentName="Tasks_" ParentPath="3708_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-TaskGroupEdit" MemberPath="3708_.3718" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="3731" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="ErrorMessage" AttributeName="ErrorMessage" ParentLabel="Tasks:" ParentName="Tasks_" ParentPath="3708_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-TaskGroupEdit" MemberPath="3708_.3744" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="3736" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Op Number" AttributeName="OpNumberCol" ParentLabel="Tasks:" ParentName="Tasks_" ParentPath="3708_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-TaskGroupEdit" MemberPath="3708_.3749" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="3743" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="SelectedValue" AttributeName="SelectedValue" ParentLabel="Tasks:" ParentName="Tasks_" ParentPath="3708_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-TaskGroupEdit" MemberPath="3708_.3756" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                            </Children>
+                        </Attribute>
+                        <Attribute AttributeId="3694" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Ticket Name:" AttributeName="TicketName" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-TaskGroupEdit" MemberPath="3707" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="3693" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Ticket Number:" AttributeName="TicketNumber" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-TaskGroupEdit" MemberPath="3706" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="3686" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="tid" AttributeName="tid" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-TaskGroupEdit" MemberPath="3699" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="3725" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="UpdateAssigneeID" AttributeName="UpdateAssigneeID" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-TaskGroupEdit" MemberPath="3738" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="3738" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="UpdateManDate" AttributeName="UpdateManDate" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-TaskGroupEdit" MemberPath="3751" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="3744" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="UpdateNote" AttributeName="UpdateNote_1" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-TaskGroupEdit" MemberPath="3757" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="3726" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="UpdateStatusID" AttributeName="UpdateStatusID" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-TaskGroupEdit" MemberPath="3739" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="3724" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="UpdateTaskTypeID" AttributeName="UpdateTaskTypeID" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-TaskGroupEdit" MemberPath="3737" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="3683" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="User_EmployeeNumber" AttributeName="User_EmployeeNumber" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-TaskGroupEdit" MemberPath="3696" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="3680" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="User_ID" AttributeName="User_ID" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-TaskGroupEdit" MemberPath="3693" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="3681" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="User_IsActive" AttributeName="User_IsActive" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-TaskGroupEdit" MemberPath="3694" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="3682" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="User_SiteID" AttributeName="User_SiteID" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-TaskGroupEdit" MemberPath="3695" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                    </Fields>
+                    <AdditionalVariableOptions>
+                        <RetrievePaymentVariables>false</RetrievePaymentVariables>
+                    </AdditionalVariableOptions>
+                </RetrieveFormFieldValueOptions>
+            </Activity>
+            <Activity Type="Laserfiche.Workflow.Activities.ForEach.ForEachResultActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="2f32b8bd-77c0-4cdf-adb4-5ca781b8a86f">
+                <Name>For Each Row</Name>
+                <SafeName>ForEachRow</SafeName>
+                <Enabled>True</Enabled>
+                <Description ShowDescription="null" ShowSummary="null">Runs the contained activities for each row returned by a Custom Query or Query Data activity, or for each result returned by activities that return collections of information.</Description>
+                <Binding Name="Collection">
+                    <BindingPath Activity="Get Business Process Variables" Property="Attribute:Tasks_" />
+                </Binding>
+                <Activities>
+                    <Activity Type="Laserfiche.Workflow.Activities.Condition.ConditionalSequenceActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="422c4d10-88fa-451e-86f4-da619b1ec786">
+                        <Name>Selected Rows</Name>
+                        <SafeName>SelectedRows</SafeName>
+                        <Enabled>True</Enabled>
+                        <Description ShowDescription="null" ShowSummary="null">A sequence activity that only performs the contained activities if the conditions are satisfied.</Description>
+                        <ProfileId>d338fdc8-0975-402f-ae99-83a3d159eb15</ProfileId>
+                        <Condition Version="10.4.3.139" Name="" Negated="false" IsConjunction="true" ConditionType="Composite" Description="">
+                            <Conditions>
+                                <Condition ConditionType="Token" Operator="Equal">
+                                    <Token Name="SelectedValue" Length="0" MetaType="String, Field">
+                                        <Activity Display="For Each Row" Append="true">ForEachRow</Activity>
+                                    </Token>
+                                    <Values>
+                                        <Value>1</Value>
+                                    </Values>
+                                </Condition>
+                            </Conditions>
+                        </Condition>
+                        <Activities>
+                            <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="bd4af9f5-fe71-42e1-9acd-0dae4bbd575f">
+                                <Name>spTASK_GroupUpdate</Name>
+                                <SafeName>spTASK_GroupUpdate</SafeName>
+                                <Enabled>True</Enabled>
+                                <Description ShowDescription="null" ShowSummary="null">Performs the specified query in the selected data source.</Description>
+                                <DataSourceId>49b2b9e4-d52c-475e-862a-b68cbfe7103e</DataSourceId>
+                                <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+                                    <CustomQuery>EXEC spTASK_GroupUpdate ?, ?, ?, ?, ?, ?, ?, ?, ?, ? </CustomQuery>
+                                    <InputParameter DbType="Int32">
+                                        <Name>?</Name>
+                                        <Value>%(GetBusinessProcessVariables_User_SiteID)</Value>
+                                    </InputParameter>
+                                    <InputParameter DbType="Int32">
+                                        <Name>?</Name>
+                                        <Value>%(ForEachRow_TaskID)</Value>
+                                    </InputParameter>
+                                    <InputParameter DbType="String">
+                                        <Name>?</Name>
+                                        <Value>%(GetBusinessProcessVariables_OpNumber#"NULL"#)</Value>
+                                    </InputParameter>
+                                    <InputParameter DbType="Int32">
+                                        <Name>?</Name>
+                                        <Value>%(GetBusinessProcessVariables_UpdateTaskTypeID#"NULL"#)</Value>
+                                    </InputParameter>
+                                    <InputParameter DbType="Int32">
+                                        <Name>?</Name>
+                                        <Value>%(GetBusinessProcessVariables_UpdateStatusID#"NULL"#)</Value>
+                                    </InputParameter>
+                                    <InputParameter DbType="String">
+                                        <Name>?</Name>
+                                        <Value>%(GetBusinessProcessVariables_DueDate#"NULL"#)</Value>
+                                    </InputParameter>
+                                    <InputParameter DbType="String">
+                                        <Name>?</Name>
+                                        <Value>%(GetBusinessProcessVariables_SchedDueDate#"NULL"#)</Value>
+                                    </InputParameter>
+                                    <InputParameter DbType="Int32">
+                                        <Name>?</Name>
+                                        <Value>%(GetBusinessProcessVariables_UpdateAssigneeID#"NULL"#)</Value>
+                                    </InputParameter>
+                                    <InputParameter DbType="Int16">
+                                        <Name>?</Name>
+                                        <Value>%(GetBusinessProcessVariables_UpdateManDate)</Value>
+                                    </InputParameter>
+                                    <InputParameter DbType="String">
+                                        <Name>?</Name>
+                                        <Value>%(GetBusinessProcessVariables_User_EmployeeNumber)</Value>
+                                    </InputParameter>
+                                </Criteria>
+                                <ResultSetSize Rows="ReturnAllRows" Count="2" />
+                                <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+                            </Activity>
+                            <Activity Type="Laserfiche.Workflow.Activities.Condition.ConditionalSequenceActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="2c5e7838-d878-494e-b28e-11250fd251cb">
+                                <Name>Status Updated</Name>
+                                <SafeName>StatusUpdated</SafeName>
+                                <Enabled>True</Enabled>
+                                <Description ShowDescription="null" ShowSummary="null">A sequence activity that only performs the contained activities if the conditions are satisfied.</Description>
+                                <ProfileId>d338fdc8-0975-402f-ae99-83a3d159eb15</ProfileId>
+                                <Condition Version="10.4.3.139" Name="" Negated="false" IsConjunction="true" ConditionType="Composite" Description="">
+                                    <Conditions>
+                                        <Condition ConditionType="Token" Operator="IsNotEmpty">
+                                            <Token Name="UpdateStatusID" Length="0" MetaType="String, Field">
+                                                <Activity Display="RMS-MPM-TaskGroupEdit" Append="true">GetBusinessProcessVariables</Activity>
+                                            </Token>
+                                            <Values />
+                                        </Condition>
+                                    </Conditions>
+                                </Condition>
+                                <Activities>
+                                    <Activity Type="Laserfiche.Workflow.Activities.Condition.IfElseConditionProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="b573495c-8213-4497-9fa9-0043a6d8ad51">
+                                        <Name>Status ID</Name>
+                                        <SafeName>StatusID</SafeName>
+                                        <Enabled>True</Enabled>
+                                        <Description ShowDescription="null" ShowSummary="null">Runs the FIRST branch that has satisfied conditions.</Description>
+                                        <ProfileId>d338fdc8-0975-402f-ae99-83a3d159eb15</ProfileId>
+                                        <Activities>
+                                            <Activity Type="Laserfiche.Workflow.Activities.Condition.RoutingDecisionBranchProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="3f3de031-6fa9-498e-a55f-72deefb059d0">
+                                                <Name>Waiting</Name>
+                                                <SafeName>Waiting</SafeName>
+                                                <Enabled>True</Enabled>
+                                                <Description ShowDescription="null" ShowSummary="null">Contains activities that will run if the branch conditions are satisfied.</Description>
+                                                <Condition Version="10.4.3.139" Name="" Negated="false" IsConjunction="true" ConditionType="Composite" Description="">
+                                                    <Conditions>
+                                                        <Condition ConditionType="Token" Operator="Equal">
+                                                            <Token Name="UpdateStatusID" Length="0" MetaType="String, Field">
+                                                                <Activity Display="Get Business Process Variables" Append="true">GetBusinessProcessVariables</Activity>
+                                                            </Token>
+                                                            <Values>
+                                                                <Value>3</Value>
+                                                            </Values>
+                                                        </Condition>
+                                                    </Conditions>
+                                                </Condition>
+                                                <Activities>
+                                                    <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="deab6573-840b-4bf6-90a7-889e129152a7">
+                                                        <Name>Add Waiting Note</Name>
+                                                        <SafeName>AddWaitingNote</SafeName>
+                                                        <Enabled>True</Enabled>
+                                                        <Description ShowDescription="null" ShowSummary="null">Performs the specified query in the selected data source.</Description>
+                                                        <DataSourceId>49b2b9e4-d52c-475e-862a-b68cbfe7103e</DataSourceId>
+                                                        <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+                                                            <Table Name="" HasIdentityColumn="false">
+                                                                <Columns Generated="1/1/0001 12:00:00 AM">
+                                                                    <Column Name="" Type="System.Decimal" ReadOnly="False" />
+                                                                </Columns>
+                                                            </Table>
+                                                            <CustomQuery>EXECUTE spTASKNOTE_AddNew ?, ?, ?, ?</CustomQuery>
+                                                            <InputParameter DbType="Int32">
+                                                                <Name>?</Name>
+                                                                <Value>%(ForEachRow_TaskID)</Value>
+                                                            </InputParameter>
+                                                            <InputParameter DbType="String">
+                                                                <Name>?</Name>
+                                                                <Value>Reason For Waiting: %(GetBusinessProcessVariables_UpdateNote_1)</Value>
+                                                            </InputParameter>
+                                                            <InputParameter DbType="Int16">
+                                                                <Name>?</Name>
+                                                                <Value>0</Value>
+                                                            </InputParameter>
+                                                            <InputParameter DbType="String">
+                                                                <Name>?</Name>
+                                                                <Value>%(GetBusinessProcessVariables_User_EmployeeNumber)</Value>
+                                                            </InputParameter>
+                                                        </Criteria>
+                                                        <ResultSetSize Rows="ReturnAllRows" Count="2" />
+                                                        <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+                                                    </Activity>
+                                                </Activities>
+                                                <FaultHandlers />
+                                            </Activity>
+                                            <Activity Type="Laserfiche.Workflow.Activities.Condition.RoutingDecisionBranchProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="8f64b9b4-215b-4ee5-a7dd-e7f1e010cacd">
+                                                <Name>Completed</Name>
+                                                <SafeName>Completed</SafeName>
+                                                <Enabled>True</Enabled>
+                                                <Description ShowDescription="null" ShowSummary="null">Contains activities that will run if the branch conditions are satisfied.</Description>
+                                                <Condition Version="10.4.3.139" Name="" Negated="false" IsConjunction="true" ConditionType="Composite" Description="">
+                                                    <Conditions>
+                                                        <Condition ConditionType="Token" Operator="Equal">
+                                                            <Token Name="UpdateStatusID" Length="0" MetaType="String, Field">
+                                                                <Activity Display="Get Business Process Variables" Append="true">GetBusinessProcessVariables</Activity>
+                                                            </Token>
+                                                            <Values>
+                                                                <Value>4</Value>
+                                                            </Values>
+                                                        </Condition>
+                                                    </Conditions>
+                                                </Condition>
+                                                <Activities>
+                                                    <Activity Type="Laserfiche.Workflow.Activities.Condition.ConditionalSequenceActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="6cec5de0-8c28-42dd-9ce1-ac7b54bf9e67">
+                                                        <Name>There is a note to add to db</Name>
+                                                        <SafeName>Thereisanotetoaddtodb</SafeName>
+                                                        <Enabled>True</Enabled>
+                                                        <Description ShowDescription="null" ShowSummary="null">A sequence activity that only performs the contained activities if the conditions are satisfied.</Description>
+                                                        <ProfileId>d338fdc8-0975-402f-ae99-83a3d159eb15</ProfileId>
+                                                        <Condition Version="10.4.3.139" Name="" Negated="false" IsConjunction="true" ConditionType="Composite" Description="">
+                                                            <Conditions>
+                                                                <Condition ConditionType="Token" Operator="IsNotEmpty">
+                                                                    <Token Name="UpdateNote_1" Length="0" MetaType="String, Field">
+                                                                        <Activity Display="Get Business Process Variables" Append="true">GetBusinessProcessVariables</Activity>
+                                                                    </Token>
+                                                                    <Values />
+                                                                </Condition>
+                                                            </Conditions>
+                                                        </Condition>
+                                                        <Activities>
+                                                            <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="2ac185b0-e09b-4904-bd62-bf936783f1ce">
+                                                                <Name>Add Completion Note</Name>
+                                                                <SafeName>AddCompletionNote</SafeName>
+                                                                <Enabled>True</Enabled>
+                                                                <Description ShowDescription="null" ShowSummary="null">Performs the specified query in the selected data source.</Description>
+                                                                <DataSourceId>49b2b9e4-d52c-475e-862a-b68cbfe7103e</DataSourceId>
+                                                                <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+                                                                    <Table Name="" HasIdentityColumn="false">
+                                                                        <Columns Generated="1/1/0001 12:00:00 AM">
+                                                                            <Column Name="" Type="System.Decimal" ReadOnly="False" />
+                                                                        </Columns>
+                                                                    </Table>
+                                                                    <CustomQuery>EXECUTE spTASKNOTE_AddNew ?, ?, ?, ?</CustomQuery>
+                                                                    <InputParameter DbType="Int32">
+                                                                        <Name>?</Name>
+                                                                        <Value>%(ForEachRow_TaskID)</Value>
+                                                                    </InputParameter>
+                                                                    <InputParameter DbType="String">
+                                                                        <Name>?</Name>
+                                                                        <Value>Completion Message: %(GetBusinessProcessVariables_UpdateNote_1)</Value>
+                                                                    </InputParameter>
+                                                                    <InputParameter DbType="Int16">
+                                                                        <Name>?</Name>
+                                                                        <Value>0</Value>
+                                                                    </InputParameter>
+                                                                    <InputParameter DbType="String">
+                                                                        <Name>?</Name>
+                                                                        <Value>%(GetBusinessProcessVariables_User_EmployeeNumber)</Value>
+                                                                    </InputParameter>
+                                                                </Criteria>
+                                                                <ResultSetSize Rows="ReturnAllRows" Count="2" />
+                                                                <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+                                                            </Activity>
+                                                        </Activities>
+                                                        <FaultHandlers />
+                                                    </Activity>
+                                                </Activities>
+                                                <FaultHandlers />
+                                            </Activity>
+                                            <Activity Type="Laserfiche.Workflow.Activities.Condition.RoutingDecisionBranchProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="d4152cc3-9eb2-4ca1-b87d-dd5ef7a8cb8e">
+                                                <Name>Cancelled</Name>
+                                                <SafeName>Cancelled</SafeName>
+                                                <Enabled>True</Enabled>
+                                                <Description ShowDescription="null" ShowSummary="null">Contains activities that will run if the branch conditions are satisfied.</Description>
+                                                <Condition Version="10.4.3.139" Name="" Negated="false" IsConjunction="true" ConditionType="Composite" Description="">
+                                                    <Conditions>
+                                                        <Condition ConditionType="Token" Operator="Equal">
+                                                            <Token Name="UpdateStatusID" Length="0" MetaType="String, Field">
+                                                                <Activity Display="Get Business Process Variables" Append="true">GetBusinessProcessVariables</Activity>
+                                                            </Token>
+                                                            <Values>
+                                                                <Value>5</Value>
+                                                            </Values>
+                                                        </Condition>
+                                                    </Conditions>
+                                                </Condition>
+                                                <Activities>
+                                                    <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="f873d2c4-238b-468f-9902-766de14d5980">
+                                                        <Name>Add Cancellation Note</Name>
+                                                        <SafeName>AddCancellationNote</SafeName>
+                                                        <Enabled>True</Enabled>
+                                                        <Description ShowDescription="null" ShowSummary="null">Performs the specified query in the selected data source.</Description>
+                                                        <DataSourceId>49b2b9e4-d52c-475e-862a-b68cbfe7103e</DataSourceId>
+                                                        <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+                                                            <Table Name="" HasIdentityColumn="false">
+                                                                <Columns Generated="1/1/0001 12:00:00 AM">
+                                                                    <Column Name="" Type="System.Decimal" ReadOnly="False" />
+                                                                </Columns>
+                                                            </Table>
+                                                            <CustomQuery>EXECUTE spTASKNOTE_AddNew ?, ?, ?, ?</CustomQuery>
+                                                            <InputParameter DbType="Int32">
+                                                                <Name>?</Name>
+                                                                <Value>%(ForEachRow_TaskID)</Value>
+                                                            </InputParameter>
+                                                            <InputParameter DbType="String">
+                                                                <Name>?</Name>
+                                                                <Value>Reason For Cancellation: %(GetBusinessProcessVariables_UpdateNote_1)</Value>
+                                                            </InputParameter>
+                                                            <InputParameter DbType="Int16">
+                                                                <Name>?</Name>
+                                                                <Value>0</Value>
+                                                            </InputParameter>
+                                                            <InputParameter DbType="String">
+                                                                <Name>?</Name>
+                                                                <Value>%(GetBusinessProcessVariables_User_EmployeeNumber)</Value>
+                                                            </InputParameter>
+                                                        </Criteria>
+                                                        <ResultSetSize Rows="ReturnAllRows" Count="2" />
+                                                        <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+                                                    </Activity>
+                                                </Activities>
+                                                <FaultHandlers />
+                                            </Activity>
+                                        </Activities>
+                                        <FaultHandlers />
+                                    </Activity>
+                                </Activities>
+                                <FaultHandlers />
+                            </Activity>
+                        </Activities>
+                        <FaultHandlers />
+                    </Activity>
+                </Activities>
+                <FaultHandlers />
+            </Activity>
+            <Activity Type="Laserfiche.Workflow.Activities.Condition.ConditionalSequenceActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="7784a331-757b-4977-92c7-65294f7c17a3">
+                <Name>Send Emails To QEs</Name>
+                <SafeName>SendEmailsToQEs</SafeName>
+                <Enabled>True</Enabled>
+                <Description ShowDescription="null" ShowSummary="null">A sequence activity that only performs the contained activities if the conditions are satisfied.</Description>
+                <ProfileId>d338fdc8-0975-402f-ae99-83a3d159eb15</ProfileId>
+                <Condition Version="10.4.3.139" Name="" Negated="false" IsConjunction="true" ConditionType="Composite" Description="">
+                    <Conditions>
+                        <Condition ConditionType="Token" Operator="IsNotEmpty">
+                            <Token Name="UpdateStatusID" Length="0" MetaType="String, Field">
+                                <Activity Display="Get Business Process Variables" Append="true">GetBusinessProcessVariables</Activity>
+                            </Token>
+                            <Values />
+                        </Condition>
+                        <Condition ConditionType="Token" Operator="IsNotEmpty">
+                            <Token Name="QEEmailAddress" Length="0" MetaType="String, Field">
+                                <Activity Display="Get Business Process Variables" Append="true">GetBusinessProcessVariables</Activity>
+                            </Token>
+                            <Values />
+                        </Condition>
+                    </Conditions>
+                </Condition>
+                <Activities>
+                    <Activity Type="Laserfiche.Workflow.Activities.Condition.IfElseConditionProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="a63a42ee-e5e7-4c28-a142-06808ca9358d">
+                        <Name>Type of Update</Name>
+                        <SafeName>TypeofUpdate</SafeName>
+                        <Enabled>True</Enabled>
+                        <Description ShowDescription="null" ShowSummary="null">Runs the FIRST branch that has satisfied conditions.</Description>
+                        <ProfileId>d338fdc8-0975-402f-ae99-83a3d159eb15</ProfileId>
+                        <Activities>
+                            <Activity Type="Laserfiche.Workflow.Activities.Condition.RoutingDecisionBranchProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="e85982b3-c1f8-4b33-8fac-9fb6f8129ad5">
+                                <Name>Completed2</Name>
+                                <SafeName>Completed2</SafeName>
+                                <Enabled>True</Enabled>
+                                <Description ShowDescription="null" ShowSummary="null">Contains activities that will run if the branch conditions are satisfied.</Description>
+                                <Condition Version="10.4.3.139" Name="" Negated="false" IsConjunction="true" ConditionType="Composite" Description="">
+                                    <Conditions>
+                                        <Condition ConditionType="Token" Operator="Equal">
+                                            <Token Name="UpdateStatusID" Length="0" MetaType="String, Field">
+                                                <Activity Display="Get Business Process Variables" Append="true">GetBusinessProcessVariables</Activity>
+                                            </Token>
+                                            <Values>
+                                                <Value>4</Value>
+                                            </Values>
+                                        </Condition>
+                                    </Conditions>
+                                </Condition>
+                                <Activities>
+                                    <Activity Type="Laserfiche.Workflow.Activities.Condition.IfElseConditionProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="6935427f-82ee-4459-82b5-17daaf47be7e">
+                                        <Name>NOTE</Name>
+                                        <SafeName>NOTE</SafeName>
+                                        <Enabled>True</Enabled>
+                                        <Description ShowDescription="null" ShowSummary="null">Runs the FIRST branch that has satisfied conditions.</Description>
+                                        <ProfileId>d338fdc8-0975-402f-ae99-83a3d159eb15</ProfileId>
+                                        <Activities>
+                                            <Activity Type="Laserfiche.Workflow.Activities.Condition.RoutingDecisionBranchProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="1f604484-7a28-4cd5-b151-1732e12050f0">
+                                                <Name>Note is Empty</Name>
+                                                <SafeName>NoteisEmpty</SafeName>
+                                                <Enabled>True</Enabled>
+                                                <Description ShowDescription="null" ShowSummary="null">Contains activities that will run if the branch conditions are satisfied.</Description>
+                                                <Condition Version="10.4.3.139" Name="" Negated="false" IsConjunction="true" ConditionType="Composite" Description="">
+                                                    <Conditions>
+                                                        <Condition ConditionType="Token" Operator="IsEmpty">
+                                                            <Token Name="UpdateNote_1" Length="0" MetaType="String, Field">
+                                                                <Activity Display="Get Business Process Variables" Append="true">GetBusinessProcessVariables</Activity>
+                                                            </Token>
+                                                            <Values />
+                                                        </Condition>
+                                                    </Conditions>
+                                                </Condition>
+                                                <Activities>
+                                                    <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="eb82cbd7-4e05-43ac-bc95-dc18ddfbd3c2">
+                                                        <Name>Get Completion Email</Name>
+                                                        <SafeName>GetCompletionEmail</SafeName>
+                                                        <Enabled>True</Enabled>
+                                                        <Description ShowDescription="null" ShowSummary="null">Performs the specified query in the selected data source.</Description>
+                                                        <DataSourceId>49b2b9e4-d52c-475e-862a-b68cbfe7103e</DataSourceId>
+                                                        <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+                                                            <Table Name="" HasIdentityColumn="false">
+                                                                <Columns Generated="1/1/0001 12:00:00 AM">
+                                                                    <Column Name="" Type="System.String" ReadOnly="False" />
+                                                                </Columns>
+                                                            </Table>
+                                                            <CustomQuery>Execute spEMAIL_GetGroupUpdateEmail ?, ?, ?, ?, ?, ?, ?, ?</CustomQuery>
+                                                            <InputParameter DbType="Int32">
+                                                                <Name>?</Name>
+                                                                <Value>%(GetBusinessProcessVariables_tid)</Value>
+                                                            </InputParameter>
+                                                            <InputParameter DbType="Int32">
+                                                                <Name>?</Name>
+                                                                <Value>%(GetBusinessProcessVariables_SelectedTaskCount)</Value>
+                                                            </InputParameter>
+                                                            <InputParameter DbType="String">
+                                                                <Name>?</Name>
+                                                                <Value>%(GetBusinessProcessVariables_SelectedIDList)</Value>
+                                                            </InputParameter>
+                                                            <InputParameter DbType="Int16">
+                                                                <Name>?</Name>
+                                                                <Value>0</Value>
+                                                            </InputParameter>
+                                                            <InputParameter DbType="String">
+                                                                <Name>?</Name>
+                                                                <Value>GROUP_TASK_COMPLETION</Value>
+                                                            </InputParameter>
+                                                            <InputParameter DbType="String">
+                                                                <Name>?</Name>
+                                                                <Value>GROUP_UPDATE_TASK_ROW</Value>
+                                                            </InputParameter>
+                                                            <InputParameter DbType="Int32">
+                                                                <Name>?</Name>
+                                                                <Value>%(GetBusinessProcessVariables_User_ID)</Value>
+                                                            </InputParameter>
+                                                            <InputParameter>
+                                                                <Name>EmailMessage</Name>
+                                                                <Value />
+                                                            </InputParameter>
+                                                        </Criteria>
+                                                        <ResultSetSize Rows="ReturnAllRows" Count="2" />
+                                                        <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+                                                    </Activity>
+                                                    <Activity Type="Laserfiche.Workflow.Activities.CreateToken.CreateTokenActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="5f6df78a-92f9-4080-bd0f-797f183ef4a9">
+                                                        <Name>Completion Email Text</Name>
+                                                        <SafeName>CompletionEmailText</SafeName>
+                                                        <Enabled>True</Enabled>
+                                                        <Description ShowDescription="null" ShowSummary="null">Creates new tokens and updates the values of existing tokens.</Description>
+                                                        <Options>
+                                                            <Tokens>
+                                                                <TokenInformation Id="514ae607-1422-4ea0-aa8e-b6e328ca11cd" IsMultivalued="false" UpdateExistingToken="false" AppendValues="false" TokenType="String">
+                                                                    <TokenName>Completion Email Text</TokenName>
+                                                                    <TokenFullName />
+                                                                    <ActivityName />
+                                                                    <TokenValues>
+                                                                        <TokenValue xml:space="preserve">%(GetCompletionEmail_)</TokenValue>
+                                                                    </TokenValues>
+                                                                </TokenInformation>
+                                                            </Tokens>
+                                                        </Options>
+                                                    </Activity>
+                                                    <Activity Type="Laserfiche.Workflow.Activities.Email.EmailSequenceProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="778fecef-de8b-473f-8ee0-11f1d8da0e9b">
+                                                        <Name>Completion Email</Name>
+                                                        <SafeName>CompletionEmail</SafeName>
+                                                        <Enabled>True</Enabled>
+                                                        <Description ShowDescription="null" ShowSummary="null">Sends an email to one or more people.</Description>
+                                                        <Email TextOnlyBodyFormat="false" DeliveryReceipts="None">
+                                                            <ToAddresses>
+                                                                <Add>%(GetBusinessProcessVariables_QEEmailAddress)</Add>
+                                                            </ToAddresses>
+                                                            <CcAddresses />
+                                                            <BccAddresses />
+                                                            <FromAddress />
+                                                            <ReplyTo />
+                                                            <Subject>Tasks completed for ticket %(GetBusinessProcessVariables_TicketNumber)</Subject>
+                                                            <Body>%(Completion Email Text#"HTML"#)</Body>
+                                                            <Priority>Normal</Priority>
+                                                            <ServerReference>ee5e3bf9-a7aa-4b71-ad92-b4feefea90d8</ServerReference>
+                                                            <UseBodyLengthLimit null="true" />
+                                                            <Attachments>
+                                                                <ExportedEntries />
+                                                                <Options>
+                                                                    <UseZipFile>false</UseZipFile>
+                                                                    <LimitEntrySize>false</LimitEntrySize>
+                                                                    <EntrySizeLimit>51200</EntrySizeLimit>
+                                                                    <ReplaceBigEntriesWithShortcut>false</ReplaceBigEntriesWithShortcut>
+                                                                    <NotifyForEntriesFiles>true</NotifyForEntriesFiles>
+                                                                    <NotifyForNoContentEntries>true</NotifyForNoContentEntries>
+                                                                    <AttachShortcutForNoContentEntries>false</AttachShortcutForNoContentEntries>
+                                                                </Options>
+                                                            </Attachments>
+                                                        </Email>
+                                                    </Activity>
+                                                    <Activity Type="Laserfiche.Workflow.Activities.ForEach.ForEachResultActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="3c60bcaa-354b-4599-b305-0ea3e188b896">
+                                                        <Name>For Each Row 2</Name>
+                                                        <SafeName>ForEachRow2</SafeName>
+                                                        <Enabled>True</Enabled>
+                                                        <Description ShowDescription="null" ShowSummary="null">Runs the contained activities for each row returned by a Custom Query or Query Data activity, or for each result returned by activities that return collections of information.</Description>
+                                                        <Binding Name="Collection">
+                                                            <BindingPath Activity="Get Business Process Variables" Property="Attribute:Tasks_" />
+                                                        </Binding>
+                                                        <Activities>
+                                                            <Activity Type="Laserfiche.Workflow.Activities.Condition.ConditionalSequenceActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="e2b9a74c-839c-4b10-9dad-7bc904a98f5a">
+                                                                <Name>Selected Tasks</Name>
+                                                                <SafeName>SelectedTasks</SafeName>
+                                                                <Enabled>True</Enabled>
+                                                                <Description ShowDescription="null" ShowSummary="null">A sequence activity that only performs the contained activities if the conditions are satisfied.</Description>
+                                                                <ProfileId>d338fdc8-0975-402f-ae99-83a3d159eb15</ProfileId>
+                                                                <Condition Version="10.4.3.139" Name="" Negated="false" IsConjunction="true" ConditionType="Composite" Description="">
+                                                                    <Conditions>
+                                                                        <Condition ConditionType="Token" Operator="Equal">
+                                                                            <Token Name="Select_Select_Is Set" Length="0" MetaType="Boolean">
+                                                                                <Activity Display="For Each Row 2" Append="true">ForEachRow2</Activity>
+                                                                            </Token>
+                                                                            <Values />
+                                                                        </Condition>
+                                                                    </Conditions>
+                                                                </Condition>
+                                                                <Activities>
+                                                                    <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="58a9d6fe-570c-4fa1-be6b-0cd3466988dd">
+                                                                        <Name>Add Completion Notice to db</Name>
+                                                                        <SafeName>AddCompletionNoticetodb</SafeName>
+                                                                        <Enabled>True</Enabled>
+                                                                        <Description ShowDescription="null" ShowSummary="null">Performs the specified query in the selected data source.</Description>
+                                                                        <DataSourceId>49b2b9e4-d52c-475e-862a-b68cbfe7103e</DataSourceId>
+                                                                        <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+                                                                            <Table Name="" HasIdentityColumn="false">
+                                                                                <Columns Generated="1/1/0001 12:00:00 AM">
+                                                                                    <Column Name="" Type="System.Decimal" ReadOnly="False" />
+                                                                                </Columns>
+                                                                            </Table>
+                                                                            <CustomQuery>EXECUTE spTASKNOTE_CompletionNotice ?, ?, ?</CustomQuery>
+                                                                            <InputParameter DbType="Int32">
+                                                                                <Name>?</Name>
+                                                                                <Value>%(ForEachRow2_TaskID)</Value>
+                                                                            </InputParameter>
+                                                                            <InputParameter DbType="String">
+                                                                                <Name>?</Name>
+                                                                                <Value>%(Completion Email Text)</Value>
+                                                                            </InputParameter>
+                                                                            <InputParameter DbType="String">
+                                                                                <Name>?</Name>
+                                                                                <Value>%(GetBusinessProcessVariables_User_EmployeeNumber)</Value>
+                                                                            </InputParameter>
+                                                                        </Criteria>
+                                                                        <ResultSetSize Rows="ReturnLimitedRows" Count="I:2" />
+                                                                        <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+                                                                    </Activity>
+                                                                </Activities>
+                                                                <FaultHandlers />
+                                                            </Activity>
+                                                        </Activities>
+                                                        <FaultHandlers />
+                                                    </Activity>
+                                                </Activities>
+                                                <FaultHandlers />
+                                            </Activity>
+                                            <Activity Type="Laserfiche.Workflow.Activities.Condition.RoutingDecisionBranchProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="470c3c93-bc86-463e-b777-ee28614a6fbc">
+                                                <Name>Note Is Not Empty</Name>
+                                                <SafeName>NoteIsNotEmpty</SafeName>
+                                                <Enabled>True</Enabled>
+                                                <Description ShowDescription="null" ShowSummary="null">Contains activities that will run if the branch conditions are satisfied.</Description>
+                                                <Condition Version="10.4.3.139" Name="" Negated="false" IsConjunction="true" ConditionType="Composite" Description="">
+                                                    <Conditions>
+                                                        <Condition ConditionType="Token" Operator="IsNotEmpty">
+                                                            <Token Name="UpdateNote_1" Length="0" MetaType="String, Field">
+                                                                <Activity Display="Get Business Process Variables" Append="true">GetBusinessProcessVariables</Activity>
+                                                            </Token>
+                                                            <Values />
+                                                        </Condition>
+                                                    </Conditions>
+                                                </Condition>
+                                                <Activities>
+                                                    <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="415de0bb-6c81-486e-88b3-d0b4dd4a7a80">
+                                                        <Name>Get Completion Email 2</Name>
+                                                        <SafeName>GetCompletionEmail2</SafeName>
+                                                        <Enabled>True</Enabled>
+                                                        <Description ShowDescription="null" ShowSummary="null">Performs the specified query in the selected data source.</Description>
+                                                        <DataSourceId>49b2b9e4-d52c-475e-862a-b68cbfe7103e</DataSourceId>
+                                                        <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+                                                            <Table Name="" HasIdentityColumn="false">
+                                                                <Columns Generated="1/1/0001 12:00:00 AM">
+                                                                    <Column Name="" Type="System.String" ReadOnly="False" />
+                                                                </Columns>
+                                                            </Table>
+                                                            <CustomQuery>Execute spEMAIL_GetGroupUpdateEmail ?, ?, ?, ?, ?, ?, ?, ?</CustomQuery>
+                                                            <InputParameter DbType="Int32">
+                                                                <Name>?</Name>
+                                                                <Value>%(GetBusinessProcessVariables_tid)</Value>
+                                                            </InputParameter>
+                                                            <InputParameter DbType="Int32">
+                                                                <Name>?</Name>
+                                                                <Value>%(GetBusinessProcessVariables_SelectedTaskCount)</Value>
+                                                            </InputParameter>
+                                                            <InputParameter DbType="String">
+                                                                <Name>?</Name>
+                                                                <Value>%(GetBusinessProcessVariables_SelectedIDList)</Value>
+                                                            </InputParameter>
+                                                            <InputParameter DbType="Int16">
+                                                                <Name>?</Name>
+                                                                <Value>1</Value>
+                                                            </InputParameter>
+                                                            <InputParameter DbType="String">
+                                                                <Name>?</Name>
+                                                                <Value>GROUP_TASK_COMPLETION</Value>
+                                                            </InputParameter>
+                                                            <InputParameter DbType="String">
+                                                                <Name>?</Name>
+                                                                <Value>GROUP_UPDATE_TASK_ROW</Value>
+                                                            </InputParameter>
+                                                            <InputParameter DbType="Int32">
+                                                                <Name>?</Name>
+                                                                <Value>%(GetBusinessProcessVariables_User_ID)</Value>
+                                                            </InputParameter>
+                                                            <InputParameter DbType="String">
+                                                                <Name>EmailMessage</Name>
+                                                                <Value />
+                                                            </InputParameter>
+                                                        </Criteria>
+                                                        <ResultSetSize Rows="ReturnAllRows" Count="2" />
+                                                        <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+                                                    </Activity>
+                                                    <Activity Type="Laserfiche.Workflow.Activities.CreateToken.CreateTokenActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="5d3f13d9-2291-4768-8c85-a923a33bbd84">
+                                                        <Name>Completion Email Text 2</Name>
+                                                        <SafeName>CompletionEmailText2</SafeName>
+                                                        <Enabled>True</Enabled>
+                                                        <Description ShowDescription="null" ShowSummary="null">Creates new tokens and updates the values of existing tokens.</Description>
+                                                        <Options>
+                                                            <Tokens>
+                                                                <TokenInformation Id="514ae607-1422-4ea0-aa8e-b6e328ca11cd" IsMultivalued="false" UpdateExistingToken="false" AppendValues="false" TokenType="String">
+                                                                    <TokenName>Completion Email Text</TokenName>
+                                                                    <TokenFullName />
+                                                                    <ActivityName />
+                                                                    <TokenValues>
+                                                                        <TokenValue xml:space="preserve">%(GetCompletionEmail2_)</TokenValue>
+                                                                    </TokenValues>
+                                                                </TokenInformation>
+                                                            </Tokens>
+                                                        </Options>
+                                                    </Activity>
+                                                    <Activity Type="Laserfiche.Workflow.Activities.Email.EmailSequenceProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="be437bf7-b5cf-45b9-a460-d5ad7b4ed027">
+                                                        <Name>Completion Email 2</Name>
+                                                        <SafeName>CompletionEmail2</SafeName>
+                                                        <Enabled>True</Enabled>
+                                                        <Description ShowDescription="null" ShowSummary="null">Sends an email to one or more people.</Description>
+                                                        <Email TextOnlyBodyFormat="false" DeliveryReceipts="None">
+                                                            <ToAddresses>
+                                                                <Add>%(GetBusinessProcessVariables_QEEmailAddress)</Add>
+                                                            </ToAddresses>
+                                                            <CcAddresses />
+                                                            <BccAddresses />
+                                                            <FromAddress />
+                                                            <ReplyTo />
+                                                            <Subject>Tasks completed for ticket %(GetBusinessProcessVariables_TicketNumber)</Subject>
+                                                            <Body>%(Completion Email Text#"HTML"#)</Body>
+                                                            <Priority>Normal</Priority>
+                                                            <ServerReference>ee5e3bf9-a7aa-4b71-ad92-b4feefea90d8</ServerReference>
+                                                            <UseBodyLengthLimit null="true" />
+                                                            <Attachments>
+                                                                <ExportedEntries />
+                                                                <Options>
+                                                                    <UseZipFile>false</UseZipFile>
+                                                                    <LimitEntrySize>false</LimitEntrySize>
+                                                                    <EntrySizeLimit>51200</EntrySizeLimit>
+                                                                    <ReplaceBigEntriesWithShortcut>false</ReplaceBigEntriesWithShortcut>
+                                                                    <NotifyForEntriesFiles>true</NotifyForEntriesFiles>
+                                                                    <NotifyForNoContentEntries>true</NotifyForNoContentEntries>
+                                                                    <AttachShortcutForNoContentEntries>false</AttachShortcutForNoContentEntries>
+                                                                </Options>
+                                                            </Attachments>
+                                                        </Email>
+                                                    </Activity>
+                                                    <Activity Type="Laserfiche.Workflow.Activities.ForEach.ForEachResultActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="6aea759f-5b1c-450a-a346-7623ebf9e1c2">
+                                                        <Name>For Each Row 3</Name>
+                                                        <SafeName>ForEachRow3</SafeName>
+                                                        <Enabled>True</Enabled>
+                                                        <Description ShowDescription="null" ShowSummary="null">Runs the contained activities for each row returned by a Custom Query or Query Data activity, or for each result returned by activities that return collections of information.</Description>
+                                                        <Binding Name="Collection">
+                                                            <BindingPath Activity="Get Business Process Variables" Property="Attribute:Tasks_" />
+                                                        </Binding>
+                                                        <Activities>
+                                                            <Activity Type="Laserfiche.Workflow.Activities.Condition.ConditionalSequenceActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="d5d5ce76-70dd-4b9f-a066-f8a7bdd840c5">
+                                                                <Name>Selected Tasks 2</Name>
+                                                                <SafeName>SelectedTasks2</SafeName>
+                                                                <Enabled>True</Enabled>
+                                                                <Description ShowDescription="null" ShowSummary="null">A sequence activity that only performs the contained activities if the conditions are satisfied.</Description>
+                                                                <ProfileId>d338fdc8-0975-402f-ae99-83a3d159eb15</ProfileId>
+                                                                <Condition Version="10.4.3.139" Name="" Negated="false" IsConjunction="true" ConditionType="Composite" Description="">
+                                                                    <Conditions>
+                                                                        <Condition ConditionType="Token" Operator="Equal">
+                                                                            <Token Name="Select_Select_Is Set" Length="0" MetaType="Boolean">
+                                                                                <Activity Display="For Each Row 3" Append="true">ForEachRow3</Activity>
+                                                                            </Token>
+                                                                            <Values />
+                                                                        </Condition>
+                                                                    </Conditions>
+                                                                </Condition>
+                                                                <Activities>
+                                                                    <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="273923fd-3441-4a13-9e84-0feeef7d7688">
+                                                                        <Name>Add Completion Notice to db 2</Name>
+                                                                        <SafeName>AddCompletionNoticetodb2</SafeName>
+                                                                        <Enabled>True</Enabled>
+                                                                        <Description ShowDescription="null" ShowSummary="null">Performs the specified query in the selected data source.</Description>
+                                                                        <DataSourceId>49b2b9e4-d52c-475e-862a-b68cbfe7103e</DataSourceId>
+                                                                        <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+                                                                            <Table Name="" HasIdentityColumn="false">
+                                                                                <Columns Generated="1/1/0001 12:00:00 AM">
+                                                                                    <Column Name="" Type="System.Decimal" ReadOnly="False" />
+                                                                                </Columns>
+                                                                            </Table>
+                                                                            <CustomQuery>EXECUTE spTASKNOTE_CompletionNotice ?, ?, ?</CustomQuery>
+                                                                            <InputParameter DbType="Int32">
+                                                                                <Name>?</Name>
+                                                                                <Value>%(ForEachRow3_TaskID)</Value>
+                                                                            </InputParameter>
+                                                                            <InputParameter DbType="String">
+                                                                                <Name>?</Name>
+                                                                                <Value>%(Completion Email Text)</Value>
+                                                                            </InputParameter>
+                                                                            <InputParameter DbType="String">
+                                                                                <Name>?</Name>
+                                                                                <Value>%(GetBusinessProcessVariables_User_EmployeeNumber)</Value>
+                                                                            </InputParameter>
+                                                                        </Criteria>
+                                                                        <ResultSetSize Rows="ReturnLimitedRows" Count="I:2" />
+                                                                        <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+                                                                    </Activity>
+                                                                </Activities>
+                                                                <FaultHandlers />
+                                                            </Activity>
+                                                        </Activities>
+                                                        <FaultHandlers />
+                                                    </Activity>
+                                                </Activities>
+                                                <FaultHandlers />
+                                            </Activity>
+                                        </Activities>
+                                        <FaultHandlers />
+                                    </Activity>
+                                </Activities>
+                                <FaultHandlers />
+                            </Activity>
+                            <Activity Type="Laserfiche.Workflow.Activities.Condition.RoutingDecisionBranchProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="51439ce4-94ec-4dfd-8395-dbf391980aea">
+                                <Name>Cancelled2</Name>
+                                <SafeName>Cancelled2</SafeName>
+                                <Enabled>True</Enabled>
+                                <Description ShowDescription="null" ShowSummary="null">Contains activities that will run if the branch conditions are satisfied.</Description>
+                                <Condition Version="10.4.3.139" Name="" Negated="false" IsConjunction="true" ConditionType="Composite" Description="">
+                                    <Conditions>
+                                        <Condition ConditionType="Token" Operator="Equal">
+                                            <Token Name="UpdateStatusID" Length="0" MetaType="String, Field">
+                                                <Activity Display="Get Business Process Variables" Append="true">GetBusinessProcessVariables</Activity>
+                                            </Token>
+                                            <Values>
+                                                <Value>5</Value>
+                                            </Values>
+                                        </Condition>
+                                    </Conditions>
+                                </Condition>
+                                <Activities>
+                                    <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="389d2e17-8039-449f-bed2-6e9bcf118ca4">
+                                        <Name>Get Cancelled Email</Name>
+                                        <SafeName>GetCancelledEmail</SafeName>
+                                        <Enabled>True</Enabled>
+                                        <Description ShowDescription="null" ShowSummary="null">Performs the specified query in the selected data source.</Description>
+                                        <DataSourceId>49b2b9e4-d52c-475e-862a-b68cbfe7103e</DataSourceId>
+                                        <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+                                            <Table Name="" HasIdentityColumn="false">
+                                                <Columns Generated="1/1/0001 12:00:00 AM">
+                                                    <Column Name="" Type="System.String" ReadOnly="False" />
+                                                </Columns>
+                                            </Table>
+                                            <CustomQuery>Execute spEMAIL_GetGroupUpdateEmail ?, ?, ?, ?, ?, ?, ?, ?</CustomQuery>
+                                            <InputParameter DbType="Int32">
+                                                <Name>?</Name>
+                                                <Value>%(GetBusinessProcessVariables_tid)</Value>
+                                            </InputParameter>
+                                            <InputParameter DbType="Int32">
+                                                <Name>?</Name>
+                                                <Value>%(GetBusinessProcessVariables_SelectedTaskCount)</Value>
+                                            </InputParameter>
+                                            <InputParameter DbType="String">
+                                                <Name>?</Name>
+                                                <Value>%(GetBusinessProcessVariables_SelectedIDList)</Value>
+                                            </InputParameter>
+                                            <InputParameter DbType="Int16">
+                                                <Name>?</Name>
+                                                <Value>1</Value>
+                                            </InputParameter>
+                                            <InputParameter DbType="String">
+                                                <Name>?</Name>
+                                                <Value>GROUP_TASK_CANCELLATION</Value>
+                                            </InputParameter>
+                                            <InputParameter DbType="String">
+                                                <Name>?</Name>
+                                                <Value>GROUP_UPDATE_TASK_ROW</Value>
+                                            </InputParameter>
+                                            <InputParameter DbType="Int32">
+                                                <Name>?</Name>
+                                                <Value>%(GetBusinessProcessVariables_User_ID)</Value>
+                                            </InputParameter>
+                                            <InputParameter DbType="String">
+                                                <Name>EmailMessage</Name>
+                                                <Value />
+                                            </InputParameter>
+                                        </Criteria>
+                                        <ResultSetSize Rows="ReturnAllRows" Count="2" />
+                                        <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+                                    </Activity>
+                                    <Activity Type="Laserfiche.Workflow.Activities.CreateToken.CreateTokenActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="1b44cdf0-5f6a-46e1-86af-29ea382883d1">
+                                        <Name>Cancellation Email Text</Name>
+                                        <SafeName>CancellationEmailText</SafeName>
+                                        <Enabled>True</Enabled>
+                                        <Description ShowDescription="null" ShowSummary="null">Creates new tokens and updates the values of existing tokens.</Description>
+                                        <Options>
+                                            <Tokens>
+                                                <TokenInformation Id="efc96e8c-e6fd-499a-b9cd-9c91cc0d7e98" IsMultivalued="false" UpdateExistingToken="false" AppendValues="false" TokenType="String">
+                                                    <TokenName>Cancellation EmailText</TokenName>
+                                                    <TokenFullName />
+                                                    <ActivityName />
+                                                    <TokenValues>
+                                                        <TokenValue xml:space="preserve">%(GetCancelledEmail_)</TokenValue>
+                                                    </TokenValues>
+                                                </TokenInformation>
+                                            </Tokens>
+                                        </Options>
+                                    </Activity>
+                                    <Activity Type="Laserfiche.Workflow.Activities.Email.EmailSequenceProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="a8ffe29f-ae47-4701-bad2-03120b5f9d83">
+                                        <Name>Cancellation Email</Name>
+                                        <SafeName>CancellationEmail</SafeName>
+                                        <Enabled>True</Enabled>
+                                        <Description ShowDescription="null" ShowSummary="null">Sends an email to one or more people.</Description>
+                                        <Email TextOnlyBodyFormat="false" DeliveryReceipts="None">
+                                            <ToAddresses>
+                                                <Add>%(GetBusinessProcessVariables_QEEmailAddress)</Add>
+                                            </ToAddresses>
+                                            <CcAddresses />
+                                            <BccAddresses />
+                                            <FromAddress />
+                                            <ReplyTo />
+                                            <Subject>Tasks completed for ticket %(GetBusinessProcessVariables_TicketNumber)</Subject>
+                                            <Body>%(Cancellation EmailText#"HTML"#)</Body>
+                                            <Priority>Normal</Priority>
+                                            <ServerReference>ee5e3bf9-a7aa-4b71-ad92-b4feefea90d8</ServerReference>
+                                            <UseBodyLengthLimit null="true" />
+                                            <Attachments>
+                                                <ExportedEntries />
+                                                <Options>
+                                                    <UseZipFile>false</UseZipFile>
+                                                    <LimitEntrySize>false</LimitEntrySize>
+                                                    <EntrySizeLimit>51200</EntrySizeLimit>
+                                                    <ReplaceBigEntriesWithShortcut>false</ReplaceBigEntriesWithShortcut>
+                                                    <NotifyForEntriesFiles>true</NotifyForEntriesFiles>
+                                                    <NotifyForNoContentEntries>true</NotifyForNoContentEntries>
+                                                    <AttachShortcutForNoContentEntries>false</AttachShortcutForNoContentEntries>
+                                                </Options>
+                                            </Attachments>
+                                        </Email>
+                                    </Activity>
+                                    <Activity Type="Laserfiche.Workflow.Activities.ForEach.ForEachResultActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="fe4dca89-57d0-4b97-96a5-5d362a3c337b">
+                                        <Name>For Each Row 4</Name>
+                                        <SafeName>ForEachRow4</SafeName>
+                                        <Enabled>True</Enabled>
+                                        <Description ShowDescription="null" ShowSummary="null">Runs the contained activities for each row returned by a Custom Query or Query Data activity, or for each result returned by activities that return collections of information.</Description>
+                                        <Binding Name="Collection">
+                                            <BindingPath Activity="Get Business Process Variables" Property="Attribute:Tasks_" />
+                                        </Binding>
+                                        <Activities>
+                                            <Activity Type="Laserfiche.Workflow.Activities.Condition.ConditionalSequenceActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="db7edfee-82eb-4db4-b6db-47379e8d2d75">
+                                                <Name>Selected Tasks 3</Name>
+                                                <SafeName>SelectedTasks3</SafeName>
+                                                <Enabled>True</Enabled>
+                                                <Description ShowDescription="null" ShowSummary="null">A sequence activity that only performs the contained activities if the conditions are satisfied.</Description>
+                                                <ProfileId>d338fdc8-0975-402f-ae99-83a3d159eb15</ProfileId>
+                                                <Condition Version="10.4.3.139" Name="" Negated="false" IsConjunction="true" ConditionType="Composite" Description="">
+                                                    <Conditions>
+                                                        <Condition ConditionType="Token" Operator="Equal">
+                                                            <Token Name="Select_Select_Is Set" Length="0" MetaType="Boolean">
+                                                                <Activity Display="For Each Row 4" Append="true">ForEachRow4</Activity>
+                                                            </Token>
+                                                            <Values />
+                                                        </Condition>
+                                                    </Conditions>
+                                                </Condition>
+                                                <Activities>
+                                                    <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="d976b6bc-d5b2-4fac-bc48-0c0a677335ea">
+                                                        <Name>Add Completion Notice to db 3</Name>
+                                                        <SafeName>AddCompletionNoticetodb3</SafeName>
+                                                        <Enabled>True</Enabled>
+                                                        <Description ShowDescription="null" ShowSummary="null">Performs the specified query in the selected data source.</Description>
+                                                        <DataSourceId>49b2b9e4-d52c-475e-862a-b68cbfe7103e</DataSourceId>
+                                                        <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+                                                            <Table Name="" HasIdentityColumn="false">
+                                                                <Columns Generated="1/1/0001 12:00:00 AM">
+                                                                    <Column Name="" Type="System.Decimal" ReadOnly="False" />
+                                                                </Columns>
+                                                            </Table>
+                                                            <CustomQuery>EXECUTE spTASKNOTE_CancellationNotice ?, ?, ?</CustomQuery>
+                                                            <InputParameter DbType="Int32">
+                                                                <Name>?</Name>
+                                                                <Value>%(ForEachRow4_TaskID)</Value>
+                                                            </InputParameter>
+                                                            <InputParameter DbType="String">
+                                                                <Name>?</Name>
+                                                                <Value>%(Cancellation EmailText)</Value>
+                                                            </InputParameter>
+                                                            <InputParameter DbType="String">
+                                                                <Name>?</Name>
+                                                                <Value>%(GetBusinessProcessVariables_User_EmployeeNumber)</Value>
+                                                            </InputParameter>
+                                                        </Criteria>
+                                                        <ResultSetSize Rows="ReturnLimitedRows" Count="I:2" />
+                                                        <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+                                                    </Activity>
+                                                </Activities>
+                                                <FaultHandlers />
+                                            </Activity>
+                                        </Activities>
+                                        <FaultHandlers />
+                                    </Activity>
+                                </Activities>
+                                <FaultHandlers />
+                            </Activity>
+                        </Activities>
+                        <FaultHandlers />
+                    </Activity>
+                </Activities>
+                <FaultHandlers />
+            </Activity>
+            <Activity Type="Laserfiche.Workflow.Activities.Condition.ConditionalSequenceActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="a4008750-7891-4d0e-861c-cc405382084b">
+                <Name>Send EMail To Assignee</Name>
+                <SafeName>SendEMailToAssignee</SafeName>
+                <Enabled>True</Enabled>
+                <Description ShowDescription="null" ShowSummary="null">A sequence activity that only performs the contained activities if the conditions are satisfied.</Description>
+                <ProfileId>d338fdc8-0975-402f-ae99-83a3d159eb15</ProfileId>
+                <Condition Version="10.4.3.139" Name="" Negated="false" IsConjunction="true" ConditionType="Composite" Description="">
+                    <Conditions>
+                        <Condition ConditionType="Token" Operator="IsNotEmpty">
+                            <Token Name="UpdateAssigneeID" Length="0" MetaType="String, Field">
+                                <Activity Display="Get Business Process Variables" Append="true">GetBusinessProcessVariables</Activity>
+                            </Token>
+                            <Values />
+                        </Condition>
+                    </Conditions>
+                </Condition>
+                <Activities>
+                    <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="eedde0d8-9f35-4568-b522-c162c04a56e2">
+                        <Name>Get Group Assignee Email</Name>
+                        <SafeName>GetGroupAssigneeEmail</SafeName>
+                        <Enabled>True</Enabled>
+                        <Description ShowDescription="null" ShowSummary="null">Performs the specified query in the selected data source.</Description>
+                        <DataSourceId>49b2b9e4-d52c-475e-862a-b68cbfe7103e</DataSourceId>
+                        <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+                            <Table Name="" HasIdentityColumn="false">
+                                <Columns Generated="1/1/0001 12:00:00 AM">
+                                    <Column Name="" Type="System.String" ReadOnly="False" />
+                                </Columns>
+                            </Table>
+                            <CustomQuery>Execute spEMAIL_GetGroupUpdateEmail ?, ?, ?, ?, ?, ?, ?, ?</CustomQuery>
+                            <InputParameter DbType="Int32">
+                                <Name>?</Name>
+                                <Value>%(GetBusinessProcessVariables_tid)</Value>
+                            </InputParameter>
+                            <InputParameter DbType="Int32">
+                                <Name>?</Name>
+                                <Value>%(GetBusinessProcessVariables_SelectedTaskCount)</Value>
+                            </InputParameter>
+                            <InputParameter DbType="String">
+                                <Name>?</Name>
+                                <Value>%(GetBusinessProcessVariables_SelectedIDList)</Value>
+                            </InputParameter>
+                            <InputParameter DbType="Int16">
+                                <Name>?</Name>
+                                <Value>0</Value>
+                            </InputParameter>
+                            <InputParameter DbType="String">
+                                <Name>?</Name>
+                                <Value>GROUP_TASK_ASSIGNMENT</Value>
+                            </InputParameter>
+                            <InputParameter DbType="String">
+                                <Name>?</Name>
+                                <Value>GROUP_TASK_ASSIGNMENT_ROW</Value>
+                            </InputParameter>
+                            <InputParameter DbType="Int32">
+                                <Name>?</Name>
+                                <Value>%(GetBusinessProcessVariables_User_ID)</Value>
+                            </InputParameter>
+                            <InputParameter>
+                                <Name>EmailMessage</Name>
+                                <Value />
+                            </InputParameter>
+                        </Criteria>
+                        <ResultSetSize Rows="ReturnAllRows" Count="2" />
+                        <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+                    </Activity>
+                    <Activity Type="Laserfiche.Workflow.Activities.CreateToken.CreateTokenActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="7c679236-073c-4a49-a1e3-da048875e1f8">
+                        <Name>Assign Token Values</Name>
+                        <SafeName>AssignTokenValues</SafeName>
+                        <Enabled>True</Enabled>
+                        <Description ShowDescription="null" ShowSummary="null">Creates new tokens and updates the values of existing tokens.</Description>
+                        <Options>
+                            <Tokens>
+                                <TokenInformation Id="f0b1d423-00ff-4ea7-8097-d794ae82d8d3" IsMultivalued="false" UpdateExistingToken="false" AppendValues="false" TokenType="String">
+                                    <TokenName>AssigneeEmailText</TokenName>
+                                    <TokenFullName />
+                                    <ActivityName />
+                                    <TokenValues>
+                                        <TokenValue xml:space="preserve">%(GetGroupAssigneeEmail_)</TokenValue>
+                                    </TokenValues>
+                                </TokenInformation>
+                            </Tokens>
+                        </Options>
+                    </Activity>
+                    <Activity Type="Laserfiche.Workflow.Activities.Email.EmailSequenceProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="66f5f08e-c264-4595-bcd8-aa60ef9eae6b">
+                        <Name>Email Assignee</Name>
+                        <SafeName>EmailAssignee</SafeName>
+                        <Enabled>True</Enabled>
+                        <Description ShowDescription="null" ShowSummary="null">Sends an email to one or more people.</Description>
+                        <Email TextOnlyBodyFormat="false" DeliveryReceipts="None">
+                            <ToAddresses>
+                                <Add>%(GetBusinessProcessVariables_AssigneeEmailAddress)</Add>
+                            </ToAddresses>
+                            <CcAddresses />
+                            <BccAddresses />
+                            <FromAddress />
+                            <ReplyTo />
+                            <Subject>%(GetBusinessProcessVariables_SelectedTaskCount) tasks have been assigned to you.</Subject>
+                            <Body>%(AssigneeEmailText#"HTML"#)</Body>
+                            <Priority>Normal</Priority>
+                            <ServerReference>e6927ae8-4844-4e57-8184-a42b18d3798b</ServerReference>
+                            <UseBodyLengthLimit null="true" />
+                            <Attachments>
+                                <ExportedEntries />
+                                <Options>
+                                    <UseZipFile>false</UseZipFile>
+                                    <LimitEntrySize>false</LimitEntrySize>
+                                    <EntrySizeLimit>51200</EntrySizeLimit>
+                                    <ReplaceBigEntriesWithShortcut>false</ReplaceBigEntriesWithShortcut>
+                                    <NotifyForEntriesFiles>true</NotifyForEntriesFiles>
+                                    <NotifyForNoContentEntries>true</NotifyForNoContentEntries>
+                                    <AttachShortcutForNoContentEntries>false</AttachShortcutForNoContentEntries>
+                                </Options>
+                            </Attachments>
+                        </Email>
+                    </Activity>
+                </Activities>
+                <FaultHandlers />
+            </Activity>
+        </Activities>
+        <FaultHandlers />
+    </SequentialWorkflowActivityProxy>
+    <CanvasUI>
+        <Expanded>True</Expanded>
+        <Activity Name="Get Business Process Variables" Key="25959247-01a5-4b25-b132-fc35078ed7a8" />
+        <Activity Name="For Each Row" Key="2f32b8bd-77c0-4cdf-adb4-5ca781b8a86f">
+            <Expanded>True</Expanded>
+            <Activity Name="Selected Rows" Key="422c4d10-88fa-451e-86f4-da619b1ec786">
+                <Expanded>True</Expanded>
+                <Activity Name="spTASK_GroupUpdate" Key="bd4af9f5-fe71-42e1-9acd-0dae4bbd575f" />
+                <Activity Name="Status Updated" Key="2c5e7838-d878-494e-b28e-11250fd251cb">
+                    <Expanded>True</Expanded>
+                    <Activity Name="Status ID" Key="b573495c-8213-4497-9fa9-0043a6d8ad51">
+                        <Expanded>True</Expanded>
+                        <Activity Name="Waiting" Key="3f3de031-6fa9-498e-a55f-72deefb059d0">
+                            <Expanded>True</Expanded>
+                            <Activity Name="Add Waiting Note" Key="deab6573-840b-4bf6-90a7-889e129152a7" />
+                        </Activity>
+                        <Activity Name="Completed" Key="8f64b9b4-215b-4ee5-a7dd-e7f1e010cacd">
+                            <Expanded>True</Expanded>
+                            <Activity Name="There is a note to add to db" Key="6cec5de0-8c28-42dd-9ce1-ac7b54bf9e67">
+                                <Expanded>True</Expanded>
+                                <Activity Name="Add Completion Note" Key="2ac185b0-e09b-4904-bd62-bf936783f1ce" />
+                            </Activity>
+                        </Activity>
+                        <Activity Name="Cancelled" Key="d4152cc3-9eb2-4ca1-b87d-dd5ef7a8cb8e">
+                            <Expanded>True</Expanded>
+                            <Activity Name="Add Cancellation Note" Key="f873d2c4-238b-468f-9902-766de14d5980" />
+                        </Activity>
+                    </Activity>
+                </Activity>
+            </Activity>
+        </Activity>
+        <Activity Name="Send Emails To QEs" Key="7784a331-757b-4977-92c7-65294f7c17a3">
+            <Expanded>True</Expanded>
+            <Activity Name="Type of Update" Key="a63a42ee-e5e7-4c28-a142-06808ca9358d">
+                <Expanded>True</Expanded>
+                <Activity Name="Completed2" Key="e85982b3-c1f8-4b33-8fac-9fb6f8129ad5">
+                    <Expanded>True</Expanded>
+                    <Activity Name="NOTE" Key="6935427f-82ee-4459-82b5-17daaf47be7e">
+                        <Expanded>True</Expanded>
+                        <Activity Name="Note is Empty" Key="1f604484-7a28-4cd5-b151-1732e12050f0">
+                            <Expanded>True</Expanded>
+                            <Activity Name="Get Completion Email" Key="eb82cbd7-4e05-43ac-bc95-dc18ddfbd3c2" />
+                            <Activity Name="Completion Email Text" Key="5f6df78a-92f9-4080-bd0f-797f183ef4a9" />
+                            <Activity Name="Completion Email" Key="778fecef-de8b-473f-8ee0-11f1d8da0e9b" />
+                            <Activity Name="For Each Row 2" Key="3c60bcaa-354b-4599-b305-0ea3e188b896">
+                                <Expanded>True</Expanded>
+                                <Activity Name="Selected Tasks" Key="e2b9a74c-839c-4b10-9dad-7bc904a98f5a">
+                                    <Expanded>True</Expanded>
+                                    <Activity Name="Add Completion Notice to db" Key="58a9d6fe-570c-4fa1-be6b-0cd3466988dd" />
+                                </Activity>
+                            </Activity>
+                        </Activity>
+                        <Activity Name="Note Is Not Empty" Key="470c3c93-bc86-463e-b777-ee28614a6fbc">
+                            <Expanded>True</Expanded>
+                            <Activity Name="Get Completion Email 2" Key="415de0bb-6c81-486e-88b3-d0b4dd4a7a80" />
+                            <Activity Name="Completion Email Text 2" Key="5d3f13d9-2291-4768-8c85-a923a33bbd84" />
+                            <Activity Name="Completion Email 2" Key="be437bf7-b5cf-45b9-a460-d5ad7b4ed027" />
+                            <Activity Name="For Each Row 3" Key="6aea759f-5b1c-450a-a346-7623ebf9e1c2">
+                                <Expanded>True</Expanded>
+                                <Activity Name="Selected Tasks 2" Key="d5d5ce76-70dd-4b9f-a066-f8a7bdd840c5">
+                                    <Expanded>True</Expanded>
+                                    <Activity Name="Add Completion Notice to db 2" Key="273923fd-3441-4a13-9e84-0feeef7d7688" />
+                                </Activity>
+                            </Activity>
+                        </Activity>
+                    </Activity>
+                </Activity>
+                <Activity Name="Cancelled2" Key="51439ce4-94ec-4dfd-8395-dbf391980aea">
+                    <Expanded>True</Expanded>
+                    <Activity Name="Get Cancelled Email" Key="389d2e17-8039-449f-bed2-6e9bcf118ca4" />
+                    <Activity Name="Cancellation Email Text" Key="1b44cdf0-5f6a-46e1-86af-29ea382883d1" />
+                    <Activity Name="Cancellation Email" Key="a8ffe29f-ae47-4701-bad2-03120b5f9d83" />
+                    <Activity Name="For Each Row 4" Key="fe4dca89-57d0-4b97-96a5-5d362a3c337b">
+                        <Expanded>True</Expanded>
+                        <Activity Name="Selected Tasks 3" Key="db7edfee-82eb-4db4-b6db-47379e8d2d75">
+                            <Expanded>True</Expanded>
+                            <Activity Name="Add Completion Notice to db 3" Key="d976b6bc-d5b2-4fac-bc48-0c0a677335ea" />
+                        </Activity>
+                    </Activity>
+                </Activity>
+            </Activity>
+        </Activity>
+        <Activity Name="Send EMail To Assignee" Key="a4008750-7891-4d0e-861c-cc405382084b">
+            <Expanded>True</Expanded>
+            <Activity Name="Get Group Assignee Email" Key="eedde0d8-9f35-4568-b522-c162c04a56e2" />
+            <Activity Name="Assign Token Values" Key="7c679236-073c-4a49-a1e3-da048875e1f8" />
+            <Activity Name="Email Assignee" Key="66f5f08e-c264-4595-bcd8-aa60ef9eae6b" />
+        </Activity>
+        <UseCompactLayout>false</UseCompactLayout>
+        <ZoomLevel>1.0</ZoomLevel>
+    </CanvasUI>
+</Designer>
