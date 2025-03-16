@@ -1,6 +1,3 @@
-var taskTypeMap = new Map();
-var taskTypeByNameMap = new Map();
-
 
 $(document).ready(function () {
   $('.Submit').hide();
@@ -13,10 +10,10 @@ $(document).ready(function () {
   $.fn.bootstrapBtn = bootstrapButton;
   $('.network-user-name input').val($('.lf-username input').val().toUpperCase().substr($('.lf-username input').val().lastIndexOf('\\') + 1)).change();
   $('.task-name-col input').keyup(function () { this.value = this.value.toLocaleUpperCase(); });
-
+  $('.manf-rev input').change(function () { $('.manf-rev input').val($('.manf-rev input').val().toUpperCase()); });
 
   $(document).on('lookupcomplete', function (e) {
-    loadTaskTypeMap();
+
   });
 
   $(document).on("onloadlookupfinished", function (e) {
@@ -26,6 +23,12 @@ $(document).ready(function () {
     generateGoBackButtons();
     createShowGenerateButton();
     createExecuteTaskGenerationButton();
+    $('.gen-due-date input').on('change', function () {
+      if ($('.gen-due-date input').val() != '') {
+        $('#empty-due-date-error').remove();
+        $('.gen-due-date input').removeClass('parsley-error');
+      }
+    });
   });
 
 });
@@ -40,17 +43,13 @@ function createExecuteTaskGenerationButton() {
 
 
 function callShowGenerateTasks() {
-  $('.show-generate-tasks input').val(1).change(); 
+  $('.Submit').hide();
+  $('.show-generate-tasks input').val(1).change();
 }
 
 
 function callGoBack() {
   $(".show-generate-tasks input").val(null).change();
-  $(".task-type-checkbox").each(function (i) {
-    $(this).prop('checked', false);
-  })
-  
-  $("#Field40").val(null);
   $('.Submit').show();
 }
 
@@ -78,55 +77,57 @@ function generateTasks() {
   if (isGenerateFormValid == false) {
     return;
   }
-  var partNumberText = $("#Field40").val();
-  var drawingNumber = $('.gen-drawing-number input').val();
+  var partNumberText = $(".part-numbers-to-generate textarea").val();
+  var drawingNumberValue = $('.gen-drawing-number input').val();
   var dueDateValue = $('.gen-due-date input').val();
 
   var partNumbers = partNumberText.split(/\r?\n/);
-  var checkboxes = $('.task-type-checkbox');
+  var taskTypes = $('.task-types-to-generate-table-name input');
+  var opNumbers = $('.op-number-to-generate input');
   $(partNumbers).each(function (i) {
-    let partNumber = partNumbers[i].trim();
-    checkboxes.each(function (j) {
-      if ($(this).is(':checked')) {
-        let taskTypeID = $(this).val();
-        let taskTypeName = $(this).parent().find('.form-option-label').text();
+    let partNumberValue = partNumbers[i].trim();
+    if (partNumberValue.length == 0) {
+      return;
+    }
+    $(taskTypes).each(function (j) {
+      let taskTypeValue = $(this).val();
+      $(opNumbers).each(function (k) {
+        let opNumberValue = $(this).val();
         if (isLastRowEmpty() == false) {
           $('.tasklist-table').find('.cf-table-add-row').trigger("click");
         }
         let newTaskRow = $('.tasklist-table table tbody tr:last-child');
-        $(newTaskRow).find('.task-name-col input').val(partNumber);
-        $(newTaskRow).find('.drawing-number-col input').val(drawingNumber);
-        <HERE'S WHERE I LEFT OFF!!>
-      }
+        let taskNameField = $(newTaskRow).find('.task-name-col input');
+        let drawingNumberField = $(newTaskRow).find('.drawing-number-col input');
+        let taskTypeField = $(newTaskRow).find('.task-type-col select');
+        let dueDateField = $(newTaskRow).find('.due-date-col input');
+        let opNumberField = $(newTaskRow).find('.op-number-col input');
+
+        taskNameField.val(partNumberValue);
+        if (drawingNumberValue != '') {
+          drawingNumberField.val(drawingNumberValue);
+        }
+        taskTypeField.val(taskTypeValue).change();
+        dueDateField.val(dueDateValue);
+        opNumberField.val(opNumberValue);
+      });
+      
 
     });
+
   });
+  callGoBack();
 }
 
 
-function generateTaskTypeCheckBoxes() {
-  var tasktype_rows = $('.tasktype-lookup-table table tbody tr');
-  var tasktype_Fieldset = $('.task-types-chk .radio-checkbox-fieldset')
-  if (tasktype_rows.length == 0) {
-    return;
-  }
-  tasktype_rows.each(function (index) {
-    let tasktypeID = Number($(this).find('.tasktype-lookup-table-id input').val());
-    let tasktypeName = $(this).find('.tasktype-lookup-table-name input').val();
-    let tasktypeCheckBox = `<span class="choice"><input name="${tasktypeID}" class="task-type-checkbox" id="TaskType-${tasktypeID}" type="checkbox" value="${tasktypeID}" ><label class="form-option-label" for="TaskType-${tasktypeID}">${tasktypeName}</label></span>`;
-    $(tasktype_Fieldset).append(tasktypeCheckBox);
-  });
-}
-
-
-function getSelectedTaskTypeCount() {
-  var checkboxes = $(".task-type-checkbox");
-  if (checkboxes.length == 0) {
+function getRowCountOfTableWithValidValues(selector) {
+  var taskTypes = $(`${selector} input`);
+  if (taskTypes.length == 0) {
     return 0;
   }
   var count = 0;
-  checkboxes.each(function () {
-    if ($(this).is(':checked')) {
+  taskTypes.each(function () {
+    if ($(this).val().length > 0) {
       count++;
     }
   });
@@ -141,8 +142,9 @@ function isLastRowEmpty() {
   var taskTypeValue = $(lastTaskRow).find('.task-type-col select').val();
   var taskTypeIDValue = $(lastTaskRow).find('.task-type-id-col input').val();
   var dueDateValue = $(lastTaskRow).find('.due-date-col input').val();
+  var opNumberValue = $(lastTaskRow).find('.op-number-col input').val();
 
-  if ((taskNameValue == null) && (drawingNumberValue == null) && (taskTypeValue == null) && (taskTypeIDValue == null) && (dueDateValue == null)) {
+  if ((taskNameValue == '') && (drawingNumberValue == '') && (taskTypeValue == '') && (taskTypeIDValue == '') && (dueDateValue == '') && (opNumberValue == '')) {
     return true;
   }
   else {
@@ -152,53 +154,36 @@ function isLastRowEmpty() {
 }
 
 
-function loadTaskTypeMap() {
-
-  if (taskTypeMap.keys.length == 0) {
-    var tasktype_rows = $('.tasktype-lookup-table table tbody tr');
-    if (tasktype_rows.length == 0) {
-      return;
-    }
-    tasktype_rows.each(function (index) {
-      let tasktypeID = Number($(this).find('.tasktype-lookup-table-id input').val());
-      let tasktypeName = $(this).find('.tasktype-lookup-table-name input').val();
-      taskTypeMap.set(tasktypeID, tasktypeName);
-      taskTypeByNameMap.set(tasktypeName, tasktypeID);
-    });
-    generateTaskTypeCheckBoxes();
-  }
-}
-
-
 function ValidateGenerateForm() {
   var returnVal = true;
-  $('#Field11').removeClass('parsley-error');
-  $('#Field40').removeClass('parsley-error');
-  $('.gen-due-date input').addClass('parsley-error');
-
   $('#empty-due-date-error').remove();
-  $('#empty-task-types-error').remove();
-  $('#empty-part-numbers-error').remove();
+  $('.gen-due-date input').removeClass('parsley-error');
 
-  if (getSelectedTaskTypeCount() == 0) {
-    $('#Field11').addClass('parsley-error');
-    $('#Field11').append("<ul id='empty-task-types-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>You have to select at least one task type to generate.</li></ul>");
+
+  if (getRowCountOfTableWithValidValues('.task-types-to-generate-table-name') == 0) {
+    $('.task-types-to-generate-table-name input').blur();
     returnVal = false;
   }
 
-  var partNumberText = $("#Field40").val();
+  var partNumberText = $(".part-numbers-to-generate textarea").val();
   if (partNumberText.length == 0) {
-    $('#Field40').addClass('parsley-error');
-    $('#Field40').parent().append("<ul id='empty-part-numbers-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>You have to add at least one part number generate.</li></ul>");
+    $(".part-numbers-to-generate textarea").blur();
     returnVal = false;
 
   }
   var dueDateValue = $('.gen-due-date input').val();
-  if (dueDateValue.length == 0) {
+  if (dueDateValue == '') {
     $('.gen-due-date input').addClass('parsley-error');
-    $('.gen-due-date input').parent().append("<ul id='empty-due-date-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Required field.</li></ul>");
+    $('.gen-due-date input').parent().append("<ul id='empty-due-date-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Value Is Required.</li></ul>");
+
     returnVal = false;
   }
+
+  if (getRowCountOfTableWithValidValues('.op-number-to-generate') == 0) {
+    $('.op-number-to-generate input').blur();
+    returnVal = false;
+  }
+
 
   return returnVal;
 }
