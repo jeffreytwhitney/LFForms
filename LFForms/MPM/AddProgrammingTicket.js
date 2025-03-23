@@ -8,6 +8,7 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
   var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
   $.fn.bootstrapBtn = bootstrapButton;
+  $('.Submit').click(function (e) { submitForm(e); });
   $('.network-user-name input').val($('.lf-username input').val().toUpperCase().substr($('.lf-username input').val().lastIndexOf('\\') + 1)).change();
   $('.task-name-col input').keyup(function () { this.value = this.value.toLocaleUpperCase(); });
   $('.manf-rev input').change(function () { $('.manf-rev input').val($('.manf-rev input').val().toUpperCase()); });
@@ -151,6 +152,15 @@ function isLastRowEmpty() {
     return false;
   }
 
+}
+
+
+function submitForm(e) {
+  e.preventDefault();
+  if ($('.ticket-me-id input').val().length == 0) {
+    $('.ticket-me-id input').val(0);
+    $('#form1').submit();
+  }
 }
 
 
