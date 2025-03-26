@@ -4,11 +4,6 @@ $(document).ready(function () {
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js');
 
   $('.Submit').click(function (e) { validateForm(e); });
-  $('.machine-name input').keyup(function () { this.value = this.value.toLocaleUpperCase(); });
-  $('.joblot-number input').keyup(function () { this.value = this.value.toLocaleUpperCase(); });
-  $('.part-number input').keyup(function () { this.value = this.value.toLocaleUpperCase(); });
-  $('.pin-table-bin-number input').keyup(function () { this.value = this.value.toLocaleUpperCase(); });
-  $('.thread-gage-table-name input').keyup(function () { this.value = this.value.toLocaleUpperCase(); });
 
   $('#q0').append("<div class='hidden' id='print_output'></div>");
 
@@ -41,8 +36,7 @@ $(document).ready(function () {
     }
   });
 
-  $('.pin-table-pin-type select').change(function (e) {
-
+  $(document).on('change', '.pin-table-pin-type select', function (e) {
     if ($(e.currentTarget).val() == 'BIN') {
       $(e.currentTarget).closest('tr').find('.pin-table-diameter input').val(1).addClass("ui-state-disabled");
       $(e.currentTarget).closest('tr').find('.pin-table-number-of-pins input').val(1).addClass("ui-state-disabled");

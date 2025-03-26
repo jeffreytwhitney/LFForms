@@ -94,6 +94,7 @@ $(document).ready(function () {
     reApplyFilterValues();
     generateFormButtons();
     appendPagination();
+    colorCodeRows();
     $('.ticket-table').show();
 
   });
@@ -225,6 +226,26 @@ function checkPermissions() {
 
 }
 
+
+function colorCodeRows() {
+  var current_date = new Date();
+  var ticket_rows = $(".ticket-table table tbody tr");
+  var cal_due_dates = $('.cal-due-date-col input[type="text"]');
+
+  $(ticket_rows).removeClass('colorOverdue');
+
+  cal_due_dates.each(function (index) {
+
+    let ticket_row = ticket_rows[index];
+    let cal_due_date = new Date($(this).val());
+
+
+    if ((cal_due_date <= current_date)) {
+      $(ticket_row).addClass('colorOverdue');
+    }
+
+  });
+}
 
 function executeIFrameUpdate(ticket_id) {
 

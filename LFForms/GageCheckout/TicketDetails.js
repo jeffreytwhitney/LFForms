@@ -276,6 +276,39 @@ function showThreadCalibrationHistory(calibration_id) {
 }
 
 
+function submitForm(e) {
+  var isValid = validateForm(e);
+  var ticketType = Number($('.ticket-type-id input').val());
+  var pinRows = $('.add-pins-bins-table table tbody tr');
+
+  if (isValid == false) {
+    e.preventDefault();
+    return;
+  }
+
+  if (ticketType == 1) {
+    if (pinRows.length > 0) {
+      pinRows.each(function (index) {
+        
+        let pinTypeValue = Number($(this).find('.add-pins-bins-table-pin-type-id input').val());
+        let newBinID = $(this).find('.add-pins-bins-table-new-bin-id input');
+        let numberOfPins = $(this).find('.add-pins-bins-table-new-bin-number input');
+        let pinDiameter = $(this).find('.add-pins-bins-table-diameter input');
+
+        if (pinTypeValue == 5) {
+          numberOfPins.val(1);
+          pinDiameter.val(0);
+        }
+        else {
+          newBinID.val(0);
+        }
+      });
+    }
+  }
+
+}
+
+
 function validateForm(e) {
   
   var isValid = true;
