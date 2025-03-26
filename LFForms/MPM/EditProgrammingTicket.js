@@ -2,8 +2,7 @@ var mfgEngineerMap = new Map();
 var mfgEngineerNameMap = new Map();
 var qualEngineerMap = new Map();
 var qualEngineerNameMap = new Map();
-var cellLeaderMap = new Map();
-var cellLeaderNameMap = new Map();
+
 
 $(document).ready(function () {
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
@@ -25,6 +24,18 @@ $(document).ready(function () {
     window.parent.postMessage('CloseDialogWithRefresh', '*');
   }
 
+  $(document).on('change', '.quality-engineer-combo select', function () {
+    let qeName = $('.quality-engineer-combo select').val();
+    let qeID = qualEngineerNameMap.get(qeName);
+    $('.qeid input').val(qeID);
+  });
+
+  $(document).on('change', '.manufacturing-engineer-combo select', function () {
+    let meName = $('.manufacturing-engineer-combo select').val();
+    let meID = mfgEngineerNameMap.get(meName);
+    $('.meid input').val(meID);
+  });
+
   window.onmessage = function (event) {
 
     if (event.data == "CloseDialogWithRefresh") {
@@ -37,22 +48,21 @@ $(document).ready(function () {
   $(document).on('lookupcomplete', function (e) {
     loadMfgEngineerMap();
     loadQualEngineerMap();
-    loadCellLeaderMap();
+
 
     $('.tasklist-duedate-col input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
     $('.tasklist-schedduedate-col input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
     $('.tasklist-date-completed-col input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
 
+
     if (($('.mename input').val() != null) && ($('.manufacturing-engineer-combo select option').length > 0)) {
       $('.manufacturing-engineer-combo select').val($('.mename input').val());
+      $('.meid input').val(mfgEngineerNameMap.get($('.mename input').val()));
     }
     if (($('.qename input').val() != null) && ($('.quality-engineer-combo select option').length > 0)) {
       $('.quality-engineer-combo select').val($('.qename input').val());
+      $('.qeid input').val(qualEngineerNameMap.get($('.qename input').val()));
     }
-    if (($('.cell-leader-name input').val() != null) && ($('.cell-leader-combo option').length > 0)) {
-      $('.cell-leader-combo select').val($('.cell-leader-name input').val());
-    }
-
     generateTaskListColumnFields();
 
     if (checkPermissions() == false) {
@@ -60,15 +70,12 @@ $(document).ready(function () {
       $('.manufacturing-engineer-combo select').removeClass('ui-state-disabled').addClass('ui-state-disabled');
       $('.quality-engineer-combo select').removeClass('ui-state-disabled').addClass('ui-state-disabled');
       $('.cell-leader-combo select').removeClass('ui-state-disabled').addClass('ui-state-disabled');
-      $('.group-edit-button').removeClass('ui-state-disabled').addClass('ui-state-disabled');
     }
     else {
       $('.Submit').show();
       $('.manufacturing-engineer-combo select').removeClass('ui-state-disabled');
       $('.quality-engineer-combo select').removeClass('ui-state-disabled');
       $('.cell-leader-combo select').removeClass('ui-state-disabled');
-      $('.group-edit-button').removeClass('ui-state-disabled');
-
     }
 
   });
@@ -76,28 +83,20 @@ $(document).ready(function () {
   $(document).on("onloadlookupfinished", function (e) {
     $('.closeme input').val(1);
     $('#q0').append("<div class='hidden-text' id='popUpDiv'></div>");
-
-    $('.manufacturing-engineer-combo select').change(function () {
-      let meName = $('.manufacturing-engineer-combo select').val();
-      let meID = mfgEngineerNameMap.get(meName);
-      $('.meid input').val(meID);
-    });
-
-    $('.quality-engineer-combo select').change(function () {
-      let qeName = $('.quality-engineer-combo select').val();
-      let qeID = qualEngineerNameMap.get(qeName);
-      $('.qeid input').val(qeID);
-    });
-
-    $('.cell-leader-combo select').change(function () {
-      let cellLeaderName = $('.cell-leader-combo select').val();
-      let cellLeaderID = cellLeaderNameMap.get(cellLeaderName);
-      $('.cell-leader-id input').val(cellLeaderID);
-    });
-
     if (isMetrologyUser()) {
       $('.tasklist-table .cf-section-header').prepend('<div class="ui-button group-edit-button" onclick="callGroupEdit()"><span title="Group Edit" class="ui-button-icon ui-icon ui-icon-clipboard"></span>Group Edit</div>');
     }
+
+    $('.detail-input div').on("dblclick", function (e) {
+      var notes = $(this).find('textarea').val();
+      console.log(notes);
+      $.dialog({
+        escapeKey: true,
+        backgroundDismiss: true,
+        title: 'Ticket Details',
+        content: notes,
+      });
+    });
 
   });
 });
@@ -112,7 +111,7 @@ function callAddTime(task_id) {
 
 
 function callCloneTask(task_id) {
-  var user_type_id = $(".user-type-id input").val();
+  var user_type_id = Number($(".user-type-id input").val());
   var userDepartmentID = $(".user-department-id input").val();
   var departmentID = getColumnValueByTaskID(task_id, '.tasklist-dept-id-col input[type="text"]');
 
@@ -134,31 +133,18 @@ function callCloneTask(task_id) {
 
 
 function callGroupEdit() {
-  var user_type_id = $(".user-type-id input").val();
-  var userDepartmentID = $(".user-department-id input").val();
-  var departmentID = getColumnValueByTaskID(task_id, '.tasklist-dept-id-col input[type="text"]');
-
-  if (user_type_id == 2 || user_type_id == 4 || user_type_id == 5) {
-    $.alert({ title: 'Nope!', content: 'Sorry, you do not have permissions to do this.' });
-    return;
-  }
-
-  if (user_type_id == 3) {
-    if (departmentID != userDepartmentID) {
-      $.alert({ title: 'Nope!', content: 'Sorry, you do not have permissions to do this.' });
-      return;
-    }
-  }
-
-  var task_name = getColumnValueByTaskID(task_id, '.tasklist-task-name-col input[type="text"]');
-  popUpIframe(`http://rmslf/Forms/MPMCloneTask?tid=${task_id}`, `Clone task '${task_name}'`, 300, 750, false, task_id);
+  var ticketId = $('.tid input').val();
+  var ticketNumber = $('.ticket-number input').val();
+  var widowHeight = $(window).height();
+  widowHeight = widowHeight - 50;
+  popUpIframe(`http://rmslf/Forms/MPM-TaskGroupEdit?tid=${ticketId}`, `Group Edit Ticket '${ticketNumber}'`, widowHeight, 1300);
 }
 
 
 function callShowDetails(task_id) {
   var widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
-  popUpIframe(`http://rmslf/Forms/MPMAddEditTask?tid=${task_id}`, 'Task Details', widowHeight, 1100, false, task_id);
+  popUpIframe(`http://rmslf/Forms/MPM-EditProgrammingTask?tid=${task_id}`, 'Task Details', widowHeight, 1300);
 }
 
 
@@ -171,6 +157,12 @@ function checkPermissions() {
   var ticket_department_id = $(".ticket-department-id input").val();
   var init_usertype_id = $(".ticket-initiator-user-type-id input").val();
   var return_val = true;
+
+
+  if (user_type_id == '1') {
+    return return_val;
+  }
+
 
   if ((user_type_id == null) || (user_type_id == '')) {
     return_val = false;
@@ -317,26 +309,10 @@ function getColumnValueByTaskID(task_id, column_name) {
 
 
 function isMetrologyUser() {
-  if ($('.user-type-id input').val() == '1') {
+  if (($('.user-type-id input').val() == '1') && ($('.user-isactive input').val() == '1')) {
     return true;
   }
   return false;
-}
-
-
-function loadCellLeaderMap() {
-  if (cellLeaderMap.keys.length == 0) {
-    var cellLead_rows = $('.cellleader-lookup-table table tbody tr');
-    if (cellLead_rows.length == 0) {
-      return;
-    }
-    cellLead_rows.each(function (index) {
-      meID = Number($(this).find('.cellleader-lookup-table-id input').val());
-      meName = $(this).find('.cellleader-lookup-table-name input').val();
-      cellLeaderMap.set(meID, meName);
-      cellLeaderNameMap.set(meName, meID);
-    });
-  }
 }
 
 

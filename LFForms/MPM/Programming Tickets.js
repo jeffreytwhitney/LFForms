@@ -34,7 +34,7 @@ $(document).ready(function () {
     $('.projectlist-table').hide();
     if ($('.pg input').val() == '999') {
       $('.pg input').val(1).change();
-      console.log("lookupcomplete");
+      
       $('.network-user-name input').trigger("change");
     }
     loadDepartmentMap();
@@ -46,12 +46,16 @@ $(document).ready(function () {
     reApplyFilterValues();
     appendPagination();
     $('.projectlist-table').show();
+    if ($('#popUpDiv').length == 0) {
+      $('.section-iframe').append("<div class='hidden-text' id='popUpDiv'></div>");
+    }
 
   });
 
   $(document).on("onloadlookupfinished", function (e) {
-    $('.section-iframe').append("<div class='hidden-text' id='popUpDiv'></div>");
-    $('.network-user-name input').trigger("change");
+    console.log('onloadlookupfinished');
+    
+    //$('.network-user-name input').trigger("change");
   });
 
 });
@@ -108,7 +112,7 @@ function callPrevPage() {
 function callShowDetails(ticket_id) {
   var widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
-  popUpIframe(`http://rmslf/Forms/MPMAddEditProject?pid=${ticket_id}`, 'Project Details', widowHeight, 1100);
+  popUpIframe(`http://rmslf/Forms/MPM-EditProgrammingTicket?tid=${ticket_id}`, 'Project Details', widowHeight, 1300);
 }
 
 
