@@ -421,7 +421,18 @@ function submitForm(e) {
     return;
   }
 
+  if ($('.update-status-id input').val() == '') {
+    $('.update-status-id input').val(0);
+  }
+  if ($('.update-assignee-id input').val() == '') {
+    $('.update-assignee-id input').val(0);
+  }
+  if ($('.update-task-type-id input').val() == '') {
+    $('.update-task-type-id input').val(0);
+  }
+
   var statusID = Number($('.update-status-id input').val());
+
   if (statusID != 0) {
     if (statusID == status_Cancelled) {
       e.preventDefault();

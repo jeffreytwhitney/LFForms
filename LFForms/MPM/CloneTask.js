@@ -98,6 +98,12 @@ function submitForm(e) {
     e.preventDefault();
     return;
   }
+  var newAssigneeID = $('.new-assignee-id input').val();
+  if (newAssigneeID == '') {
+    $('.new-assignee-id input').val(0);
+  }
+
+
   $('.closeme input').val(1);
 }
 
