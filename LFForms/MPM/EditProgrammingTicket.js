@@ -21,6 +21,7 @@ $(document).ready(function () {
   }
 
   if ($('.closeme input').val() == 1) {
+    $('#form1').hide();
     window.parent.postMessage('CloseDialogWithRefresh', '*');
   }
 
@@ -32,8 +33,13 @@ $(document).ready(function () {
 
   $(document).on('change', '.manufacturing-engineer-combo select', function () {
     let meName = $('.manufacturing-engineer-combo select').val();
-    let meID = mfgEngineerNameMap.get(meName);
-    $('.meid input').val(meID);
+    if (meName.length == 0) {
+      $('.meid input').val(0);
+    }
+    else {
+      let meID = mfgEngineerNameMap.get(meName);
+      $('.meid input').val(meID);
+    }
   });
 
   window.onmessage = function (event) {
@@ -78,14 +84,19 @@ $(document).ready(function () {
       $('.cell-leader-combo select').removeClass('ui-state-disabled');
     }
 
+    if (isMetrologyUser()) {
+      if ($('.group-edit-button').length == 0) {
+        $('.tasklist-table .cf-section-header').prepend('<div class="ui-button group-edit-button" onclick="callGroupEdit()"><span title="Group Edit" class="ui-button-icon ui-icon ui-icon-clipboard"></span>Group Edit</div>');
+      }
+    }
+
+
   });
 
   $(document).on("onloadlookupfinished", function (e) {
     $('.closeme input').val(1);
     $('#q0').append("<div class='hidden-text' id='popUpDiv'></div>");
-    if (isMetrologyUser()) {
-      $('.tasklist-table .cf-section-header').prepend('<div class="ui-button group-edit-button" onclick="callGroupEdit()"><span title="Group Edit" class="ui-button-icon ui-icon ui-icon-clipboard"></span>Group Edit</div>');
-    }
+
 
     $('.detail-input div').on("dblclick", function (e) {
       var notes = $(this).find('textarea').val();
@@ -97,7 +108,7 @@ $(document).ready(function () {
         content: notes,
       });
     });
-
+    $('.network-user-name input').trigger("change");
   });
 });
 
@@ -155,14 +166,12 @@ function checkPermissions() {
   var user_type_id = $(".user-type-id input").val();
   var user_department_id = $(".user-department-id input").val();
   var ticket_department_id = $(".ticket-department-id input").val();
-  var init_usertype_id = $(".ticket-initiator-user-type-id input").val();
   var return_val = true;
 
 
   if (user_type_id == '1') {
     return return_val;
   }
-
 
   if ((user_type_id == null) || (user_type_id == '')) {
     return_val = false;
@@ -173,9 +182,7 @@ function checkPermissions() {
   if ((ticket_department_id == null) || (ticket_department_id == '')) {
     return_val = false;
   }
-  if ((init_usertype_id == null) || (init_usertype_id == '')) {
-    return_val = false;
-  }
+
   if ((user_id == null) || (user_id == '')) {
     return_val = false;
   }
@@ -193,9 +200,6 @@ function checkPermissions() {
 
   if (user_type_id != '1') {
     if (user_department_id !== ticket_department_id) {
-      return_val = false;
-    }
-    if (user_type_id !== init_usertype_id) {
       return_val = false;
     }
   }
@@ -374,4 +378,11 @@ function popUpIframe(src, title, height, width) {
 function refreshForm() {
   var current_url = window.location.href;
   window.location = current_url;
+}
+
+
+function submitForm(e) {
+  if ($('.meid input').val() == '') {
+    $('.meid input').val(0);
+  } 
 }

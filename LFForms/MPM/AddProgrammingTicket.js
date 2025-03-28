@@ -1,6 +1,6 @@
 
 $(document).ready(function () {
-  $('.Submit').hide();
+  
   $(document).prop('title', 'Task Maintenance');
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
@@ -81,6 +81,7 @@ function generateTasks() {
   var partNumberText = $(".part-numbers-to-generate textarea").val();
   var drawingNumberValue = $('.gen-drawing-number input').val();
   var dueDateValue = $('.gen-due-date input').val();
+  var revNumberValue = $('.gen-rev-number input').val();
 
   var partNumbers = partNumberText.split(/\r?\n/);
   var taskTypes = $('.task-types-to-generate-table-name input');
@@ -94,6 +95,7 @@ function generateTasks() {
       let taskTypeValue = $(this).val();
       $(opNumbers).each(function (k) {
         let opNumberValue = $(this).val();
+        
         if (isLastRowEmpty() == false) {
           $('.tasklist-table').find('.cf-table-add-row').trigger("click");
         }
@@ -103,6 +105,7 @@ function generateTasks() {
         let taskTypeField = $(newTaskRow).find('.task-type-col select');
         let dueDateField = $(newTaskRow).find('.due-date-col input');
         let opNumberField = $(newTaskRow).find('.op-number-col input');
+        let revNumberField = $(newTaskRow).find('.rev-number-col input');
 
         taskNameField.val(partNumberValue);
         if (drawingNumberValue != '') {
@@ -111,6 +114,7 @@ function generateTasks() {
         taskTypeField.val(taskTypeValue).change();
         dueDateField.val(dueDateValue);
         opNumberField.val(opNumberValue);
+        revNumberField.val(revNumberValue);
       });
       
 
@@ -179,13 +183,19 @@ function ValidateGenerateForm() {
   if (partNumberText.length == 0) {
     $(".part-numbers-to-generate textarea").blur();
     returnVal = false;
-
   }
+
+  var revNumberText = $(".gen-rev-number input").val();
+  if (revNumberText.length == 0) {
+    $(".gen-rev-number input").blur();
+    returnVal = false;
+  }
+
+
   var dueDateValue = $('.gen-due-date input').val();
   if (dueDateValue == '') {
     $('.gen-due-date input').addClass('parsley-error');
     $('.gen-due-date input').parent().append("<ul id='empty-due-date-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Value Is Required.</li></ul>");
-
     returnVal = false;
   }
 

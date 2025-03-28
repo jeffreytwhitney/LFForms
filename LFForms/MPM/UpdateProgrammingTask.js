@@ -413,22 +413,24 @@ function submitForm(e) {
     return;
   }
 
+  var statusID = Number($('.sid input').val());
+  var newStatusID = Number($('.update-sid input').val());
 
-  if ($('.sid input').val() != $('.new-status-id input').val()) { //status has changed
-    $('.sid input').val($('.new-status-id input').val());
-    if ($('.sid input').val() == status_Waiting) {
+  if (statusID != newStatusID) { 
+
+    if (newStatusID == status_Waiting) {
       e.preventDefault();
       callSetTaskToWaiting();
       return;
     }
 
-    if ($('.sid input').val() == status_Completed) {
+    if (newStatusID == status_Completed) {
       e.preventDefault();
       callCompleteTask();
       return;
     }
 
-    if ($('.sid input').val() == status_Cancelled) {
+    if (newStatusID == status_Cancelled) {
       e.preventDefault();
       callCancelTask();
       return;

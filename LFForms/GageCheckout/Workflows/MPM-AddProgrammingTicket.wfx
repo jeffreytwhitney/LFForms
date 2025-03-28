@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Designer Version="10.4.3.139">
+    <SequentialWorkflowActivityProxy Type="Laserfiche.Workflow.Activities.Proxies.LfSequentialWorkflowProxy, Laserfiche.Workflow.Designer.Base, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="f1779a4e-6d10-4fe0-9a11-44008171a45e" ActivityCountHint="1">
+        <Name>MPM-AddProgrammingTicket</Name>
+        <SafeName>MPMAddProgrammingTicket</SafeName>
+        <Enabled>True</Enabled>
+        <Description ShowDescription="null" ShowSummary="null" />
+        <AttachedProperties>
+            <Property Key="WorkflowWebServiceCollection" PropertyType="WebServices">
+                <LinkedProperties Default="">
+                    <LinkedProperty ServiceURL="http://rmslf/forms" User="admin" Type="Laserfiche Forms">
+                        <Name>LFForms</Name>
+                        <Id>18</Id>
+                        <Uuid>7fb9ad76-6301-4938-86cf-561c5befcb1b</Uuid>
+                        <Offline />
+                    </LinkedProperty>
+                </LinkedProperties>
+            </Property>
+        </AttachedProperties>
+        <Projects>
+            <CSharpProject />
+            <VBProject />
+        </Projects>
+        <WorkflowBusinessProcessOptions LfProcessId="0" ProfileId="" Flags="AllowStartingFromClients, CreateBusinessProcessEntity, RecordMilestoneEvents, RecordStepEvents, SetStartingMilestone, SetCompletedMilestone, SetCanceledMilestone" Enabled="false">
+            <Milestones>
+                <Starting>Running</Starting>
+                <Completed>Completed</Completed>
+                <Canceled>Terminated</Canceled>
+            </Milestones>
+            <CustomInstanceName />
+        </WorkflowBusinessProcessOptions>
+        <WorkflowParameters SetOutputValuesViaTokens="true" />
+        <Cultures>
+            <Culture>en-us</Culture>
+        </Cultures>
+        <MetadataStore Attributes="ExpectsStartingEntry, ValidateDesign">
+            <VersionHistory>
+                <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\MPM-AddProgrammingTicket.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="03/28/2025 16:31:09" EndTime="03/28/2025 16:37:44" />
+            </VersionHistory>
+            <Metadata>
+                <Value Item="Author" Type="String">JTWhitney</Value>
+                <Value Item="WorkflowFilePath" Type="String">C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\MPM-AddProgrammingTicket.wfx</Value>
+            </Metadata>
+        </MetadataStore>
+        <Activities>
+            <Activity Type="Laserfiche.Workflow.Activities.Forms.RetrieveFormFieldValueProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="de6d2696-74a4-4b30-a76d-aeff1f0371fe">
+                <Name>Retrieve Business Process Variables</Name>
+                <SafeName>RetrieveBusinessProcessVariables</SafeName>
+                <Enabled>True</Enabled>
+                <Description ShowDescription="null" ShowSummary="null">Retrieves the values from a Laserfiche Forms business process instance and stores those values as tokens.</Description>
+                <RetrieveFormFieldValueOptions Id="7fb9ad76-6301-4938-86cf-561c5befcb1b" OPT123332="true">
+                    <SubmissionOptions UseStarting="true" SubmissionId="" InstanceId="" UseStartingInstance="true" />
+                    <ProcessOptions ProcessId="105" ProcessName="RMS-MPM-AddProgrammingTicket" />
+                    <Fields>
+                        <Attribute AttributeId="3763" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Table" Label="Tasks:" AttributeName="TaskListTable" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-AddProgrammingTicket" MemberPath="3776_" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false">
+                            <Choices>
+                                <FormAttributeFieldChoice Label="row 1" Value="row_1" />
+                            </Choices>
+                            <Children>
+                                <Attribute AttributeId="3769" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Drawing Number" AttributeName="DrawingNumber" ParentLabel="Tasks:" ParentName="TaskListTable" ParentPath="3776_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-AddProgrammingTicket" MemberPath="3776_.3782" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="3771" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Date" Label="Due Date" AttributeName="DueDateColumn" ParentLabel="Tasks:" ParentName="TaskListTable" ParentPath="3776_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-AddProgrammingTicket" MemberPath="3776_.3784" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="3788" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Op Number" AttributeName="Op_Number" ParentLabel="Tasks:" ParentName="TaskListTable" ParentPath="3776_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-AddProgrammingTicket" MemberPath="3776_.3801" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="3952" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Rev" AttributeName="RevNumberCol" ParentLabel="Tasks:" ParentName="TaskListTable" ParentPath="3776_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-AddProgrammingTicket" MemberPath="3776_.3965" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="3768" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Task Name" AttributeName="TaskName" ParentLabel="Tasks:" ParentName="TaskListTable" ParentPath="3776_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-AddProgrammingTicket" MemberPath="3776_.3781" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="3770" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Select" Label="Task Type" AttributeName="TaskType" ParentLabel="Tasks:" ParentName="TaskListTable" ParentPath="3776_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-AddProgrammingTicket" MemberPath="3776_.3783" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                                <Attribute AttributeId="3765" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="TaskTypeID" AttributeName="TaskTypeID" ParentLabel="Tasks:" ParentName="TaskListTable" ParentPath="3776_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-AddProgrammingTicket" MemberPath="3776_.3778" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                            </Children>
+                        </Attribute>
+                        <Attribute AttributeId="3757" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Ticket_ManufacturingEngineerID" AttributeName="Ticket_ManufacturingEngineerID" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-AddProgrammingTicket" MemberPath="3770" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="3758" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Ticket_QualityEngineer" AttributeName="Ticket_QualityEngineer" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-AddProgrammingTicket" MemberPath="3771" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="3780" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Ticket Description:" AttributeName="TicketDescription" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-AddProgrammingTicket" MemberPath="3793" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="3779" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Ticket Name:" AttributeName="TicketName" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-AddProgrammingTicket" MemberPath="3792" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                        <Attribute AttributeId="3755" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="User_EmployeeNumber" AttributeName="User_EmployeeNumber_1" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-AddProgrammingTicket" MemberPath="3768" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                    </Fields>
+                    <AdditionalVariableOptions>
+                        <RetrievePaymentVariables>false</RetrievePaymentVariables>
+                    </AdditionalVariableOptions>
+                </RetrieveFormFieldValueOptions>
+            </Activity>
+        </Activities>
+        <FaultHandlers />
+    </SequentialWorkflowActivityProxy>
+    <CanvasUI>
+        <Expanded>True</Expanded>
+        <Activity Name="Retrieve Business Process Variables" Key="de6d2696-74a4-4b30-a76d-aeff1f0371fe" />
+        <UseCompactLayout>false</UseCompactLayout>
+        <ZoomLevel>1.0</ZoomLevel>
+    </CanvasUI>
+</Designer>

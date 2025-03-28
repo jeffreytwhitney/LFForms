@@ -90,6 +90,13 @@ function appendPagination() {
 }
 
 
+function addTicket() {
+  var widowHeight = $(window).height();
+  widowHeight = widowHeight - 50;
+  popUpIframe(`http://rmslf/Forms/RMS-MPM-AddProgrammingTicket`, 'Add Programming Ticket', widowHeight, 1500);
+}
+
+
 function callNextPage() {
   $('.projectlist-table').hide();
   removeAppendedFields();
@@ -112,7 +119,7 @@ function callPrevPage() {
 function callShowDetails(ticket_id) {
   var widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
-  popUpIframe(`http://rmslf/Forms/MPM-EditProgrammingTicket?tid=${ticket_id}`, 'Project Details', widowHeight, 1300);
+  popUpIframe(`http://rmslf/Forms/MPM-EditProgrammingTicket?tid=${ticket_id}`, 'Project Details', widowHeight, 1500);
 }
 
 
@@ -176,6 +183,10 @@ function filterTable() {
 function generateFilterRow() {
 
   if ($('#filterRow').length == 0) {
+    var add_button = '<div class="table-button ui-button add-button" onclick="addTicket()"><span title="AddTicket" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Ticket</div>'
+
+    $(add_button).insertBefore('.projectlist-table table');
+
     var includeCompleteCheckbox = '<div class="choice include-choice"><input name="chkIncludeComplete" id="chkIncludeComplete" type="checkbox" ><label class="form-option-label" for="chkIncludeComplete">Include Completed</label></div>'
     $('.projectlist-table table').parent().prepend(includeCompleteCheckbox)
 
