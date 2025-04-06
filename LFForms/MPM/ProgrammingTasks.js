@@ -109,19 +109,19 @@ function appendPagination() {
   if (row_count > 0) {
     $('#tasklist-pagination').remove();
     if ((current_page == 1) && (row_count < 25)) {
-      $('.tasklist-table table').parent().append("<div id='tasklist-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>‹</a></li><li><a class='page-link next isDisabled'>›</a></li></ul></div>");
+      $('.tasklist-table table').parent().append("<div id='tasklist-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>‹‹</a></li><li><a class='page-link prev isDisabled'>‹</a></li><li><a class='page-link next isDisabled'>›</a></li></ul></div>");
       return;
     }
     if ((current_page == 1) && (row_count == 25)) {
-      $('.tasklist-table table').parent().append("<div id='tasklist-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>‹</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>›</a></li></ul></div>")
+      $('.tasklist-table table').parent().append("<div id='tasklist-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>‹‹</a></li><li><a class='page-link prev isDisabled'>‹</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>›</a></li></ul></div>")
       return;
     }
     if ((current_page > 1) && (row_count == 25)) {
-      $('.tasklist-table table').parent().append("<div id='tasklist-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>‹</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>›</a></li></ul></div>")
+      $('.tasklist-table table').parent().append("<div id='tasklist-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>‹‹</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>‹</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>›</a></li></ul></div>")
       return;
     }
     if ((current_page > 1) && (row_count < 25)) {
-      $('.tasklist-table table').parent().append("<div id='tasklist-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>‹</a></li><li><a class='page-link next isDisabled'>›</a></li></ul></div>")
+      $('.tasklist-table table').parent().append("<div id='tasklist-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>‹‹</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>‹</a></li><li><a class='page-link next isDisabled'>›</a></li></ul></div>")
       return;
     }
   }
@@ -180,13 +180,6 @@ function callPrevPage() {
     return;
   }
   $('.tasklist-page input').val(current_page - 1).change();
-}
-
-
-function callShowDetails(task_id) {
-  var widowHeight = $(window).height();
-  widowHeight = widowHeight - 50;
-  popUpIframe(`http://rmslf/Forms/MPMAddEditTask?tid=${task_id}`, 'Task Details', widowHeight, 1100, false, task_id);
 }
 
 
@@ -461,10 +454,9 @@ function generateProjectColumn() {
     let ticket_number = $(ticket_numbers[index]);
     let ticket_number_value = $(ticket_numbers[index]).val();
     let project_name = $(this).val();
-    let project_href = `http://rmslf/Forms/MPMProjectMaintenance?pid=${project_id}`;
-    let project_link = $("<a>", { text: project_name.substr(0, 30), class: 'project-link', href: project_href, "target": "_blank" });
+    let project_link = $("<a>", { text: project_name.substr(0, 30), class: 'project-link', href: `javascript:void(0);`, onclick: `showProjectDetails(${project_id})` });
     $(this).parent().append(project_link);
-    project_link = $("<a>", { text: ticket_number_value, class: 'project-link', href: project_href, "target": "_blank" });
+    project_link = $("<a>", { text: ticket_number_value, class: 'project-link', href: `javascript:void(0);`, onclick: `showProjectDetails(${project_id})` });
     $(ticket_number).parent().append(project_link);
   });
 
@@ -515,7 +507,7 @@ function generateTaskColumn() {
   task_names.each(function (index) {
     let task_id = $(task_ids[index]).val();
     let task_name = $(this).val();
-    let task_link = $("<a>", { text: task_name.substr(0, 30), class: 'task-link', href: `javascript:void(0);`, onclick: `callShowDetails(${task_id})` });
+    let task_link = $("<a>", { text: task_name.substr(0, 30), class: 'task-link', href: `javascript:void(0);`, onclick: `showTaskDetails(${task_id})` });
     $(this).parent().append(task_link);
   });
 }
@@ -920,4 +912,25 @@ function removeAppendedFields() {
   $('.time-button').remove();
   $('.mandate-chk').remove();
 
+}
+
+
+function resetPageNumber() {
+  $('.tasklist-table').hide();
+  removeAppendedFields();
+  $('.tasklist-page input').val(1).change();
+}
+
+
+function showProjectDetails(ticket_id) {
+  var widowHeight = $(window).height();
+  widowHeight = widowHeight - 50;
+  popUpIframe(`http://rmslf/Forms/MPM-EditProgrammingTicket?tid=${ticket_id}`, 'Ticket Details', widowHeight, 1300, false, ticket_id);
+}
+
+
+function showTaskDetails(task_id) {
+  var widowHeight = $(window).height();
+  widowHeight = widowHeight - 50;
+  popUpIframe(`http://rmslf/Forms/MPM-EditProgrammingTask?tid=${task_id}`, 'Task Details', widowHeight, 1100, false, task_id);
 }

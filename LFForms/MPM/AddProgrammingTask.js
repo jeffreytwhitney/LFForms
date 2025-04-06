@@ -162,7 +162,7 @@ function validateForm() {
   else {
     $('.Submit').removeClass("ui-state-disabled");
   }
-
+  console.log('return_val: ' + return_val);
   return return_val;
 
 }

@@ -1,7 +1,10 @@
+var taskTypeMap = new Map();
+var taskTypeByNameMap = new Map();
+
 
 $(document).ready(function () {
   
-  $(document).prop('title', 'Task Maintenance');
+  $(document).prop('title', 'Add Programming Ticket');
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
@@ -13,7 +16,36 @@ $(document).ready(function () {
   $('.task-name-col input').keyup(function () { this.value = this.value.toLocaleUpperCase(); });
   $('.manf-rev input').change(function () { $('.manf-rev input').val($('.manf-rev input').val().toUpperCase()); });
 
+  $(document).on('change', '.task-type-col select', function (e) {
+    var taskName = $(this).val();
+    var taskID = taskTypeByNameMap.get(taskName);
+    $(this).closest('tr').find('.task-type-id-col input').val(taskID);
+  });
+
+
   $(document).on('lookupcomplete', function (e) {
+    loadTaskTypeMap();
+
+    var userTypeID = Number($('.user-type-id input').val());
+    if ((userTypeID == 3) && ($('.department select option').length > 1)) {
+      if ($('.department select').val() == '') {
+        let userDepartmentName = $('.user-department-name input').val();
+        $('.department select').val(userDepartmentName).change();
+        $('.department select').addClass('ui-state-disabled');
+      }
+    }
+
+    if ((userTypeID == 3) && ($('.quality-engineer select option').length > 1)) {
+      if ($('.quality-engineer select').val() == '') {
+        let userQEName = $('.user-employee-name input').val();
+        $('.quality-engineer select').val(userQEName).change();
+        $('.quality-engineer select').addClass('ui-state-disabled');
+      }
+    }
+
+    
+    
+
 
   });
 
@@ -44,7 +76,36 @@ function createExecuteTaskGenerationButton() {
 
 
 function callShowGenerateTasks() {
+
   $('.Submit').hide();
+  $('.gen-drawing-number input').val('');
+
+  $('.task-types-to-generate-table .cf-table-delete:visible').trigger('click');
+  $('.op-numbers-table .cf-table-delete:visible').trigger('click');
+
+  $('.task-types-to-generate-table tbody tr').each(function (index) {
+    if (index > 0) {
+      var deleteLink = $(this).find('.cf-table-delete');
+      deleteLink.trigger('click');
+    }
+  });
+
+  $('.op-numbers-table tbody tr').each(function (index) {
+    if (index > 0) {
+      var deleteLink = $(this).find('.cf-table-delete');
+      deleteLink.trigger('click');
+    }
+  });
+
+  $('.op-number-to-generate input').val('');
+  $('.task-types-to-generate-table-name input').val('');
+
+  
+  $('.gen-drawing-number input').val('');
+  $('.gen-due-date input').val('');
+  $('.gen-rev-number input').val('');
+  $('.part-numbers-to-generate textarea').text('');
+
   $('.show-generate-tasks input').val(1).change();
 }
 
@@ -85,6 +146,7 @@ function generateTasks() {
 
   var partNumbers = partNumberText.split(/\r?\n/);
   var taskTypes = $('.task-types-to-generate-table-name input');
+  var taskTypeIDs = $('.task-types-to-generate-table-id input');
   var opNumbers = $('.op-number-to-generate input');
   $(partNumbers).each(function (i) {
     let partNumberValue = partNumbers[i].trim();
@@ -93,6 +155,7 @@ function generateTasks() {
     }
     $(taskTypes).each(function (j) {
       let taskTypeValue = $(this).val();
+      let taskTypeIDValue = $(taskTypeIDs[j]).val();
       $(opNumbers).each(function (k) {
         let opNumberValue = $(this).val();
         
@@ -106,15 +169,18 @@ function generateTasks() {
         let dueDateField = $(newTaskRow).find('.due-date-col input');
         let opNumberField = $(newTaskRow).find('.op-number-col input');
         let revNumberField = $(newTaskRow).find('.rev-number-col input');
+        let taskTypeIDField = $(newTaskRow).find('.task-type-id-col input');
 
         taskNameField.val(partNumberValue);
         if (drawingNumberValue != '') {
           drawingNumberField.val(drawingNumberValue);
         }
-        taskTypeField.val(taskTypeValue).change();
+        taskTypeField.val(taskTypeValue);
+        taskTypeIDField.val(taskTypeIDValue);
         dueDateField.val(dueDateValue);
         opNumberField.val(opNumberValue);
         revNumberField.val(revNumberValue);
+        
       });
       
 
@@ -159,11 +225,28 @@ function isLastRowEmpty() {
 }
 
 
+function loadTaskTypeMap() {
+
+  if (taskTypeMap.keys.length == 0) {
+    var tasktype_rows = $('.task-type-lookup-table table tbody tr');
+    if (tasktype_rows.length == 0) {
+      return;
+    }
+    tasktype_rows.each(function (index) {
+      tasktypeID = Number($(this).find('.task-type-lookup-table-id input').val());
+      tasktypeName = $(this).find('.task-type-lookup-table-name input').val();
+      taskTypeMap.set(tasktypeID, tasktypeName);
+      taskTypeByNameMap.set(tasktypeName, tasktypeID);
+    });
+  }
+}
+
+
 function submitForm(e) {
-  e.preventDefault();
+ 
   if ($('.ticket-me-id input').val().length == 0) {
     $('.ticket-me-id input').val(0);
-    $('#form1').submit();
+    
   }
 }
 

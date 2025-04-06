@@ -86,7 +86,16 @@ $(document).ready(function () {
 
     if (isMetrologyUser()) {
       if ($('.group-edit-button').length == 0) {
-        $('.tasklist-table .cf-section-header').prepend('<div class="ui-button group-edit-button" onclick="callGroupEdit()"><span title="Group Edit" class="ui-button-icon ui-icon ui-icon-clipboard"></span>Group Edit</div>');
+        $('.tasklist-table .cf-section-header').prepend('<div class="choice include-choice"><input name="chkIncludeComplete" id="chkIncludeComplete" type="checkbox" ><label class="form-option-label" for="chkIncludeComplete">Include Completed</label></div><div class="ui-button group-edit-button" onclick="callGroupEdit()"><span title="Group Edit" class="ui-button-icon ui-icon ui-icon-clipboard"></span>Group Edit</div>');
+        $('#chkIncludeComplete').on('change', function () {
+          var includeCompleted = $(this).is(':checked');
+          if (includeCompleted) {
+            $('.fincomp input').val(1).change();
+          }
+          else {
+            $('.fincomp input').val(0).change();
+          }
+        });
       }
     }
 
@@ -384,5 +393,5 @@ function refreshForm() {
 function submitForm(e) {
   if ($('.meid input').val() == '') {
     $('.meid input').val(0);
-  } 
+  }
 }

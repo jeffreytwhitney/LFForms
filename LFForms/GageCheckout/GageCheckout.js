@@ -151,7 +151,7 @@ function validateForm(e) {
       if ((pinTypeValue == 5) && ((binName.val().length > 0) && binID.val().length == 0)) {
         console.log('pins!');
         binName.parent().find('#bad-pin-name-error').remove();
-        binName.parent().append("<ul id='bad-pin-name-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Invalid Pin Name.</li></ul>");
+        binName.parent().append("<ul id='bad-pin-name-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Invalid Bin Name.</li></ul>");
         binName.addClass('parsley-error');
         $('.Submit').prop("disabled", true);
         if (arguments.length === 1) {

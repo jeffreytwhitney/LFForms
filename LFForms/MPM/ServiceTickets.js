@@ -23,6 +23,18 @@ $(document).ready(function () {
     $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).change();
   }
 
+  window.onmessage = function (event) {
+    if (event.data == "CloseDialog") {
+      $("#popupIFrame").dialog("destroy");
+      $("#popupIFrame").remove();
+    }
+    if (event.data == "CloseDialogWithRefresh") {
+      $("#popupIFrame").dialog("destroy");
+      $("#popupIFrame").remove();
+      refreshPage();
+    }
+  };
+
 
   $(document).on("onloadlookupfinished", function () {
     var sitename = $.cookie('site_name');
@@ -30,6 +42,7 @@ $(document).ready(function () {
       $('.site-name select').val(sitename).change();
     }
   });
+
 
   $(document).on('lookupcomplete', function (e) {
     $('.projectlist-table').hide();
@@ -60,6 +73,13 @@ $(document).ready(function () {
 });
 
 
+function addTicket() {
+  var widowHeight = $(window).height();
+  widowHeight = widowHeight - 50;
+  popUpIframe(`http://rmslf/Forms/RMS-MPM-AddServiceTicket`, 'Add Service Ticket', widowHeight, 1500);
+}
+
+
 function appendPagination() {
 
   var current_page = Number($('.pg input').val());
@@ -70,19 +90,19 @@ function appendPagination() {
   if (row_count > 0) {
     $('#table-pagination').remove();
     if ((current_page == 1) && (row_count < 25)) {
-      $('.service-ticket-table table').parent().append("<div id='table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>‹</a></li><li><a class='page-link next isDisabled'>›</a></li></ul></div>");
+      $('.service-ticket-table table').parent().append("<div id='table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>‹‹</a></li><li><a class='page-link prev isDisabled'>‹</a></li><li><a class='page-link next isDisabled'>›</a></li></ul></div>");
       return;
     }
     if ((current_page == 1) && (row_count == 25)) {
-      $('.service-ticket-table table').parent().append("<div id='table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>‹</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>›</a></li></ul></div>")
+      $('.service-ticket-table table').parent().append("<div id='table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>‹‹</a></li><li><a class='page-link prev isDisabled'>‹</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>›</a></li></ul></div>")
       return;
     }
     if ((current_page > 1) && (row_count == 25)) {
-      $('.service-ticket-table table').parent().append("<div id='table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>‹</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>›</a></li></ul></div>")
+      $('.service-ticket-table table').parent().append("<div id='table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>‹‹</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>‹</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>›</a></li></ul></div>")
       return;
     }
     if ((current_page > 1) && (row_count < 25)) {
-      $('.service-ticket-table table').parent().append("<div id='table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>‹</a></li><li><a class='page-link next isDisabled'>›</a></li></ul></div>")
+      $('.service-ticket-table table').parent().append("<div id='table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>‹‹</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>‹</a></li><li><a class='page-link next isDisabled'>›</a></li></ul></div>")
       return;
     }
   }
@@ -109,7 +129,9 @@ function callPrevPage() {
 
 
 function editTicket(ticketID) {
-
+  var widowHeight = $(window).height();
+  widowHeight = widowHeight - 50;
+  popUpIframe(`http://rmslf/Forms/RMS-MPM-EditServiceTicket?tid=${ticketID}`, 'Edit Service Ticket', widowHeight, 1500);
 }
 
 
@@ -175,7 +197,7 @@ function generateFilterRow() {
     var includeCompleteCheckbox = '<div class="choice include-choice"><input name="chkIncludeComplete" id="chkIncludeComplete" type="checkbox" ><label class="form-option-label" for="chkIncludeComplete">Include Completed</label></div>'
     $('.service-ticket-table table').parent().prepend(includeCompleteCheckbox)
 
-    var filter_row = "<TR id='filterRow'><TH><input id='txtFilter_TicketNumber'/></TH><TH><input id='txtFilter_TicketName'/></TH><TH><select id='cboFilter_Initiator'/></TH><TH></TH><TH><select id='cboFilter_TicketType'/></TH><TH><select id='cboFilter_Department'/></TH><TH></TH><TH></TH><TH></TH><TH></TH><TH></TH><TH></TH><TH></TH></TR>"
+    var filter_row = "<TR id='filterRow'><TH><input id='txtFilter_TicketNumber'/></TH><TH><input id='txtFilter_TicketName'/></TH><TH><select id='cboFilter_Initiator'/></TH><TH><select id='cboFilter_TicketType'/></TH><TH><select id='cboFilter_Department'/></TH><TH></TH><TH></TH><TH></TH><TH></TH><TH></TH><TH></TH><TH></TH></TR>"
 
 
     $('.service-ticket-table table thead').append(filter_row);
@@ -365,8 +387,64 @@ function reApplyFilterValues() {
 }
 
 
+function refreshPage() {
+
+  var ticketNameFilter = $('.ftname input').val();
+  var ticketNumberFilter = $('.ftnum input').val();
+  var include_Complete = Number($('.finccomp input').val());
+  var departmentIDFilter = Number($('.fdid input').val());
+  var ticketTypeIDFilter = Number($('.fttid input').val());
+  var initiatorIDFilter = Number($('.fiid input').val());
+
+
+  var pageNumber = Number($('.pg input').val());
+
+  var current_url = window.location.href;
+  if (current_url.includes('?')) {
+    indexOfQuestionMark = current_url.indexOf('?');
+    current_url = current_url.substring(0, indexOfQuestionMark);
+  }
+
+  if ((pageNumber != null) && (pageNumber != NaN) && (pageNumber > 0)) {
+    current_url = current_url + `?pg=${pageNumber}`;
+  }
+
+  if ((ticketNameFilter != null) && (ticketNameFilter.length > 0)) {
+    current_url = current_url + `&ftname=${ticketNameFilter}`;
+  }
+
+  if ((ticketNumberFilter != null) && (ticketNumberFilter.length > 0)) {
+    current_url = current_url + `&ftnum=${ticketNumberFilter}`;
+  }
+
+  if ((ticketTypeIDFilter != null) && (ticketTypeIDFilter != NaN) && (ticketTypeIDFilter > 0)) {
+    current_url = current_url + `&fttid=${ticketTypeIDFilter}`;
+  }
+
+  if ((initiatorIDFilter != null) && (initiatorIDFilter.length > 0)) {
+    current_url = current_url + `&fiid=${initiatorIDFilter}`;
+  }
+
+  if ((include_Complete != null) && (include_Complete != NaN) && (include_Complete > 0)) {
+    current_url = current_url + `&finccomp=${include_Complete}`;
+  }
+
+  if ((departmentIDFilter != null) && (departmentIDFilter != NaN) && (departmentIDFilter > 0)) {
+    current_url = current_url + `&fdid=${departmentIDFilter}`;
+  }
+  window.location = current_url;
+}
+
+
 function removeAppendedFields() {
   $('#table-pagination').remove();
   $('.edit-button').remove();
   $('.ticket-link').remove();
+}
+
+
+function resetPageNumber() {
+  $('.service-ticket-table').hide();
+  removeAppendedFields();
+  $('.pg input').val(1).change();
 }

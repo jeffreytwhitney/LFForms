@@ -406,9 +406,9 @@ function selectAllTasks(check_on) {
   }
   checkboxes.each(function () {
     if (check_on == true)
-      $(this).prop('checked', true);
+      $(this).prop('checked', true).change();
     else
-      $(this).prop('checked', false);
+      $(this).prop('checked', false).change();
   });
   fillSelectedIDs();
   $('.select-task-count input').val(getSelectedCount());

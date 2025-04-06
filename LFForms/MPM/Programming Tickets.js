@@ -29,6 +29,18 @@ $(document).ready(function () {
     }
   };
 
+  $(document).on('dblclick', '[id^="Field56"]', function (e) {
+    var ticketDetail = $(this).val();
+    var ticketNumber = $(this).closest('tr').find('.projectlist-ticket-number-col input[type="text"]').val();
+    console.log(ticketDetail);
+    $.dialog({
+      escapeKey: true,
+      backgroundDismiss: true,
+      title: `${ticketNumber} Details`,
+      content: ticketDetail,
+    });
+  });
+
 
   $(document).on('lookupcomplete', function (e) {
     $('.projectlist-table').hide();
@@ -53,9 +65,7 @@ $(document).ready(function () {
   });
 
   $(document).on("onloadlookupfinished", function (e) {
-    console.log('onloadlookupfinished');
-    
-    //$('.network-user-name input').trigger("change");
+
   });
 
 });
@@ -71,19 +81,19 @@ function appendPagination() {
   if (row_count > 0) {
     $('#projectlist-pagination').remove();
     if ((current_page == 1) && (row_count < 25)) {
-      $('.projectlist-table table').parent().append("<div id='projectlist-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>‹</a></li><li><a class='page-link next isDisabled'>›</a></li></ul></div>");
+      $('.projectlist-table table').parent().append("<div id='projectlist-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>‹‹</a></li><li><a class='page-link prev isDisabled'>‹</a></li><li><a class='page-link next isDisabled'>›</a></li></ul></div>");
       return;
     }
     if ((current_page == 1) && (row_count == 25)) {
-      $('.projectlist-table table').parent().append("<div id='projectlist-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>‹</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>›</a></li></ul></div>")
+      $('.projectlist-table table').parent().append("<div id='projectlist-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>‹‹</a></li><li><a class='page-link prev isDisabled'>‹</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>›</a></li></ul></div>")
       return;
     }
     if ((current_page > 1) && (row_count == 25)) {
-      $('.projectlist-table table').parent().append("<div id='projectlist-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>‹</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>›</a></li></ul></div>")
+      $('.projectlist-table table').parent().append("<div id='projectlist-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>‹‹</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>‹</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>›</a></li></ul></div>")
       return;
     }
     if ((current_page > 1) && (row_count < 25)) {
-      $('.projectlist-table table').parent().append("<div id='projectlist-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>‹</a></li><li><a class='page-link next isDisabled'>›</a></li></ul></div>")
+      $('.projectlist-table table').parent().append("<div id='projectlist-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>‹‹</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>‹</a></li><li><a class='page-link next isDisabled'>›</a></li></ul></div>")
       return;
     }
   }
@@ -406,7 +416,7 @@ function refreshPage() {
   var taskNameFilter = $('.ftname input').val();
   var include_Complete = Number($('.inccom input').val());
   var projectIDFilter = Number($('.fpid input').val());
-  var departmentIDFilter = Number($('fdid input').val());
+  var departmentIDFilter = Number($('.fdid input').val());
   var taskListPage = Number($('.tasklist-page input').val());
 
   var current_url = window.location.href;
@@ -444,3 +454,8 @@ function removeAppendedFields() {
 }
 
 
+function resetPageNumber() {
+  $('.projectlist-table').hide();
+  removeAppendedFields();
+  $('.pg input').val(1).change();
+}
