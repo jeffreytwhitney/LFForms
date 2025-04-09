@@ -157,7 +157,7 @@ function checkExistingTaskIDs() {
   existing_task_ids.each(function (index) {
     option_value = Number($(this).val());
     if (option_value == NaN) {
-      return;
+      return returnVal;
     }
     if ((option_value != 0) && (option_value != task_id)) {
       returnVal = true;

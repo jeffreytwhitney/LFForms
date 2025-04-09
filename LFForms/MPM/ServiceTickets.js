@@ -55,6 +55,7 @@ $(document).ready(function () {
     loadInitiatorMap();
     loadTicketTypeMap();
     $('.due-date-col input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
+    $('.create-date-col input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
     generateTicketNumberColumn();
     generateFilterRow();
     //reApplyFilterValues();
@@ -215,7 +216,7 @@ function generateFilterRow() {
     $("#cboFilter_Initiator").dblclick(function () { $("#cboFilter_Initiator").val(0).change(); });
     $("#cboFilter_TicketType").dblclick(function () { $("#cboFilter_TicketType").val(0).change(); });
     $("#cboFilter_Department").dblclick(function () { $("#cboFilter_Department").val(null).change(); });
-
+    wireUpSortFields();
   }
 
   if ((($('.ftnum input').val() != null) && ($('.ftnum input').val().length > 0)) && (($('#txtFilter_TicketNumber').val() == null) || ($('#txtFilter_TicketNumber').val() == ''))) {
@@ -447,4 +448,133 @@ function resetPageNumber() {
   $('.service-ticket-table').hide();
   removeAppendedFields();
   $('.pg input').val(1).change();
+}
+
+
+function sortTable(newSortOrdinal) {
+  $('.projectlist-table').hide();
+  removeAppendedFields();
+  $('.sort-icon').remove();
+
+  var currentSortOrdinal = Number($('.sort-field-ordinal input').val());
+  var sortDirection = Number($('.sort-direction input').val());
+
+  if (newSortOrdinal == currentSortOrdinal) {
+    if (sortDirection == 0) {
+      sortDirection = 1
+      $('.sort-direction input').val(1).change();
+    }
+    else {
+      sortDirection = 0;
+      $('.sort-direction input').val(0).change();
+    }
+  }
+  else {
+    $('.sort-field-ordinal input').val(newSortOrdinal);
+    $('.sort-direction input').val(0).change();
+    sortDirection = 0;
+  }
+
+  if (newSortOrdinal == 0) {
+    if (sortDirection == 0) {
+      $('#q15 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
+    }
+    else {
+      $('#q15 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
+    }
+  }
+  if (newSortOrdinal == 1) {
+
+    if (sortDirection == 0) {
+      $('#q18 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
+    }
+    else {
+      $('#q18 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
+    }
+  }
+  if (newSortOrdinal == 2) {
+    if (sortDirection == 0) {
+      $('#q40 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
+    }
+    else {
+      $('#q40 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
+    }
+  }
+  if (newSortOrdinal == 3) {
+    if (sortDirection == 0) {
+      $('#q42 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
+    }
+    else {
+      $('#q42 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
+    }
+  }
+  if (newSortOrdinal == 4) {
+    if (sortDirection == 0) {
+      $('#q43 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
+    }
+    else {
+      $('#q43 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
+    }
+  }
+  if (newSortOrdinal == 5) {
+    if (sortDirection == 0) {
+      $('#q44 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
+    }
+    else {
+      $('#q44 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
+    }
+  }
+  if (newSortOrdinal == 6) {
+    if (sortDirection == 0) {
+      $('#q45 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
+    }
+    else {
+      $('#q45 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
+    }
+  }
+  if (newSortOrdinal == 7) {
+    if (sortDirection == 0) {
+      $('#q46 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
+    }
+    else {
+      $('#q46 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
+    }
+  }
+  if (newSortOrdinal == 8) {
+    if (sortDirection == 0) {
+      $('#q47 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
+    }
+    else {
+      $('#q47 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
+    }
+  }
+  if (newSortOrdinal == 9) {
+    if (sortDirection == 0) {
+      $('#q51 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
+    }
+    else {
+      $('#q51 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
+    }
+  }
+
+
+
+}
+
+
+function wireUpSortFields() {
+
+  $('#q15 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
+
+  $('#q15').on('click', function () { sortTable(0); });
+  $('#q18').on('click', function () { sortTable(1); });
+  $('#q40').on('click', function () { sortTable(2); });
+  $('#q42').on('click', function () { sortTable(3); });
+  $('#q43').on('click', function () { sortTable(4); });
+  $('#q44').on('click', function () { sortTable(5); });
+  $('#q45').on('click', function () { sortTable(6); });
+  $('#q46').on('click', function () { sortTable(7); });
+  $('#q47').on('click', function () { sortTable(8); });
+  $('#q51').on('click', function () { sortTable(9); });
+
 }
