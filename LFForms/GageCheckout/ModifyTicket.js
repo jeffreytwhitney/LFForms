@@ -274,6 +274,7 @@ function generateFilterRow() {
     $("#cboFilter_MachineGroup").dblclick(function () { $("#cboFilter_MachineGroup").val(null).change(); });
     $("#cboFilter_Operator").dblclick(function () { $("#cboFilter_Operator").val(null).change(); });
     $("#cboFilter_CellLeader").dblclick(function () { $("#cboFilter_CellLeader").val(null).change(); });
+    wireUpSortFields();
   }
 
   if (($(".ticket-type-lookup-cbo select option").length > 0) && ($('#cboFilter_TicketType option' == 0))) {
@@ -467,6 +468,11 @@ function reApplyFilterValues() {
 }
 
 
+function removeAppendedFields() {
+  $('.ticket-detail-link').remove();
+  $('#ticket-table-pagination').remove();
+}
+
 function resetPageNumber() {
   $('.ticket-table').hide();
   $('.ticket-detail-link').remove();
@@ -510,6 +516,130 @@ function showDetails(ticket_id) {
   $('.details-modifier-employee-number input').focus();
   $(".details-ticket-id input").val(ticket_id).change();
   $('.Submit').show();
+}
+
+
+function sortTable(newSortOrdinal) {
+  $('.projectlist-table').hide();
+  removeAppendedFields();
+  $('.sort-icon').remove();
+
+  var currentSortOrdinal = Number($('.sort-field-ordinal input').val());
+  var sortDirection = Number($('.sort-direction input').val());
+
+  if (newSortOrdinal == currentSortOrdinal) {
+    if (sortDirection == 0) {
+      sortDirection = 1
+      $('.sort-direction input').val(1).change();
+    }
+    else {
+      sortDirection = 0;
+      $('.sort-direction input').val(0).change();
+    }
+  }
+  else {
+    $('.sort-field-ordinal input').val(newSortOrdinal);
+    $('.sort-direction input').val(0).change();
+    sortDirection = 0;
+  }
+
+  if (newSortOrdinal == 0) {
+    if (sortDirection == 0) {
+      $('#q30 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
+    }
+    else {
+      $('#q30 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
+    }
+  }
+  if (newSortOrdinal == 1) {
+
+    if (sortDirection == 0) {
+      $('#q33 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
+    }
+    else {
+      $('#q33 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
+    }
+  }
+  if (newSortOrdinal == 2) {
+    if (sortDirection == 0) {
+      $('#q34 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
+    }
+    else {
+      $('#q34 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
+    }
+  }
+  if (newSortOrdinal == 3) {
+    if (sortDirection == 0) {
+      $('#q36 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
+    }
+    else {
+      $('#q36 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
+    }
+  }
+  if (newSortOrdinal == 4) {
+    if (sortDirection == 0) {
+      $('#q35 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
+    }
+    else {
+      $('#q35 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
+    }
+  }
+  if (newSortOrdinal == 5) {
+    if (sortDirection == 0) {
+      $('#q37 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
+    }
+    else {
+      $('#q37 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
+    }
+  }
+  if (newSortOrdinal == 6) {
+    if (sortDirection == 0) {
+      $('#q38 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
+    }
+    else {
+      $('#q38 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
+    }
+  }
+  if (newSortOrdinal == 7) {
+    if (sortDirection == 0) {
+      $('#q39 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
+    }
+    else {
+      $('#q39 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
+    }
+  }
+  if (newSortOrdinal == 8) {
+    if (sortDirection == 0) {
+      $('#q40 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
+    }
+    else {
+      $('#q40 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
+    }
+  }
+  if (newSortOrdinal == 9) {
+    if (sortDirection == 0) {
+      $('#q41 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
+    }
+    else {
+      $('#q41 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
+    }
+  }
+  if (newSortOrdinal == 10) {
+    if (sortDirection == 0) {
+      $('#q42 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
+    }
+    else {
+      $('#q42 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
+    }
+  }
+  if (newSortOrdinal == 11) {
+    if (sortDirection == 0) {
+      $('#q44 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
+    }
+    else {
+      $('#q44 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
+    }
+  }
 }
 
 
@@ -594,4 +724,22 @@ function wireUpChangeEvents() {
   });
 
 
+}
+
+
+function wireUpSortFields() {
+
+  $('#q30 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
+  $('#q30').on('click', function () { sortTable(0); });
+  $('#q33').on('click', function () { sortTable(1); });
+  $('#q34').on('click', function () { sortTable(2); });
+  $('#q36').on('click', function () { sortTable(3); });
+  $('#q35').on('click', function () { sortTable(4); });
+  $('#q37').on('click', function () { sortTable(5); });
+  $('#q38').on('click', function () { sortTable(6); });
+  $('#q39').on('click', function () { sortTable(7); });
+  $('#q40').on('click', function () { sortTable(8); });
+  $('#q41').on('click', function () { sortTable(9); });
+  $('#q42').on('click', function () { sortTable(10); });
+  $('#q44').on('click', function () { sortTable(11); });
 }

@@ -365,6 +365,7 @@ function generateFilterRow() {
     $("#cboFilter_MachineGroup").dblclick(function () { $("#cboFilter_MachineGroup").val(null).change(); });
     $("#cboFilter_Operator").dblclick(function () { $("#cboFilter_Operator").val(null).change(); });
     $("#cboFilter_CellLeader").dblclick(function () { $("#cboFilter_CellLeader").val(null).change(); });
+    wireUpSortFields();
   }
 
   if (($(".ticket-type-lookup-cbo select option").length > 0) && ($('#cboFilter_TicketType option' == 0))) {
@@ -689,3 +690,57 @@ function showDetails(ticket_id) {
   popUpIframe(`http://rmslf/Forms/RMS-GAGE-TicketDetails?tid=${ticket_id}`, 'Ticket Details', widowHeight, 1200);
 }
 
+
+
+function sortTable(newSortOrdinal, selector) {
+  $('.projectlist-table').hide();
+  removeAppendedFields();
+  $('.sort-icon').remove();
+
+  var currentSortOrdinal = Number($('.sort-field-ordinal input').val());
+  var sortDirection = Number($('.sort-direction input').val());
+
+  if (newSortOrdinal == currentSortOrdinal) {
+    if (sortDirection == 0) {
+      sortDirection = 1
+      $('.sort-direction input').val(1).change();
+    }
+    else {
+      sortDirection = 0;
+      $('.sort-direction input').val(0).change();
+    }
+  }
+  else {
+    $('.sort-field-ordinal input').val(newSortOrdinal);
+    $('.sort-direction input').val(0).change();
+    sortDirection = 0;
+  }
+
+  if (sortDirection == 0) {
+    $(`${selector} .cf-col-label`).append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
+  }
+  else {
+    $(`${selector} .cf-col-label`).append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
+  }
+
+
+}
+
+
+function wireUpSortFields() {
+
+  $('#q124 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
+  $('#q124').on('click', function () { sortTable(0, '#q124'); });
+  $('#q115').on('click', function () { sortTable(1, '#q115'); });
+  $('#q116').on('click', function () { sortTable(2, '#q116'); });
+  $('#q119').on('click', function () { sortTable(3, '#q119'); });
+  $('#q117').on('click', function () { sortTable(4, '#q117'); });
+  $('#q120').on('click', function () { sortTable(5, '#q120'); });
+  $('#q121').on('click', function () { sortTable(6, '#q121'); });
+  $('#q122').on('click', function () { sortTable(7, '#q122'); });
+  $('#q162').on('click', function () { sortTable(8, '#q162'); });
+  $('#q163').on('click', function () { sortTable(9, '#q163'); });
+  $('#q166').on('click', function () { sortTable(10, '#q166'); });
+  $('#q123').on('click', function () { sortTable(11, '#q123'); });
+  $('#q125').on('click', function () { sortTable(12, '#q125'); });
+}

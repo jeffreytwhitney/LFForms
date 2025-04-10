@@ -3,7 +3,7 @@ var taskTypeByNameMap = new Map();
 
 
 $(document).ready(function () {
-  
+
   $(document).prop('title', 'Add Programming Ticket');
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
@@ -42,9 +42,9 @@ $(document).ready(function () {
         $('.quality-engineer select').addClass('ui-state-disabled');
       }
     }
+    generateTaskRowNumbers();
+    generateTableButtons(".clone-col", "ui-icon-newwin", "Clone Task", "cloneRow");
 
-    
-    
 
 
   });
@@ -63,6 +63,12 @@ $(document).ready(function () {
       }
     });
   });
+
+  $(document).on('click', '#q28', function (e) {
+    generateTaskRowNumbers();
+    generateTableButtons(".clone-col", "ui-icon-newwin", "Clone Task", "cloneRow");
+  });
+
 
 });
 
@@ -100,7 +106,7 @@ function callShowGenerateTasks() {
   $('.op-number-to-generate input').val('');
   $('.task-types-to-generate-table-name input').val('');
 
-  
+
   $('.gen-drawing-number input').val('');
   $('.gen-due-date input').val('');
   $('.gen-rev-number input').val('');
@@ -116,6 +122,32 @@ function callGoBack() {
 }
 
 
+function cloneRow(cloneRowID) {
+
+  var rowToClone = $(".tasklist-table tbody tr").filter(function () {
+    return Number($(this).find(".clone-col input").val()) == cloneRowID;
+  });
+
+  console.log(rowToClone);
+
+
+  if (isLastRowEmpty() == false) {
+    $('.tasklist-table').find('.cf-table-add-row').trigger("click");
+  }
+  var newTaskRow = $('.tasklist-table table tbody tr:last-child');
+
+  newTaskRow.find('.task-name-col input').val(rowToClone.find('.task-name-col input').val());
+  newTaskRow.find('.drawing-number-col input').val(rowToClone.find('.drawing-number-col input').val());
+  newTaskRow.find('.task-type-col select').val(rowToClone.find('.task-type-col select').val());
+  newTaskRow.find('.task-type-id-col input').val(rowToClone.find('.task-type-id-col input').val());
+  newTaskRow.find('.due-date-col input').val(rowToClone.find('.due-date-col input').val());
+  newTaskRow.find('.op-number-col input').val(rowToClone.find('.op-number-col input').val());
+  newTaskRow.find('.rev-number-col input').val(rowToClone.find('.rev-number-col input').val());
+
+
+}
+
+
 function createShowGenerateButton() {
   var add_buttons = $("#show-generate-tasks");
   add_buttons.each(function (index) {
@@ -125,12 +157,97 @@ function createShowGenerateButton() {
 }
 
 
+function checkForDuplicateRows() {
+  console.log('checkForDuplicateRows');
+  $('.task-name-col input').removeClass('parsley-error');
+  $('.task-type-col select').removeClass('parsley-error');
+  $('.op-number-col input').removeClass('parsley-error');
+  $('.rev-number-col input').removeClass('parsley-error');
+  $('.error-message input').removeClass('parsley-error');
+  $('.error-message input').val('');
+
+  var returnVal = false;
+
+  var taskRows = $('.tasklist-table tbody tr');
+  var rowCount = taskRows.length;
+  taskRows.each(function (index) {
+    console.log('checkForDuplicateRows index: ' + index);
+    let currentTaskName = $(this).find('.task-name-col input');
+    let currentTaskType = $(this).find('.task-type-col select');
+    let currentOpNumber = $(this).find('.op-number-col input');
+    let currentRevNumber = $(this).find('.rev-number-col input');
+    let currentErrorMessage = $(this).find('.error-message input');
+    let errorMessageValue = $(this).find('.error-message input').val();
+    if (isRowValid(index) == false) {
+    }
+    if (errorMessageValue.length == 0) {
+      for (i = index + 1; i < rowCount; i++) {
+        console.log('checkForDuplicateRows i: ' + i);
+        if (isRowValid(i) == false) {
+          return;
+        }
+        let rowToCheck = $(taskRows[i]);
+        let chkErrorMessage = $(rowToCheck).find('.error-message input');
+        let chkErrorMessageValue = $(chkErrorMessage).val();
+        if (chkErrorMessageValue.length == 0) {
+          let chkTaskName = $(rowToCheck).find('.task-name-col input');
+          let chkTaskType = $(rowToCheck).find('.task-type-col select');
+          let chkOpNumber = $(rowToCheck).find('.op-number-col input');
+          let chkRevNumber = $(rowToCheck).find('.rev-number-col input');
+          if ((currentTaskName.val() == chkTaskName.val())
+            && (currentTaskType.val() == chkTaskType.val())
+            && (currentOpNumber.val() == chkOpNumber.val())
+            && (currentRevNumber.val() == chkRevNumber.val())) {
+            $(currentErrorMessage).val('Duplicate Row');
+            $(currentTaskName).addClass('parsley-error');
+            $(currentTaskType).addClass('parsley-error');
+            $(currentOpNumber).addClass('parsley-error');
+            $(currentRevNumber).addClass('parsley-error');
+            $(currentErrorMessage).addClass('parsley-error');
+            $(chkTaskName).addClass('parsley-error');
+            $(chkTaskType).addClass('parsley-error');
+            $(chkOpNumber).addClass('parsley-error');
+            $(chkRevNumber).addClass('parsley-error');
+            $(chkErrorMessage).addClass('parsley-error');
+            $(chkErrorMessage).val('Duplicate Row');
+            returnVal = true;
+          }
+        }
+      }
+    }
+  });
+  return returnVal;
+}
+
+
 function generateGoBackButtons() {
   var goback_buttons = $(".gobackbutton");
   goback_buttons.each(function (index) {
     $(this).parent().append("<div id='go-back' class='ui-button ui-corner-all ui-widget' onclick='callGoBack()'><span class='ui-icon ui-icon-arrowreturnthick-1-w'></span>Go Back</div>");
   });
   $(".gobackbutton").remove();
+}
+
+
+function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFunction) {
+  var selectionString = buttonSelector + " input[type=text]";
+  var buttons = $(selectionString);
+  buttons.each(function () {
+    var btn_value = $(this).val();
+    var btn_html = `<div class='table-button ui-button'><span title='${buttonTitle}' class='ui-button-icon ui-icon ${buttonClass}' onclick='${buttonFunction}(${btn_value})'/></div>`
+
+    var has_button = $(this).parent().find(`.${buttonClass}`).length;
+    if (has_button == 0) {
+      $(this).parent().append(btn_html);
+    }
+  });
+}
+
+
+function generateTaskRowNumbers() {
+  $('.clone-col input').each(function (index) {
+    $(this).val(index + 1);
+  });
 }
 
 
@@ -158,7 +275,7 @@ function generateTasks() {
       let taskTypeIDValue = $(taskTypeIDs[j]).val();
       $(opNumbers).each(function (k) {
         let opNumberValue = $(this).val();
-        
+
         if (isLastRowEmpty() == false) {
           $('.tasklist-table').find('.cf-table-add-row').trigger("click");
         }
@@ -180,9 +297,9 @@ function generateTasks() {
         dueDateField.val(dueDateValue);
         opNumberField.val(opNumberValue);
         revNumberField.val(revNumberValue);
-        
+
       });
-      
+
 
     });
 
@@ -225,6 +342,29 @@ function isLastRowEmpty() {
 }
 
 
+function isRowValid(rowIndex) {
+  var returnVal = true;
+
+  var taskNameValue = $(`.tasklist-table tbody tr:nth-child(${rowIndex}) .task-name-col input`).val();
+  var taskTypeValue = $(`.tasklist-table tbody tr:nth-child(${rowIndex}) .task-type-col select`).val();
+  var dueDateValue = $(`.tasklist-table tbody tr:nth-child(${rowIndex}) .due-date-col input`).val();
+  var opNumberValue = $(`.tasklist-table tbody tr:nth-child(${rowIndex}) .op-number-col input`).val();
+  if (taskNameValue == '') {
+    returnVal = false;
+  }
+  if (taskTypeValue == '') {
+    returnVal = false;
+  }
+  if (dueDateValue == '') {
+    returnVal = false;
+  }
+  if (opNumberValue == '') {
+    returnVal = false;
+  }
+  return returnVal;
+}
+
+
 function loadTaskTypeMap() {
 
   if (taskTypeMap.keys.length == 0) {
@@ -243,10 +383,14 @@ function loadTaskTypeMap() {
 
 
 function submitForm(e) {
- 
+
+  if (checkForDuplicateRows() == true) {
+    e.preventDefault();
+    return;
+  }
+
   if ($('.ticket-me-id input').val().length == 0) {
     $('.ticket-me-id input').val(0);
-    
   }
 }
 
