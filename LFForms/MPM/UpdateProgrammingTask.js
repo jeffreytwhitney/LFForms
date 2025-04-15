@@ -15,11 +15,25 @@ $(document).ready(function () {
   $('.Submit').addClass('ui-button ui-corner-all ui-widget');
   $('.Submit').click(function (e) { submitForm(e); });
   var lfUserName = $('.lf-user-name input').val();
-  if (lfUserName != "") {
-    let networkUserName = lfUserName.toUpperCase();
+  if (lfUserName != '') {
+    let networkUserName = $('.lf-user-name input').val().toUpperCase();
     networkUserName = networkUserName.substr(networkUserName.lastIndexOf('\\') + 1);
     $('.network-user-name input').val(networkUserName).change();
   }
+
+  $(document).on('dblclick', '.project-description textarea', function (e) {
+    var ticketDetail = $(this).val();
+
+    $.dialog({
+      escapeKey: true,
+      backgroundDismiss: true,
+      title: `Details:`,
+      content: ticketDetail,
+      resizable: true,
+      width: 600,
+      height: 400,
+    });
+  });
 
   if ($('.closeme input').val() == 1) {
     $('.cf-formwrap').hide();
@@ -134,6 +148,9 @@ function callViewNotes() {
       backgroundDismiss: true,
       title: 'Note',
       content: notes,
+      resizable: true,
+      width: 600,
+      height: 400,
     });
   });
 }
@@ -169,30 +186,21 @@ function checkExistingTaskIDs() {
 
 function checkPermissions() {
 
-  var user_id = $(".user-id input").val();
-  var is_active_user = $(".user-isactive input").val();
-  var user_type_id = $(".user-type-id input").val();
-  var user_department_id = $(".user-department-id input").val();
-  var ticket_department_id = $(".ticket-department-id input").val();
+  var user_type_id = Number($(".user-type-id input").val());
+  var user_department_id = Number($(".user-department-id input").val());
+  var ticket_department_id = Number($(".ticket-department-id input").val());
 
-  var return_val = true;
-
-  if (is_active_user == '0') {
-    return_val = false;
+  if (user_type_id == 1) {
+    return true;
   }
 
-  if (user_id == '0') {
-    return_val = false;
-  }
-
-  if (user_type_id != '1') {
-    if (user_department_id != ticket_department_id) {
-      return_val = false;
+  if (user_type_id == 3) {
+    if (user_department_id == ticket_department_id) {
+      return true;
     }
   }
 
-  return return_val
-
+  return false;
 }
 
 
@@ -222,10 +230,29 @@ function generateManualCheckBox() {
 }
 
 
-function lockForm() {
+function lockFormNoPermissions() {
   $('.Submit').addClass("ui-state-disabled");
   $('#add-note').addClass("ui-state-disabled");
-  $('#view-notes').addClass("ui-state-disabled");
+  
+  $('#pester-qe').addClass("ui-state-disabled");
+  $('#pester-assignee').addClass("ui-state-disabled");
+  $('.task-status select').addClass("ui-state-disabled");
+  $('.assigned-to select').addClass("ui-state-disabled");
+  $('.task-name input').addClass("ui-state-disabled");
+  $('.drawing-number input').addClass("ui-state-disabled");
+  $('.manf-rev input').addClass("ui-state-disabled");
+  $('.op-number input').addClass("ui-state-disabled");
+  $('.due-date input').addClass("ui-state-disabled");
+  $('.sched-due-date input').addClass("ui-state-disabled");
+  $('#manual-date-chk').parent().addClass("ui-state-disabled");
+  $('.job-number input').addClass("ui-state-disabled");
+  $('.status-combo select').addClass("ui-state-disabled");
+}
+
+
+function lockFormCompleteCancelled() {
+
+  $('.Submit').addClass("ui-state-disabled");
   $('#pester-qe').addClass("ui-state-disabled");
   $('#pester-assignee').addClass("ui-state-disabled");
   $('.task-status select').addClass("ui-state-disabled");
@@ -311,45 +338,23 @@ function setFormFieldEnableState() {
   resetEnabledState();
 
   if ($('.tid input').val().length == 0) {
-    console.log('No Task ID provided, locking form');
-    lockForm();
-    return;
-  }
-
-  if ($('.pid input').val().length == 0) {
-    console.log('No Project ID found, locking form');
-    lockForm();
+    lockFormNoPermissions();
     return;
   }
 
   if (!checkPermissions()) {
-    console.log('User does not have permissions to edit this task');
-    lockForm();
+    lockFormNoPermissions();
     return;
   }
 
   var statusID = Number($('.sid input').val());
   if ((statusID == status_Completed) || (statusID == status_Cancelled)) {
-    $('.Submit').addClass("ui-state-disabled");
-    $('#pester-qe').addClass("ui-state-disabled");
-    $('#pester-assignee').addClass("ui-state-disabled");
-    $('.task-status select').addClass("ui-state-disabled");
-    $('.assigned-to select').addClass("ui-state-disabled");
-    $('.task-name input').addClass("ui-state-disabled");
-    $('.drawing-number input').addClass("ui-state-disabled");
-    $('.manf-rev input').addClass("ui-state-disabled");
-    $('.op-number input').addClass("ui-state-disabled");
-    $('.due-date input').addClass("ui-state-disabled");
-    $('.sched-due-date input').addClass("ui-state-disabled");
-    $('#manual-date-chk').parent().addClass("ui-state-disabled");
-    $('.job-number input').addClass("ui-state-disabled");
-    $('.status-combo select').addClass("ui-state-disabled");
-    return;
+    lockFormCompleteCancelled();
   }
 
 
   if (!isMetrologyUser()) {
-    $('.task-status select').addClass('ui-state-disabled');
+    $('.status-combo select').addClass('ui-state-disabled');
     $('.assigned-to select').addClass('ui-state-disabled');
   }
   else {

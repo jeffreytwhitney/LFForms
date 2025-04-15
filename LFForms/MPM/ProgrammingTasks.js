@@ -28,14 +28,17 @@ var qualityEngineerNameMap = new Map();
 $(document).ready(function () {
   $('.Submit').hide();
   $(document).prop('title', 'Task Maintenance');
+  $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js');
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
   var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
   $.fn.bootstrapBtn = bootstrapButton;
-  $('.network-user-name input').val($('.lf-username input').val().toUpperCase().substr($('.lf-username input').val().lastIndexOf('\\') + 1)).change();
-
+  var lfUserName = $('.lf-username input').val();
+  if (lfUserName != 'Anonymous User') {
+    $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).change();
+  }
   window.onmessage = function (event) {
     //This is the callback from the IFrame.
     //If the event data says "Close Dialog", it destroys the dialog, (so that the close function won't fire).
@@ -43,18 +46,22 @@ $(document).ready(function () {
     //I don't refresh if you add a note, for example. But if you do anything that will show up on the page, (adding time, cloning a task, etc)
     //then I do a refresh.
     if (event.data == "CloseDialog") {
-      console.log('Task Maintenance closing dialog');
+     
       $("#popupIFrame").dialog("destroy");
       $("#popupIFrame").remove();
     }
     if (event.data == "CloseDialogWithRefresh") {
-      console.log('Task Maintenance closing dialog');
+      
       $("#popupIFrame").dialog("destroy");
       $("#popupIFrame").remove();
       refreshPage();
     }
   };
 
+  $(document).on('change', '.site-name select', function () {
+    var sitename = $('.site-name select').val();
+    $.cookie('site_name', sitename, { expires: 365, path: '/' });
+  });
 
   $(document).on('lookupcomplete', function (e) {
 
@@ -73,9 +80,8 @@ $(document).ready(function () {
     reApplyFilterValues();
     appendPagination();
     generateFilterRow();
+    lockRows();
     $('.tasklist-table').show();
-
-
   });
 
   $(document).on("onloadlookupfinished", function (e) {
@@ -85,15 +91,12 @@ $(document).ready(function () {
     if ($('.tasklist-page input').val() == '999') {
       $('.tasklist-page input').val(1).change();
     }
-    $('.network-user-name input').trigger("change");
-
-    
-
-    $('.tasklist-table').show();
-    if (checkPermissions() == false) {
-      lockRows();
+    var sitename = $.cookie('site_name');
+    if (sitename != null) {
+      $('.site-name select').val(sitename).change();
     }
-
+    $('.network-user-name input').trigger("change");
+    $('.tasklist-table').show();
   });
 
 });
@@ -129,13 +132,22 @@ function appendPagination() {
 
 
 function callAddNote(task_id) {
-  var task_name = getColumnValueByTaskID(task_id, '.tasklist-task-name-col input[type="text"]');
-  popUpIframe(`http://rmslf/Forms/MPMAddNote?TaskID=${task_id}&nt=1`, `Add Note for task '${task_name}'`, 400, 650, false, task_id);
+  var user_id = Number($(".user-id input").val());
+  if (user_id != 0) {
+    var task_name = getColumnValueByTaskID(task_id, '.tasklist-task-name-col input[type="text"]');
+    popUpIframe(`http://rmslf/Forms/MPMAddNote?TaskID=${task_id}&nt=1`, `Add Note for task '${task_name}'`, 400, 650, false, task_id);
+  }
+  else {
+    $.alert({ title: 'Nope!', content: 'Sorry, you do not have permissions to do this.' });
+  }
+
 }
 
 
 function callAddTime(task_id) {
-  if (checkPermissions() == true) {
+  var user_id = Number($(".user-id input").val());
+
+  if (user_id == 1) {
     var task_name = getColumnValueByTaskID(task_id, '.tasklist-task-name-col input[type="text"]');
     popUpIframe(`http://rmslf/Forms/MPMAddTaskTime?tid=${task_id}`, `Add Time to task '${task_name}'`, 300, 800, false, task_id);
   }
@@ -143,11 +155,11 @@ function callAddTime(task_id) {
 
 
 function callCloneTask(task_id) {
-  var user_type_id = $(".user-type-id input").val();
-  var userDepartmentID = $(".user-department-id input").val();
-  var departmentID = getColumnValueByTaskID(task_id, '.tasklist-dept-id-col input[type="text"]');
+  var user_type_id = Number($(".user-type-id input").val());
+  var userDepartmentID = Number($(".user-department-id input").val());
+  var departmentID = Number(getColumnValueByTaskID(task_id, '.tasklist-dept-id-col input[type="text"]'));
 
-  if (user_type_id == 2 || user_type_id == 4 || user_type_id == 5) {
+  if (user_type_id == 0 || user_type_id == 2 || user_type_id == 4 || user_type_id == 5) {
     $.alert({ title: 'Nope!', content: 'Sorry, you do not have permissions to do this.' });
     return;
   }
@@ -180,30 +192,6 @@ function callPrevPage() {
     return;
   }
   $('.tasklist-page input').val(current_page - 1).change();
-}
-
-
-function checkPermissions() {
-
-  var employee_number = $(".user-id input").val();
-  var is_active_user = $(".user-isactive input").val();
-  var user_type_id = $(".user-type-id input").val();
-  var return_val = true;
-
-  if (is_active_user == 0) {
-    return_val = false;
-  }
-
-  if (employee_number == '') {
-    return_val = false;
-  }
-
-  if (user_type_id != 1) {
-    return_val = false;
-  }
-
-  return return_val
-
 }
 
 
@@ -654,55 +642,55 @@ function loadTaskTypeMap() {
 function lockCompletedRows() {
   var status_ids = $('.tasklist-status-id-col input[type="text"]');
   var tasklist_rows = $(".tasklist-table table tbody tr");
+  var includeCompleted = Number($('.finccom input').val());
 
+  if (includeCompleted == 1) {
 
-  status_ids.each(function (index) {
-    let status_id = $(status_ids[index]).val();
-    let tasklist_row = tasklist_rows[index];
+    status_ids.each(function (index) {
+      let status_id = $(status_ids[index]).val();
+      let tasklist_row = tasklist_rows[index];
 
-    if ((status_id == status_Completed) || (status_id == status_Cancelled)) {
-      $(tasklist_row).addClass('colorClosedCancelled');
-      $(tasklist_row).find(".time-button").prop("disabled", true);
-      $(tasklist_row).find('.tasklist-date-col input[type="text"]').prop("disabled", true);
-      $(tasklist_row).find('.tasklist-date-col input[type="text"]').prop("disabled", true);
-      $(tasklist_row).find('.tasklist-status-cbo-col select').prop("disabled", true);
-      $(tasklist_row).find('.tasklist-assignee-cbo-col select').prop("disabled", true);
+      if ((status_id == status_Completed) || (status_id == status_Cancelled)) {
+        $(tasklist_row).addClass('colorClosedCancelled');
+        $(tasklist_row).find(".time-button").prop("disabled", true);
 
-    }
-    else {
-      $(tasklist_row).removeClass('colorClosedCancelled');
-      $(tasklist_row).find(".time-button").prop("disabled", false);
-      $(tasklist_row).find('.tasklist-date-col input[type="text"]').prop("disabled", false);
-      $(tasklist_row).find('.tasklist-date-col input[type="text"]').prop("disabled", false);
-      $(tasklist_row).find('.tasklist-status-cbo-col select').prop("disabled", false);
-      $(tasklist_row).find('.tasklist-assignee-cbo-col select').prop("disabled", false);
-    }
-  });
+      }
+      else {
+        $(tasklist_row).removeClass('colorClosedCancelled');
+        $(tasklist_row).find(".time-button").prop("disabled", false);
+      }
+    });
+  }
 }
 
 
 function lockRows() {
   var tasklist_rows = $(".tasklist-table table tbody tr");
-  var user_type_id = $(".user-type-id input").val();
-  var userDepartmentID = $(".user-department-id input").val();
-
+  var user_id = Number($(".user-id input").val());
+  var user_type_id = Number($(".user-type-id input").val());
+  var userDepartmentID = Number($(".user-department-id input").val());
   tasklist_rows.each(function (index) {
-
-    let departmentID = $(this).find('.tasklist-dept-id-col input[type="text"]').val();
-
-    $(this).find(".tasklist-time-col").find(".table-button").addClass("ui-state-disabled");
-    if ((user_type_id == 2) || (user_type_id == 4) || (user_type_id == 5)) {
-      $(this).find(".task-list-clone-col").find(".table-button").addClass("ui-state-disabled");
+    if (user_type_id == 1) {
+      
+      $(this).find(".task-list-clone-col").find(".table-button").removeClass("ui-state-disabled");
+      $(this).find(".tasklist-note-col").find(".table-button").removeClass("ui-state-disabled");
+      $(this).find(".tasklist-time-col").find(".table-button").removeClass("ui-state-disabled");
+      return;
     }
     if (user_type_id == 3) {
+      $(this).find(".tasklist-time-col").find(".table-button").addClass("ui-state-disabled");
+      let departmentID = Number($(this).find('.tasklist-dept-id-col input[type="text"]').val());
       if (departmentID != userDepartmentID) {
         $(this).find(".task-list-clone-col").find(".table-button").addClass("ui-state-disabled");
+        $(this).find(".tasklist-note-col").find(".table-button").addClass("ui-state-disabled");
       }
+      return;
     }
-
-    $(this).find('.tasklist-date-col input[type="text"]').prop("disabled", true);
-    $(this).find('.tasklist-status-cbo-col select').prop("disabled", true);
-    $(this).find('.tasklist-assignee-cbo-col select').prop("disabled", true);
+    
+    var fred = $(this).find(".task-list-clone-col").find(".table-button");
+    $(this).find(".task-list-clone-col").find(".table-button").addClass("ui-state-disabled");
+    $(this).find(".tasklist-note-col").find(".table-button").addClass("ui-state-disabled");
+    $(this).find(".tasklist-time-col").find(".table-button").addClass("ui-state-disabled");
   });
 }
 
@@ -730,7 +718,10 @@ function popUpIframe(src, title, height, width, dorefresh, task_id) {
 
 
   $("#popupIFrame").dialog("open");
-  $('#popupIFrame').attr('style', `width: 100%; height: ${height}px;`);
+  $("#popupIFrame").attr('style', `width: ${width};`);
+  var resizeableStyle = $('.ui-resizable').attr('style');
+  let newStyle = resizeableStyle.replaceAll('width: 0px;', `width: ${width}px;`);
+  $('.ui-resizable').attr('style', newStyle);
 }
 
 
@@ -925,7 +916,7 @@ function resetPageNumber() {
 function showProjectDetails(ticket_id) {
   var widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
-  popUpIframe(`http://rmslf/Forms/MPM-EditProgrammingTicket?tid=${ticket_id}`, 'Ticket Details', widowHeight, 1300, false, ticket_id);
+  popUpIframe(`http://rmslf/Forms/MPM-EditProgrammingTicket?tid=${ticket_id}`, 'Ticket Details', widowHeight, 1500, false, ticket_id);
 }
 
 

@@ -169,52 +169,20 @@ function callShowDetails(task_id) {
 
 
 function checkPermissions() {
+  var user_type_id = Number($(".user-type-id input").val());
+  var user_department_id = Number($(".user-department-id input").val());
+  var ticket_department_id = Number($(".ticket-department-id input").val());
 
-  var user_id = $(".user-id input").val();
-  var is_active_user = $(".user-isactive input").val();
-  var user_type_id = $(".user-type-id input").val();
-  var user_department_id = $(".user-department-id input").val();
-  var ticket_department_id = $(".ticket-department-id input").val();
-  var return_val = true;
-
-
-  if (user_type_id == '1') {
-    return return_val;
+  if (user_type_id == 1) {
+    return true;
   }
-
-  if ((user_type_id == null) || (user_type_id == '')) {
-    return_val = false;
-  }
-  if ((user_department_id == null) || (user_department_id == '')) {
-    return_val = false;
-  }
-  if ((ticket_department_id == null) || (ticket_department_id == '')) {
-    return_val = false;
-  }
-
-  if ((user_id == null) || (user_id == '')) {
-    return_val = false;
-  }
-  if ((is_active_user == null) || (is_active_user == '')) {
-    return_val = false;
-  }
-
-  if (is_active_user == '0') {
-    return_val = false;
-  }
-
-  if (user_id == '0') {
-    return_val = false;
-  }
-
-  if (user_type_id != '1') {
-    if (user_department_id !== ticket_department_id) {
-      return_val = false;
+  else {
+    if (user_department_id == ticket_department_id) {
+      return true;
     }
   }
 
-  return return_val;
-
+  return false;
 }
 
 

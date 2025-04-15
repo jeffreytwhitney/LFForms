@@ -10,13 +10,17 @@ var qualityEngineerNameMap = new Map();
 $(document).ready(function () {
   $('.Submit').hide();
   $(document).prop('title', 'Programming Tickets');
+  $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js');
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
   var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
   $.fn.bootstrapBtn = bootstrapButton;
-  $('.network-user-name input').val($('.lf-user-name input').val().toUpperCase().substr($('.lf-user-name input').val().lastIndexOf('\\') + 1)).change();
+  var lfUserName = $('.lf-user-name input').val();
+  if (lfUserName != 'Anonymous User') {
+    $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).change();
+  }
   window.onmessage = function (event) {
     if (event.data == "CloseDialog") {
       $("#popupIFrame").dialog("destroy");
@@ -28,6 +32,12 @@ $(document).ready(function () {
       refreshPage();
     }
   };
+
+  $(document).on('change', '.site-name select', function () {
+    var sitename = $('.site-name select').val();
+    $.cookie('site_name', sitename, { expires: 365, path: '/' });
+  });
+
 
   $(document).on('dblclick', '[id^="Field56"]', function (e) {
     var ticketDetail = $(this).val();
@@ -57,16 +67,28 @@ $(document).ready(function () {
     generateFilterRow();
     reApplyFilterValues();
     appendPagination();
-    $('.projectlist-table').show();
+    
     if ($('#popUpDiv').length == 0) {
       $('.section-iframe').append("<div class='hidden-text' id='popUpDiv'></div>");
     }
     $('.create-date-col input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
 
+    var userTypeID = Number($('.user-type-id input').val());
+    if ((userTypeID != 1) && (userTypeID != 3)) {
+      $('.add-button').addClass("ui-state-disabled");
+    }
+    else {
+      $('.add-button').removeClass("ui-state-disabled");
+    }
+
+    $('.projectlist-table').show();
   });
 
   $(document).on("onloadlookupfinished", function (e) {
-
+    var sitename = $.cookie('site_name');
+    if (sitename != null) {
+      $('.site-name select').val(sitename).change();
+    }
   });
 
 });
@@ -130,7 +152,7 @@ function callPrevPage() {
 function callShowDetails(ticket_id) {
   var widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
-  popUpIframe(`http://rmslf/Forms/MPM-EditProgrammingTicket?tid=${ticket_id}`, 'Project Details', widowHeight, 1500);
+  popUpIframe(`http://rmslf/Forms/MPM-EditProgrammingTicket?tid=${ticket_id}`, 'Ticket Details', widowHeight, 1500);
 }
 
 
@@ -322,6 +344,7 @@ function loadInitiatorMap() {
 
 
 function popUpIframe(src, title, height, width) {
+  
   $("#popupIFrame").remove();
   $("#popUpDiv").html(`<div height='${height}' width='${width}'><iframe id='popupIFrame' name='myname' src='${src}' height='${height}' width='${width}'/></div>`);
   $("#popupIFrame").dialog({
@@ -336,10 +359,11 @@ function popUpIframe(src, title, height, width) {
 
     }
   });
-
-
   $("#popupIFrame").dialog("open");
-  $('#popupIFrame').attr('style', `width: 100%; height: ${height}px;`);
+  $("#popupIFrame").attr('style', `width: ${width};`);
+  var resizeableStyle = $('.ui-resizable').attr('style');
+  let newStyle = resizeableStyle.replaceAll('width: 0px;', `width: ${width}px;`);
+  $('.ui-resizable').attr('style', newStyle);
 }
 
 

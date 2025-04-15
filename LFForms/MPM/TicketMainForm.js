@@ -2,7 +2,42 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $('.Submit').hide();
   $(document).prop('title', 'MPM Ticket Mainform');
+  var lfUserName = $('.lf-user-name input').val();
+  if (lfUserName != 'Anonymous User') {
+    $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).change();
+  }
+
   tabifyFormSections();
+
+  $(document).on("onloadlookupfinished", function (e) {
+    $('.network-user-name input').trigger("change");
+  });
+
+  $(document).on('lookupcomplete', function (e) {
+    if ($('.user-name-hidden input').val() == '') {
+      $('.network-user-name input').trigger("change");
+    }
+
+    if ($('.user-name-display input').val() == '') {
+      var lfUserName = $('.lf-user-name input').val();
+      if (lfUserName == 'Anonymous User') {
+        $('.user-name-display input').val('User :Anonymous');
+        let login_link = $("<a>", { text: 'Log In', class: 'login-link', href: 'http://rmslf/Forms/account/login?returnUrl=%2fForms%2fMPM-TicketMainform' });
+        $('.user-name-display').append(login_link);
+      }
+      else {
+        let userName = $('.user-name-hidden input').val()
+        let userText = `User: ${userName}`
+        $('.user-name-display input').val(userText);
+      }
+      $('.network-user-name input').trigger("change");
+      
+    }
+  });
+  
+  if ($('.user-name-hidden input').val() == '') {
+    $('.network-user-name input').trigger("change");
+  }
 });
 
 
