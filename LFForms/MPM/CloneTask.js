@@ -25,44 +25,23 @@ $(document).ready(function () {
       return;
     } 
 
-
-    if (!isMetrologyUser()) {
-      $('.assigned-to').hide();
-      $('.new-assignee-id input').val(null);
-    }
-    else {
-      $('.assigned-to').show();
-      $('.assigned-to select').val($('.current-assignee-name input').val()).change();
-    }
-
     $('.new-task-type select').val($('.current-task-type-name input').val()).change();
     $('.new-op input').val($('.current-op input').val()).change();
     $('.new-task-name input').val($('.current-task-name input').val()).change();
-
-    if ($('.user-type-id input').val() == 3) {
-      if ($('.user-department-id input').val() != $('.department-id input').val()) {
-        $('.Submit').addClass("ui-state-disabled");
-        $('.assigned-to select').addClass("ui-state-disabled");
-        $('.new-task-type select').addClass("ui-state-disabled");
-        $('.new-op input').addClass("ui-state-disabled");
-        $('.new-task-name input').addClass("ui-state-disabled");
-        $('#error-message').html('<b><font size="5">You do not have permission to clone this task.</font></b>').show();
-      }
-    }
-    if (($('.user-type-id input').val() != 1) && ($('.user-type-id input').val() != 3)) {
-      $('.Submit').addClass("ui-state-disabled");
-      $('.assigned-to select').addClass("ui-state-disabled");
-      $('.new-task-type select').addClass("ui-state-disabled");
-      $('.new-op input').addClass("ui-state-disabled");
-      $('.new-task-name input').addClass("ui-state-disabled");
-      $('#error-message').html('<b><font size="5">You do not have permission to clone this task.</font></b>').show();
-    }
-
+    
 
   });
 
   $(document).on('lookupcomplete', function (e) {
-
+    if (Number($('.user-id input').val()) == 0) {
+      $('.network-user-name input').trigger("change");
+    }
+    if (Number($('.pid input').val()) == 0) {
+      $('.tid input').trigger("change");
+    }
+    if ((Number($('.department-id input').val()) != 0) && ($('.department-email-address input').val() == '')){
+      $('.department-id input').trigger("change");
+    }
   });
 
 });
@@ -89,6 +68,27 @@ function isMetrologyUser() {
     return true;
   }
   return false;
+}
+
+function setFormEnabledState() {
+
+  if ($('.user-type-id input').val() == 3) {
+    if ($('.user-department-id input').val() != $('.department-id input').val()) {
+      $('.Submit').addClass("ui-state-disabled");
+      $('.new-task-type select').addClass("ui-state-disabled");
+      $('.new-op input').addClass("ui-state-disabled");
+      $('.new-task-name input').addClass("ui-state-disabled");
+      $('#error-message').html('<b><font size="5">You do not have permission to clone this task.</font></b>').show();
+    }
+  }
+  if (($('.user-type-id input').val() != 1) && ($('.user-type-id input').val() != 3)) {
+    $('.Submit').addClass("ui-state-disabled");
+    $('.new-task-type select').addClass("ui-state-disabled");
+    $('.new-op input').addClass("ui-state-disabled");
+    $('.new-task-name input').addClass("ui-state-disabled");
+    $('#error-message').html('<b><font size="5">You do not have permission to clone this task.</font></b>').show();
+  }
+
 }
 
 

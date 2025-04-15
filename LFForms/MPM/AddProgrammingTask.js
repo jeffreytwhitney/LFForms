@@ -24,6 +24,9 @@ $(document).ready(function () {
 
   $(document).on('lookupcomplete', function (e) {
     setFormFieldEnableState();
+    if ($('.department-email-address input').val() == '') {
+      $('.did input').trigger("change");
+    }
   });
 
   $(document).on("onloadlookupfinished", function (e) {
@@ -52,18 +55,13 @@ function checkExistingTaskIDs() {
 
 function checkPermissions() {
 
-  var user_id = $(".user-id input").val();
-  var is_active_user = $(".user-isactive input").val();
-  var user_department_id = $(".user-department-id input").val();
-  var ticket_department_id = $(".did input").val();
+  var user_id = Number($(".user-id input").val());
+  var user_department_id = Number($(".user-department-id input").val());
+  var ticket_department_id = Number($(".did input").val());
 
   var return_val = true;
 
-  if (is_active_user == '0') {
-    return_val = false;
-  }
-
-  if (user_id == '0') {
+  if (user_id == 0) {
     return_val = false;
   }
 
@@ -79,7 +77,7 @@ function checkPermissions() {
 
 
 function isMetrologyUser() {
-  if ($('.user-type-id input').val() == 1) {
+  if (Number($('.user-type-id input').val()) == 1) {
     return true;
   }
   return false;
@@ -108,13 +106,6 @@ function setFormFieldEnableState() {
     if (!has_permission) {
       $('.Submit').addClass("ui-state-disabled");
     }
-
-    if (isMetrologyUser()) {
-      $('.assigned-to select').removeClass("ui-state-disabled");
-    }
-    else {
-      $('.assigned-to select').addClass("ui-state-disabled");
-    }
   }
 
 }
@@ -127,10 +118,6 @@ function submitForm(e) {
     return;
   }
 
-
-  if ($('.aid input').val() == 0) {
-    $('.aid input').val(0)
-  }
 }
 
 

@@ -34,9 +34,6 @@ $(document).ready(function () {
 
 
   if ($('.closeme input').val() == 1) {
-    
-    console.log(window.parent.name);
-
     if ($('.nt input').val() > 3) {
       window.parent.postMessage('CloseDialogWithRefresh', '*');
     }

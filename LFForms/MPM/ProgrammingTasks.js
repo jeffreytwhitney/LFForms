@@ -896,11 +896,9 @@ function refreshPage() {
 
 function removeAppendedFields() {
   $('#tasklist-pagination').remove();
-  $('.clone-button').remove();
+  $('.table-button').remove();
   $('.project-link').remove();
   $('.task-link').remove();
-  $('.note-button').remove();
-  $('.time-button').remove();
   $('.mandate-chk').remove();
 
 }
