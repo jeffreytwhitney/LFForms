@@ -132,8 +132,8 @@ function appendPagination() {
 
 
 function callAddNote(task_id) {
-  var user_id = Number($(".user-id input").val());
-  if (user_id != 0) {
+  var user_type_id = Number($(".user-type-id input").val());
+  if (user_type_id != 0) {
     var task_name = getColumnValueByTaskID(task_id, '.tasklist-task-name-col input[type="text"]');
     popUpIframe(`http://rmslf/Forms/MPMAddNote?TaskID=${task_id}&nt=1`, `Add Note for task '${task_name}'`, 400, 650, false, task_id);
   }
@@ -145,9 +145,9 @@ function callAddNote(task_id) {
 
 
 function callAddTime(task_id) {
-  var user_id = Number($(".user-id input").val());
+  var user_type_id = Number($(".user-type-id input").val());
 
-  if (user_id == 1) {
+  if (user_type_id == 1) {
     var task_name = getColumnValueByTaskID(task_id, '.tasklist-task-name-col input[type="text"]');
     popUpIframe(`http://rmslf/Forms/MPMAddTaskTime?tid=${task_id}`, `Add Time to task '${task_name}'`, 300, 800, false, task_id);
   }

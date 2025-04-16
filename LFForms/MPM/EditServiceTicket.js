@@ -1,7 +1,6 @@
 
-
 $(document).ready(function () {
-  $(document).prop('title', 'Add Service Ticket');
+  $(document).prop('title', 'Edit Service Ticket');
   $('.Submit').click(function (e) { submitForm(e); });
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js');
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
@@ -28,11 +27,33 @@ $(document).ready(function () {
     }
   };
 
+  $(document).on('change', '.anonymous-user-id input', function () {
+    var anonymousUserID = Number($('.anonymous-user-id input').val());
+    if (anonymousUserID > 0) {
+      $('#add-note-button').removeClass('ui-state-disabled');
+    }
+  });
+
+  $(document).on('dblclick', '[id^="Field20"]', function (e) {
+    var ticketDetail = $(this).val();
+
+    $.dialog({
+      escapeKey: true,
+      backgroundDismiss: true,
+      title: `Note:`,
+      content: ticketDetail,
+    });
+  });
+
   $(document).on("onloadlookupfinished", function () {
     $('.closeme input').val(1);
     $('#q0').append("<div class='hidden-text' id='popUpDiv'></div>");
     $('#add-note-button').append('<div class="table-button ui-button add-button" onclick="addNote()"><span title="Add Note" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Note</div>');
-    $('.section-add-note').append('<div class="section-add-note-content"><textarea class="note-textarea" rows="5" cols="50"></textarea></div>');
+
+    if ($('#note-textarea').length == 0) {
+      $('.section-add-note').append('<div class="section-add-note-content"><textarea id="note-textarea" rows="5" cols="50"></textarea></div>');
+    }
+
     var lfUserName = $('.lf-user-name input').val();
     if (lfUserName != 'Anonymous User') {
       $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).change();
@@ -47,49 +68,33 @@ $(document).ready(function () {
 
   $(document).on('lookupcomplete', function (e) {
     setDepartmentEmail();
-  });
-
-  $(document).on('change', '.status-name input', function () {
-    $('.ticket-status select').val($('.status-name input').val()).change();
-  });
-
-  $(document).on('change', '.assignee-name input', function () {
-    $('.assignee-combo select').val($('.assignee-name input').val()).change();
-  });
-
-  $(document).on('change', '.anonymous-user-id input', function () {
-    var anonymousUserID = Number($('.anonymous-user-id input').val());
-    if (anonymousUserID > 0) {
-      $('#add-note-button').removeClass('ui-state-disabled');
+    if (($('.assignee-name input').val() != '') && ($('.assignee-combo select').val() == '')) {
+      $('.assignee-combo select').val($('.assignee-name input').val()).change();
     }
+    if (($('.status-name input').val() != '') && ($('.ticket-status select').val() == '')) {
+      $('.ticket-status select').val($('.status-name input').val()).change();
+    }
+
   });
 
-  $(document).on('dblclick', '[id^="Field20"]', function (e) {
-    var ticketDetail = $(this).val();
-    
-    $.dialog({
-      escapeKey: true,
-      backgroundDismiss: true,
-      title: `Note:`,
-      content: ticketDetail,
-    });
-  });
+
 
 });
 
 
 function addNote() {
-  var task_id = $('.tid input').val();
+  var ticket_id = $('.tid input').val();
   var ticket_number = $('.ticket-number input').val();
-  popupIFrame(`http://rmslf/Forms/MPMAddNote?TaskID=${tid}&nt=1`, `Add Note for task '${ticket_number}'`, 400, 650, false);
+  var user_id = getUserID();
+  console.log(`ticket_id: ${ticket_id}, ticket_number: ${ticket_number}, user_id: ${user_id}`); 
+  popupIFrame(`http://rmslf/Forms/MPM-AddServiceTicketNote?tid=${ticket_id}&uid=${user_id}`, `Add Note for task '${ticket_number}'`, 400, 650, false);
 }
 
 
-function getCancelNote() {
-  var noteField = $('.note-textarea').clone();
-
+function cancelTicket() {
+  var noteField = $('#note-textarea');
   $(noteField).dialog({
-    title: 'Add Note',
+    title: 'Add Cancellation Reason (Required)',
     modal: true,
     width: 600,
     height: 400,
@@ -97,18 +102,29 @@ function getCancelNote() {
     resizable: false,
     buttons: {
       'OK': function () {
+
+        if ($('#note-textarea').val() == '') {
+          $.alert({ title: 'Must supply cancellation reason!', content: 'Sorry, you need to provide a reason for cancelling this ticket.' });
+          return;
+        }
+
+        $('.new-note textarea').val($(noteField).val());
         $(this).dialog('close');
+        $('#form1').submit();
       }
     }
   });
+  var resizeableStyle = $('#note-textarea').attr('style');
+  let newStyle = resizeableStyle + 'border-width: thin;border-color: black;border-style: solid;';
+  $('#note-textarea').attr('style', newStyle);
+  $(noteField).dialog("open");
 }
 
 
-function callCompleteTask() {
-  var noteField = $('.note-textarea').clone();
-
+function completeTicket() {
+  var noteField = $('#note-textarea');
   $(noteField).dialog({
-    title: 'Add Note',
+    title: 'Add Completion Note (Optional)',
     modal: true,
     width: 600,
     height: 400,
@@ -116,12 +132,33 @@ function callCompleteTask() {
     resizable: false,
     buttons: {
       'OK': function () {
+        $('.new-note textarea').val($(noteField).val());
         $(this).dialog('close');
+        $('#form1').submit();
       }
     }
   });
+  var resizeableStyle = $('#note-textarea').attr('style');
+  let newStyle = resizeableStyle + 'border-width: thin;border-color: black;border-style: solid;';
+  $('#note-textarea').attr('style', newStyle);
+  $(noteField).dialog("open");
+
 }
 
+
+function getUserID() {
+  var networkUserID = Number($('.user-id input').val());
+  var userEnteredUserID = Number($('.anonymous-user-id input').val());
+
+  if (networkUserID > 0) {
+    return networkUserID;
+  }
+  if (userEnteredUserID > 0) {
+    return userEnteredUserID;
+  }
+
+
+}
 
 
 function popupIFrame(src, title, height, width) {
@@ -136,15 +173,25 @@ function popupIFrame(src, title, height, width) {
     resizable: true,
     modal: true,
     close: function (event, ui) {
-      if (cancelSubmit) {
-        return false;
-      }
+
     }
   });
 
 
   $("#popupIFrame").dialog("open");
   $('#popupIFrame').attr('style', `width: 100%; height: ${height}px;`);
+}
+
+
+function resetErrorFields() {
+
+  $('#assigned-cannot-unassign-error').remove();
+  $('#active-ticket-requires-assignee-error').remove();
+  $('#active-ticket-cannot-inactivate-error').remove();
+  $('#assigned-needs-active-status-error').remove();
+  $('.ticket-status select').removeClass('parsley-error');
+  $('.assignee-combo select').removeClass('parsley-error');
+
 }
 
 
@@ -177,13 +224,10 @@ function setDepartmentEmail() {
 }
 
 
-function submitForm(e) {
-
-  e.preventDefault();
-  var noteField = $('.note-textarea').clone();
-
+function setTicketToWaitingStatus() {
+  var noteField = $('#note-textarea');
   $(noteField).dialog({
-    title: 'Add Note',
+    title: 'Add What you are waiting on (Required)',
     modal: true,
     width: 600,
     height: 400,
@@ -191,15 +235,102 @@ function submitForm(e) {
     resizable: false,
     buttons: {
       'OK': function () {
+
+        if ($('#note-textarea').val() == '') {
+          $.alert({ title: 'Must supply waiting reason!', content: 'Sorry, you need to provide what you are waiting on.' });
+          return;
+        }
+
+        $('.new-note textarea').val($(noteField).val());
         $(this).dialog('close');
+        $('#form1').submit();
       }
     }
   });
-  
+  var resizeableStyle = $('#note-textarea').attr('style');
+  let newStyle = resizeableStyle + 'border-width: thin;border-color: black;border-style: solid;';
+  $('#note-textarea').attr('style', newStyle);
   $(noteField).dialog("open");
 
-  var noteText = $('.note-textarea').val();
-  
-  
-  
+}
+
+
+function submitForm(e) {
+
+  if (!validateForm()) {
+    e.preventDefault();
+    return;
+  }
+
+  var newTicketStatusID = Number($('.new-sid input').val());
+  e.preventDefault();
+  switch (newTicketStatusID) {
+    case 6:
+      cancelTicket();
+      break;
+    case 5:
+      completeTicket();
+      break;
+    case 4:
+      setTicketToOnHoldStatus();
+      break;
+    case 3:
+      setTicketToWaitingStatus();
+      break;
+    case 2:
+    case 1:
+      break;
+    default:
+      console.log('Invalid ticket status');
+      e.preventDefault();
+  }
+}
+
+
+function validateForm() {
+  var isValid = true;
+  var ticketStatusField = $('.ticket-status select');
+  var assigneeField = $('.assignee-combo select');
+  var newTicketStatusID = Number($('.new-sid input').val());
+  var oldTicketStatusID = Number($('.sid input').val());
+  var newAssigneeID = Number($('.new-aid input').val());
+  var oldAssigneeID = Number($('.assignee-id input').val());
+
+  resetErrorFields();
+
+  if ($('.ticket-subject input').val() == '') {
+    $('.ticket-subject input').trigger("blur");
+    isValid = false;
+  }
+  if ($(ticketStatusField).val() == '') {
+    $('.ticket-subject input').trigger("blur");
+    isValid = false;
+  }
+
+  if ((oldAssigneeID > 0) && (newAssigneeID == 0)) {
+    assigneeField.addClass('parsley-error');
+    assigneeField.parent().append("<ul id='assigned-cannot-unassign-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>You cannot unassign as ticket once it has been assigned.</li></ul>");
+    isValid = false;
+  }
+
+  if ((newTicketStatusID > 1) && (newAssigneeID == 0)) {
+    assigneeField.addClass('parsley-error');
+    assigneeField.parent().append("<ul id='active-ticket-requires-assignee-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>An active ticket requires an assignee.</li></ul>");
+    isValid = false;
+  }
+
+  if ((newTicketStatusID == 1) && (newAssigneeID > 0)) {
+    assigneeField.addClass('parsley-error');
+    assigneeField.parent().append("<ul id='assigned-needs-active-status-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>An assigned ticket must have an active status.</li></ul>");
+    isValid = false;
+  }
+
+  if ((newTicketStatusID == 1) && (oldTicketStatusID > 1)) {
+    ticketStatusField.addClass('parsley-error');
+    ticketStatusField.parent().append("<ul id='active-ticket-cannot-inactivate-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>You cannot set status back to Awaiting Dispatch once it has been set to Work In Progress or Waiting on User.</li></ul>");
+    isValid = false;
+  }
+
+
+  return isValid;
 }

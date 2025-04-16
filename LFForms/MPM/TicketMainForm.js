@@ -12,6 +12,13 @@ $(document).ready(function () {
     $('.user-name-display').append(login_link);
   }
 
+  $(document).on('change', '.user-name-hidden input', function () {
+    let userName = $('.user-name-hidden input').val()
+    if (userName != '') {
+      let userText = `User: ${userName}`
+      $('.user-name-display input').val(userText);
+    }
+  });
 
   tabifyFormSections();
 
@@ -32,8 +39,11 @@ $(document).ready(function () {
       }
       else {
         let userName = $('.user-name-hidden input').val()
-        let userText = `User: ${userName}`
-        $('.user-name-display input').val(userText);
+        if (userName != '') {
+          let userText = `User: ${userName}`
+          $('.user-name-display input').val(userText);
+        }
+        
       }
     }
   });

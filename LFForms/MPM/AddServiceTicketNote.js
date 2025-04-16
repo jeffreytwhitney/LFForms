@@ -16,10 +16,15 @@ $(document).ready(function () {
 
 
   $(document).on("onloadlookupfinished", function () {
+    if ($('.tid input').val() == '') {
+      $('.Submit').hide();
+      $('.note-text textarea').addClass("ui-state-disabled");
+    }
     if ($('.uid input').val() == '') {
       $('.Submit').hide();
       $('.note-text textarea').addClass("ui-state-disabled"); 
     }
+    $('.closeme input').val(1);
   });
 
 

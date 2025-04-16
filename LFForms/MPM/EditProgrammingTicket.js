@@ -42,6 +42,8 @@ $(document).ready(function () {
     }
   });
 
+
+
   window.onmessage = function (event) {
 
     if (event.data == "CloseDialogWithRefresh") {
@@ -56,9 +58,9 @@ $(document).ready(function () {
     loadQualEngineerMap();
 
 
-    $('.tasklist-duedate-col input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
-    $('.tasklist-schedduedate-col input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
-    $('.tasklist-date-completed-col input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
+    //$('.tasklist-duedate-col input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
+    //$('.tasklist-schedduedate-col input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
+   // $('.tasklist-date-completed-col input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
 
 
     if (($('.mename input').val() != null) && ($('.manufacturing-engineer-combo select option').length > 0)) {
@@ -87,26 +89,35 @@ $(document).ready(function () {
     if (isMetrologyUser()) {
       if ($('.group-edit-button').length == 0) {
         $('.tasklist-table .cf-section-header').prepend('<div class="choice include-choice"><input name="chkIncludeComplete" id="chkIncludeComplete" type="checkbox" ><label class="form-option-label" for="chkIncludeComplete">Include Completed</label></div><div class="ui-button group-edit-button" onclick="callGroupEdit()"><span title="Group Edit" class="ui-button-icon ui-icon ui-icon-clipboard"></span>Group Edit</div>');
-        $('#chkIncludeComplete').on('change', function () {
-          var includeCompleted = $(this).is(':checked');
-          if (includeCompleted) {
-            $('.fincomp input').val(1).change();
-          }
-          else {
-            $('.fincomp input').val(0).change();
-          }
-        });
+      }
+    }
+    else {
+      if ($('.include-choice').length > 0) {
+        let include_chk = '<div class="choice include-choice"><input name="chkIncludeComplete" id="chkIncludeComplete" type="checkbox" ><label class="form-option-label" for="chkIncludeComplete">Include Completed</label></div>'
+        $('.tasklist-table .cf-section-header').prepend(include_chk);
       }
     }
 
+    if ($('.add-button').length == 0) {
+      let add_button = '<div class="ui-button add-button" onclick="addTask()"><span title="AddTicket" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Task</div>';
+      $(add_button).insertBefore('.tasklist-table table')
+    }
 
+    $('#chkIncludeComplete').on('change', function () {
+      let includeCompleted = $(this).is(':checked');
+      if (includeCompleted) {
+        $('.fincomp input').val(1).change();
+      }
+      else {
+        $('.fincomp input').val(0).change();
+      }
+    });
+    
   });
 
   $(document).on("onloadlookupfinished", function (e) {
     $('.closeme input').val(1);
     $('#q0').append("<div class='hidden-text' id='popUpDiv'></div>");
-
-
     $('.detail-input div').on("dblclick", function (e) {
       var notes = $(this).find('textarea').val();
       console.log(notes);
@@ -117,9 +128,18 @@ $(document).ready(function () {
         content: notes,
       });
     });
+    wireUpSortFields();
     $('.network-user-name input').trigger("change");
   });
 });
+
+
+function addTask() {
+  var ticketID = $('.tid input').val();
+  var widowHeight = $(window).height();
+  widowHeight = widowHeight - 50;
+  popUpIframe(`http://rmslf/Forms/MPM-AddProgrammingTask?pid=${ticketID}`, 'Add Task', widowHeight, 1300);
+}
 
 
 function callAddTime(task_id) {
@@ -358,8 +378,64 @@ function refreshForm() {
 }
 
 
+function removeAppendedFields() {
+  
+  $('.table-button').remove();
+  $('.task-link').remove();
+}
+
 function submitForm(e) {
   if ($('.meid input').val() == '') {
     $('.meid input').val(0);
   }
+}
+
+
+
+function sortTable(newSortOrdinal, selector) {
+  
+  removeAppendedFields();
+  $('.sort-icon').remove();
+
+  var currentSortOrdinal = Number($('.sort-field-ordinal input').val());
+  var sortDirection = Number($('.sort-direction input').val());
+
+  if (newSortOrdinal == currentSortOrdinal) {
+    if (sortDirection == 0) {
+      sortDirection = 1
+      $('.sort-direction input').val(1).change();
+    }
+    else {
+      sortDirection = 0;
+      $('.sort-direction input').val(0).change();
+    }
+  }
+  else {
+    $('.sort-field-ordinal input').val(newSortOrdinal);
+    $('.sort-direction input').val(0).change();
+    sortDirection = 0;
+  }
+
+    if (sortDirection == 0) {
+      $(`${selector} .cf-col-label`).append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
+    }
+    else {
+      $(`${selector} .cf-col-label`).append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
+    }
+}
+
+
+function wireUpSortFields() {
+
+  $('#q47 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
+
+  $('#q47').on('click', function () { sortTable(0, '#q47'); });
+  $('#q48').on('click', function () { sortTable(1, '#q48'); });
+  $('#q49').on('click', function () { sortTable(2, '#q49'); });
+  $('#q50').on('click', function () { sortTable(3, '#q50'); });
+  $('#q52').on('click', function () { sortTable(4, '#q52'); });
+  $('#q53').on('click', function () { sortTable(5, '#q53'); });
+  $('#q54').on('click', function () { sortTable(6, '#q54'); });
+  $('#q55').on('click', function () { sortTable(7, '#q55'); });
+
 }

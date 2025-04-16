@@ -45,10 +45,7 @@ $(document).ready(function () {
       $('.Submit').addClass("ui-state-disabled");
       $('.add-time-radio fieldset').addClass("ui-state-disabled");
     }
-    if (($('.pid input').val() == null) || ($('.pid input').val().length == 0)) {
-      $('.Submit').addClass("ui-state-disabled");
-      $('.add-time-radio fieldset').addClass("ui-state-disabled");
-    }
+
   });
 
 
