@@ -23,7 +23,7 @@ $(document).ready(function () {
       console.log('Add Edit task CloseDialog closing dialog with refresh');
       $("#popupIFrame").dialog("destroy");
       $("#popupIFrame").remove();
-      $("#form1").submit();
+      window.location = window.location.href
     }
   };
 
@@ -46,7 +46,7 @@ $(document).ready(function () {
   });
 
   $(document).on("onloadlookupfinished", function () {
-    $('.closeme input').val(1);
+    
     $('#q0').append("<div class='hidden-text' id='popUpDiv'></div>");
     $('#add-note-button').append('<div class="table-button ui-button add-button" onclick="addNote()"><span title="Add Note" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Note</div>');
 
@@ -301,7 +301,7 @@ function submitForm(e) {
   }
 
 
-
+  $('.closeme input').val(1);
   var newTicketStatusID = Number($('.new-sid input').val());
   e.preventDefault();
   switch (newTicketStatusID) {
