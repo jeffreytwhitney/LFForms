@@ -63,7 +63,14 @@ $(document).ready(function () {
       $('.assignee-combo select').addClass('ui-state-disabled');
       $('#add-note-button').addClass('ui-state-disabled');
     }
-    
+
+    if ((Number($('.sid input').val()) == 5) || (Number($('.sid input').val()) == 6)) {
+      $('.ticket-status select').addClass('ui-state-disabled');
+      $('.assignee-combo select').addClass('ui-state-disabled');
+      $('.ticket-subject input').addClass('ui-state-disabled');
+      $('.ticket-details textarea').addClass('ui-state-disabled');
+      $('.Submit').hide();
+    }
   });
 
   $(document).on('lookupcomplete', function (e) {
@@ -75,10 +82,11 @@ $(document).ready(function () {
       $('.ticket-status select').val($('.status-name input').val()).change();
     }
 
+    if ((Number($('.site-id input').val()) != 0) && ($('.metrology-email input').val == '')) {
+      $('.site-id input').trigger("change");
+    } 
+
   });
-
-
-
 });
 
 
@@ -103,12 +111,12 @@ function cancelTicket() {
     buttons: {
       'OK': function () {
 
-        if ($('#note-textarea').val() == '') {
+        if ($('#note-textarea').val().trim() == '') {
           $.alert({ title: 'Must supply cancellation reason!', content: 'Sorry, you need to provide a reason for cancelling this ticket.' });
           return;
         }
 
-        $('.new-note textarea').val($(noteField).val());
+        $('.new-note textarea').val($(noteField).val().trim());
         $(this).dialog('close');
         $('#form1').submit();
       }
@@ -132,7 +140,7 @@ function completeTicket() {
     resizable: false,
     buttons: {
       'OK': function () {
-        $('.new-note textarea').val($(noteField).val());
+        $('.new-note textarea').val($(noteField).val().trim());
         $(this).dialog('close');
         $('#form1').submit();
       }
@@ -236,12 +244,12 @@ function setTicketToWaitingStatus() {
     buttons: {
       'OK': function () {
 
-        if ($('#note-textarea').val() == '') {
+        if ($('#note-textarea').val().trim() == '') {
           $.alert({ title: 'Must supply waiting reason!', content: 'Sorry, you need to provide what you are waiting on.' });
           return;
         }
 
-        $('.new-note textarea').val($(noteField).val());
+        $('.new-note textarea').val($(noteField).val().trim());
         $(this).dialog('close');
         $('#form1').submit();
       }
@@ -262,6 +270,38 @@ function submitForm(e) {
     return;
   }
 
+  if ($('.metrology-email input').val == '') {
+    e.preventDefault();
+    $.alert({ title: 'No Metrology email address!', content: 'Sorry, an error has occurred. Please refresh and try again.' });
+    return;
+  }
+
+  if ($('.department-email-address input').val == '') {
+    e.preventDefault();
+    $.alert({ title: 'No department email address!', content: 'Sorry, an error has occurred. Please refresh and try again.' });
+    return;
+  }
+  
+  var networkUserName = $('.network-user-name input').val();
+
+  var anonymousUserID = Number($('.anonymous-user-id input').val());
+  var anonymousEmployeeNumber = $('.anonymous-user-employee-number input').val();
+  var networkUserIDField = $('.user-id input');
+  var networkEmployeeNumberField = $('.user-employee-number input');
+  var newAssigneeIDField = $('.new-aid input');
+  var newAssigneeID = Number(newAssigneeIDField.val());
+
+  if (networkUserName == 'Anonymous User') {
+    $(networkUserIDField).val(anonymousUserID);
+    $(networkEmployeeNumberField).val(anonymousEmployeeNumber);
+  }
+
+  if (newAssigneeID == 0) {
+    $(newAssigneeIDField).val(0);
+  }
+
+
+
   var newTicketStatusID = Number($('.new-sid input').val());
   e.preventDefault();
   switch (newTicketStatusID) {
@@ -271,18 +311,12 @@ function submitForm(e) {
     case 5:
       completeTicket();
       break;
-    case 4:
-      setTicketToOnHoldStatus();
-      break;
     case 3:
       setTicketToWaitingStatus();
       break;
     case 2:
     case 1:
-      break;
-    default:
-      console.log('Invalid ticket status');
-      e.preventDefault();
+      $('#form1').submit();
   }
 }
 
@@ -295,6 +329,10 @@ function validateForm() {
   var oldTicketStatusID = Number($('.sid input').val());
   var newAssigneeID = Number($('.new-aid input').val());
   var oldAssigneeID = Number($('.assignee-id input').val());
+  var networkUserName = $('.network-user-name input').val();
+  var anonymousUserID = Number($('.anonymous-user-id input').val());
+  var anonymousEmployeeNumberField = $('.anonymous-user-employee-number input');
+  
 
   resetErrorFields();
 
@@ -305,6 +343,12 @@ function validateForm() {
   if ($(ticketStatusField).val() == '') {
     $('.ticket-subject input').trigger("blur");
     isValid = false;
+  }
+  if ($(networkUserName).val() == 'Anonymous User') {
+    if ($(anonymousUserID).val() == '') {
+      $(anonymousEmployeeNumberField).trigger("blur");
+      isValid = false;
+    }
   }
 
   if ((oldAssigneeID > 0) && (newAssigneeID == 0)) {

@@ -132,7 +132,7 @@ function callPrevPage() {
 function editTicket(ticketID) {
   var widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
-  popUpIframe(`http://rmslf/Forms/RMS-MPM-EditServiceTicket?tid=${ticketID}`, 'Edit Service Ticket', widowHeight, 1500);
+  popUpIframe(`http://rmslf/Forms/MPM-EditServiceTicket?tid=${ticketID}`, 'Edit Service Ticket', widowHeight, 1200);
 }
 
 
@@ -330,7 +330,10 @@ function popUpIframe(src, title, height, width) {
 
 
   $("#popupIFrame").dialog("open");
-  $('#popupIFrame').attr('style', `width: 100%; height: ${height}px;`);
+  $("#popupIFrame").attr('style', `width: ${width};`);
+  var resizeableStyle = $('.ui-resizable').attr('style');
+  let newStyle = resizeableStyle.replaceAll('width: 0px;', `width: ${width}px;`);
+  $('.ui-resizable').attr('style', newStyle);
 }
 
 
