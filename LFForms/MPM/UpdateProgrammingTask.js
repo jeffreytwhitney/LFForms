@@ -73,7 +73,6 @@ $(document).ready(function () {
     let task_name = $('.task-name input').val();
     $('.closeme input').val(1);
     $('#q0').append("<div class='hidden-text' id='popUpDiv'></div>");
-
     $('.btn-wrapper').append("<div id='add-note' class='ui-button ui-corner-all ui-widget' onclick='callAddNote()'><span class='ui-button-icon ui-icon ui-icon-document'></span>Add Note</div>");
     $('.btn-wrapper').append("<div id='view-notes' class='ui-button ui-corner-all ui-widget' onclick='callViewNotes()'><span class='ui-button-icon ui-icon ui-icon-newwin'></span>View Notes</div>");
     $('.network-user-name input').trigger("change");
@@ -90,16 +89,65 @@ function callAddNote() {
 
 
 function callCancelTask() {
-  var task_id = $('.tid input').val();
-  var task_name = $('.task-name input').val();
-  popupIFrame(`http://rmslf/Forms/MPMAddNote?TaskID=${task_id}&nt=5`, `Set task '${task_name}' to 'Cancelled'`, 350, 650, true);
+  var noteField = $('#note-textarea');
+  $(noteField).dialog({
+    title: 'Add Cancellation Reason (Required)',
+    modal: true,
+    width: 600,
+    height: 400,
+    autoOpen: false,
+    resizable: false,
+    buttons: {
+      'OK': function () {
+
+        if ($('#note-textarea').val().trim() == '') {
+          $.alert({ title: 'Must supply cancellation reason!', content: 'Sorry, you need to provide a reason for cancelling this ticket.' });
+          return;
+        }
+
+        $('.submit-note textarea').val($(noteField).val().trim());
+        $(this).dialog('close');
+        $('#form1').submit();
+      }
+    }
+  });
+  var resizeableStyle = $('#note-textarea').attr('style');
+  let newStyle = resizeableStyle + 'border-width: thin;border-color: black;border-style: solid;';
+  $('#note-textarea').attr('style', newStyle);
+  $(noteField).dialog("open");
 }
 
 
 function callCompleteTask() {
-  var task_id = $('.tid input').val();
-  var task_name = $('.task-name input').val();
-  popupIFrame(`http://rmslf/Forms/MPMAddNote?TaskID=${task_id}&nt=4`, `Set task '${task_name}' to 'Complete'`, 450, 700, true);
+  var noteField = $('.section-completion-time-note');
+  $(noteField).dialog({
+    title: 'Add Completion Note (Optional)',
+    modal: true,
+    width: 800,
+    height: 500,
+    autoOpen: false,
+    resizable: false,
+    buttons: {
+      'OK': function () {
+        let selectedTimeAmount = $('.add-time .radio-checkbox-fieldset input[type="radio"]:checked').val(); 
+        let timeAmount = Number($('.amount-of-time input').val());
+        if (selectedTimeAmount == 'X') {
+          if (timeAmount <= 1) {
+            $.alert({ title: 'Must supply amount of time to add!', content: 'Sorry, you need to provide a valid number of hours. (1 hour or greater).' });
+            return;
+          }
+        }
+
+        $(this).dialog('close');
+        $('#form1').submit();
+      }
+    }
+  });
+
+  $(noteField).dialog("open");
+
+
+
 }
 
 
@@ -120,9 +168,36 @@ function callPesterQE() {
 
 
 function callSetTaskToWaiting() {
-  var task_id = $('.tid input').val();
-  var task_name = $('.task-name input').val();
-  popupIFrame(`http://rmslf/Forms/MPMAddNote?TaskID=${task_id}&nt=6`, `Set task '${task_name}' to 'Waiting'`, 450, 650, true);
+  var noteField = $('.section-waiting-note');
+  $(noteField).dialog({
+    title: 'Add What you are waiting on (Required)',
+    modal: true,
+    width: 650,
+    height: 425,
+    autoOpen: false,
+    resizable: false,
+    buttons: {
+      'OK': function () {
+        var selectedLength = $('.waiting-reason .radio-checkbox-fieldset input[type="radio"]:checked').length;
+        
+        if (selectedLength == 0) {
+          $.alert({ title: 'Must select waiting reason!', content: 'Sorry, you need to select what you are waiting on.' });
+          return;
+        }
+
+        let selectedWaitingValue = Number($('.waiting-reason .radio-checkbox-fieldset input[type="radio"]:checked').val());
+        if (selectedWaitingValue == 3) {
+          if ($('.waiting-note textarea').val().trim() == '') {
+            $.alert({ title: 'Must supply waiting reason!', content: 'Sorry, you need to provide what you are waiting on.' });
+            return;
+          }
+        }
+        $(this).dialog('close');
+        $('#form1').submit();
+      }
+    }
+  });
+  $(noteField).dialog("open");
 }
 
 
@@ -369,49 +444,28 @@ function setFormFieldEnableState() {
 
 
 function setFormFields() {
+  console.log(`SiteID: ${$('.site-id input').val()}`)
+  if ((Number($('.site-id input').val()) != 0) && ($('.metrology-email input').val() == '')) {
+    console.log('Setting metrology email');
+    $('.site-id input').trigger("change");
+  }
+
 
   $('.note-date input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
   $('.date-started input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
 
-  if ($('.status-combo select').length) {
-    var statusNameValue = $('.status-name input').val();
-    var statusComboValue = $('.status-combo select').val();
-
-
-    if (statusNameValue.length == 0) {
-      $('.status-combo select').eq(0).prop('selected', true);
-    }
-    else {
-      if ((statusNameValue.length > 0) && ((statusComboValue == null) || (statusComboValue == ''))) {
-        $('.status-combo select').val(statusNameValue).change();
-      }
-
-    }
+  if (($('.assignee-name input').val() != '') && ($('.assigned-to select').val() == '')) {
+    $('.assigned-to select').val($('.assignee-name input').val()).change();
   }
-
-  if ($('.assigned-to select').length) {
-    var assigneeNameValue = $('.assignee-name input').val();
-    var assigneeComboValue = $('.assigned-to select').val();
-
-    if (assigneeNameValue.length == 0) {
-      $('.assigned-to select').eq(0).prop('selected', true);
-    }
-    else {
-
-      if ((assigneeNameValue.length > 0) && ((assigneeComboValue == null) || (assigneeComboValue == ''))) {
-        $('.assigned-to select').val(assigneeNameValue).change();
-      }
-    }
+  if (($('.status-name input').val() != '') && ($('.status-combo select').val() == '')) {
+    $('.status-combo select').val($('.status-name input').val()).change();
   }
-
-
-
   generateManualCheckBox();
 }
 
 
 function submitForm(e) {
-
+  
   var form_is_valid = validateForm();
   if (form_is_valid == false) {
     e.preventDefault();
@@ -420,6 +474,14 @@ function submitForm(e) {
 
   var statusID = Number($('.sid input').val());
   var newStatusID = Number($('.update-sid input').val());
+
+  if (!$('.aid input').val().length) {
+    $('.aid input').val(0);
+  }
+  if (!$('.update-aid input').val().length) {
+    $('.update-aid input').val(0);
+  }
+  $('#man-date-div').remove();
 
   if (statusID != newStatusID) { 
 
@@ -440,15 +502,6 @@ function submitForm(e) {
       callCancelTask();
       return;
     }
-  }
-
-  $('#man-date-div').remove();
-
-  if (!$('.aid input').val().length) {
-    $('.aid input').val(0);
-  }
-  if (!$('.update-aid input').val().length) {
-    $('.update-aid input').val(0);
   }
 
 }

@@ -27,6 +27,9 @@ $(document).ready(function () {
     }
   };
 
+  $(document).on('change', '.user-type-id input', function () {
+    setFormEnabledState();
+  });
   $(document).on('change', '.anonymous-user-id input', function () {
     var anonymousUserID = Number($('.anonymous-user-id input').val());
     if (anonymousUserID > 0) {
@@ -46,7 +49,7 @@ $(document).ready(function () {
   });
 
   $(document).on("onloadlookupfinished", function () {
-    
+
     $('#q0').append("<div class='hidden-text' id='popUpDiv'></div>");
     $('#add-note-button').append('<div class="table-button ui-button add-button" onclick="addNote()"><span title="Add Note" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Note</div>');
 
@@ -54,15 +57,7 @@ $(document).ready(function () {
       $('.section-add-note').append('<div class="section-add-note-content"><textarea id="note-textarea" rows="5" cols="50"></textarea></div>');
     }
 
-    var lfUserName = $('.lf-user-name input').val();
-    if (lfUserName != 'Anonymous User') {
-      $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).change();
-    }
-    else {
-      $('.ticket-status select').addClass('ui-state-disabled');
-      $('.assignee-combo select').addClass('ui-state-disabled');
-      $('#add-note-button').addClass('ui-state-disabled');
-    }
+
 
     if ((Number($('.sid input').val()) == 5) || (Number($('.sid input').val()) == 6)) {
       $('.ticket-status select').addClass('ui-state-disabled');
@@ -81,11 +76,14 @@ $(document).ready(function () {
     if (($('.status-name input').val() != '') && ($('.ticket-status select').val() == '')) {
       $('.ticket-status select').val($('.status-name input').val()).change();
     }
-
-    if ((Number($('.site-id input').val()) != 0) && ($('.metrology-email input').val == '')) {
+    var lfUserName = $('.lf-user-name input').val();
+    if ($('.network-user-name input').val() == '') {
+      $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).change();
+    }
+    if ((Number($('.site-id input').val()) != 0) && ($('.metrology-email input').val() == '')) {
       $('.site-id input').trigger("change");
-    } 
-
+    }
+    setFormEnabledState();
   });
 });
 
@@ -94,7 +92,7 @@ function addNote() {
   var ticket_id = $('.tid input').val();
   var ticket_number = $('.ticket-number input').val();
   var user_id = getUserID();
-  console.log(`ticket_id: ${ticket_id}, ticket_number: ${ticket_number}, user_id: ${user_id}`); 
+  console.log(`ticket_id: ${ticket_id}, ticket_number: ${ticket_number}, user_id: ${user_id}`);
   popupIFrame(`http://rmslf/Forms/MPM-AddServiceTicketNote?tid=${ticket_id}&uid=${user_id}`, `Add Note for task '${ticket_number}'`, 400, 650, false);
 }
 
@@ -169,6 +167,17 @@ function getUserID() {
 }
 
 
+function isMetrologyUser() {
+  var userTypeID = Number($('.user-type-id input').val());
+
+  console.log(`userID: ${userTypeID}`);
+  if ((userTypeID == 1) || (userTypeID == 2)) {
+    return true;
+  }
+  return false;
+}
+
+
 function popupIFrame(src, title, height, width) {
 
   $("#popupIFrame").remove();
@@ -199,6 +208,30 @@ function resetErrorFields() {
   $('#assigned-needs-active-status-error').remove();
   $('.ticket-status select').removeClass('parsley-error');
   $('.assignee-combo select').removeClass('parsley-error');
+
+}
+
+
+function setFormEnabledState() {
+  var lfUserName = $('.lf-user-name input').val();
+  if (lfUserName != 'Anonymous User') {
+    if (!isMetrologyUser()) {
+      console.log('User is not a metrology user');
+      $('.ticket-status select').addClass('ui-state-disabled');
+      $('.assignee-combo select').addClass('ui-state-disabled');
+    }
+    else {
+      console.log('User is a metrology user');
+      $('.ticket-status select').removeClass('ui-state-disabled');
+      $('.assignee-combo select').removeClass('ui-state-disabled');
+    }
+  }
+  else {
+    $('.show-anonymous input').val(1).change();
+    $('.ticket-status select').addClass('ui-state-disabled');
+    $('.assignee-combo select').addClass('ui-state-disabled');
+    $('#add-note-button').addClass('ui-state-disabled');
+  }
 
 }
 
@@ -281,7 +314,7 @@ function submitForm(e) {
     $.alert({ title: 'No department email address!', content: 'Sorry, an error has occurred. Please refresh and try again.' });
     return;
   }
-  
+
   var networkUserName = $('.network-user-name input').val();
 
   var anonymousUserID = Number($('.anonymous-user-id input').val());
@@ -332,7 +365,7 @@ function validateForm() {
   var networkUserName = $('.network-user-name input').val();
   var anonymousUserID = Number($('.anonymous-user-id input').val());
   var anonymousEmployeeNumberField = $('.anonymous-user-employee-number input');
-  
+
 
   resetErrorFields();
 
