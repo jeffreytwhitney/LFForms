@@ -20,6 +20,8 @@ $(document).ready(function () {
     networkUserName = networkUserName.substr(networkUserName.lastIndexOf('\\') + 1);
     $('.network-user-name input').val(networkUserName).change();
   }
+ 
+  $('.date-to-add input').val(moment().format('MM/DD/YYYY'));
 
   $(document).on('dblclick', '.project-description textarea', function (e) {
     var ticketDetail = $(this).val();
@@ -39,6 +41,20 @@ $(document).ready(function () {
     $('.cf-formwrap').hide();
     window.parent.postMessage('CloseDialogWithRefresh', '*');
   }
+
+  $('.add-time fieldset').change(function () {
+    var time_to_add = $('.add-time fieldset input[type="radio"]:checked').val();
+    if (time_to_add != 'X') {
+      $('.time-to-add input').val(time_to_add);
+    }
+    else {
+      $('.time-to-add input').val(1);
+    }
+  });
+
+  $('.amount-of-time input').change(function () {
+    $('.time-to-add input').val($('.amount-of-time input').val());
+  });
 
   window.onmessage = function (event) {
     if (event.data == "CloseDialog") {
@@ -124,7 +140,7 @@ function callCompleteTask() {
     title: 'Add Completion Note (Optional)',
     modal: true,
     width: 800,
-    height: 500,
+    height: 450,
     autoOpen: false,
     resizable: false,
     buttons: {

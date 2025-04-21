@@ -56,5 +56,27 @@ function tabifyFormSections() {
   $('#q0').children().wrapAll('<div id="ticket-tabs"></div>');
   $('#ticket-tabs').prepend('<ul id="ticket-tab"><li><a href="#q1"><span>Service Tickets</span></a></li><li><a href="#q2"><span>Programming Tasks</span></a></li><li><a href="#q3"><span>Programming Tickets</span></a></li></ul>');
   $('#ticket-tabs').tabs();
+  $("#ticket-tabs").on("tabsactivate", function (event, ui) {
+    var tab = ui.newTab.index();
+    if (tab == 0) {
+      let iframeServiceTickets = $('#frm-servicetickets');
+      if (iframeServiceTickets.length) {
+        iframeServiceTickets.attr('src', iframeServiceTickets.attr('src'));
+      }
+    }
+    else if (tab == 1) {
 
+      let iframeProgrammingTasks = $('#frm-programming-tasks');
+      if (iframeProgrammingTasks.length) {
+        iframeProgrammingTasks.attr('src', iframeProgrammingTasks.attr('src'));
+      }
+    }
+    else if (tab == 2) {
+
+      let iframeProgrammingTickets = $('#frm-programming-tickets');
+      if (iframeProgrammingTickets.length) {
+        iframeProgrammingTickets.attr('src', iframeProgrammingTickets.attr('src'));
+      }
+    }
+  });
 }

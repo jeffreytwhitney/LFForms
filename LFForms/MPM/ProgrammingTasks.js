@@ -20,8 +20,7 @@ var taskStatusMap = new Map();
 var taskStatusNameMap = new Map();
 var initiatorMap = new Map();
 var initiatorNameMap = new Map();
-var qualityEngineerMap = new Map();
-var qualityEngineerNameMap = new Map();
+
 
 //-------------------DOCUMENT FUNCTIONS-------------------------
 
@@ -71,7 +70,7 @@ $(document).ready(function () {
     loadDepartmentMap();
     loadTaskTypeMap();
     loadInitiatorMap();
-    loadQualityEngineerMap();
+    
 
     $('.tasklist-datestarted-col input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
     $('.tasklist-duedate-col input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
@@ -154,28 +153,6 @@ function callAddTime(task_id) {
 }
 
 
-function callCloneTask(task_id) {
-  var user_type_id = Number($(".user-type-id input").val());
-  var userDepartmentID = Number($(".user-department-id input").val());
-  var departmentID = Number(getColumnValueByTaskID(task_id, '.tasklist-dept-id-col input[type="text"]'));
-
-  if (user_type_id == 0 || user_type_id == 2 || user_type_id == 4 || user_type_id == 5) {
-    $.alert({ title: 'Nope!', content: 'Sorry, you do not have permissions to do this.' });
-    return;
-  }
-
-  if (user_type_id == 3) {
-    if (departmentID != userDepartmentID) {
-      $.alert({ title: 'Nope!', content: 'Sorry, you do not have permissions to do this.' });
-      return;
-    }
-  }
-
-  var task_name = getColumnValueByTaskID(task_id, '.tasklist-task-name-col input[type="text"]');
-  popUpIframe(`http://rmslf/Forms/MPMCloneTask?tid=${task_id}`, `Clone task '${task_name}'`, 300, 750, false, task_id);
-}
-
-
 function callNextPage() {
   $('.tasklist-table').hide();
   removeAppendedFields();
@@ -207,6 +184,7 @@ function colorCodeRows() {
   $(tasklist_rows).removeClass('colorStarted');
   $(tasklist_rows).removeClass('colorStartedButOld');
   $(tasklist_rows).removeClass('colorWaiting');
+  $(tasklist_rows).removeClass('colorClosedCancelled');
 
   status_ids.each(function (index) {
     let status_id = $(status_ids[index]).val();
@@ -286,7 +264,6 @@ function filterTaskListTable() {
   var statusFilterVal = $('#cboFilter_Status').val();
   var assigneeFilterVal = $('#cboFilter_Assignee').val();
   var departmentFilterVal = $('#cboFilter_Department').val();
-  var qeFilterVal = $('#cboFilter_QE').val();
   var initiatorFilterVal = $('#cboFilter_Initiator').val();
 
   $('.ftname input').val(taskNameFilterValue);
@@ -328,14 +305,6 @@ function filterTaskListTable() {
     $('.fdid input').val(0);
   }
 
-  if ((qeFilterVal != null) && (qeFilterVal.length > 0)) {
-    let qeID = qualityEngineerNameMap.get(qeFilterVal);
-    $('.fqeid input').val(qeID);
-  }
-  else {
-    $('.fqeid input').val(0);
-  }
-
   if ((initiatorFilterVal != null) && (initiatorFilterVal.length > 0)) {
     let initiatorID = initiatorNameMap.get(initiatorFilterVal);
     $('.finitid input').val(initiatorID);
@@ -355,7 +324,7 @@ function generateFilterRow() {
 
   if ($('#filterRow').length == 0) {
 
-    var filter_row = "<TR id='filterRow'><TH/><TH/><TH/><TH/><TH/><TH/><TH><input id='txtFilter_TicketNumber'/></TH><TH><input type='text' id='txtFilter_ProjectName'></TH><TH><input type='text' id='txtFilter_TaskName'></TH><TH><select id='cboFilter_Status'/></TH><TH><select id='cboFilter_TaskType'/></TH><TH><select id='cboFilter_Assignee'/></TH><TH/><TH/><TH/><TH/><TH/><TH><TH/><TH><select id='cboFilter_Department'/></TH><TH/><TH><select id='cboFilter_QE'/></TH><TH><select id='cboFilter_Initiator'/></TH><TH/></TR>"
+    var filter_row = "<TR id='filterRow'><TH/><TH/><TH/><TH/><TH/><TH><input id='txtFilter_TicketNumber'/></TH><TH><input type='text' id='txtFilter_ProjectName'></TH><TH><input type='text' id='txtFilter_TaskName'></TH><TH><select id='cboFilter_Status'/></TH><TH><select id='cboFilter_TaskType'/></TH><TH><select id='cboFilter_Assignee'/></TH><TH/><TH/><TH/><TH><TH/><TH/><TH><select id='cboFilter_Department'/></TH><TH><select id='cboFilter_Initiator'/></TH><TH/><TH/></TR>"
     $('.tasklist-table table thead').append(filter_row);
     $("#txtFilter_TicketNumber").on("change", function () { filterTaskListTable(); });
     $("#txtFilter_ProjectName").on("change", function () { filterTaskListTable(); });
@@ -364,7 +333,6 @@ function generateFilterRow() {
     $("#cboFilter_TaskType").on("change", function () { filterTaskListTable(); });
     $("#cboFilter_Assignee").on("change", function () { filterTaskListTable(); });
     $("#cboFilter_Department").on("change", function () { filterTaskListTable(); });
-    $("#cboFilter_QE").on("change", function () { filterTaskListTable(); });
     $("#cboFilter_Initiator").on("change", function () { filterTaskListTable(); });
 
     $("#txtFilter_TicketNumber").dblclick(function () { $("#txtFilter_TicketNumber").val(null).change(); });
@@ -374,8 +342,8 @@ function generateFilterRow() {
     $("#cboFilter_TaskType").dblclick(function () { $("#cboFilter_TaskType").val(0).change(); });
     $("#cboFilter_Assignee").dblclick(function () { $("#cboFilter_Assignee").val(0).change(); });
     $("#cboFilter_Department").dblclick(function () { $("#cboFilter_Department").val(0).change(); });
-    $("#cboFilter_QE").dblclick(function () { $("#cboFilter_QE").val(0).change(); });
     $("#cboFilter_Initiator").dblclick(function () { $("#cboFilter_Initiator").val(0).change(); });
+    wireUpSortFields();
   }
 
   if ((($('.ftname input').val() != null) && ($('.ftname input').val().length > 0)) && (($('#txtFilter_TaskName').val() == null) || ($('#txtFilter_TaskName').val() == ''))) {
@@ -388,11 +356,6 @@ function generateFilterRow() {
 
   if ((($('.fpid input').val() != null) && ($('.fpid input').val().length > 0)) && (($('#txtFilter_TicketNumber').val() == null) || ($('#txtFilter_TicketNumber').val() == ''))) {
     $('#txtFilter_TicketNumber').val($('.fpid input').val());
-  }
-
-
-  if (($(".qe-lookup-combo select option").length > 1) && ($("#cboFilter_QE option").length == 0)) {
-    $("#cboFilter_QE").html($(".qe-lookup-combo select").html());
   }
 
   if (($(".initiator-lookup-combo select option").length > 1) && ($("#cboFilter_Initiator option").length == 0)) {
@@ -418,10 +381,7 @@ function generateTaskListColumnFields() {
   removeAppendedFields();
   if ($('.tasklist-table table tbody tr').length > 0) {
 
-    generateTableButtons(".task-list-clone-col", "ui-icon-newwin", "Clone Task", "callCloneTask");
-
     generateTableButtons(".tasklist-note-col", "ui-icon-document", "Add Note", "callAddNote");
-
     generateTableButtons(".tasklist-time-col", "ui-icon-clock", "Add Time", "callAddTime");
 
     generateTableCheckBox(".tasklist-mandate-col", "mandate-chk");
@@ -590,22 +550,6 @@ function loadInitiatorMap() {
 }
 
 
-function loadQualityEngineerMap() {
-  if (qualityEngineerMap.keys.length == 0) {
-    var qe_rows = $('.qe-lookup-table table tbody tr');
-    if (qe_rows.length == 0) {
-      return;
-    }
-    qe_rows.each(function (index) {
-      qeID = Number($(this).find('.qe-lookup-table-id input').val());
-      qeName = $(this).find('.qe-lookup-table-name input').val();
-      qualityEngineerMap.set(qeID, qeName);
-      qualityEngineerNameMap.set(qeName, qeID);
-    });
-  }
-}
-
-
 function loadStatusMap() {
   if (taskStatusMap.keys.length == 0) {
     var status_rows = $('.status-lookup-table table tbody tr');
@@ -666,13 +610,11 @@ function lockCompletedRows() {
 
 function lockRows() {
   var tasklist_rows = $(".tasklist-table table tbody tr");
-  var user_id = Number($(".user-id input").val());
   var user_type_id = Number($(".user-type-id input").val());
   var userDepartmentID = Number($(".user-department-id input").val());
   tasklist_rows.each(function (index) {
     if (user_type_id == 1) {
       
-      $(this).find(".task-list-clone-col").find(".table-button").removeClass("ui-state-disabled");
       $(this).find(".tasklist-note-col").find(".table-button").removeClass("ui-state-disabled");
       $(this).find(".tasklist-time-col").find(".table-button").removeClass("ui-state-disabled");
       return;
@@ -681,14 +623,11 @@ function lockRows() {
       $(this).find(".tasklist-time-col").find(".table-button").addClass("ui-state-disabled");
       let departmentID = Number($(this).find('.tasklist-dept-id-col input[type="text"]').val());
       if (departmentID != userDepartmentID) {
-        $(this).find(".task-list-clone-col").find(".table-button").addClass("ui-state-disabled");
         $(this).find(".tasklist-note-col").find(".table-button").addClass("ui-state-disabled");
       }
       return;
     }
     
-    var fred = $(this).find(".task-list-clone-col").find(".table-button");
-    $(this).find(".task-list-clone-col").find(".table-button").addClass("ui-state-disabled");
     $(this).find(".tasklist-note-col").find(".table-button").addClass("ui-state-disabled");
     $(this).find(".tasklist-time-col").find(".table-button").addClass("ui-state-disabled");
   });
@@ -765,15 +704,7 @@ function reApplyFilterValues() {
   var statusFilterVal = Number($('.fsid input').val());
   var assigneeFilterVal = Number($('.faid input').val());
   var departmentFilterVal = Number($('.fdid input').val());
-  var qeFilterVal = Number($('.fqeid input').val());
   var initiatorFilterVal = $('.finitid input').val();
-
-  if (qeFilterVal != 0) {
-    let qeName = qualityEngineerMap.get(qeFilterVal);
-
-    $('#cboFilter_QE').val(qeName);
-  }
-
 
   if (initiatorFilterVal != 0) {
 
@@ -922,4 +853,54 @@ function showTaskDetails(task_id) {
   var widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
   popUpIframe(`http://rmslf/Forms/MPM-EditProgrammingTask?tid=${task_id}`, 'Task Details', widowHeight, 1100, false, task_id);
+}
+
+
+function sortTable(newSortOrdinal, selector) {
+
+  removeAppendedFields();
+  $('.sort-icon').remove();
+
+  var currentSortOrdinal = Number($('.sort-field-ordinal input').val());
+  var sortDirection = Number($('.sort-direction input').val());
+
+  if (newSortOrdinal == currentSortOrdinal) {
+    if (sortDirection == 0) {
+      sortDirection = 1
+      $('.sort-direction input').val(1).change();
+    }
+    else {
+      sortDirection = 0;
+      $('.sort-direction input').val(0).change();
+    }
+  }
+  else {
+    $('.sort-field-ordinal input').val(newSortOrdinal);
+    $('.sort-direction input').val(0).change();
+    sortDirection = 0;
+  }
+
+  if (sortDirection == 0) {
+    $(`${selector} .cf-col-label`).append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
+  }
+  else {
+    $(`${selector} .cf-col-label`).append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
+  }
+}
+
+
+function wireUpSortFields() {
+
+  $('#q236 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
+
+  $('#q236').on('click', function () { sortTable(0, '#q236'); });
+  $('#q88').on('click', function () { sortTable(1, '#q88'); });
+  $('#q83').on('click', function () { sortTable(2, '#q83'); });
+  $('#q84').on('click', function () { sortTable(3, '#q84'); });
+  $('#q234').on('click', function () { sortTable(4, '#q234'); });
+  $('#q87').on('click', function () { sortTable(5, '#q87'); });
+  $('#q235').on('click', function () { sortTable(6, '#q235'); });
+  $('#q102').on('click', function () { sortTable(7, '#q102'); });
+  $('#q221').on('click', function () { sortTable(8, '#q221'); });
+  $('#q241').on('click', function () { sortTable(9, '#q241'); });
 }
