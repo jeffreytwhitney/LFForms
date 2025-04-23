@@ -257,6 +257,13 @@ function filterTaskListTable() {
     $('.fexw input').val(0);
   }
 
+  if ($("#Field206-3").is(":checked")) {
+    $('.fexsd input').val(1);
+  }
+  else {
+    $('.fexsd input').val(0);
+  }
+
   var taskNameFilterValue = $('#txtFilter_TaskName').val();
   var projectNameFilterValue = $('#txtFilter_ProjectName').val();
   var ticketNumberFilterValue = $('#txtFilter_TicketNumber').val();
@@ -759,7 +766,6 @@ function refreshPage() {
   var include_NotSched = Number($('.fincns input').val());
   var exclude_Waiting = Number($('.fexw input').val());
   var include_Complete = Number($('.finccom input').val());
-  var projectIDFilter = Number($('.fpid input').val());
   var taskTypeIDFilter = Number($('fttid input').val());
   var statusIDFilter = Number($('fsid input').val());
   var assigneeIDFilter = Number($('faid input').val());
@@ -795,10 +801,6 @@ function refreshPage() {
 
   if ((include_Complete != null) && (include_Complete != NaN) && (include_Complete > 0)) {
     current_url = current_url + `&finccom=${include_Complete}`;
-  }
-
-  if ((projectIDFilter != null) && (projectIDFilter != NaN) && (projectIDFilter > 0)) {
-    current_url = current_url + `&fpid=${projectIDFilter}`;
   }
 
   if ((assigneeIDFilter != null) && (assigneeIDFilter != NaN) && (assigneeIDFilter > 0)) {

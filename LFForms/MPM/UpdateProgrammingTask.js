@@ -105,31 +105,28 @@ function callAddNote() {
 
 
 function callCancelTask() {
-  var noteField = $('#note-textarea');
+  var noteField = $('.section-cancellation-note');
   $(noteField).dialog({
     title: 'Add Cancellation Reason (Required)',
     modal: true,
-    width: 600,
-    height: 400,
+    width: 650,
+    height: 425,
     autoOpen: false,
     resizable: false,
     buttons: {
       'OK': function () {
 
-        if ($('#note-textarea').val().trim() == '') {
+        if ($('.cancellation-note textarea').val().trim() == '') {
           $.alert({ title: 'Must supply cancellation reason!', content: 'Sorry, you need to provide a reason for cancelling this ticket.' });
           return;
         }
-
-        $('.submit-note textarea').val($(noteField).val().trim());
+        $('.submit-note input').val($('.cancellation-note textarea').val());
         $(this).dialog('close');
         $('#form1').submit();
       }
     }
   });
-  var resizeableStyle = $('#note-textarea').attr('style');
-  let newStyle = resizeableStyle + 'border-width: thin;border-color: black;border-style: solid;';
-  $('#note-textarea').attr('style', newStyle);
+
   $(noteField).dialog("open");
 }
 
@@ -153,7 +150,7 @@ function callCompleteTask() {
             return;
           }
         }
-
+        $('.submit-note input').val($('.completion-note textarea').val());
         $(this).dialog('close');
         $('#form1').submit();
       }
@@ -207,6 +204,7 @@ function callSetTaskToWaiting() {
             $.alert({ title: 'Must supply waiting reason!', content: 'Sorry, you need to provide what you are waiting on.' });
             return;
           }
+          $('.submit-note input').val($('.waiting-note textarea').val());
         }
         $(this).dialog('close');
         $('#form1').submit();
@@ -514,6 +512,7 @@ function submitForm(e) {
     }
 
     if (newStatusID == status_Cancelled) {
+      
       e.preventDefault();
       callCancelTask();
       return;

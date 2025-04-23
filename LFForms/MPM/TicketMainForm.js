@@ -17,6 +17,10 @@ $(document).ready(function () {
     if (userName != '') {
       let userText = `User: ${userName}`
       $('.user-name-display input').val(userText);
+      if (isAdmin()) {
+        let admin_link = $("<a>", { text: 'Admin', class: 'admin-link', href: 'http://rmslf/Forms/MPM-AdminMainform', target: '_blank' });
+        $('.user-name-display').append(admin_link);
+      }
     }
   });
 
@@ -42,6 +46,10 @@ $(document).ready(function () {
         if (userName != '') {
           let userText = `User: ${userName}`
           $('.user-name-display input').val(userText);
+          if (isAdmin()) {
+            let admin_link = $("<a>", { text: 'Admin', class: 'admin-link', href: 'http://rmslf/Forms/MPM-AdminMainform', target:'_blank' });
+            $('.user-name-display').append(admin_link);
+          }
         }
         
       }
@@ -50,6 +58,17 @@ $(document).ready(function () {
   
 
 });
+
+
+function isAdmin() {
+  var isAdmin = Number($('.user-isadmin input').val());
+  if (isAdmin == 1) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
 
 
 function tabifyFormSections() {
