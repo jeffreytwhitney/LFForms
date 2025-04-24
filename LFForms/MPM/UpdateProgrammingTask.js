@@ -216,32 +216,9 @@ function callSetTaskToWaiting() {
 
 
 function callViewNotes() {
-  var noteHtml = $(".notes-table").find('.cf-table_parent').clone();
-  $(noteHtml).dialog({
-    title: "Notes",
-    height: 800,
-    width: 1000,
-    autoOpen: true,
-    resizable: true,
-    modal: true,
-    close: function (event, ui) {
-
-    }
-  });
-
-  $('.ui-dialog-content .cf-col100').on("dblclick", function (e) {
-    var notes = $(this).find('textarea').val();
-    console.log(notes);
-    $.dialog({
-      escapeKey: true,
-      backgroundDismiss: true,
-      title: 'Note',
-      content: notes,
-      resizable: true,
-      width: 600,
-      height: 400,
-    });
-  });
+  var task_id = $('.tid input').val();
+  var qe_name = $('.quality-engineer-name input').val();
+  popupIFrame(`http://rmslf/Forms/MPM-ViewTaskNotes?tid=${task_id}`, `Notes`, 800, 1000, false);
 }
 
 

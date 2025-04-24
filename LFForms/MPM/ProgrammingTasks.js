@@ -766,10 +766,10 @@ function refreshPage() {
   var include_NotSched = Number($('.fincns input').val());
   var exclude_Waiting = Number($('.fexw input').val());
   var include_Complete = Number($('.finccom input').val());
-  var taskTypeIDFilter = Number($('fttid input').val());
-  var statusIDFilter = Number($('fsid input').val());
-  var assigneeIDFilter = Number($('faid input').val());
-  var departmentIDFilter = Number($('fdid input').val());
+  var taskTypeIDFilter = Number($('.fttid input').val());
+  var statusIDFilter = Number($('.fsid input').val());
+  var assigneeIDFilter = Number($('.faid input').val());
+  var departmentIDFilter = Number($('.fdid input').val());
   var taskListPage = Number($('.tasklist-page input').val());
   var initiatorID = Number($('.finitid input').val());
 
