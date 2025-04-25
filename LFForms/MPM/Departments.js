@@ -13,7 +13,12 @@ $(document).ready(function () {
   $.fn.bootstrapBtn = bootstrapButton;
 
   $(document).on('lookupcomplete', function (e) {
+    generateGoBackButtons();
     generateTableButtons(".edit-button-col", "ui-icon-pencil", "Edit Department", "callEditDepartment");
+    if ($('.add-button').length == 0) {
+      var add_button = '<div class="ui-button add-button" onclick="callAddDepartment()"><span title="Add Department" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Department</div>'
+      $(add_button).insertBefore('.department-table table');
+    }
   });
 
   $(document).on("onloadlookupfinished", function (e) {
@@ -23,6 +28,19 @@ $(document).ready(function () {
 
 });
 
+
+function callAddDepartment() {
+  $(`.action-choice input[type='radio'][value='1']`).prop("checked", true);
+  $('.add-department-id input').val(1).change();
+  $('.Submit').show();
+}
+
+
+function callEditDepartment(departmentID) {
+  $(`.action-choice input[type='radio'][value='2']`).prop("checked", true);
+  $('.edit-department-id input').val(departmentID).change();
+  $('.Submit').show();
+}
 
 
 function callGoBack() {

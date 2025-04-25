@@ -310,7 +310,7 @@ function submitForm(e) {
       return;
     }
   }
-  e.preventDefault();
+  
 }
 
 
