@@ -1,7 +1,7 @@
 $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $('.Submit').hide();
-  $(document).prop('title', 'MPM Ticket Mainform');
+  $(document).prop('title', 'Metrology Tickets');
   var lfUserName = $('.lf-user-name input').val();
   if (lfUserName != 'Anonymous User') {
     $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).change();
@@ -22,6 +22,31 @@ $(document).ready(function () {
         $('.user-name-display').append(admin_link);
       }
     }
+  });
+
+  $(document).on('dblclick', '.ui-tabs-anchor', function () {
+    var tabID = $(this).attr('id');
+    if (tabID == 'ui-id-1') {
+      let iframeServiceTickets = $('#frm-servicetickets');
+      if (iframeServiceTickets.length) {
+        iframeServiceTickets.attr('src', iframeServiceTickets.attr('src'));
+      }
+    }
+    else if (tabID == 'ui-id-2') {
+
+      let iframeProgrammingTasks = $('#frm-programming-tasks');
+      if (iframeProgrammingTasks.length) {
+        iframeProgrammingTasks.attr('src', iframeProgrammingTasks.attr('src'));
+      }
+    }
+    else if (tabID == 'ui-id-3') {
+
+      let iframeProgrammingTickets = $('#frm-programming-tickets');
+      if (iframeProgrammingTickets.length) {
+        iframeProgrammingTickets.attr('src', iframeProgrammingTickets.attr('src'));
+      }
+    }
+
   });
 
   tabifyFormSections();

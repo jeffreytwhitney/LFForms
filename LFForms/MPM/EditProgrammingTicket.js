@@ -58,11 +58,6 @@ $(document).ready(function () {
     loadQualEngineerMap();
 
 
-    //$('.tasklist-duedate-col input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
-    //$('.tasklist-schedduedate-col input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
-   // $('.tasklist-date-completed-col input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
-
-
     if (($('.mename input').val() != null) && ($('.manufacturing-engineer-combo select option').length > 0)) {
       $('.manufacturing-engineer-combo select').val($('.mename input').val());
       $('.meid input').val(mfgEngineerNameMap.get($('.mename input').val()));
@@ -78,12 +73,14 @@ $(document).ready(function () {
       $('.manufacturing-engineer-combo select').removeClass('ui-state-disabled').addClass('ui-state-disabled');
       $('.quality-engineer-combo select').removeClass('ui-state-disabled').addClass('ui-state-disabled');
       $('.cell-leader-combo select').removeClass('ui-state-disabled').addClass('ui-state-disabled');
+      $('.add-button').addClass("ui-state-disabled");
     }
     else {
       $('.Submit').show();
       $('.manufacturing-engineer-combo select').removeClass('ui-state-disabled');
       $('.quality-engineer-combo select').removeClass('ui-state-disabled');
       $('.cell-leader-combo select').removeClass('ui-state-disabled');
+      $('.add-button').removeClass("ui-state-disabled");
     }
 
     if (isMetrologyUser()) {
@@ -192,6 +189,10 @@ function checkPermissions() {
   var user_type_id = Number($(".user-type-id input").val());
   var user_department_id = Number($(".user-department-id input").val());
   var ticket_department_id = Number($(".ticket-department-id input").val());
+
+  if (typeof $('.user-type-id input').val() === 'undefined') {
+    return false;
+  }
 
   if (user_type_id == 1) {
     return true;

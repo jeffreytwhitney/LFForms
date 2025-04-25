@@ -56,7 +56,7 @@ $(document).ready(function () {
     $('.projectlist-table').hide();
     if ($('.pg input').val() == '999') {
       $('.pg input').val(1).change();
-      
+
       $('.network-user-name input').trigger("change");
     }
     loadDepartmentMap();
@@ -67,18 +67,23 @@ $(document).ready(function () {
     generateFilterRow();
     reApplyFilterValues();
     appendPagination();
-    
+
     if ($('#popUpDiv').length == 0) {
       $('.section-iframe').append("<div class='hidden-text' id='popUpDiv'></div>");
     }
     $('.create-date-col input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
 
     var userTypeID = Number($('.user-type-id input').val());
-    if ((userTypeID != 1) && (userTypeID != 3)) {
+    if (typeof $('.user-type-id input').val() === 'undefined') {
       $('.add-button').addClass("ui-state-disabled");
     }
     else {
-      $('.add-button').removeClass("ui-state-disabled");
+      if ((userTypeID != 1) && (userTypeID != 3)) {
+        $('.add-button').addClass("ui-state-disabled");
+      }
+      else {
+        $('.add-button').removeClass("ui-state-disabled");
+      }
     }
 
     $('.projectlist-table').show();
@@ -283,7 +288,7 @@ function generateFilterRow() {
 function generateTicketNumberColumn() {
   var ticket_ids = $('.projectlist-ticket-id-col input[type="text"]');
   var ticket_numbers = $('.projectlist-ticket-number-col input[type="text"]');
-  
+
   ticket_numbers.each(function (index) {
     let ticket_id = $(ticket_ids[index]).val();
     let ticket_number = $(this).val();
@@ -344,7 +349,7 @@ function loadInitiatorMap() {
 
 
 function popUpIframe(src, title, height, width) {
-  
+
   $("#popupIFrame").remove();
   $("#popUpDiv").html(`<div height='${height}' width='${width}'><iframe id='popupIFrame' name='myname' src='${src}' height='${height}' width='${width}'/></div>`);
   $("#popupIFrame").dialog({
