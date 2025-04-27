@@ -3,7 +3,8 @@ $(document).ready(function () {
   var lfUserName = $('.lf-user-name input').val();
   $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).change();
   $('.Submit').hide();
-  $(document).prop('title', 'User Maintenance');
+  $('.Submit').click(function (e) { submitForm(e); });
+  $(document).prop('title', 'Department Maintenance');
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js');
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
@@ -11,6 +12,14 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
   var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
   $.fn.bootstrapBtn = bootstrapButton;
+
+  $(document).on('change', '.edit-db-parent-name input', function (e) {
+    var editParentName = $('.edit-db-parent-name input').val();
+    if (editParentName.length > 0) {
+      $('.edit-parent-name select').val(editParentName).change();
+    }
+  });
+
 
   $(document).on('lookupcomplete', function (e) {
     generateGoBackButtons();
@@ -44,8 +53,8 @@ function callEditDepartment(departmentID) {
 
 
 function callGoBack() {
-  $(".add-user-id input").val(0).change();
-  $(".edit-user-id input").val(0).change();
+  $(".add-department-id input").val(0).change();
+  $(".edit-department-id input").val(0).change();
   $('.Submit').hide();
 }
 
@@ -64,7 +73,7 @@ function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFu
   var buttons = $(selectionString);
   buttons.each(function () {
     var btn_value = $(this).val();
-    var btn_html = `<div class='table-button ui-button'><span title='${buttonTitle}' class='ui-button-icon ui-icon ${buttonClass}' onclick='${buttonFunction}(${btn_value})'/></div>`
+    var btn_html = `<div class='table-button ui-button' onclick='${buttonFunction}(${btn_value})'><span title='${buttonTitle}' class='ui-button-icon ui-icon ${buttonClass}' /></div>`
 
     var has_button = $(this).parent().find(`.${buttonClass}`).length;
     if (has_button == 0) {
@@ -73,3 +82,15 @@ function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFu
   });
 }
 
+
+function submitForm(e) {
+  var editParentID = Number($('.edit-parent-id input').val());
+  var addParentID = Number($('.add-parent-id input').val());
+  if (editParentID == 0) {
+    $('.edit-parent-id input').val(0);
+  }
+  if (addParentID == 0) {
+    $('.add-parent-id input').val(0);
+  }
+
+}

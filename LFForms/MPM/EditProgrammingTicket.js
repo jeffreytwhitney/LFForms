@@ -217,10 +217,10 @@ function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFu
 
 
     if (disabled == true) {
-      btn_html = `<div class='table-button ui-button ui-state-disabled'><span title='${buttonTitle}' class='ui-button-icon ui-icon ui-state-disabled ${buttonClass}' onclick='javascript:void(0);'/></div>`
+      btn_html = `<div class='table-button ui-button ui-state-disabled' onclick='javascript:void(0);'><span title='${buttonTitle}' class='ui-button-icon ui-icon ui-state-disabled ${buttonClass}'/></div>`
     }
     else {
-      btn_html = `<div class='table-button ui-button'><span title='${buttonTitle}' class='ui-button-icon ui-icon ${buttonClass}' onclick='${buttonFunction}(${btn_value})'/></div>`
+      btn_html = `<div class='table-button ui-button' onclick='${buttonFunction}(${btn_value})'><span title='${buttonTitle}' class='ui-button-icon ui-icon ${buttonClass}'/></div>`
     }
 
     $(this).parent().append(btn_html);

@@ -239,7 +239,7 @@ function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFu
   var buttons = $(selectionString);
   buttons.each(function () {
     var btn_value = $(this).val();
-    var btn_html = `<div class='table-button ui-button'><span title='${buttonTitle}' class='ui-button-icon ui-icon ${buttonClass}' onclick='${buttonFunction}(${btn_value})'/></div>`
+    var btn_html = `<div class='table-button ui-button' onclick='${buttonFunction}(${btn_value})'><span title='${buttonTitle}' class='ui-button-icon ui-icon ${buttonClass}'/></div>`
 
     var has_button = $(this).parent().find(`.${buttonClass}`).length;
     if (has_button == 0) {

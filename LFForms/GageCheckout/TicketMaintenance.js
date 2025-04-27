@@ -335,7 +335,7 @@ function generateTableButtons(buttonSelector, buttonClass, buttonImageClass, but
   var buttons = $(selectionString);
   buttons.each(function () {
     var btn_value = $(this).val();
-    var btn_html = `<div class='table-button ui-button ${buttonClass}'><span title='${buttonTitle}' class='ui-button-icon ui-icon ${buttonImageClass}' onclick='${buttonFunction}(${btn_value})'/></div>`
+    var btn_html = `<div class='table-button ui-button ${buttonClass}' onclick='${buttonFunction}(${btn_value})'><span title='${buttonTitle}' class='ui-button-icon ui-icon ${buttonImageClass}'/></div>`
 
     var has_button = $(this).parent().find(`.${buttonClass}`).length;
     if (has_button == 0) {
