@@ -34,16 +34,6 @@ $(document).ready(function () {
     }
   };
 
-  $(document).on('change', '.user-type-id input', function () {
-    setFormEnabledState();
-  });
-  $(document).on('change', '.anonymous-user-id input', function () {
-    var anonymousUserID = Number($('.anonymous-user-id input').val());
-    if (anonymousUserID > 0) {
-      $('#add-note-button').removeClass('ui-state-disabled');
-    }
-  });
-
   $(document).on('dblclick', '[id^="Field20"]', function (e) {
     var ticketDetail = $(this).val();
 
@@ -73,6 +63,9 @@ $(document).ready(function () {
       $('.ticket-details textarea').addClass('ui-state-disabled');
       $('.Submit').hide();
     }
+    $('.network-user-name input').trigger("change");
+    
+    console.log('onloadlookupfinished');
   });
 
   $(document).on('lookupcomplete', function (e) {
@@ -91,6 +84,7 @@ $(document).ready(function () {
       $('.site-id input').trigger("change");
     }
     setFormEnabledState();
+    console.log('lookupcomplete');
   });
 });
 
@@ -177,7 +171,6 @@ function getUserID() {
 function isMetrologyUser() {
   var userTypeID = Number($('.user-type-id input').val());
 
-  console.log(`userID: ${userTypeID}`);
   if ((userTypeID == 1) || (userTypeID == 2)) {
     return true;
   }
