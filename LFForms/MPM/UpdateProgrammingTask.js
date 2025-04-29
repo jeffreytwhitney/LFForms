@@ -6,7 +6,7 @@ const status_Cancelled = 5;
 const status_NotSched = 7;
 
 $(document).ready(function () {
-  window.name = "AddEditTask";
+  $(document).prop('title', 'Edit Programming Task');
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
@@ -20,7 +20,12 @@ $(document).ready(function () {
     networkUserName = networkUserName.substr(networkUserName.lastIndexOf('\\') + 1);
     $('.network-user-name input').val(networkUserName).change();
   }
- 
+
+  $(document).on('change', '.task-name input', function (e) {
+    var task_name = $(this).val();
+    $(document).prop('title', `Edit Task ${task_name}`);
+  });
+
   $('.date-to-add input').val(moment().format('MM/DD/YYYY'));
 
   $(document).on('dblclick', '.project-description textarea', function (e) {

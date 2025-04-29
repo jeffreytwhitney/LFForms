@@ -13,6 +13,13 @@ $(document).ready(function () {
     window.parent.postMessage('CloseDialogWithRefresh', '*');
   }
 
+  $(document).on('change', '.ticket-number input', function (e) {
+    var ticket_name = $(this).val();
+    $(document).prop('title', `Edit Ticket ${ticket_name}`);
+  });
+
+
+
   window.onmessage = function (event) {
     if (event.data == "CloseDialog") {
       console.log('Add Edit task closing dialog');

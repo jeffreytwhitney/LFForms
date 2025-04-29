@@ -20,6 +20,12 @@ $(document).ready(function () {
     $('.network-user-name input').val(networkUserName).change();
   }
 
+  $(document).on('change', '.ticket-number input', function (e) {
+    var ticket_name = $(this).val();
+    $(document).prop('title', `Edit Ticket ${ticket_name}`);
+  });
+
+
   if ($('.closeme input').val() == 1) {
     $('#form1').hide();
     window.parent.postMessage('CloseDialogWithRefresh', '*');
