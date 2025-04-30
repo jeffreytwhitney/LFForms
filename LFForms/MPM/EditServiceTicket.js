@@ -10,7 +10,9 @@ $(document).ready(function () {
   $.fn.bootstrapBtn = bootstrapButton;
 
   if ($('.closeme input').val() == 1) {
-    window.parent.postMessage('CloseDialogWithRefresh', '*');
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage('CloseDialogWithRefresh', '*');
+    }
   }
 
   $(document).on('change', '.ticket-number input', function (e) {
@@ -63,9 +65,11 @@ $(document).ready(function () {
       $('.ticket-details textarea').addClass('ui-state-disabled');
       $('.Submit').hide();
     }
-    $('.network-user-name input').trigger("change");
+    if ($('.closeme input').val() != 1) {
+      $('.network-user-name input').trigger("change");
+    }
     
-    console.log('onloadlookupfinished');
+    
   });
 
   $(document).on('lookupcomplete', function (e) {

@@ -377,6 +377,11 @@ function generateFilterRow() {
   }
   if (($(".assignee-lookup-combo select option").length > 1) && ($("#cboFilter_Assignee option").length == 0)) {
     $("#cboFilter_Assignee").html($(".assignee-lookup-combo select").html());
+    $("#cboFilter_Assignee option").eq(0).after($('<option>', {
+      value: 'Unassigned',
+      text: 'Unassigned'
+    }));
+    
   }
   if (($(".department-lookup-combo select option").length > 1) && ($("#cboFilter_Department option").length == 0)) {
     $("#cboFilter_Department").html($(".department-lookup-combo select").html());
@@ -521,6 +526,8 @@ function loadAssigneeMap() {
       assigneeMap.set(assigneeID, assigneeName);
       assigneeNameMap.set(assigneeName, assigneeID);
     });
+    assigneeMap.set(-1, 'Unassigned');
+    assigneeNameMap.set('Unassigned', -1);
   }
 }
 
