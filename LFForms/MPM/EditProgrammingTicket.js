@@ -2,6 +2,12 @@ var mfgEngineerMap = new Map();
 var mfgEngineerNameMap = new Map();
 var qualEngineerMap = new Map();
 var qualEngineerNameMap = new Map();
+var assigneeMap = new Map();
+var assigneeNameMap = new Map();
+var taskTypeMap = new Map();
+var taskTypeByNameMap = new Map();
+var taskStatusMap = new Map();
+var taskStatusNameMap = new Map();
 
 
 $(document).ready(function () {
@@ -62,7 +68,9 @@ $(document).ready(function () {
   $(document).on('lookupcomplete', function (e) {
     loadMfgEngineerMap();
     loadQualEngineerMap();
-
+    loadAssigneeMap();
+    loadStatusMap();
+    loadTaskTypeMap();
 
     if (($('.mename input').val() != null) && ($('.manufacturing-engineer-combo select option').length > 0)) {
       $('.manufacturing-engineer-combo select').val($('.mename input').val());
@@ -107,15 +115,10 @@ $(document).ready(function () {
     }
 
     $('#chkIncludeComplete').on('change', function () {
-      let includeCompleted = $(this).is(':checked');
-      if (includeCompleted) {
-        $('.fincomp input').val(1).change();
-      }
-      else {
-        $('.fincomp input').val(0).change();
-      }
+      filterTable();
     });
-    
+    generateFilterRow();
+    $('.tasklist-table').show();
   });
 
   $(document).on("onloadlookupfinished", function (e) {
@@ -131,8 +134,9 @@ $(document).ready(function () {
         content: notes,
       });
     });
-    wireUpSortFields();
+    
     $('.network-user-name input').trigger("change");
+    $('.fincomp input').val(0).change();
   });
 });
 
@@ -212,6 +216,97 @@ function checkPermissions() {
   return false;
 }
 
+
+function filterTable() {
+  if ($('#filterRow').length == 0) {
+    return;
+  }
+
+  //$('.tasklist-table').hide();
+  var includeCompleted = $('#chkIncludeComplete').is(':checked');
+  var taskNameFilterValue = $('#txtFilter_TaskName').val();
+  var taskTypeFilterVal = $('#cboFilter_TaskType').val();
+  var statusFilterVal = $('#cboFilter_Status').val();
+  var assigneeFilterVal = $('#cboFilter_Assignee').val();
+
+
+  $('.ftname input').val(taskNameFilterValue);
+
+  if ((taskTypeFilterVal != null) && (taskTypeFilterVal.length > 0)) {
+    let taskTypeID = taskTypeByNameMap.get(taskTypeFilterVal);
+    $('.fttid input').val(taskTypeID);
+  }
+  else {
+    $('.fttid input').val(0);
+  }
+
+
+  if ((statusFilterVal != null) && (statusFilterVal.length > 0)) {
+    let statusID = taskStatusNameMap.get(statusFilterVal);
+    $('.fsid input').val(statusID);
+  }
+  else {
+    $('.fsid input').val(0);
+  }
+
+  if ((assigneeFilterVal != null) && (assigneeFilterVal.length > 0)) {
+    let assigneeID = assigneeNameMap.get(assigneeFilterVal);
+    $('.faid input').val(assigneeID);
+  }
+  else {
+    $('.faid input').val(0);
+  }
+
+  removeAppendedFields();
+
+  if (includeCompleted) {
+    $('.fincomp input').val(1).change();
+  }
+  else {
+    $('.fincomp input').val(0).change();
+  }
+
+}
+
+
+function generateFilterRow() {
+
+  if ($('#filterRow').length == 0) {
+
+    var filter_row = "<TR id='filterRow'><TH/><TH/><TH/><TH><input type='text' id='txtFilter_TaskName'></TH><TH><select id='cboFilter_TaskType'/></TH><TH><select id='cboFilter_Assignee'/></TH><TH><select id='cboFilter_Status'/></TH><TH/><TH/><TH/><TH><TH/><TH/></TR>"
+    $('.tasklist-table table thead').append(filter_row);
+    $("#txtFilter_TaskName").on("change", function () { filterTable(); });
+    $("#cboFilter_Status").on("change", function () { filterTable(); });
+    $("#cboFilter_TaskType").on("change", function () { filterTable(); });
+    $("#cboFilter_Assignee").on("change", function () { filterTable(); });
+
+    $("#txtFilter_TaskName").dblclick(function () { $("#txtFilter_TaskName").val(null).change(); });
+    $("#cboFilter_Status").dblclick(function () { $("#cboFilter_Status").val(0).change(); });
+    $("#cboFilter_TaskType").dblclick(function () { $("#cboFilter_TaskType").val(0).change(); });
+    $("#cboFilter_Assignee").dblclick(function () { $("#cboFilter_Assignee").val(0).change(); });
+    wireUpSortFields();
+  }
+
+  if ((($('.ftname input').val() != null) && ($('.ftname input').val().length > 0)) && (($('#txtFilter_TaskName').val() == null) || ($('#txtFilter_TaskName').val() == ''))) {
+    $('#txtFilter_TaskName').val($('.ftname input').val());
+  }
+
+  if (($(".status-lookup-combo select option").length > 1) && ($("#cboFilter_Status option").length == 0)) {
+    $("#cboFilter_Status").html($(".status-lookup-combo select").html());
+  }
+  if (($(".tasktype-lookup-combo select option").length > 1) && ($("#cboFilter_TaskType option").length == 0)) {
+    $("#cboFilter_TaskType").html($(".tasktype-lookup-combo select").html());
+  }
+  if (($(".assignee-lookup-combo select option").length > 1) && ($("#cboFilter_Assignee option").length == 0)) {
+    $("#cboFilter_Assignee").html($(".assignee-lookup-combo select").html());
+    $("#cboFilter_Assignee option").eq(0).after($('<option>', {
+      value: 'Unassigned',
+      text: 'Unassigned'
+    }));
+
+  }
+  
+}
 
 function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFunction, disabled) {
   var btn_html = '';
@@ -324,6 +419,25 @@ function isMetrologyUser() {
 }
 
 
+function loadAssigneeMap() {
+
+  if (assigneeMap.keys.length == 0) {
+    var assignee_rows = $('.assignee-lookup-table table tbody tr');
+    if (assignee_rows.length == 0) {
+      return;
+    }
+    assignee_rows.each(function (index) {
+      assigneeID = Number($(this).find('.assignee-lookup-table-id input').val());
+      assigneeName = $(this).find('.assignee-lookup-table-name input').val();
+      assigneeMap.set(assigneeID, assigneeName);
+      assigneeNameMap.set(assigneeName, assigneeID);
+    });
+    assigneeMap.set(-1, 'Unassigned');
+    assigneeNameMap.set('Unassigned', -1);
+  }
+}
+
+
 function loadMfgEngineerMap() {
   if (mfgEngineerMap.keys.length == 0) {
     var me_rows = $('.me-lookup-table table tbody tr');
@@ -351,6 +465,39 @@ function loadQualEngineerMap() {
       qeName = $(this).find('.qe-lookup-table-name input').val();
       qualEngineerMap.set(qeID, qeName);
       qualEngineerNameMap.set(qeName, qeID);
+    });
+  }
+}
+
+
+function loadStatusMap() {
+  if (taskStatusMap.keys.length == 0) {
+    var status_rows = $('.status-lookup-table table tbody tr');
+    if (status_rows.length == 0) {
+      return;
+    }
+    status_rows.each(function (index) {
+      statusID = Number($(this).find('.status-lookup-table-id input').val());
+      statusName = $(this).find('.status-lookup-table-name input').val();
+      taskStatusMap.set(statusID, statusName);
+      taskStatusNameMap.set(statusName, statusID);
+    });
+  }
+}
+
+
+function loadTaskTypeMap() {
+
+  if (taskTypeMap.keys.length == 0) {
+    var tasktype_rows = $('.tasktype-lookup-table table tbody tr');
+    if (tasktype_rows.length == 0) {
+      return;
+    }
+    tasktype_rows.each(function (index) {
+      tasktypeID = Number($(this).find('.tasktype-lookup-table-id input').val());
+      tasktypeName = $(this).find('.tasktype-lookup-table-name input').val();
+      taskTypeMap.set(tasktypeID, tasktypeName);
+      taskTypeByNameMap.set(tasktypeName, tasktypeID);
     });
   }
 }
@@ -391,12 +538,12 @@ function removeAppendedFields() {
   $('.task-link').remove();
 }
 
+
 function submitForm(e) {
   if ($('.meid input').val() == '') {
     $('.meid input').val(0);
   }
 }
-
 
 
 function sortTable(newSortOrdinal, selector) {
