@@ -37,6 +37,9 @@ $(document).ready(function () {
     generateTableCheckBox(".man-date-col", "mandate-chk");
 
     generateFilterRow();
+
+
+
     $('.tasklist-table').show();
 
   });
@@ -49,6 +52,13 @@ $(document).ready(function () {
     if (checkPermissions() == false) {
 
     }
+
+    if (($('.site-id input').val() != '0') && ($('.site-id input').val().length > 0)) {
+      if ($('.assignee-name-combo select option').length < 2) {
+        $('.site-id input').trigger("change");
+      }
+    }
+
 
     $(document).on('change', '#Field18-0', function () {
       if (this.checked) {

@@ -134,7 +134,26 @@ $(document).ready(function () {
         content: notes,
       });
     });
-    
+
+    var ticketID = $('.tid input').val();
+    if ((ticketID != '') && (ticketID != '0')) {
+      $('#ticket-history').append(`<iframe id='ticket-history-iframe' name='ticket-history-iframe' src='http://rmslf/Forms/MPM-ProgamTicketHistory?tid=${ticketID}' height='500' width='100%'/>`);
+      if ($('.quality-engineer-combo select option').length == 1) {
+        console.log('No QE');
+        $('.ticket-department-id input').trigger("change");
+      }
+    }
+
+    if (($('.site-id input').val() != '0') && ($('.site-id input').val() != '')) {
+      let assingeesCombo = $('.assignee-lookup-combo select option');
+      if (typeof assingeesCombo !== 'undefined') {
+        $('.site-id input').trigger("change");
+      }
+      else if (assingeesCombo.length < 2) {
+        $('.site-id input').trigger("change");
+      }
+    }
+
     $('.network-user-name input').trigger("change");
     $('.fincomp input').val(0).change();
   });

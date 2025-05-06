@@ -225,6 +225,20 @@ function checkForDuplicateRows() {
 }
 
 
+function fillCCList() {
+
+  var ccUserNames = '';
+
+  $('.cc-email-col input').each(function (index) {
+    let ccUserName = $(this).val();
+    if (ccUserName.length > 0) {
+      ccUserNames += ccUserName + ';';
+    }
+  });
+  $('.cc-email-address-list input').val(ccUserNames);
+}
+
+
 function generateGoBackButtons() {
   var goback_buttons = $(".gobackbutton");
   goback_buttons.each(function (index) {
@@ -394,6 +408,8 @@ function submitForm(e) {
     return;
   }
 
+  fillCCList();
+  
   if ($('.ticket-me-id input').val().length == 0) {
     $('.ticket-me-id input').val(0);
   }
