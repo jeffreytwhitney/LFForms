@@ -565,8 +565,8 @@ function validateForm() {
     assignee_field.parent().append("<ul id='status-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>You can't unassign a task once it's been assigned to someone.</li></ul>");
     return_val = false;
   }
-
-  if ((new_status_val != status_NotStarted) && ((new_assignee_val == null) || (new_assignee_val == 0))) {
+ 
+  if (((new_status_val != status_NotStarted) && (new_status_val != status_Cancelled) && (new_status_val != status_NotSched)) && ((new_assignee_val == null) || (new_assignee_val == 0))) {
     assignee_field.addClass('parsley-error');
     assignee_field.parent().append("<ul id='status-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>You can't have a task status other than 'Not Started' if it's not assigned to someone.</li></ul>");
     return_val = false;

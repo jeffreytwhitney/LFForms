@@ -45,12 +45,12 @@ $(document).ready(function () {
     //I don't refresh if you add a note, for example. But if you do anything that will show up on the page, (adding time, cloning a task, etc)
     //then I do a refresh.
     if (event.data == "CloseDialog") {
-     
+
       $("#popupIFrame").dialog("destroy");
       $("#popupIFrame").remove();
     }
     if (event.data == "CloseDialogWithRefresh") {
-      
+
       $("#popupIFrame").dialog("destroy");
       $("#popupIFrame").remove();
       refreshPage();
@@ -70,7 +70,7 @@ $(document).ready(function () {
     loadDepartmentMap();
     loadTaskTypeMap();
     loadInitiatorMap();
-    
+
 
     $('.tasklist-datestarted-col input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
     $('.tasklist-duedate-col input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
@@ -150,6 +150,12 @@ function callAddTime(task_id) {
     var task_name = getColumnValueByTaskID(task_id, '.tasklist-task-name-col input[type="text"]');
     popUpIframe(`http://rmslf/Forms/MPMAddTaskTime?tid=${task_id}`, `Add Time to task '${task_name}'`, 300, 800, false, task_id);
   }
+}
+
+
+function callOpenOneFactory(task_name) {
+
+  window.open(`https://val.1factory.com/plans/list?f3=0&search=${task_name}`, "_blank");
 }
 
 
@@ -331,7 +337,7 @@ function generateFilterRow() {
 
   if ($('#filterRow').length == 0) {
 
-    var filter_row = "<TR id='filterRow'><TH/><TH/><TH/><TH/><TH/><TH><input id='txtFilter_TicketNumber'/></TH><TH><input type='text' id='txtFilter_ProjectName'></TH><TH><input type='text' id='txtFilter_TaskName'></TH><TH><select id='cboFilter_Status'/></TH><TH><select id='cboFilter_TaskType'/></TH><TH><select id='cboFilter_Assignee'/></TH><TH/><TH/><TH/><TH><TH/><TH/><TH><select id='cboFilter_Department'/></TH><TH><select id='cboFilter_Initiator'/></TH><TH/><TH/></TR>"
+    var filter_row = "<TR id='filterRow'><TH/><TH/><TH/><TH/><TH/><TH/><TH><input id='txtFilter_TicketNumber'/></TH><TH><input type='text' id='txtFilter_ProjectName'></TH><TH><input type='text' id='txtFilter_TaskName'></TH><TH><select id='cboFilter_Status'/></TH><TH><select id='cboFilter_TaskType'/></TH><TH><select id='cboFilter_Assignee'/></TH><TH/><TH/><TH/><TH><TH/><TH/><TH><select id='cboFilter_Department'/></TH><TH><select id='cboFilter_Initiator'/></TH><TH/><TH/></TR>"
     $('.tasklist-table table thead').append(filter_row);
     $("#txtFilter_TicketNumber").on("change", function () { filterTaskListTable(); });
     $("#txtFilter_ProjectName").on("change", function () { filterTaskListTable(); });
@@ -381,7 +387,7 @@ function generateFilterRow() {
       value: 'Unassigned',
       text: 'Unassigned'
     }));
-    
+
   }
   if (($(".department-lookup-combo select option").length > 1) && ($("#cboFilter_Department option").length == 0)) {
     $("#cboFilter_Department").html($(".department-lookup-combo select").html());
@@ -393,9 +399,9 @@ function generateTaskListColumnFields() {
   removeAppendedFields();
   if ($('.tasklist-table table tbody tr').length > 0) {
 
-    generateTableButtons(".tasklist-note-col", "ui-icon-document", "Add Note", "callAddNote");
-    generateTableButtons(".tasklist-time-col", "ui-icon-clock", "Add Time", "callAddTime");
-
+    generateTableButtons(".tasklist-note-col", "ui-icon-document", "Add Note", "callAddNote", true);
+    generateTableButtons(".tasklist-time-col", "ui-icon-clock", "Add Time", "callAddTime", true);
+    generateTableButtons(".tasklist-1f-col", "ui-icon-extlink", "Open 1Factory", "callOpenOneFactory", false);
     generateTableCheckBox(".tasklist-mandate-col", "mandate-chk");
     generateProjectColumn();
     generateTaskColumn();
@@ -423,12 +429,20 @@ function generateProjectColumn() {
 }
 
 
-function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFunction) {
+function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFunction, isArgNumeric) {
+  var btn_html
   var selectionString = buttonSelector + " input[type=text]";
   var buttons = $(selectionString);
   buttons.each(function () {
     var btn_value = $(this).val();
-    var btn_html = `<div class='table-button ui-button' onclick='${buttonFunction}(${btn_value})'><span title='${buttonTitle}' class='ui-button-icon ui-icon ${buttonClass}'/></div>`
+    if (isArgNumeric) {
+      btn_html = `<div class='table-button ui-button' onclick='${buttonFunction}(${btn_value})'><span title='${buttonTitle}' class='ui-button-icon ui-icon ${buttonClass}'/></div>`
+    }
+    else {
+      btn_html = `<div class='table-button ui-button' onclick='${buttonFunction}("${btn_value}")'><span title='${buttonTitle}' class='ui-button-icon ui-icon ${buttonClass}'/></div>`
+    }
+
+    
 
     var has_button = $(this).parent().find(`.${buttonClass}`).length;
     if (has_button == 0) {
@@ -628,7 +642,7 @@ function lockRows() {
   var userDepartmentID = Number($(".user-department-id input").val());
   tasklist_rows.each(function (index) {
     if (user_type_id == 1) {
-      
+
       $(this).find(".tasklist-note-col").find(".table-button").removeClass("ui-state-disabled");
       $(this).find(".tasklist-time-col").find(".table-button").removeClass("ui-state-disabled");
       return;
@@ -641,7 +655,7 @@ function lockRows() {
       }
       return;
     }
-    
+
     $(this).find(".tasklist-note-col").find(".table-button").addClass("ui-state-disabled");
     $(this).find(".tasklist-time-col").find(".table-button").addClass("ui-state-disabled");
   });
