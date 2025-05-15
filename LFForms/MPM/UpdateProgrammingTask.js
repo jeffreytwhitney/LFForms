@@ -10,6 +10,7 @@ $(document).ready(function () {
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
+
   var bootstrapButton = $.fn.button.noConflict();
   $.fn.bootstrapBtn = bootstrapButton;
   $('.Submit').addClass('ui-button ui-corner-all ui-widget');
@@ -63,12 +64,10 @@ $(document).ready(function () {
 
   window.onmessage = function (event) {
     if (event.data == "CloseDialog") {
-      console.log('Add Edit task closing dialog');
       $("#popupIFrame").dialog("destroy");
       $("#popupIFrame").remove();
     }
     if (event.data == "CloseDialogWithRefresh") {
-      console.log('Add Edit task CloseDialog closing dialog with refresh');
       $("#popupIFrame").dialog("destroy");
       $("#popupIFrame").remove();
       $("#form1").submit();
@@ -101,6 +100,7 @@ $(document).ready(function () {
     if ((taskID != '') && (taskID != '0')) {
       $('#task-history').append(`<iframe id='task-history-iframe' name='task-history-iframe' src='http://rmslf/Forms/MPM-ProgamTaskHistory?tid=${taskID}' height='500' width='100%'/>`);
     }
+    generateFilePathLinks();
   });
 });
 
@@ -223,6 +223,31 @@ function callSetTaskToWaiting() {
 }
 
 
+function callShowScheduleFilePath(index) {
+  var schedules = $('.schedule-col input');
+  var file_paths = $('.file-path-col input');
+  var file_path = $(file_paths[index]).val();
+  var schedule_name = $(schedules[index]).val();
+
+  $.confirm({
+    title: `File path for ${schedule_name} schedule`,
+    content: '' +
+      '<form action="" class="formName">' +
+      '<div class="form-group">' +
+      '<label>Copy this and paste into Windows Explorer</label>' +
+      `<input type="text" value="${file_path}" class="name form-control"/>` +
+      '</div>' +
+      '</form>',
+    buttons: {
+      close: function () {
+        close
+      },
+    },
+  });
+
+}
+
+
 function callViewNotes() {
   var task_id = $('.tid input').val();
   var qe_name = $('.quality-engineer-name input').val();
@@ -283,6 +308,23 @@ function isMetrologyUser() {
     return true;
   }
   return false;
+}
+
+
+function generateFilePathLinks() {
+  var scheduleNames = $('.schedule-col input[type="text"]'); 
+  var filePaths = $('.file-path-col input[type="text"]');
+  
+  scheduleNames.each(function (index) {
+    let file_path = $(filePaths[index]);
+    let file_path_val = $(filePaths[index]).val();
+    let schedule_name = $(scheduleNames[index]).val();
+    let schedule_link = $("<a>", { text: schedule_name, class: 'schedule-link', href: `javascript:void(0);`, onclick: `callShowScheduleFilePath(${index})` });
+
+    $(this).parent().append(schedule_link);
+    $(file_path).parent().append(`<div id="filepath${schedule_id}" class="filepath${schedule_id}" value="${file_path_val}"/></div>`)
+  });
+
 }
 
 
@@ -443,9 +485,7 @@ function setFormFieldEnableState() {
 
 
 function setFormFields() {
-  console.log(`SiteID: ${$('.site-id input').val()}`)
   if ((Number($('.site-id input').val()) != 0) && ($('.metrology-email input').val() == '')) {
-    console.log('Setting metrology email');
     $('.site-id input').trigger("change");
   }
 
