@@ -651,6 +651,20 @@ function validateForm(e) {
   if (actionType == 1) {
     return;
   }
+
+  var siteID = Number($('.site-id input'));
+  var submitEmployeeNumber = $('.submit-employee-number input');
+  var crEmployeeNumber = $('.cr-employee-number input');
+  var anokaEmployeeNumber = $('.anoka-employee-number input');
+
+  if (siteID == 1) {
+    submitEmployeeNumber.val(crEmployeeNumber.val());
+  }
+  if (siteID == 2) {
+    submitEmployeeNumber.val(anokaEmployeeNumber.val());
+  }
+
+
   var ticketType = $('.details-ticket-type-id input').val();
   var pinRows = $('.add-pins-bins-table table tbody tr');
   var threadRows = $('.add-thread-gages-table table tbody tr');
