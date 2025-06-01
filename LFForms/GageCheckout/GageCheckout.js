@@ -132,7 +132,7 @@ function validateForm(e) {
   var pinRows = $('.pin-table table tbody tr');
   var threadRows = $('.thread-gage-table table tbody tr');
 
-  var siteID = Number($('.site-id input'));
+  var siteID = Number($('.site-id input').val());
   var submitEmployeeName = $('.submit-employee-name input');
   var crEmployeeName = $('.cr-employee-name input');
   var anokaEmployeeName = $('.anoka-employee-name input');
@@ -144,12 +144,14 @@ function validateForm(e) {
   if (siteID == 1) {
     submitEmployeeNumber.val(crEmployeeNumber.val());
     submitEmployeeName.val(crEmployeeName.val());
+    
   }
   if (siteID == 2) {
     submitEmployeeNumber.val(anokaEmployeeNumber.val());
     submitEmployeeName.val(anokaEmployeeName.val());
+   
   }
-
+  
 
   if ((cellLeaderName.val().length > 0) && (cellLeaderID.val().length === 0)) {
     cellLeaderName.parent().append("<ul id='cell-leader-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>You must select a valid Cell Leader.</li></ul>");

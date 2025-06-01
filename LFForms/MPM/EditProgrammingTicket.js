@@ -179,7 +179,7 @@ function callAddTime(task_id) {
 function callCloneTask(task_id) {
   var user_type_id = Number($(".user-type-id input").val());
   var userDepartmentID = $(".user-department-id input").val();
-  var departmentID = getColumnValueByTaskID(task_id, '.tasklist-dept-id-col input[type="text"]');
+  var departmentID = $(".ticket-department-id input").val();
 
   if (user_type_id == 2 || user_type_id == 4 || user_type_id == 5) {
     $.alert({ title: 'Nope!', content: 'Sorry, you do not have permissions to do this.' });
@@ -326,6 +326,7 @@ function generateFilterRow() {
   }
   
 }
+
 
 function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFunction, disabled) {
   var btn_html = '';

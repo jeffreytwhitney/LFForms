@@ -214,7 +214,9 @@ function callSetTaskToWaiting() {
           }
           $('.submit-note input').val($('.waiting-note textarea').val());
         }
+        $('.update-waiting-id input').val(selectedWaitingValue).change();
         $(this).dialog('close');
+        
         $('#form1').submit();
       }
     }
@@ -224,10 +226,9 @@ function callSetTaskToWaiting() {
 
 
 function callShowScheduleFilePath(index) {
-  var schedules = $('.schedule-col input');
-  var file_paths = $('.file-path-col input');
-  var file_path = $(file_paths[index]).val();
-  var schedule_name = $(schedules[index]).val();
+  var schedule_name = $('.schedule-col input').eq(index).val();
+  var file_path = $('.file-path-col input').eq(index).val();
+  
 
   $.confirm({
     title: `File path for ${schedule_name} schedule`,
@@ -316,13 +317,14 @@ function generateFilePathLinks() {
   var filePaths = $('.file-path-col input[type="text"]');
   
   scheduleNames.each(function (index) {
+
     let file_path = $(filePaths[index]);
     let file_path_val = $(filePaths[index]).val();
     let schedule_name = $(scheduleNames[index]).val();
     let schedule_link = $("<a>", { text: schedule_name, class: 'schedule-link', href: `javascript:void(0);`, onclick: `callShowScheduleFilePath(${index})` });
 
     $(this).parent().append(schedule_link);
-    $(file_path).parent().append(`<div id="filepath${schedule_id}" class="filepath${schedule_id}" value="${file_path_val}"/></div>`)
+    $(file_path).parent().append(`<div id="filepath${index}" class="filepath${index}" value="${file_path_val}"/></div>`)
   });
 
 }

@@ -160,13 +160,27 @@ function callPrevPage() {
 
 function callReturnTicket() {
 
-  if ($('.details-modifier-employee-name input').val().length == 0) {
-    $.alert({
-      title: 'Enter Your Employee Number!',
-      content: 'You have to enter your employee number before you can check this ticket in.',
-    });
-    return;
+  var siteID = Number($('.site-id input').val());
+  if (siteID == 1) {
+    if ($('.cr-employee-name input').val().length == 0) {
+      $.alert({
+        title: 'Enter Your Employee Number!',
+        content: 'You have to enter your employee number before you can check this ticket in.',
+      });
+      return;
+    }
   }
+  if (siteID == 2) {
+    if ($('.anoka-employee-name input').val().length == 0) {
+      $.alert({
+        title: 'Enter Your Employee Number!',
+        content: 'You have to enter your employee number before you can check this ticket in.',
+      });
+      return;
+    }
+  }
+
+
 
 
   $.confirm({
@@ -652,7 +666,7 @@ function validateForm(e) {
     return;
   }
 
-  var siteID = Number($('.site-id input'));
+  var siteID = Number($('.site-id input').val());
   var submitEmployeeNumber = $('.submit-employee-number input');
   var crEmployeeNumber = $('.cr-employee-number input');
   var anokaEmployeeNumber = $('.anoka-employee-number input');
