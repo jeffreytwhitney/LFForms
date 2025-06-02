@@ -22,6 +22,20 @@ $(document).ready(function () {
     $('.network-user-name input').val(networkUserName).change();
   }
 
+  var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
+  var printEvent = window[eventMethod];
+  var messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
+  printEvent(messageEvent, function (e) {
+
+    if (e.data === "printme" || e.message === "printme") {
+      function show_print() {
+        $("#print-iframe").get(0).contentWindow.print();
+      };
+      window.setTimeout(show_print, 800); // 2 seconds
+    }
+  });
+
+
   $(document).on('change', '.task-name input', function (e) {
     var task_name = $(this).val();
     $(document).prop('title', `Edit Task ${task_name}`);
@@ -83,6 +97,11 @@ $(document).ready(function () {
         $('.assigned-to select').parent().append(`<div id='pester-assignee' class='table-button ui-button' onclick='callPesterAssignee()'><span title='Pester Assignee' class='ui-button-icon ui-icon ui-icon-mail-closed'/></div>`);
       }
     }
+
+    if (!$('#print-ticket').length) {
+      $('.task-name input').parent().append(`<div id='print-ticket' class='table-button ui-button' onclick='printTask()'><span title='Print Task' class='ui-button-icon ui-icon ui-icon-print'/></div>`);
+    }
+
 
     setFormFields();
     setFormFieldEnableState();
@@ -348,6 +367,11 @@ function generateManualCheckBox() {
 }
 
 
+function loadiFrame(src) {
+  $("#popUpDiv").html("<iframe id='print-iframe' name='print-iframe' src='" + src + "' />");
+}
+
+
 function lockFormNoPermissions() {
   $('.Submit').addClass("ui-state-disabled");
   $('#add-note').addClass("ui-state-disabled");
@@ -409,6 +433,15 @@ function popupIFrame(src, title, height, width, cancelSubmit) {
   $("#popupIFrame").dialog("open");
   $('#popupIFrame').attr('style', `width: 100%; height: ${height}px;`);
 }
+
+
+function printTask() {
+
+  var taskID = $('.tid input').val();
+  var report_url = `http://rmslf/Forms/MPM-ProgrammingTicketPrint?tid=${taskID}`
+  loadiFrame(report_url);
+}
+
 
 
 function resetErrorFields() {

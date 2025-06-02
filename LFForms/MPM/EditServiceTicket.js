@@ -9,6 +9,20 @@ $(document).ready(function () {
   var bootstrapButton = $.fn.button.noConflict();
   $.fn.bootstrapBtn = bootstrapButton;
 
+  var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
+  var printEvent = window[eventMethod];
+  var messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
+  printEvent(messageEvent, function (e) {
+
+    if (e.data === "printme" || e.message === "printme") {
+      function show_print() {
+        $("#print-iframe").get(0).contentWindow.print();
+      };
+      window.setTimeout(show_print, 800); // 2 seconds
+    }
+  });
+
+
   if ($('.closeme input').val() == 1) {
     if (window.parent && window.parent !== window) {
       window.parent.postMessage('CloseDialogWithRefresh', '*');
@@ -87,8 +101,11 @@ $(document).ready(function () {
     if ((Number($('.site-id input').val()) != 0) && ($('.metrology-email input').val() == '')) {
       $('.site-id input').trigger("change");
     }
+    if (!$('#print-ticket').length) {
+      $('.ticket-number input').parent().append(`<div id='print-ticket' class='table-button ui-button' onclick='printTicket()'><span title='Print Ticket' class='ui-button-icon ui-icon ui-icon-print'/></div>`);
+    }
     setFormEnabledState();
-    console.log('lookupcomplete');
+    
   });
 });
 
@@ -181,6 +198,10 @@ function isMetrologyUser() {
   return false;
 }
 
+function loadiFrame(src) {
+  $("#popUpDiv").html("<iframe id='print-iframe' name='print-iframe' src='" + src + "' />");
+}
+
 
 function popupIFrame(src, title, height, width) {
 
@@ -202,6 +223,15 @@ function popupIFrame(src, title, height, width) {
   $("#popupIFrame").dialog("open");
   $('#popupIFrame').attr('style', `width: 100%; height: ${height}px;`);
 }
+
+
+function printTicket() {
+
+  var ticketID = $('.tid input').val();
+  var report_url = `http://rmslf/Forms/MPM-ServiceTicketPrint?tid=${ticketID}`
+  loadiFrame(report_url);
+}
+
 
 
 function resetErrorFields() {
