@@ -1,11 +1,26 @@
 $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
+  
+
+
+  $.when(
+    $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js')
+  ).done(function () {
+    var sitename = $.cookie('site_name');
+    if (sitename != null) {
+      $('.site-name input').val(sitename).change();
+    }
+  });
+
+
+
   $('.Submit').hide();
   $(document).prop('title', 'Metrology Tickets');
   var lfUserName = $('.lf-user-name input').val();
   if (lfUserName != 'Anonymous User') {
     $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).change();
   }
+  
 
   $(document).on('change', '.user-name-hidden input', function () {
     //generateTitleInfo();
@@ -46,16 +61,18 @@ $(document).ready(function () {
   tabifyFormSections();
 
   $(document).on("onloadlookupfinished", function (e) {
-    if ($('.user-name-hidden input').val() == '') {
-      $('.network-user-name input').trigger("change");
-    }
-    generateTitleInfo();
 
   });
 
 
   $(document).on('lookupcomplete', function (e) {
-    //generateTitleInfo();
+    if ($('.user-name-hidden input').val() == '') {
+      $('.network-user-name input').trigger("change");
+    }
+
+    generateTitleInfo();
+    console.log('onloadlookupfinished triggered');
+    loadIFrames();
   });
 
 });
@@ -77,13 +94,16 @@ function generateTitleInfo() {
 
   if ($('.user-name-display input').val() == '') {
     var lfUserName = $('.lf-user-name input').val();
+    console.log('LF User Name: ' + lfUserName);
     if (lfUserName == 'Anonymous User') {
+      console.log('Anonymous User Detected');
       $('.user-name-display input').val('User :Anonymous');
       let login_link = $("<a>", { text: 'Log In', class: 'login-link', href: 'http://rmslf/Forms/account/login?returnUrl=%2fForms%2fMPM-TicketMainform' });
       $('.user-name-display').append(login_link);
     }
     else {
       let userName = $('.user-name-hidden input').val()
+      console.log('User Name: ' + userName);
       if (userName != '') {
         let userText = `User: ${userName}`
         $('.user-name-display input').val(userText);
@@ -140,6 +160,21 @@ function generateLastRunMessage() {
 }
 
 
+function loadIFrames() {
+  if ($('#frm-servicetickets').length == 0) {
+    $('#service-ticket-div').append(`<iframe id="frm-servicetickets" src="http://rmslf/Forms/RMS-MPM-ServiceTickets/"></iframe>`);
+  }
+
+  if ($('#frm-programming-tasks').length == 0) {
+    $('#program-task-div').append(`<iframe id="frm-programming-tasks" src="http://rmslf/Forms/MPM-ProgrammingTasks/"></iframe>`);
+  }
+  
+  if ($('#frm-programming-tickets').length == 0) {
+    $('#program-ticket-div').append(`<iframe id="frm-programming-tickets" src="http://rmslf/Forms/MPM-ProgrammingTickets/"></iframe>`);
+  }
+}
+
+
 function searchScheduleByTaskName() {
   var searchTaskName = $('.task-schedule-info input').val();
   var searchURL
@@ -183,4 +218,5 @@ function tabifyFormSections() {
       }
     }
   });
+  generateTitleInfo();
 }
