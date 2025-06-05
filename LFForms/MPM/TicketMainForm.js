@@ -170,7 +170,7 @@ function loadIFrames() {
   }
   
   if ($('#frm-programming-tickets').length == 0) {
-    $('#program-ticket-div').append(`<iframe id="frm-programming-tickets" src="http://rmslf/Forms/MPM-ProgrammingTickets/"></iframe>`);
+    $('#program-ticket-div').append(`<iframe id="frm-programming-tickets" src="http://rmslf/Forms/MPM-ProgrammingTickets"></iframe>`);
   }
 }
 

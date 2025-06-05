@@ -69,6 +69,15 @@ $(document).ready(function () {
       }
     });
 
+    $(document).on('change', '#Field94-0', function () {
+      if (this.checked) {
+        $('.update-remove-rev-letter input').val(1);
+      }
+      else {
+        $('.update-remove-rev-letter input').val(0);
+      }
+    });
+
 
     $(document).on('change', 'input[id^="Field21"]', function () {
       fillSelectedIDs();

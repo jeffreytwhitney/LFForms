@@ -245,8 +245,8 @@ function callSetTaskToWaiting() {
 
 
 function callShowScheduleFilePath(index) {
-  var schedule_name = $('.schedule-col input').eq(index).val();
-  var file_path = $('.file-path-col input').eq(index).val();
+  var schedule_name = $('.schedule-col input[type="text"]').eq(index).val();
+  var file_path = $('.file-path-col input[type="text"]').eq(index).val();
   
 
   $.confirm({
