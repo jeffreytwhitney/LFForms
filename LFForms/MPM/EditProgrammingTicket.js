@@ -16,6 +16,20 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
   var bootstrapButton = $.fn.button.noConflict();
   $.fn.bootstrapBtn = bootstrapButton;
+
+  var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
+  var printEvent = window[eventMethod];
+  var messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
+  printEvent(messageEvent, function (e) {
+
+    if (e.data === "printme" || e.message === "printme") {
+      function show_print() {
+        $("#print-iframe").get(0).contentWindow.print();
+      };
+      window.setTimeout(show_print, 800); // 2 seconds
+    }
+  });
+
   $('.Submit').addClass('ui-button ui-corner-all ui-widget');
   $('.Submit').click(function (e) { submitForm(e); });
 
@@ -118,6 +132,12 @@ $(document).ready(function () {
       filterTable();
     });
     generateFilterRow();
+
+    if (!$('#print-ticket').length) {
+      $('.ticket-number input').parent().append(`<div id='print-ticket' class='print-button ui-button' onclick='printTicket()'><span title='Print Ticket' class='ui-button-icon ui-icon ui-icon-print'/></div>`);
+    }
+
+
     $('.tasklist-table').show();
   });
 
@@ -458,6 +478,11 @@ function loadAssigneeMap() {
 }
 
 
+function loadiFrame(src) {
+  $("#popUpDiv").html("<iframe id='print-iframe' name='print-iframe' src='" + src + "' />");
+}
+
+
 function loadMfgEngineerMap() {
   if (mfgEngineerMap.keys.length == 0) {
     var me_rows = $('.me-lookup-table table tbody tr');
@@ -545,6 +570,13 @@ function popUpIframe(src, title, height, width) {
   $('#popupIFrame').attr('style', `width: 100%; height: ${height}px;`);
 }
 
+
+function printTicket() {
+
+  var taskID = $('.tid input').val();
+  var report_url = `http://rmslf/Forms/MPM-ProgrammingTicketPrint?tid=${taskID}`
+  loadiFrame(report_url);
+}
 
 function refreshForm() {
   var current_url = window.location.href;

@@ -66,12 +66,11 @@ $(document).ready(function () {
 
 
   $(document).on('lookupcomplete', function (e) {
-    if ($('.user-name-hidden input').val() == '') {
-      $('.network-user-name input').trigger("change");
-    }
+    //if ($('.user-name-hidden input').val() == '') {
+    //  $('.network-user-name input').trigger("change");
+    //}
 
     generateTitleInfo();
-    console.log('onloadlookupfinished triggered');
     loadIFrames();
   });
 
@@ -136,7 +135,7 @@ function generateLastRunMessage() {
   if ($('#last-run-div').length == 0) {
 
     if (lastRunDate == '' || lastRunBy == '') {
-      $('.site-id input').trigger("change");
+      //$('.site-id input').trigger("change");
       return;
     }
 
