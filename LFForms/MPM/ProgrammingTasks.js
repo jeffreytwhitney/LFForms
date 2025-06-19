@@ -337,7 +337,7 @@ function generateFilterRow() {
 
   if ($('#filterRow').length == 0) {
 
-    var filter_row = "<TR id='filterRow'><TH/><TH/><TH/><TH/><TH/><TH/><TH><input id='txtFilter_TicketNumber'/></TH><TH><input type='text' id='txtFilter_ProjectName'></TH><TH><input type='text' id='txtFilter_TaskName'></TH><TH><select id='cboFilter_Status'/></TH><TH><select id='cboFilter_TaskType'/></TH><TH><select id='cboFilter_Assignee'/></TH><TH/><TH/><TH/><TH><TH/><TH/><TH><select id='cboFilter_Department'/></TH><TH><select id='cboFilter_Initiator'/></TH><TH/><TH/></TR>"
+    var filter_row = "<TR id='filterRow'><TH/><TH/><TH/><TH/><TH/><TH/><TH><input id='txtFilter_TicketNumber'/></TH><TH><input type='text' id='txtFilter_ProjectName'></TH><TH><input type='text' id='txtFilter_TaskName'></TH><TH/><TH/><TH><select id='cboFilter_Status'/></TH><TH><select id='cboFilter_TaskType'/></TH><TH><select id='cboFilter_Assignee'/></TH><TH/><TH/><TH/><TH><TH/><TH/><TH><select id='cboFilter_Department'/></TH><TH><select id='cboFilter_Initiator'/></TH><TH/><TH/></TR>"
     $('.tasklist-table table thead').append(filter_row);
     $("#txtFilter_TicketNumber").on("change", function () { filterTaskListTable(); });
     $("#txtFilter_ProjectName").on("change", function () { filterTaskListTable(); });
