@@ -65,6 +65,7 @@ $(document).ready(function () {
     $('.ticket-table-last-cal input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
     $('.ticket-table-cal-due-date input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
     generateTicketNumberColumn();
+    generatePrintButtons();
     generateFilterRow();
     reApplyFilterValues();
     appendPagination();
@@ -73,6 +74,13 @@ $(document).ready(function () {
     }
     $('.ticket-table').show();
 
+  });
+
+
+
+  $(document).on('change', '.site-name select', function () {
+    var sitename = $('.site-name select').val();
+    $.cookie('site_name', sitename, { expires: 365, path: '/' });
   });
 
   $(document).on('change', '[id^="Field81"]', function (e) {
@@ -155,6 +163,16 @@ function callPrevPage() {
     return;
   }
   $('.pg input').val(current_page - 1).change();
+}
+
+
+function callPrint(ticket_id) {
+  should_print_receipt = true;
+  var ticketTypeID = getTicketTypeIDByTicketID(ticket_id);
+  var ticketGuid = getTicketGuidByTicketID(ticket_id);
+  $('.print-ticket-id input').val(ticketGuid);
+  $('.print-ticket-type-id input').val(ticketTypeID);
+  print_receipt();
 }
 
 
@@ -272,7 +290,7 @@ function generateFilterRow() {
 
   if ($('#filterRow').length == 0) {
 
-    var filter_row = "<TR id='filterRow'><TH><input type='text' id='txtFilter_TicketNumber'></TH><TH><select id='cboFilter_TicketType'/></TH><TH><select id='cboFilter_Department'/></TH><TH/><TH><select id='cboFilter_MachineGroup'/></TH><TH><select id='cboFilter_Operator'/></TH><TH><select id='cboFilter_CellLeader'/></TH><TH/><TH/><TH/><TH/><TH/><TH/>"
+    var filter_row = "<TR id='filterRow'><TH/><TH><input type='text' id='txtFilter_TicketNumber'></TH><TH><select id='cboFilter_TicketType'/></TH><TH><select id='cboFilter_Department'/></TH><TH/><TH><select id='cboFilter_MachineGroup'/></TH><TH><select id='cboFilter_Operator'/></TH><TH><select id='cboFilter_CellLeader'/></TH><TH/><TH/><TH/><TH/><TH/><TH/>"
     $('.ticket-table table thead').append(filter_row);
     $("#txtFilter_TicketNumber").on("change", function () { filterTicketTable(); });
     $("#cboFilter_TicketType").on("change", function () { filterTicketTable(); });
@@ -324,6 +342,20 @@ function generateGoBackButtons() {
 }
 
 
+function generatePrintButtons() {
+  var print_buttons = $(".ticket-table-print-button input[type=text]");
+  var ticket_ids = $(".ticket-table-id input[type=text]");
+  print_buttons.each(function (index) {
+    let ticket_id = ticket_ids[index].value;
+    let has_button = $(this).parent().find('.print-button').length;
+    if (has_button == 0) {
+      let btn_html = `<div class='table-button ui-button print-button' onclick='callPrint(${ticket_id})'><span title='Print' class='ui-button-icon ui-icon ui-icon-print'/></div>`
+      $(this).parent().append(btn_html);
+    }
+  });
+}
+
+
 function generateTicketNumberColumn() {
   $('.ticket-detail-link').remove();
   var ticket_numbers = $('.ticket-table-ticket-number input[type="text"]');
@@ -338,27 +370,45 @@ function generateTicketNumberColumn() {
 }
 
 
-function getColumnValueByTaskID(task_id, column_name) {
+function getTicketGuidByTicketID(ticket_id) {
+  var ticket_guid;
+  var ticket_ids = $(".ticket-table-id input[type=text]");
+  var ticket_guids = $(".ticket-table-print-button input[type=text]");
 
-  var tasklist_rows = $(".ticket-table table tbody tr");
-  var task_ids = $('.tasklist-task-id-col input[type="text"]');
-  var column_value;
-
-  task_ids.each(function (index) {
-    let row_task_id = $(this).val();
-    if (row_task_id == task_id) {
-      let tasklist_row = tasklist_rows[index];
-      column_value = $(tasklist_row).find(column_name).val();
+  ticket_ids.each(function (index) {
+    var row_ticket_id = $(this).val();
+    var row_ticket_guid = ticket_guids[index].value;
+    if (row_ticket_id == ticket_id) {
+      ticket_guid = row_ticket_guid;
       return;
     }
   });
-  return column_value;
+  return ticket_guid;
 }
 
 
 function getTicketRowCount() {
   var row_count = $('.ticket-table table tbody tr').length;
   return row_count;
+}
+
+
+function getTicketTypeIDByTicketID(ticket_id) {
+  var ticket_type_id;
+  var ticket_ids = $(".ticket-table-id input[type=text]");
+  var ticket_type_ids = $(".ticket-table-ticket-type-id input[type=text]");
+
+  ticket_ids.each(function (index) {
+    var row_ticket_id = $(this).val();
+    var row_ticket_type_id = ticket_type_ids[index].value;
+    if (row_ticket_id == ticket_id) {
+      ticket_type_id = row_ticket_type_id;
+      return;
+    }
+  });
+
+
+  return ticket_type_id;
 }
 
 
@@ -486,6 +536,7 @@ function removeAppendedFields() {
   $('.ticket-detail-link').remove();
   $('#ticket-table-pagination').remove();
 }
+
 
 function resetPageNumber() {
   $('.ticket-table').hide();

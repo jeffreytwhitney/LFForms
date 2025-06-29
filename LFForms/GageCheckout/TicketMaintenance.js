@@ -99,6 +99,11 @@ $(document).ready(function () {
 
   });
 
+  $(document).on('change', '.site-name select', function () {
+    var sitename = $('.site-name select').val();
+    $.cookie('site_name', sitename, { expires: 365, path: '/' });
+  });
+
 });
 
 
@@ -246,6 +251,7 @@ function colorCodeRows() {
 
   });
 }
+
 
 function executeIFrameUpdate(ticket_id) {
 
@@ -408,7 +414,7 @@ function generatePrintButtons() {
     let ticket_id = ticket_ids[index].value;
     let has_button = $(this).parent().find('.print-button').length;
     if (has_button == 0) {
-      let btn_html = `<div class='table-button ui-button print-button'><span title='Print' class='ui-button-icon ui-icon ui-icon-print' onclick='callPrint(${ticket_id})'/></div>`
+      let btn_html = `<div class='table-button ui-button print-button' onclick='callPrint(${ticket_id})'><span title='Print' class='ui-button-icon ui-icon ui-icon-print'/></div>`
       $(this).parent().append(btn_html);
     }
   });
@@ -689,7 +695,6 @@ function showDetails(ticket_id) {
   widowHeight = widowHeight - 50;
   popUpIframe(`http://rmslf/Forms/RMS-GAGE-TicketDetails?tid=${ticket_id}`, 'Ticket Details', widowHeight, 1200);
 }
-
 
 
 function sortTable(newSortOrdinal, selector) {
