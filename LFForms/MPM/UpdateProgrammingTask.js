@@ -164,7 +164,7 @@ function callCompleteTask() {
     title: 'Add Completion Note (Optional)',
     modal: true,
     width: 800,
-    height: 450,
+    height: 600,
     autoOpen: false,
     resizable: false,
     buttons: {
@@ -213,7 +213,7 @@ function callSetTaskToWaiting() {
     title: 'Add What you are waiting on (Required)',
     modal: true,
     width: 650,
-    height: 425,
+    height: 600,
     autoOpen: false,
     resizable: false,
     buttons: {
