@@ -20,6 +20,9 @@ $(document).ready(function () {
   if (lfUserName != 'Anonymous User') {
     $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).change();
   }
+  else {
+    loadIFrames();
+  }
   
 
   $(document).on('change', '.user-name-hidden input', function () {
@@ -99,6 +102,7 @@ function generateTitleInfo() {
       $('.user-name-display input').val('User :Anonymous');
       let login_link = $("<a>", { text: 'Log In', class: 'login-link', href: 'http://rmslf/Forms/account/login?returnUrl=%2fForms%2fMPM-TicketMainform' });
       $('.user-name-display').append(login_link);
+      loadIFrames();
     }
     else {
       let userName = $('.user-name-hidden input').val()
