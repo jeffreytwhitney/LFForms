@@ -250,7 +250,7 @@ function generateFilterRow() {
     $("#txtFilter_TaskName").dblclick(function () { $("#txtFilter_TaskName").val(null).change(); });
     $("#cboFilter_TaskType").dblclick(function () { $("#cboFilter_TaskType").val(0).change(); });
     $("#cboFilter_Assignee").dblclick(function () { $("#cboFilter_Assignee").val(0).change(); });
-
+    wireUpSortFields();
   }
 
   if ((($('.ftname input').val() != null) && ($('.ftname input').val().length > 0)) && (($('#txtFilter_TaskName').val() == null) || ($('#txtFilter_TaskName').val() == ''))) {
@@ -418,6 +418,12 @@ function popupWaitingNote(e) {
 }
 
 
+function removeAppendedFields() {
+
+  $('.table-button').remove();
+  $('.task-link').remove();
+}
+
 function selectAllTasks(check_on) {
   var checkboxes = $("input[id^='Field21']");
   if (checkboxes.length == 0) {
@@ -433,6 +439,54 @@ function selectAllTasks(check_on) {
   $('.select-task-count input').val(getSelectedCount());
 }
 
+
+function sortTable(newSortOrdinal, selector) {
+
+  removeAppendedFields();
+  $('.sort-icon').remove();
+
+  var currentSortOrdinal = Number($('.sort-field-ordinal input').val());
+  var sortDirection = Number($('.sort-direction input').val());
+
+  if (newSortOrdinal == currentSortOrdinal) {
+    if (sortDirection == 0) {
+      sortDirection = 1
+      $('.sort-direction input').val(1).change();
+    }
+    else {
+      sortDirection = 0;
+      $('.sort-direction input').val(0).change();
+    }
+  }
+  else {
+    $('.sort-field-ordinal input').val(newSortOrdinal);
+    $('.sort-direction input').val(0).change();
+    sortDirection = 0;
+  }
+
+  if (sortDirection == 0) {
+    $(`${selector} .cf-col-label`).append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
+  }
+  else {
+    $(`${selector} .cf-col-label`).append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
+  }
+}
+
+
+function wireUpSortFields() {
+
+  $('#q24 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
+
+  $('#q24').on('click', function () { sortTable(0, '#q24'); });//Task Name
+  $('#q25').on('click', function () { sortTable(1, '#q25'); });//Task Type
+  $('#q26').on('click', function () { sortTable(2, '#q26'); });//Assignee
+  $('#q27').on('click', function () { sortTable(3, '#q27'); });//Status
+  $('#q29').on('click', function () { sortTable(4, '#q29'); });//Due Date
+  $('#q30').on('click', function () { sortTable(5, '#q30'); });//Sched Due Date
+  $('#q31').on('click', function () { sortTable(6, '#q31'); });//Total Hours
+  
+
+}
 
 function submitForm(e) {
   if (validateForm() == false) {

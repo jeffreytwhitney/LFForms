@@ -578,6 +578,7 @@ function printTicket() {
   loadiFrame(report_url);
 }
 
+
 function refreshForm() {
   var current_url = window.location.href;
   window.location = current_url;
