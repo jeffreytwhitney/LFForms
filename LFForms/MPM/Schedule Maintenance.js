@@ -39,11 +39,13 @@ $(document).ready(function () {
   $(document).on('lookupcomplete', function (e) {
     generateTableButtons(".edit-button-col", "ui-icon-pencil", "Edit Schedule", "callEditSchedule");
     generateGoBackButtons();
-   
-    if ($('.add-button').length == 0) {
-      var add_button = '<div class="ui-button add-button" onclick="callAddSchedule()"><span title="Add Schedule" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Schedule</div>';
-      $(add_button).insertBefore('.schedule-table table');
+    if (isAdminUser()) {
+      if ($('.add-button').length == 0) {
+        var add_button = '<div class="ui-button add-button" onclick="callAddSchedule()"><span title="Add Schedule" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Schedule</div>';
+        $(add_button).insertBefore('.schedule-table table');
+      }
     }
+
     
   });
 
@@ -52,7 +54,6 @@ $(document).ready(function () {
   });
 
 });
-
 
 
 function callAddSchedule() {
@@ -65,7 +66,9 @@ function callAddSchedule() {
 function callEditSchedule(scheduleID) {
   $(`.action-choice input[type='radio'][value='2']`).prop("checked", true);
   $('.edit-id input').val(scheduleID).change();
-  $('.Submit').show();
+  if (isAdminUser()) {
+    $('.Submit').show();
+  }
 }
 
 
@@ -74,8 +77,6 @@ function callGoBack() {
   $(".edit-id input").val(0).change();
   $('.Submit').hide();
 }
-
-
 
 
 function generateGoBackButtons() {
@@ -101,6 +102,13 @@ function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFu
   });
 }
 
+
+function isAdminUser() {
+  if ($('.user-isadmin input').val() == '1') {
+    return true;
+  }
+  return false;
+}
 
 
 function submitForm(e) {

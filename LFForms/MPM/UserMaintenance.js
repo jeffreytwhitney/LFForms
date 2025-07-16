@@ -62,7 +62,6 @@ $(document).ready(function () {
 });
 
 
-
 function appendPagination() {
 
   var current_page = Number($('.pg input').val());
@@ -102,7 +101,9 @@ function callAddUser() {
 function callEditUser(userID) {
   $(`.action-choice input[type='radio'][value='2']`).prop("checked", true);
   $('.edit-user-id input').val(userID).change();
-  $('.Submit').show();
+  if (isAdminUser()) {
+    $('.Submit').show();
+  }
 }
 
 
@@ -178,8 +179,6 @@ function filterTable() {
 function generateFilterRow() {
 
   if ($('#filterRow').length == 0) {
-    var add_button = '<div class="ui-button add-button" onclick="callAddUser()"><span title="Add User" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add User</div><div class="choice include-choice"><input name="chkIncludeInActive" id="chkIncludeInActive" type="checkbox"><label class="form-option-label" for="chkIncludeInActive">Include InActive</label></div>'
-    $(add_button).insertBefore('.user-table table');
     var filter_row = "<TR id='filterRow'><TH/><TH/><TH/><TH><select id='cboFilter_UserType'/></TH><TH><select id='cboFilter_Department'/></TH><TH/><TH/><TH/></TR>"
     $('.user-table table thead').append(filter_row);
 
@@ -191,6 +190,14 @@ function generateFilterRow() {
     $("#cboFilter_UserType").dblclick(function () { $("#cboFilter_UserType").val(0).change(); });
     wireUpSortFields();
   }
+
+  if (isAdminUser()) {
+    if ($('.add-button').length == 0) {
+      var add_button = '<div class="ui-button add-button" onclick="callAddUser()"><span title="Add User" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add User</div><div class="choice include-choice"><input name="chkIncludeInActive" id="chkIncludeInActive" type="checkbox"><label class="form-option-label" for="chkIncludeInActive">Include InActive</label></div>'
+      $(add_button).insertBefore('.user-table table');
+    }
+  }
+
 
   if (($(".department-combo select option").length > 1) && ($("#cboFilter_Department option").length == 0)) {
     $("#cboFilter_Department").html($(".department-combo select").html());
@@ -228,6 +235,14 @@ function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFu
 function getTableRowCount() {
   var row_count = $('.user-table tbody tr').length;
   return row_count;
+}
+
+
+function isAdminUser() {
+  if ($('.user-isadmin input').val() == '1') {
+    return true;
+  }
+  return false;
 }
 
 
@@ -328,6 +343,7 @@ function validateAdd() {
   }
 }
 
+
 function validateEdit() {
   $('#existing-user-error').remove();
   var returnValue = true;
@@ -351,6 +367,7 @@ function validateEdit() {
   });
   return returnValue;
 }
+
 
 function wireUpSortFields() {
 

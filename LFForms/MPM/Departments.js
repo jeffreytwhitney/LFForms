@@ -24,9 +24,11 @@ $(document).ready(function () {
   $(document).on('lookupcomplete', function (e) {
     generateGoBackButtons();
     generateTableButtons(".edit-button-col", "ui-icon-pencil", "Edit Department", "callEditDepartment");
-    if ($('.add-button').length == 0) {
-      var add_button = '<div class="ui-button add-button" onclick="callAddDepartment()"><span title="Add Department" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Department</div>'
-      $(add_button).insertBefore('.department-table table');
+    if (isAdminUser()) {
+      if ($('.add-button').length == 0) {
+        var add_button = '<div class="ui-button add-button" onclick="callAddDepartment()"><span title="Add Department" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Department</div>'
+        $(add_button).insertBefore('.department-table table');
+      }
     }
   });
 
@@ -48,7 +50,9 @@ function callAddDepartment() {
 function callEditDepartment(departmentID) {
   $(`.action-choice input[type='radio'][value='2']`).prop("checked", true);
   $('.edit-department-id input').val(departmentID).change();
-  $('.Submit').show();
+  if (isAdminUser()) {
+    $('.Submit').show();
+  }
 }
 
 
@@ -80,6 +84,14 @@ function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFu
       $(this).parent().append(btn_html);
     }
   });
+}
+
+
+function isAdminUser() {
+  if ($('.user-isadmin input').val() == '1') {
+    return true;
+  }
+  return false;
 }
 
 

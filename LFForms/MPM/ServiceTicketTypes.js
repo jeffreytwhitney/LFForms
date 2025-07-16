@@ -11,32 +11,28 @@ $(document).ready(function () {
   var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
   $.fn.bootstrapBtn = bootstrapButton;
 
-
   $('.Submit').click(function (e) { submitForm(e); });
+
   $(document).on('change', '.edit-is-active-value input', function () {
     var isActive = $('.edit-is-active-value input').val();
     $(`.edit-tickettype-is-active input[type='radio'][value='${isActive}']`).prop("checked", true);
   });
-
-
 
   $(document).on('change', ".edit-tickettype-is-active input[type='radio']", function () {
     var isActive = $(this).val();
     $('.edit-is-active-value input').val(isActive);
   });
 
-
-
-
   $(document).on('lookupcomplete', function (e) {
     generateTableButtons(".edit-button-col", "ui-icon-pencil", "Edit TicketType", "callEditTicketType");
     generateGoBackButtons();
 
-    if ($('.add-button').length == 0) {
-      var add_button = '<div class="ui-button add-button" onclick="callAddTicketType()"><span title="Add TicketType" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Service Ticket Type</div>';
-      $(add_button).insertBefore('.tickettype-table table');
+    if (isAdminUser()) {
+      if ($('.add-button').length == 0) {
+        var add_button = '<div class="ui-button add-button" onclick="callAddTicketType()"><span title="Add TicketType" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Service Ticket Type</div>';
+        $(add_button).insertBefore('.tickettype-table table');
+      }
     }
-
   });
 
   $(document).on("onloadlookupfinished", function (e) {
@@ -44,7 +40,6 @@ $(document).ready(function () {
   });
 
 });
-
 
 
 function callAddTicketType() {
@@ -57,7 +52,9 @@ function callAddTicketType() {
 function callEditTicketType(tickettypeID) {
   $(`.action-choice input[type='radio'][value='2']`).prop("checked", true);
   $('.edit-id input').val(tickettypeID).change();
-  $('.Submit').show();
+  if (isAdminUser()) {
+    $('.Submit').show();
+  }
 }
 
 
@@ -66,8 +63,6 @@ function callGoBack() {
   $(".edit-id input").val(0).change();
   $('.Submit').hide();
 }
-
-
 
 
 function generateGoBackButtons() {
@@ -94,6 +89,12 @@ function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFu
 }
 
 
+function isAdminUser() {
+  if ($('.user-isadmin input').val() == '1') {
+    return true;
+  }
+  return false;
+}
 
 function submitForm(e) {
 

@@ -80,7 +80,6 @@ $(document).ready(function () {
 });
 
 
-
 function isAdmin() {
   var isAdmin = Number($('.user-isadmin input').val());
   if (isAdmin == 1) {
@@ -91,6 +90,13 @@ function isAdmin() {
   }
 }
 
+
+function isMetrologyUser() {
+  if (Number($('.user-type-id input').val()) == 1) {
+    return true;
+  }
+  return false;
+}
 
 function generateTitleInfo() {
 
@@ -110,7 +116,7 @@ function generateTitleInfo() {
       if (userName != '') {
         let userText = `User: ${userName}`
         $('.user-name-display input').val(userText);
-        if (isAdmin()) {
+        if (isMetrologyUser()) {
           let admin_link = $("<a>", { text: 'Admin', class: 'admin-link', href: 'http://rmslf/Forms/MPM-AdminMainform', target: '_blank' });
           $('.user-name-display').append(admin_link);
         }
@@ -192,6 +198,7 @@ function searchScheduleByTaskName() {
   window.open(searchURL, '_blank');
 
 }
+
 
 function tabifyFormSections() {
   $('#q0').children().wrapAll('<div id="ticket-tabs"></div>');

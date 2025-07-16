@@ -23,27 +23,15 @@ $(document).ready(function () {
     $(`.edit-is-bns input[type='radio'][value='${setValue}']`).prop("checked", true);
   });
 
-
-  //$(document).on('change', ".edit-cmm-is-active input[type='radio']", function () {
-  //  var isActive = $(this).val();
-  //  $('.edit-is-active-value input').val(isActive);
-  //});
-  //$(document).on('change', ".edit-cmm-is-active input[type='radio']", function () {
-  //  var isActive = $(this).val();
-  //  $('.edit-is-bns-value input').val(isActive);
-  //});
-
-
-
   $(document).on('lookupcomplete', function (e) {
     generateTableButtons(".edit-button-col", "ui-icon-pencil", "Edit CMM", "callEditCMM");
     generateGoBackButtons();
-
-    if ($('.add-button').length == 0) {
-      var add_button = '<div class="ui-button add-button" onclick="callAddCMM()"><span title="Add CMM" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add CMM</div>';
-      $(add_button).insertBefore('.cmm-table table');
+    if (isAdminUser()) {
+      if ($('.add-button').length == 0) {
+        var add_button = '<div class="ui-button add-button" onclick="callAddCMM()"><span title="Add CMM" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add CMM</div>';
+        $(add_button).insertBefore('.cmm-table table');
+      }
     }
-
   });
 
   $(document).on("onloadlookupfinished", function (e) {
@@ -64,7 +52,9 @@ function callAddCMM() {
 function callEditCMM(cmmID) {
   $(`.action-choice input[type='radio'][value='2']`).prop("checked", true);
   $('.edit-id input').val(cmmID).change();
-  $('.Submit').show();
+  if (isAdminUser()) {
+    $('.Submit').show();
+  }
 }
 
 
@@ -73,8 +63,6 @@ function callGoBack() {
   $(".edit-id input").val(0).change();
   $('.Submit').hide();
 }
-
-
 
 
 function generateGoBackButtons() {
@@ -100,6 +88,13 @@ function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFu
   });
 }
 
+
+function isAdminUser() {
+  if ($('.user-isadmin input').val() == '1') {
+    return true;
+  }
+  return false;
+}
 
 
 function submitForm(e) {

@@ -21,12 +21,12 @@ $(document).ready(function () {
   $(document).on('lookupcomplete', function (e) {
     generateTableButtons(".edit-button-col", "ui-icon-pencil", "Edit Site", "callEditSite");
     generateGoBackButtons();
-
-    if ($('.add-button').length == 0) {
-      var add_button = '<div class="ui-button add-button" onclick="callAddSite()"><span title="Add Site" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Site</div>';
-      $(add_button).insertBefore('.site-table table');
+    if (isAdminUser()) {
+      if ($('.add-button').length == 0) {
+        var add_button = '<div class="ui-button add-button" onclick="callAddSite()"><span title="Add Site" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Site</div>';
+        $(add_button).insertBefore('.site-table table');
+      }
     }
-
   });
 
   $(document).on("onloadlookupfinished", function (e) {
@@ -34,7 +34,6 @@ $(document).ready(function () {
   });
 
 });
-
 
 
 function callAddSite() {
@@ -47,7 +46,9 @@ function callAddSite() {
 function callEditSite(siteID) {
   $(`.action-choice input[type='radio'][value='2']`).prop("checked", true);
   $('.edit-id input').val(siteID).change();
-  $('.Submit').show();
+  if (isAdminUser()) {
+    $('.Submit').show();
+  }
 }
 
 
@@ -56,8 +57,6 @@ function callGoBack() {
   $(".edit-id input").val(0).change();
   $('.Submit').hide();
 }
-
-
 
 
 function generateGoBackButtons() {
@@ -84,6 +83,12 @@ function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFu
 }
 
 
+function isAdminUser() {
+  if ($('.user-isadmin input').val() == '1') {
+    return true;
+  }
+  return false;
+}
 
 function submitForm(e) {
 

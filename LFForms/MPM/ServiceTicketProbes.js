@@ -28,11 +28,12 @@ $(document).ready(function () {
     generateTableButtons(".edit-button-col", "ui-icon-pencil", "Edit Probe", "callEditProbe");
     generateGoBackButtons();
 
-    if ($('.add-button').length == 0) {
-      var add_button = '<div class="ui-button add-button" onclick="callAddProbe()"><span title="Add Probe" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Probe</div>';
-      $(add_button).insertBefore('.probe-table table');
+    if (isAdminUser()) {
+      if ($('.add-button').length == 0) {
+        var add_button = '<div class="ui-button add-button" onclick="callAddProbe()"><span title="Add Probe" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Probe</div>';
+        $(add_button).insertBefore('.probe-table table');
+      }
     }
-
   });
 
   $(document).on("onloadlookupfinished", function (e) {
@@ -40,7 +41,6 @@ $(document).ready(function () {
   });
 
 });
-
 
 
 function callAddProbe() {
@@ -53,7 +53,9 @@ function callAddProbe() {
 function callEditProbe(probeID) {
   $(`.action-choice input[type='radio'][value='2']`).prop("checked", true);
   $('.edit-id input').val(probeID).change();
-  $('.Submit').show();
+  if (isAdminUser()) {
+    $('.Submit').show();
+  }
 }
 
 
@@ -62,8 +64,6 @@ function callGoBack() {
   $(".edit-id input").val(0).change();
   $('.Submit').hide();
 }
-
-
 
 
 function generateGoBackButtons() {
@@ -90,6 +90,12 @@ function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFu
 }
 
 
+function isAdminUser() {
+  if ($('.user-isadmin input').val() == '1') {
+    return true;
+  }
+  return false;
+}
 
 function submitForm(e) {
 

@@ -37,17 +37,15 @@ $(document).ready(function () {
     $('.edit-task-type-group-cbo select').val($(this).val());
   });
 
-
-
   $(document).on('lookupcomplete', function (e) {
     generateTableButtons(".edit-button-col", "ui-icon-pencil", "Edit TaskType", "callEditTaskType");
     generateGoBackButtons();
-
-    if ($('.add-button').length == 0) {
-      var add_button = '<div class="ui-button add-button" onclick="callAddTaskType()"><span title="Add TaskType" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add TaskType</div>';
-      $(add_button).insertBefore('.tasktype-table table');
+    if (isAdminUser()) {
+      if ($('.add-button').length == 0) {
+        var add_button = '<div class="ui-button add-button" onclick="callAddTaskType()"><span title="Add TaskType" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add TaskType</div>';
+        $(add_button).insertBefore('.tasktype-table table');
+      }
     }
-
   });
 
   $(document).on("onloadlookupfinished", function (e) {
@@ -55,7 +53,6 @@ $(document).ready(function () {
   });
 
 });
-
 
 
 function callAddTaskType() {
@@ -68,7 +65,9 @@ function callAddTaskType() {
 function callEditTaskType(tasktypeID) {
   $(`.action-choice input[type='radio'][value='2']`).prop("checked", true);
   $('.edit-id input').val(tasktypeID).change();
-  $('.Submit').show();
+  if (isAdminUser()) {
+    $('.Submit').show();
+  }
 }
 
 
@@ -77,8 +76,6 @@ function callGoBack() {
   $(".edit-id input").val(0).change();
   $('.Submit').hide();
 }
-
-
 
 
 function generateGoBackButtons() {
@@ -104,6 +101,13 @@ function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFu
   });
 }
 
+
+function isAdminUser() {
+  if ($('.user-isadmin input').val() == '1') {
+    return true;
+  }
+  return false;
+}
 
 
 function submitForm(e) {
