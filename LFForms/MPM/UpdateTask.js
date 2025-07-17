@@ -19,7 +19,7 @@ $(document).ready(function () {
     if ($('.closeme input').val().length == 0) {
       if (validateForm() == true) {
         $('.closeme input').val(1);
-        $("#form1").submit();
+        $(".Submit").trigger('click');
       }
     }
   });

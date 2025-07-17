@@ -18,7 +18,12 @@ $(document).ready(function () {
   $(document).on('lookupcomplete', function (e) {
     generateTableButtons(".edit-button-col", "ui-icon-pencil", "Edit User", "callShowDetails");
     appendPagination();
-   
+    if (isMetrologyUser()) {
+      if ($('.add-button').length == 0) {
+        var add_button = '<div class="ui-button add-button" onclick="callStartRun()"><span title="Refresh Dates" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Refresh Dates</div>';
+        $(add_button).insertBefore('.schedule-runs-table table');
+      }
+    }
     $('.schedule-runs-table').show();
   });
 
@@ -71,7 +76,7 @@ function appendPagination() {
 
 
 function callStartRun() {
-
+  $('#form1').submit();
 }
 
 
@@ -106,6 +111,7 @@ function callPrevPage() {
   $('.pg input').val(current_page - 1).change();
 }
 
+
 function generateGoBackButtons() {
   var $goback_buttons = $(".gobackbutton");
   $goback_buttons.each(function (index) {
@@ -113,6 +119,7 @@ function generateGoBackButtons() {
   });
   $(".gobackbutton").remove();
 }
+
 
 function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFunction) {
   var selectionString = buttonSelector + " input[type=text]";
@@ -128,14 +135,19 @@ function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFu
   });
 }
 
+
 function getTableRowCount() {
   var row_count = $('.schedule-runs-table tbody tr').length;
   return row_count;
 }
 
 
-
-
+function isMetrologyUser() {
+  if (Number($('.user-type-id input').val()) == 1) {
+    return true;
+  }
+  return false;
+}
 
 function resetPageNumber() {
   $('.schedule-runs-table').hide();

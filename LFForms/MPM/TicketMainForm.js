@@ -1,6 +1,6 @@
 $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
-  
+
 
 
   $.when(
@@ -23,7 +23,7 @@ $(document).ready(function () {
   else {
     loadIFrames();
   }
-  
+
 
   $(document).on('change', '.user-name-hidden input', function () {
     //generateTitleInfo();
@@ -122,8 +122,8 @@ function generateTitleInfo() {
         }
       }
     }
-   
-    
+
+
   }
   generateLastRunMessage();
   if ($('.task-search-button').length == 0) {
@@ -135,7 +135,7 @@ function generateTitleInfo() {
 
 
 function generateLastRunMessage() {
-
+  console.log('Generating Last Run Message');
   var lastRunDate = $('.last-schedule-update-run input').val();
   var lastRunBy = $('.last-schedule-run-by input').val();
   var isAutomated = Number($('.last-schedule-is-automated input').val());
@@ -144,89 +144,86 @@ function generateLastRunMessage() {
 
   if ($('#last-run-div').length == 0) {
 
-    if (lastRunDate == '' || lastRunBy == '') {
-      //$('.site-id input').trigger("change");
-      return;
+
+    if (isAutomated != 1) {
+      if (lastRunDate == '' || lastRunBy == '') {
+        return;
+      }
     }
 
-
-    if (lastRunDate != '' && lastRunBy != '') {
-
-      let schedule_page_link = `<a href='http://rmslf/Forms/MPM-ScheduleUpdate' target='_blank' class='schedule-page-link'>Schedules</a>`
-      let schedule_link = `<a href='http://rmslf/Forms/MPM-ScheduleUpdate?rid=${lastRunID}' target='_blank' class='schedule-run-link'>${lastRunDate}</a>`
-      if (isAutomated == 1) {
-        lastRunMessage = `<div id="last-run-div">${schedule_page_link} Updated: ${schedule_link} (Automated)</div>`;
-      }
-      else {
-        lastRunMessage = `<div id="last-run-div">${schedule_page_link} Updated: ${schedule_link} by ${lastRunBy}</div>`;
-      }
-
-      $('.schedule-update-message').append(lastRunMessage);
+    let schedule_page_link = `<a href='http://rmslf/Forms/MPM-ScheduleUpdate' target='_blank' class='schedule-page-link'>Schedules</a>`
+    let schedule_link = `<a href='http://rmslf/Forms/MPM-ScheduleUpdate?rid=${lastRunID}' target='_blank' class='schedule-run-link'>${lastRunDate}</a>`
+    if (isAutomated == 1) {
+      lastRunMessage = `<div id="last-run-div">${schedule_page_link} Updated: ${schedule_link} (Automated)</div>`;
     }
+    else {
+      lastRunMessage = `<div id="last-run-div">${schedule_page_link} Updated: ${schedule_link} by ${lastRunBy}</div>`;
+    }
+
+    $('.schedule-update-message').append(lastRunMessage);
 
 
   }
 }
 
-
-function loadIFrames() {
-  if ($('#frm-servicetickets').length == 0) {
-    $('#service-ticket-div').append(`<iframe id="frm-servicetickets" src="http://rmslf/Forms/RMS-MPM-ServiceTickets/"></iframe>`);
-  }
-
-  if ($('#frm-programming-tasks').length == 0) {
-    $('#program-task-div').append(`<iframe id="frm-programming-tasks" src="http://rmslf/Forms/MPM-ProgrammingTasks/"></iframe>`);
-  }
-  
-  if ($('#frm-programming-tickets').length == 0) {
-    $('#program-ticket-div').append(`<iframe id="frm-programming-tickets" src="http://rmslf/Forms/MPM-ProgrammingTickets"></iframe>`);
-  }
-}
-
-
-function searchScheduleByTaskName() {
-  var searchTaskName = $('.task-schedule-info input').val();
-  var searchURL
-
-  if (searchTaskName == '') {
-    searchURL = `http://rmslf/Forms/MPM-SearchScheduleByTaskName`;
-  }
-  else {
-    searchURL = `http://rmslf/Forms/MPM-SearchScheduleByTaskName?tname=${encodeURIComponent(searchTaskName)}`;
-  }
-
-  window.open(searchURL, '_blank');
-
-}
-
-
-function tabifyFormSections() {
-  $('#q0').children().wrapAll('<div id="ticket-tabs"></div>');
-  $('#ticket-tabs').prepend('<ul id="ticket-tab"><li><a href="#q1"><span>Service Tickets</span></a></li><li><a href="#q2"><span>Programming Tasks</span></a></li><li><a href="#q3"><span>Programming Tickets</span></a></li></ul>');
-  $('#ticket-tabs').tabs();
-
-  $("#ticket-tabs").on("tabsactivate", function (event, ui) {
-    var tab = ui.newTab.index();
-    if (tab == 0) {
-      let iframeServiceTickets = $('#frm-servicetickets');
-      if (iframeServiceTickets.length) {
-        iframeServiceTickets.attr('src', iframeServiceTickets.attr('src'));
-      }
+  function loadIFrames() {
+    if ($('#frm-servicetickets').length == 0) {
+      $('#service-ticket-div').append(`<iframe id="frm-servicetickets" src="http://rmslf/Forms/RMS-MPM-ServiceTickets/"></iframe>`);
     }
-    else if (tab == 1) {
 
-      let iframeProgrammingTasks = $('#frm-programming-tasks');
-      if (iframeProgrammingTasks.length) {
-        iframeProgrammingTasks.attr('src', iframeProgrammingTasks.attr('src'));
-      }
+    if ($('#frm-programming-tasks').length == 0) {
+      $('#program-task-div').append(`<iframe id="frm-programming-tasks" src="http://rmslf/Forms/MPM-ProgrammingTasks/"></iframe>`);
     }
-    else if (tab == 2) {
 
-      let iframeProgrammingTickets = $('#frm-programming-tickets');
-      if (iframeProgrammingTickets.length) {
-        iframeProgrammingTickets.attr('src', iframeProgrammingTickets.attr('src'));
-      }
+    if ($('#frm-programming-tickets').length == 0) {
+      $('#program-ticket-div').append(`<iframe id="frm-programming-tickets" src="http://rmslf/Forms/MPM-ProgrammingTickets"></iframe>`);
     }
-  });
-  generateTitleInfo();
-}
+  }
+
+
+  function searchScheduleByTaskName() {
+    var searchTaskName = $('.task-schedule-info input').val();
+    var searchURL
+
+    if (searchTaskName == '') {
+      searchURL = `http://rmslf/Forms/MPM-SearchScheduleByTaskName`;
+    }
+    else {
+      searchURL = `http://rmslf/Forms/MPM-SearchScheduleByTaskName?tname=${encodeURIComponent(searchTaskName)}`;
+    }
+
+    window.open(searchURL, '_blank');
+
+  }
+
+
+  function tabifyFormSections() {
+    $('#q0').children().wrapAll('<div id="ticket-tabs"></div>');
+    $('#ticket-tabs').prepend('<ul id="ticket-tab"><li><a href="#q1"><span>Service Tickets</span></a></li><li><a href="#q2"><span>Programming Tasks</span></a></li><li><a href="#q3"><span>Programming Tickets</span></a></li></ul>');
+    $('#ticket-tabs').tabs();
+
+    $("#ticket-tabs").on("tabsactivate", function (event, ui) {
+      var tab = ui.newTab.index();
+      if (tab == 0) {
+        let iframeServiceTickets = $('#frm-servicetickets');
+        if (iframeServiceTickets.length) {
+          iframeServiceTickets.attr('src', iframeServiceTickets.attr('src'));
+        }
+      }
+      else if (tab == 1) {
+
+        let iframeProgrammingTasks = $('#frm-programming-tasks');
+        if (iframeProgrammingTasks.length) {
+          iframeProgrammingTasks.attr('src', iframeProgrammingTasks.attr('src'));
+        }
+      }
+      else if (tab == 2) {
+
+        let iframeProgrammingTickets = $('#frm-programming-tickets');
+        if (iframeProgrammingTickets.length) {
+          iframeProgrammingTickets.attr('src', iframeProgrammingTickets.attr('src'));
+        }
+      }
+    });
+    generateTitleInfo();
+  }
