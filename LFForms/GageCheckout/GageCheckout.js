@@ -36,6 +36,16 @@ $(document).ready(function () {
     }
   });
 
+  $(document).on('change', '[id^="Field174"]', function (e) {
+    generateMachineList();
+  });
+
+  $(document).on('click', '.cf-collection-delete', function (e) {
+    generateMachineList();
+  });
+
+
+
   $(document).on('change', '.pin-table-pin-type select', function (e) {
     if ($(e.currentTarget).val() == 'BIN') {
       $(e.currentTarget).closest('tr').find('.pin-table-diameter input').val(1).addClass("ui-state-disabled");
@@ -75,6 +85,24 @@ $(document).ready(function () {
 
 
 });
+
+
+function generateMachineList() {
+  var machineList = '';
+  $('[id^="Field174"]').each(function (index, element) {
+    machineName = $(element).val();
+    if (machineName != '') {
+      if (machineList.length > 0) {
+        machineList += ', ' + machineName;
+      }
+      else {
+        machineList = machineName;
+      }
+    }
+  });
+  
+  $('.machine-name-list input').val(machineList);
+}
 
 
 function loadiFrame(src) {
@@ -180,7 +208,7 @@ function validateForm(e) {
       }
       if (existingBinTicketNumber.val().length > 0) {
         binName.parent().find('#preexisting-bin-error').remove();
-        binName.parent().append("<ul id='preexisting-bin-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Bin already marked as 'Checked Out'. See Metrology Calibration.</li></ul>");
+        binName.parent().append("<ul id='preexisting-bin-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Bin already is already checked out. See Metrology Calibration.</li></ul>");
         binName.addClass('parsley-error');
         $('.Submit').prop("disabled", true);
         if (arguments.length === 1) {
@@ -207,7 +235,7 @@ function validateForm(e) {
       }
       if (existingThreadGageTicketNumber.val().length > 0) {
         threadGageName.parent().find('#preexisting-thread-gage-error').remove();
-        threadGageName.parent().append("<ul id='preexisting-thread-gage-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Thread Gage already marked as 'Checked Out'. See Metrology Calibration.</li></ul>");
+        threadGageName.parent().append("<ul id='preexisting-thread-gage-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Thread Gage is already checked out. See Metrology Calibration.</li></ul>");
         threadGageName.addClass('parsley-error');
         $('.Submit').prop("disabled", true);
         if (arguments.length === 1) {
