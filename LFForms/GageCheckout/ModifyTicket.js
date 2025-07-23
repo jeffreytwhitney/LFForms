@@ -51,7 +51,6 @@ $(document).ready(function () {
       }
     }
 
-
     if ($('.pg input').val() == '999') {
       $('.pg input').val(1).change();
     }
@@ -105,6 +104,10 @@ $(document).ready(function () {
     generateMachineList();
   });
 
+  $(document).on('change', '[id^="Field131"]', function (e) {
+    generateMachineList();
+  });
+
   $(document).on('click', '.cf-collection-delete', function (e) {
     generateMachineList();
   });
@@ -142,9 +145,11 @@ function appendPagination() {
 
 
 function callActivate(ticket_id) {
+  $('.modify-action input').val(3);
   $('.activate-ticket-id input').val(ticket_id).change(); 
   $('.Submit').show();
 }
+
 
 function callGoBack() {
   $(".details-ticket-id input").val(null).change();
@@ -155,6 +160,7 @@ function callGoBack() {
   $('[id^="Field83"]').val('');
   $('[id^="Field92"]').val('');
   $('.activate-ticket-id input').val(null).change(); 
+  $('.modify-action input').val(0);
   $('.Submit').hide();
 }
 
@@ -392,7 +398,7 @@ function generateMachineList() {
 
   if (activateTicketID != '') {
 
-    $('[id^="Field122"]').each(function (index, element) {
+    $('[id^="Field131"]').each(function (index, element) {
       machineName = $(element).val();
       if (machineName != '') {
         if (machineList.length > 0) {
@@ -666,6 +672,7 @@ function setDailyCalValues() {
 
 
 function showDetails(ticket_id) {
+  $('.modify-action input').val(2)
   $('.details-modifier-employee-number input').focus();
   $(".details-ticket-id input").val(ticket_id).change();
   $('.Submit').show();
@@ -798,99 +805,113 @@ function sortTable(newSortOrdinal) {
 
 function validateForm(e) {
   var isValid = true;
-  resetValidationErrors();
-
+  var siteID = Number($('.site-id input').val());
   var actionType = Number($('.modify-action input').val());
+
   if (actionType == 1) {
     return;
   }
 
-  var siteID = Number($('.site-id input').val());
-  var submitEmployeeNumber = $('.submit-employee-number input');
-  var crEmployeeNumber = $('.cr-employee-number input');
-  var anokaEmployeeNumber = $('.anoka-employee-number input');
+  if (actionType == 3) {
+    $('.print-ticket-id input').val($('.activate-guid input').val());
 
-  if (siteID == 1) {
-    submitEmployeeNumber.val(crEmployeeNumber.val());
+    let activateSubmitEmployeeNumber = $('.activate-employee-number input');
+    let activateSubmitEmployeeName = $('.activate-employee-name input');
+    let crActivateEmployeeNumber = $('.cr-activate-employee-number input');
+    let anokaActivateEmployeeNumber = $('.anoka-activate-employee-number input');
+    let crActivateEmployeeName = $('.cr-activate-employee-name input');
+    let anokaActivateEmployeeName = $('.anoka-activate-employee-name input');
+    
+    if (siteID == 1) {
+      activateSubmitEmployeeNumber.val(crActivateEmployeeNumber.val());
+      activateSubmitEmployeeName.val(crActivateEmployeeName.val());
+    }
+    if (siteID == 2) {
+      activateSubmitEmployeeNumber.val(anokaActivateEmployeeNumber.val());
+      activateSubmitEmployeeName.val(anokaActivateEmployeeName.val());
+    }
+
+    return;
   }
-  if (siteID == 2) {
-    submitEmployeeNumber.val(anokaEmployeeNumber.val());
+
+  if (actionType == 2) {
+    resetValidationErrors();
+    var submitEmployeeNumber = $('.submit-employee-number input');
+    var crEmployeeNumber = $('.cr-employee-number input');
+    var anokaEmployeeNumber = $('.anoka-employee-number input');
+
+    if (siteID == 1) {
+      submitEmployeeNumber.val(crEmployeeNumber.val());
+    }
+    if (siteID == 2) {
+      submitEmployeeNumber.val(anokaEmployeeNumber.val());
+    }
+
+    var ticketType = $('.details-ticket-type-id input').val();
+    var pinRows = $('.add-pins-bins-table table tbody tr');
+    var threadRows = $('.add-thread-gages-table table tbody tr');
+
+    if (ticketType == 1) {
+      pinRows.each(function (index) {
+
+        let pinTypeValue = Number($(this).find('.add-pins-bins-table-pin-type-id input').val());
+        let binName = $(this).find('.add-pins-bins-table-new-bin-number input');
+        let existingBinTicketNumber = $(this).find('.add-pins-bins-table-existing-bin-id input');
+        let binID = $(this).find('.add-pins-bins-table-new-bin-id input');
+        if ((pinTypeValue == 5) && ((binName.val().length > 0) && binID.val().length == 0)) {
+          binName.parent().find('#bad-pin-name-error').remove();
+          binName.parent().append("<ul id='bad-pin-name-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Invalid Pin Name.</li></ul>");
+          binName.addClass('parsley-error');
+          isValid = false;
+        }
+        if (existingBinTicketNumber.val().length > 0) {
+          binName.parent().find('#preexisting-bin-error').remove();
+          binName.parent().append("<ul id='preexisting-bin-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Bin already marked as 'Checked Out'. See Metrology Calibration.</li></ul>");
+          binName.addClass('parsley-error');
+          isValid = false;
+        }
+      });
+    }
+    else if (ticketType == 2) {
+      console.log('validating');
+      threadRows.each(function (index) {
+        let threadGageName = $(this).find('.add-thread-gages-table-thread-gage-name input');
+        let threadGageID = $(this).find('.add-thread-gages-table-new-thread-gage-id input');
+        let existingThreadGageTicketNumber = $(this).find('.add-thread-gages-table-existing-thread-gage-id input');
+        let missingThreadGageTicketNumber = $(this).find('.existing-missing-thread-ticket-number input');
+
+        if ((threadGageID.val().length == 0) && (threadGageName.val().length > 0)) {
+          threadGageName.parent().find('#bad-thread-gage-error').remove();
+          threadGageName.parent().append("<ul id='bad-thread-gage-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Invalid Thread Gage Name.</li></ul>");
+          threadGageName.addClass('parsley-error');
+          isValid = false;
+        }
+        if (existingThreadGageTicketNumber.val().length > 0) {
+          threadGageName.parent().find('#preexisting-thread-gage-error').remove();
+          threadGageName.parent().append("<ul id='preexisting-thread-gage-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Thread Gage already marked as 'Checked Out'. See Metrology Calibration.</li></ul>");
+          threadGageName.addClass('parsley-error');
+          isValid = false;
+        }
+        if (missingThreadGageTicketNumber.val().length > 0) {
+          threadGageName.parent().find('#missing-thread-gage-error').remove();
+          threadGageName.parent().append("<ul id='missing-thread-gage-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Thread Gage marked as 'Missing' on another ticket. Bring gage to Metrology Calibration.</li></ul>");
+          threadGageName.addClass('parsley-error');
+          isValid = false;
+        }
+      });
+    }
+
+    if (isValid == true) {
+      $('.print-ticket-id input').val($('.details-guid input').val());
+    }
+    else {
+      e.preventDefault();
+    }
+
+    return;
   }
-
-
-  var ticketType = $('.details-ticket-type-id input').val();
-  var pinRows = $('.add-pins-bins-table table tbody tr');
-  var threadRows = $('.add-thread-gages-table table tbody tr');
   
-  if (ticketType == 1) {
-    pinRows.each(function (index) {
-
-      let pinTypeValue = Number($(this).find('.add-pins-bins-table-pin-type-id input').val());
-      let binName = $(this).find('.add-pins-bins-table-new-bin-number input');
-      let existingBinTicketNumber = $(this).find('.add-pins-bins-table-existing-bin-id input');
-      let binID = $(this).find('.add-pins-bins-table-new-bin-id input');
-      if ((pinTypeValue == 5) && ((binName.val().length > 0) && binID.val().length == 0)) {
-        binName.parent().find('#bad-pin-name-error').remove();
-        binName.parent().append("<ul id='bad-pin-name-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Invalid Pin Name.</li></ul>");
-        binName.addClass('parsley-error');
-        isValid = false;
-      }
-      if (existingBinTicketNumber.val().length > 0) {
-        binName.parent().find('#preexisting-bin-error').remove();
-        binName.parent().append("<ul id='preexisting-bin-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Bin already marked as 'Checked Out'. See Metrology Calibration.</li></ul>");
-        binName.addClass('parsley-error');
-        isValid = false;
-      }
-    });
-  }
-  else if (ticketType == 2) {
-    console.log('validating');
-    threadRows.each(function (index) {
-      let threadGageName = $(this).find('.add-thread-gages-table-thread-gage-name input');
-      let threadGageID = $(this).find('.add-thread-gages-table-new-thread-gage-id input');
-      let existingThreadGageTicketNumber = $(this).find('.add-thread-gages-table-existing-thread-gage-id input');
-      let missingThreadGageTicketNumber = $(this).find('.existing-missing-thread-ticket-number input');
-
-      if ((threadGageID.val().length == 0) && (threadGageName.val().length > 0)) {
-        threadGageName.parent().find('#bad-thread-gage-error').remove();
-        threadGageName.parent().append("<ul id='bad-thread-gage-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Invalid Thread Gage Name.</li></ul>");
-        threadGageName.addClass('parsley-error');
-        isValid = false;
-      }
-      if (existingThreadGageTicketNumber.val().length > 0) {
-        threadGageName.parent().find('#preexisting-thread-gage-error').remove();
-        threadGageName.parent().append("<ul id='preexisting-thread-gage-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Thread Gage already marked as 'Checked Out'. See Metrology Calibration.</li></ul>");
-        threadGageName.addClass('parsley-error');
-        isValid = false;
-      }
-      if (missingThreadGageTicketNumber.val().length > 0) {
-        threadGageName.parent().find('#missing-thread-gage-error').remove();
-        threadGageName.parent().append("<ul id='missing-thread-gage-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Thread Gage marked as 'Missing' on another ticket. Bring gage to Metrology Calibration.</li></ul>");
-        threadGageName.addClass('parsley-error');
-        isValid = false;
-      }
-    });
-  }
-
-  if (isValid == true) {
-    $('.modify-action input').val(2);
-    $('.print-ticket-id input').val($('.details-guid input').val());
-  }
-  else {
-   e.preventDefault();
-  }
-
-
-}
-
-
-function wireUpChangeEvents() {
-  $('.site-name select').change(function () {
-    var sitename = $('.site-name select').val();
-    $.cookie('site_name', sitename, { expires: 365, path: '/' });
-  });
-
-
+  e.preventDefault();
 }
 
 
