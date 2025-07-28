@@ -24,9 +24,18 @@ $(document).ready(function () {
 
   $(document).on("onloadlookupfinished", function (e) {
     if ($('#probe-tip-table-div table').length == 0) {
-      $('#probe-tip-table-div table').append('<table class="probe-tip-table"><tr><td class="probe-table-cell"><fieldset class="probe-checkboxes"><legend>Probes</legend></td><td class="tip-table-cell"><fieldset class="tip-checkboxes"><legend>Tip Angles</legend></td></tr></table>');
+      $('#probe-tip-table-div').append('<table class="probe-tip-table"><tr><td class="probe-table-cell"><fieldset class="probe-checkboxes"><legend>Probes</legend></td><td class="tip-table-cell"><fieldset class="tip-checkboxes"><legend>Tip Angles</legend></td></tr></table>');
     }
   });
+
+  $(document).on('change', '.probe-chkbox', function (e) {
+    generateSelectedProbeList();
+  });
+
+  $(document).on('change', '.tip-chkbox', function (e) {
+    generateSelectedTipAngles();
+  });
+
 });
 
 
@@ -54,12 +63,54 @@ function refreshProbes() {
 
 function refreshTipAngles() {
   var tipangle_length = $('.tipangle-table table tbody tr').length;
+  var tipangle_divs_html = '';
+  $('.selected-tips input').val('').change();
+  $('.tip-div').remove();
+  $('[id^="Field14"]').each(function (index, element) {
+    let tipName = $(element).val();
+    let tip_div_html = '';
+    if (tipName) {
+      tip_div_html = `<div class="tip-div"><input id="tip-chkbox${index}" type="checkbox" value="${tipName}" class="tip-chkbox"><label class="tip-label" for="tip-chkbox${index}">${tipName}</label></div>`;
+      tipangle_divs_html = tipangle_divs_html + tip_div_html;
+    }
+  });
+  $('.tip-table-cell').append(tipangle_divs_html);
 }
 
-function generateSelectedProbes() {
+function generateSelectedProbeList() {
+  var selectedProbeList = '';
 
+  $('.probe-chkbox').each(function (index, element) {
+    probeCheckBox = $(element);
+
+    if ($(probeCheckBox).is(':checked')) {
+      if (selectedProbeList.length == 0) {
+        selectedProbeList = $(probeCheckBox).val().trim();
+      }
+      else {
+        selectedProbeList += ',' + $(probeCheckBox).val().trim()
+      }
+    }
+  });
+
+  $('.selected-probes input').val(selectedProbeList).change();
 }
 
 function generateSelectedTipAngles() {
+  var selectedTipList = '';
 
+  $('.tip-chkbox').each(function (index, element) {
+    tipCheckBox = $(element);
+
+    if ($(tipCheckBox).is(':checked')) {
+      if (selectedTipList.length == 0) {
+        selectedTipList = $(tipCheckBox).val().trim();
+      }
+      else {
+        selectedTipList += ',' + $(tipCheckBox).val().trim()
+      }
+    }
+  });
+
+  $('.selected-tips input').val(selectedTipList).change();
 }
