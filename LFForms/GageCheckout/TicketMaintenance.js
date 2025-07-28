@@ -10,7 +10,7 @@ var should_print_receipt = true;
 $(document).ready(function () {
 
   $('.Submit').hide();
-
+  $('.Submit').click(function (e) { submitForm(e); });
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js');
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
@@ -27,10 +27,12 @@ $(document).ready(function () {
   var printEvent = window[eventMethod];
   var messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
   printEvent(messageEvent, function (e) {
-
-    if (e.data === "printme" || e.message === "printme") {
-      $("#print-iframe").get(0).contentWindow.print();
-      $('.print-ticket-id input').val(null);
+    returnTicketID = Number($('.return-ticket-id input').val());
+    if (returnTicketID == 0) {
+      if (e.data === "printme" || e.message === "printme") {
+        $("#print-iframe").get(0).contentWindow.print();
+        $('.print-ticket-id input').val(null);
+      }
     }
   });
 
@@ -47,10 +49,18 @@ $(document).ready(function () {
     if (event.data == "CloseDialogWithRefresh") {
       $("#popupIFrame").dialog("destroy");
       $("#popupIFrame").remove();
-      refreshPage();
+
+      returnTicketID = Number($('.return-ticket-id input').val());
+      if (returnTicketID > 0) {
+        executeIFrameUpdate(returnTicketID);
+        removeRow(returnTicketID);
+        $('.return-ticket-id input').val(0);
+      }
+      else {
+        refreshPage();
+      }
     }
   };
-
 
   $(document).on("onloadlookupfinished", function () {
     $('.Submit').hide();
@@ -59,10 +69,10 @@ $(document).ready(function () {
       $('.site-name select').val(sitename).change();
     }
     generateFormButtons();
+    generateGoBackButtons();
     $('.ticket-table').show();
 
   });
-
 
   $(document).on('lookupcomplete', function (e) {
 
@@ -104,6 +114,13 @@ $(document).ready(function () {
     $.cookie('site_name', sitename, { expires: 365, path: '/' });
   });
 
+  $(document).on('change', '[id^="Field269"]', function (e) {
+    generateMachineList();
+  });
+
+  $(document).on('click', '.cf-collection-delete', function (e) {
+    generateMachineList();
+  });
 });
 
 
@@ -141,16 +158,33 @@ function appendPagination() {
 }
 
 
-function callCalibrate(ticket_id) {
+function callActivate(ticket_id) {
+  $('.activate-ticket-id input').val(ticket_id).change();
+  $('.Submit').show();
+}
+
+
+function callCalibrate(ticket_id, calForReturn=0) {
   var has_permissions = checkPermissions();
   if (has_permissions) {
     var widowHeight = $(window).height();
     widowHeight = widowHeight - 50;
-    popUpIframe(`http://rmslf/Forms/GageCalibration?tid=${ticket_id}`, 'Calibrate Ticket', widowHeight, 1200);
+    if (calForReturn == 0) {
+      popUpIframe(`http://rmslf/Forms/GageCalibration?tid=${ticket_id}`, 'Calibrate Ticket', widowHeight, 1200);
+    }
+    else {
+      popUpIframe(`http://rmslf/Forms/GageCalibration?tid=${ticket_id}&CalForReturn=1`, 'Calibrate Ticket', widowHeight, 1200);
+    }
   }
   else {
     alert("Sorry, you do not have permissions to do this.");
   }
+}
+
+
+function callGoBack() {
+  $('.activate-ticket-id input').val(null).change();
+  $('.Submit').hide();
 }
 
 
@@ -174,6 +208,7 @@ function callPrevPage() {
 
 
 function callPrint(ticket_id) {
+
   should_print_receipt = true;
   var ticketTypeID = getTicketTypeIDByTicketID(ticket_id);
   var ticketGuid = getTicketGuidByTicketID(ticket_id);
@@ -187,7 +222,7 @@ function callReturn(ticket_id) {
 
   $.confirm({
     title: 'Are you sure?',
-    content: 'Are you sure you wish to return this ticket? It cannot be undone.',
+    content: 'Are you sure you wish to check in this ticket? It cannot be undone.',
 
     buttons: {
       ok: {
@@ -196,8 +231,8 @@ function callReturn(ticket_id) {
         action: function () {
           var has_permissions = checkPermissions();
           if (has_permissions) {
-            executeIFrameUpdate(ticket_id);
-            removeRow(ticket_id);
+            $('.return-ticket-id input').val(ticket_id); 
+            callCalibrate(ticket_id, 1);
           }
           else {
             alert("Sorry, you do not have permissions to do this.");
@@ -258,10 +293,6 @@ function executeIFrameUpdate(ticket_id) {
   if (typeof ticket_id === 'undefined') {
     return;
   }
-
-  console.log('executeIFrameUpdate');
-  console.log(execute_url);
-
   var execute_url = `http://rmslf/Forms/RMS-GAGE-ReturnTicket?tid=${ticket_id}`;
 
   $("#popupIFrame").remove();
@@ -281,8 +312,11 @@ function filterTicketTable() {
   var machineGroupFilterVal = $('#cboFilter_MachineGroup').val();
   var operatorFilterVal = $('#cboFilter_Operator').val();
   var cellLeaderFilterVal = $('#cboFilter_CellLeader').val();
+  var statusFilterVal = $('#cboFilter_Status').val();
 
   $('.ftname input').val(ticketNumberFilterValue);
+
+  $('.fsid input').val(statusFilterVal); 
 
   if (ticketTypeFilterVal != null) {
     $('.fttid input').val(ticketTypeFilterVal);
@@ -336,18 +370,30 @@ function formatDateFields(selector) {
 }
 
 
-function generateTableButtons(buttonSelector, buttonClass, buttonImageClass, buttonTitle, buttonFunction) {
-  var selectionString = buttonSelector + " input[type=text]";
-  var buttons = $(selectionString);
-  buttons.each(function () {
-    var btn_value = $(this).val();
-    var btn_html = `<div class='table-button ui-button ${buttonClass}' onclick='${buttonFunction}(${btn_value})'><span title='${buttonTitle}' class='ui-button-icon ui-icon ${buttonImageClass}'/></div>`
-
-    var has_button = $(this).parent().find(`.${buttonClass}`).length;
-    if (has_button == 0) {
-      $(this).parent().append(btn_html);
+function generateActivateButtons() {
+  var activate_textboxes = $(".activate-ticket-button input[type=text]");
+  var ticket_ids = $(".ticket-id-col input[type=text]");
+  var ticket_status_ids = $(".ticket-status-id-col input[type=text]");
+  activate_textboxes.each(function (index) {
+    let ticket_id = ticket_ids[index].value;
+    let ticket_status_id = ticket_status_ids[index].value;
+    if (ticket_status_id == '1') {
+      let has_button = $(this).parent().find('.activate-button').length;
+      if (has_button == 0) {
+        let btn_html = `<div class='table-button ui-button activate-button' onclick='callActivate(${ticket_id})'><span title='Activate Staged Ticket' class='ui-button-icon ui-icon ui-icon-power'/></div>`
+        $(this).parent().append(btn_html);
+      }
     }
   });
+}
+
+
+function generateGoBackButtons() {
+  var gobackactivate_buttons = $(".goback_activate");
+  gobackactivate_buttons.each(function (index) {
+    $(this).parent().append("<div id='go-back' class='ui-button ui-corner-all ui-widget' onclick='callGoBack()'><span class='ui-icon ui-icon-arrowreturnthick-1-w'></span>Go Back</div>");
+  });
+  $(".goback_activate").remove();
 }
 
 
@@ -355,7 +401,7 @@ function generateFilterRow() {
 
   if ($('#filterRow').length == 0) {
 
-    var filter_row = "<TR id='filterRow'><TH/><TH/><TH/><TH><input type='text' id='txtFilter_TicketNumber'></TH><TH><select id='cboFilter_TicketType'/></TH><TH><select id='cboFilter_Department'/></TH><TH/><TH><select id='cboFilter_MachineGroup'/></TH><TH><select id='cboFilter_Operator'/></TH><TH><select id='cboFilter_CellLeader'/></TH><TH/><TH/><TH/><TH/><TH/><TH/><TH/>"
+    var filter_row = "<TR id='filterRow'><TH/><TH/><TH/><TH/><TH><input type='text' id='txtFilter_TicketNumber'></TH><TH><select id='cboFilter_TicketType'/></TH><TH><select id='cboFilter_Status'/></TH><TH><select id='cboFilter_Department'/></TH><TH/><TH><select id='cboFilter_MachineGroup'/></TH><TH><select id='cboFilter_Operator'/></TH><TH><select id='cboFilter_CellLeader'/></TH><TH/><TH/><TH/><TH/><TH/><TH/><TH/>"
     $('.ticket-table table thead').append(filter_row);
     $("#txtFilter_TicketNumber").on("change", function () { filterTicketTable(); });
     $("#cboFilter_TicketType").on("change", function () { filterTicketTable(); });
@@ -363,6 +409,7 @@ function generateFilterRow() {
     $("#cboFilter_MachineGroup").on("change", function () { filterTicketTable(); });
     $("#cboFilter_Operator").on("change", function () { filterTicketTable(); });
     $("#cboFilter_CellLeader").on("change", function () { filterTicketTable(); });
+    $("#cboFilter_Status").on("change", function () { filterTicketTable(); });
 
 
     $("#txtFilter_TicketNumber").dblclick(function () { $("#txtFilter_TicketNumber").val(null).change(); });
@@ -371,6 +418,7 @@ function generateFilterRow() {
     $("#cboFilter_MachineGroup").dblclick(function () { $("#cboFilter_MachineGroup").val(null).change(); });
     $("#cboFilter_Operator").dblclick(function () { $("#cboFilter_Operator").val(null).change(); });
     $("#cboFilter_CellLeader").dblclick(function () { $("#cboFilter_CellLeader").val(null).change(); });
+    $("#cboFilter_Status").dblclick(function () { $("#cboFilter_Status").val(null).change(); });
     wireUpSortFields();
   }
 
@@ -380,6 +428,10 @@ function generateFilterRow() {
 
   if (($(".department-lookup-cbo select option").length > 0) && ($('#cboFilter_Department option' == 0))) {
     $("#cboFilter_Department").html($(".department-lookup-cbo select").html());
+  }
+
+  if (($(".status-lookup-cbo select option").length > 0) && ($('#cboFilter_Status option' == 0))) {
+    $("#cboFilter_Status").html($(".status-lookup-cbo select").html());
   }
 
   if (($(".machine-group-lookup-cbo select option").length > 0) && ($('#cboFilter_MachineGroup option' == 0))) {
@@ -400,10 +452,35 @@ function generateFilterRow() {
 
 function generateFormButtons() {
 
-  generateTableButtons(".ticket-table-return-button", "return-button", "ui-icon-arrowreturn-1-w", "Return", "callReturn");
-  generateTableButtons(".ticket-table-calibrate-button", "cal-button", "ui-icon-wrench", "Calibrate", "callCalibrate");
+  generateTableButtons(".ticket-table-return-button", "return-button", "ui-icon-arrowreturn-1-w", "Check In Ticket", "callReturn");
+  generateTableButtons(".ticket-table-calibrate-button", "cal-button", "ui-icon-wrench", "Calibrate Ticket Gages", "callCalibrate");
   generatePrintButtons();
   generateTicketNumberColumn();
+  generateActivateButtons();
+}
+
+
+function generateMachineList() {
+  var activateTicketID = $('.activate-ticket-id input').val();
+  var machineList = '';
+
+
+  if (activateTicketID != '') {
+
+    $('[id^="Field269"]').each(function (index, element) {
+      machineName = $(element).val();
+      if (machineName != '') {
+        if (machineList.length > 0) {
+          machineList += ', ' + machineName;
+        }
+        else {
+          machineList = machineName;
+        }
+      }
+    });
+
+    $('.activate-machine-list input').val(machineList);
+  }
 }
 
 
@@ -414,7 +491,22 @@ function generatePrintButtons() {
     let ticket_id = ticket_ids[index].value;
     let has_button = $(this).parent().find('.print-button').length;
     if (has_button == 0) {
-      let btn_html = `<div class='table-button ui-button print-button' onclick='callPrint(${ticket_id})'><span title='Print' class='ui-button-icon ui-icon ui-icon-print'/></div>`
+      let btn_html = `<div class='table-button ui-button print-button' onclick='callPrint(${ticket_id})'><span title='Print Ticket Receipt' class='ui-button-icon ui-icon ui-icon-print'/></div>`
+      $(this).parent().append(btn_html);
+    }
+  });
+}
+
+
+function generateTableButtons(buttonSelector, buttonClass, buttonImageClass, buttonTitle, buttonFunction) {
+  var selectionString = buttonSelector + " input[type=text]";
+  var buttons = $(selectionString);
+  buttons.each(function () {
+    var btn_value = $(this).val();
+    var btn_html = `<div class='table-button ui-button ${buttonClass}' onclick='${buttonFunction}(${btn_value})'><span title='${buttonTitle}' class='ui-button-icon ui-icon ${buttonImageClass}'/></div>`
+
+    var has_button = $(this).parent().find(`.${buttonClass}`).length;
+    if (has_button == 0) {
       $(this).parent().append(btn_html);
     }
   });
@@ -557,6 +649,11 @@ function popUpIframe(src, title, height, width) {
 
 function print_receipt() {
 
+  if (Number($('.return-ticket-id input').val()) != 0) {
+    return;
+  }
+
+
   var domain = document.location.hostname;
   var receipt_url_root = "http://" + domain + "/Forms/";
   var receipt_url = "";
@@ -589,6 +686,9 @@ function reApplyFilterValues() {
   var machineGroupFilterVal = Number($('.fmgid input').val());
   var operatorFilterVal = $('.fopname input').val();
   var cellLeaderFilterVal = Number($('.fclid input').val());
+  var statusFilterVal = $('.fsid input').val();
+
+  $('#cboFilter_Status').val(statusFilterVal);
 
   if ((ticketNumberFilterValue != null) && (ticketNumberFilterValue.length > 0)) {
     $('#txtFilter_TicketNumber').val(ticketNumberFilterValue);
@@ -729,6 +829,30 @@ function sortTable(newSortOrdinal, selector) {
   }
 
 
+}
+
+
+function submitForm(e) {
+
+  var siteID = Number($('.site-id input').val());
+  var activateSubmitEmployeeNumber = $('.activate-employee-number input');
+  var activateSubmitEmployeeName = $('.activate-employee-name input');
+
+  var crActivateEmployeeNumber = $('.cr-act-employee-number input');
+  var crActivateEmployeeName = $('.cr-act-employee-name input');
+
+  var anokaActivateEmployeeNumber = $('.ank-act-employee-number input');
+  var anokaActivateEmployeeName = $('.ank-act-employee-name input');
+
+  if (siteID == 1) {
+    activateSubmitEmployeeNumber.val(crActivateEmployeeNumber.val());
+    activateSubmitEmployeeName.val(crActivateEmployeeName.val());
+  }
+  if (siteID == 2) {
+    activateSubmitEmployeeNumber.val(anokaActivateEmployeeNumber.val());
+    activateSubmitEmployeeName.val(anokaActivateEmployeeName.val());
+  }
+  $('.print-ticket-id input').val($('.activate-guid input').val());
 }
 
 

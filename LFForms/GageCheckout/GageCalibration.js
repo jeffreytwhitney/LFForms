@@ -187,6 +187,11 @@ function loadiFrame(src) {
 
 
 function print_receipt() {
+  var calForReturn = Number($('.cal-for-return input').val()); 
+  if (calForReturn == 1) {
+    should_print_receipt = false;
+    return;
+  }
 
   var domain = document.location.hostname;
   var receipt_url_root = "http://" + domain + "/Forms/";
@@ -212,6 +217,15 @@ function print_receipt() {
 
 
 function set_print_event() {
+  var calForReturn = Number($('.cal-for-return input').val());
+  if (calForReturn == 1) {
+    if ($('.closeme input').val() == 1) {
+      window.parent.postMessage('CloseDialogWithRefresh', '*');
+    }
+    return;
+  }
+
+
   var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
   var printEvent = window[eventMethod];
   var messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";

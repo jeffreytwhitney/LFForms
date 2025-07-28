@@ -36,14 +36,11 @@ $(document).ready(function () {
       }
     }
   });
-
- 
-
+  
   $(document).on("onloadlookupfinished", function () {
 
 
   });
-
 
   $(document).on('lookupcomplete', function (e) {
     if (e.triggerId == 'Field23') {
@@ -67,7 +64,6 @@ $(document).ready(function () {
     }
   });
 
-
   $(document).on('change', '[id^="Field41"]', function (e) {
     if ($(e.currentTarget).val() == 'BIN') {
       $(e.currentTarget).closest('tr').find('.add-pins-bins-table-diameter input').val(0).addClass("ui-state-disabled");
@@ -78,12 +74,20 @@ $(document).ready(function () {
       $(e.currentTarget).closest('tr').find('.add-pins-bins-table-number-of-pins input').removeClass("ui-state-disabled");
     }
   });
+
   $(document).on('keyup', '[id^="Field45"]', function () {
     this.value = this.value.toLocaleUpperCase();
   });
 
+  $(document).on('change', '[id^="Field106"]', function (e) {
+    generateMachineList();
+  });
 
-});
+  $(document).on('click', '.cf-collection-delete', function (e) {
+    generateMachineList();
+  });
+
+  });
 
 
 function colorCodePinRows() {
@@ -131,6 +135,25 @@ function colorCodeThreadRows() {
     }
 
   });
+}
+
+
+function generateMachineList() {
+  var machineList = '';
+
+  $('[id^="Field106"]').each(function (index, element) {
+    machineName = $(element).val();
+    if (machineName != '') {
+      if (machineList.length > 0) {
+        machineList += ', ' + machineName;
+      }
+      else {
+        machineList = machineName;
+      }
+    }
+  });
+
+  $('.machine-name-list input').val(machineList);
 }
 
 
