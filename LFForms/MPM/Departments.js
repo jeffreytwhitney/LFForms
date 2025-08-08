@@ -19,6 +19,10 @@ $(document).ready(function () {
       $('.edit-parent-name select').val(editParentName).change();
     }
   });
+  $(document).on('change', '.site-name select', function () {
+    var sitename = $('.site-name select').val();
+    $.cookie('site_name', sitename, { expires: 365, path: '/' });
+  });
 
 
   $(document).on('lookupcomplete', function (e) {
@@ -35,6 +39,10 @@ $(document).ready(function () {
   $(document).on("onloadlookupfinished", function (e) {
     generateGoBackButtons();
     $('.network-user-name input').trigger("change");
+    var sitename = $.cookie('site_name');
+    if (sitename != null) {
+      $('.site-name select').val(sitename).change();
+    }
   });
 
 });

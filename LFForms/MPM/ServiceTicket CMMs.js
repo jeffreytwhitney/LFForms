@@ -17,10 +17,13 @@ $(document).ready(function () {
     var isActive = $('.edit-is-active-value input').val();
     $(`.edit-cmm-is-active input[type='radio'][value='${isActive}']`).prop("checked", true);
   });
-
   $(document).on('change', '.edit-is-bns-value input', function () {
     var setValue = $('.edit-is-bns-value input').val();
     $(`.edit-is-bns input[type='radio'][value='${setValue}']`).prop("checked", true);
+  });
+  $(document).on('change', '.site-name select', function () {
+    var sitename = $('.site-name select').val();
+    $.cookie('site_name', sitename, { expires: 365, path: '/' });
   });
 
   $(document).on('lookupcomplete', function (e) {
@@ -36,6 +39,10 @@ $(document).ready(function () {
 
   $(document).on("onloadlookupfinished", function (e) {
     $('.network-user-name input').trigger("change");
+    var sitename = $.cookie('site_name');
+    if (sitename != null) {
+      $('.site-name select').val(sitename).change();
+    }
   });
 
 });
