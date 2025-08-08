@@ -37,7 +37,10 @@ $(document).ready(function () {
   $(document).on('keyup', '.capitalize-me input', function () {
     this.value = this.value.toUpperCase();
   });
-
+  $(document).on('change', '.site-name select', function () {
+    var sitename = $('.site-name select').val();
+    $.cookie('site_name', sitename, { expires: 365, path: '/' });
+  });
 
 
   $(document).on('lookupcomplete', function (e) {
@@ -56,6 +59,10 @@ $(document).ready(function () {
       $('.pg input').val(1).change();
     }
     $('.network-user-name input').trigger("change");
+    var sitename = $.cookie('site_name');
+    if (sitename != null) {
+      $('.site-name select').val(sitename).change();
+    }
     $('.user-table').show();
   });
 

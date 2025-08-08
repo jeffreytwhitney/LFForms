@@ -1,3 +1,6 @@
+var cellLeadMap = new Map();
+var cellLeadNameMap = new Map();
+
 $(document).ready(function () {
   var lfUserName = $('.lf-user-name input').val();
   $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).change();
@@ -11,7 +14,6 @@ $(document).ready(function () {
   var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
   $.fn.bootstrapBtn = bootstrapButton;
 
-
   $('.Submit').click(function (e) { submitForm(e); });
   $(document).on('change', '.edit-is-active-value input', function () {
     var isActive = $('.edit-is-active-value input').val();
@@ -21,24 +23,34 @@ $(document).ready(function () {
     var isAdmin = $('.edit-name-trimming-value input').val();
     $(`.edit-do-part-name-trimming input[type='radio'][value='${isAdmin}']`).prop("checked", true);
   });
-
-
   $(document).on('change', ".edit-schedule-is-active input[type='radio']", function () {
     var isActive = $(this).val();
     $('.edit-is-active-value input').val(isActive);
   });
-
   $(document).on('change', ".edit-do-part-name-trimming input[type='radio']", function () {
     var isAdmin = $(this).val();
     $('.edit-name-trimming-value input').val(isAdmin);
   });
-
-
-
+  $(document).on('change', '.edit-schedule-owner-cbo select', function () {
+    var ownerName = $(this).val();
+    if (cellLeadNameMap.has(ownerName)) {
+      var ownerID = cellLeadNameMap.get(ownerName);
+      $('.edit-owner-id input').val(ownerID);
+    }
+    else {
+      $('.edit-owner-id input').val(0);
+    }
+  });
+  $(document).on('change', '.site-name select', function () {
+    var sitename = $('.site-name select').val();
+    $.cookie('site_name', sitename, { expires: 365, path: '/' });
+  });
 
   $(document).on('lookupcomplete', function (e) {
     generateTableButtons(".edit-button-col", "ui-icon-pencil", "Edit Schedule", "callEditSchedule");
+    fillCellLeadSelect();
     generateGoBackButtons();
+    loadCellLeadMap();
     if (isAdminUser()) {
       if ($('.add-button').length == 0) {
         var add_button = '<div class="ui-button add-button" onclick="callAddSchedule()"><span title="Add Schedule" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Schedule</div>';
@@ -51,6 +63,10 @@ $(document).ready(function () {
 
   $(document).on("onloadlookupfinished", function (e) {
     $('.network-user-name input').trigger("change");
+    var sitename = $.cookie('site_name');
+    if (sitename != null) {
+      $('.site-name select').val(sitename).change();
+    }
   });
 
 });
@@ -74,8 +90,31 @@ function callEditSchedule(scheduleID) {
 
 function callGoBack() {
   $(".add-id input").val(0).change();
+  $('.add-owner-id input').val(0).change(); 
+  $('.add-department-id input').val(0).change(); 
+  $('.add-schedule-owner-cbo select').val(''); 
+
   $(".edit-id input").val(0).change();
+  $('.edit-owner-id input').val(0).change();
+  $('.edit-department-id input').val(0).change();
+  $('.edit-schedule-owner-cbo select').val('');
+
   $('.Submit').hide();
+}
+
+
+function fillCellLeadSelect() {
+
+  var ownerID = Number($('.edit-owner-id input').val());
+  var selectLength = $('.edit-schedule-owner-cbo select option').length;
+
+  if ((cellLeadMap.has(ownerID)) && (selectLength > 1)) {
+    var ownerName = cellLeadMap.get(ownerID);
+    $('.edit-schedule-owner-cbo select').val(ownerName);
+  }
+  else {
+    $('.edit-schedule-owner-cbo select').val('');
+  }
 }
 
 
@@ -111,8 +150,23 @@ function isAdminUser() {
 }
 
 
-function submitForm(e) {
+function loadCellLeadMap() {
+  if (cellLeadMap.keys.length == 0) {
+    var cellLead_rows = $('.celllead-lookup-table table tbody tr');
+    if (cellLead_rows.length == 0) {
+      return;
+    }
+    cellLead_rows.each(function (index) {
+      cellLeadID = Number($(this).find('.celllead-lookup-table-id input').val());
+      cellLeadName = $(this).find('.celllead-lookup-table-name input').val();
+      cellLeadMap.set(cellLeadID, cellLeadName);
+      cellLeadNameMap.set(cellLeadName, cellLeadID);
+    });
+  }
+}
 
+
+function submitForm(e) {
 
 }
 

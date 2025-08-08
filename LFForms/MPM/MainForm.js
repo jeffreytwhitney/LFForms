@@ -8,25 +8,20 @@ $(document).ready(function () {
   $.fn.bootstrapBtn = bootstrapButton;
   $('#Field3').val($('#Field2').val().substr($('#Field2').val().lastIndexOf('\\') + 1)).change();
 
-  if ($('#Field5').val() != 1) {
-    $(".is-user").addClass('disabledAnchor');
-  }
 
-  if ($('#Field6').val() != 1) {
-    $(".is-admin").addClass('disabledAnchor');
-  }
 
 
 
 
   $(document).on('lookupcomplete', function (e) {
+    if ($('#Field6').val() != '1') {
+      console.log('Not Admin');
 
-
+      $(".is-admin").removeClass('disabledAnchor').addClass('disabledAnchor');
+    }
   });
 
   $(document).on("onloadlookupfinished", function (e) {
-
-
 
   });
 
