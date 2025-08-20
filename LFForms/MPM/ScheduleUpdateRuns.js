@@ -12,7 +12,11 @@ $(document).ready(function () {
   if (lfUserName != 'Anonymous User') {
     $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).change();
   }
-  
+
+  $(document).on('change', '.site-name select', function () {
+    var sitename = $('.site-name select').val();
+    $.cookie('site_name', sitename, { expires: 365, path: '/' });
+  });
 
 
   $(document).on('lookupcomplete', function (e) {
@@ -24,19 +28,20 @@ $(document).ready(function () {
         $(add_button).insertBefore('.schedule-runs-table table');
       }
     }
+
     $('.schedule-runs-table').show();
+    
   });
 
   $(document).on("onloadlookupfinished", function (e) {
 
     $('#q0').append("<div class='hidden-text' id='popUpDiv'></div>");
-
     var sitename = $.cookie('site_name');
     if (sitename != null) {
-      $('.site-name input').val(sitename).change();
+      $('.site-name select').val(sitename).change();
     }
     $('.network-user-name input').trigger("change");
-    $('.site-id input').trigger("change");
+   
     if ($('.pg input').val() == '999') {
       $('.pg input').val(1).change();
     }
