@@ -41,7 +41,7 @@ $(document).ready(function () {
     var sitename = $('.site-name select').val();
     $.cookie('site_name', sitename, { expires: 365, path: '/' });
   });
-
+  $(document).on('change', '#chkIncludeInActive', function () { filterTable(); });
 
   $(document).on('lookupcomplete', function (e) {
     loadUserTypeMap();
@@ -191,7 +191,7 @@ function generateFilterRow() {
 
     $("#cboFilter_UserType").on("change", function () { filterTable(); });
     $("#cboFilter_Department").on("change", function () { filterTable(); });
-    $("#chkIncludeInActive").on("change", function () { filterTable(); });
+    
 
     $("#cboFilter_Department").dblclick(function () { $("#cboFilter_Department").val(0).change(); });
     $("#cboFilter_UserType").dblclick(function () { $("#cboFilter_UserType").val(0).change(); });

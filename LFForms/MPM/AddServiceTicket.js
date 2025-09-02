@@ -55,6 +55,20 @@ $(document).ready(function () {
 });
 
 
+function fillCCList() {
+
+  var ccUserNames = '';
+
+  $('.cc-email-col input').each(function (index) {
+    let ccUserName = $(this).val();
+    if (ccUserName.length > 0) {
+      ccUserNames += ccUserName + ';';
+    }
+  });
+  $('.cc-email-address-list input').val(ccUserNames);
+}
+
+
 function getSiteNameFromCookie() {
   var sitename = $.cookie('site_name');
   var siteNameFieldVal = $('.site-name input').val();
@@ -66,11 +80,13 @@ function getSiteNameFromCookie() {
 
 function submitForm(e) {
   var ticketType = Number($('.ttid input').val());
-
+  console.log('about to call cclist');
   if (ticketType == 0) {
     e.preventDefault();
     return;
   }
+  
+  fillCCList();
 
   if (ticketType != 1) {
     $('.cmmid input').val(0);
