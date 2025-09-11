@@ -1,8 +1,6 @@
 $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
 
-
-
   $.when(
     $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js')
   ).done(function () {
@@ -25,13 +23,7 @@ $(document).ready(function () {
   }
 
 
-  $(document).on('change', '.user-name-hidden input', function () {
-    //generateTitleInfo();
-  });
-
-
   $(document).on('click', '.ui-tabs-anchor', function () {
-    console.log('Tab clicked');
     generateTitleInfo();
   });
 
@@ -69,9 +61,7 @@ $(document).ready(function () {
 
 
   $(document).on('lookupcomplete', function (e) {
-    //if ($('.user-name-hidden input').val() == '') {
-    //  $('.network-user-name input').trigger("change");
-    //}
+
 
     generateTitleInfo();
     loadIFrames();
@@ -199,7 +189,7 @@ function generateLastRunMessage() {
 
   function tabifyFormSections() {
     $('#q0').children().wrapAll('<div id="ticket-tabs"></div>');
-    $('#ticket-tabs').prepend('<ul id="ticket-tab"><li><a href="#q1"><span>Service Tickets</span></a></li><li><a href="#q2"><span>Programming Tasks</span></a></li><li><a href="#q3"><span>Programming Tickets</span></a></li></ul>');
+    $('#ticket-tabs').prepend('<ul id="ticket-tab"><li><a href="#q1"><span>Service Tickets</span></a></li><li><a href="#q2"><span>Programming Tasks</span></a></li><li><a href="#q3"><span>Programming Tickets</span></a></li><li><a href="#q23"><span>Purchase Orders</span></a></li></ul>');
     $('#ticket-tabs').tabs();
 
     $("#ticket-tabs").on("tabsactivate", function (event, ui) {

@@ -59,42 +59,42 @@ function generateAppliationLinks() {
   var mainWindowHTML = '<div class="row"><div class="column"><ul>';
 
   if (hasPermissions) {
-    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/GageTicketAdministration" title="Gage Administration" target="_blank">Tickets</a></li>'
-    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/GageCalibration" title="Gage Calibration" target="_blank">Calibration</a></li>'
-    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/Gage-MissingGages" title="Missing Thread Gages" target="_blank">Missing Thread Gages</a></li>'
-    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-CheckoutMainform" title="Gage Checkout" target="_blank">Gage Checkout</a></li>'
-    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-TicketHistory" title="Ticket History" target="_blank">Ticket History</a></li>'
-    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-BinHistory" title="Ticket History" target="_blank">Bin History</a></li>'
-    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-ThreadGageHistory" title="Ticket History" target="_blank">Thread Gage History</a></li>'
+    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/GageTicketAdministration" title="Gage Administration" target="_self">Tickets</a></li>'
+    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/GageCalibration" title="Gage Calibration" target="_self">Calibration</a></li>'
+    //mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/Gage-MissingGages" title="Missing Thread Gages" target="_self">Missing Thread Gages</a></li>'
+    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-CheckoutMainform" title="Gage Checkout" target="_self">Gage Checkout</a></li>'
+    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-TicketHistory" title="Ticket History" target="_self">Ticket History</a></li>'
+    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-BinHistory" title="Ticket History" target="_self">Bin History</a></li>'
+    //mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-ThreadGageHistory" title="Ticket History" target="_self">Thread Gage History</a></li>'
     mainWindowHTML = mainWindowHTML + '<li></li>'
     mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Generate Overdue Ticket EMails" onclick="generateOverdueEmails()">Generate Overdue Ticket EMails</a></li>'
     mainWindowHTML = mainWindowHTML + '</ul></div><div class="column"><ul>'
 
     if (isAdmin) {
-      mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/GageUserMaintenance" title="Users" target="_blank">Users</a></li>'
+      mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/GageUserMaintenance" title="Users" target="_self">Users</a></li>'
     }
     else {
       mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Users" onclick="showPermissionAlert()">Users</a></li>';
     }
-    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-CellLeaders" title="Cell Leaders" target="_blank">Cell Leaders</a></li>'
-    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-MachineGroups" title="Machine Groups" target="_blank">Machine Groups</a></li>'
-    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-Departments" title="Departments" target="_blank">Departments</a></li>'
-    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-ThreadGages" title="Thread Gages" target="_blank">Thread Gages</a></li>'
-    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-Bins" title="Pin Bins" target="_blank">Pin Bins</a></li>'
-    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-PinTypes" title="Pin Types" target="_blank">Pin Types</a></li>'
-    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-ThreadTypes" title="Pin Types" target="_blank">Thread Types</a></li>'
-    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-Sites" title="Sites" target="_blank">Sites</a></li>'
+    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-CellLeaders" title="Cell Leaders" target="_self">Cell Leaders</a></li>'
+    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-MachineGroups" title="Machine Groups" target="_self">Machine Groups</a></li>'
+    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-Departments" title="Departments" target="_self">Departments</a></li>'
+    //mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-ThreadGages" title="Thread Gages" target="_self">Thread Gages</a></li>'
+    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-Bins" title="Pin Bins" target="_self">Pin Bins</a></li>'
+    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-PinTypes" title="Pin Types" target="_self">Pin Types</a></li>'
+    //mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-ThreadTypes" title="Pin Types" target="_self">Thread Types</a></li>'
+    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-Sites" title="Sites" target="_self">Sites</a></li>'
     mainWindowHTML = mainWindowHTML + '</ul></div></div>'
 
   }
   else {
     mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Gage Administration" onclick="showPermissionAlert()">Tickets</a></li>';
     mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Gage Calibration" onclick="showPermissionAlert()">Calibration</a></li>';
-    mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Missing Thread Gages" onclick="showPermissionAlert()">Missing Thread Gages</a></li>';
+    //mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Missing Thread Gages" onclick="showPermissionAlert()">Missing Thread Gages</a></li>';
     mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Gage Checkout" onclick="showPermissionAlert()">Gage Checkout</a></li>';
     mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Ticket History" onclick="showPermissionAlert()>Ticket History</a></li>'
     mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Bin History" onclick="showPermissionAlert()>Bin History</a></li>'
-    mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Thread Gage History" onclick="showPermissionAlert()>Thread Gage History</a></li>'
+    //mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Thread Gage History" onclick="showPermissionAlert()>Thread Gage History</a></li>'
     mainWindowHTML = mainWindowHTML + '<li></li>'
     mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Generate Overdue Ticket EMails" onclick="showPermissionAlert()">Generate Overdue Ticket EMails</a></li>';
     mainWindowHTML = mainWindowHTML + '</ul></div><div class="column"><ul>';
@@ -102,10 +102,10 @@ function generateAppliationLinks() {
     mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Cell Leaders" onclick="showPermissionAlert()">Cell Leaders</a></li>';
     mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Machine Groups" onclick="showPermissionAlert()">Machine Groups</a></li>';
     mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Departments" onclick="showPermissionAlert()">Departments</a></li>';
-    mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Thread Gages" onclick="showPermissionAlert()">Thread Gages</a></li>';
+    //mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Thread Gages" onclick="showPermissionAlert()">Thread Gages</a></li>';
     mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Pin Bins" onclick="showPermissionAlert()">Pin Bins</a></li>';
     mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Pin Types" onclick="showPermissionAlert()">Pin Types</a></li>';
-    mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Thread Types" onclick="showPermissionAlert()">Thread Types</a></li>';
+    //mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Thread Types" onclick="showPermissionAlert()">Thread Types</a></li>';
     mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Sites" onclick="showPermissionAlert()">Sites</a></li>';
   }
 

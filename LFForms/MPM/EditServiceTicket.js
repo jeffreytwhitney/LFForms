@@ -68,6 +68,7 @@ $(document).ready(function () {
 
     if ($('#note-textarea').length == 0) {
       $('.section-add-note').append('<div class="section-add-note-content"><textarea id="note-textarea" rows="5" cols="50"></textarea></div>');
+      $('.section-add-note').contents().wrapAll('<div id="section-add-note-div"></div>'); 
     }
 
 
@@ -150,26 +151,29 @@ function cancelTicket() {
 
 
 function completeTicket() {
-  var noteField = $('#note-textarea');
-  $(noteField).dialog({
+  var contentClone = $('#section-add-note-div');
+  $(contentClone).dialog({
     title: 'Add Completion Note (Optional)',
     modal: true,
     width: 600,
-    height: 400,
+    height: 600,
     autoOpen: false,
     resizable: false,
     buttons: {
       'OK': function () {
-        $('.new-note textarea').val($(noteField).val().trim());
+        noteText = contentClone.find('#note-textarea').val().trim(); 
+        $('.new-note textarea').val(noteText);
+        contentClone.find('#note-textarea').remove(); 
+        $('.section-add-note').contents().replaceWith(contentClone.contents().clone());
         $(this).dialog('close');
-        $('#form1').submit();
+        //$('#form1').submit();
       }
     }
   });
   var resizeableStyle = $('#note-textarea').attr('style');
   let newStyle = resizeableStyle + 'border-width: thin;border-color: black;border-style: solid;';
   $('#note-textarea').attr('style', newStyle);
-  $(noteField).dialog("open");
+  $(contentClone).dialog("open");
 
 }
 
@@ -197,6 +201,7 @@ function isMetrologyUser() {
   }
   return false;
 }
+
 
 function loadiFrame(src) {
   $("#popUpDiv").html("<iframe id='print-iframe' name='print-iframe' src='" + src + "' />");
@@ -231,7 +236,6 @@ function printTicket() {
   var report_url = `http://rmslf/Forms/MPM-ServiceTicketPrint?tid=${ticketID}`
   loadiFrame(report_url);
 }
-
 
 
 function resetErrorFields() {

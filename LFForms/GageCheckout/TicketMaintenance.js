@@ -307,7 +307,7 @@ function filterTicketTable() {
   }
 
   var ticketNumberFilterValue = $('#txtFilter_TicketNumber').val();
-  var ticketTypeFilterVal = $('#cboFilter_TicketType').val();
+  //var ticketTypeFilterVal = $('#cboFilter_TicketType').val();
   var departmentFilterVal = $('#cboFilter_Department').val();
   var machineGroupFilterVal = $('#cboFilter_MachineGroup').val();
   var operatorFilterVal = $('#cboFilter_Operator').val();
@@ -318,12 +318,12 @@ function filterTicketTable() {
 
   $('.fsid input').val(statusFilterVal); 
 
-  if (ticketTypeFilterVal != null) {
-    $('.fttid input').val(ticketTypeFilterVal);
-  }
-  else {
-    $('.fttid input').val(0);
-  }
+  //if (ticketTypeFilterVal != null) {
+  //  $('.fttid input').val(ticketTypeFilterVal);
+  //}
+  //else {
+  //  $('.fttid input').val(0);
+  //}
 
   if ((departmentFilterVal != 0) && (departmentFilterVal.length > 0)) {
     let taskDepartmentID = departmentNameMap.get(departmentFilterVal);
@@ -401,10 +401,10 @@ function generateFilterRow() {
 
   if ($('#filterRow').length == 0) {
 
-    var filter_row = "<TR id='filterRow'><TH/><TH/><TH/><TH/><TH><input type='text' id='txtFilter_TicketNumber'></TH><TH><select id='cboFilter_TicketType'/></TH><TH><select id='cboFilter_Status'/></TH><TH><select id='cboFilter_Department'/></TH><TH/><TH><select id='cboFilter_MachineGroup'/></TH><TH><select id='cboFilter_Operator'/></TH><TH><select id='cboFilter_CellLeader'/></TH><TH/><TH/><TH/><TH/><TH/><TH/><TH/>"
+    var filter_row = "<TR id='filterRow'><TH/><TH/><TH/><TH/><TH><input type='text' id='txtFilter_TicketNumber'></TH><TH><select id='cboFilter_Status'/></TH><TH><select id='cboFilter_Department'/></TH><TH/><TH><select id='cboFilter_MachineGroup'/></TH><TH><select id='cboFilter_Operator'/></TH><TH><select id='cboFilter_CellLeader'/></TH><TH/><TH/><TH/><TH/><TH/><TH/><TH/>"
     $('.ticket-table table thead').append(filter_row);
     $("#txtFilter_TicketNumber").on("change", function () { filterTicketTable(); });
-    $("#cboFilter_TicketType").on("change", function () { filterTicketTable(); });
+    //$("#cboFilter_TicketType").on("change", function () { filterTicketTable(); });
     $("#cboFilter_Department").on("change", function () { filterTicketTable(); });
     $("#cboFilter_MachineGroup").on("change", function () { filterTicketTable(); });
     $("#cboFilter_Operator").on("change", function () { filterTicketTable(); });
@@ -413,7 +413,7 @@ function generateFilterRow() {
 
 
     $("#txtFilter_TicketNumber").dblclick(function () { $("#txtFilter_TicketNumber").val(null).change(); });
-    $("#cboFilter_TicketType").dblclick(function () { $("#cboFilter_TicketType").val(null).change(); });
+    //$("#cboFilter_TicketType").dblclick(function () { $("#cboFilter_TicketType").val(null).change(); });
     $("#cboFilter_Department").dblclick(function () { $("#cboFilter_Department").val(null).change(); });
     $("#cboFilter_MachineGroup").dblclick(function () { $("#cboFilter_MachineGroup").val(null).change(); });
     $("#cboFilter_Operator").dblclick(function () { $("#cboFilter_Operator").val(null).change(); });
@@ -422,9 +422,9 @@ function generateFilterRow() {
     wireUpSortFields();
   }
 
-  if (($(".ticket-type-lookup-cbo select option").length > 0) && ($('#cboFilter_TicketType option' == 0))) {
-    $("#cboFilter_TicketType").html($(".ticket-type-lookup-cbo select").html());
-  }
+  //if (($(".ticket-type-lookup-cbo select option").length > 0) && ($('#cboFilter_TicketType option' == 0))) {
+  //  $("#cboFilter_TicketType").html($(".ticket-type-lookup-cbo select").html());
+  //}
 
   if (($(".department-lookup-cbo select option").length > 0) && ($('#cboFilter_Department option' == 0))) {
     $("#cboFilter_Department").html($(".department-lookup-cbo select").html());
