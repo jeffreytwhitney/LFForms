@@ -1,3 +1,4 @@
+var enabledStateSet = false;
 
 $(document).ready(function () {
   $(document).prop('title', 'Edit Service Ticket');
@@ -34,6 +35,10 @@ $(document).ready(function () {
     $(document).prop('title', `Edit Ticket ${ticket_name}`);
   });
 
+  $(document).on('change', '.user-id input', function (e) {
+    enabledStateSet = false;
+    setFormEnabledState();
+  });
 
 
   window.onmessage = function (event) {
@@ -71,7 +76,13 @@ $(document).ready(function () {
       $('.section-add-note').contents().wrapAll('<div id="section-add-note-div"></div>'); 
     }
 
-
+    brokenProbeID = Number($('.broken-probe-id input').val());
+    console.log(`brokenProbeID: ${brokenProbeID}`);
+    if (brokenProbeID > 0) {
+      brokenProbeName = $('.broken-probe-name input').val();
+      console.log(`brokenProbeName: ${brokenProbeName}`);
+      $('.broken-probe-name-col select').val(brokenProbeName);
+    }
 
     if ((Number($('.sid input').val()) == 5) || (Number($('.sid input').val()) == 6)) {
       $('.ticket-status select').addClass('ui-state-disabled');
@@ -105,8 +116,9 @@ $(document).ready(function () {
     if (!$('#print-ticket').length) {
       $('.ticket-number input').parent().append(`<div id='print-ticket' class='table-button ui-button' onclick='printTicket()'><span title='Print Ticket' class='ui-button-icon ui-icon ui-icon-print'/></div>`);
     }
-    setFormEnabledState();
-    
+    if (enabledStateSet == false) {
+      setFormEnabledState();
+    }
   });
 });
 
@@ -164,15 +176,21 @@ function completeTicket() {
         noteText = contentClone.find('#note-textarea').val().trim(); 
         $('.new-note textarea').val(noteText);
         contentClone.find('#note-textarea').remove(); 
-        $('.section-add-note').contents().replaceWith(contentClone.contents().clone());
+        $('.section-add-note').append(contentClone.contents());
         $(this).dialog('close');
         //$('#form1').submit();
       }
     }
   });
   var resizeableStyle = $('#note-textarea').attr('style');
-  let newStyle = resizeableStyle + 'border-width: thin;border-color: black;border-style: solid;';
+  let newStyle = resizeableStyle + 'border-width: thin;border-color: black;border-style: solid;height:250px;width:100%;';
+  let newSectionStyle = 'list-style-type:none;';
+
+
   $('#note-textarea').attr('style', newStyle);
+  $('.broken-probe-table').attr('style', newSectionStyle);
+  $('.broken-probe-name-col select').prop("disabled", false);
+  $('.replacement-number-col input').prop("disabled", false);
   $(contentClone).dialog("open");
 
 }
@@ -251,6 +269,7 @@ function resetErrorFields() {
 
 
 function setFormEnabledState() {
+
   var lfUserName = $('.lf-user-name input').val();
   if (lfUserName != 'Anonymous User') {
     if (!isMetrologyUser()) {
@@ -270,7 +289,7 @@ function setFormEnabledState() {
     $('.assignee-combo select').addClass('ui-state-disabled');
     $('#add-note-button').addClass('ui-state-disabled');
   }
-
+  enabledStateSet = true;
 }
 
 
