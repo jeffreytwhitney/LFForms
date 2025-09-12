@@ -81,7 +81,7 @@ $(document).ready(function () {
     if (brokenProbeID > 0) {
       brokenProbeName = $('.broken-probe-name input').val();
       console.log(`brokenProbeName: ${brokenProbeName}`);
-      $('.broken-probe-name-col select').val(brokenProbeName);
+      $('.broken-probe-name-col select').val(brokenProbeName).change();
     }
 
     if ((Number($('.sid input').val()) == 5) || (Number($('.sid input').val()) == 6)) {
@@ -178,7 +178,7 @@ function completeTicket() {
         contentClone.find('#note-textarea').remove(); 
         $('.section-add-note').append(contentClone.contents());
         $(this).dialog('close');
-        //$('#form1').submit();
+        $('#form1').submit();
       }
     }
   });
