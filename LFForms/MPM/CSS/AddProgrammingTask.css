@@ -1,0 +1,81 @@
+/*****     		  Globals          *****/
+.cf-form {
+  padding-top: 0px;
+  padding-bottom: 40px;
+  padding-left: 10px;
+  padding-right: 10px;
+  clear: both;
+}
+
+.cf-formwrap {
+  margin: 0px;
+}
+
+.capitalize-me input {
+  text-transform: uppercase;
+}
+
+.capitalize-me textarea {
+  text-transform: uppercase;
+}
+
+
+#preview-notice {
+  display: none;
+}
+
+.ui-state-disabled, .ui-widget-content .ui-state-disabled, .ui-widget-header .ui-state-disabled {
+  opacity: .35;
+  filter: Alpha(Opacity = 35);
+  background-image: none;
+  pointer-events: none;
+}
+
+
+.form-focused {
+  background-color: #FFFFFF;
+  padding: 0px;
+  margin: 0px;
+}
+
+.ui-button {
+  padding: 0px;
+}
+
+ul li.form-q {
+  padding: 1px 0px;
+}
+
+.cf-table {
+  border: 1px solid black !important;
+}
+
+.table-button {
+  height: 25px;
+  margin-top: 1px;
+  margin-bottom: 2px;
+  margin-left: 3px;
+}
+
+/*****     	Details Section        *****/
+
+#q2 .cf-field input[type=text] {
+  font-size: 14px;
+}
+
+#q2 .cf-field select {
+  font-size: 14px;
+}
+
+#q2 .cf-field textarea {
+  font-size: 12px;
+}
+
+.ticket-number input {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.man-date input[type=text] {
+  display: none;
+}

@@ -1,0 +1,29 @@
+#cf-formtitle {
+  display: none;
+}
+
+.cf-formwrap {
+  margin-top: 0px;
+  margin-left: 0px;
+  border: 0px;
+}
+
+.form-focused {
+  background-color: #FFFFFF;
+}
+
+.cf-form {
+  padding: 0px !important;
+  width: 600px !important;
+}
+
+#preview-notice {
+  display: none;
+}
+
+.ui-state-disabled, .ui-widget-content .ui-state-disabled, .ui-widget-header .ui-state-disabled {
+  opacity: .35;
+  filter: Alpha(Opacity = 35);
+  background-image: none;
+  pointer-events: none;
+}
