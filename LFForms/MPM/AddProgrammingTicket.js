@@ -1,10 +1,10 @@
 /*# AddProgrammingTicket.js — Documentation
 
 Purpose
-- Implements client-side behavior for the “Add Programming Ticket” form in LFForms/MPM-ProgrammingTickets.
-- Handles UI initialization, dynamic task row operations, validation, bulk task generation, and form submission.
-- The intent is to allow users to add multiple programming tasks efficiently, with validation to prevent duplicates and 
-- ensure required fields are filled.
+  Implements client-side behavior for the “Add Programming Ticket” form in LFForms/MPM-ProgrammingTickets.
+  Handles UI initialization, dynamic task row operations, validation, bulk task generation, and form submission.
+  The intent is to allow users to add multiple programming tasks efficiently, with validation to prevent duplicates and 
+  ensure required fields are filled.
 
 Key Concepts:
     Dialog Looping Mechanism:
@@ -35,8 +35,8 @@ Key Concepts:
 
     LaserFiche Events:
      There are two key LaserFiche events used in this script:
-        - onloadlookupfinished: The event fires only once, when all of the initial lookups have completed. 
-        - lookupcomplete: This event fires each time a lookup completes after onloadlookupfinished. This generally occurs when the users
+          onloadlookupfinished: The event fires only once, when all of the initial lookups have completed. 
+          lookupcomplete: This event fires each time a lookup completes after onloadlookupfinished. This generally occurs when the users
           changes a field where there is a LF Lookup rule. This event can fire multiple times during the lifetime of the form.
      Now this gets a bit tricky because the lookupcomplete event can fire multiple times, and we only want to do certain things once, so we need
      to put logic in there so that it's not doing expensive things again and again.
@@ -56,96 +56,96 @@ Key Concepts:
  
 
 Dependencies
-- jQuery
-- jQuery UI (Smoothness theme)
-- jquery-confirm (CSS/JS)
-- simplePagination.css (CSS)
-- Relies on Parsley-style CSS classes for error styling (e.g., `parsley-error`).
+  jQuery
+  jQuery UI (Smoothness theme)
+  jquery-confirm (CSS/JS)
+  simplePagination.css (CSS)
+  Relies on Parsley-style CSS classes for error styling (e.g., parsley-error).
   The parsley validation is something that LFForms uses natively. This just piggybacks on that by adding and removing the same classes.
 
-Key DOM Structure (expected selectors)
-- Hidden state fields:                  Notes:
-  - .closeme input                      See Dialog Looping Mechanism above
-  - .lf-username input                  Populated by LFF with CRETEX\username (see User Permissions above)
-  - .network-user-name input            Username portion only, uppercased (see User Permissions above)
-  - .user-type-id input                 User type ID (1=Metrology, 2=QE, 3=Not Authenticated)
-  - .user-department-name input         This is set on lookup. It is the department name of the user. Is only used when the user is QE 
-                                        (user-type-id == 2). In that case, the department select is defaulted to this value and disabled.
-  - .user-employee-name input           <TODO>
-  - .department select                  <TODO>
-  - .quality-engineer select            <TODO>
 
-- Task list table (`.tasklist-table`):
+Key DOM Structure (expected selectors)
+  
+   Hidden state fields:                 Notes:
+    .closeme input                      See Dialog Looping Mechanism above
+    .lf-username input                  Populated by LFF with CRETEX\username (see User Permissions above)
+    .network-user-name input            Username portion only, uppercased (see User Permissions above)
+    .user-type-id input                 User type ID (1=Metrology, 2=QE, 3=Not Authenticated)
+    .user-department-name input         This is set on lookup. It is the department name of the user. Is only used when the user is QE 
+                                        (user-type-id == 2). In that case, the department select is defaulted to this value and disabled.
+    .user-employee-name input           Same thing as above. This is the name of the user. It is used to default the quality engineer field if the user is a QE.
+  
+   Ticket section fields                Notes:
+    
+    .department select                  The department of the tasks being added. If the user is QE, this is defaulted to their department and disabled.
+    .quality-engineer select            The quality engineer for the tasks being added. If the user is QE, this is defaulted to their name and disabled.
+
+  Task list table (.tasklist-table):
     Here the user can add multiple tasks, one at a time. The user can also clone an existing row to make it easier to add similar tasks.
     If they want to generate a large number of tasks, they can click the GenerateTasks button to open the task generation panel.
-  - Row columns:                        Notes:
-    .clone-col                          This column has a hidden input with the row number. A button is added next to it to clone the row.
+
+    COLUMNS:                            NOTES:
+    .clone-col                          This column has a hidden input with the row number. Because the id isn't coming from the database, it is being 
+                                        set by calling the generateTaskRowNumbers function. A button is added next to it to clone the row, so that 
+                                        when CloneRow is called, it knows which row to clone.
     .task-name-col input
     .drawing-number-col input
     .task-type-col select
-    .task-type-id-col input
+    .task-type-id-col input             Hidden. Set when the user selects a task type from the select. The task type select only has the name, not the ID, so we LFF look up the ID.
     .due-date-col input
     .op-number-col input
     .rev-number-col input
     .error-message input                This is typically empty, but if there is a validation error for the row, the error message is put in here.
+    #q28                                This is the "Add" link which is generated by LFF. We hook into the click event to refresh the row numbers and add buttons.   
 
 
-- Generation panel:    
-   Fields                                           Notes:
-      - .show-generate-tasks input                  When set to `1`, shows the task generation panel and hides the Task List Table and the submit button.
-      - #show-generate-tasks                        
-      - .part-numbers-to-generate textarea
-      - .task-types-to-generate-table-name input
-      - .task-types-to-generate-table-id input
-      - .op-number-to-generate input
-      - .gen-drawing-number input
-      - .gen-due-date input
-      - .gen-rev-number input
-      - .execute-task-generation
-      - .gobackbutton`
+  Generation panel:    
+   Fields                                       Notes:
+    .show-generate-tasks input                  When set to 1, shows the task generation panel and hides the Task List Table and the submit button.
+    #show-generate-tasks                        There are no buttons in LFF so we have to create our own. Placeholder for the GenerateTasks button.           
+    .part-numbers-to-generate textarea
+    .task-types-to-generate-table-name input
+    .task-types-to-generate-table-id input
+    .op-number-to-generate input
+    .gen-drawing-number input
+    .gen-due-date input
+    .gen-rev-number input
+    .execute-task-generation
+    .gobackbutton                               There are no buttons in LFF so we have to create our own. This is a placeholder that gets replaced with a button.
 
-- Lookup table:
-  - .task-type-lookup-table table has rows for each task id and name.
+  Lookup table:
+    .task-type-lookup-table table has rows for each task type id and name.
 
-- On `lookupcomplete`:
-  - `loadTaskTypeMap()` from lookup table.
-  - For userTypeID 3: default department and quality engineer fields and disable them.
-  - `generateTaskRowNumbers()` and add row action buttons (`generateTableButtons`).
+  On lookupcomplete:
+    loadTaskTypeMap() from lookup table.
+    For userTypeID 3: default department and quality engineer fields and disable them.
+    generateTaskRowNumbers() and add row action buttons (generateTableButtons).
 
-- On `onloadlookupfinished`:
-  - Set `.closeme input` to `1`, add hidden `#popUpDiv`.
-  - Trigger network user name change.
-  - Add “Go Back” and “GenerateTasks” buttons, wire up due date error clearing.
-- On `#q28` click: refresh row numbers and buttons (helps after dynamic table refreshes).
+  On onloadlookupfinished:
+    Set .closeme input to 1, add hidden #popUpDiv.
+    Trigger network user name change.
+    Add “Go Back” and “GenerateTasks” buttons, wire up due date error clearing.
+  On #q28 click: refresh row numbers and buttons (helps after dynamic table refreshes).
 
 */
+
 var taskTypeMap = new Map();
 var taskTypeByNameMap = new Map();
 
 /*Document ready handler
-- Description: Initializes the page, loads UI assets, binds event handlers, and performs role-based defaulting.
-- Side effects:
-  - Sets document title.
-  - Loads jquery-confirm JS and relevant CSS files (jQuery UI theme, pagination CSS, confirm CSS).
-  - Resolves Bootstrap/jQuery UI button conflict with `$.fn.button.noConflict()`.
-  - If `.closeme input` equals `1`, posts `CloseDialogWithRefresh` to parent window.
-  - Binds `.Submit` click ? `submitForm`.
-  - Uppercases user-related inputs:
-    - Copies network username from `.lf-username` to `.network-user-name` uppercased, without domain.
-    - Uppercases `.task-name-col input` on keyup.
-    - Uppercases `.manf-rev input` on change.
-  - On change of `.task-type-col select`, looks up TaskTypeID via `taskTypeByNameMap` and writes it to `.task-type-id-col input`.
-  - On `lookupcomplete`:
-    - Calls `loadTaskTypeMap()`.
-    - For `userTypeID === 3`, defaults and disables `.department select` and `.quality-engineer select` when empty.
-    - Calls `generateTaskRowNumbers()` and `generateTableButtons(".clone-col", "ui-icon-newwin", "Clone Task", "cloneRow")`.
-  - On `onloadlookupfinished`:
-    - Sets `.closeme input` to `1`.
-    - Injects a hidden `#popUpDiv`.
-    - Triggers `.network-user-name input` change.
-    - Calls `generateGoBackButtons()`, `createShowGenerateButton()`, and `createExecuteTaskGenerationButton()`.
-    - Wires due date change to clear parsley errors.
-  - On click `#q28`: re-runs row numbering and table  */
+  Description: Initializes the page, loads UI assets, binds event handlers, and performs role-based defaulting.
+  Side effects:
+    Sets document title.
+    Loads jquery-confirm JS and relevant CSS files (jQuery UI theme, pagination CSS, confirm CSS).
+    Resolves Bootstrap/jQuery UI button conflict with $.fn.button.noConflict().
+    If .closeme input equals 1, posts CloseDialogWithRefresh to parent window.
+    Binds .Submit click ? submitForm.
+    Uppercases user-related inputs:
+      Copies network username from .lf-username to .network-user-name uppercased, without domain.
+      Uppercases .task-name-col input on keyup.
+      Uppercases .manf-rev input on change.
+    
+*/
 $(document).ready(function () {
 
   $(document).prop('title', 'Add Programming Ticket');
@@ -153,8 +153,9 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-  var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
+  var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value so that popup close button displays correctly.
   $.fn.bootstrapBtn = bootstrapButton;
+
   if ($('.closeme input').val() == 1) {
     window.parent.postMessage('CloseDialogWithRefresh', '*');
   }
@@ -165,13 +166,20 @@ $(document).ready(function () {
   $('.task-name-col input').keyup(function () { this.value = this.value.toLocaleUpperCase(); });
   $('.manf-rev input').change(function () { $('.manf-rev input').val($('.manf-rev input').val().toUpperCase()); });
 
+  /**
+   * On change of .task-type-col select, looks up TaskTypeID via taskTypeByNameMap and writes it to .task-type-id-col input.
+   */
   $(document).on('change', '.task-type-col select', function (e) {
     var taskName = $(this).val();
     var taskID = taskTypeByNameMap.get(taskName);
     $(this).closest('tr').find('.task-type-id-col input').val(taskID);
   });
 
-
+  /**
+   * Calls loadTaskTypeMap(). 
+     For userTypeID === 3, defaults and disables .department select and .quality-engineer select when empty.
+     Calls generateTaskRowNumbers() and generateTableButtons(".clone-col", "ui-icon-newwin", "Clone Task", "cloneRow").
+   */
   $(document).on('lookupcomplete', function (e) {
     loadTaskTypeMap();
 
@@ -194,10 +202,15 @@ $(document).ready(function () {
     generateTaskRowNumbers();
     generateTableButtons(".clone-col", "ui-icon-newwin", "Clone Task", "cloneRow");
 
-
-
   });
 
+  /**
+   * Sets .closeme input to 1.
+      Injects a hidden #popUpDiv.
+      Triggers .network-user-name input change.
+      Calls generateGoBackButtons(), createShowGenerateButton(), and createExecuteTaskGenerationButton().
+      Wires due date change to clear parsley errors.
+   */
   $(document).on("onloadlookupfinished", function (e) {
     $('.closeme input').val(1);
     $('#q0').append("<div class='hidden-text' id='popUpDiv'></div>");
@@ -213,120 +226,23 @@ $(document).ready(function () {
     });
   });
 
+  /**
+   * When the "Add" link gets clicked, LFF adds a row in the LFF code. I'm not privy to that code so I have to respond
+   * instead to the click of that link. This re-runs row numbering and re-does the table buttons.
+   */
   $(document).on('click', '#q28', function (e) {
     generateTaskRowNumbers();
     generateTableButtons(".clone-col", "ui-icon-newwin", "Clone Task", "cloneRow");
   });
 
-
 });
 
 
-/**createExecuteTaskGenerationButton()
-- Signature: `createExecuteTaskGenerationButton(): void`
-- Description: Replaces any `.execute-task-generation` placeholders with an `<input type="button">` labeled “GenerateTasks” that calls `generateTasks()`.
-- Side effects: DOM replacement.
-
-callShowGenerateTasks()
-- Signature: `callShowGenerateTasks(): void`
-- Description: Switches UI into “generate tasks” mode and clears generation inputs.
-- Side effects:
-  - Hides `.Submit`.
-  - Clears `.gen-drawing-number`, `.gen-due-date`, `.gen-rev-number`, and `.part-numbers-to-generate`.
-  - Clears `.op-number-to-generate` and `.task-types-to-generate-table-name`.
-  - Deletes all but the first rows in `.task-types-to-generate-table` and `.op-numbers-table` via `.cf-table-delete`.
-  - Sets `.show-generate-tasks input` to `1` and triggers change.
-
-callGoBack()
-- Signature: `callGoBack(): void`
-- Description: Leaves “generate tasks” mode and returns to the main form.
-- Side effects:
-  - Clears `.show-generate-tasks input` and triggers change.
-  - Shows `.Submit`.
-
-cloneRow(cloneRowID)
-- Signature: `cloneRow(cloneRowID: number): void`
-- Description: Clones values from the task row whose `.clone-col input` equals `cloneRowID` into the last row (adding a row if necessary).
-- Parameters:
-  - `cloneRowID`: 1-based row identifier stored in `.clone-col input`.
-- Behavior:
-  - If the last row is not empty, triggers `.cf-table-add-row`.
-  - Copies values for task name, drawing number, task type (text), task type ID, due date, op number, rev number into the last row.
-- Side effects: Mutates table rows.
-
-createShowGenerateButton()
-- Signature: `createShowGenerateButton(): void`
-- Description: Replaces `#show-generate-tasks` placeholder with a “GenerateTasks” button that calls `callShowGenerateTasks()`.
-- Side effects: DOM replacement.
-
-checkForDuplicateRows()
-- Signature: `checkForDuplicateRows(): boolean`
-- Description: Detects duplicate task rows (same task name, task type, op number, rev number) among valid rows.
-- Returns: `true` if any duplicates are found; otherwise `false`.
-- Behavior:
-  - Clears previous parsley error classes and `.error-message` contents.
-  - For each pair of rows considered valid by `isRowValid`, flags duplicates by:
-    - Writing “Duplicate Row” into both rows’ `.error-message input`.
-    - Adding `parsley-error` to both rows’ relevant inputs.
-- Notes:
-  - Uses `isRowValid(index)`; see “Caveats” for indexing and scoping quirks.
-
-fillCCList()
-- Signature: `fillCCList(): void`
-- Description: Builds a semicolon-separated list of CC emails from `.cc-email-col input` and writes it to `.cc-email-address-list input`.
-
-generateGoBackButtons()
-- Signature: `generateGoBackButtons(): void`
-- Description: Converts placeholders with class `.gobackbutton` into a styled “Go Back” UI button that calls `callGoBack()` and removes the placeholders.
-
-generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFunction)
-- Signature: `generateTableButtons(buttonSelector: string, buttonClass: string, buttonTitle: string, buttonFunction: string): void`
-- Description: Appends a small clickable UI button next to each text input inside `buttonSelector` that calls `buttonFunction(value)` when clicked.
-- Parameters:
-  - `buttonSelector`: CSS selector; a container that holds text inputs (e.g., `.clone-col`).
-  - `buttonClass`: CSS class for the icon (e.g., `ui-icon-newwin`).
-  - `buttonTitle`: Tooltip text.
-  - `buttonFunction`: Global function name to call in `onclick`.
-- Notes:
-  - Skips adding a button if one with `buttonClass` already exists in the same parent.
-
-generateTaskRowNumbers()
-- Signature: `generateTaskRowNumbers(): void`
-- Description: Writes sequential row numbers (1-based) into each `.clone-col input`. Used as IDs for cloning.
-
-getRowCountOfTableWithValidValues(selector)
-- Signature: `getRowCountOfTableWithValidValues(selector: string): number`
-- Description: Counts the number of non-empty `<input>` elements under the given selector.
-- Parameters:
-  - `selector`: CSS selector for a container (e.g., `.task-types-to-generate-table-name`).
-- Returns: Count of inputs whose value length > 0.
-
-isLastRowEmpty()
-- Signature: `isLastRowEmpty(): boolean`
-- Description: Determines whether the last task row is considered empty by checking the following fields:
-  - `.task-name-col`, `.drawing-number-col`, `.task-type-col`, `.task-type-id-col`, `.due-date-col`, `.op-number-col`.
-- Returns: `true` if all those fields are empty; otherwise `false`.
-
-isRowValid(rowIndex)
-- Signature: `isRowValid(rowIndex: number): boolean`
-- Description: Validates whether the row has non-empty values for:
-  - Task name, task type, due date, and op number.
-- Parameters:
-  - `rowIndex`: Intended row index.
-- Returns: `true` if all required fields are present; otherwise `false`.
-- Notes:
-  - Current implementation uses `:nth-child(${rowIndex})` which is 1-based; callers pass 0-based indices from `.each`. Consider fixing to avoid mismatches.
-
-loadTaskTypeMap()
-- Signature: `loadTaskTypeMap(): void`
-- Description: Populates `taskTypeMap` and `taskTypeByNameMap` from `.task-type-lookup-table` (id/name inputs) on first run.
-- Behavior:
-  - If not already loaded, iterates table rows to map:
-    - `taskTypeMap.set(id, name)`
-    - `taskTypeByNameMap.set(name, id)`
-- Notes:
-  - Checks emptiness with `taskTypeMap.keys.length`, */
-
+/**
+   - Description: Replaces any `.execute-task-generation` placeholder with an `<input type="button">` labeled “GenerateTasks” that calls `generateTasks()`.
+     LFF doesn't provide buttons, so we have to create our own.
+   - Side effects: DOM replacement.
+ */
 function createExecuteTaskGenerationButton() {
   var add_buttons = $(".execute-task-generation");
   add_buttons.each(function (index) {
@@ -335,6 +251,15 @@ function createExecuteTaskGenerationButton() {
 }
 
 
+/**
+ * Description: Hides the main form and shows the task generation panel, clearing all generation inputs.
+   Side effects:
+      - Hides `.Submit`.
+      - Clears `.gen-drawing-number`, `.gen-due-date`, `.gen-rev-number`, and `.part-numbers-to-generate`.
+      - Clears `.op-number-to-generate` and `.task-types-to-generate-table-name`.
+      - Deletes all but the first rows in `.task-types-to-generate-table` and `.op-numbers-table` via `.cf-table-delete`.
+      - Sets `.show-generate-tasks input` to `1` and triggers change. This is actually what shows and hides stuff because there is a LFF rule bound to that field.
+ */
 function callShowGenerateTasks() {
 
   $('.Submit').hide();
@@ -370,20 +295,31 @@ function callShowGenerateTasks() {
 }
 
 
+/*
+ Sets the value of .show-generate-tasks input to null and triggers change. 
+ This hides the task generation panel and shows the main form again.
+ This works because there is a LFF rule bound to that field which shows and hides stuff.
+*/
 function callGoBack() {
   $(".show-generate-tasks input").val(null).change();
   $('.Submit').show();
 }
 
 
+/**
+ * Description: Clones values from the task row whose .clone-col input equals cloneRowID into the last row (adding a row if necessary).
+  Parameters:
+      cloneRowID  : 1-based row identifier stored in   .clone-col input  .
+  Behavior:
+    If the last row is not empty, triggers .cf-table-add-row which is a LFF-generated link.
+    Copies values for task name, drawing number, task type (text), task type ID, due date, op number, rev number into the last row.
+  Side effects: Mutates table rows.
+ */
 function cloneRow(cloneRowID) {
 
   var rowToClone = $(".tasklist-table tbody tr").filter(function () {
     return Number($(this).find(".clone-col input").val()) == cloneRowID;
   });
-
-  console.log(rowToClone);
-
 
   if (isLastRowEmpty() == false) {
     $('.tasklist-table').find('.cf-table-add-row').trigger("click");
@@ -397,11 +333,13 @@ function cloneRow(cloneRowID) {
   newTaskRow.find('.due-date-col input').val(rowToClone.find('.due-date-col input').val());
   newTaskRow.find('.op-number-col input').val(rowToClone.find('.op-number-col input').val());
   newTaskRow.find('.rev-number-col input').val(rowToClone.find('.rev-number-col input').val());
-
-
 }
 
 
+/**
+ * Description: Replaces   #show-generate-tasks   placeholder with a “GenerateTasks” button that calls callShowGenerateTasks()  .
+   Side effects: DOM replacement.
+ */
 function createShowGenerateButton() {
   var add_buttons = $("#show-generate-tasks");
   add_buttons.each(function (index) {
@@ -411,6 +349,16 @@ function createShowGenerateButton() {
 }
 
 
+/**
+  Signature:   checkForDuplicateRows(): boolean  
+  Description: Detects duplicate task rows (same task name, task type, op number, rev number) among valid rows.
+  Returns: true if any duplicates are found; otherwise false  .
+  Behavior:
+    Clears previous parsley error classes and .error-message contents.
+    For each pair of rows considered valid by isRowValid, flags duplicates by:
+      Writing “Duplicate Row” into both rows’   .error-message input  .
+      Adding   parsley-error   to both rows’ relevant inputs.
+ */
 function checkForDuplicateRows() {
   console.log('checkForDuplicateRows');
   $('.task-name-col input').removeClass('parsley-error');
@@ -474,6 +422,9 @@ function checkForDuplicateRows() {
 }
 
 
+/**
+ * Description: Builds a semicolon-separated list of CC emails from .cc-email-col input in the CC Table and writes it to .cc-email-address-list input.
+ */
 function fillCCList() {
 
   var ccUserNames = '';
@@ -488,6 +439,9 @@ function fillCCList() {
 }
 
 
+/**
+ * Description: Converts placeholder with class .gobackbutton into a styled “Go Back” UI button that calls callGoBack() and removes the placeholder.
+ */
 function generateGoBackButtons() {
   var goback_buttons = $(".gobackbutton");
   goback_buttons.each(function (index) {
@@ -523,6 +477,9 @@ function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFu
 }
 
 
+/**
+ * Description: Writes sequential row numbers (1-based) into each `.clone-col input`. Used as IDs for cloning.
+ */
 function generateTaskRowNumbers() {
   $('.clone-col input').each(function (index) {
     $(this).val(index + 1);
@@ -601,6 +558,13 @@ function generateTasks() {
 }
 
 
+/**
+  Signature:   getRowCountOfTableWithValidValues(selector: string): number  
+  Description: Counts the number of non-empty <input> elements under the given selector.
+  Parameters:
+      selector  : CSS selector for a container (e.g., .task-types-to-generate-table-name  ).
+  Returns: Count of inputs whose value length > 0.
+ */
 function getRowCountOfTableWithValidValues(selector) {
   var taskTypes = $(`${selector} input`);
   if (taskTypes.length == 0) {
@@ -616,6 +580,12 @@ function getRowCountOfTableWithValidValues(selector) {
 }
 
 
+/**
+ Signature:   isLastRowEmpty(): boolean  
+  Description: Determines whether the last task row is considered empty by checking the following fields:
+      .task-name-col, .drawing-number-col, .task-type-col, .task-type-id-col, .due-date-col, .op-number-col  .
+  Returns: true if all those fields are empty; otherwise false.
+ */
 function isLastRowEmpty() {
   var lastTaskRow = $('.tasklist-table table tbody tr:last-child');
   var taskNameValue = $(lastTaskRow).find('.task-name-col input').val();
@@ -635,6 +605,14 @@ function isLastRowEmpty() {
 }
 
 
+/**
+  Signature:   isRowValid(rowIndex: number): boolean  
+  Description: Validates whether the row has non-empty values for:
+    Task name, task type, due date, and op number.
+  Parameters:
+      rowIndex  : Intended row index.
+  Returns:   true if all required fields are present; otherwise false  .
+ */
 function isRowValid(rowIndex) {
   var returnVal = true;
 
@@ -658,6 +636,15 @@ function isRowValid(rowIndex) {
 }
 
 
+/**
+  Description: Populates taskTypeMap and taskTypeByNameMap from .task-type-lookup-table (id/name inputs) on first run.
+  Behavior:
+    If not already loaded, iterates table rows to map:
+        taskTypeMap.set(id, name)  
+        taskTypeByNameMap.set(name, id)  
+  Notes:
+    Checks emptiness with taskTypeMap.keys.length 
+ */
 function loadTaskTypeMap() {
 
   if (taskTypeMap.keys.length == 0) {
@@ -673,6 +660,7 @@ function loadTaskTypeMap() {
     });
   }
 }
+
 
 /**
 - Description: Final client-side submission handler.
@@ -697,6 +685,7 @@ function submitForm(e) {
     $('.ticket-me-id input').val(0);
   }
 }
+
 
 /**
 - Description: Validates the generation panel inputs.

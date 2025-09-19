@@ -33,10 +33,10 @@
  *   There is a way of asking what the TriggerID of the lookup is. (A laserfiche function). But I found this to be kind of a pain to use because
  *   you have to know the TriggerID of the lookup that you want to respond to and it's just an integer. Also, if you ever change anything 
  *   in the form, you don't know if the trigger id has changed or not. So I found it easier to just put logic in the function that I want to run. 
- *   For an example of what I'm talking about, in this page there is the setFormFieldEnableState() function which is called on every lookupcomplete 
- *   event, but it only does something if the user-type-id field has a value. This field is only populated once, when the network-user-name 
- *   field is populated and the lookup runs to get the user info. Because we're setting the field in code and causing a lookup,
- *   the onloadlookupfinished event has already fired.
+ *   For an example of what I'm talking about, we're setting the user name field in code and causing a lookup, (see 'User Permissions' above).
+ *   Because we're setting the field in code and causing a lookup, the onloadlookupfinished event has already fired. Therefore, any logic that 
+ *   relies on user fields being populated won't work if you call them from the onloadlookupfinished event. Instead, we have to call them from the lookupcomplete event.
+ *   The unfortunate side effect of this is that the lookupcomplete event can fire multiple times, so we have to put logic in there so that it's not doing expensive things again and again.
  * 
  * 
  * ## Constants

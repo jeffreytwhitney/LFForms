@@ -1,0 +1,212 @@
+#preview-notice {
+  display: none;
+}
+
+.form-focused {
+  background-color: transparent !important;
+}
+
+.capitalize-me input {
+  text-transform: uppercase;
+}
+
+.capitalize-me textarea {
+  text-transform: uppercase;
+}
+
+.cf-formwrap {
+  margin: 0 !important;
+  border-width: 0px;
+}
+
+.cf-table .cf-field {
+  padding: 0px !important;
+  font-size: 11px !important;
+  width: 100%;
+}
+
+.table-button {
+  height: 20px;
+  width: 99%;
+  margin: 0px;
+}
+
+#q13 {
+  width: 1100px !important;
+  padding: 0px !important;
+}
+
+.tasklist-table th {
+  font-size: 11px;
+  border: 1px solid !important;
+}
+
+.tasklist-table th:last-child {
+  display: none;
+}
+
+.tasklist-table tbody tr td:last-child {
+  border-width: 0px !important;
+  border-style: transparent !important;
+}
+
+.tasklist-table th input {
+  height: 20px !important;
+  width: 100% !important;
+  font-size: 11px !important;
+}
+
+.tasklist-table th select {
+  height: 20px !important;
+  width: 100% !important;
+  font-size: 11px !important;
+}
+
+.tasklist-table td {
+  font-size: 11px;
+  padding: 0px !important;
+  height: 20px !important;
+  border: 1px solid !important;
+}
+
+
+input[id^='Field45'] {
+  width: 70% !important;
+  border-width: 0px 1px 0px 0px !important;
+  border-color: black !important;
+  border-style: solid !important;
+}
+
+.tasklist-table td input[type="text"] {
+  font-size: 11px !important;
+  width: 100%;
+  padding: 0px !important;
+  height: 20px !important;
+  border: 0px;
+}
+
+
+.tasklist-table td select {
+  font-size: 11px !important;
+  width: 100% !important;
+  padding: 0px !important;
+  height: 20px !important;
+  border: 0px !important;
+}
+
+.part-numbers-to-generate textarea {
+  resize: both !important;
+}
+/*Clone Button*/
+#q77 {
+  width: 40px !important;
+}
+
+/*Task Name*/
+#q41 {
+  width: 250px !important;
+}
+
+/*Drawing Number*/
+#q42 {
+  width: 130px !important;
+}
+
+/*Task Type*/
+#q43 {
+  width: 130px !important;
+}
+
+
+/*Due Date*/
+#q45 {
+  width: 110px !important;
+}
+
+/*Error*/
+#q78 {
+  width: 120px !important;
+}
+
+  #q78 label {
+    display: none;
+  }
+
+#q25 {
+  width: 800px;
+}
+
+
+/*Generate TaskType Table*/
+#q51 {
+  width: 300px;
+}
+
+.task-types-to-generate-table-name input {
+  width: 200px;
+}
+
+.task-types-to-generate-table .cf-section-header {
+  display: none;
+}
+
+.op-numbers-table .cf-section-header {
+  display: none;
+}
+
+.clone-col input {
+  display: none;
+}
+
+.cc-table {
+  width: 300px;
+}
+
+.cc-table .cf-section-header {
+  display: none;
+}
+
+.cc-table tbody tr td:last-child {
+  border-width: 0px !important;
+  border-style: transparent !important;
+}
+
+.cc-table th input {
+  height: 20px !important;
+  width: 100% !important;
+  font-size: 11px !important;
+}
+
+.cc-table th select {
+  height: 20px !important;
+  width: 100% !important;
+  font-size: 11px !important;
+}
+
+.cc-table td {
+  font-size: 11px;
+  padding: 0px !important;
+  height: 20px !important;
+  border: 1px solid !important;
+}
+
+.cc-table td input[type="text"] {
+  font-size: 11px !important;
+  width: 100%;
+  padding: 0px !important;
+  height: 20px !important;
+  border: 0px;
+}
+
+
+.cc-table td select {
+  font-size: 11px !important;
+  width: 100% !important;
+  padding: 0px !important;
+  height: 20px !important;
+  border: 0px !important;
+}
+
+#q81 {
+  width: 200px !important;
+}
