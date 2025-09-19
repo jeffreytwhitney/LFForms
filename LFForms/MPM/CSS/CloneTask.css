@@ -1,0 +1,34 @@
+#cf-formtitle {
+  display: none;
+}
+
+.cf-formwrap {
+  margin-top: 0px;
+  margin-left: 0px;
+  border: 0px;
+}
+
+.form-focused {
+  background-color: #FFFFFF;
+}
+
+.cf-form {
+  padding: 0px !important;
+  margin: 0px !important;
+}
+
+#preview-notice {
+  display: none;
+}
+
+.ui-button {
+  padding: 0px;
+}
+
+ul li.form-q {
+  padding: 1px 0px;
+}
+
+.cf-field {
+  width: 250px;
+}

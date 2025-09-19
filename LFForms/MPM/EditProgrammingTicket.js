@@ -1,3 +1,120 @@
+/**
+ * EditProgrammingTicket.js
+ *
+ * Purpose:
+ * Drives the Edit Programming Ticket UI: loads lookup data, manages permissions, filters/sorts the task list,
+ * and wires actions such as Add Task, Add Time, Clone Task, Group Edit, Print, and Show Details.
+ *
+ * Responsibilities:
+ * - Load CSS/JS dependencies and resolve Bootstrap/jQuery UI button conflicts.
+ * - Maintain lookup maps (ME/QE/Assignee/TaskType/Status) for fast name<->ID translation.
+ * - Enforce permissions (Metrology users or same-department users) and enable/disable UI accordingly.
+ * - Generate dynamic UI (task table buttons, filter row, checkboxes, task links).
+ * - Wire custom events: window message print handler, lookupcomplete/onloadlookupfinished, filter and sort controls.
+ * - Open modal dialogs/iframes for editing, adding tasks/time, cloning, printing, and history display.
+ *
+ Key Concepts:
+    Dialog/Popup Mechanism:
+     As with most things in LaserFiche Forms, there is no built-in way to open a popup dialog or iframe, so I had to build my own functionality.
+     This is done via a combination of a hidden div on the form, and a jQuery UI dialog. The hidden div is populated with an iframe
+     which loads the desired URL. The jQuery UI dialog is then opened, displaying the iframe. If you just close the dialog, nothing happens to this form. 
+     If however, you submit the popup form, the first thing it does is to change a hidden field called 'closeme' to a value of 1. (Its default is 0.)
+     After the popup gets submitted to the server, the server processes it by sending its form fields to a LF Workflow. When the workflow completes, it comes 
+     back to the server-side process which forwards back to the same form, but this time with the closeme field set by the query string. (We set it when we submitted the form.)
+     When the popup loads, it has its closeme value set by the query string, so it knows that it has just come back from being submitted. 
+     Therefore, it will then send a message to its parent, (namely, this form), informing it that the server-side 
+     data has changed. When this form receives such a message, it closes the popup dialog, and then it calls a function refreshes the page.
+     
+    User Permissions:
+     There is a user permission model in place to restrict who can add/edit tasks based on their department and user type.
+     Metrology users (user-type-id == 1) have elevated permissions and can add/edit tasks across departments.
+     QE users can only add/edit tasks within their own department. They can also add notes to tasks in their department.
+     Non-authenticated users (user-id == 0) are not allowed to add/edit tasks. This includes Cell Leads and anybody else who does not have a LaserFiche Forms account.
+     This is how it works: when the user first loads the form, LFF fills in the .lf-user-name field with CRETEX\username, but we only want the username portion so we copy just the 
+     username portion (trimming off the "CRETEX/" part) into the .network-user-name field, which is what gets posted back to the server.
+     This will be matched against the user database to determine the user's ID, user type, and department.
+
+    Filtering and Sorting:
+     There is no way to filter or sort rows in LFF, so I had to build a custom filtering mechanism. This is done via a combination of hidden fields which are arguments to a 
+     SQL Server stored procedure. The stored procedure returns a maximum of 25 rows at a time, so we have to be able to filter and sort the rows on the server side.
+     There are also two buttons which allow the user to change which page of results they are viewing.
+     Here is a list of the hidden fields used for filtering and sorting:
+      Filtering:
+        .ftname input: Task name filter (partial match)
+        .fttid input: Task type ID filter (exact match)
+        .fsid input: Status ID filter (exact match)
+        .faid input: Assignee ID filter (exact match)
+        .fincomp input: Include completed tasks (1 = include, 0 = exclude)
+        Sorting:
+        .sort-field-ordinal input: Field to sort by (1 = Task Name, 2 = Task Type, 3 = Status, 4 = Assignee, 5 = Due Date, 6 = Priority)
+        .sort-direction input: Sort direction (ASC or DESC)
+      This gets us part of the way there, but we also need to have a way for the user to set these fields.
+      This is done via a filter row which is added to the task list table. The filter row contains a text box for the task name filter,
+      and dropdowns for the task type, status, and assignee filters. There is also a checkbox to include completed tasks.
+      The change of any of these controls triggers the filterTable() function which reads the values from the controls and sets the hidden fields accordingly.
+      Values from select controls are mapped from name to ID using the lookup maps.
+      Sorting is handled via clickable column headers. Clicking a header sets the sort field and toggles the sort direction.
+      If you click on a sort field that is already the current sort field, it toggles the direction.
+
+    Mapping:
+     There are several differnent lookup tables on the form which are used to populate dropdowns, nearly all of which are for filtering.
+     Task types are stored both as ID?Name and Name?ID because LFF only stores the display value in the select, for example, the TaskType
+     select shows the names of the task types, but we are storing the TaskTypeID in a the database, so we need to have a way to 
+     figure out what the TaskTypeID is so that we can set the value of the hidden field that the workflow is going to use to 
+     set the value in the task table. So we need to be able to look up the ID by name when the user selects a task type.
+     The only way I've been able to figure out how to do this is to have a hidden lookup table on the page which contains all of the 
+     task types and their IDs. So when the page loads, we read that table and build two maps: one for ID?Name and one for Name?ID.
+     When the user selects a task type, we look up the ID by name and set the value of the hidden field.
+
+    LaserFiche Events:
+     There are two key LaserFiche events used in this script:
+          onloadlookupfinished: The event fires only once, when all of the initial lookups have completed. 
+          lookupcomplete: This event fires each time a lookup completes after onloadlookupfinished. This generally occurs when the users
+          changes a field where there is a LF Lookup rule. This event can fire multiple times during the lifetime of the form.
+     Now this gets a bit tricky because the lookupcomplete event can fire multiple times, and we only want to do certain things once, so we need
+     to put logic in there so that it's not doing expensive things again and again.
+     There is a way of asking what the TriggerID of the lookup is. (A laserfiche function). But I found this to be kind of a pain to use because
+     you have to know the TriggerID of the lookup that you want to respond to and it's just an integer. Also, if you ever change anything 
+     in the form, you don't know if the trigger id has changed or not. So I found it easier to just put logic in the function that I want to run. 
+     
+     Take Mapping, for example. We have a tasktypeMap which we want to fill in once the hidden tasktype lookup table has been populated by LFF.
+     You would think then that we could put the call to this function in the onloadlookupfinished event,
+     but the problem with that is that when the onloadlookupfinished event fires, the lookup table may not have been populated yet.
+     In this instance, I don't know why this should be the case, but it is. 
+     Because of this, we have to put the call to loadTaskTypeMap() in the lookupcomplete event, but we don't want to do it every time the event fires,
+     so there's a check in there that asks whether the map has already been populated, and if it has, it doesn't do anything.
+     Also, because of the way permissions works, a lot of the hidden fields that we use to determine the user's department and user type
+     only get populated after we fill in the network user name and trigger a change event on that field. So the onloadlookupfinished event
+     has already been fired. Permissions to do stuff all run on the UserTypeID field, so we have to wait until that field is populated.
+ * 
+ * Key DOM fields/classes:
+ * - User/permissions: `.user-type-id input`, `.user-department-id input`, `.user-isactive input`, `.ticket-department-id input`
+ * - Ticket/task identity: `.tid input` (ticket ID), `.ticket-number input`
+ * - ME/QE controls: `.manufacturing-engineer-combo select`, `.quality-engineer-combo select`, `.meid input`, `.qeid input`, `.mename input`, `.qename input`
+ * - Lookup sources (tables): `.me-lookup-table`, `.qe-lookup-table`, `.assignee-lookup-table`, `.tasktype-lookup-table`, `.status-lookup-table`
+ * - Filtering state: `.ftname input`, `.fttid input`, `.fsid input`, `.faid input`, `.fincomp input`, `#chkIncludeComplete`
+ * - Sorting state: `.sort-field-ordinal input`, `.sort-direction input`, headers `#q47..#q55`
+ * - Task list columns: `.tasklist-task-id-col`, `.tasklist-task-name-col`, `.tasklist-time-col`, `.task-list-clone-col`, `.tasklist-mandate-col`
+ * - Misc: `.add-button`, `.print-button`, `#popUpDiv`, `#print-iframe`, `#ticket-history`, `.tasklist-table`
+ *
+ * Custom events observed:
+ * - Window postMessage "printme" to print iframe, and "CloseDialogWithRefresh" to refresh.
+ * - `lookupcomplete` to load maps, set combos, enforce permissions, build UI, and wire filters.
+ * - `onloadlookupfinished` to finalize UI (history iframe, site-dependent reloads, defaults).
+ *
+ * Notes:
+ * - Assumes backend populates hidden inputs/lookup tables; this file translates and orchestrates UI behavior.
+ * - Uses jQuery UI Dialog for pop-up iframes.
+ * - Filtering writes to hidden fields and triggers LF lookup via `.change()` where appropriate.
+ * - Sorting only toggles indicators and hidden sort fields; actual sort performed by backend lookup.
+ *
+ * Potential improvements (informational only):
+ * - Replace `map.keys.length` checks with `map.size === 0`.
+ * - Replace `option_value == NaN` patterns (if any) with `Number.isNaN(option_value)`.
+ * - Debounce filter input changes to reduce backend calls.
+ * - Centralize permission checks to avoid duplication.
+ */
+
 var mfgEngineerMap = new Map();
 var mfgEngineerNameMap = new Map();
 var qualEngineerMap = new Map();
@@ -17,6 +134,7 @@ $(document).ready(function () {
   var bootstrapButton = $.fn.button.noConflict();
   $.fn.bootstrapBtn = bootstrapButton;
 
+  // Window message print hook
   var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
   var printEvent = window[eventMethod];
   var messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
@@ -33,6 +151,7 @@ $(document).ready(function () {
   $('.Submit').addClass('ui-button ui-corner-all ui-widget');
   $('.Submit').click(function (e) { submitForm(e); });
 
+  // Normalize network username from domain\user
   var lfUserName = $('.lf-user-name input').val();
   if (lfUserName != "") {
     let networkUserName = lfUserName.toUpperCase();
@@ -40,17 +159,19 @@ $(document).ready(function () {
     $('.network-user-name input').val(networkUserName).change();
   }
 
+  // Reflect ticket number in document title
   $(document).on('change', '.ticket-number input', function (e) {
     var ticket_name = $(this).val();
     $(document).prop('title', `Edit Ticket ${ticket_name}`);
   });
 
-
+  // Close/refresh integration for dialog hosting
   if ($('.closeme input').val() == 1) {
     $('#form1').hide();
     window.parent.postMessage('CloseDialogWithRefresh', '*');
   }
 
+  // Keep hidden QE/ME ID fields in sync with selected names
   $(document).on('change', '.quality-engineer-combo select', function () {
     let qeName = $('.quality-engineer-combo select').val();
     let qeID = qualEngineerNameMap.get(qeName);
@@ -70,6 +191,7 @@ $(document).ready(function () {
 
 
 
+  // Dialog close from child iframes should refresh this form
   window.onmessage = function (event) {
 
     if (event.data == "CloseDialogWithRefresh") {
@@ -79,6 +201,7 @@ $(document).ready(function () {
     }
   };
 
+  // After lookups populate, load maps, set default selections, and build UI
   $(document).on('lookupcomplete', function (e) {
     loadMfgEngineerMap();
     loadQualEngineerMap();
@@ -96,6 +219,7 @@ $(document).ready(function () {
     }
     generateTaskListColumnFields();
 
+    // Enforce permissions for editing and adding
     if (checkPermissions() == false) {
       $('.Submit').hide();
       $('.manufacturing-engineer-combo select').removeClass('ui-state-disabled').addClass('ui-state-disabled');
@@ -111,6 +235,7 @@ $(document).ready(function () {
       $('.add-button').removeClass("ui-state-disabled");
     }
 
+    // Add group edit button (Metrology users) and Include Completed checkbox
     if (isMetrologyUser()) {
       if ($('.group-edit-button').length == 0) {
         $('.tasklist-table .cf-section-header').prepend('<div class="choice include-choice"><input name="chkIncludeComplete" id="chkIncludeComplete" type="checkbox" ><label class="form-option-label" for="chkIncludeComplete">Include Completed</label></div><div class="ui-button group-edit-button" onclick="callGroupEdit()"><span title="Group Edit" class="ui-button-icon ui-icon ui-icon-clipboard"></span>Group Edit</div>');
@@ -123,16 +248,19 @@ $(document).ready(function () {
       }
     }
 
+    // Add "Add Task" button if missing
     if ($('.add-button').length == 0) {
       let add_button = '<div class="ui-button add-button" onclick="addTask()"><span title="AddTicket" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Task</div>';
       $(add_button).insertBefore('.tasklist-table table')
     }
 
+    // Wire Include Completed and build the filter row
     $('#chkIncludeComplete').on('change', function () {
       filterTable();
     });
     generateFilterRow();
 
+    // Add print button once
     if (!$('#print-ticket').length) {
       $('.ticket-number input').parent().append(`<div id='print-ticket' class='print-button ui-button' onclick='printTicket()'><span title='Print Ticket' class='ui-button-icon ui-icon ui-icon-print'/></div>`);
     }
@@ -141,6 +269,7 @@ $(document).ready(function () {
     $('.tasklist-table').show();
   });
 
+  // Finalize initial UI once all lookups are done
   $(document).on("onloadlookupfinished", function (e) {
     $('.closeme input').val(1);
     $('#q0').append("<div class='hidden-text' id='popUpDiv'></div>");
@@ -179,7 +308,9 @@ $(document).ready(function () {
   });
 });
 
-
+/**
+ * Opens Add Task dialog for the current ticket in a popup iframe.
+ */
 function addTask() {
   var ticketID = $('.tid input').val();
   var widowHeight = $(window).height();
@@ -187,7 +318,10 @@ function addTask() {
   popUpIframe(`http://rmslf/Forms/MPM-AddProgrammingTask?pid=${ticketID}`, 'Add Task', widowHeight, 1300);
 }
 
-
+/**
+ * Opens Add Time dialog for the selected task, if permissions allow.
+ * @param {number} task_id
+ */
 function callAddTime(task_id) {
   if (checkPermissions() == true) {
     var task_name = getColumnValueByTaskID(task_id, '.tasklist-task-name-col input[type="text"]');
@@ -195,7 +329,10 @@ function callAddTime(task_id) {
   }
 }
 
-
+/**
+ * Opens Clone Task dialog after checking user type and department permissions.
+ * @param {number} task_id
+ */
 function callCloneTask(task_id) {
   var user_type_id = Number($(".user-type-id input").val());
   var userDepartmentID = $(".user-department-id input").val();
@@ -217,7 +354,9 @@ function callCloneTask(task_id) {
   popUpIframe(`http://rmslf/Forms/MPMCloneTask?tid=${task_id}`, `Clone task '${task_name}'`, 300, 750, false, task_id);
 }
 
-
+/**
+ * Opens Group Edit dialog for the current ticket.
+ */
 function callGroupEdit() {
   var ticketId = $('.tid input').val();
   var ticketNumber = $('.ticket-number input').val();
@@ -226,14 +365,22 @@ function callGroupEdit() {
   popUpIframe(`http://rmslf/Forms/MPM-TaskGroupEdit?tid=${ticketId}`, `Group Edit Ticket '${ticketNumber}'`, widowHeight, 1300);
 }
 
-
+/**
+ * Opens Task Details dialog for the selected task.
+ * @param {number} task_id
+ */
 function callShowDetails(task_id) {
   var widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
   popUpIframe(`http://rmslf/Forms/MPM-EditProgrammingTask?tid=${task_id}`, 'Task Details', widowHeight, 1300);
 }
 
-
+/**
+ * Returns true if user can edit this ticket:
+ * - Metrology user (type 1), or
+ * - Same department as the ticket.
+ * @returns {boolean}
+ */
 function checkPermissions() {
   var user_type_id = Number($(".user-type-id input").val());
   var user_department_id = Number($(".user-department-id input").val());
@@ -255,7 +402,9 @@ function checkPermissions() {
   return false;
 }
 
-
+/**
+ * Applies current filter controls to hidden filter fields and triggers lookup refresh.
+ */
 function filterTable() {
   if ($('#filterRow').length == 0) {
     return;
@@ -298,6 +447,7 @@ function filterTable() {
 
   removeAppendedFields();
 
+  /**We only want to call .change() once at the very end by which time all of the filter fields have been set.*/
   if (includeCompleted) {
     $('.fincomp input').val(1).change();
   }
@@ -307,7 +457,15 @@ function filterTable() {
 
 }
 
-
+/**
+ * Creates a filter row (if missing) and wires change events.
+ * Also hydrates filter selects from lookup combos. 
+ * As an example, Assignees are filtered by name, so a filter select is created and populated from the Assignee lookup combo.
+ * What this does is for each filter dropdown, if it's empty it copies the options from the corresponding lookup combo.
+ * And then every filter field is wired to call filterTable() on change.
+ * It also adds a double-click event to each filter control to clear it.
+ * Finally, the Assignee filter gets an "Unassigned" option added to it.
+ */
 function generateFilterRow() {
 
   if ($('#filterRow').length == 0) {
@@ -347,7 +505,14 @@ function generateFilterRow() {
   
 }
 
-
+/**
+ * Generates table buttons in a given column, respecting disabled state.
+ * @param {string} buttonSelector Column selector prefix.
+ * @param {string} buttonClass jQuery UI icon class.
+ * @param {string} buttonTitle Tooltip.
+ * @param {string} buttonFunction Function to call with ID.
+ * @param {boolean} disabled Render disabled button when true.
+ */
 function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFunction, disabled) {
   var btn_html = '';
   var selectionString = buttonSelector + " input[type=text]";
@@ -368,7 +533,12 @@ function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFu
   });
 }
 
-
+/**
+ * Renders a disabled checkbox based on a hidden boolean value in the column.
+ * It's a general purpose function, but currently used only for the Manual Date column.
+ * @param {string} selector Column selector prefix.
+ * @param {string} checkboxClass Class assigned to the added checkbox input.
+ */
 function generateTableCheckBox(selector, checkboxClass) {
   var selectionString = selector + " input[type=text]";
   var checkboxes = $(selectionString);
@@ -391,7 +561,9 @@ function generateTableCheckBox(selector, checkboxClass) {
   });
 }
 
-
+/**
+ * Adds a clickable task name link to open Task Details for each row (id->name col).
+ */
 function generateTaskColumn() {
   var task_names = $('.tasklist-task-name-col input[type="text"]');
   var task_ids = $('.tasklist-task-id-col input[type="text"]');
@@ -406,7 +578,9 @@ function generateTaskColumn() {
   });
 }
 
-
+/**
+ * Generates row-level UI (buttons/checkboxes/links) depending on permissions.
+ */
 function generateTaskListColumnFields() {
 
   var has_permissions = checkPermissions();
@@ -432,7 +606,12 @@ function generateTaskListColumnFields() {
   }
 }
 
-
+/**
+ * Finds a column value in the task list row matching task_id.
+ * @param {number} task_id
+ * @param {string} column_name jQuery selector for the column input.
+ * @returns {string|undefined}
+ */
 function getColumnValueByTaskID(task_id, column_name) {
 
   var tasklist_rows = $(".tasklist-table table tbody tr");
@@ -450,7 +629,10 @@ function getColumnValueByTaskID(task_id, column_name) {
   return column_value;
 }
 
-
+/**
+ * Returns true when the current user is active Metrology (type 1 and active).
+ * @returns {boolean}
+ */
 function isMetrologyUser() {
   if (($('.user-type-id input').val() == '1') && ($('.user-isactive input').val() == '1')) {
     return true;
@@ -458,7 +640,10 @@ function isMetrologyUser() {
   return false;
 }
 
-
+/**
+ * Builds the Assignee lookup maps from the lookup table (id<->name).
+ * No-ops if already loaded or table not present.
+ */
 function loadAssigneeMap() {
 
   if (assigneeMap.keys.length == 0) {
@@ -477,12 +662,17 @@ function loadAssigneeMap() {
   }
 }
 
-
+/**
+ * Loads an iframe into the placeholder element for dialogs.
+ * @param {string} src URL to load.
+ */
 function loadiFrame(src) {
   $("#popUpDiv").html("<iframe id='print-iframe' name='print-iframe' src='" + src + "' />");
 }
 
-
+/**
+ * Builds the ME lookup maps from the lookup table (id<->name).
+ */
 function loadMfgEngineerMap() {
   if (mfgEngineerMap.keys.length == 0) {
     var me_rows = $('.me-lookup-table table tbody tr');
@@ -498,7 +688,9 @@ function loadMfgEngineerMap() {
   }
 }
 
-
+/**
+ * Builds the QE lookup maps from the lookup table (id<->name).
+ */
 function loadQualEngineerMap() {
   if (qualEngineerMap.keys.length == 0) {
     var qe_rows = $('.qe-lookup-table table tbody tr');
@@ -514,7 +706,9 @@ function loadQualEngineerMap() {
   }
 }
 
-
+/**
+ * Builds the Task Status lookup maps from the lookup table (id<->name).
+ */
 function loadStatusMap() {
   if (taskStatusMap.keys.length == 0) {
     var status_rows = $('.status-lookup-table table tbody tr');
@@ -530,7 +724,9 @@ function loadStatusMap() {
   }
 }
 
-
+/**
+ * Builds the Task Type lookup maps from the lookup table (id<->name).
+ */
 function loadTaskTypeMap() {
 
   if (taskTypeMap.keys.length == 0) {
@@ -547,7 +743,13 @@ function loadTaskTypeMap() {
   }
 }
 
-
+/**
+ * Opens a jQuery UI dialog containing an iframe with the given src.
+ * @param {string} src
+ * @param {string} title
+ * @param {number} height
+ * @param {number} width
+ */
 function popUpIframe(src, title, height, width) {
 
   $("#popupIFrame").remove();
@@ -570,7 +772,11 @@ function popUpIframe(src, title, height, width) {
   $('#popupIFrame').attr('style', `width: 100%; height: ${height}px;`);
 }
 
-
+/**
+ * Loads the ticket print report into an iframe for printing.
+ * There is a print version of the ticket detail form that tells it self to print as soon as it loads.
+ * This is necessary because LFF of course doesn't have reports or anyway of making one, so I had to roll my own.
+ */
 function printTicket() {
 
   var taskID = $('.tid input').val();
@@ -578,27 +784,44 @@ function printTicket() {
   loadiFrame(report_url);
 }
 
-
+/**
+ * Reloads the current page.
+ */
 function refreshForm() {
   var current_url = window.location.href;
   window.location = current_url;
 }
 
-
+/**
+ * Removes dynamically appended UI (buttons/links) from the task list to avoid duplicates.
+ * This is called before re-adding them after a lookup refresh, or a sort change or a pagination change.
+ * Otherwise, the buttons and links would keep accumulating and/or point to the wrong task IDs.
+ * So every time you have to refresh the page, you have to delete the old buttons and links first, then refresh, then add them all back again.
+ * And they wonder why this page runs slow.
+ */
 function removeAppendedFields() {
   
   $('.table-button').remove();
   $('.task-link').remove();
 }
 
-
+/**
+ * Normalizes ME ID on submit when empty.
+ * @param {Event} e
+ * This is done because the Manufacturing Engineer field is optional, so if it's left blank we want to submit a 0 instead of an empty string
+ * because Laserfiche Workflow doesn't like empty strings in numeric fields.
+ */
 function submitForm(e) {
   if ($('.meid input').val() == '') {
     $('.meid input').val(0);
   }
 }
 
-
+/**
+ * Toggles sort state and updates visible sort icons for the given header.
+ * @param {number} newSortOrdinal Field ordinal to sort by (0-based).
+ * @param {string} selector Header cell selector (e.g., '#q47').
+ */
 function sortTable(newSortOrdinal, selector) {
   
   removeAppendedFields();
@@ -631,7 +854,10 @@ function sortTable(newSortOrdinal, selector) {
     }
 }
 
-
+/**
+ * Wires sort click handlers for the visible task list headers and sets default icon.
+ * The 'q' numbers are the internal LF field IDs for the columns. Descriptive no?
+ */
 function wireUpSortFields() {
 
   $('#q47 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');

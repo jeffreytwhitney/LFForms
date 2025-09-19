@@ -1,3 +1,75 @@
+/**
+ * CloneTask.js
+ *
+ * Purpose:
+ * Orchestrates the Clone Task dialog behavior and validation.
+ *
+ * Responsibilities:
+ * - Load CSS/JS dependencies and resolve Bootstrap/jQuery UI conflicts.
+ * - Normalize the network username from domain\user.
+ * - Pre-fill new task fields from current task values after lookups.
+ * - Enforce permission-based enable/disable states.
+ * - Validate uniqueness (Name + Type + Op) before submit and surface errors.
+ *
+ *Key Concepts:
+ *  Dialog Looping Mechanism:
+ *   The form is called as a popup dialog from other pages, and it communicates with the parent window to close the dialog and refresh the parent page after this page is submitted.
+ *   This loop is essential to understand because it's a common pattern that you will see again and again any form which is being used as a popup. This form is one of those.
+ *   The way it works is when this page loads initially, the $('.closeme input') is not provided from the query string, and so is set to the default value of 0.
+ *   Submitting the form sets that value to 1. In LFF, when that the form is submitted it executes the workflow and then, 
+ *   the On Event Completion event redirects back to this same page, but this time with the closeme value set to 1 in the query string. 
+ *   This tells the page that it should close the dialog and refresh the parent page, so it sends off a message to the parent window to do that.
+ * 
+ *  User Permissions:
+ *   There is a user permission model in place to restrict who can add/edit tasks based on their department and user type.
+ *   Metrology users (user-type-id == 1) have elevated permissions and can add/edit tasks across departments.
+ *   QE users can only add/edit tasks within their own department. They can also add notes to tasks in their department.
+ *   Non-authenticated users (user-id == 0) are not allowed to add/edit tasks. This includes Cell Leads and anybody else who does not have a LaserFiche Forms account.
+ *   This is how it works: when the user first loads the form, LFF fills in the .lf-user-name field with CRETEX\username, but we only want the username portion so we copy just the 
+ *   username portion (trimming off the "CRETEX/" part) into the .network-user-name field, which is what gets posted back to the server.
+ *   This will be matched against the user database to determine the user's ID, user type, and department.
+ * 
+ * LaserFiche Events:
+ *   There are two key LaserFiche events used in this script:
+ *      - onloadlookupfinished: The event fires only once, when all of the initial lookups have completed. 
+ *      - lookupcomplete: This event fires each time a lookup completes after onloadlookupfinished. This generally occurs when the users
+ *        changes a field where there is a LF Lookup rule. This event can fire multiple times during the lifetime of the form.
+ *   Now this gets a bit tricky because the lookupcomplete event can fire multiple times, and we only want to do certain things once, so we need
+ *   to put logic in there so that it's not doing expensive things again and again.
+ *   There is a way of asking what the TriggerID of the lookup is. (A laserfiche function). But I found this to be kind of a pain to use because
+ *   you have to know the TriggerID of the lookup that you want to respond to and it's just an integer. Also, if you ever change anything 
+ *   in the form, you don't know if the trigger id has changed or not. So I found it easier to just put logic in the function that I want to run. 
+ *   For an example of what I'm talking about, we're setting the user name field in code and causing a lookup, (see 'User Permissions' above).
+ *   Because we're setting the field in code and causing a lookup, the onloadlookupfinished event has already fired. Therefore, any logic that 
+ *   relies on user fields being populated won't work if you call them from the onloadlookupfinished event. Instead, we have to call them from the lookupcomplete event.
+ *   The unfortunate side effect of this is that the lookupcomplete event can fire multiple times, so we have to put logic in there so that it's not doing expensive things again and again.
+ * 
+ * Key DOM fields/classes:
+ * - .tid input                         Current Task ID (required; disables submit when 0).
+ * - .current-task-type-name input      Current Task Type (text).
+ * - .current-op input                  Current Op number.
+ * - .current-task-name input           Current Task Name.
+ * - .new-task-type select              Target Task Type.
+ * - .new-op input                      Target Op number.
+ * - .new-task-name input               Target Task Name.
+ * - .existing-task-ids select option   Options representing conflicting existing tasks.
+ * - .user-type-id input                User type (1=Metrology, 3=Dept user).
+ * - .user-department-id input          Current user department.
+ * - .department-id input               Task’s department.
+ * - .department-email-address input    Department email (populated on lookup).
+ * - .new-assignee-id input             Optional new assignee; defaults to 0 on submit.
+ * - #error-message                     Container for permission error text.
+ * - .closeme input                     When set to 1, closes parent dialog with refresh.
+ *
+ * Custom events observed:
+ * - onloadlookupfinished               Initializes form values and submit state.
+ * - lookupcomplete                     Triggers dependent field population if missing.
+ *
+ * Notes:
+ * - All text inputs are uppercased on blur.
+ * - checkExistingTaskIDs() uses option_value == NaN which never evaluates true; prefer isNaN(option_value).
+ */
+
 $(document).ready(function () {
   
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
@@ -13,12 +85,14 @@ $(document).ready(function () {
     window.parent.postMessage('CloseDialogWithRefresh', '*');
   }
 
+  // Uppercase all text inputs on blur
   $(document).on('blur', "input[type=text]", function () {
     $(this).val(function (_, val) {
       return val.toUpperCase();
     });
   });
 
+  // Initialize new task fields from current values after lookups
   $(document).on("onloadlookupfinished", function (e) {
     if ($('.tid input').val() == 0) {
       $('.Submit').addClass("ui-state-disabled");
@@ -32,6 +106,7 @@ $(document).ready(function () {
 
   });
 
+  // Fill missing dependent values when available
   $(document).on('lookupcomplete', function (e) {
     if (Number($('.user-id input').val()) == 0) {
       $('.network-user-name input').trigger("change");
@@ -47,6 +122,12 @@ $(document).ready(function () {
 });
 
 
+/**
+ * Checks for any nonzero option value under .existing-task-ids select.
+ * Indicates that a conflicting task (Name + Type + Op) exists in the project.
+ * Note: option_value == NaN is always false; use isNaN(option_value) if refactoring.
+ * @returns {boolean} True if at least one nonzero ID exists; otherwise false.
+ */
 function checkExistingTaskIDs() {
   var existing_task_ids = $('.existing-task-ids select option');
   var returnVal = false;
@@ -63,6 +144,10 @@ function checkExistingTaskIDs() {
 }
 
 
+/**
+ * Returns true when the current user is a Metrology user (user-type-id == 1).
+ * @returns {boolean}
+ */
 function isMetrologyUser() {
   if ($('.user-type-id input').val() == 1) {
     return true;
@@ -70,6 +155,11 @@ function isMetrologyUser() {
   return false;
 }
 
+/**
+ * Enforces permission rules; disables form and shows message for unauthorized users.
+ * - Dept user (3) must match task department.
+ * - All other non-metrology, non-dept users are denied.
+ */
 function setFormEnabledState() {
 
   if ($('.user-type-id input').val() == 3) {
@@ -92,6 +182,13 @@ function setFormEnabledState() {
 }
 
 
+/**
+ * Submit handler.
+ * - Validates uniqueness and blocks submit on failure.
+ * - Defaults empty new assignee to 0.
+ * - Sets close flag to instruct parent to refresh/close after server post.
+ * @param {Event} e Click/submit event.
+ */
 function submitForm(e) {
   if (validateForm() == false) {
     console.log('form is invalid');
@@ -108,6 +205,12 @@ function submitForm(e) {
 }
 
 
+/**
+ * Validates new task values.
+ * - Fails when a duplicate (Name + Type + Op) exists in project.
+ * - Adds Parsley-style inline error markup to each invalid field.
+ * @returns {boolean} True if valid; otherwise false.
+ */
 function validateForm() {
   var task_name_field = $('.new-task-name input');
   var task_type_field = $('.new-task-type select');
