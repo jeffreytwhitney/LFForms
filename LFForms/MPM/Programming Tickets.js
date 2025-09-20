@@ -17,20 +17,22 @@
     Dialog/Popup Mechanism:
      As with most things in LaserFiche Forms, there is no built-in way to open a popup dialog or iframe, so I had to build my own functionality.
      This is done via a combination of a hidden div on the form, and a jQuery UI dialog. The hidden div is populated with an iframe
-     which loads the desired URL. The jQuery UI dialog is then opened, displaying the iframe. If you just close the dialog, nothing happens to this form. 
-     If however, you submit the popup form, the first thing it does is to change a hidden field called 'closeme' to a value of 1. (Its default is 0.)
-     After the popup gets submitted to the server, the server processes it by sending its form fields to a LF Workflow. When the workflow completes, it comes 
-     back to the server-side process which forwards back to the same form, but this time with the closeme field set by the query string. (We set it when we submitted the form.)
+     which loads the desired URL. The jQuery UI dialog is then opened, displaying the iframe. If you just close the dialog, nothing happens 
+     to this form. If however, you submit the popup form, the first thing it does is to change a hidden field called 'closeme' to a value of 1. 
+     (Its default is 0.)
+     After the popup gets submitted to the server, the server processes it by sending its form fields to a LF Workflow. 
+     When the workflow completes, it comes back to the server-side process which forwards back to the same form, but this time 
+     with the closeme field set by the query string. (We set it when we submitted the form.)
      When the popup loads, it has its closeme value set by the query string, so it knows that it has just come back from being submitted. 
      Therefore, it will then send a message to its parent, (namely, this form), informing it that the server-side 
      data has changed. When this form receives such a message, it closes the popup dialog, and then it calls a function refreshes the page.
      
    User Permissions:
       There is a user permission model in place to restrict which updates the user can make.
-      Metrology users (user-type-id == 1 or 2) have elevated permissions and can choose who this ticket is assigned to.
-      They can also change the status of the ticket to any status. (With the notable exception that they cannot change the status back 
-      to Awaiting Dispatch once it has been set to Work In Progress or Waiting on User, or if the ticket has been assigned to someone).
-      Non-authenticated users (user-id == 0), or QE's can only add notes to the ticket.
+      Metrology users (user-type-id == 1) and QE's (user-type-id == 3) have elevated permissions
+      QE's can add tickets, add tasks to tickets, add notes. 
+      They cannot, however, change tickets outside their department. They also cannot change task statuses or assign them to anyone.
+      Only Metrology users can do that.
       How authentication is performed: 
       When the user first loads the form, LFF fills in the .lf-user-name field with CRETEX\username. 
       (Predicated on the fact that the user has a LFF account and is logged in to LFF).
@@ -222,7 +224,7 @@
         add functionality that nobody's really using anyway. No it wouldn't take long to write, but it seems like needless computation just
         so that the pagination logic is flawless. There are also a bunch of pages that use pagination, so we'd have to have an extra sproc
         for every page that uses pagination. And then there's the extra client-side processing of making a bunch of extra buttons and what not.
-        Honestly, the page is slow enough as it is without adding a bunch of extra code for, again, functionality that no one really uses._
+        Honestly, the page is slow enough as it is without adding a bunch of extra code for, again, functionality that no one really uses.
      
 
   DOM assumptions (LF Forms-like structure):
@@ -313,8 +315,8 @@ $(document).ready(function () {
     // Enhance grid
     generateTicketNumberColumn(); // Turns ticket number inputs into clickable links
     generateFilterRow();          // Adds filter UI and wires change handlers
-    reApplyFilterValues();        // Reserved for restoring filters; currently commented
-    appendPagination();           // Adds prev/next controls based on row count
+    reApplyFilterValues();        // See "Page Refresh Quirks" above
+    appendPagination();           // See "Pagination" above
 
     // Container for popup iframe dialogs
     if ($('#popUpDiv').length == 0) {
