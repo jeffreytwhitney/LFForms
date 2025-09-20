@@ -22,7 +22,6 @@ var initiatorMap = new Map();
 var initiatorNameMap = new Map();
 
 
-//-------------------DOCUMENT FUNCTIONS-------------------------
 
 $(document).ready(function () {
   $('.Submit').hide();
@@ -32,18 +31,14 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-  var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
+  var bootstrapButton = $.fn.button.noConflict(); 
   $.fn.bootstrapBtn = bootstrapButton;
   var lfUserName = $('.lf-username input').val();
   if (lfUserName != 'Anonymous User') {
     $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).change();
   }
   window.onmessage = function (event) {
-    //This is the callback from the IFrame.
-    //If the event data says "Close Dialog", it destroys the dialog, (so that the close function won't fire).
-    //If it says "CloseDialogWithRefresh", it destroys the dialog and refreshes the form.
-    //I don't refresh if you add a note, for example. But if you do anything that will show up on the page, (adding time, cloning a task, etc)
-    //then I do a refresh.
+
     if (event.data == "CloseDialog") {
 
       $("#popupIFrame").dialog("destroy");

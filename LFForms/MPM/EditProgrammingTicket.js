@@ -1,29 +1,36 @@
 /**
- * EditProgrammingTicket.js
- *
- * Purpose:
- * Drives the Edit Programming Ticket UI: loads lookup data, manages permissions, filters/sorts the task list,
- * and wires actions such as Add Task, Add Time, Clone Task, Group Edit, Print, and Show Details.
- *
- * Responsibilities:
- * - Load CSS/JS dependencies and resolve Bootstrap/jQuery UI button conflicts.
- * - Maintain lookup maps (ME/QE/Assignee/TaskType/Status) for fast name<->ID translation.
- * - Enforce permissions (Metrology users or same-department users) and enable/disable UI accordingly.
- * - Generate dynamic UI (task table buttons, filter row, checkboxes, task links).
- * - Wire custom events: window message print handler, lookupcomplete/onloadlookupfinished, filter and sort controls.
- * - Open modal dialogs/iframes for editing, adding tasks/time, cloning, printing, and history display.
- *
+ EditProgrammingTicket.js
+ 
+ Purpose:
+ Drives the Edit Programming Ticket UI: loads lookup data, manages permissions, filters/sorts the task list,
+ and wires actions such as Add Task, Add Time, Clone Task, Group Edit, Print, and Show Details.
+ 
+ Responsibilities:
+  - Load CSS/JS dependencies and resolve Bootstrap/jQuery UI button conflicts.
+  - Maintain lookup maps (ME/QE/Assignee/TaskType/Status) for fast name<->ID translation.
+  - Enforce permissions (Metrology users or same-department users) and enable/disable UI accordingly.
+  - Generate dynamic UI (task table buttons, filter row, checkboxes, task links).
+  - Wire custom events: window message print handler, lookupcomplete/onloadlookupfinished, filter and sort controls.
+  - Open modal dialogs/iframes for editing, adding tasks/time, cloning, printing, and history display.
+ 
  Key Concepts:
     Dialog/Popup Mechanism:
      As with most things in LaserFiche Forms, there is no built-in way to open a popup dialog or iframe, so I had to build my own functionality.
      This is done via a combination of a hidden div on the form, and a jQuery UI dialog. The hidden div is populated with an iframe
-     which loads the desired URL. The jQuery UI dialog is then opened, displaying the iframe. If you just close the dialog, nothing happens to this form. 
+     which loads the desired URL. The jQuery UI dialog is then opened, displaying the iframe. If you just close the dialog, nothing happens 
+     to this form. 
      If however, you submit the popup form, the first thing it does is to change a hidden field called 'closeme' to a value of 1. (Its default is 0.)
-     After the popup gets submitted to the server, the server processes it by sending its form fields to a LF Workflow. When the workflow completes, it comes 
-     back to the server-side process which forwards back to the same form, but this time with the closeme field set by the query string. (We set it when we submitted the form.)
+     After the popup gets submitted to the server, the server processes it by sending its form fields to a LF Workflow. When the workflow completes, 
+     it comes back to the server-side process which forwards back to the same form, but this time with the closeme field set by the query string. 
+     (We set it when we submitted the form.)
      When the popup loads, it has its closeme value set by the query string, so it knows that it has just come back from being submitted. 
      Therefore, it will then send a message to its parent, (namely, this form), informing it that the server-side 
      data has changed. When this form receives such a message, it closes the popup dialog, and then it calls a function refreshes the page.
+
+     Just keep in mind that this page is also a popup, so when this page submits, it also sets its own closeme field to 1, 
+     so that when it comes back from the server, it will also send a message to its parent to refresh. That will cause the parent form
+     to refresh and close the popup dialog that is hosting this page. This is a bit convoluted, but it works, and it's the only way it will
+     work because of the limitations of LaserFiche Forms.
      
     User Permissions:
      There is a user permission model in place to restrict who can add/edit tasks based on their department and user type.
@@ -51,8 +58,8 @@
       This gets us part of the way there, but we also need to have a way for the user to set these fields.
       This is done via a filter row which is added to the task list table. The filter row contains a text box for the task name filter,
       and dropdowns for the task type, status, and assignee filters. There is also a checkbox to include completed tasks.
-      The change of any of these controls triggers the filterTable() function which reads the values from the controls and sets the hidden fields accordingly.
-      Values from select controls are mapped from name to ID using the lookup maps.
+      The change of any of these controls triggers the filterTable() function which reads the values from the controls and sets the hidden fields 
+      ccordingly. Values from select controls are mapped from name to ID using the lookup maps.
       Sorting is handled via clickable column headers. Clicking a header sets the sort field and toggles the sort direction.
       If you click on a sort field that is already the current sort field, it toggles the direction.
 
@@ -86,32 +93,32 @@
      Also, because of the way permissions works, a lot of the hidden fields that we use to determine the user's department and user type
      only get populated after we fill in the network user name and trigger a change event on that field. So the onloadlookupfinished event
      has already been fired. Permissions to do stuff all run on the UserTypeID field, so we have to wait until that field is populated.
- * 
- * Key DOM fields/classes:
- * - User/permissions: `.user-type-id input`, `.user-department-id input`, `.user-isactive input`, `.ticket-department-id input`
- * - Ticket/task identity: `.tid input` (ticket ID), `.ticket-number input`
- * - ME/QE controls: `.manufacturing-engineer-combo select`, `.quality-engineer-combo select`, `.meid input`, `.qeid input`, `.mename input`, `.qename input`
- * - Lookup sources (tables): `.me-lookup-table`, `.qe-lookup-table`, `.assignee-lookup-table`, `.tasktype-lookup-table`, `.status-lookup-table`
- * - Filtering state: `.ftname input`, `.fttid input`, `.fsid input`, `.faid input`, `.fincomp input`, `#chkIncludeComplete`
- * - Sorting state: `.sort-field-ordinal input`, `.sort-direction input`, headers `#q47..#q55`
- * - Task list columns: `.tasklist-task-id-col`, `.tasklist-task-name-col`, `.tasklist-time-col`, `.task-list-clone-col`, `.tasklist-mandate-col`
- * - Misc: `.add-button`, `.print-button`, `#popUpDiv`, `#print-iframe`, `#ticket-history`, `.tasklist-table`
- *
- * Custom events observed:
- * - Window postMessage "printme" to print iframe, and "CloseDialogWithRefresh" to refresh.
- * - `lookupcomplete` to load maps, set combos, enforce permissions, build UI, and wire filters.
- * - `onloadlookupfinished` to finalize UI (history iframe, site-dependent reloads, defaults).
- *
- * Notes:
- * - Assumes backend populates hidden inputs/lookup tables; this file translates and orchestrates UI behavior.
- * - Uses jQuery UI Dialog for pop-up iframes.
- * - Filtering writes to hidden fields and triggers LF lookup via `.change()` where appropriate.
- * - Sorting only toggles indicators and hidden sort fields; actual sort performed by backend lookup.
- *
- * Potential improvements (informational only):
- * - Replace `map.keys.length` checks with `map.size === 0`.
- * - Replace `option_value == NaN` patterns (if any) with `Number.isNaN(option_value)`.
- * - Debounce filter input changes to reduce backend calls.
+ 
+ Key DOM fields/classes:
+ - User/permissions: `.user-type-id input`, `.user-department-id input`, `.user-isactive input`, `.ticket-department-id input`
+ - Ticket/task identity: `.tid input` (ticket ID), `.ticket-number input`
+ - ME/QE controls: `.manufacturing-engineer-combo select`, `.quality-engineer-combo select`, `.meid input`, `.qeid input`, `.mename input`, `.qename input`
+ - Lookup sources (tables): `.me-lookup-table`, `.qe-lookup-table`, `.assignee-lookup-table`, `.tasktype-lookup-table`, `.status-lookup-table`
+ - Filtering state: `.ftname input`, `.fttid input`, `.fsid input`, `.faid input`, `.fincomp input`, `#chkIncludeComplete`
+ - Sorting state: `.sort-field-ordinal input`, `.sort-direction input`, headers `#q47..#q55`
+ - Task list columns: `.tasklist-task-id-col`, `.tasklist-task-name-col`, `.tasklist-time-col`, `.task-list-clone-col`, `.tasklist-mandate-col`
+ - Misc: `.add-button`, `.print-button`, `#popUpDiv`, `#print-iframe`, `#ticket-history`, `.tasklist-table`
+ 
+ Custom events observed:
+ - Window postMessage "printme" to print iframe, and "CloseDialogWithRefresh" to refresh.
+ - `lookupcomplete` to load maps, set combos, enforce permissions, build UI, and wire filters.
+ - `onloadlookupfinished` to finalize UI (history iframe, site-dependent reloads, defaults).
+ 
+ Notes:
+ - Assumes backend populates hidden inputs/lookup tables; this file translates and orchestrates UI behavior.
+ - Uses jQuery UI Dialog for pop-up iframes.
+ - Filtering writes to hidden fields and triggers LF lookup via `.change()` where appropriate.
+ - Sorting only toggles indicators and hidden sort fields; actual sort performed by backend lookup.
+ 
+ Potential improvements (informational only):
+ - Replace `map.keys.length` checks with `map.size === 0`.
+ - Replace `option_value == NaN` patterns (if any) with `Number.isNaN(option_value)`.
+ - Debounce filter input changes to reduce backend calls.
  * - Centralize permission checks to avoid duplication.
  */
 
