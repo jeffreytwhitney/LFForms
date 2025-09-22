@@ -1,0 +1,1322 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ExportedWorkflows Version="8.3.0.0" Count="1">
+  <ExportedWorkflow>
+    <Designer Version="10.4.3.139">
+      <SequentialWorkflowActivityProxy Type="Laserfiche.Workflow.Activities.Proxies.LfSequentialWorkflowProxy, Laserfiche.Workflow.Designer.Base, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="536c8ea1-a488-45a0-a2e8-e18e1eff42d7" ActivityCountHint="59">
+        <Name>MPM-AddNote</Name>
+        <SafeName>MPMAddNote</SafeName>
+        <Enabled>True</Enabled>
+        <Description ShowDescription="null" ShowSummary="null" />
+        <AttachedProperties>
+          <Property Key="ProfileCollection" PropertyType="Profiles">
+            <LinkedProperties Default="">
+              <LinkedProperty>
+                <Name>RMS Admin</Name>
+                <Id>-1</Id>
+                <Uuid>9b4b499b-8845-4198-af3a-8911ca93c7fc</Uuid>
+                <Offline>
+                  <ConnectionProfile Version="2" xmlns="http:\laserfiche\workflow\connection">
+                    <ProfileId>gvlLW5hQyCKwkTZNP5BvUgPkFloD+Q7A</ProfileId>
+                    <EncryptedData xmlns="http://www.w3/.org/2001/04/xmlenc#">
+                      <CipherData>
+                        <CipherValue>ROgHokcranR1gJS0LvRxaDZslauzU5Ms9UGRt4IhTdZiPmcs7ifJnlnceahoWvRohDjBxUPD4t1TmKf9GpXoCQpsD32mdI8bEXlbE1cTbNfKw8z+YynbxpykHWhDNtwA0OgkbKDY8SJG1JYf3Y5chfOJcICXeGT21r1ZmE0T2ZRInfZgH1lPaDhIUq6mREYss4hctXVq6Iv4pxljjhNjS26vF8iMgplNSDHAh5D4V9YMg3mzRJ0ABzzidgyKsAwkphEGRTD71SMcHW1hgdmOPcZDbHZ6WSZ6zxIBSAor8+RzU/S+ajHzVBqkLgCwGFbo5lQBf+HH1Mf9hZa32la2hcOT9RvfiOu4rj6KuJKVLUXCmpoCqB8A5ZWgEhXIs4clOUoi7c3UrlYd44bcwzKeUkFyx6TM3kXmyq8l+i7hcyhfZMKX/c5RQbi1ZhHt+zx4bk9JVOx/rdG4LRpXCB9vfrzwmgnQqO8Lfkdnc3OsgFgHdQqw+1c/4EP8rVvhfB2Q/XLuCF3G/U6856j9GSeh8FUO0GbMkQd5RWO45ZWN8UxxofrZVXa27oT0EC7HMTu3Bb4zOBHHEoy6NACWQsUpQ+b32r/L0KGXNqrLU9nHNjl+ykn9McOgsYBI9zBF2qT5CljxP+TZv0DwGFTl5h8DaIbU3lECP1vKdnskQPoZJrdUKX1g+hzJ4mB3QvXlrg2uIHTcoBLMnzH2ZpUC1rTizrqRh+GYf7kwZjeQcr3WdHXVYZ4ISt4SliWJ2KohyKaIPrPiDwhRMT4S4zbHFzXijhe7aFOY4bjkqvMT1xUeI6ru35GEE+VETpUxcm7BdWHd3kvSTGCTc9pR0hEuzkOi6byJpYmUxX7+9/tdFRzwGYoINhK9q5pRBV5WCulDdxFsKZP63AfL9kPIyhFfcvcHgran3fiJhpx7XI5nognNK7+rMSEHIoCh9pNxlx1LKUYbqqNlZOyE2UVIWE9pPOMdLjy2DZBCVfhbVY2xBEooqqmrUeo1x9vxzVXEKW4ovMvfBl+B9rbm4DY=</CipherValue>
+                      </CipherData>
+                    </EncryptedData>
+                  </ConnectionProfile>
+                </Offline>
+              </LinkedProperty>
+            </LinkedProperties>
+          </Property>
+          <Property Key="WorkflowWebServiceCollection" PropertyType="WebServices">
+            <LinkedProperties Default="">
+              <LinkedProperty ServiceURL="http://rmslf/forms" User="admin" Type="Laserfiche Forms">
+                <Name>LFForms</Name>
+                <Id>18</Id>
+                <Uuid>73188341-8c85-4561-9273-aff17d5bcc5a</Uuid>
+                <Offline />
+              </LinkedProperty>
+            </LinkedProperties>
+          </Property>
+          <Property Key="WorkflowDataSourceCollection" PropertyType="DataSources">
+            <LinkedProperties Default="">
+              <LinkedProperty>
+                <Name>LF_RMS_COMMS_MPM</Name>
+                <Id>47</Id>
+                <Uuid>c68f2e48-b538-4574-a58d-68702c3fbe53</Uuid>
+                <Offline />
+                <Information>
+                  <SourceInformation Flags="OdbcType, ServerDatabase, UseSSPI" Adapter="Sql">
+                    <Host>rms-corplfsql1.cretexinc.com</Host>
+                    <Database>LF_RMS_COMMS_MPM</Database>
+                    <Server />
+                    <User />
+                  </SourceInformation>
+                </Information>
+              </LinkedProperty>
+            </LinkedProperties>
+          </Property>
+          <Property Key="EmailServerReferenceCollection" PropertyType="EmailServers">
+            <LinkedProperties Default="">
+              <LinkedProperty Host="rms-intstmprelay" IsDefault="false">
+                <Name>LF Notfications</Name>
+                <Id>10</Id>
+                <Uuid>ee5e3bf9-a7aa-4b71-ad92-b4feefea90d8</Uuid>
+                <Offline />
+              </LinkedProperty>
+            </LinkedProperties>
+          </Property>
+        </AttachedProperties>
+        <Projects>
+          <CSharpProject />
+          <VBProject />
+        </Projects>
+        <WorkflowBusinessProcessOptions LfProcessId="0" ProfileId="9b4b499b-8845-4198-af3a-8911ca93c7fc" Flags="AllowStartingFromClients, CreateBusinessProcessEntity, RecordMilestoneEvents, RecordStepEvents, SetStartingMilestone, SetCompletedMilestone, SetCanceledMilestone" Enabled="false">
+          <Milestones>
+            <Starting>Running</Starting>
+            <Completed>Completed</Completed>
+            <Canceled>Terminated</Canceled>
+          </Milestones>
+          <CustomInstanceName />
+        </WorkflowBusinessProcessOptions>
+        <WorkflowParameters SetOutputValuesViaTokens="true" />
+        <Cultures>
+          <Culture>en-us</Culture>
+        </Cultures>
+        <MetadataStore Attributes="ExpectsStartingEntry, ValidateDesign">
+          <VersionHistory>
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpF3B4.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="01/25/2025 17:37:07" EndTime="01/25/2025 18:25:21" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp49C.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="01/26/2025 23:03:05" EndTime="01/26/2025 23:17:40" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp93AC.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="01/26/2025 23:17:40" EndTime="01/27/2025 01:06:25" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp250B.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="01/27/2025 01:06:25" EndTime="01/27/2025 03:24:39" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp18FA.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="01/27/2025 09:36:03" EndTime="01/27/2025 09:51:55" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp66C5.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="01/27/2025 09:51:55" EndTime="01/27/2025 09:57:42" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpB588.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="01/27/2025 09:57:42" EndTime="01/27/2025 10:00:14" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp4255.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="01/27/2025 10:00:14" EndTime="01/27/2025 10:19:24" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp27D1.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="01/27/2025 10:19:24" EndTime="01/27/2025 10:24:45" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp2C46.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="01/27/2025 10:24:45" EndTime="01/27/2025 10:35:41" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp3D83.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="01/27/2025 10:35:41" EndTime="01/27/2025 10:48:52" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpF199.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="01/27/2025 10:48:52" EndTime="01/27/2025 10:55:06" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpAF0A.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="01/29/2025 19:04:26" EndTime="01/29/2025 19:50:57" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp75A8.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="04/17/2025 01:34:51" EndTime="04/17/2025 01:45:19" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpB90B.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="04/21/2025 00:22:46" EndTime="04/21/2025 08:30:27" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp320B.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="04/27/2025 09:30:08" EndTime="04/27/2025 09:57:22" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp4C01.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="04/27/2025 15:07:56" EndTime="04/27/2025 15:11:40" />
+          </VersionHistory>
+          <Metadata>
+            <Value Item="Author" Type="String">JTWhitney</Value>
+            <Value Item="PublishedDate" Type="DateTime">2025-04-27T14:57:30.3Z</Value>
+            <Value Item="WorkflowId" Type="Int32">117</Value>
+            <Value Item="WorkflowVersion" Type="Int32">16</Value>
+            <Value Item="WorkflowServerURL" Type="String">RMS-CORPLF1</Value>
+            <Value Item="WorkflowServerId" Type="String">8f6ebc76-1c3a-4b6f-b657-d705dfc3c51f</Value>
+          </Metadata>
+        </MetadataStore>
+        <Activities>
+          <Activity Type="Laserfiche.Workflow.Activities.Forms.RetrieveFormFieldValueProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="f5a3b5a9-a3d3-487f-a3ad-49cb48d173d9">
+            <Name>Retrieve Business Process Variables</Name>
+            <SafeName>RetrieveBusinessProcessVariables</SafeName>
+            <Enabled>True</Enabled>
+            <Description ShowDescription="null" ShowSummary="null">Retrieves the values from a Laserfiche Forms business process instance and stores those values as tokens.</Description>
+            <RetrieveFormFieldValueOptions Id="73188341-8c85-4561-9273-aff17d5bcc5a" OPT123332="true">
+              <SubmissionOptions UseStarting="true" SubmissionId="" InstanceId="" UseStartingInstance="true" />
+              <ProcessOptions ProcessId="72" ProcessName="RMS-MPM-AddNote" />
+              <Fields>
+                <Attribute AttributeId="2851" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="AssigneeEmailAddress" AttributeName="AssigneeEmailAddress" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="MPM-AddNote" MemberPath="2857" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="2858" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="DateToAdd" AttributeName="DateToAdd" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="MPM-AddNote" MemberPath="2864" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="2651" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="EmployeeNumber" AttributeName="EmployeeNumber" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="MPM-AddNote" MemberPath="2657" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="2650" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="IsActiveUser" AttributeName="IsActiveUser" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="MPM-AddNote" MemberPath="2656" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="2849" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="IsAdmin" AttributeName="IsAdmin" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="MPM-AddNote" MemberPath="2855" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="4617" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Metrology_EMail" AttributeName="Metrology_EMail" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="MPM-AddNote" MemberPath="4630" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="2646" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Note:" AttributeName="NoteText" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="MPM-AddNote" MemberPath="2652" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="2708" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="nt" AttributeName="nt" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="MPM-AddNote" MemberPath="2714" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="2745" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Note:" AttributeName="OptionalNote" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="MPM-AddNote" MemberPath="2751" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="2850" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="QEEmailAddress" AttributeName="QEEmailAddress" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="MPM-AddNote" MemberPath="2856" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="2859" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="QEName" AttributeName="QEName" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="MPM-AddNote" MemberPath="2865" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="2855" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="SiteOwnerEmailAddress" AttributeName="SiteOwnerEmailAddress" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="MPM-AddNote" MemberPath="2861" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="2645" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="TaskID" AttributeName="TaskID" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="MPM-AddNote" MemberPath="2651" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="2748" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="TaskName" AttributeName="TaskName" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="MPM-AddNote" MemberPath="2754" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="2744" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="TimeToAdd" AttributeName="TimeToAdd" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="MPM-AddNote" MemberPath="2750" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="2856" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="User Email address" AttributeName="User_Email_address" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="MPM-AddNote" MemberPath="2862" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="2848" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="User_ID" AttributeName="User_ID" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="MPM-AddNote" MemberPath="2854" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="2847" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="User_TypeID" AttributeName="User_TypeID" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="MPM-AddNote" MemberPath="2853" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="2747" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Note:" AttributeName="WaitingNote" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="MPM-AddNote" MemberPath="2753" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="2746" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Radio" Label="Waiting Reason:" AttributeName="WaitingReason" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="true" BoundPropertyName="" FormName="MPM-AddNote" MemberPath="2752" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false">
+                  <Choices>
+                    <FormAttributeFieldChoice Label="Waiting On Part" Value="1" />
+                    <FormAttributeFieldChoice Label="Waiting For Permission to Release" Value="2" />
+                    <FormAttributeFieldChoice Label="Waiting Other" Value="3" />
+                  </Choices>
+                </Attribute>
+                <Attribute AttributeId="4616" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Workflow_ErrorMessage" AttributeName="Workflow_ErrorMessage" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="MPM-AddNote" MemberPath="4629" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+              </Fields>
+              <AdditionalVariableOptions>
+                <RetrievePaymentVariables>false</RetrievePaymentVariables>
+              </AdditionalVariableOptions>
+            </RetrieveFormFieldValueOptions>
+          </Activity>
+          <Activity Type="Laserfiche.Workflow.Activities.CreateToken.CreateTokenActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="11f87b2d-db83-429c-be6f-8917b7e02e83">
+            <Name>Error Message</Name>
+            <SafeName>ErrorMessage</SafeName>
+            <Enabled>True</Enabled>
+            <Description ShowDescription="null" ShowSummary="null">Creates new tokens and updates the values of existing tokens.</Description>
+            <Options>
+              <Tokens>
+                <TokenInformation Id="4f87a38f-652e-45f0-b66f-c4903c94bbfb" IsMultivalued="false" UpdateExistingToken="false" AppendValues="false" TokenType="String">
+                  <TokenName>Error Message</TokenName>
+                  <TokenFullName />
+                  <ActivityName />
+                  <TokenValues>
+                    <TokenValue xml:space="preserve">%(RetrieveBusinessProcessVariables_Workflow_ErrorMessage)</TokenValue>
+                  </TokenValues>
+                </TokenInformation>
+              </Tokens>
+            </Options>
+          </Activity>
+          <Activity Type="Laserfiche.Workflow.Activities.Condition.IfElseConditionProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="c7c349c6-895c-4efa-82cc-c1c5225b01a9">
+            <Name>Note Type</Name>
+            <SafeName>NoteType</SafeName>
+            <Enabled>True</Enabled>
+            <Description ShowDescription="null" ShowSummary="null">Runs the FIRST branch that has satisfied conditions.</Description>
+            <ProfileId>9b4b499b-8845-4198-af3a-8911ca93c7fc</ProfileId>
+            <Activities>
+              <Activity Type="Laserfiche.Workflow.Activities.Condition.RoutingDecisionBranchProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="60731de4-38c7-401e-bcc0-25f57e852c95">
+                <Name>Generic Add Note</Name>
+                <SafeName>GenericAddNote</SafeName>
+                <Enabled>True</Enabled>
+                <Description ShowDescription="null" ShowSummary="null">Contains activities that will run if the branch conditions are satisfied.</Description>
+                <Condition Version="10.4.3.139" Name="" Negated="false" IsConjunction="true" ConditionType="Composite" Description="">
+                  <Conditions>
+                    <Condition ConditionType="Token" Operator="Equal">
+                      <Token Name="nt" Length="0" MetaType="String, Field">
+                        <Activity Display="Retrieve Business Process Variables" Append="true">RetrieveBusinessProcessVariables</Activity>
+                      </Token>
+                      <Values>
+                        <Value>1</Value>
+                      </Values>
+                    </Condition>
+                  </Conditions>
+                </Condition>
+                <Activities>
+                  <Activity Type="Laserfiche.Workflow.Activities.Condition.ConditionalSequenceActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="2709ab19-31db-492d-b36d-ed189c8027af">
+                    <Name>Conditional Sequence</Name>
+                    <SafeName>ConditionalSequence</SafeName>
+                    <Enabled>True</Enabled>
+                    <Description ShowDescription="null" ShowSummary="null">A sequence activity that only performs the contained activities if the conditions are satisfied.</Description>
+                    <ProfileId>9b4b499b-8845-4198-af3a-8911ca93c7fc</ProfileId>
+                    <Condition Version="10.4.3.139" Name="" Negated="false" IsConjunction="true" ConditionType="Composite" Description="">
+                      <Conditions>
+                        <Condition ConditionType="Token" Operator="Equal">
+                          <Token Name="IsActiveUser" Length="0" MetaType="String, Field">
+                            <Activity Display="Retrieve Business Process Variables" Append="true">RetrieveBusinessProcessVariables</Activity>
+                          </Token>
+                          <Values>
+                            <Value>1</Value>
+                          </Values>
+                        </Condition>
+                      </Conditions>
+                    </Condition>
+                    <Activities>
+                      <Activity Type="Laserfiche.Workflow.Activities.Exceptions.ExceptionCompositeProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="d3b31bb5-5187-47e2-85c0-0a77aac9557d">
+                        <Name>Try AddNote</Name>
+                        <SafeName>TryAddNote</SafeName>
+                        <Enabled>True</Enabled>
+                        <Description ShowDescription="null" ShowSummary="null">Prevents a workflow from terminating if an activity encounters an error. A catch branch lets you specify activities that will be performed if the try branch encounters an error.</Description>
+                        <Activities>
+                          <Activity Type="Laserfiche.Workflow.Activities.Exceptions.ExceptionTryProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="437ab8a6-5add-4cf4-9ba6-63da29cc40cd">
+                            <Name>Try Branch</Name>
+                            <SafeName>TryBranch</SafeName>
+                            <Enabled>True</Enabled>
+                            <Description ShowDescription="null" ShowSummary="null">Defines the default actions that will be attempted.</Description>
+                            <Activities>
+                              <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="19db1cfc-69aa-4cbb-98af-da932b20aacc">
+                                <Name>AddNote</Name>
+                                <SafeName>AddNote</SafeName>
+                                <Enabled>True</Enabled>
+                                <Description ShowDescription="null" ShowSummary="null">Performs the specified query in the selected data source.</Description>
+                                <DataSourceId>c68f2e48-b538-4574-a58d-68702c3fbe53</DataSourceId>
+                                <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+                                  <CustomQuery>EXECUTE spTASKNOTE_AddNew ?, ?, ?, ?</CustomQuery>
+                                  <InputParameter DbType="Int32">
+                                    <Name>?</Name>
+                                    <Value>%(RetrieveBusinessProcessVariables_TaskID)</Value>
+                                  </InputParameter>
+                                  <InputParameter DbType="String">
+                                    <Name>?</Name>
+                                    <Value>%(RetrieveBusinessProcessVariables_NoteText)</Value>
+                                  </InputParameter>
+                                  <InputParameter DbType="Int16">
+                                    <Name>?</Name>
+                                    <Value>0</Value>
+                                  </InputParameter>
+                                  <InputParameter DbType="String">
+                                    <Name>?</Name>
+                                    <Value>%(RetrieveBusinessProcessVariables_EmployeeNumber)</Value>
+                                  </InputParameter>
+                                </Criteria>
+                                <ResultSetSize Rows="ReturnAllRows" Count="2" />
+                                <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+                              </Activity>
+                            </Activities>
+                            <FaultHandlers />
+                          </Activity>
+                          <Activity Type="Laserfiche.Workflow.Activities.Exceptions.ExceptionCatchProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="4ad7f21e-881f-4a8f-a6c6-5c34e02d9534">
+                            <Name>Catch Branch</Name>
+                            <SafeName>CatchBranch</SafeName>
+                            <Enabled>True</Enabled>
+                            <Description ShowDescription="null" ShowSummary="null">Defines the actions that will take place if a specific error occurs.</Description>
+                            <FaultType>System.Exception</FaultType>
+                            <Activities>
+                              <Activity Type="Laserfiche.Workflow.Activities.CreateToken.CreateTokenActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="ed098197-b5c3-4617-9944-51ccb01aff07">
+                                <Name>Assign Token Values 2</Name>
+                                <SafeName>AssignTokenValues2</SafeName>
+                                <Enabled>True</Enabled>
+                                <Description ShowDescription="null" ShowSummary="null">Creates new tokens and updates the values of existing tokens.</Description>
+                                <Options>
+                                  <Tokens>
+                                    <TokenInformation Id="d7979b92-4811-490e-b23c-94a0ea25389a" IsMultivalued="false" UpdateExistingToken="true" AppendValues="false" TokenType="String">
+                                      <TokenName>Error Message</TokenName>
+                                      <TokenFullName>Error Message</TokenFullName>
+                                      <ActivityName>ErrorMessage</ActivityName>
+                                      <TokenValues>
+                                        <TokenValue xml:space="preserve">PROCESS: Add Generic Note, MESSAGE: '%(CatchBranch_Message)'</TokenValue>
+                                      </TokenValues>
+                                    </TokenInformation>
+                                  </Tokens>
+                                </Options>
+                              </Activity>
+                            </Activities>
+                            <FaultHandlers />
+                          </Activity>
+                        </Activities>
+                        <FaultHandlers />
+                      </Activity>
+                    </Activities>
+                    <FaultHandlers />
+                  </Activity>
+                </Activities>
+                <FaultHandlers />
+              </Activity>
+              <Activity Type="Laserfiche.Workflow.Activities.Condition.RoutingDecisionBranchProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="13d64e0a-9da4-4804-9dcc-338ace425fa0">
+                <Name>Pester QE</Name>
+                <SafeName>PesterQE</SafeName>
+                <Enabled>True</Enabled>
+                <Description ShowDescription="null" ShowSummary="null">Contains activities that will run if the branch conditions are satisfied.</Description>
+                <Condition Version="10.4.3.139" Name="" Negated="false" IsConjunction="true" ConditionType="Composite" Description="">
+                  <Conditions>
+                    <Condition ConditionType="Token" Operator="Equal">
+                      <Token Name="nt" Length="0" MetaType="String, Field">
+                        <Activity Display="Retrieve Business Process Variables" Append="true">RetrieveBusinessProcessVariables</Activity>
+                      </Token>
+                      <Values>
+                        <Value>2</Value>
+                      </Values>
+                    </Condition>
+                  </Conditions>
+                </Condition>
+                <Activities>
+                  <Activity Type="Laserfiche.Workflow.Activities.Condition.ConditionalSequenceActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="ae90cef3-9514-4394-bacc-fa7267607fc9">
+                    <Name>There is a QE to pester</Name>
+                    <SafeName>ThereisaQEtopester</SafeName>
+                    <Enabled>True</Enabled>
+                    <Description ShowDescription="null" ShowSummary="null">A sequence activity that only performs the contained activities if the conditions are satisfied.</Description>
+                    <ProfileId>9b4b499b-8845-4198-af3a-8911ca93c7fc</ProfileId>
+                    <Condition Version="10.4.3.139" Name="" Negated="false" IsConjunction="true" ConditionType="Composite" Description="">
+                      <Conditions>
+                        <Condition ConditionType="Token" Operator="IsNotEmpty">
+                          <Token Name="QEEmailAddress" Length="0" MetaType="String, Field">
+                            <Activity Display="Retrieve Business Process Variables" Append="true">RetrieveBusinessProcessVariables</Activity>
+                          </Token>
+                          <Values />
+                        </Condition>
+                      </Conditions>
+                    </Condition>
+                    <Activities>
+                      <Activity Type="Laserfiche.Workflow.Activities.Exceptions.ExceptionCompositeProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="f86a74d1-b88e-490c-bec9-af5e8c00ca6d">
+                        <Name>Try GetQEPesterMessage</Name>
+                        <SafeName>TryGetQEPesterMessage</SafeName>
+                        <Enabled>True</Enabled>
+                        <Description ShowDescription="null" ShowSummary="null">Prevents a workflow from terminating if an activity encounters an error. A catch branch lets you specify activities that will be performed if the try branch encounters an error.</Description>
+                        <Activities>
+                          <Activity Type="Laserfiche.Workflow.Activities.Exceptions.ExceptionTryProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="f9614550-5c91-44d3-b19d-66028b4fb1da">
+                            <Name>Try Branch 2</Name>
+                            <SafeName>TryBranch2</SafeName>
+                            <Enabled>True</Enabled>
+                            <Description ShowDescription="null" ShowSummary="null">Defines the default actions that will be attempted.</Description>
+                            <Activities>
+                              <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="eed373a6-0108-45a8-bea1-10ec4b1b7038">
+                                <Name>GetQEPesterMessage</Name>
+                                <SafeName>GetQEPesterMessage</SafeName>
+                                <Enabled>True</Enabled>
+                                <Description ShowDescription="null" ShowSummary="null">Performs the specified query in the selected data source.</Description>
+                                <DataSourceId>c68f2e48-b538-4574-a58d-68702c3fbe53</DataSourceId>
+                                <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+                                  <Table Name="" HasIdentityColumn="false">
+                                    <Columns Generated="1/1/0001 12:00:00 AM">
+                                      <Column Name="" Type="System.String" ReadOnly="False" />
+                                    </Columns>
+                                  </Table>
+                                  <CustomQuery>Execute spEMAIL_GetEmailMessageByTaskIDAndEMailType ?, ?, ?, ?, ?, ?</CustomQuery>
+                                  <InputParameter DbType="Int32">
+                                    <Name>?</Name>
+                                    <Value>%(RetrieveBusinessProcessVariables_TaskID)</Value>
+                                  </InputParameter>
+                                  <InputParameter DbType="String">
+                                    <Name>?</Name>
+                                    <Value>TASK_UPDATE_REQUESTED</Value>
+                                  </InputParameter>
+                                  <InputParameter DbType="String">
+                                    <Name>?</Name>
+                                    <Value>%(RetrieveBusinessProcessVariables_NoteText)</Value>
+                                  </InputParameter>
+                                  <InputParameter>
+                                    <Name>?</Name>
+                                    <Value>0</Value>
+                                  </InputParameter>
+                                  <InputParameter>
+                                    <Name>?</Name>
+                                    <Value>%(RetrieveBusinessProcessVariables_EmployeeNumber)</Value>
+                                  </InputParameter>
+                                  <InputParameter>
+                                    <Name>EmailMessage</Name>
+                                    <Value />
+                                  </InputParameter>
+                                </Criteria>
+                                <ResultSetSize Rows="ReturnAllRows" Count="2" />
+                                <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+                              </Activity>
+                            </Activities>
+                            <FaultHandlers />
+                          </Activity>
+                          <Activity Type="Laserfiche.Workflow.Activities.Exceptions.ExceptionCatchProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="508a1b46-2260-4d35-8d1b-4b00fe31a92b">
+                            <Name>Catch Branch 2</Name>
+                            <SafeName>CatchBranch2</SafeName>
+                            <Enabled>True</Enabled>
+                            <Description ShowDescription="null" ShowSummary="null">Defines the actions that will take place if a specific error occurs.</Description>
+                            <FaultType>System.Exception</FaultType>
+                            <Activities>
+                              <Activity Type="Laserfiche.Workflow.Activities.CreateToken.CreateTokenActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="c9fa2241-13fc-4221-bf76-5bb13369f177">
+                                <Name>Assign Token Values 3</Name>
+                                <SafeName>AssignTokenValues3</SafeName>
+                                <Enabled>True</Enabled>
+                                <Description ShowDescription="null" ShowSummary="null">Creates new tokens and updates the values of existing tokens.</Description>
+                                <Options>
+                                  <Tokens>
+                                    <TokenInformation Id="09cf1c03-4d4f-4072-8aa5-7ca49e013dc0" IsMultivalued="false" UpdateExistingToken="true" AppendValues="false" TokenType="String">
+                                      <TokenName>Error Message</TokenName>
+                                      <TokenFullName>Error Message</TokenFullName>
+                                      <ActivityName>ErrorMessage</ActivityName>
+                                      <TokenValues>
+                                        <TokenValue xml:space="preserve">PROCESS: 'GetQEPesterMessage', MESSAGE: '%(CatchBranch2_Message)'</TokenValue>
+                                      </TokenValues>
+                                    </TokenInformation>
+                                  </Tokens>
+                                </Options>
+                              </Activity>
+                            </Activities>
+                            <FaultHandlers />
+                          </Activity>
+                        </Activities>
+                        <FaultHandlers />
+                      </Activity>
+                      <Activity Type="Laserfiche.Workflow.Activities.CreateToken.CreateTokenActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="11be7e93-e27d-4f51-b02f-5e3bdf4a5e9c">
+                        <Name>Assign QE Pester Email Message</Name>
+                        <SafeName>AssignQEPesterEmailMessage</SafeName>
+                        <Enabled>True</Enabled>
+                        <Description ShowDescription="null" ShowSummary="null">Creates new tokens and updates the values of existing tokens.</Description>
+                        <Options>
+                          <Tokens>
+                            <TokenInformation Id="5792c388-2aa7-4690-8696-bba226c9ff8e" IsMultivalued="false" UpdateExistingToken="false" AppendValues="false" TokenType="String">
+                              <TokenName>Email Message</TokenName>
+                              <TokenFullName />
+                              <ActivityName />
+                              <TokenValues>
+                                <TokenValue xml:space="preserve">%(GetQEPesterMessage_)</TokenValue>
+                              </TokenValues>
+                            </TokenInformation>
+                          </Tokens>
+                        </Options>
+                      </Activity>
+                      <Activity Type="Laserfiche.Workflow.Activities.Condition.IfElseConditionProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="ff12edf0-ddd4-4b9e-a71f-3e29b974e7d2">
+                        <Name>Was sent by Site Owner</Name>
+                        <SafeName>WassentbySiteOwner</SafeName>
+                        <Enabled>True</Enabled>
+                        <Description ShowDescription="true" ShowSummary="null">If the site owner is the sender, I don't want to CC the site owner, because they're the person who sent it.</Description>
+                        <ProfileId>9b4b499b-8845-4198-af3a-8911ca93c7fc</ProfileId>
+                        <Activities>
+                          <Activity Type="Laserfiche.Workflow.Activities.Condition.RoutingDecisionBranchProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="a5a420c6-865f-477e-aed4-319484b07a96">
+                            <Name>SiteOwnerEmail equals Sender Email</Name>
+                            <SafeName>SiteOwnerEmailequalsSenderEmail</SafeName>
+                            <Enabled>True</Enabled>
+                            <Description ShowDescription="null" ShowSummary="null">Contains activities that will run if the branch conditions are satisfied.</Description>
+                            <Condition Version="10.4.3.139" Name="" Negated="false" IsConjunction="true" ConditionType="Composite" Description="">
+                              <Conditions>
+                                <Condition ConditionType="Token" Operator="Equal">
+                                  <Token Name="SiteOwnerEmailAddress" Length="0" MetaType="String, Field">
+                                    <Activity Display="Retrieve Business Process Variables" Append="true">RetrieveBusinessProcessVariables</Activity>
+                                  </Token>
+                                  <Values>
+                                    <Value>%(RetrieveBusinessProcessVariables_User_Email_address)</Value>
+                                  </Values>
+                                </Condition>
+                              </Conditions>
+                            </Condition>
+                            <Activities>
+                              <Activity Type="Laserfiche.Workflow.Activities.Exceptions.ExceptionCompositeProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="25dbdd30-45f8-42cd-88be-1a8917b9901a">
+                                <Name>Try QE Pester Email</Name>
+                                <SafeName>TryQEPesterEmail</SafeName>
+                                <Enabled>True</Enabled>
+                                <Description ShowDescription="null" ShowSummary="null">Prevents a workflow from terminating if an activity encounters an error. A catch branch lets you specify activities that will be performed if the try branch encounters an error.</Description>
+                                <Activities>
+                                  <Activity Type="Laserfiche.Workflow.Activities.Exceptions.ExceptionTryProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="73b73b31-0145-4f6c-bcad-219ff133c2f3">
+                                    <Name>Try Branch 4</Name>
+                                    <SafeName>TryBranch4</SafeName>
+                                    <Enabled>True</Enabled>
+                                    <Description ShowDescription="null" ShowSummary="null">Defines the default actions that will be attempted.</Description>
+                                    <Activities>
+                                      <Activity Type="Laserfiche.Workflow.Activities.Email.EmailSequenceProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="01f804c9-03bf-4556-b1c3-3fe6b54052f3">
+                                        <Name>QE Pester Email</Name>
+                                        <SafeName>QEPesterEmail</SafeName>
+                                        <Enabled>True</Enabled>
+                                        <Description ShowDescription="null" ShowSummary="null">Sends an email to one or more people.</Description>
+                                        <Email TextOnlyBodyFormat="false" DeliveryReceipts="None">
+                                          <ToAddresses>
+                                            <Add>%(RetrieveBusinessProcessVariables_QEEmailAddress)</Add>
+                                          </ToAddresses>
+                                          <CcAddresses />
+                                          <BccAddresses />
+                                          <FromAddress />
+                                          <ReplyTo />
+                                          <Subject>Information Requested for Part Number '%(RetrieveBusinessProcessVariables_TaskName)'</Subject>
+                                          <Body>%(Email Message#"HTML"#)</Body>
+                                          <Priority>Normal</Priority>
+                                          <ServerReference>ee5e3bf9-a7aa-4b71-ad92-b4feefea90d8</ServerReference>
+                                          <UseBodyLengthLimit null="true" />
+                                          <Attachments>
+                                            <ExportedEntries />
+                                            <Options>
+                                              <UseZipFile>false</UseZipFile>
+                                              <LimitEntrySize>false</LimitEntrySize>
+                                              <EntrySizeLimit>51200</EntrySizeLimit>
+                                              <ReplaceBigEntriesWithShortcut>false</ReplaceBigEntriesWithShortcut>
+                                              <NotifyForEntriesFiles>true</NotifyForEntriesFiles>
+                                              <NotifyForNoContentEntries>true</NotifyForNoContentEntries>
+                                              <AttachShortcutForNoContentEntries>false</AttachShortcutForNoContentEntries>
+                                            </Options>
+                                          </Attachments>
+                                        </Email>
+                                      </Activity>
+                                    </Activities>
+                                    <FaultHandlers />
+                                  </Activity>
+                                  <Activity Type="Laserfiche.Workflow.Activities.Exceptions.ExceptionCatchProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="e949e59d-6007-45da-893e-ca7d0dada6f6">
+                                    <Name>Catch Branch 4</Name>
+                                    <SafeName>CatchBranch4</SafeName>
+                                    <Enabled>True</Enabled>
+                                    <Description ShowDescription="null" ShowSummary="null">Defines the actions that will take place if a specific error occurs.</Description>
+                                    <FaultType>System.Exception</FaultType>
+                                    <Activities>
+                                      <Activity Type="Laserfiche.Workflow.Activities.CreateToken.CreateTokenActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="474064b0-58a9-48dc-ab8d-6bbd7d88c9ad">
+                                        <Name>Assign Token Values 4</Name>
+                                        <SafeName>AssignTokenValues4</SafeName>
+                                        <Enabled>True</Enabled>
+                                        <Description ShowDescription="null" ShowSummary="null">Creates new tokens and updates the values of existing tokens.</Description>
+                                        <Options>
+                                          <Tokens>
+                                            <TokenInformation Id="49cac12c-a6fa-4327-8429-e75e4e060fbd" IsMultivalued="false" UpdateExistingToken="true" AppendValues="false" TokenType="String">
+                                              <TokenName>Error Message</TokenName>
+                                              <TokenFullName>Error Message</TokenFullName>
+                                              <ActivityName>ErrorMessage</ActivityName>
+                                              <TokenValues>
+                                                <TokenValue xml:space="preserve">PROCESS: 'QE Pester Email', MESSAGE: '%(CatchBranch4_Message)'</TokenValue>
+                                              </TokenValues>
+                                            </TokenInformation>
+                                          </Tokens>
+                                        </Options>
+                                      </Activity>
+                                    </Activities>
+                                    <FaultHandlers />
+                                  </Activity>
+                                </Activities>
+                                <FaultHandlers />
+                              </Activity>
+                            </Activities>
+                            <FaultHandlers />
+                          </Activity>
+                          <Activity Type="Laserfiche.Workflow.Activities.Condition.RoutingDecisionBranchProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="09682fd0-9d6e-413d-95f7-df602401f376">
+                            <Name>Branch 2</Name>
+                            <SafeName>Branch2</SafeName>
+                            <Enabled>True</Enabled>
+                            <Description ShowDescription="null" ShowSummary="null">Contains activities that will run if the branch conditions are satisfied.</Description>
+                            <Activities>
+                              <Activity Type="Laserfiche.Workflow.Activities.Exceptions.ExceptionCompositeProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="7494f99c-d249-4260-820c-35e23747f45d">
+                                <Name>Try QE Pester Email 2</Name>
+                                <SafeName>TryQEPesterEmail2</SafeName>
+                                <Enabled>True</Enabled>
+                                <Description ShowDescription="null" ShowSummary="null">Prevents a workflow from terminating if an activity encounters an error. A catch branch lets you specify activities that will be performed if the try branch encounters an error.</Description>
+                                <Activities>
+                                  <Activity Type="Laserfiche.Workflow.Activities.Exceptions.ExceptionTryProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="72c2ced0-f9c0-4559-a803-9c2c65d4d853">
+                                    <Name>Try Branch 5</Name>
+                                    <SafeName>TryBranch5</SafeName>
+                                    <Enabled>True</Enabled>
+                                    <Description ShowDescription="null" ShowSummary="null">Defines the default actions that will be attempted.</Description>
+                                    <Activities>
+                                      <Activity Type="Laserfiche.Workflow.Activities.Email.EmailSequenceProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="0437bb8f-b724-4b37-94ff-dda9b088acab">
+                                        <Name>QE Pester Email 2</Name>
+                                        <SafeName>QEPesterEmail2</SafeName>
+                                        <Enabled>True</Enabled>
+                                        <Description ShowDescription="null" ShowSummary="null">Sends an email to one or more people.</Description>
+                                        <Email TextOnlyBodyFormat="false" DeliveryReceipts="None">
+                                          <ToAddresses>
+                                            <Add>%(RetrieveBusinessProcessVariables_QEEmailAddress)</Add>
+                                          </ToAddresses>
+                                          <CcAddresses>
+                                            <Add>%(RetrieveBusinessProcessVariables_SiteOwnerEmailAddress)</Add>
+                                          </CcAddresses>
+                                          <BccAddresses />
+                                          <FromAddress />
+                                          <ReplyTo />
+                                          <Subject>Information Requested for Part Number '%(RetrieveBusinessProcessVariables_TaskName)'</Subject>
+                                          <Body>%(Email Message#"HTML"#)</Body>
+                                          <Priority>Normal</Priority>
+                                          <ServerReference>ee5e3bf9-a7aa-4b71-ad92-b4feefea90d8</ServerReference>
+                                          <UseBodyLengthLimit null="true" />
+                                          <Attachments>
+                                            <ExportedEntries />
+                                            <Options>
+                                              <UseZipFile>false</UseZipFile>
+                                              <LimitEntrySize>false</LimitEntrySize>
+                                              <EntrySizeLimit>51200</EntrySizeLimit>
+                                              <ReplaceBigEntriesWithShortcut>false</ReplaceBigEntriesWithShortcut>
+                                              <NotifyForEntriesFiles>true</NotifyForEntriesFiles>
+                                              <NotifyForNoContentEntries>true</NotifyForNoContentEntries>
+                                              <AttachShortcutForNoContentEntries>false</AttachShortcutForNoContentEntries>
+                                            </Options>
+                                          </Attachments>
+                                        </Email>
+                                      </Activity>
+                                    </Activities>
+                                    <FaultHandlers />
+                                  </Activity>
+                                  <Activity Type="Laserfiche.Workflow.Activities.Exceptions.ExceptionCatchProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="959a4671-b0ed-40f5-973b-6d5d186cb5fe">
+                                    <Name>Catch Branch 5</Name>
+                                    <SafeName>CatchBranch5</SafeName>
+                                    <Enabled>True</Enabled>
+                                    <Description ShowDescription="null" ShowSummary="null">Defines the actions that will take place if a specific error occurs.</Description>
+                                    <FaultType>System.Exception</FaultType>
+                                    <Activities>
+                                      <Activity Type="Laserfiche.Workflow.Activities.CreateToken.CreateTokenActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="8803084e-d323-44cb-98f5-55f96431495d">
+                                        <Name>Assign Token Values 5</Name>
+                                        <SafeName>AssignTokenValues5</SafeName>
+                                        <Enabled>True</Enabled>
+                                        <Description ShowDescription="null" ShowSummary="null">Creates new tokens and updates the values of existing tokens.</Description>
+                                        <Options>
+                                          <Tokens>
+                                            <TokenInformation Id="fd1b752c-0dea-4839-9fb6-25d209c8588e" IsMultivalued="false" UpdateExistingToken="true" AppendValues="false" TokenType="String">
+                                              <TokenName>Error Message</TokenName>
+                                              <TokenFullName>Error Message</TokenFullName>
+                                              <ActivityName>ErrorMessage</ActivityName>
+                                              <TokenValues>
+                                                <TokenValue xml:space="preserve">PROCESS: 'QE Pester Email 2', MESSAGE: '%(CatchBranch5_Message)'</TokenValue>
+                                              </TokenValues>
+                                            </TokenInformation>
+                                          </Tokens>
+                                        </Options>
+                                      </Activity>
+                                    </Activities>
+                                    <FaultHandlers />
+                                  </Activity>
+                                </Activities>
+                                <FaultHandlers />
+                              </Activity>
+                            </Activities>
+                            <FaultHandlers />
+                          </Activity>
+                        </Activities>
+                        <FaultHandlers />
+                      </Activity>
+                      <Activity Type="Laserfiche.Workflow.Activities.Exceptions.ExceptionCompositeProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="564481e8-968c-4d82-b58d-d450fda4c69e">
+                        <Name>Try Add QE Pester Note to DB</Name>
+                        <SafeName>TryAddQEPesterNotetoDB</SafeName>
+                        <Enabled>True</Enabled>
+                        <Description ShowDescription="null" ShowSummary="null">Prevents a workflow from terminating if an activity encounters an error. A catch branch lets you specify activities that will be performed if the try branch encounters an error.</Description>
+                        <Activities>
+                          <Activity Type="Laserfiche.Workflow.Activities.Exceptions.ExceptionTryProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="65f40508-b04f-477e-86ed-6e64d06202b1">
+                            <Name>Try Branch 6</Name>
+                            <SafeName>TryBranch6</SafeName>
+                            <Enabled>True</Enabled>
+                            <Description ShowDescription="null" ShowSummary="null">Defines the default actions that will be attempted.</Description>
+                            <Activities>
+                              <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="a073dd37-0e6b-4819-b03e-94cf6c01c085">
+                                <Name>Add QE Pester Note to DB</Name>
+                                <SafeName>AddQEPesterNotetoDB</SafeName>
+                                <Enabled>True</Enabled>
+                                <Description ShowDescription="null" ShowSummary="null">Performs the specified query in the selected data source.</Description>
+                                <DataSourceId>c68f2e48-b538-4574-a58d-68702c3fbe53</DataSourceId>
+                                <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+                                  <CustomQuery>Execute spTASKNOTE_PesterQualityEngineer ?, ?, ?</CustomQuery>
+                                  <InputParameter DbType="Int32">
+                                    <Name>?</Name>
+                                    <Value>%(RetrieveBusinessProcessVariables_TaskID)</Value>
+                                  </InputParameter>
+                                  <InputParameter DbType="String">
+                                    <Name>?</Name>
+                                    <Value>%(Email Message)</Value>
+                                  </InputParameter>
+                                  <InputParameter DbType="String">
+                                    <Name>?</Name>
+                                    <Value>%(RetrieveBusinessProcessVariables_EmployeeNumber)</Value>
+                                  </InputParameter>
+                                </Criteria>
+                                <ResultSetSize Rows="ReturnAllRows" Count="2" />
+                                <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+                              </Activity>
+                            </Activities>
+                            <FaultHandlers />
+                          </Activity>
+                          <Activity Type="Laserfiche.Workflow.Activities.Exceptions.ExceptionCatchProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="f06694cf-851c-4c2a-b881-ba4db5d476dc">
+                            <Name>Catch Branch 6</Name>
+                            <SafeName>CatchBranch6</SafeName>
+                            <Enabled>True</Enabled>
+                            <Description ShowDescription="null" ShowSummary="null">Defines the actions that will take place if a specific error occurs.</Description>
+                            <FaultType>System.Exception</FaultType>
+                            <Activities>
+                              <Activity Type="Laserfiche.Workflow.Activities.CreateToken.CreateTokenActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="d4f05c1d-4845-4d40-8ddc-d3a092b3bea8">
+                                <Name>Assign Token Values 6</Name>
+                                <SafeName>AssignTokenValues6</SafeName>
+                                <Enabled>True</Enabled>
+                                <Description ShowDescription="null" ShowSummary="null">Creates new tokens and updates the values of existing tokens.</Description>
+                                <Options>
+                                  <Tokens>
+                                    <TokenInformation Id="32b76110-7fac-469d-90f5-46597c0e5def" IsMultivalued="false" UpdateExistingToken="true" AppendValues="false" TokenType="String">
+                                      <TokenName>Error Message</TokenName>
+                                      <TokenFullName>Error Message</TokenFullName>
+                                      <ActivityName>ErrorMessage</ActivityName>
+                                      <TokenValues>
+                                        <TokenValue xml:space="preserve">PROCESS: 'Add QE Pester Note to DB', MESSAGE: '%(CatchBranch6_Message)'</TokenValue>
+                                      </TokenValues>
+                                    </TokenInformation>
+                                  </Tokens>
+                                </Options>
+                              </Activity>
+                            </Activities>
+                            <FaultHandlers />
+                          </Activity>
+                        </Activities>
+                        <FaultHandlers />
+                      </Activity>
+                    </Activities>
+                    <FaultHandlers />
+                  </Activity>
+                </Activities>
+                <FaultHandlers />
+              </Activity>
+              <Activity Type="Laserfiche.Workflow.Activities.Condition.RoutingDecisionBranchProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="ae180678-01cb-4f0e-bb35-a3487c3036b4">
+                <Name>Pester Assignee</Name>
+                <SafeName>PesterAssignee</SafeName>
+                <Enabled>True</Enabled>
+                <Description ShowDescription="null" ShowSummary="null">Contains activities that will run if the branch conditions are satisfied.</Description>
+                <Condition Version="10.4.3.139" Name="" Negated="false" IsConjunction="true" ConditionType="Composite" Description="">
+                  <Conditions>
+                    <Condition ConditionType="Token" Operator="Equal">
+                      <Token Name="nt" Length="0" MetaType="String, Field">
+                        <Activity Display="Retrieve Business Process Variables" Append="true">RetrieveBusinessProcessVariables</Activity>
+                      </Token>
+                      <Values>
+                        <Value>3</Value>
+                      </Values>
+                    </Condition>
+                  </Conditions>
+                </Condition>
+                <Activities>
+                  <Activity Type="Laserfiche.Workflow.Activities.Condition.ConditionalSequenceActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="e5aa0ded-a0f8-4932-8650-7c57cc917151">
+                    <Name>There is an Assignee to pester</Name>
+                    <SafeName>ThereisanAssigneetopester</SafeName>
+                    <Enabled>True</Enabled>
+                    <Description ShowDescription="null" ShowSummary="null">A sequence activity that only performs the contained activities if the conditions are satisfied.</Description>
+                    <ProfileId>9b4b499b-8845-4198-af3a-8911ca93c7fc</ProfileId>
+                    <Condition Version="10.4.3.139" Name="" Negated="false" IsConjunction="true" ConditionType="Composite" Description="">
+                      <Conditions>
+                        <Condition ConditionType="Token" Operator="IsNotEmpty">
+                          <Token Name="AssigneeEmailAddress" Length="0" MetaType="String, Field">
+                            <Activity Display="Retrieve Business Process Variables" Append="true">RetrieveBusinessProcessVariables</Activity>
+                          </Token>
+                          <Values />
+                        </Condition>
+                      </Conditions>
+                    </Condition>
+                    <Activities>
+                      <Activity Type="Laserfiche.Workflow.Activities.Condition.ConditionalSequenceActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="7ed703ff-15f0-495f-be65-9d075662e1f4">
+                        <Name>Make sure user in an admin</Name>
+                        <SafeName>Makesureuserinanadmin</SafeName>
+                        <Enabled>True</Enabled>
+                        <Description ShowDescription="null" ShowSummary="null">A sequence activity that only performs the contained activities if the conditions are satisfied.</Description>
+                        <ProfileId>9b4b499b-8845-4198-af3a-8911ca93c7fc</ProfileId>
+                        <Condition Version="10.4.3.139" Name="" Negated="false" IsConjunction="true" ConditionType="Composite" Description="">
+                          <Conditions>
+                            <Condition ConditionType="Token" Operator="Equal">
+                              <Token Name="IsAdmin" Length="0" MetaType="String, Field">
+                                <Activity Display="Retrieve Business Process Variables" Append="true">RetrieveBusinessProcessVariables</Activity>
+                              </Token>
+                              <Values>
+                                <Value>1</Value>
+                              </Values>
+                            </Condition>
+                          </Conditions>
+                        </Condition>
+                        <Activities>
+                          <Activity Type="Laserfiche.Workflow.Activities.Exceptions.ExceptionCompositeProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="7f6a2fb3-65a1-48c6-a33b-405bbfb7fb61">
+                            <Name>Try GetAssignee Pester Message</Name>
+                            <SafeName>TryGetAssigneePesterMessage</SafeName>
+                            <Enabled>True</Enabled>
+                            <Description ShowDescription="null" ShowSummary="null">Prevents a workflow from terminating if an activity encounters an error. A catch branch lets you specify activities that will be performed if the try branch encounters an error.</Description>
+                            <Activities>
+                              <Activity Type="Laserfiche.Workflow.Activities.Exceptions.ExceptionTryProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="d0df23ac-4769-4953-b308-08f7a4f92dc8">
+                                <Name>Try Branch 7</Name>
+                                <SafeName>TryBranch7</SafeName>
+                                <Enabled>True</Enabled>
+                                <Description ShowDescription="null" ShowSummary="null">Defines the default actions that will be attempted.</Description>
+                                <Activities>
+                                  <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="bdb7b212-ae37-4fc7-b1dd-bd1b38f94a8c">
+                                    <Name>GetAssignee Pester Message</Name>
+                                    <SafeName>GetAssigneePesterMessage</SafeName>
+                                    <Enabled>True</Enabled>
+                                    <Description ShowDescription="null" ShowSummary="null">Performs the specified query in the selected data source.</Description>
+                                    <DataSourceId>c68f2e48-b538-4574-a58d-68702c3fbe53</DataSourceId>
+                                    <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+                                      <Table Name="" HasIdentityColumn="false">
+                                        <Columns Generated="1/1/0001 12:00:00 AM">
+                                          <Column Name="" Type="System.String" ReadOnly="False" />
+                                        </Columns>
+                                      </Table>
+                                      <CustomQuery>Execute spEMAIL_GetEmailMessageByTaskIDAndEMailType ?, ?, ?, ?, ?, ?</CustomQuery>
+                                      <InputParameter DbType="Int32">
+                                        <Name>?</Name>
+                                        <Value>%(RetrieveBusinessProcessVariables_TaskID)</Value>
+                                      </InputParameter>
+                                      <InputParameter DbType="String">
+                                        <Name>?</Name>
+                                        <Value>TASK_UPDATE_REQUESTED</Value>
+                                      </InputParameter>
+                                      <InputParameter DbType="String">
+                                        <Name>?</Name>
+                                        <Value>%(RetrieveBusinessProcessVariables_NoteText)</Value>
+                                      </InputParameter>
+                                      <InputParameter>
+                                        <Name>?</Name>
+                                        <Value>0</Value>
+                                      </InputParameter>
+                                      <InputParameter>
+                                        <Name>?</Name>
+                                        <Value>%(RetrieveBusinessProcessVariables_EmployeeNumber)</Value>
+                                      </InputParameter>
+                                      <InputParameter>
+                                        <Name>EmailMessage</Name>
+                                        <Value />
+                                      </InputParameter>
+                                    </Criteria>
+                                    <ResultSetSize Rows="ReturnAllRows" Count="2" />
+                                    <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+                                  </Activity>
+                                </Activities>
+                                <FaultHandlers />
+                              </Activity>
+                              <Activity Type="Laserfiche.Workflow.Activities.Exceptions.ExceptionCatchProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="feb94dfb-cddd-49ac-b1f9-b15d0f6fc87e">
+                                <Name>Catch Branch 7</Name>
+                                <SafeName>CatchBranch7</SafeName>
+                                <Enabled>True</Enabled>
+                                <Description ShowDescription="null" ShowSummary="null">Defines the actions that will take place if a specific error occurs.</Description>
+                                <FaultType>System.Exception</FaultType>
+                                <Activities>
+                                  <Activity Type="Laserfiche.Workflow.Activities.CreateToken.CreateTokenActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="d948e253-9b30-4980-96ba-04765647e1a2">
+                                    <Name>Assign Token Values 7</Name>
+                                    <SafeName>AssignTokenValues7</SafeName>
+                                    <Enabled>True</Enabled>
+                                    <Description ShowDescription="null" ShowSummary="null">Creates new tokens and updates the values of existing tokens.</Description>
+                                    <Options>
+                                      <Tokens>
+                                        <TokenInformation Id="5f361dd3-238e-4316-be1b-85c23fd23c73" IsMultivalued="false" UpdateExistingToken="true" AppendValues="false" TokenType="String">
+                                          <TokenName>Error Message</TokenName>
+                                          <TokenFullName>Error Message</TokenFullName>
+                                          <ActivityName>ErrorMessage</ActivityName>
+                                          <TokenValues>
+                                            <TokenValue xml:space="preserve">PROCESS: 'GetAssignee Pester Message', MESSAGE: '%(CatchBranch7_Message)'</TokenValue>
+                                          </TokenValues>
+                                        </TokenInformation>
+                                      </Tokens>
+                                    </Options>
+                                  </Activity>
+                                </Activities>
+                                <FaultHandlers />
+                              </Activity>
+                            </Activities>
+                            <FaultHandlers />
+                          </Activity>
+                          <Activity Type="Laserfiche.Workflow.Activities.CreateToken.CreateTokenActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="b5be039e-c41a-464b-ba23-62598a892999">
+                            <Name>Assign Assignee Pester Email Message</Name>
+                            <SafeName>AssignAssigneePesterEmailMessage</SafeName>
+                            <Enabled>True</Enabled>
+                            <Description ShowDescription="null" ShowSummary="null">Creates new tokens and updates the values of existing tokens.</Description>
+                            <Options>
+                              <Tokens>
+                                <TokenInformation Id="72cb7f24-5cb0-43c1-b5ec-0c1372bff285" IsMultivalued="false" UpdateExistingToken="false" AppendValues="false" TokenType="String">
+                                  <TokenName>Assignee Pester Message</TokenName>
+                                  <TokenFullName />
+                                  <ActivityName />
+                                  <TokenValues>
+                                    <TokenValue xml:space="preserve">%(GetAssigneePesterMessage_)</TokenValue>
+                                  </TokenValues>
+                                </TokenInformation>
+                              </Tokens>
+                            </Options>
+                          </Activity>
+                          <Activity Type="Laserfiche.Workflow.Activities.Exceptions.ExceptionCompositeProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="c8c7874c-f79f-4324-a2f7-6cc09ee739dc">
+                            <Name>Try Assignee Pester Email</Name>
+                            <SafeName>TryAssigneePesterEmail</SafeName>
+                            <Enabled>True</Enabled>
+                            <Description ShowDescription="null" ShowSummary="null">Prevents a workflow from terminating if an activity encounters an error. A catch branch lets you specify activities that will be performed if the try branch encounters an error.</Description>
+                            <Activities>
+                              <Activity Type="Laserfiche.Workflow.Activities.Exceptions.ExceptionTryProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="673a7294-d0ab-40f9-9f8d-3a419abfc458">
+                                <Name>Try Branch 8</Name>
+                                <SafeName>TryBranch8</SafeName>
+                                <Enabled>True</Enabled>
+                                <Description ShowDescription="null" ShowSummary="null">Defines the default actions that will be attempted.</Description>
+                                <Activities>
+                                  <Activity Type="Laserfiche.Workflow.Activities.Email.EmailSequenceProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="60749651-4aa9-4637-ac79-56b27301b55f">
+                                    <Name>Assignee Pester Email</Name>
+                                    <SafeName>AssigneePesterEmail</SafeName>
+                                    <Enabled>True</Enabled>
+                                    <Description ShowDescription="null" ShowSummary="null">Sends an email to one or more people.</Description>
+                                    <Email TextOnlyBodyFormat="false" DeliveryReceipts="None">
+                                      <ToAddresses>
+                                        <Add>%(RetrieveBusinessProcessVariables_AssigneeEmailAddress)</Add>
+                                      </ToAddresses>
+                                      <CcAddresses />
+                                      <BccAddresses />
+                                      <FromAddress />
+                                      <ReplyTo />
+                                      <Subject>Information Requested for Part Number '%(RetrieveBusinessProcessVariables_TaskName)'</Subject>
+                                      <Body>%(Assignee Pester Message#"HTML"#)</Body>
+                                      <Priority>Normal</Priority>
+                                      <ServerReference>ee5e3bf9-a7aa-4b71-ad92-b4feefea90d8</ServerReference>
+                                      <UseBodyLengthLimit null="true" />
+                                      <Attachments>
+                                        <ExportedEntries />
+                                        <Options>
+                                          <UseZipFile>false</UseZipFile>
+                                          <LimitEntrySize>false</LimitEntrySize>
+                                          <EntrySizeLimit>51200</EntrySizeLimit>
+                                          <ReplaceBigEntriesWithShortcut>false</ReplaceBigEntriesWithShortcut>
+                                          <NotifyForEntriesFiles>true</NotifyForEntriesFiles>
+                                          <NotifyForNoContentEntries>true</NotifyForNoContentEntries>
+                                          <AttachShortcutForNoContentEntries>false</AttachShortcutForNoContentEntries>
+                                        </Options>
+                                      </Attachments>
+                                    </Email>
+                                  </Activity>
+                                </Activities>
+                                <FaultHandlers />
+                              </Activity>
+                              <Activity Type="Laserfiche.Workflow.Activities.Exceptions.ExceptionCatchProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="d4200a64-eb85-4eef-8bb7-389098de3abc">
+                                <Name>Catch Branch 8</Name>
+                                <SafeName>CatchBranch8</SafeName>
+                                <Enabled>True</Enabled>
+                                <Description ShowDescription="null" ShowSummary="null">Defines the actions that will take place if a specific error occurs.</Description>
+                                <FaultType>System.Exception</FaultType>
+                                <Activities>
+                                  <Activity Type="Laserfiche.Workflow.Activities.CreateToken.CreateTokenActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="cc84f5a5-2ef0-4c3b-8cde-234d3adcc12f">
+                                    <Name>Assign Token Values 8</Name>
+                                    <SafeName>AssignTokenValues8</SafeName>
+                                    <Enabled>True</Enabled>
+                                    <Description ShowDescription="null" ShowSummary="null">Creates new tokens and updates the values of existing tokens.</Description>
+                                    <Options>
+                                      <Tokens>
+                                        <TokenInformation Id="b48d4707-0a6c-4887-87d0-d142768fd84c" IsMultivalued="false" UpdateExistingToken="true" AppendValues="false" TokenType="String">
+                                          <TokenName>Error Message</TokenName>
+                                          <TokenFullName>Error Message</TokenFullName>
+                                          <ActivityName>ErrorMessage</ActivityName>
+                                          <TokenValues>
+                                            <TokenValue xml:space="preserve">PROCESS: 'Assignee Pester Email', MESSAGE: '%(CatchBranch8_Message)'</TokenValue>
+                                          </TokenValues>
+                                        </TokenInformation>
+                                      </Tokens>
+                                    </Options>
+                                  </Activity>
+                                </Activities>
+                                <FaultHandlers />
+                              </Activity>
+                            </Activities>
+                            <FaultHandlers />
+                          </Activity>
+                          <Activity Type="Laserfiche.Workflow.Activities.Exceptions.ExceptionCompositeProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="bf74c2a2-4a60-4de5-ab14-f49d72832466">
+                            <Name>Try Add Assignee Pester Note to DB</Name>
+                            <SafeName>TryAddAssigneePesterNotetoDB</SafeName>
+                            <Enabled>True</Enabled>
+                            <Description ShowDescription="null" ShowSummary="null">Prevents a workflow from terminating if an activity encounters an error. A catch branch lets you specify activities that will be performed if the try branch encounters an error.</Description>
+                            <Activities>
+                              <Activity Type="Laserfiche.Workflow.Activities.Exceptions.ExceptionTryProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="2259317b-9969-42d3-93d4-f5b8c042dbcf">
+                                <Name>Try Branch 9</Name>
+                                <SafeName>TryBranch9</SafeName>
+                                <Enabled>True</Enabled>
+                                <Description ShowDescription="null" ShowSummary="null">Defines the default actions that will be attempted.</Description>
+                                <Activities>
+                                  <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="7cc17656-0f15-43aa-aaf8-1945daf274d7">
+                                    <Name>Add Assignee Pester Note to DB</Name>
+                                    <SafeName>AddAssigneePesterNotetoDB</SafeName>
+                                    <Enabled>True</Enabled>
+                                    <Description ShowDescription="null" ShowSummary="null">Performs the specified query in the selected data source.</Description>
+                                    <DataSourceId>c68f2e48-b538-4574-a58d-68702c3fbe53</DataSourceId>
+                                    <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+                                      <CustomQuery>Execute spTASKNOTE_PesterAddressee ?, ?, ?</CustomQuery>
+                                      <InputParameter DbType="Int32">
+                                        <Name>?</Name>
+                                        <Value>%(RetrieveBusinessProcessVariables_TaskID)</Value>
+                                      </InputParameter>
+                                      <InputParameter DbType="String">
+                                        <Name>?</Name>
+                                        <Value>%(Assignee Pester Message)</Value>
+                                      </InputParameter>
+                                      <InputParameter DbType="String">
+                                        <Name>?</Name>
+                                        <Value>%(RetrieveBusinessProcessVariables_EmployeeNumber)</Value>
+                                      </InputParameter>
+                                    </Criteria>
+                                    <ResultSetSize Rows="ReturnAllRows" Count="2" />
+                                    <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+                                  </Activity>
+                                </Activities>
+                                <FaultHandlers />
+                              </Activity>
+                              <Activity Type="Laserfiche.Workflow.Activities.Exceptions.ExceptionCatchProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="059846fc-c3da-464e-bf3e-fed70bfc6cc2">
+                                <Name>Catch Branch 9</Name>
+                                <SafeName>CatchBranch9</SafeName>
+                                <Enabled>True</Enabled>
+                                <Description ShowDescription="null" ShowSummary="null">Defines the actions that will take place if a specific error occurs.</Description>
+                                <FaultType>System.Exception</FaultType>
+                                <Activities>
+                                  <Activity Type="Laserfiche.Workflow.Activities.CreateToken.CreateTokenActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="0d8c2b69-af79-4d26-bdf2-23bed4025f30">
+                                    <Name>Assign Token Values 9</Name>
+                                    <SafeName>AssignTokenValues9</SafeName>
+                                    <Enabled>True</Enabled>
+                                    <Description ShowDescription="null" ShowSummary="null">Creates new tokens and updates the values of existing tokens.</Description>
+                                    <Options>
+                                      <Tokens>
+                                        <TokenInformation Id="a35ff67e-2236-44e9-9c58-971d65495a7f" IsMultivalued="false" UpdateExistingToken="true" AppendValues="false" TokenType="String">
+                                          <TokenName>Error Message</TokenName>
+                                          <TokenFullName>Error Message</TokenFullName>
+                                          <ActivityName>ErrorMessage</ActivityName>
+                                          <TokenValues>
+                                            <TokenValue xml:space="preserve">PROCESS: 'Add Assignee Pester Note to DB', MESSAGE: '%(CatchBranch9_Message)'</TokenValue>
+                                          </TokenValues>
+                                        </TokenInformation>
+                                      </Tokens>
+                                    </Options>
+                                  </Activity>
+                                </Activities>
+                                <FaultHandlers />
+                              </Activity>
+                            </Activities>
+                            <FaultHandlers />
+                          </Activity>
+                        </Activities>
+                        <FaultHandlers />
+                      </Activity>
+                    </Activities>
+                    <FaultHandlers />
+                  </Activity>
+                </Activities>
+                <FaultHandlers />
+              </Activity>
+            </Activities>
+            <FaultHandlers />
+          </Activity>
+          <Activity Type="Laserfiche.Workflow.Activities.Condition.ConditionalSequenceActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="d6b3d5e1-377c-49ef-9a3d-e310320c6c65">
+            <Name>Was There an error?</Name>
+            <SafeName>WasThereanerror</SafeName>
+            <Enabled>True</Enabled>
+            <Description ShowDescription="null" ShowSummary="null">A sequence activity that only performs the contained activities if the conditions are satisfied.</Description>
+            <ProfileId>9b4b499b-8845-4198-af3a-8911ca93c7fc</ProfileId>
+            <Condition Version="10.4.3.139" Name="" Negated="false" IsConjunction="true" ConditionType="Composite" Description="">
+              <Conditions>
+                <Condition ConditionType="Token" Operator="IsNotEmpty">
+                  <Token Name="Error Message" Length="0" MetaType="String">
+                    <Activity Display="Error Message" Append="false">ErrorMessage</Activity>
+                  </Token>
+                  <Values />
+                </Condition>
+              </Conditions>
+            </Condition>
+            <Activities>
+              <Activity Type="Laserfiche.Workflow.Activities.Forms.SetBPVariablesActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="f7df52d2-c9a9-4b01-9fbc-30081f2fb079">
+                <Name>Set Business Process Variables</Name>
+                <SafeName>SetBusinessProcessVariables</SafeName>
+                <Enabled>True</Enabled>
+                <Description ShowDescription="null" ShowSummary="null">Sets an output parameter with variable values that will be processed by Laserfiche Forms when this workflow completes.</Description>
+                <SetBPVariablesOptions Id="73188341-8c85-4561-9273-aff17d5bcc5a" UseWorkflowAccount="true">
+                  <ProcessOptions ProcessId="72" ProcessName="RMS-MPM-AddNote" />
+                  <Fields>
+                    <Attribute AttributeId="4616" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Workflow_ErrorMessage" AttributeName="Workflow_ErrorMessage" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="MPM-AddNote" MemberPath="4629" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                  </Fields>
+                  <AdvancedQuery Enabled="true" xml:space="preserve">Workflow_ErrorMessage= %(Error Message)</AdvancedQuery>
+                </SetBPVariablesOptions>
+              </Activity>
+              <Activity Type="Laserfiche.Workflow.Activities.Email.EmailSequenceProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="b315f7a3-4413-4a22-a86b-470bd1bf39a4">
+                <Name>Email</Name>
+                <SafeName>Email</SafeName>
+                <Enabled>True</Enabled>
+                <Description ShowDescription="null" ShowSummary="null">Sends an email to one or more people.</Description>
+                <Email TextOnlyBodyFormat="false" DeliveryReceipts="None">
+                  <ToAddresses>
+                    <Add>%(RetrieveBusinessProcessVariables_Metrology_EMail)</Add>
+                  </ToAddresses>
+                  <CcAddresses />
+                  <BccAddresses />
+                  <FromAddress />
+                  <ReplyTo />
+                  <Subject>There was an error processing workflow 'MPM-AddNote'</Subject>
+                  <Body>%(Error Message)</Body>
+                  <Priority>Normal</Priority>
+                  <ServerReference />
+                  <UseBodyLengthLimit null="true" />
+                  <Attachments>
+                    <ExportedEntries />
+                    <Options>
+                      <UseZipFile>false</UseZipFile>
+                      <LimitEntrySize>false</LimitEntrySize>
+                      <EntrySizeLimit>51200</EntrySizeLimit>
+                      <ReplaceBigEntriesWithShortcut>false</ReplaceBigEntriesWithShortcut>
+                      <NotifyForEntriesFiles>true</NotifyForEntriesFiles>
+                      <NotifyForNoContentEntries>true</NotifyForNoContentEntries>
+                      <AttachShortcutForNoContentEntries>false</AttachShortcutForNoContentEntries>
+                    </Options>
+                  </Attachments>
+                </Email>
+              </Activity>
+            </Activities>
+            <FaultHandlers />
+          </Activity>
+          <Activity Type="Laserfiche.Workflow.Activities.Tracking.TrackTokenActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="c50a84e9-5a59-4e31-a544-41fcdd82dee5">
+            <Name>Track Tokens</Name>
+            <SafeName>TrackTokens</SafeName>
+            <Enabled>True</Enabled>
+            <Description ShowDescription="null" ShowSummary="null">Records the values of selected tokens when the workflow runs. You can view these values in the Tokens tab in the workflow's Search Details pane.</Description>
+            <Options TrackTokenManager="true">
+              <Tokens />
+            </Options>
+          </Activity>
+        </Activities>
+        <FaultHandlers />
+      </SequentialWorkflowActivityProxy>
+      <CanvasUI>
+        <Expanded>True</Expanded>
+        <Activity Name="Retrieve Business Process Variables" Key="f5a3b5a9-a3d3-487f-a3ad-49cb48d173d9" />
+        <Activity Name="Error Message" Key="11f87b2d-db83-429c-be6f-8917b7e02e83" />
+        <Activity Name="Note Type" Key="c7c349c6-895c-4efa-82cc-c1c5225b01a9">
+          <Expanded>True</Expanded>
+          <Activity Name="Generic Add Note" Key="60731de4-38c7-401e-bcc0-25f57e852c95">
+            <Expanded>False</Expanded>
+            <Activity Name="Conditional Sequence" Key="2709ab19-31db-492d-b36d-ed189c8027af">
+              <Expanded>True</Expanded>
+              <Activity Name="Try AddNote" Key="d3b31bb5-5187-47e2-85c0-0a77aac9557d">
+                <Expanded>True</Expanded>
+                <Activity Name="Try Branch" Key="437ab8a6-5add-4cf4-9ba6-63da29cc40cd">
+                  <Expanded>True</Expanded>
+                  <Activity Name="AddNote" Key="19db1cfc-69aa-4cbb-98af-da932b20aacc" />
+                </Activity>
+                <Activity Name="Catch Branch" Key="4ad7f21e-881f-4a8f-a6c6-5c34e02d9534">
+                  <Expanded>True</Expanded>
+                  <Activity Name="Assign Token Values 2" Key="ed098197-b5c3-4617-9944-51ccb01aff07" />
+                </Activity>
+              </Activity>
+            </Activity>
+          </Activity>
+          <Activity Name="Pester QE" Key="13d64e0a-9da4-4804-9dcc-338ace425fa0">
+            <Expanded>False</Expanded>
+            <Activity Name="There is a QE to pester" Key="ae90cef3-9514-4394-bacc-fa7267607fc9">
+              <Expanded>False</Expanded>
+              <Activity Name="Try GetQEPesterMessage" Key="f86a74d1-b88e-490c-bec9-af5e8c00ca6d">
+                <Expanded>True</Expanded>
+                <Activity Name="Try Branch 2" Key="f9614550-5c91-44d3-b19d-66028b4fb1da">
+                  <Expanded>True</Expanded>
+                  <Activity Name="GetQEPesterMessage" Key="eed373a6-0108-45a8-bea1-10ec4b1b7038" />
+                </Activity>
+                <Activity Name="Catch Branch 2" Key="508a1b46-2260-4d35-8d1b-4b00fe31a92b">
+                  <Expanded>True</Expanded>
+                  <Activity Name="Assign Token Values 3" Key="c9fa2241-13fc-4221-bf76-5bb13369f177" />
+                </Activity>
+              </Activity>
+              <Activity Name="Assign QE Pester Email Message" Key="11be7e93-e27d-4f51-b02f-5e3bdf4a5e9c" />
+              <Activity Name="Was sent by Site Owner" Key="ff12edf0-ddd4-4b9e-a71f-3e29b974e7d2">
+                <Expanded>True</Expanded>
+                <Activity Name="SiteOwnerEmail equals Sender Email" Key="a5a420c6-865f-477e-aed4-319484b07a96">
+                  <Expanded>True</Expanded>
+                  <Activity Name="Try QE Pester Email" Key="25dbdd30-45f8-42cd-88be-1a8917b9901a">
+                    <Expanded>True</Expanded>
+                    <Activity Name="Try Branch 4" Key="73b73b31-0145-4f6c-bcad-219ff133c2f3">
+                      <Expanded>True</Expanded>
+                      <Activity Name="QE Pester Email" Key="01f804c9-03bf-4556-b1c3-3fe6b54052f3" />
+                    </Activity>
+                    <Activity Name="Catch Branch 4" Key="e949e59d-6007-45da-893e-ca7d0dada6f6">
+                      <Expanded>True</Expanded>
+                      <Activity Name="Assign Token Values 4" Key="474064b0-58a9-48dc-ab8d-6bbd7d88c9ad" />
+                    </Activity>
+                  </Activity>
+                </Activity>
+                <Activity Name="Branch 2" Key="09682fd0-9d6e-413d-95f7-df602401f376">
+                  <Expanded>True</Expanded>
+                  <Activity Name="Try QE Pester Email 2" Key="7494f99c-d249-4260-820c-35e23747f45d">
+                    <Expanded>True</Expanded>
+                    <Activity Name="Try Branch 5" Key="72c2ced0-f9c0-4559-a803-9c2c65d4d853">
+                      <Expanded>True</Expanded>
+                      <Activity Name="QE Pester Email 2" Key="0437bb8f-b724-4b37-94ff-dda9b088acab" />
+                    </Activity>
+                    <Activity Name="Catch Branch 5" Key="959a4671-b0ed-40f5-973b-6d5d186cb5fe">
+                      <Expanded>True</Expanded>
+                      <Activity Name="Assign Token Values 5" Key="8803084e-d323-44cb-98f5-55f96431495d" />
+                    </Activity>
+                  </Activity>
+                </Activity>
+              </Activity>
+              <Activity Name="Try Add QE Pester Note to DB" Key="564481e8-968c-4d82-b58d-d450fda4c69e">
+                <Expanded>True</Expanded>
+                <Activity Name="Try Branch 6" Key="65f40508-b04f-477e-86ed-6e64d06202b1">
+                  <Expanded>True</Expanded>
+                  <Activity Name="Add QE Pester Note to DB" Key="a073dd37-0e6b-4819-b03e-94cf6c01c085" />
+                </Activity>
+                <Activity Name="Catch Branch 6" Key="f06694cf-851c-4c2a-b881-ba4db5d476dc">
+                  <Expanded>True</Expanded>
+                  <Activity Name="Assign Token Values 6" Key="d4f05c1d-4845-4d40-8ddc-d3a092b3bea8" />
+                </Activity>
+              </Activity>
+            </Activity>
+          </Activity>
+          <Activity Name="Pester Assignee" Key="ae180678-01cb-4f0e-bb35-a3487c3036b4">
+            <Expanded>True</Expanded>
+            <Activity Name="There is an Assignee to pester" Key="e5aa0ded-a0f8-4932-8650-7c57cc917151">
+              <Expanded>True</Expanded>
+              <Activity Name="Make sure user in an admin" Key="7ed703ff-15f0-495f-be65-9d075662e1f4">
+                <Expanded>True</Expanded>
+                <Activity Name="Try GetAssignee Pester Message" Key="7f6a2fb3-65a1-48c6-a33b-405bbfb7fb61">
+                  <Expanded>True</Expanded>
+                  <Activity Name="Try Branch 7" Key="d0df23ac-4769-4953-b308-08f7a4f92dc8">
+                    <Expanded>True</Expanded>
+                    <Activity Name="GetAssignee Pester Message" Key="bdb7b212-ae37-4fc7-b1dd-bd1b38f94a8c" />
+                  </Activity>
+                  <Activity Name="Catch Branch 7" Key="feb94dfb-cddd-49ac-b1f9-b15d0f6fc87e">
+                    <Expanded>True</Expanded>
+                    <Activity Name="Assign Token Values 7" Key="d948e253-9b30-4980-96ba-04765647e1a2" />
+                  </Activity>
+                </Activity>
+                <Activity Name="Assign Assignee Pester Email Message" Key="b5be039e-c41a-464b-ba23-62598a892999" />
+                <Activity Name="Try Assignee Pester Email" Key="c8c7874c-f79f-4324-a2f7-6cc09ee739dc">
+                  <Expanded>True</Expanded>
+                  <Activity Name="Try Branch 8" Key="673a7294-d0ab-40f9-9f8d-3a419abfc458">
+                    <Expanded>True</Expanded>
+                    <Activity Name="Assignee Pester Email" Key="60749651-4aa9-4637-ac79-56b27301b55f" />
+                  </Activity>
+                  <Activity Name="Catch Branch 8" Key="d4200a64-eb85-4eef-8bb7-389098de3abc">
+                    <Expanded>True</Expanded>
+                    <Activity Name="Assign Token Values 8" Key="cc84f5a5-2ef0-4c3b-8cde-234d3adcc12f" />
+                  </Activity>
+                </Activity>
+                <Activity Name="Try Add Assignee Pester Note to DB" Key="bf74c2a2-4a60-4de5-ab14-f49d72832466">
+                  <Expanded>True</Expanded>
+                  <Activity Name="Try Branch 9" Key="2259317b-9969-42d3-93d4-f5b8c042dbcf">
+                    <Expanded>True</Expanded>
+                    <Activity Name="Add Assignee Pester Note to DB" Key="7cc17656-0f15-43aa-aaf8-1945daf274d7" />
+                  </Activity>
+                  <Activity Name="Catch Branch 9" Key="059846fc-c3da-464e-bf3e-fed70bfc6cc2">
+                    <Expanded>True</Expanded>
+                    <Activity Name="Assign Token Values 9" Key="0d8c2b69-af79-4d26-bdf2-23bed4025f30" />
+                  </Activity>
+                </Activity>
+              </Activity>
+            </Activity>
+          </Activity>
+        </Activity>
+        <Activity Name="Was There an error?" Key="d6b3d5e1-377c-49ef-9a3d-e310320c6c65">
+          <Expanded>True</Expanded>
+          <Activity Name="Set Business Process Variables" Key="f7df52d2-c9a9-4b01-9fbc-30081f2fb079" />
+          <Activity Name="Email" Key="b315f7a3-4413-4a22-a86b-470bd1bf39a4" />
+        </Activity>
+        <Activity Name="Track Tokens" Key="c50a84e9-5a59-4e31-a544-41fcdd82dee5" />
+        <UseCompactLayout>false</UseCompactLayout>
+        <ZoomLevel>1.0</ZoomLevel>
+      </CanvasUI>
+    </Designer>
+    <CreationRules Count="0" />
+    <Schedules Count="0" />
+  </ExportedWorkflow>
+  <LinkedObjects Count="3">
+    <LinkedObject>
+      <Id>47</Id>
+      <Name>LF_RMS_COMMS_MPM</Name>
+      <Description />
+      <AttachmentType>DataSource</AttachmentType>
+      <LinkedWorkflows Count="1">
+        <LinkInfo>
+          <WorkflowName>MPM-AddNote</WorkflowName>
+        </LinkInfo>
+      </LinkedWorkflows>
+      <XmlValue>&lt;SourceInformation DataSourceType="Odbc" DSNType="System" Authenticated="true"&gt;
+  &lt;Location&gt;
+    &lt;HostName&gt;rms-corplfsql1.cretexinc.com&lt;/HostName&gt;
+    &lt;ServerInstance /&gt;
+    &lt;DatabaseName&gt;LF_RMS_COMMS_MPM&lt;/DatabaseName&gt;
+    &lt;LocationType&gt;ServerDatabase&lt;/LocationType&gt;
+  &lt;/Location&gt;
+  &lt;Authentication&gt;
+    &lt;UserName&gt;&lt;/UserName&gt;
+    &lt;SecureString Version="2" Value="" /&gt;
+  &lt;/Authentication&gt;
+  &lt;Adapter&gt;
+    &lt;type key="sql" default="false" category="ODBC"&gt;
+      &lt;typename&gt;Laserfiche.Project.Data.Runtime.Odbc.Sql, Laserfiche.Project.Data, Version=9.0.0.0, Culture=neutral, PublicKeyToken=607dd73ee2bd1c00&lt;/typename&gt;
+      &lt;names default="Sql"&gt;
+        &lt;add code="en" value="Sql" /&gt;
+      &lt;/names&gt;
+    &lt;/type&gt;
+  &lt;/Adapter&gt;
+  &lt;OtherOptions ActualType="Laserfiche.Collections.PropertyBag, Laserfiche.Base, Version=9.0.0.0, Culture=neutral, PublicKeyToken=607dd73ee2bd1c00"&gt;
+    &lt;Properties /&gt;
+  &lt;/OtherOptions&gt;
+&lt;/SourceInformation&gt;</XmlValue>
+    </LinkedObject>
+    <LinkedObject>
+      <Id>10</Id>
+      <Name>LF Notfications</Name>
+      <Description />
+      <AttachmentType>EmailServer</AttachmentType>
+      <LinkedWorkflows Count="1">
+        <LinkInfo>
+          <WorkflowName>MPM-AddNote</WorkflowName>
+        </LinkInfo>
+      </LinkedWorkflows>
+      <XmlValue>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;EmailServer IsProtected="true" SendTimeout="-1"&gt;
+  &lt;Name /&gt;
+  &lt;NetworkAddress&gt;rms-intstmprelay&lt;/NetworkAddress&gt;
+  &lt;Port&gt;25&lt;/Port&gt;
+  &lt;UserName /&gt;
+  &lt;Password&gt;6Dd9xl/YoLU=&lt;/Password&gt;
+  &lt;From&gt;LF_Notifications@machine.com&lt;/From&gt;
+  &lt;DefaultSubject /&gt;
+  &lt;UseIISPickup&gt;false&lt;/UseIISPickup&gt;
+  &lt;PickupDirectory /&gt;
+  &lt;UseSSL&gt;false&lt;/UseSSL&gt;
+  &lt;UseDefaultAuthentication&gt;true&lt;/UseDefaultAuthentication&gt;
+&lt;/EmailServer&gt;</XmlValue>
+    </LinkedObject>
+    <LinkedObject>
+      <Id>18</Id>
+      <Name>LFForms</Name>
+      <Description />
+      <AttachmentType>WebService</AttachmentType>
+      <LinkedWorkflows Count="1">
+        <LinkInfo>
+          <WorkflowName>MPM-AddNote</WorkflowName>
+        </LinkInfo>
+      </LinkedWorkflows>
+      <XmlValue>&lt;WebService ServiceURL="http://rmslf/forms" WebServiceType="Laserfiche Forms" RunAsTasks="true" AcceptInvalidCertificates="true" /&gt;</XmlValue>
+    </LinkedObject>
+  </LinkedObjects>
+</ExportedWorkflows>

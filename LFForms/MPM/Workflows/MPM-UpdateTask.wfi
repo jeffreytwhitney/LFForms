@@ -1,0 +1,682 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ExportedWorkflows Version="8.3.0.0" Count="1">
+  <ExportedWorkflow>
+    <Designer Version="10.4.3.139">
+      <SequentialWorkflowActivityProxy Type="Laserfiche.Workflow.Activities.Proxies.LfSequentialWorkflowProxy, Laserfiche.Workflow.Designer.Base, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="4d2c1368-2d2d-4c2b-90bf-5a0ee0c4199d" ActivityCountHint="21">
+        <Name>MPM-UpdateTask</Name>
+        <SafeName>MPMUpdateTask</SafeName>
+        <Enabled>True</Enabled>
+        <Description ShowDescription="null" ShowSummary="null" />
+        <AttachedProperties>
+          <Property Key="ProfileCollection" PropertyType="Profiles">
+            <LinkedProperties Default="">
+              <LinkedProperty>
+                <Name>RMS Admin</Name>
+                <Id>-1</Id>
+                <Uuid>ccf67a10-bee7-4f96-b23b-d41be747b4d3</Uuid>
+                <Offline>
+                  <ConnectionProfile Version="2" xmlns="http:\laserfiche\workflow\connection">
+                    <ProfileId>TvuSIxS+CTFnME9ARqwhXNdwLH9nFUh9</ProfileId>
+                    <EncryptedData xmlns="http://www.w3/.org/2001/04/xmlenc#">
+                      <CipherData>
+                        <CipherValue>LPOnYIIqcgr7YjaCQf0zQOcmJfKhRROuFTaPEQKc7QVvvZsrVR/6kHyArqnjWJ3vdf+HQsxi22z/MMiSqwVn9bhBAFRyHMYuSBw7ue9WVe4rIq1kMQRJj+s3tB9e4vzCBVG7m5rltAQtA0P+Jgpnu9T3xX/QvIn/ifj7wT3CpiV7T/3gCo0j9oszU7FlpLrAdox5fN1r0rTRAzxB95lqWMrq3FDT6neB5YymEwhQ3W/7eZiVN+2KHQirjS4GxThNj/LD4tcdAFMjZlX5OMJHPkGvXMlRmioK20HohgO8qyf2cu4ylf+Soy0iT1KvW8+DOWlefdsyMqu68YN9Ge0OMuawulrLfd6ktVeGR4OR1inji9JtcmlkrbbhTsAWIChSG5ZI+aZsnOZV0coZo95mQECitoBz8Uf0gJ2NvfLxmzWBT1s59PebWaRhP1MddhWPvm+v1LyL3twzAXNg0UgRoSiNswGQaDnehOW/cqIZMLWZIV9LSEiYpOQ479Gwicg2HjUY70lQ6GOuteNPHpEjUFWiNBjNdnagouz9/DR19WHaxAGpDp5i286pMy5dEDr5OTrIVl534UXAwt6hQ/9I16MLfU15Hna9nole7BWMvTZOx8zVVhAw8f+CsruJLDDseSaHjqBZQ8lnmzGHpvtZqxAys5fLF8pvcYSrEQJbglOFQIIGkbJDC01oJS7fFR9bmFco2DAbV7Bg3U7fizR1hhkQEtRWPLR1m8E83KWhBTNgo9OU8CbXi7W3AG3NHou+7yLIFZtk1zVxuZcLPetpNpicm6/4CbIz1VAaIhNXmyI/w0+cb8hu4otN38LPHnyk678JpW6S4ebsYwN85BN9Avuup/KbbilR8f8gr6sfqwr865zmZMhYYqJ3L5UdGp4Vh0Mn9FMd0Jwa43I8T1a3hxdgxKZ0SQRZ1yU3Yq0wa9KN+8AE7lZMV9/SDvIvprgHAZjN8PCwPEo9S8oUitp1cx7NQ8326TO6QMN2VMvNYCtlr7B2VkDL3YFokQ0LhzE6ESsa9CI+Pl4=</CipherValue>
+                      </CipherData>
+                    </EncryptedData>
+                  </ConnectionProfile>
+                </Offline>
+              </LinkedProperty>
+            </LinkedProperties>
+          </Property>
+          <Property Key="WorkflowWebServiceCollection" PropertyType="WebServices">
+            <LinkedProperties Default="">
+              <LinkedProperty ServiceURL="http://rmslf/forms" User="admin" Type="Laserfiche Forms">
+                <Name>LFForms</Name>
+                <Id>18</Id>
+                <Uuid>213aacf5-3a37-441d-a5d8-3022ddf3558a</Uuid>
+                <Offline />
+              </LinkedProperty>
+            </LinkedProperties>
+          </Property>
+          <Property Key="WorkflowDataSourceCollection" PropertyType="DataSources">
+            <LinkedProperties Default="">
+              <LinkedProperty>
+                <Name>LF_RMS_COMMS_MPM</Name>
+                <Id>47</Id>
+                <Uuid>e7747a68-8fbc-42bd-b2a1-a0f64988a0fa</Uuid>
+                <Offline />
+                <Information>
+                  <SourceInformation Flags="OdbcType, ServerDatabase, UseSSPI" Adapter="Sql">
+                    <Host>rms-corplfsql1.cretexinc.com</Host>
+                    <Database>LF_RMS_COMMS_MPM</Database>
+                    <Server />
+                    <User />
+                  </SourceInformation>
+                </Information>
+              </LinkedProperty>
+            </LinkedProperties>
+          </Property>
+          <Property Key="EmailServerReferenceCollection" PropertyType="EmailServers">
+            <LinkedProperties Default="">
+              <LinkedProperty Host="rms-intstmprelay" IsDefault="true">
+                <Name>LF Notfications</Name>
+                <Id>10</Id>
+                <Uuid>767d5a60-27d7-4357-9862-e44383f2d1c3</Uuid>
+                <Offline />
+              </LinkedProperty>
+            </LinkedProperties>
+          </Property>
+        </AttachedProperties>
+        <Projects>
+          <CSharpProject />
+          <VBProject />
+        </Projects>
+        <WorkflowBusinessProcessOptions LfProcessId="0" ProfileId="ccf67a10-bee7-4f96-b23b-d41be747b4d3" Flags="AllowStartingFromClients, CreateBusinessProcessEntity, RecordMilestoneEvents, RecordStepEvents, SetStartingMilestone, SetCompletedMilestone, SetCanceledMilestone" Enabled="false">
+          <Milestones>
+            <Starting>Running</Starting>
+            <Completed>Completed</Completed>
+            <Canceled>Terminated</Canceled>
+          </Milestones>
+          <CustomInstanceName />
+        </WorkflowBusinessProcessOptions>
+        <WorkflowParameters SetOutputValuesViaTokens="true" />
+        <Cultures>
+          <Culture>en-us</Culture>
+        </Cultures>
+        <MetadataStore Attributes="ExpectsStartingEntry, ValidateDesign">
+          <VersionHistory>
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp319E.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="01/23/2025 17:43:51" EndTime="01/23/2025 19:22:19" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp6889.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="01/24/2025 01:23:04" EndTime="01/24/2025 01:23:39" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp87E0.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="01/24/2025 07:37:09" EndTime="01/24/2025 07:50:52" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp1C1D.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="01/24/2025 07:50:52" EndTime="01/24/2025 08:17:43" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp3C6A.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="01/24/2025 08:17:43" EndTime="01/24/2025 09:11:22" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpAF9F.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="01/24/2025 16:27:09" EndTime="01/24/2025 17:29:29" />
+          </VersionHistory>
+          <Metadata>
+            <Value Item="Author" Type="String">JTWhitney</Value>
+            <Value Item="PublishedDate" Type="DateTime">2025-01-24T15:11:30.697Z</Value>
+            <Value Item="WorkflowId" Type="Int32">116</Value>
+            <Value Item="WorkflowVersion" Type="Int32">4</Value>
+            <Value Item="WorkflowServerURL" Type="String">RMS-CORPLF1</Value>
+            <Value Item="WorkflowServerId" Type="String">8f6ebc76-1c3a-4b6f-b657-d705dfc3c51f</Value>
+          </Metadata>
+        </MetadataStore>
+        <Activities>
+          <Activity Type="Laserfiche.Workflow.Activities.Forms.RetrieveFormFieldValueProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="2945b31f-a6e0-482b-b9e7-c8d16eb5503c">
+            <Name>Retrieve Business Process Variables</Name>
+            <SafeName>RetrieveBusinessProcessVariables</SafeName>
+            <Enabled>True</Enabled>
+            <Description ShowDescription="null" ShowSummary="null">Retrieves the values from a Laserfiche Forms business process instance and stores those values as tokens.</Description>
+            <RetrieveFormFieldValueOptions Id="213aacf5-3a37-441d-a5d8-3022ddf3558a" OPT123332="true">
+              <SubmissionOptions UseStarting="true" SubmissionId="" InstanceId="" UseStartingInstance="true" />
+              <ProcessOptions ProcessId="75" ProcessName="RMS-MPM-UpdateTask" />
+              <Fields>
+                <Attribute AttributeId="2835" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="ftu" AttributeName="ftu" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-UpdateTask" MemberPath="2841" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="2836" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="fv" AttributeName="fv" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-UpdateTask" MemberPath="2842" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="2828" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Network_UserName" AttributeName="Network_UserName" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-UpdateTask" MemberPath="2834" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="2834" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="tid" AttributeName="tid" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-UpdateTask" MemberPath="2840" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="2846" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="User_EmailAddress" AttributeName="User_EmailAddress" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-UpdateTask" MemberPath="2852" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="2845" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="User_EmployeeNumber" AttributeName="User_EmployeeNumber" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-UpdateTask" MemberPath="2851" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="2829" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="User_ID" AttributeName="User_ID" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-UpdateTask" MemberPath="2835" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="2833" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="User_SiteID" AttributeName="User_SiteID" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-UpdateTask" MemberPath="2839" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+              </Fields>
+              <AdditionalVariableOptions>
+                <RetrievePaymentVariables>false</RetrievePaymentVariables>
+              </AdditionalVariableOptions>
+            </RetrieveFormFieldValueOptions>
+          </Activity>
+          <Activity Type="Laserfiche.Workflow.Activities.Condition.IfElseConditionProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="3d44c47a-5441-44ed-8fcd-0383969ea24a">
+            <Name>FieldToUpdate</Name>
+            <SafeName>FieldToUpdate</SafeName>
+            <Enabled>True</Enabled>
+            <Description ShowDescription="null" ShowSummary="null">Runs the FIRST branch that has satisfied conditions.</Description>
+            <ProfileId>ccf67a10-bee7-4f96-b23b-d41be747b4d3</ProfileId>
+            <Activities>
+              <Activity Type="Laserfiche.Workflow.Activities.Condition.RoutingDecisionBranchProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="23ad4bec-2d9a-4eac-be96-8ae590ef3353">
+                <Name>Update Assignee</Name>
+                <SafeName>UpdateAssignee</SafeName>
+                <Enabled>True</Enabled>
+                <Description ShowDescription="null" ShowSummary="null">Contains activities that will run if the branch conditions are satisfied.</Description>
+                <Condition Version="10.4.3.139" Name="" Negated="false" IsConjunction="true" ConditionType="Composite" Description="">
+                  <Conditions>
+                    <Condition ConditionType="Token" Operator="Equal">
+                      <Token Name="ftu" Length="0" MetaType="String, Field">
+                        <Activity Display="Retrieve Business Process Variables" Append="true">RetrieveBusinessProcessVariables</Activity>
+                      </Token>
+                      <Values>
+                        <Value>1</Value>
+                      </Values>
+                    </Condition>
+                  </Conditions>
+                </Condition>
+                <Activities>
+                  <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="85764802-760c-4dc4-b550-4b1166d079d0">
+                    <Name>Get Site Owner Email</Name>
+                    <SafeName>GetSiteOwnerEmail</SafeName>
+                    <Enabled>True</Enabled>
+                    <Description ShowDescription="null" ShowSummary="null">Performs the specified query in the selected data source.</Description>
+                    <DataSourceId>e7747a68-8fbc-42bd-b2a1-a0f64988a0fa</DataSourceId>
+                    <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+                      <Table Name="" HasIdentityColumn="false">
+                        <Columns Generated="1/1/0001 12:00:00 AM">
+                          <Column Name="EmailAddressCCList" Type="System.String" ReadOnly="False" />
+                        </Columns>
+                      </Table>
+                      <CustomQuery>SELECT EmailAddressCCList FROM tblSite  WHERE tblSite.ID = ?</CustomQuery>
+                      <InputParameter DbType="Int32">
+                        <Name>?</Name>
+                        <Value>%(RetrieveBusinessProcessVariables_User_SiteID)</Value>
+                      </InputParameter>
+                    </Criteria>
+                    <ResultSetSize Rows="ReturnAllRows" Count="2" />
+                    <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+                  </Activity>
+                  <Activity Type="Laserfiche.Workflow.Activities.CreateToken.CreateTokenActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="085a4338-ace4-490d-a4d5-858cde755a9b">
+                    <Name>Assign Site Owner EmailAddress</Name>
+                    <SafeName>AssignSiteOwnerEmailAddress</SafeName>
+                    <Enabled>True</Enabled>
+                    <Description ShowDescription="null" ShowSummary="null">Creates new tokens and updates the values of existing tokens.</Description>
+                    <Options>
+                      <Tokens>
+                        <TokenInformation Id="120b63be-d287-4ead-93b9-98afb09eb012" IsMultivalued="false" UpdateExistingToken="false" AppendValues="false" TokenType="String">
+                          <TokenName>SiteOwnerEmailAddress</TokenName>
+                          <TokenFullName />
+                          <ActivityName />
+                          <TokenValues>
+                            <TokenValue xml:space="preserve">%(GetSiteOwnerEmail_EmailAddressCCList)%(GetSiteOwnerEmail_Results Found)</TokenValue>
+                          </TokenValues>
+                        </TokenInformation>
+                      </Tokens>
+                    </Options>
+                  </Activity>
+                  <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="b709ae63-6551-4935-81f2-ea2ce63c9063">
+                    <Name>Get new AssigneeEmail</Name>
+                    <SafeName>GetnewAssigneeEmail</SafeName>
+                    <Enabled>True</Enabled>
+                    <Description ShowDescription="null" ShowSummary="null">Performs the specified query in the selected data source.</Description>
+                    <DataSourceId>e7747a68-8fbc-42bd-b2a1-a0f64988a0fa</DataSourceId>
+                    <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+                      <Table Name="" HasIdentityColumn="false">
+                        <Columns Generated="1/1/0001 12:00:00 AM">
+                          <Column Name="eMailAddress" Type="System.String" ReadOnly="False" />
+                        </Columns>
+                      </Table>
+                      <CustomQuery>Select eMailAddress from tblUser Where ID = ?</CustomQuery>
+                      <InputParameter>
+                        <Name>?</Name>
+                        <Value>%(RetrieveBusinessProcessVariables_fv)</Value>
+                      </InputParameter>
+                    </Criteria>
+                    <ResultSetSize Rows="ReturnAllRows" Count="2" />
+                    <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+                  </Activity>
+                  <Activity Type="Laserfiche.Workflow.Activities.CreateToken.CreateTokenActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="edb46c1f-f1fa-44ad-b216-71a8dc90b146">
+                    <Name>Assign Assignee Email</Name>
+                    <SafeName>AssignAssigneeEmail</SafeName>
+                    <Enabled>True</Enabled>
+                    <Description ShowDescription="null" ShowSummary="null">Creates new tokens and updates the values of existing tokens.</Description>
+                    <Options>
+                      <Tokens>
+                        <TokenInformation Id="a8b79da9-7c71-43c8-890d-a2c8732bfaea" IsMultivalued="false" UpdateExistingToken="false" AppendValues="false" TokenType="String">
+                          <TokenName>AssigneeEmail</TokenName>
+                          <TokenFullName />
+                          <ActivityName />
+                          <TokenValues>
+                            <TokenValue xml:space="preserve">%(GetnewAssigneeEmail_eMailAddress)</TokenValue>
+                          </TokenValues>
+                        </TokenInformation>
+                      </Tokens>
+                    </Options>
+                  </Activity>
+                  <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="f9689b3d-a2f1-4e15-912b-faff833cb2b4">
+                    <Name>Update AssigneeID</Name>
+                    <SafeName>UpdateAssigneeID</SafeName>
+                    <Enabled>True</Enabled>
+                    <Description ShowDescription="null" ShowSummary="null">Performs the specified query in the selected data source.</Description>
+                    <DataSourceId>e7747a68-8fbc-42bd-b2a1-a0f64988a0fa</DataSourceId>
+                    <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+                      <CustomQuery>EXECUTE spTASK_Update_SetAssignedToID ?, ?, ?</CustomQuery>
+                      <InputParameter DbType="Int32">
+                        <Name>?</Name>
+                        <Value>%(RetrieveBusinessProcessVariables_tid)</Value>
+                      </InputParameter>
+                      <InputParameter DbType="Int32">
+                        <Name>?</Name>
+                        <Value>%(RetrieveBusinessProcessVariables_fv)</Value>
+                      </InputParameter>
+                      <InputParameter DbType="String">
+                        <Name>?</Name>
+                        <Value>%(RetrieveBusinessProcessVariables_User_EmployeeNumber)</Value>
+                      </InputParameter>
+                    </Criteria>
+                    <ResultSetSize Rows="ReturnAllRows" Count="2" />
+                    <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+                  </Activity>
+                  <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="23e4ef3d-d79f-4d43-9b26-1b23f425b8d9">
+                    <Name>Get Assignee Email Template</Name>
+                    <SafeName>GetAssigneeEmailTemplate</SafeName>
+                    <Enabled>True</Enabled>
+                    <Description ShowDescription="null" ShowSummary="null">Performs the specified query in the selected data source.</Description>
+                    <DataSourceId>e7747a68-8fbc-42bd-b2a1-a0f64988a0fa</DataSourceId>
+                    <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+                      <Table Name="" HasIdentityColumn="false">
+                        <Columns Generated="1/1/0001 12:00:00 AM">
+                          <Column Name="" Type="System.String" ReadOnly="False" />
+                        </Columns>
+                      </Table>
+                      <CustomQuery>EXECUTE spEMAIL_GetEmailMessageByTaskIDAndEMailType ?, ?, ?, ?, ?,?</CustomQuery>
+                      <InputParameter DbType="Int32">
+                        <Name>?</Name>
+                        <Value>%(RetrieveBusinessProcessVariables_tid)</Value>
+                      </InputParameter>
+                      <InputParameter DbType="String">
+                        <Name>?</Name>
+                        <Value>TASK_ASSIGNMENT</Value>
+                      </InputParameter>
+                      <InputParameter DbType="String">
+                        <Name>?</Name>
+                        <Value />
+                      </InputParameter>
+                      <InputParameter DbType="Int16">
+                        <Name>? </Name>
+                        <Value>0</Value>
+                      </InputParameter>
+                      <InputParameter DbType="String">
+                        <Name>?</Name>
+                        <Value>%(RetrieveBusinessProcessVariables_User_EmployeeNumber)</Value>
+                      </InputParameter>
+                      <InputParameter>
+                        <Name>?</Name>
+                        <Value />
+                      </InputParameter>
+                    </Criteria>
+                    <ResultSetSize Rows="ReturnAllRows" Count="2" />
+                    <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+                  </Activity>
+                  <Activity Type="Laserfiche.Workflow.Activities.CreateToken.CreateTokenActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="71f2e922-f947-46f8-885b-b1b6b5ced60b">
+                    <Name>Assign Email Template</Name>
+                    <SafeName>AssignEmailTemplate</SafeName>
+                    <Enabled>True</Enabled>
+                    <Description ShowDescription="null" ShowSummary="null">Creates new tokens and updates the values of existing tokens.</Description>
+                    <Options>
+                      <Tokens>
+                        <TokenInformation Id="cbfc4340-d786-458a-94ad-a35e5649b15c" IsMultivalued="false" UpdateExistingToken="false" AppendValues="false" TokenType="String">
+                          <TokenName>AssigneeEmailTemplate</TokenName>
+                          <TokenFullName />
+                          <ActivityName />
+                          <TokenValues>
+                            <TokenValue xml:space="preserve">%(GetAssigneeEmailTemplate_)</TokenValue>
+                          </TokenValues>
+                        </TokenInformation>
+                      </Tokens>
+                    </Options>
+                  </Activity>
+                  <Activity Type="Laserfiche.Workflow.Activities.Condition.IfElseConditionProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="c5c53160-4344-4da2-9890-79bbab187e32">
+                    <Name>Conditional Decision</Name>
+                    <SafeName>ConditionalDecision</SafeName>
+                    <Enabled>True</Enabled>
+                    <Description ShowDescription="null" ShowSummary="null">Runs the FIRST branch that has satisfied conditions.</Description>
+                    <ProfileId>ccf67a10-bee7-4f96-b23b-d41be747b4d3</ProfileId>
+                    <Activities>
+                      <Activity Type="Laserfiche.Workflow.Activities.Condition.RoutingDecisionBranchProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="60838b9e-2d2a-4b38-bea0-2d165090ee8a">
+                        <Name>User Email Equals Site Owner Email</Name>
+                        <SafeName>UserEmailEqualsSiteOwnerEmail</SafeName>
+                        <Enabled>True</Enabled>
+                        <Description ShowDescription="null" ShowSummary="null">Contains activities that will run if the branch conditions are satisfied.</Description>
+                        <Condition Version="10.4.3.139" Name="" Negated="false" IsConjunction="true" ConditionType="Composite" Description="">
+                          <Conditions>
+                            <Condition ConditionType="Token" Operator="Equal">
+                              <Token Name="User_EmailAddress" Length="0" MetaType="String, Field">
+                                <Activity Display="Retrieve Business Process Variables" Append="true">RetrieveBusinessProcessVariables</Activity>
+                              </Token>
+                              <Values>
+                                <Value>%(GetSiteOwnerEmail_EmailAddressCCList)</Value>
+                              </Values>
+                            </Condition>
+                          </Conditions>
+                        </Condition>
+                        <Activities>
+                          <Activity Type="Laserfiche.Workflow.Activities.Email.EmailSequenceProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="89eecfd1-8a32-42b6-b7f7-094cc2dd9464">
+                            <Name>Task Assignment Email1</Name>
+                            <SafeName>TaskAssignmentEmail1</SafeName>
+                            <Enabled>True</Enabled>
+                            <Description ShowDescription="null" ShowSummary="null">Sends an email to one or more people.</Description>
+                            <Email TextOnlyBodyFormat="false" DeliveryReceipts="None">
+                              <ToAddresses>
+                                <Add>%(AssigneeEmail)</Add>
+                              </ToAddresses>
+                              <CcAddresses />
+                              <BccAddresses />
+                              <FromAddress />
+                              <ReplyTo />
+                              <Subject>Task Assignment</Subject>
+                              <Body>%(AssigneeEmailTemplate#"HTML"#)</Body>
+                              <Priority>Normal</Priority>
+                              <ServerReference>767d5a60-27d7-4357-9862-e44383f2d1c3</ServerReference>
+                              <UseBodyLengthLimit null="true" />
+                              <Attachments>
+                                <ExportedEntries />
+                                <Options>
+                                  <UseZipFile>false</UseZipFile>
+                                  <LimitEntrySize>false</LimitEntrySize>
+                                  <EntrySizeLimit>51200</EntrySizeLimit>
+                                  <ReplaceBigEntriesWithShortcut>false</ReplaceBigEntriesWithShortcut>
+                                  <NotifyForEntriesFiles>true</NotifyForEntriesFiles>
+                                  <NotifyForNoContentEntries>true</NotifyForNoContentEntries>
+                                  <AttachShortcutForNoContentEntries>false</AttachShortcutForNoContentEntries>
+                                </Options>
+                              </Attachments>
+                            </Email>
+                          </Activity>
+                        </Activities>
+                        <FaultHandlers />
+                      </Activity>
+                      <Activity Type="Laserfiche.Workflow.Activities.Condition.RoutingDecisionBranchProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="2af69adf-6fe7-4f20-94ed-ab22d2a64c6b">
+                        <Name>Branch 3</Name>
+                        <SafeName>Branch3</SafeName>
+                        <Enabled>True</Enabled>
+                        <Description ShowDescription="null" ShowSummary="null">Contains activities that will run if the branch conditions are satisfied.</Description>
+                        <Activities>
+                          <Activity Type="Laserfiche.Workflow.Activities.Email.EmailSequenceProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="b410a14f-2c50-4179-aaeb-16687353f609">
+                            <Name>Task Assignment Email2</Name>
+                            <SafeName>TaskAssignmentEmail2</SafeName>
+                            <Enabled>True</Enabled>
+                            <Description ShowDescription="null" ShowSummary="null">Sends an email to one or more people.</Description>
+                            <Email TextOnlyBodyFormat="false" DeliveryReceipts="None">
+                              <ToAddresses>
+                                <Add>%(AssigneeEmail)</Add>
+                              </ToAddresses>
+                              <CcAddresses>
+                                <Add>%(SiteOwnerEmailAddress)</Add>
+                              </CcAddresses>
+                              <BccAddresses />
+                              <FromAddress />
+                              <ReplyTo />
+                              <Subject>Task Assignment</Subject>
+                              <Body>%(AssigneeEmailTemplate#"HTML"#)</Body>
+                              <Priority>Normal</Priority>
+                              <ServerReference>767d5a60-27d7-4357-9862-e44383f2d1c3</ServerReference>
+                              <UseBodyLengthLimit null="true" />
+                              <Attachments>
+                                <ExportedEntries />
+                                <Options>
+                                  <UseZipFile>false</UseZipFile>
+                                  <LimitEntrySize>false</LimitEntrySize>
+                                  <EntrySizeLimit>51200</EntrySizeLimit>
+                                  <ReplaceBigEntriesWithShortcut>false</ReplaceBigEntriesWithShortcut>
+                                  <NotifyForEntriesFiles>true</NotifyForEntriesFiles>
+                                  <NotifyForNoContentEntries>true</NotifyForNoContentEntries>
+                                  <AttachShortcutForNoContentEntries>false</AttachShortcutForNoContentEntries>
+                                </Options>
+                              </Attachments>
+                            </Email>
+                          </Activity>
+                        </Activities>
+                        <FaultHandlers />
+                      </Activity>
+                    </Activities>
+                    <FaultHandlers />
+                  </Activity>
+                </Activities>
+                <FaultHandlers />
+              </Activity>
+              <Activity Type="Laserfiche.Workflow.Activities.Condition.RoutingDecisionBranchProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="d6d11e06-dfcc-443f-8c3e-9c40f3b0f24d">
+                <Name>Update Status</Name>
+                <SafeName>UpdateStatus</SafeName>
+                <Enabled>True</Enabled>
+                <Description ShowDescription="null" ShowSummary="null">Contains activities that will run if the branch conditions are satisfied.</Description>
+                <Condition Version="10.4.3.139" Name="" Negated="false" IsConjunction="true" ConditionType="Composite" Description="">
+                  <Conditions>
+                    <Condition ConditionType="Token" Operator="Equal">
+                      <Token Name="ftu" Length="0" MetaType="String, Field">
+                        <Activity Display="Retrieve Business Process Variables" Append="true">RetrieveBusinessProcessVariables</Activity>
+                      </Token>
+                      <Values>
+                        <Value>2</Value>
+                      </Values>
+                    </Condition>
+                  </Conditions>
+                </Condition>
+                <Activities>
+                  <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="a5fe455e-e600-423f-9a86-65bedf3bc929">
+                    <Name>Update Task Status</Name>
+                    <SafeName>UpdateTaskStatus</SafeName>
+                    <Enabled>True</Enabled>
+                    <Description ShowDescription="null" ShowSummary="null">Performs the specified query in the selected data source.</Description>
+                    <DataSourceId>e7747a68-8fbc-42bd-b2a1-a0f64988a0fa</DataSourceId>
+                    <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+                      <CustomQuery>Execute spTASK_Update_SetTaskStatus ?, ?, ?</CustomQuery>
+                      <InputParameter DbType="Int32">
+                        <Name>?</Name>
+                        <Value>%(RetrieveBusinessProcessVariables_tid)</Value>
+                      </InputParameter>
+                      <InputParameter DbType="Int32">
+                        <Name>?</Name>
+                        <Value>%(RetrieveBusinessProcessVariables_fv)</Value>
+                      </InputParameter>
+                      <InputParameter DbType="String">
+                        <Name>?</Name>
+                        <Value>%(RetrieveBusinessProcessVariables_User_EmployeeNumber)</Value>
+                      </InputParameter>
+                    </Criteria>
+                    <ResultSetSize Rows="ReturnAllRows" Count="2" />
+                    <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+                  </Activity>
+                </Activities>
+                <FaultHandlers />
+              </Activity>
+              <Activity Type="Laserfiche.Workflow.Activities.Condition.RoutingDecisionBranchProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="faa00333-2009-4d5d-8a72-f2093035bd58">
+                <Name>Update DueDate</Name>
+                <SafeName>UpdateDueDate</SafeName>
+                <Enabled>True</Enabled>
+                <Description ShowDescription="null" ShowSummary="null">Contains activities that will run if the branch conditions are satisfied.</Description>
+                <Condition Version="10.4.3.139" Name="" Negated="false" IsConjunction="true" ConditionType="Composite" Description="">
+                  <Conditions>
+                    <Condition ConditionType="Token" Operator="Equal">
+                      <Token Name="ftu" Length="0" MetaType="String, Field">
+                        <Activity Display="Retrieve Business Process Variables" Append="true">RetrieveBusinessProcessVariables</Activity>
+                      </Token>
+                      <Values>
+                        <Value>3</Value>
+                      </Values>
+                    </Condition>
+                  </Conditions>
+                </Condition>
+                <Activities>
+                  <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="82c4ebfd-d655-4379-86e6-f2b809daff7c">
+                    <Name>Update Due Date</Name>
+                    <SafeName>UpdateDueDate2</SafeName>
+                    <Enabled>True</Enabled>
+                    <Description ShowDescription="null" ShowSummary="null">Performs the specified query in the selected data source.</Description>
+                    <DataSourceId>e7747a68-8fbc-42bd-b2a1-a0f64988a0fa</DataSourceId>
+                    <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+                      <CustomQuery>Execute spTASK_Update_SetDueDate ?, ?, ?</CustomQuery>
+                      <InputParameter DbType="Int32">
+                        <Name>?</Name>
+                        <Value>%(RetrieveBusinessProcessVariables_tid)</Value>
+                      </InputParameter>
+                      <InputParameter DbType="String">
+                        <Name>?</Name>
+                        <Value>%(RetrieveBusinessProcessVariables_fv)</Value>
+                      </InputParameter>
+                      <InputParameter DbType="String">
+                        <Name>?</Name>
+                        <Value>%(RetrieveBusinessProcessVariables_User_EmployeeNumber)</Value>
+                      </InputParameter>
+                    </Criteria>
+                    <ResultSetSize Rows="ReturnAllRows" Count="2" />
+                    <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+                  </Activity>
+                </Activities>
+                <FaultHandlers />
+              </Activity>
+              <Activity Type="Laserfiche.Workflow.Activities.Condition.RoutingDecisionBranchProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="51d55f56-7d78-4d06-9da9-9ff04a096983">
+                <Name>Update Scheduled DueDate</Name>
+                <SafeName>UpdateScheduledDueDate</SafeName>
+                <Enabled>True</Enabled>
+                <Description ShowDescription="null" ShowSummary="null">Contains activities that will run if the branch conditions are satisfied.</Description>
+                <Condition Version="10.4.3.139" Name="" Negated="false" IsConjunction="true" ConditionType="Composite" Description="">
+                  <Conditions>
+                    <Condition ConditionType="Token" Operator="Equal">
+                      <Token Name="ftu" Length="0" MetaType="String, Field">
+                        <Activity Display="Retrieve Business Process Variables" Append="true">RetrieveBusinessProcessVariables</Activity>
+                      </Token>
+                      <Values>
+                        <Value>4</Value>
+                      </Values>
+                    </Condition>
+                  </Conditions>
+                </Condition>
+                <Activities>
+                  <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="6f31d5cc-e4af-4350-8012-43d318767732">
+                    <Name>Update Scheduled Due Date</Name>
+                    <SafeName>UpdateScheduledDueDate2</SafeName>
+                    <Enabled>True</Enabled>
+                    <Description ShowDescription="null" ShowSummary="null">Performs the specified query in the selected data source.</Description>
+                    <DataSourceId>e7747a68-8fbc-42bd-b2a1-a0f64988a0fa</DataSourceId>
+                    <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+                      <CustomQuery>EXECUTE spTASK_Update_SetScheduledDueDate ?, ?, ?</CustomQuery>
+                      <InputParameter DbType="Int32">
+                        <Name>?</Name>
+                        <Value>%(RetrieveBusinessProcessVariables_tid)</Value>
+                      </InputParameter>
+                      <InputParameter DbType="String">
+                        <Name>?</Name>
+                        <Value>%(RetrieveBusinessProcessVariables_fv)</Value>
+                      </InputParameter>
+                      <InputParameter DbType="String">
+                        <Name>?</Name>
+                        <Value>%(RetrieveBusinessProcessVariables_User_EmployeeNumber)</Value>
+                      </InputParameter>
+                    </Criteria>
+                    <ResultSetSize Rows="ReturnAllRows" Count="2" />
+                    <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+                  </Activity>
+                </Activities>
+                <FaultHandlers />
+              </Activity>
+            </Activities>
+            <FaultHandlers />
+          </Activity>
+        </Activities>
+        <FaultHandlers />
+      </SequentialWorkflowActivityProxy>
+      <CanvasUI>
+        <Expanded>True</Expanded>
+        <Activity Name="Retrieve Business Process Variables" Key="2945b31f-a6e0-482b-b9e7-c8d16eb5503c" />
+        <Activity Name="FieldToUpdate" Key="3d44c47a-5441-44ed-8fcd-0383969ea24a">
+          <Expanded>True</Expanded>
+          <Activity Name="Update Assignee" Key="23ad4bec-2d9a-4eac-be96-8ae590ef3353">
+            <Expanded>True</Expanded>
+            <Activity Name="Get Site Owner Email" Key="85764802-760c-4dc4-b550-4b1166d079d0" />
+            <Activity Name="Assign Site Owner EmailAddress" Key="085a4338-ace4-490d-a4d5-858cde755a9b" />
+            <Activity Name="Get new AssigneeEmail" Key="b709ae63-6551-4935-81f2-ea2ce63c9063" />
+            <Activity Name="Assign Assignee Email" Key="edb46c1f-f1fa-44ad-b216-71a8dc90b146" />
+            <Activity Name="Update AssigneeID" Key="f9689b3d-a2f1-4e15-912b-faff833cb2b4" />
+            <Activity Name="Get Assignee Email Template" Key="23e4ef3d-d79f-4d43-9b26-1b23f425b8d9" />
+            <Activity Name="Assign Email Template" Key="71f2e922-f947-46f8-885b-b1b6b5ced60b" />
+            <Activity Name="Conditional Decision" Key="c5c53160-4344-4da2-9890-79bbab187e32">
+              <Expanded>True</Expanded>
+              <Activity Name="User Email Equals Site Owner Email" Key="60838b9e-2d2a-4b38-bea0-2d165090ee8a">
+                <Expanded>True</Expanded>
+                <Activity Name="Task Assignment Email1" Key="89eecfd1-8a32-42b6-b7f7-094cc2dd9464" />
+              </Activity>
+              <Activity Name="Branch 3" Key="2af69adf-6fe7-4f20-94ed-ab22d2a64c6b">
+                <Expanded>True</Expanded>
+                <Activity Name="Task Assignment Email2" Key="b410a14f-2c50-4179-aaeb-16687353f609" />
+              </Activity>
+            </Activity>
+          </Activity>
+          <Activity Name="Update Status" Key="d6d11e06-dfcc-443f-8c3e-9c40f3b0f24d">
+            <Expanded>True</Expanded>
+            <Activity Name="Update Task Status" Key="a5fe455e-e600-423f-9a86-65bedf3bc929" />
+          </Activity>
+          <Activity Name="Update DueDate" Key="faa00333-2009-4d5d-8a72-f2093035bd58">
+            <Expanded>True</Expanded>
+            <Activity Name="Update Due Date" Key="82c4ebfd-d655-4379-86e6-f2b809daff7c" />
+          </Activity>
+          <Activity Name="Update Scheduled DueDate" Key="51d55f56-7d78-4d06-9da9-9ff04a096983">
+            <Expanded>True</Expanded>
+            <Activity Name="Update Scheduled Due Date" Key="6f31d5cc-e4af-4350-8012-43d318767732" />
+          </Activity>
+        </Activity>
+        <UseCompactLayout>false</UseCompactLayout>
+        <ZoomLevel>1.0</ZoomLevel>
+      </CanvasUI>
+    </Designer>
+    <CreationRules Count="0" />
+    <Schedules Count="0" />
+  </ExportedWorkflow>
+  <LinkedObjects Count="3">
+    <LinkedObject>
+      <Id>47</Id>
+      <Name>LF_RMS_COMMS_MPM</Name>
+      <Description />
+      <AttachmentType>DataSource</AttachmentType>
+      <LinkedWorkflows Count="1">
+        <LinkInfo>
+          <WorkflowName>MPM-UpdateTask</WorkflowName>
+        </LinkInfo>
+      </LinkedWorkflows>
+      <XmlValue>&lt;SourceInformation DataSourceType="Odbc" DSNType="System" Authenticated="true"&gt;
+  &lt;Location&gt;
+    &lt;HostName&gt;rms-corplfsql1.cretexinc.com&lt;/HostName&gt;
+    &lt;ServerInstance /&gt;
+    &lt;DatabaseName&gt;LF_RMS_COMMS_MPM&lt;/DatabaseName&gt;
+    &lt;LocationType&gt;ServerDatabase&lt;/LocationType&gt;
+  &lt;/Location&gt;
+  &lt;Authentication&gt;
+    &lt;UserName&gt;&lt;/UserName&gt;
+    &lt;SecureString Version="2" Value="" /&gt;
+  &lt;/Authentication&gt;
+  &lt;Adapter&gt;
+    &lt;type key="sql" default="false" category="ODBC"&gt;
+      &lt;typename&gt;Laserfiche.Project.Data.Runtime.Odbc.Sql, Laserfiche.Project.Data, Version=9.0.0.0, Culture=neutral, PublicKeyToken=607dd73ee2bd1c00&lt;/typename&gt;
+      &lt;names default="Sql"&gt;
+        &lt;add code="en" value="Sql" /&gt;
+      &lt;/names&gt;
+    &lt;/type&gt;
+  &lt;/Adapter&gt;
+  &lt;OtherOptions ActualType="Laserfiche.Collections.PropertyBag, Laserfiche.Base, Version=9.0.0.0, Culture=neutral, PublicKeyToken=607dd73ee2bd1c00"&gt;
+    &lt;Properties /&gt;
+  &lt;/OtherOptions&gt;
+&lt;/SourceInformation&gt;</XmlValue>
+    </LinkedObject>
+    <LinkedObject>
+      <Id>10</Id>
+      <Name>LF Notfications</Name>
+      <Description />
+      <AttachmentType>EmailServer</AttachmentType>
+      <LinkedWorkflows Count="1">
+        <LinkInfo>
+          <WorkflowName>MPM-UpdateTask</WorkflowName>
+        </LinkInfo>
+      </LinkedWorkflows>
+      <XmlValue>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;EmailServer IsProtected="true" SendTimeout="-1"&gt;
+  &lt;Name /&gt;
+  &lt;NetworkAddress&gt;rms-intstmprelay&lt;/NetworkAddress&gt;
+  &lt;Port&gt;25&lt;/Port&gt;
+  &lt;UserName /&gt;
+  &lt;Password&gt;6Dd9xl/YoLU=&lt;/Password&gt;
+  &lt;From&gt;LF_Notifications@machine.com&lt;/From&gt;
+  &lt;DefaultSubject /&gt;
+  &lt;UseIISPickup&gt;false&lt;/UseIISPickup&gt;
+  &lt;PickupDirectory /&gt;
+  &lt;UseSSL&gt;false&lt;/UseSSL&gt;
+  &lt;UseDefaultAuthentication&gt;true&lt;/UseDefaultAuthentication&gt;
+&lt;/EmailServer&gt;</XmlValue>
+    </LinkedObject>
+    <LinkedObject>
+      <Id>18</Id>
+      <Name>LFForms</Name>
+      <Description />
+      <AttachmentType>WebService</AttachmentType>
+      <LinkedWorkflows Count="1">
+        <LinkInfo>
+          <WorkflowName>MPM-UpdateTask</WorkflowName>
+        </LinkInfo>
+      </LinkedWorkflows>
+      <XmlValue>&lt;WebService ServiceURL="http://rmslf/forms" WebServiceType="Laserfiche Forms" RunAsTasks="true" AcceptInvalidCertificates="true" /&gt;</XmlValue>
+    </LinkedObject>
+  </LinkedObjects>
+</ExportedWorkflows>

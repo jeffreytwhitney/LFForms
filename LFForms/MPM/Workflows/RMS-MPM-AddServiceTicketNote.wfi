@@ -1,0 +1,390 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ExportedWorkflows Version="8.3.0.0" Count="1">
+  <ExportedWorkflow>
+    <Designer Version="10.4.3.139">
+      <SequentialWorkflowActivityProxy Type="Laserfiche.Workflow.Activities.Proxies.LfSequentialWorkflowProxy, Laserfiche.Workflow.Designer.Base, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="bbc9d4e2-c799-4d46-99c0-7d8f6d5b72c4" ActivityCountHint="8">
+        <Name>RMS-MPM-AddServiceTicketNote</Name>
+        <SafeName>RMSMPMAddServiceTicketNote</SafeName>
+        <Enabled>True</Enabled>
+        <Description ShowDescription="null" ShowSummary="null" />
+        <AttachedProperties>
+          <Property Key="ProfileCollection" PropertyType="Profiles">
+            <LinkedProperties Default="">
+              <LinkedProperty>
+                <Name>RMS Admin</Name>
+                <Id>-1</Id>
+                <Uuid>97946dcd-48c8-4188-b91c-e0136316d2cb</Uuid>
+                <Offline>
+                  <ConnectionProfile Version="2" xmlns="http:\laserfiche\workflow\connection">
+                    <ProfileId>SQg+Rg7UdmUhKliipMjMelyPANsZlnOl</ProfileId>
+                    <EncryptedData xmlns="http://www.w3/.org/2001/04/xmlenc#">
+                      <CipherData>
+                        <CipherValue>9zmXp6/1xCLOhMuKImrdFj1ad2AwC/H4aERdfmnxdgXsGYJ30wjcxXtS3zu1yJZyQNCeqnTgCLarQkGPR9Hdn9/Xt3alCUs5NWK+KpjbGT2uaauKrTsrxe46KQIU9UA4UDdj8EcDMzei/0RR/2Lt95pVbYPRFa/3AoiavhevLIOPE8BEkaUDkUio6oCl97bzckA8G1i2++SOeCil3VTT2QWEXOoAav1wS14KLyGYKfHWf2nS9okkMtUwdtBLeJrFchtvOzCTGUusnCnZcHvIRJb6ZWh4oVWTzTvuY5+aLTPoRdJ76QhaywwURitMPl09jngSCxtfRka55YV5iZDqXEPyEG1+VYoVsknb+WFKrCsPOSaTuu0d2Xx+NhstJk/7+A6A2nv34gu2KzWL9koIEBIwjTZ6m+sWc13lYXMSPKCdn7HdliawUrAcHBpZxci65Dla41zrvv+nC28HnPoeB0AUGoRaBlwIgx1KAtFJ0n03ZNS3bkzBPB2m+6/SnPoLEXkPMjhIIgFMDrDAwhRXt7DiPqE4BDi7iTh/ituGqDULT2CFS8tgNudjLCiAKaegLA0pbLWj61ddMDxoev3TlYaWJY5TK3UEW5AfuJMQhv2+4TxKvMF47Ud1hnBzLxYyRaPsCKRExtNfffvbt0ndrFzJLEI3e1SIczzLiHHyWH9lIS2glznhFksH6+pIQm/xvrEhTmUinhawoSLsCJ3OcNyw7C0oGnGyFPpls4pff0ntzAyAddKZDy8afLS2f39Kd8ItYeMoTSOqPbrnk+eJL+Z8IlnTjiLKu9TWBfAIOArvYnCGg4sa/eksDrQ/gbESUPBuRHNuPypI3bHzG7CeIem8FuMQanP2bb0DaCIjhemNEPUwgy7TDZp+mHYgY7zP4vYiIxmXQkbgskrIfQZmzxjCf9A8Cg7eiXsYM88d41hF/qGfCeNKRsadwjYtymd0fJYFk9n2d0IX7Ee6z6lr40BdMP0+ptwxFB4NGTUkn76s7Oa5dUK4RuCqF7ikibzlz+0NsLCG+I8=</CipherValue>
+                      </CipherData>
+                    </EncryptedData>
+                  </ConnectionProfile>
+                </Offline>
+              </LinkedProperty>
+            </LinkedProperties>
+          </Property>
+          <Property Key="WorkflowWebServiceCollection" PropertyType="WebServices">
+            <LinkedProperties Default="">
+              <LinkedProperty ServiceURL="http://rmslf/forms" User="admin" Type="Laserfiche Forms">
+                <Name>LFForms</Name>
+                <Id>18</Id>
+                <Uuid>e6d9aba5-2bcd-4233-bda3-5d21b2b29c54</Uuid>
+                <Offline />
+              </LinkedProperty>
+            </LinkedProperties>
+          </Property>
+          <Property Key="WorkflowDataSourceCollection" PropertyType="DataSources">
+            <LinkedProperties Default="">
+              <LinkedProperty>
+                <Name>LF_RMS_COMMS_MPM</Name>
+                <Id>47</Id>
+                <Uuid>0bd867a5-79a0-4e17-bbc3-4698975f2648</Uuid>
+                <Offline />
+                <Information>
+                  <SourceInformation Flags="OdbcType, ServerDatabase, UseSSPI" Adapter="Sql">
+                    <Host>rms-corplfsql1.cretexinc.com</Host>
+                    <Database>LF_RMS_COMMS_MPM</Database>
+                    <Server />
+                    <User />
+                  </SourceInformation>
+                </Information>
+              </LinkedProperty>
+            </LinkedProperties>
+          </Property>
+          <Property Key="EmailServerReferenceCollection" PropertyType="EmailServers">
+            <LinkedProperties Default="">
+              <LinkedProperty Host="rms-intstmprelay" IsDefault="false">
+                <Name>LF Notfications</Name>
+                <Id>10</Id>
+                <Uuid>4077de1d-5b52-4206-ab92-e69e4e7c5008</Uuid>
+                <Offline />
+              </LinkedProperty>
+            </LinkedProperties>
+          </Property>
+        </AttachedProperties>
+        <Projects>
+          <CSharpProject />
+          <VBProject />
+        </Projects>
+        <WorkflowBusinessProcessOptions LfProcessId="0" ProfileId="97946dcd-48c8-4188-b91c-e0136316d2cb" Flags="AllowStartingFromClients, CreateBusinessProcessEntity, RecordMilestoneEvents, RecordStepEvents, SetStartingMilestone, SetCompletedMilestone, SetCanceledMilestone" Enabled="false">
+          <Milestones>
+            <Starting>Running</Starting>
+            <Completed>Completed</Completed>
+            <Canceled>Terminated</Canceled>
+          </Milestones>
+          <CustomInstanceName />
+        </WorkflowBusinessProcessOptions>
+        <WorkflowParameters SetOutputValuesViaTokens="true" />
+        <Cultures>
+          <Culture>en-us</Culture>
+        </Cultures>
+        <MetadataStore Attributes="ExpectsStartingEntry, ValidateDesign">
+          <VersionHistory>
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpB06D.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="04/14/2025 22:06:26" EndTime="04/15/2025 00:20:29" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp32BD.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="04/15/2025 05:24:09" EndTime="04/15/2025 05:24:19" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp465E.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="04/16/2025 08:33:26" EndTime="04/16/2025 08:47:38" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp6C7F.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/26/2025 11:33:33" EndTime="08/26/2025 11:34:30" />
+          </VersionHistory>
+          <Metadata>
+            <Value Item="Author" Type="String">JTWhitney</Value>
+            <Value Item="PublishedDate" Type="DateTime">2025-04-16T13:47:50.637Z</Value>
+            <Value Item="WorkflowId" Type="Int32">142</Value>
+            <Value Item="WorkflowVersion" Type="Int32">3</Value>
+            <Value Item="WorkflowServerURL" Type="String">RMS-CORPLF1</Value>
+            <Value Item="WorkflowServerId" Type="String">8f6ebc76-1c3a-4b6f-b657-d705dfc3c51f</Value>
+          </Metadata>
+        </MetadataStore>
+        <Activities>
+          <Activity Type="Laserfiche.Workflow.Activities.Forms.RetrieveFormFieldValueProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="b88b4890-7ccb-45e9-bd6c-9b5fdad0c872">
+            <Name>Retrieve Business Process Variables</Name>
+            <SafeName>RetrieveBusinessProcessVariables</SafeName>
+            <Enabled>True</Enabled>
+            <Description ShowDescription="null" ShowSummary="null">Retrieves the values from a Laserfiche Forms business process instance and stores those values as tokens.</Description>
+            <RetrieveFormFieldValueOptions Id="e6d9aba5-2bcd-4233-bda3-5d21b2b29c54" OPT123332="true">
+              <SubmissionOptions UseStarting="true" SubmissionId="" InstanceId="" UseStartingInstance="true" />
+              <ProcessOptions ProcessId="117" ProcessName="RMS-MPM-AddServiceTicketNote" />
+              <Fields>
+                <Attribute AttributeId="5128" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="CarbonCopyEmailList" AttributeName="CarbonCopyEmailList" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-AddServiceTicketNote" MemberPath="5141" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="4152" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="closeme" AttributeName="closeme" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-AddServiceTicketNote" MemberPath="4165" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="4144" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Department_Email" AttributeName="Department_Email" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-AddServiceTicketNote" MemberPath="4157" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="4143" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="MetrologyEmail" AttributeName="MetrologyEmail" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-AddServiceTicketNote" MemberPath="4156" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="4139" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Note Text:" AttributeName="NoteText" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-AddServiceTicketNote" MemberPath="4152" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="4151" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Ticket_Number" AttributeName="Ticket_Number" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-AddServiceTicketNote" MemberPath="4164" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="4129" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="tid" AttributeName="tid" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-AddServiceTicketNote" MemberPath="4142" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="4138" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="uid" AttributeName="uid" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-AddServiceTicketNote" MemberPath="4151" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="4142" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="uid_EmployeeNumber" AttributeName="uid_EmployeeNumber" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-MPM-AddServiceTicketNote" MemberPath="4155" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+              </Fields>
+              <AdditionalVariableOptions>
+                <RetrievePaymentVariables>false</RetrievePaymentVariables>
+              </AdditionalVariableOptions>
+            </RetrieveFormFieldValueOptions>
+          </Activity>
+          <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="8ad184d9-fbf2-4ef0-b229-07888cc4ee8d">
+            <Name>spSERVICETICKET_AddNote</Name>
+            <SafeName>spSERVICETICKET_AddNote</SafeName>
+            <Enabled>True</Enabled>
+            <Description ShowDescription="null" ShowSummary="null">Performs the specified query in the selected data source.</Description>
+            <DataSourceId>0bd867a5-79a0-4e17-bbc3-4698975f2648</DataSourceId>
+            <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+              <Table Name="" HasIdentityColumn="false">
+                <Columns Generated="1/1/0001 12:00:00 AM">
+                  <Column Name="" Type="System.Decimal" ReadOnly="False" />
+                </Columns>
+              </Table>
+              <CustomQuery>EXECUTE spSERVICETICKET_AddNote ?, ?, ?</CustomQuery>
+              <InputParameter DbType="Int32">
+                <Name>?</Name>
+                <Value>%(RetrieveBusinessProcessVariables_tid)</Value>
+              </InputParameter>
+              <InputParameter DbType="String">
+                <Name>?</Name>
+                <Value>%(RetrieveBusinessProcessVariables_NoteText)</Value>
+              </InputParameter>
+              <InputParameter DbType="String">
+                <Name>?</Name>
+                <Value>%(RetrieveBusinessProcessVariables_uid_EmployeeNumber)</Value>
+              </InputParameter>
+            </Criteria>
+            <ResultSetSize Rows="ReturnAllRows" Count="2" />
+            <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+          </Activity>
+          <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="4c1c22e4-0030-4f08-affd-6f110ea25393">
+            <Name>spEMAIL_GetUpdatedServiceTicketEmailMessage</Name>
+            <SafeName>spEMAIL_GetUpdatedServiceTicketEmailMessage</SafeName>
+            <Enabled>True</Enabled>
+            <Description ShowDescription="null" ShowSummary="null">Performs the specified query in the selected data source.</Description>
+            <DataSourceId>0bd867a5-79a0-4e17-bbc3-4698975f2648</DataSourceId>
+            <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+              <Table Name="" HasIdentityColumn="false">
+                <Columns Generated="1/1/0001 12:00:00 AM">
+                  <Column Name="" Type="System.String" ReadOnly="False" />
+                </Columns>
+              </Table>
+              <CustomQuery>EXECUTE spEMAIL_GetUpdatedServiceTicketEmailMessage ?, ?</CustomQuery>
+              <InputParameter DbType="Int32">
+                <Name>?</Name>
+                <Value>%(RetrieveBusinessProcessVariables_tid)</Value>
+              </InputParameter>
+              <InputParameter>
+                <Name>?</Name>
+                <Value />
+              </InputParameter>
+            </Criteria>
+            <ResultSetSize Rows="ReturnAllRows" Count="2" />
+            <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+          </Activity>
+          <Activity Type="Laserfiche.Workflow.Activities.CreateToken.CreateTokenActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="59547165-dfc1-40cb-aca3-9ef34471ff03">
+            <Name>Store Email Text</Name>
+            <SafeName>StoreEmailText</SafeName>
+            <Enabled>True</Enabled>
+            <Description ShowDescription="null" ShowSummary="null">Creates new tokens and updates the values of existing tokens.</Description>
+            <Options>
+              <Tokens>
+                <TokenInformation Id="9e2dc829-656e-4af8-a97a-c5619c6ca756" IsMultivalued="false" UpdateExistingToken="false" AppendValues="false" TokenType="String">
+                  <TokenName>EMailText</TokenName>
+                  <TokenFullName />
+                  <ActivityName />
+                  <TokenValues>
+                    <TokenValue xml:space="preserve">%(spEMAIL_GetUpdatedServiceTicketEmailMessage_)</TokenValue>
+                  </TokenValues>
+                </TokenInformation>
+              </Tokens>
+            </Options>
+          </Activity>
+          <Activity Type="Laserfiche.Workflow.Activities.Email.EmailSequenceProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="24bf7cbf-a750-4bc1-834c-ab21da3d1a98">
+            <Name>Email</Name>
+            <SafeName>Email</SafeName>
+            <Enabled>True</Enabled>
+            <Description ShowDescription="null" ShowSummary="null">Sends an email to one or more people.</Description>
+            <Email TextOnlyBodyFormat="false" DeliveryReceipts="None">
+              <ToAddresses>
+                <Add>%(RetrieveBusinessProcessVariables_MetrologyEmail)</Add>
+              </ToAddresses>
+              <CcAddresses>
+                <Add>%(RetrieveBusinessProcessVariables_CarbonCopyEmailList)</Add>
+              </CcAddresses>
+              <BccAddresses />
+              <FromAddress />
+              <ReplyTo />
+              <Subject>Ticket %(RetrieveBusinessProcessVariables_Ticket_Number) Updated. (New Note)</Subject>
+              <Body>%(EMailText#"HTML"#)</Body>
+              <Priority>Normal</Priority>
+              <ServerReference />
+              <UseBodyLengthLimit null="true" />
+              <Attachments>
+                <ExportedEntries />
+                <Options>
+                  <UseZipFile>false</UseZipFile>
+                  <LimitEntrySize>false</LimitEntrySize>
+                  <EntrySizeLimit>51200</EntrySizeLimit>
+                  <ReplaceBigEntriesWithShortcut>false</ReplaceBigEntriesWithShortcut>
+                  <NotifyForEntriesFiles>true</NotifyForEntriesFiles>
+                  <NotifyForNoContentEntries>true</NotifyForNoContentEntries>
+                  <AttachShortcutForNoContentEntries>false</AttachShortcutForNoContentEntries>
+                </Options>
+              </Attachments>
+            </Email>
+          </Activity>
+          <Activity Type="Laserfiche.Workflow.Activities.Condition.ConditionalSequenceActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="357a8e46-a64d-4ef8-927e-9cdbb41b0abc">
+            <Name>If Department Email Does not equal Metrology Email</Name>
+            <SafeName>IfDepartmentEmailDoesnotequalMetrologyEmail</SafeName>
+            <Enabled>True</Enabled>
+            <Description ShowDescription="null" ShowSummary="null">A sequence activity that only performs the contained activities if the conditions are satisfied.</Description>
+            <ProfileId>97946dcd-48c8-4188-b91c-e0136316d2cb</ProfileId>
+            <Condition Version="10.4.3.139" Name="" Negated="false" IsConjunction="true" ConditionType="Composite" Description="">
+              <Conditions>
+                <Condition ConditionType="Token" Operator="NotEqual">
+                  <Token Name="MetrologyEmail" Length="0" MetaType="String, Field">
+                    <Activity Display="Retrieve Business Process Variables" Append="true">RetrieveBusinessProcessVariables</Activity>
+                  </Token>
+                  <Values>
+                    <Value>%(RetrieveBusinessProcessVariables_Department_Email)</Value>
+                  </Values>
+                </Condition>
+              </Conditions>
+            </Condition>
+            <Activities>
+              <Activity Type="Laserfiche.Workflow.Activities.Email.EmailSequenceProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="2c7d96e3-55f8-4d8c-9194-f509c74b0122">
+                <Name>Email 2</Name>
+                <SafeName>Email2</SafeName>
+                <Enabled>True</Enabled>
+                <Description ShowDescription="null" ShowSummary="null">Sends an email to one or more people.</Description>
+                <Email TextOnlyBodyFormat="false" DeliveryReceipts="None">
+                  <ToAddresses>
+                    <Add>%(RetrieveBusinessProcessVariables_Department_Email)</Add>
+                  </ToAddresses>
+                  <CcAddresses />
+                  <BccAddresses />
+                  <FromAddress />
+                  <ReplyTo />
+                  <Subject>Ticket %(RetrieveBusinessProcessVariables_Ticket_Number) Updated. (New Note)</Subject>
+                  <Body>%(EMailText#"HTML"#)</Body>
+                  <Priority>Normal</Priority>
+                  <ServerReference>4077de1d-5b52-4206-ab92-e69e4e7c5008</ServerReference>
+                  <UseBodyLengthLimit null="true" />
+                  <Attachments>
+                    <ExportedEntries />
+                    <Options>
+                      <UseZipFile>false</UseZipFile>
+                      <LimitEntrySize>false</LimitEntrySize>
+                      <EntrySizeLimit>51200</EntrySizeLimit>
+                      <ReplaceBigEntriesWithShortcut>false</ReplaceBigEntriesWithShortcut>
+                      <NotifyForEntriesFiles>true</NotifyForEntriesFiles>
+                      <NotifyForNoContentEntries>true</NotifyForNoContentEntries>
+                      <AttachShortcutForNoContentEntries>false</AttachShortcutForNoContentEntries>
+                    </Options>
+                  </Attachments>
+                </Email>
+              </Activity>
+            </Activities>
+            <FaultHandlers />
+          </Activity>
+          <Activity Type="Laserfiche.Workflow.Activities.Tracking.TrackTokenActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="ccf35384-c7d9-4ef9-b061-1428c0d6790a">
+            <Name>Track Tokens</Name>
+            <SafeName>TrackTokens</SafeName>
+            <Enabled>True</Enabled>
+            <Description ShowDescription="null" ShowSummary="null">Records the values of selected tokens when the workflow runs. You can view these values in the Tokens tab in the workflow's Search Details pane.</Description>
+            <Options TrackTokenManager="true">
+              <Tokens />
+            </Options>
+          </Activity>
+        </Activities>
+        <FaultHandlers />
+      </SequentialWorkflowActivityProxy>
+      <CanvasUI>
+        <Expanded>True</Expanded>
+        <Activity Name="Retrieve Business Process Variables" Key="b88b4890-7ccb-45e9-bd6c-9b5fdad0c872" />
+        <Activity Name="spSERVICETICKET_AddNote" Key="8ad184d9-fbf2-4ef0-b229-07888cc4ee8d" />
+        <Activity Name="spEMAIL_GetUpdatedServiceTicketEmailMessage" Key="4c1c22e4-0030-4f08-affd-6f110ea25393" />
+        <Activity Name="Store Email Text" Key="59547165-dfc1-40cb-aca3-9ef34471ff03" />
+        <Activity Name="Email" Key="24bf7cbf-a750-4bc1-834c-ab21da3d1a98" />
+        <Activity Name="If Department Email Does not equal Metrology Email" Key="357a8e46-a64d-4ef8-927e-9cdbb41b0abc">
+          <Expanded>True</Expanded>
+          <Activity Name="Email 2" Key="2c7d96e3-55f8-4d8c-9194-f509c74b0122" />
+        </Activity>
+        <Activity Name="Track Tokens" Key="ccf35384-c7d9-4ef9-b061-1428c0d6790a" />
+        <UseCompactLayout>false</UseCompactLayout>
+        <ZoomLevel>1.0</ZoomLevel>
+      </CanvasUI>
+    </Designer>
+    <CreationRules Count="0" />
+    <Schedules Count="0" />
+  </ExportedWorkflow>
+  <LinkedObjects Count="3">
+    <LinkedObject>
+      <Id>47</Id>
+      <Name>LF_RMS_COMMS_MPM</Name>
+      <Description />
+      <AttachmentType>DataSource</AttachmentType>
+      <LinkedWorkflows Count="1">
+        <LinkInfo>
+          <WorkflowName>RMS-MPM-AddServiceTicketNote</WorkflowName>
+        </LinkInfo>
+      </LinkedWorkflows>
+      <XmlValue>&lt;SourceInformation DataSourceType="Odbc" DSNType="System" Authenticated="true"&gt;
+  &lt;Location&gt;
+    &lt;HostName&gt;rms-corplfsql1.cretexinc.com&lt;/HostName&gt;
+    &lt;ServerInstance /&gt;
+    &lt;DatabaseName&gt;LF_RMS_COMMS_MPM&lt;/DatabaseName&gt;
+    &lt;LocationType&gt;ServerDatabase&lt;/LocationType&gt;
+  &lt;/Location&gt;
+  &lt;Authentication&gt;
+    &lt;UserName&gt;&lt;/UserName&gt;
+    &lt;SecureString Version="2" Value="" /&gt;
+  &lt;/Authentication&gt;
+  &lt;Adapter&gt;
+    &lt;type key="sql" default="false" category="ODBC"&gt;
+      &lt;typename&gt;Laserfiche.Project.Data.Runtime.Odbc.Sql, Laserfiche.Project.Data, Version=9.0.0.0, Culture=neutral, PublicKeyToken=607dd73ee2bd1c00&lt;/typename&gt;
+      &lt;names default="Sql"&gt;
+        &lt;add code="en" value="Sql" /&gt;
+      &lt;/names&gt;
+    &lt;/type&gt;
+  &lt;/Adapter&gt;
+  &lt;OtherOptions ActualType="Laserfiche.Collections.PropertyBag, Laserfiche.Base, Version=9.0.0.0, Culture=neutral, PublicKeyToken=607dd73ee2bd1c00"&gt;
+    &lt;Properties /&gt;
+  &lt;/OtherOptions&gt;
+&lt;/SourceInformation&gt;</XmlValue>
+    </LinkedObject>
+    <LinkedObject>
+      <Id>10</Id>
+      <Name>LF Notfications</Name>
+      <Description />
+      <AttachmentType>EmailServer</AttachmentType>
+      <LinkedWorkflows Count="1">
+        <LinkInfo>
+          <WorkflowName>RMS-MPM-AddServiceTicketNote</WorkflowName>
+        </LinkInfo>
+      </LinkedWorkflows>
+      <XmlValue>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;EmailServer IsProtected="true" SendTimeout="-1"&gt;
+  &lt;Name /&gt;
+  &lt;NetworkAddress&gt;rms-intstmprelay&lt;/NetworkAddress&gt;
+  &lt;Port&gt;25&lt;/Port&gt;
+  &lt;UserName /&gt;
+  &lt;Password&gt;6Dd9xl/YoLU=&lt;/Password&gt;
+  &lt;From&gt;LF_Notifications@machine.com&lt;/From&gt;
+  &lt;DefaultSubject /&gt;
+  &lt;UseIISPickup&gt;false&lt;/UseIISPickup&gt;
+  &lt;PickupDirectory /&gt;
+  &lt;UseSSL&gt;false&lt;/UseSSL&gt;
+  &lt;UseDefaultAuthentication&gt;true&lt;/UseDefaultAuthentication&gt;
+&lt;/EmailServer&gt;</XmlValue>
+    </LinkedObject>
+    <LinkedObject>
+      <Id>18</Id>
+      <Name>LFForms</Name>
+      <Description />
+      <AttachmentType>WebService</AttachmentType>
+      <LinkedWorkflows Count="1">
+        <LinkInfo>
+          <WorkflowName>RMS-MPM-AddServiceTicketNote</WorkflowName>
+        </LinkInfo>
+      </LinkedWorkflows>
+      <XmlValue>&lt;WebService ServiceURL="http://rmslf/forms" WebServiceType="Laserfiche Forms" RunAsTasks="true" AcceptInvalidCertificates="true" /&gt;</XmlValue>
+    </LinkedObject>
+  </LinkedObjects>
+</ExportedWorkflows>

@@ -1,0 +1,195 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ExportedWorkflows Version="8.3.0.0" Count="1">
+  <ExportedWorkflow>
+    <Designer Version="10.4.3.139">
+      <SequentialWorkflowActivityProxy Type="Laserfiche.Workflow.Activities.Proxies.LfSequentialWorkflowProxy, Laserfiche.Workflow.Designer.Base, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="b1c99e8f-14de-4886-8e7f-28f61ff01539" ActivityCountHint="2">
+        <Name>RMS-GAGE-GageAdministration</Name>
+        <SafeName>RMSGAGEGageAdministration</SafeName>
+        <Enabled>True</Enabled>
+        <Description ShowDescription="null" ShowSummary="null" />
+        <AttachedProperties>
+          <Property Key="WorkflowWebServiceCollection" PropertyType="WebServices">
+            <LinkedProperties Default="">
+              <LinkedProperty ServiceURL="http://rmslf/forms" User="admin" Type="Laserfiche Forms">
+                <Name>LFForms</Name>
+                <Id>18</Id>
+                <Uuid>91ae35ae-a69f-48b8-8001-645f6bd3a3ac</Uuid>
+                <Offline />
+              </LinkedProperty>
+            </LinkedProperties>
+          </Property>
+          <Property Key="WorkflowDataSourceCollection" PropertyType="DataSources">
+            <LinkedProperties Default="">
+              <LinkedProperty>
+                <Name>GageCheckout</Name>
+                <Id>46</Id>
+                <Uuid>086d56c1-457c-4cf6-93ef-33e96e4a4056</Uuid>
+                <Offline />
+                <Information>
+                  <SourceInformation Flags="OdbcType, ServerDatabase, UseSSPI" Adapter="Sql">
+                    <Host>rms-corplfsql1.cretexinc.com</Host>
+                    <Database>GageCheckout</Database>
+                    <Server />
+                    <User />
+                  </SourceInformation>
+                </Information>
+              </LinkedProperty>
+            </LinkedProperties>
+          </Property>
+        </AttachedProperties>
+        <Projects>
+          <CSharpProject />
+          <VBProject />
+        </Projects>
+        <WorkflowBusinessProcessOptions LfProcessId="0" ProfileId="" Flags="AllowStartingFromClients, CreateBusinessProcessEntity, RecordMilestoneEvents, RecordStepEvents, SetStartingMilestone, SetCompletedMilestone, SetCanceledMilestone" Enabled="false">
+          <Milestones>
+            <Starting>Running</Starting>
+            <Completed>Completed</Completed>
+            <Canceled>Terminated</Canceled>
+          </Milestones>
+          <CustomInstanceName />
+        </WorkflowBusinessProcessOptions>
+        <WorkflowParameters SetOutputValuesViaTokens="true" />
+        <Cultures>
+          <Culture>en-us</Culture>
+        </Cultures>
+        <MetadataStore Attributes="ExpectsStartingEntry, ValidateDesign">
+          <VersionHistory>
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp972E.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="07/25/2025 09:58:51" EndTime="07/25/2025 11:26:19" />
+          </VersionHistory>
+          <Metadata>
+            <Value Item="Author" Type="String">JTWhitney</Value>
+          </Metadata>
+        </MetadataStore>
+        <Activities>
+          <Activity Type="Laserfiche.Workflow.Activities.Forms.RetrieveFormFieldValueProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="1a4e9ea9-8264-42f0-ac98-44c59c1e228b">
+            <Name>Retrieve Business Process Variables</Name>
+            <SafeName>RetrieveBusinessProcessVariables</SafeName>
+            <Enabled>True</Enabled>
+            <Description ShowDescription="null" ShowSummary="null">Retrieves the values from a Laserfiche Forms business process instance and stores those values as tokens.</Description>
+            <RetrieveFormFieldValueOptions Id="91ae35ae-a69f-48b8-8001-645f6bd3a3ac" OPT123332="true">
+              <SubmissionOptions UseStarting="true" SubmissionId="" InstanceId="" UseStartingInstance="true" />
+              <ProcessOptions ProcessId="41" ProcessName="RMS-GAGE-GageAdministration" />
+              <Fields>
+                <Attribute AttributeId="5088" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Activate_Department_ID" AttributeName="Activate_Department_ID" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Gage Ticket Administration" MemberPath="5101" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="5087" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Activate_Emp_Name" AttributeName="Activate_Emp_Name" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Gage Ticket Administration" MemberPath="5100" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="5086" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Activate_Emp_Nbr" AttributeName="Activate_Emp_Nbr" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Gage Ticket Administration" MemberPath="5099" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="5081" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Job/Lot Number:" AttributeName="Activate_JobLot" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Gage Ticket Administration" MemberPath="5094" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="5092" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="ActivateGUID" AttributeName="ActivateGUID" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Gage Ticket Administration" MemberPath="5105" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="5091" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="ActivateMachineGroupID" AttributeName="ActivateMachineGroupID" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Gage Ticket Administration" MemberPath="5104" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="5093" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="ActivateMachineList" AttributeName="ActivateMachineList" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Gage Ticket Administration" MemberPath="5106" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="5089" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="ActivateTicketID" AttributeName="ActivateTicketID" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Gage Ticket Administration" MemberPath="5102" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="5090" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="ActiveateCellLeaderID" AttributeName="ActiveateCellLeaderID" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="RMS-GAGE-Gage Ticket Administration" MemberPath="5103" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+              </Fields>
+              <AdditionalVariableOptions>
+                <RetrievePaymentVariables>false</RetrievePaymentVariables>
+              </AdditionalVariableOptions>
+            </RetrieveFormFieldValueOptions>
+          </Activity>
+          <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="06191a95-240a-4f50-a59a-2b87a26ddda8">
+            <Name>spActivateTicket</Name>
+            <SafeName>spActivateTicket</SafeName>
+            <Enabled>True</Enabled>
+            <Description ShowDescription="null" ShowSummary="null">Performs the specified query in the selected data source.</Description>
+            <DataSourceId>086d56c1-457c-4cf6-93ef-33e96e4a4056</DataSourceId>
+            <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+              <CustomQuery>EXECUTE spActivateTicket ?,?,?,?,?,?,?,?</CustomQuery>
+              <InputParameter DbType="Int32">
+                <Name>?</Name>
+                <Value>%(RetrieveBusinessProcessVariables_ActivateTicketID)</Value>
+              </InputParameter>
+              <InputParameter DbType="String">
+                <Name>?</Name>
+                <Value>%(RetrieveBusinessProcessVariables_Activate_Emp_Nbr)</Value>
+              </InputParameter>
+              <InputParameter DbType="String">
+                <Name>?</Name>
+                <Value>%(RetrieveBusinessProcessVariables_Activate_Emp_Name)</Value>
+              </InputParameter>
+              <InputParameter DbType="Int32">
+                <Name>?</Name>
+                <Value>%(RetrieveBusinessProcessVariables_ActivateMachineGroupID)</Value>
+              </InputParameter>
+              <InputParameter DbType="Int32">
+                <Name>?</Name>
+                <Value>%(RetrieveBusinessProcessVariables_ActiveateCellLeaderID)</Value>
+              </InputParameter>
+              <InputParameter DbType="String">
+                <Name>?</Name>
+                <Value>%(RetrieveBusinessProcessVariables_Activate_JobLot)</Value>
+              </InputParameter>
+              <InputParameter DbType="String">
+                <Name>?</Name>
+                <Value>%(RetrieveBusinessProcessVariables_ActivateMachineList)</Value>
+              </InputParameter>
+              <InputParameter DbType="String">
+                <Name>?</Name>
+                <Value>%(RetrieveBusinessProcessVariables_Activate_Emp_Nbr)</Value>
+              </InputParameter>
+            </Criteria>
+            <ResultSetSize Rows="ReturnAllRows" Count="2" />
+            <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+          </Activity>
+        </Activities>
+        <FaultHandlers />
+      </SequentialWorkflowActivityProxy>
+      <CanvasUI>
+        <Expanded>True</Expanded>
+        <Activity Name="Retrieve Business Process Variables" Key="1a4e9ea9-8264-42f0-ac98-44c59c1e228b" />
+        <Activity Name="spActivateTicket" Key="06191a95-240a-4f50-a59a-2b87a26ddda8" />
+        <UseCompactLayout>false</UseCompactLayout>
+        <ZoomLevel>1.0</ZoomLevel>
+      </CanvasUI>
+    </Designer>
+    <CreationRules Count="0" />
+    <Schedules Count="0" />
+  </ExportedWorkflow>
+  <LinkedObjects Count="2">
+    <LinkedObject>
+      <Id>46</Id>
+      <Name>GageCheckout</Name>
+      <Description />
+      <AttachmentType>DataSource</AttachmentType>
+      <LinkedWorkflows Count="1">
+        <LinkInfo>
+          <WorkflowName>RMS-GAGE-GageAdministration</WorkflowName>
+        </LinkInfo>
+      </LinkedWorkflows>
+      <XmlValue>&lt;SourceInformation DataSourceType="Odbc" DSNType="User" Authenticated="true"&gt;
+  &lt;Location&gt;
+    &lt;HostName&gt;rms-corplfsql1.cretexinc.com&lt;/HostName&gt;
+    &lt;ServerInstance /&gt;
+    &lt;DatabaseName&gt;GageCheckout&lt;/DatabaseName&gt;
+    &lt;LocationType&gt;ServerDatabase&lt;/LocationType&gt;
+  &lt;/Location&gt;
+  &lt;Authentication&gt;
+    &lt;UserName&gt;&lt;/UserName&gt;
+    &lt;SecureString Version="2" Value="" /&gt;
+  &lt;/Authentication&gt;
+  &lt;Adapter&gt;
+    &lt;type key="sql" default="false" category="ODBC"&gt;
+      &lt;typename&gt;Laserfiche.Project.Data.Runtime.Odbc.Sql, Laserfiche.Project.Data, Version=9.0.0.0, Culture=neutral, PublicKeyToken=607dd73ee2bd1c00&lt;/typename&gt;
+      &lt;names default="Sql"&gt;
+        &lt;add code="en" value="Sql" /&gt;
+      &lt;/names&gt;
+    &lt;/type&gt;
+  &lt;/Adapter&gt;
+  &lt;OtherOptions ActualType="Laserfiche.Collections.PropertyBag, Laserfiche.Base, Version=9.0.0.0, Culture=neutral, PublicKeyToken=607dd73ee2bd1c00"&gt;
+    &lt;Properties /&gt;
+  &lt;/OtherOptions&gt;
+&lt;/SourceInformation&gt;</XmlValue>
+    </LinkedObject>
+    <LinkedObject>
+      <Id>18</Id>
+      <Name>LFForms</Name>
+      <Description />
+      <AttachmentType>WebService</AttachmentType>
+      <LinkedWorkflows Count="1">
+        <LinkInfo>
+          <WorkflowName>RMS-GAGE-GageAdministration</WorkflowName>
+        </LinkInfo>
+      </LinkedWorkflows>
+      <XmlValue>&lt;WebService ServiceURL="http://rmslf/forms" WebServiceType="Laserfiche Forms" RunAsTasks="true" AcceptInvalidCertificates="true" /&gt;</XmlValue>
+    </LinkedObject>
+  </LinkedObjects>
+</ExportedWorkflows>
