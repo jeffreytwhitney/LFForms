@@ -33,26 +33,31 @@ Key Concepts:
      task types and their IDs. So when the page loads, we read that table and build two maps: one for ID?Name and one for Name?ID.
      When the user selects a task type, we look up the ID by name and set the value of the hidden field.
 
-    LaserFiche Events:
-     There are two key LaserFiche events used in this script:
-          onloadlookupfinished: The event fires only once, when all of the initial lookups have completed. 
-          lookupcomplete: This event fires each time a lookup completes after onloadlookupfinished. This generally occurs when the users
-          changes a field where there is a LF Lookup rule. This event can fire multiple times during the lifetime of the form.
-     Now this gets a bit tricky because the lookupcomplete event can fire multiple times, and we only want to do certain things once, so we need
-     to put logic in there so that it's not doing expensive things again and again.
-     There is a way of asking what the TriggerID of the lookup is. (A laserfiche function). But I found this to be kind of a pain to use because
-     you have to know the TriggerID of the lookup that you want to respond to and it's just an integer. Also, if you ever change anything 
-     in the form, you don't know if the trigger id has changed or not. So I found it easier to just put logic in the function that I want to run. 
-     
-     Take Mapping, for example. We have a tasktypeMap which we want to fill in once the hidden tasktype lookup table has been populated by LFF.
-     You would think then that we could put the call to this function in the onloadlookupfinished event,
-     but the problem with that is that when the onloadlookupfinished event fires, the lookup table may not have been populated yet.
-     In this instance, I don't know why this should be the case, but it is. 
-     Because of this, we have to put the call to loadTaskTypeMap() in the lookupcomplete event, but we don't want to do it every time the event fires,
-     so there's a check in there that asks whether the map has already been populated, and if it has, it doesn't do anything.
-     Also, because of the way permissions works, a lot of the hidden fields that we use to determine the user's department and user type
-     only get populated after we fill in the network user name and trigger a change event on that field. So the onloadlookupfinished event
-     has already been fired. Permissions to do stuff all run on the UserTypeID field, so we have to wait until that field is populated.
+  LaserFiche Events:
+    There are two key LaserFiche events used in this script:
+        - onloadlookupfinished: The event fires only once, when all of the initial lookups have completed. The kinds of lookups that are completed
+                                under this event are the ones that do not have any arguments in them, meaning that they can be looked up immediately.
+                                Examples of this would be Task Types and Task Statuses. These lookups do not depend on any other fields being set.
+        - lookupcomplete: This event fires each time a lookup completes after the onloadlookupfinished event has been called. 
+                          Laserfiche has lookup rules applied to certain fields, so that when a field is changed, it triggers a lookup to fill in other fields.
+                          The fields themselves can either be changed by the user directly, or indirectly. 
+                          An example of an direct change would be when the user chooses a Site from the dropdown. 
+        
+  
+    Now this gets a bit tricky because the lookupcomplete event can fire multiple times, and we only want to do certain things once, so we need
+    to put logic in there so that it's not doing expensive things again and again.
+    There is a way of asking what the TriggerID of the lookup is. (A laserfiche function). But I found this to be kind of a pain to use because
+    you have to know the TriggerID of the lookup that you want to respond to and it's just an integer. Also, if you ever change anything 
+    in the form, you don't know if the trigger id has changed or not. So I found it easier to just put logic in the function that I want to run
+    to make sure that it doesn't, say iterate through a table or something getting values again and again when we only need it to do it once.
+  
+    For an example of what I'm talking about, we're setting the user name field in code and causing a lookup, (see 'User Permissions' above).
+    Because we're setting the field in code and causing a lookup, the onloadlookupfinished event has already fired. Therefore, any logic that 
+    relies on user fields being populated won't work if you call them from the onloadlookupfinished event. Instead, we have to call them from 
+    the lookupcomplete event. The unfortunate side effect of this is that the lookupcomplete event can fire multiple times, 
+    so we have to put logic in there so that it's not doing expensive things again and again. If you do this wrong, you can seriously lengthen
+    the load time of the form. Sometimes this is sort of unavoidable because of the way the LFF Lookup rules work, 
+    but you want to minimize it as much as possible.
  
 
 Dependencies

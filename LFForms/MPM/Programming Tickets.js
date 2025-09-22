@@ -44,9 +44,14 @@
 
    LaserFiche Events:
       There are two key LaserFiche events used in this script:
-          - onloadlookupfinished: The event fires only once, when all of the initial lookups have completed. 
-          - lookupcomplete: This event fires each time a lookup completes after onloadlookupfinished. This generally occurs when the users
-            changes a field where there is a LF Lookup rule. This event can fire multiple times during the lifetime of the form.
+          - onloadlookupfinished: The event fires only once, when all of the initial lookups have completed. The kinds of lookups that are completed
+                                  under this event are the ones that do not have any arguments in them, meaning that they can be looked up immediately.
+                                  Examples of this would be Task Types and Task Statuses. These lookups do not depend on any other fields being set.
+          - lookupcomplete: This event fires each time a lookup completes after the onloadlookupfinished event has been called. 
+                            Laserfiche has lookup rules applied to certain fields, so that when a field is changed, it triggers a lookup to fill in other fields.
+                            The fields themselves can either be changed by the user directly, or indirectly. 
+                            An example of an direct change would be when the user chooses a Site from the dropdown. 
+          
     
       Now this gets a bit tricky because the lookupcomplete event can fire multiple times, and we only want to do certain things once, so we need
       to put logic in there so that it's not doing expensive things again and again.
@@ -62,6 +67,17 @@
       so we have to put logic in there so that it's not doing expensive things again and again. If you do this wrong, you can seriously lengthen
       the load time of the form. Sometimes this is sort of unavoidable because of the way the LFF Lookup rules work, 
       but you want to minimize it as much as possible.
+
+      Daisy-Chaining Lookups:
+        A side-effect of the way lookups work is how they sometimes daisy-chain. Let me explain with an example:
+        In our example, we have four fields: LFUserName, NetworkUserName, SiteID, DepartmentLookupTable.
+        At the beginning the only field which has anything in it is LFUserName, because LF has filled it in for us.
+        We take that value, keeping only the username portion an dput that in NetworkUserName. 
+        This causes a lookup for all of the user related fields, including SiteID. Once the SiteID is set, this in turn
+        causes another lookup to pull in all the departments related to that site. The Departments Lookup cannot be loaded until 
+        we know which site we're talking about. Sometimes this daisy-chaining can get 3 and sometimes even 4 levels deep because of all the relationships between
+        various fields on a form. This causes the form to be slower than it otherwise would have been, but there's not a lot we can do about it.
+        It sort of is what it is. This is what happens when you have to make an application with a non-application framework.
    
    Page Refresh Quirks:
       There are two ways that the page can be programmatically refreshed. One is via the filter/sort/pagination mechanism described below, 
@@ -225,7 +241,16 @@
         so that the pagination logic is flawless. There are also a bunch of pages that use pagination, so we'd have to have an extra sproc
         for every page that uses pagination. And then there's the extra client-side processing of making a bunch of extra buttons and what not.
         Honestly, the page is slow enough as it is without adding a bunch of extra code for, again, functionality that no one really uses.
-     
+
+     Mapping:
+     There are several differnent lookup tables on the form which are used to populate dropdowns, nearly all of which are for filtering.
+     Task types are stored both as ID?Name and Name?ID because LFF only stores the display value in the select, for example, the TaskType
+     select shows the names of the task types, but we are storing the TaskTypeID in a the database, so we need to have a way to 
+     figure out what the TaskTypeID is so that we can set the value of the hidden field that the workflow is going to use to 
+     set the value in the task table. So we need to be able to look up the ID by name when the user selects a task type.
+     The only way I've been able to figure out how to do this is to have a hidden lookup table on the page which contains all of the 
+     task types and their IDs. So when the page loads, we read that table and build two maps: one for ID?Name and one for Name?ID.
+     When the user selects a task type, we look up the ID by name and set the value of the hidden field.    
 
   DOM assumptions (LF Forms-like structure):
   - Hidden fields drive server-side queries (e.g., `.pg input`, `.ftname input`, `.fpname input`, `.fpid input`, `.fdid input`, `.fqeid input`, `.finitemp input`, etc.).

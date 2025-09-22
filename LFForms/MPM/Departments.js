@@ -21,20 +21,42 @@ Key Concepts:
    username portion (trimming off the "CRETEX/" part) into the .network-user-name field, which is what gets posted back to the server.
    This will be matched against the user database to determine the user's ID, user type, and department.
  
- LaserFiche Events:
-   There are two key LaserFiche events used in this script:
-      - onloadlookupfinished: The event fires only once, when all of the initial lookups have completed. 
-      - lookupcomplete: This event fires each time a lookup completes after onloadlookupfinished. This generally occurs when the users
-        changes a field where there is a LF Lookup rule. This event can fire multiple times during the lifetime of the form.
-   Now this gets a bit tricky because the lookupcomplete event can fire multiple times, and we only want to do certain things once, so we need
-   to put logic in there so that it's not doing expensive things again and again.
-   There is a way of asking what the TriggerID of the lookup is. (A laserfiche function). But I found this to be kind of a pain to use because
-   you have to know the TriggerID of the lookup that you want to respond to and it's just an integer. Also, if you ever change anything 
-   in the form, you don't know if the trigger id has changed or not. So I found it easier to just put logic in the function that I want to run. 
-   For an example of what I'm talking about, we're setting the user name field in code and causing a lookup, (see 'User Permissions' above).
-   Because we're setting the field in code and causing a lookup, the onloadlookupfinished event has already fired. Therefore, any logic that 
-   relies on user fields being populated won't work if you call them from the onloadlookupfinished event. Instead, we have to call them from the lookupcomplete event.
-   The unfortunate side effect of this is that the lookupcomplete event can fire multiple times, so we have to put logic in there so that it's not doing expensive things again and again.
+   LaserFiche Events:
+      There are two key LaserFiche events used in this script:
+          - onloadlookupfinished: The event fires only once, when all of the initial lookups have completed. The kinds of lookups that are completed
+                                  under this event are the ones that do not have any arguments in them, meaning that they can be looked up immediately.
+                                  Examples of this would be Task Types and Task Statuses. These lookups do not depend on any other fields being set.
+          - lookupcomplete: This event fires each time a lookup completes after the onloadlookupfinished event has been called. 
+                            Laserfiche has lookup rules applied to certain fields, so that when a field is changed, it triggers a lookup to fill in other fields.
+                            The fields themselves can either be changed by the user directly, or indirectly. 
+                            An example of an direct change would be when the user chooses a Site from the dropdown. 
+          
+    
+      Now this gets a bit tricky because the lookupcomplete event can fire multiple times, and we only want to do certain things once, so we need
+      to put logic in there so that it's not doing expensive things again and again.
+      There is a way of asking what the TriggerID of the lookup is. (A laserfiche function). But I found this to be kind of a pain to use because
+      you have to know the TriggerID of the lookup that you want to respond to and it's just an integer. Also, if you ever change anything 
+      in the form, you don't know if the trigger id has changed or not. So I found it easier to just put logic in the function that I want to run
+      to make sure that it doesn't, say iterate through a table or something getting values again and again when we only need it to do it once.
+    
+      For an example of what I'm talking about, we're setting the user name field in code and causing a lookup, (see 'User Permissions' above).
+      Because we're setting the field in code and causing a lookup, the onloadlookupfinished event has already fired. Therefore, any logic that 
+      relies on user fields being populated won't work if you call them from the onloadlookupfinished event. Instead, we have to call them from 
+      the lookupcomplete event. The unfortunate side effect of this is that the lookupcomplete event can fire multiple times, 
+      so we have to put logic in there so that it's not doing expensive things again and again. If you do this wrong, you can seriously lengthen
+      the load time of the form. Sometimes this is sort of unavoidable because of the way the LFF Lookup rules work, 
+      but you want to minimize it as much as possible.
+
+      Daisy-Chaining Lookups:
+        A side-effect of the way lookups work is how they sometimes daisy-chain. Let me explain with an example:
+        In our example, we have four fields: LFUserName, NetworkUserName, SiteID, DepartmentLookupTable.
+        At the beginning the only field which has anything in it is LFUserName, because LF has filled it in for us.
+        We take that value, keeping only the username portion an dput that in NetworkUserName. 
+        This causes a lookup for all of the user related fields, including SiteID. Once the SiteID is set, this in turn
+        causes another lookup to pull in all the departments related to that site. The Departments Lookup cannot be loaded until 
+        we know which site we're talking about. Sometimes this daisy-chaining can get 3 and sometimes even 4 levels deep because of all the relationships between
+        various fields on a form. This causes the form to be slower than it otherwise would have been, but there's not a lot we can do about it.
+        It sort of is what it is. This is what happens when you have to make an application with a non-application framework.
   
  Key DOM fields/classes:
  - `.lf-user-name input`                 Raw network identity (domain\user).
