@@ -4,6 +4,10 @@
     <TypeScriptConfiguration Remove="MPM\SQL\Stored Procedure\**" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="GageCheckout\SQL\Functions\" />
+    <Folder Include="GageCheckout\SQL\Tables\" />
+    <Folder Include="GageCheckout\SQL\Views\" />
+    <Folder Include="GageCheckout\SQL\Stored Procedures\" />
     <Folder Include="GageCheckout\Workflows\" />
     <Folder Include="MPM\UPN\" />
     <Folder Include="MPM\SQL\Tables\" />
