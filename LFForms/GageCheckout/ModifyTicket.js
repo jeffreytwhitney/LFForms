@@ -69,6 +69,7 @@ $(document).ready(function () {
     generateFilterRow();
     reApplyFilterValues();
     appendPagination();
+    fillMachineNameCombos();
     if ($('.details-ticket-type-id input').val() == '2') {
       setDailyCalValues();
     }
@@ -100,7 +101,7 @@ $(document).ready(function () {
     this.value = this.value.toLocaleUpperCase();
   });
 
-  $(document).on('change', '[id^="Field122"]', function (e) {
+  $(document).on('change', '[id^="Field152"]', function (e) {
     generateMachineList();
   });
 
@@ -240,6 +241,19 @@ function callReturnTicket() {
   });
 }
 
+
+function fillMachineNameCombos() {
+  var machineNameInputs = $('[id^="Field122"]');
+
+  $('[id^="Field152"]').each(function (index, element) {
+    if ($(element).val() == '') {
+      let machineNameInput = machineNameInputs[index];
+      let machineNameInputVal = $(machineNameInput).val();
+      $(element).val(machineNameInputVal).change();
+    }
+    
+  });
+}
 
 function filterTicketTable() {
 
@@ -381,7 +395,7 @@ function generateMachineList() {
 
   if (detailTicketID != '') {
 
-    $('[id^="Field122"]').each(function (index, element) {
+    $('[id^="Field152"]').each(function (index, element) {
       machineName = $(element).val();
       if (machineName != '') {
         if (machineList.length > 0) {
