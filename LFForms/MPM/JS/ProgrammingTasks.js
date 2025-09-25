@@ -371,7 +371,7 @@ $(document).ready(function () {
     // Host element for modal iframe dialogs.    // Host element for modal iframe dialogs.
     $('#q0').append("<div class='hidden-text' id='popUpDiv'></div>");
 
-    $(".tasklist-filter-checks input").on("change", function () { filterTaskListTable(); });
+    $(".tasklist-filter-checks input").on("change", function () { filterTable(); });
 
     //See "Page Refresh Quirks" above.
     if ($('.tasklist-page input').val() == '999') {
@@ -553,7 +553,7 @@ function colorCodeRows() {
  * Push filter UI values into their backing hidden fields and refresh the list.
  * Reads values from the filter row controls.
  */
-function filterTaskListTable() {
+function filterTable() {
   $('.tasklist-assignee-cbo-col select').off();
   $('.tasklist-duedate-col input[type="text"]').off();
   $('.tasklist-schedduedate-col input[type="text"]').off();
@@ -663,14 +663,14 @@ function generateFilterRow() {
 
     var filter_row = "<TR id='filterRow'><TH/><TH/><TH/><TH/><TH/><TH/><TH><input id='txtFilter_TicketNumber'/></TH><TH><input type='text' id='txtFilter_ProjectName'></TH><TH><input type='text' id='txtFilter_TaskName'></TH><TH/><TH/><TH/><TH><select id='cboFilter_Status'/></TH><TH><select id='cboFilter_TaskType'/></TH><TH><select id='cboFilter_Assignee'/></TH><TH/><TH/><TH/><TH><TH/><TH/><TH><select id='cboFilter_Department'/></TH><TH><select id='cboFilter_Initiator'/></TH><TH/><TH/></TR>"
     $('.tasklist-table table thead').append(filter_row);
-    $("#txtFilter_TicketNumber").on("change", function () { filterTaskListTable(); });
-    $("#txtFilter_ProjectName").on("change", function () { filterTaskListTable(); });
-    $("#txtFilter_TaskName").on("change", function () { filterTaskListTable(); });
-    $("#cboFilter_Status").on("change", function () { filterTaskListTable(); });
-    $("#cboFilter_TaskType").on("change", function () { filterTaskListTable(); });
-    $("#cboFilter_Assignee").on("change", function () { filterTaskListTable(); });
-    $("#cboFilter_Department").on("change", function () { filterTaskListTable(); });
-    $("#cboFilter_Initiator").on("change", function () { filterTaskListTable(); });
+    $("#txtFilter_TicketNumber").on("change", function () { filterTable(); });
+    $("#txtFilter_ProjectName").on("change", function () { filterTable(); });
+    $("#txtFilter_TaskName").on("change", function () { filterTable(); });
+    $("#cboFilter_Status").on("change", function () { filterTable(); });
+    $("#cboFilter_TaskType").on("change", function () { filterTable(); });
+    $("#cboFilter_Assignee").on("change", function () { filterTable(); });
+    $("#cboFilter_Department").on("change", function () { filterTable(); });
+    $("#cboFilter_Initiator").on("change", function () { filterTable(); });
 
     // Quick clear on double-click.
     $("#txtFilter_TicketNumber").dblclick(function () { $("#txtFilter_TicketNumber").val(null).change(); });

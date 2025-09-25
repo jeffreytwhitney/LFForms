@@ -92,9 +92,7 @@ function generateTitleInfo() {
 
   if ($('.user-name-display input').val() == '') {
     var lfUserName = $('.lf-user-name input').val();
-    console.log('LF User Name: ' + lfUserName);
     if (lfUserName == 'Anonymous User') {
-      console.log('Anonymous User Detected');
       $('.user-name-display input').val('User :Anonymous');
       let login_link = $("<a>", { text: 'Log In', class: 'login-link', href: 'http://rmslf/Forms/account/login?returnUrl=%2fForms%2fMPM-TicketMainform' });
       $('.user-name-display').append(login_link);
@@ -102,7 +100,6 @@ function generateTitleInfo() {
     }
     else {
       let userName = $('.user-name-hidden input').val()
-      console.log('User Name: ' + userName);
       if (userName != '') {
         let userText = `User: ${userName}`
         $('.user-name-display input').val(userText);
@@ -112,9 +109,8 @@ function generateTitleInfo() {
         }
       }
     }
-
-
   }
+
   generateLastRunMessage();
   if ($('.task-search-button').length == 0) {
     $('.task-schedule-info input').show();
@@ -125,7 +121,6 @@ function generateTitleInfo() {
 
 
 function generateLastRunMessage() {
-  console.log('Generating Last Run Message');
   var lastRunDate = $('.last-schedule-update-run input').val();
   var lastRunBy = $('.last-schedule-run-by input').val();
   var isAutomated = Number($('.last-schedule-is-automated input').val());
@@ -152,7 +147,10 @@ function generateLastRunMessage() {
 
     $('.schedule-update-message').append(lastRunMessage);
 
-
+    if ($('.curl-logs-link').length == 0) {
+      let curl_logs_link = $("<a>", { text: 'Curl Logs', class: 'curl-logs-link', href: 'http://rmslf/Forms/RMS-MPM-CurlLogs', target: '_blank' });
+      $('#last-run-div').append(curl_logs_link);
+    }
   }
 }
 
