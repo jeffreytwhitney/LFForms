@@ -53,6 +53,8 @@ $(document).ready(function () {
 
     var ticketType = Number($('.ticket-type-id input').val());
 
+    fillMachineNameCombos();
+
     if (ticketType == 1) {
       generatePinCalibrationLinkColumn();
       colorCodePinRows();
@@ -79,7 +81,7 @@ $(document).ready(function () {
     this.value = this.value.toLocaleUpperCase();
   });
 
-  $(document).on('change', '[id^="Field106"]', function (e) {
+  $(document).on('change', '[id^="Field109"]', function (e) {
     generateMachineList();
   });
 
@@ -138,10 +140,25 @@ function colorCodeThreadRows() {
 }
 
 
+function fillMachineNameCombos() {
+  var machineNameInputs = $('[id^="Field106"]');
+
+  $('[id^="Field109"]').each(function (index, element) {
+    if ($(element).val() == '') {
+      let machineNameInput = machineNameInputs[index];
+      let machineNameInputVal = $(machineNameInput).val();
+      console.log(`MachineNameInputVal: ${machineNameInputVal}`);
+      $(element).val(machineNameInputVal).change();
+    }
+
+  });
+}
+
+
 function generateMachineList() {
   var machineList = '';
 
-  $('[id^="Field106"]').each(function (index, element) {
+  $('[id^="Field109"]').each(function (index, element) {
     machineName = $(element).val();
     if (machineName != '') {
       if (machineList.length > 0) {
