@@ -1,0 +1,496 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ExportedWorkflows Version="8.3.0.0" Count="1">
+  <ExportedWorkflow>
+    <Designer Version="10.4.3.139">
+      <SequentialWorkflowActivityProxy Type="Laserfiche.Workflow.Activities.Proxies.LfSequentialWorkflowProxy, Laserfiche.Workflow.Designer.Base, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="949842d2-b314-4671-8668-6dc0c10666c8" ActivityCountHint="10">
+        <Name>RMS-MPM-GenerateScheduleRunEmails</Name>
+        <SafeName>RMSMPMGenerateScheduleRunEmails</SafeName>
+        <Enabled>True</Enabled>
+        <Description ShowDescription="null" ShowSummary="null" />
+        <AttachedProperties>
+          <Property Key="ProfileCollection" PropertyType="Profiles">
+            <LinkedProperties Default="">
+              <LinkedProperty>
+                <Name>RMS Admin</Name>
+                <Id>-1</Id>
+                <Uuid>a23015a7-4f36-4f7f-bab1-f3be68b8ac02</Uuid>
+                <Offline>
+                  <ConnectionProfile Version="2" xmlns="http:\laserfiche\workflow\connection">
+                    <ProfileId>5q7/UMfjnglq4yPwU/mVWasKD+zeVFOp</ProfileId>
+                    <EncryptedData xmlns="http://www.w3/.org/2001/04/xmlenc#">
+                      <CipherData>
+                        <CipherValue>wBHSkLEr87e+oWSO9B3KcmkfGkCqQVO/MaiMZP8ve2KAn3V/wy3uCEpkIMN16In9p1I9A4v7wfLILzmSF6d79lzm28R71WDGCogwrHxJA7zegWau3tj8YFOsRtxISXlf+u8TGZaSCVSVGnyOKqgosmh9KF7s7rCHz4KNUv6P6qVrClfJ+OOlwBb2BT30JdwwlYcL910ZdLHRtR/UEfUlx/feR+NDQyiX+WRc+gH4fo5ujwz35AMXjJXAOG6MdJuJrCQTUqjLDgfqx8iJb/PlSBp1zKHaBtg/HB1zd3tv0+DUpqco4+xjpsqZX1Gn5RY9SnGbqAJtSWWaYoKKk2JgI9OPEtmnBLKENCl5C3Drx8eHssuJBnjLW9tWZ4a/lipJ1baqANMTSqKohYJlfmEGGrsANBLAzPaj3br5rNW++NSNepRW4gp99QIdufCEEys3EEG9XWH9yxbNwyddE6AeYBxopGvyHgLXFR+VinbkvMwTv0miTpFgRP2rD/nR3Xv+1TU1083dgF6cXmij4kHUGuTWfmU+ddhm4OPACFnuBEG8ZSD6UoDECodP0c+xgX52V5SU9XS0B4tOBRqJmehVbizRXG2bAPasB+4vdvgEdmJnOQ51AZgcsU8+352ORGVqp7XK32JbRb44RK7LDDBwlJHsPk/Y7YtQ+0K6DmF1UiqaiA9fYCs7/lHdmVV2heGv0XHttgmUT3SZ0Y06VgS6A0fXFzMGUnEVfgjIeAz1+L3YsNkrgwL825FUJKF5RSOB5QLIE4XBCzpUZcc2DmmP0QEBhuFi5GtVRLNwlnHiVXCZhPhsPjAxW/U0zyN3ESFhm8aw8F+Bz+K4/FJcbmccX/CX7pbyHy7LwpBVcC2WWJkoDaM3Ar72JgHXKZAdE+2pq3iCZwjl9I4iRY3qsVVMRDstBlaCCFCy5R5KvD8AisXKYbjXBLfZeqw3cwpsbaXX0N/cTD/+4vEOkKcpOWyCVDcY6sgUJcCWe2l77tIotyB9UZxhhfaZp+Ch000nIJPAN/pdPuCd2FY=</CipherValue>
+                      </CipherData>
+                    </EncryptedData>
+                  </ConnectionProfile>
+                </Offline>
+              </LinkedProperty>
+            </LinkedProperties>
+          </Property>
+          <Property Key="WorkflowDataSourceCollection" PropertyType="DataSources">
+            <LinkedProperties Default="">
+              <LinkedProperty>
+                <Name>LF_RMS_COMMS_MPM</Name>
+                <Id>47</Id>
+                <Uuid>d98a9d29-e839-4b48-9234-22fe2eb1f226</Uuid>
+                <Offline />
+                <Information>
+                  <SourceInformation Flags="OdbcType, ServerDatabase, UseSSPI" Adapter="Sql">
+                    <Host>rms-corplfsql1.cretexinc.com</Host>
+                    <Database>LF_RMS_COMMS_MPM</Database>
+                    <Server />
+                    <User />
+                  </SourceInformation>
+                </Information>
+              </LinkedProperty>
+            </LinkedProperties>
+          </Property>
+          <Property Key="EmailServerReferenceCollection" PropertyType="EmailServers">
+            <LinkedProperties Default="">
+              <LinkedProperty Host="rms-intstmprelay" IsDefault="false">
+                <Name>LF Notfications</Name>
+                <Id>10</Id>
+                <Uuid>df2c6228-6f2f-4548-be91-4724a2df8c7b</Uuid>
+                <Offline />
+              </LinkedProperty>
+            </LinkedProperties>
+          </Property>
+        </AttachedProperties>
+        <Projects>
+          <CSharpProject />
+          <VBProject />
+        </Projects>
+        <WorkflowBusinessProcessOptions LfProcessId="0" ProfileId="a23015a7-4f36-4f7f-bab1-f3be68b8ac02" Flags="AllowStartingFromClients, CreateBusinessProcessEntity, RecordMilestoneEvents, RecordStepEvents, SetStartingMilestone, SetCompletedMilestone, SetCanceledMilestone" Enabled="false">
+          <Milestones>
+            <Starting>Running</Starting>
+            <Completed>Completed</Completed>
+            <Canceled>Terminated</Canceled>
+          </Milestones>
+          <CustomInstanceName />
+        </WorkflowBusinessProcessOptions>
+        <WorkflowParameters SetOutputValuesViaTokens="true" />
+        <Cultures>
+          <Culture>en-us</Culture>
+        </Cultures>
+        <MetadataStore Attributes="ExpectsStartingEntry, ValidateDesign">
+          <VersionHistory>
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp506E.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="06/01/2025 15:41:11" EndTime="06/01/2025 17:19:10" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp8EDE.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="06/01/2025 17:19:10" EndTime="06/01/2025 17:30:21" />
+          </VersionHistory>
+          <Metadata>
+            <Value Item="Author" Type="String">JTWhitney</Value>
+            <Value Item="PublishedDate" Type="DateTime">2025-06-01T17:19:22.593Z</Value>
+            <Value Item="WorkflowId" Type="Int32">155</Value>
+            <Value Item="WorkflowVersion" Type="Int32">1</Value>
+            <Value Item="WorkflowServerURL" Type="String">RMS-CORPLF1</Value>
+            <Value Item="WorkflowServerId" Type="String">8f6ebc76-1c3a-4b6f-b657-d705dfc3c51f</Value>
+          </Metadata>
+        </MetadataStore>
+        <Activities>
+          <Activity Type="Laserfiche.Workflow.Activities.Data.LookupActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="6f726e84-6299-465e-aa06-680c55557f2f">
+            <Name>Get Runs where Message has not been sent</Name>
+            <SafeName>GetRunswhereMessagehasnotbeensent</SafeName>
+            <Enabled>True</Enabled>
+            <Description ShowDescription="null" ShowSummary="null">Retrieves records from the selected data source and creates tokens.</Description>
+            <DataSourceId>d98a9d29-e839-4b48-9234-22fe2eb1f226</DataSourceId>
+            <Criteria HasCustomQuery="false" IsCreateIdentityTokenEnabled="false" Timeout="-1">
+              <Table Name="qryScheduleUpdateRuns" HasIdentityColumn="false">
+                <Columns Generated="1/1/0001 12:00:00 AM">
+                  <Column Name="SiteID" Type="System.Int32" ReadOnly="False" />
+                  <Column Name="CompletionTimestamp" Type="System.DateTime" ReadOnly="False" />
+                  <Column Name="StartTimestamp" Type="System.DateTime" ReadOnly="False" />
+                  <Column Name="UpdateTimestamp" Type="System.DateTime" ReadOnly="False" />
+                  <Column Name="CreateTimestamp" Type="System.DateTime" ReadOnly="False" />
+                  <Column Name="RequestUserEmployeeNumber" Type="System.String" ReadOnly="False" />
+                  <Column Name="IsAutomated" Type="System.Int16" ReadOnly="False" />
+                  <Column Name="MessageSent" Type="System.Int16" ReadOnly="False" />
+                  <Column Name="ErrorCount" Type="System.Int16" ReadOnly="False" />
+                  <Column Name="IsComplete" Type="System.Int16" ReadOnly="False" />
+                  <Column Name="RunDateTime" Type="System.DateTime" ReadOnly="False" />
+                  <Column Name="RequestedBy" Type="System.String" ReadOnly="True" />
+                  <Column Name="IsCompleteDisplay" Type="System.String" ReadOnly="True" />
+                  <Column Name="IsAutomatedDisplay" Type="System.String" ReadOnly="True" />
+                  <Column Name="ID" Type="System.Int32" ReadOnly="False" />
+                  <Column Name="TasksUpdated" Type="System.Int32" ReadOnly="False" />
+                  <Column Name="SiteName" Type="System.String" ReadOnly="False" />
+                  <Column Name="MetrologyEmailAddress" Type="System.String" ReadOnly="False" />
+                  <Column Name="RequestorEmailAddress" Type="System.String" ReadOnly="False" />
+                </Columns>
+              </Table>
+              <Criterion Flags="None" Type="System.Int16" Column="MessageSent" ReadOnly="false">
+                <Value>0</Value>
+              </Criterion>
+              <Criterion Flags="None" Type="System.Int16" Column="IsComplete" ReadOnly="false">
+                <Value>1</Value>
+              </Criterion>
+            </Criteria>
+            <ResultSetSize Rows="ReturnAllRows" Count="2" />
+            <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+          </Activity>
+          <Activity Type="Laserfiche.Workflow.Activities.ForEach.ForEachResultActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="ddcab719-b827-4693-bac1-4a550d1c3862">
+            <Name>For Each Row</Name>
+            <SafeName>ForEachRow</SafeName>
+            <Enabled>True</Enabled>
+            <Description ShowDescription="null" ShowSummary="null">Runs the contained activities for each row returned by a Custom Query or Query Data activity, or for each result returned by activities that return collections of information.</Description>
+            <Binding Name="Collection">
+              <BindingPath Activity="Get Runs where Message has not been sent" Property="ResultFile" />
+            </Binding>
+            <Activities>
+              <Activity Type="Laserfiche.Workflow.Activities.CreateToken.CreateTokenActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="d850814b-dbc5-4e21-9e95-d120152ec554">
+                <Name>Assign Row Values</Name>
+                <SafeName>AssignRowValues</SafeName>
+                <Enabled>True</Enabled>
+                <Description ShowDescription="null" ShowSummary="null">Creates new tokens and updates the values of existing tokens.</Description>
+                <Options>
+                  <Tokens>
+                    <TokenInformation Id="7c363208-1bcb-4a9f-a116-f05935238a9f" IsMultivalued="false" UpdateExistingToken="false" AppendValues="false" TokenType="String">
+                      <TokenName>RunID</TokenName>
+                      <TokenFullName />
+                      <ActivityName />
+                      <TokenValues>
+                        <TokenValue xml:space="preserve">%(ForEachRow_ID)</TokenValue>
+                      </TokenValues>
+                    </TokenInformation>
+                    <TokenInformation Id="2c144556-3246-4eba-9624-81e86e4c8cdb" IsMultivalued="false" UpdateExistingToken="false" AppendValues="false" TokenType="String">
+                      <TokenName>ErrorCount</TokenName>
+                      <TokenFullName />
+                      <ActivityName />
+                      <TokenValues>
+                        <TokenValue xml:space="preserve">%(ForEachRow_ErrorCount)</TokenValue>
+                      </TokenValues>
+                    </TokenInformation>
+                    <TokenInformation Id="0a86c6c7-a659-4634-b547-29ceb23c1545" IsMultivalued="false" UpdateExistingToken="false" AppendValues="false" TokenType="String">
+                      <TokenName>IsAutomated</TokenName>
+                      <TokenFullName />
+                      <ActivityName />
+                      <TokenValues>
+                        <TokenValue xml:space="preserve">%(ForEachRow_IsAutomated)</TokenValue>
+                      </TokenValues>
+                    </TokenInformation>
+                    <TokenInformation Id="0c1b9686-071c-418a-9a57-0130fd5ff5d6" IsMultivalued="false" UpdateExistingToken="false" AppendValues="false" TokenType="String">
+                      <TokenName>MetrologyEmail</TokenName>
+                      <TokenFullName />
+                      <ActivityName />
+                      <TokenValues>
+                        <TokenValue xml:space="preserve">%(ForEachRow_MetrologyEmailAddress)</TokenValue>
+                      </TokenValues>
+                    </TokenInformation>
+                    <TokenInformation Id="96923199-3f69-4558-be62-087c30ee769f" IsMultivalued="false" UpdateExistingToken="false" AppendValues="false" TokenType="String">
+                      <TokenName>RequestorEmailAddress</TokenName>
+                      <TokenFullName />
+                      <ActivityName />
+                      <TokenValues>
+                        <TokenValue xml:space="preserve">%(ForEachRow_RequestorEmailAddress)</TokenValue>
+                      </TokenValues>
+                    </TokenInformation>
+                  </Tokens>
+                </Options>
+              </Activity>
+              <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="3fbdaed8-aadd-4382-8688-ff3e11d88c09">
+                <Name>Get Email Message</Name>
+                <SafeName>GetEmailMessage</SafeName>
+                <Enabled>True</Enabled>
+                <Description ShowDescription="null" ShowSummary="null">Performs the specified query in the selected data source.</Description>
+                <DataSourceId>d98a9d29-e839-4b48-9234-22fe2eb1f226</DataSourceId>
+                <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+                  <Table Name="" HasIdentityColumn="false">
+                    <Columns Generated="1/1/0001 12:00:00 AM">
+                      <Column Name="" Type="System.String" ReadOnly="False" />
+                    </Columns>
+                  </Table>
+                  <CustomQuery>EXEC spEMAIL_ScheduleUpdateEmailMessage ?, ?</CustomQuery>
+                  <InputParameter DbType="Int32">
+                    <Name>?</Name>
+                    <Value>%(RunID)</Value>
+                  </InputParameter>
+                  <InputParameter>
+                    <Name>?</Name>
+                    <Value />
+                  </InputParameter>
+                </Criteria>
+                <ResultSetSize Rows="ReturnAllRows" Count="2" />
+                <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+              </Activity>
+              <Activity Type="Laserfiche.Workflow.Activities.CreateToken.CreateTokenActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="c4c439c6-eb06-4fb2-a485-783d8a472d5f">
+                <Name>Assign Email Message</Name>
+                <SafeName>AssignEmailMessage</SafeName>
+                <Enabled>True</Enabled>
+                <Description ShowDescription="null" ShowSummary="null">Creates new tokens and updates the values of existing tokens.</Description>
+                <Options>
+                  <Tokens>
+                    <TokenInformation Id="9de0c4bd-ab80-44e0-97e5-63a8097287ee" IsMultivalued="false" UpdateExistingToken="false" AppendValues="false" TokenType="String">
+                      <TokenName>EMailMessage</TokenName>
+                      <TokenFullName />
+                      <ActivityName />
+                      <TokenValues>
+                        <TokenValue xml:space="preserve">%(GetEmailMessage_)</TokenValue>
+                      </TokenValues>
+                    </TokenInformation>
+                  </Tokens>
+                </Options>
+              </Activity>
+              <Activity Type="Laserfiche.Workflow.Activities.Condition.ConditionalSequenceActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="8b041c86-2bcf-4751-9fa1-1f807dcf48de">
+                <Name>Where there errors?</Name>
+                <SafeName>Wherethereerrors</SafeName>
+                <Enabled>True</Enabled>
+                <Description ShowDescription="null" ShowSummary="null">A sequence activity that only performs the contained activities if the conditions are satisfied.</Description>
+                <ProfileId>a23015a7-4f36-4f7f-bab1-f3be68b8ac02</ProfileId>
+                <Condition Version="10.4.3.139" Name="" Negated="false" IsConjunction="true" ConditionType="Composite" Description="">
+                  <Conditions>
+                    <Condition ConditionType="Token" Operator="NotEqual">
+                      <Token Name="ErrorCount" Length="0" MetaType="String">
+                        <Activity Display="Assign Row Values" Append="false">AssignRowValues</Activity>
+                      </Token>
+                      <Values>
+                        <Value>0</Value>
+                      </Values>
+                    </Condition>
+                  </Conditions>
+                </Condition>
+                <Activities>
+                  <Activity Type="Laserfiche.Workflow.Activities.Email.EmailSequenceProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="691ff72a-bee9-4404-aa50-c98ed4deeceb">
+                    <Name>Email Metrology</Name>
+                    <SafeName>EmailMetrology</SafeName>
+                    <Enabled>True</Enabled>
+                    <Description ShowDescription="null" ShowSummary="null">Sends an email to one or more people.</Description>
+                    <Email TextOnlyBodyFormat="false" DeliveryReceipts="None">
+                      <ToAddresses>
+                        <Add>%(MetrologyEmail)</Add>
+                      </ToAddresses>
+                      <CcAddresses />
+                      <BccAddresses />
+                      <FromAddress />
+                      <ReplyTo />
+                      <Subject>Errors occured while processing schedule updates</Subject>
+                      <Body>%(EMailMessage#"HTML"#)</Body>
+                      <Priority>Normal</Priority>
+                      <ServerReference />
+                      <UseBodyLengthLimit null="true" />
+                      <Attachments>
+                        <ExportedEntries />
+                        <Options>
+                          <UseZipFile>false</UseZipFile>
+                          <LimitEntrySize>false</LimitEntrySize>
+                          <EntrySizeLimit>51200</EntrySizeLimit>
+                          <ReplaceBigEntriesWithShortcut>false</ReplaceBigEntriesWithShortcut>
+                          <NotifyForEntriesFiles>true</NotifyForEntriesFiles>
+                          <NotifyForNoContentEntries>true</NotifyForNoContentEntries>
+                          <AttachShortcutForNoContentEntries>false</AttachShortcutForNoContentEntries>
+                        </Options>
+                      </Attachments>
+                    </Email>
+                  </Activity>
+                </Activities>
+                <FaultHandlers />
+              </Activity>
+              <Activity Type="Laserfiche.Workflow.Activities.Condition.ConditionalSequenceActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="3b210c92-41d4-4bec-a4ad-0d3a1706ee18">
+                <Name>Was run requested? (Not automated)</Name>
+                <SafeName>WasrunrequestedNotautomated</SafeName>
+                <Enabled>True</Enabled>
+                <Description ShowDescription="true" ShowSummary="null">Only run if IsAutomated = 0 and ErrorCount = 0 because if error count &gt; 0 then it's already been processed by the section above.</Description>
+                <ProfileId>a23015a7-4f36-4f7f-bab1-f3be68b8ac02</ProfileId>
+                <Condition Version="10.4.3.139" Name="" Negated="false" IsConjunction="true" ConditionType="Composite" Description="">
+                  <Conditions>
+                    <Condition ConditionType="Token" Operator="Equal">
+                      <Token Name="IsAutomated" Length="0" MetaType="String">
+                        <Activity Display="Assign Row Values" Append="false">AssignRowValues</Activity>
+                      </Token>
+                      <Values>
+                        <Value>0</Value>
+                      </Values>
+                    </Condition>
+                    <Condition ConditionType="Token" Operator="Equal">
+                      <Token Name="ErrorCount" Length="0" MetaType="String">
+                        <Activity Display="Assign Row Values" Append="false">AssignRowValues</Activity>
+                      </Token>
+                      <Values>
+                        <Value>0</Value>
+                      </Values>
+                    </Condition>
+                  </Conditions>
+                </Condition>
+                <Activities>
+                  <Activity Type="Laserfiche.Workflow.Activities.Email.EmailSequenceProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="4ff0a336-cdac-44b7-a2e4-bfc16a4b3772">
+                    <Name>Email Requestor</Name>
+                    <SafeName>EmailRequestor</SafeName>
+                    <Enabled>True</Enabled>
+                    <Description ShowDescription="null" ShowSummary="null">Sends an email to one or more people.</Description>
+                    <Email TextOnlyBodyFormat="false" DeliveryReceipts="None">
+                      <ToAddresses>
+                        <Add>%(RequestorEmailAddress)</Add>
+                      </ToAddresses>
+                      <CcAddresses />
+                      <BccAddresses />
+                      <FromAddress />
+                      <ReplyTo />
+                      <Subject>Schedules have been successfully updated</Subject>
+                      <Body>%(EMailMessage#"HTML"#)</Body>
+                      <Priority>Normal</Priority>
+                      <ServerReference>df2c6228-6f2f-4548-be91-4724a2df8c7b</ServerReference>
+                      <UseBodyLengthLimit null="true" />
+                      <Attachments>
+                        <ExportedEntries />
+                        <Options>
+                          <UseZipFile>false</UseZipFile>
+                          <LimitEntrySize>false</LimitEntrySize>
+                          <EntrySizeLimit>51200</EntrySizeLimit>
+                          <ReplaceBigEntriesWithShortcut>false</ReplaceBigEntriesWithShortcut>
+                          <NotifyForEntriesFiles>true</NotifyForEntriesFiles>
+                          <NotifyForNoContentEntries>true</NotifyForNoContentEntries>
+                          <AttachShortcutForNoContentEntries>false</AttachShortcutForNoContentEntries>
+                        </Options>
+                      </Attachments>
+                    </Email>
+                  </Activity>
+                </Activities>
+                <FaultHandlers />
+              </Activity>
+              <Activity Type="Laserfiche.Workflow.Activities.Data.UpdateDataActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="1c155c02-c52b-429c-8ae2-9da06596d729">
+                <Name>Update Data</Name>
+                <SafeName>UpdateData</SafeName>
+                <Enabled>True</Enabled>
+                <Description ShowDescription="null" ShowSummary="null">Updates the column values of a subset of rows in the selected data source.</Description>
+                <DataSourceId>d98a9d29-e839-4b48-9234-22fe2eb1f226</DataSourceId>
+                <Criteria HasCustomQuery="false" IsCreateIdentityTokenEnabled="false" Timeout="-1">
+                  <Table Name="tblScheduleRunEntry" HasIdentityColumn="false">
+                    <Columns Generated="1/1/0001 12:00:00 AM">
+                      <Column Name="ID" Type="System.Int32" ReadOnly="True" />
+                      <Column Name="SiteID" Type="System.Int32" ReadOnly="False" />
+                      <Column Name="RunDateTime" Type="System.DateTime" ReadOnly="False" />
+                      <Column Name="IsComplete" Type="System.Int16" ReadOnly="False" />
+                      <Column Name="HasErrors" Type="System.Int16" ReadOnly="False" />
+                      <Column Name="MessageSent" Type="System.Int16" ReadOnly="False" />
+                      <Column Name="IsAutomated" Type="System.Int16" ReadOnly="False" />
+                      <Column Name="RequestUserEmployeeNumber" Type="System.String" ReadOnly="False" />
+                      <Column Name="CreateTimestamp" Type="System.DateTime" ReadOnly="False" />
+                      <Column Name="UpdateTimestamp" Type="System.DateTime" ReadOnly="False" />
+                      <Column Name="StartTimestamp" Type="System.DateTime" ReadOnly="False" />
+                      <Column Name="CompletionTimestamp" Type="System.DateTime" ReadOnly="False" />
+                      <Column Name="IsCompleteDisplay" Type="System.String" ReadOnly="True" />
+                      <Column Name="IsAutomatedDisplay" Type="System.String" ReadOnly="True" />
+                      <Column Name="TasksUpdated" Type="System.Int32" ReadOnly="False" />
+                    </Columns>
+                  </Table>
+                  <Criterion Flags="None" Type="System.Int32" Column="ID" ReadOnly="true">
+                    <Value>%(RunID)</Value>
+                  </Criterion>
+                </Criteria>
+                <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+                <Criteria HasCustomQuery="false" IsCreateIdentityTokenEnabled="false" Timeout="-1">
+                  <Table Name="tblScheduleRunEntry" HasIdentityColumn="false">
+                    <Columns Generated="1/1/0001 12:00:00 AM">
+                      <Column Name="ID" Type="System.Int32" ReadOnly="True" />
+                      <Column Name="SiteID" Type="System.Int32" ReadOnly="False" />
+                      <Column Name="RunDateTime" Type="System.DateTime" ReadOnly="False" />
+                      <Column Name="IsComplete" Type="System.Int16" ReadOnly="False" />
+                      <Column Name="HasErrors" Type="System.Int16" ReadOnly="False" />
+                      <Column Name="MessageSent" Type="System.Int16" ReadOnly="False" />
+                      <Column Name="IsAutomated" Type="System.Int16" ReadOnly="False" />
+                      <Column Name="RequestUserEmployeeNumber" Type="System.String" ReadOnly="False" />
+                      <Column Name="CreateTimestamp" Type="System.DateTime" ReadOnly="False" />
+                      <Column Name="UpdateTimestamp" Type="System.DateTime" ReadOnly="False" />
+                      <Column Name="StartTimestamp" Type="System.DateTime" ReadOnly="False" />
+                      <Column Name="CompletionTimestamp" Type="System.DateTime" ReadOnly="False" />
+                      <Column Name="IsCompleteDisplay" Type="System.String" ReadOnly="True" />
+                      <Column Name="IsAutomatedDisplay" Type="System.String" ReadOnly="True" />
+                      <Column Name="TasksUpdated" Type="System.Int32" ReadOnly="False" />
+                    </Columns>
+                  </Table>
+                  <Criterion Flags="None" Type="System.Int16" Column="MessageSent" ReadOnly="false">
+                    <Value>1</Value>
+                  </Criterion>
+                </Criteria>
+              </Activity>
+            </Activities>
+            <FaultHandlers />
+          </Activity>
+        </Activities>
+        <FaultHandlers />
+      </SequentialWorkflowActivityProxy>
+      <CanvasUI>
+        <Expanded>True</Expanded>
+        <Activity Name="Get Runs where Message has not been sent" Key="6f726e84-6299-465e-aa06-680c55557f2f" />
+        <Activity Name="For Each Row" Key="ddcab719-b827-4693-bac1-4a550d1c3862">
+          <Expanded>True</Expanded>
+          <Activity Name="Assign Row Values" Key="d850814b-dbc5-4e21-9e95-d120152ec554" />
+          <Activity Name="Get Email Message" Key="3fbdaed8-aadd-4382-8688-ff3e11d88c09" />
+          <Activity Name="Assign Email Message" Key="c4c439c6-eb06-4fb2-a485-783d8a472d5f" />
+          <Activity Name="Where there errors?" Key="8b041c86-2bcf-4751-9fa1-1f807dcf48de">
+            <Expanded>True</Expanded>
+            <Activity Name="Email Metrology" Key="691ff72a-bee9-4404-aa50-c98ed4deeceb" />
+          </Activity>
+          <Activity Name="Was run requested? (Not automated)" Key="3b210c92-41d4-4bec-a4ad-0d3a1706ee18">
+            <Expanded>False</Expanded>
+            <Activity Name="Email Requestor" Key="4ff0a336-cdac-44b7-a2e4-bfc16a4b3772" />
+          </Activity>
+          <Activity Name="Update Data" Key="1c155c02-c52b-429c-8ae2-9da06596d729" />
+        </Activity>
+        <UseCompactLayout>false</UseCompactLayout>
+        <ZoomLevel>1.0</ZoomLevel>
+      </CanvasUI>
+    </Designer>
+    <CreationRules Count="0" />
+    <Schedules Count="0" />
+  </ExportedWorkflow>
+  <LinkedObjects Count="2">
+    <LinkedObject>
+      <Id>47</Id>
+      <Name>LF_RMS_COMMS_MPM</Name>
+      <Description />
+      <AttachmentType>DataSource</AttachmentType>
+      <LinkedWorkflows Count="1">
+        <LinkInfo>
+          <WorkflowName>RMS-MPM-GenerateScheduleRunEmails</WorkflowName>
+        </LinkInfo>
+      </LinkedWorkflows>
+      <XmlValue>&lt;SourceInformation DataSourceType="Odbc" DSNType="System" Authenticated="true"&gt;
+  &lt;Location&gt;
+    &lt;HostName&gt;rms-corplfsql1.cretexinc.com&lt;/HostName&gt;
+    &lt;ServerInstance /&gt;
+    &lt;DatabaseName&gt;LF_RMS_COMMS_MPM&lt;/DatabaseName&gt;
+    &lt;LocationType&gt;ServerDatabase&lt;/LocationType&gt;
+  &lt;/Location&gt;
+  &lt;Authentication&gt;
+    &lt;UserName&gt;&lt;/UserName&gt;
+    &lt;SecureString Version="2" Value="" /&gt;
+  &lt;/Authentication&gt;
+  &lt;Adapter&gt;
+    &lt;type key="sql" default="false" category="ODBC"&gt;
+      &lt;typename&gt;Laserfiche.Project.Data.Runtime.Odbc.Sql, Laserfiche.Project.Data, Version=9.0.0.0, Culture=neutral, PublicKeyToken=607dd73ee2bd1c00&lt;/typename&gt;
+      &lt;names default="Sql"&gt;
+        &lt;add code="en" value="Sql" /&gt;
+      &lt;/names&gt;
+    &lt;/type&gt;
+  &lt;/Adapter&gt;
+  &lt;OtherOptions ActualType="Laserfiche.Collections.PropertyBag, Laserfiche.Base, Version=9.0.0.0, Culture=neutral, PublicKeyToken=607dd73ee2bd1c00"&gt;
+    &lt;Properties /&gt;
+  &lt;/OtherOptions&gt;
+&lt;/SourceInformation&gt;</XmlValue>
+    </LinkedObject>
+    <LinkedObject>
+      <Id>10</Id>
+      <Name>LF Notfications</Name>
+      <Description />
+      <AttachmentType>EmailServer</AttachmentType>
+      <LinkedWorkflows Count="1">
+        <LinkInfo>
+          <WorkflowName>RMS-MPM-GenerateScheduleRunEmails</WorkflowName>
+        </LinkInfo>
+      </LinkedWorkflows>
+      <XmlValue>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;EmailServer IsProtected="true" SendTimeout="-1"&gt;
+  &lt;Name /&gt;
+  &lt;NetworkAddress&gt;rms-intstmprelay&lt;/NetworkAddress&gt;
+  &lt;Port&gt;25&lt;/Port&gt;
+  &lt;UserName /&gt;
+  &lt;Password&gt;6Dd9xl/YoLU=&lt;/Password&gt;
+  &lt;From&gt;LF_Notifications@machine.com&lt;/From&gt;
+  &lt;DefaultSubject /&gt;
+  &lt;UseIISPickup&gt;false&lt;/UseIISPickup&gt;
+  &lt;PickupDirectory /&gt;
+  &lt;UseSSL&gt;false&lt;/UseSSL&gt;
+  &lt;UseDefaultAuthentication&gt;true&lt;/UseDefaultAuthentication&gt;
+&lt;/EmailServer&gt;</XmlValue>
+    </LinkedObject>
+  </LinkedObjects>
+</ExportedWorkflows>

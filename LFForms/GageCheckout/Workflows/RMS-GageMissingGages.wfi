@@ -1,0 +1,254 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ExportedWorkflows Version="8.3.0.0" Count="1">
+  <ExportedWorkflow>
+    <Designer Version="10.4.3.139">
+      <SequentialWorkflowActivityProxy Type="Laserfiche.Workflow.Activities.Proxies.LfSequentialWorkflowProxy, Laserfiche.Workflow.Designer.Base, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="cc74868b-b99e-4a1e-8be0-79ae880a36cf" ActivityCountHint="4">
+        <Name>RMS-GageMissingGages</Name>
+        <SafeName>RMSGageMissingGages</SafeName>
+        <Enabled>True</Enabled>
+        <Description ShowDescription="null" ShowSummary="null" />
+        <AttachedProperties>
+          <Property Key="ProfileCollection" PropertyType="Profiles">
+            <LinkedProperties Default="">
+              <LinkedProperty>
+                <Name>RMS Admin</Name>
+                <Id>-1</Id>
+                <Uuid>2556da34-6db5-49ea-b6fd-54c417eac619</Uuid>
+                <Offline>
+                  <ConnectionProfile Version="2" xmlns="http:\laserfiche\workflow\connection">
+                    <ProfileId>NBQWR4KRkjMOuQTH6DT6roCl4y0U4nKY</ProfileId>
+                    <EncryptedData xmlns="http://www.w3/.org/2001/04/xmlenc#">
+                      <CipherData>
+                        <CipherValue>08qIUmEIxb2t2oocek8yaXD2v+nLBHpudM1Q7/LVs/x/TShHYDmDYLYbYeKGIs4vtC5zcUoIH0NjcBWnoL6S7wEMUEntiehZD4QvWxyH5f0Rn+auLC+grSifg5ePAfa3UTt/IodC3QE6LfuO/T9lGiiTf7WqiwceGAXlxXyPie7f1y8wxRE2vddU/l4MNhXDD3goCpCvHoYHUMQ2cB5t6frx7bYxoSMrFYD3KZC7IW6leR+W79G2vhudrlvyY5yHMzk6JOWBcWYvAj+HYiATOvcxPvBQrtb/24Z1ShqAXoNgsHNYkAZe+Gv3pTrpS5DbALEzM8L4bm48kJkZzhFFNAnDJUIM4e/DeBi1bO6HFVB1ajtdcyTrnneSIV5z0o3FM5Mobq+4Xse44BAEXWxWZbQ1f5sboFv5zXMQi21y8LxN0KlJrbmoblnUUynM1MJdCS786arDPztcwEpPoFDPVbLmUCXsGuefnUBnqPNZkJRjII7MP4kNIMuSL3qpUF8+y5dnDbkMmyV6Kul3oMNg2dPUU+9wJMyMkw8l7dPanBtnqF8n++AmM7dti0rxtbqPi8CdMkvXZQ4PokRKOk/HjET0OBEX7BpZKo8lZa1gPlNKndQ8OYYIMyQwv7aDYKHiervg4huqXGjTRiEk2yfRI36qgloXnO/zei6PjTi4q5oE6ABSLoaXQQAwefukn6PgWCe6dTtS+yg7CQpixNHdlsTNaTEFRLl6c7igrKVpj+AO0UvA+j/k7u9+k/gs9zbNhrzJ//BchqmCj2X0n3sE9rGt1/3KmF2nwdPH1kVSnGp0VjWId+3wJTZtNjYWD2hVY+YnR8Z4mt03UDSh8x6iYe8a3wP3YX0f4fF78IE+IoTdpdMkSVWMhh3MJKs53cPHz1fjWUGKiU2/qmAyWVZE+xD4W0eFrykDbj4hmzBtB/DS0HDZhpNZSUlC+ZVibpJh4iWlMRJLigMQwj3nasODnohBn4DfIrY4FrlPkA7bqs5BBCWe7Mx/0iNVYNgz5kPO13YVJoQzDNM=</CipherValue>
+                      </CipherData>
+                    </EncryptedData>
+                  </ConnectionProfile>
+                </Offline>
+              </LinkedProperty>
+            </LinkedProperties>
+          </Property>
+          <Property Key="WorkflowWebServiceCollection" PropertyType="WebServices">
+            <LinkedProperties Default="">
+              <LinkedProperty ServiceURL="http://rmslf/forms" User="admin" Type="Laserfiche Forms">
+                <Name>LFForms</Name>
+                <Id>18</Id>
+                <Uuid>b3f5394f-7063-490a-bddf-9608db684911</Uuid>
+                <Offline />
+              </LinkedProperty>
+            </LinkedProperties>
+          </Property>
+          <Property Key="WorkflowDataSourceCollection" PropertyType="DataSources">
+            <LinkedProperties Default="">
+              <LinkedProperty>
+                <Name>GageCheckout</Name>
+                <Id>46</Id>
+                <Uuid>10ac2de7-cc35-4b1b-9141-85a4806b9b9a</Uuid>
+                <Offline />
+                <Information>
+                  <SourceInformation Flags="OdbcType, ServerDatabase, UseSSPI" Adapter="Sql">
+                    <Host>rms-corplfsql1.cretexinc.com</Host>
+                    <Database>GageCheckout</Database>
+                    <Server />
+                    <User />
+                  </SourceInformation>
+                </Information>
+              </LinkedProperty>
+            </LinkedProperties>
+          </Property>
+        </AttachedProperties>
+        <Projects>
+          <CSharpProject />
+          <VBProject />
+        </Projects>
+        <WorkflowBusinessProcessOptions LfProcessId="0" ProfileId="2556da34-6db5-49ea-b6fd-54c417eac619" Flags="AllowStartingFromClients, CreateBusinessProcessEntity, RecordMilestoneEvents, RecordStepEvents, SetStartingMilestone, SetCompletedMilestone, SetCanceledMilestone" Enabled="false">
+          <Milestones>
+            <Starting>Running</Starting>
+            <Completed>Completed</Completed>
+            <Canceled>Terminated</Canceled>
+          </Milestones>
+          <CustomInstanceName />
+        </WorkflowBusinessProcessOptions>
+        <WorkflowParameters SetOutputValuesViaTokens="true" />
+        <Cultures>
+          <Culture>en-us</Culture>
+        </Cultures>
+        <MetadataStore Attributes="ExpectsStartingEntry, ValidateDesign">
+          <VersionHistory>
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp3D77.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="09/11/2024 08:58:00" EndTime="09/11/2024 08:59:15" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp7552.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="09/19/2024 06:12:15" EndTime="09/19/2024 06:15:18" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp681A.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/26/2025 20:08:38" EndTime="02/26/2025 20:12:21" />
+          </VersionHistory>
+          <Metadata>
+            <Value Item="Author" Type="String">JTWhitney</Value>
+            <Value Item="PublishedDate" Type="DateTime">2024-09-19T11:15:28.57Z</Value>
+            <Value Item="WorkflowId" Type="Int32">113</Value>
+            <Value Item="WorkflowVersion" Type="Int32">2</Value>
+            <Value Item="WorkflowServerURL" Type="String">RMS-CORPLF1</Value>
+            <Value Item="WorkflowServerId" Type="String">8f6ebc76-1c3a-4b6f-b657-d705dfc3c51f</Value>
+          </Metadata>
+        </MetadataStore>
+        <Activities>
+          <Activity Type="Laserfiche.Workflow.Activities.Forms.RetrieveFormFieldValueProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="847c7504-4cb6-4e6e-912d-4cb186ada135">
+            <Name>Retrieve Business Process Variables</Name>
+            <SafeName>RetrieveBusinessProcessVariables</SafeName>
+            <Enabled>True</Enabled>
+            <Description ShowDescription="null" ShowSummary="null">Retrieves the values from a Laserfiche Forms business process instance and stores those values as tokens.</Description>
+            <RetrieveFormFieldValueOptions Id="b3f5394f-7063-490a-bddf-9608db684911" OPT123332="true">
+              <SubmissionOptions UseStarting="true" SubmissionId="" InstanceId="" UseStartingInstance="true" />
+              <ProcessOptions ProcessId="44" ProcessName="RMS - Gage Missing Gages" />
+              <Fields>
+                <Attribute AttributeId="3511" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Notes" AttributeName="CalNotes" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Missing Thread Gages" MemberPath="3524" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="2157" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Is Active" AttributeName="EmployeeIsActive" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Missing Thread Gages" MemberPath="2163" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="2156" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="EmployeeNumber" AttributeName="EmployeeNumber" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Missing Thread Gages" MemberPath="2162" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="3507" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Number" Label="Go Pitch Diameter:" AttributeName="GoDiam" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Missing Thread Gages" MemberPath="3520" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="3509" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Number" Label="Major Pitch Diameter:" AttributeName="MajorPitchDiam" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Missing Thread Gages" MemberPath="3522" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="3508" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Number" Label="NoGo Pitch Diameter:" AttributeName="NoGoPitchDiam" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Missing Thread Gages" MemberPath="3521" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="2159" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="ThreadDetailID" AttributeName="SubmitThreadDetailID" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Missing Thread Gages" MemberPath="2165" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="3510" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Radio" Label="Cal Result:" AttributeName="ThreadCalibrationResult" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="true" BoundPropertyName="" FormName="Missing Thread Gages" MemberPath="3523" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false">
+                  <Choices>
+                    <FormAttributeFieldChoice Label="Pass" Value="2" />
+                    <FormAttributeFieldChoice Label="Adjusted" Value="5" />
+                    <FormAttributeFieldChoice Label="Replace, No SOT" Value="3" />
+                    <FormAttributeFieldChoice Label="Replace, Send SOT" Value="1" />
+                  </Choices>
+                </Attribute>
+              </Fields>
+              <AdditionalVariableOptions>
+                <RetrievePaymentVariables>false</RetrievePaymentVariables>
+              </AdditionalVariableOptions>
+            </RetrieveFormFieldValueOptions>
+          </Activity>
+          <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="1283033a-66cd-4021-8492-6566467d0b4a">
+            <Name>spRecallMissingThreadGage</Name>
+            <SafeName>spRecallMissingThreadGage</SafeName>
+            <Enabled>True</Enabled>
+            <Description ShowDescription="null" ShowSummary="null">Performs the specified query in the selected data source.</Description>
+            <DataSourceId>10ac2de7-cc35-4b1b-9141-85a4806b9b9a</DataSourceId>
+            <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+              <CustomQuery>exec spRecallMissingThreadGage ?, ?</CustomQuery>
+              <InputParameter DbType="Int32">
+                <Name>?</Name>
+                <Value>%(RetrieveBusinessProcessVariables_SubmitThreadDetailID)</Value>
+              </InputParameter>
+              <InputParameter DbType="String">
+                <Name>?</Name>
+                <Value>%(RetrieveBusinessProcessVariables_EmployeeNumber)</Value>
+              </InputParameter>
+            </Criteria>
+            <ResultSetSize Rows="ReturnAllRows" Count="2" />
+            <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+          </Activity>
+          <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="ddc87366-4386-4929-8192-49ae3b3928d0">
+            <Name>spCalibrateThreadGage</Name>
+            <SafeName>spCalibrateThreadGage</SafeName>
+            <Enabled>True</Enabled>
+            <Description ShowDescription="true" ShowSummary="null" />
+            <DataSourceId>10ac2de7-cc35-4b1b-9141-85a4806b9b9a</DataSourceId>
+            <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+              <CustomQuery>exec spCalibrateThreadGage ?, ?, ?, ?, ?, ?, ?</CustomQuery>
+              <InputParameter DbType="Int32">
+                <Name>?</Name>
+                <Value>%(RetrieveBusinessProcessVariables_SubmitThreadDetailID)</Value>
+              </InputParameter>
+              <InputParameter DbType="Int32">
+                <Name>?</Name>
+                <Value>%(RetrieveBusinessProcessVariables_ThreadCalibrationResult)</Value>
+              </InputParameter>
+              <InputParameter DbType="Decimal">
+                <Name>?</Name>
+                <Value>%(RetrieveBusinessProcessVariables_GoDiam)</Value>
+              </InputParameter>
+              <InputParameter DbType="Decimal">
+                <Name>?</Name>
+                <Value>%(RetrieveBusinessProcessVariables_NoGoPitchDiam)</Value>
+              </InputParameter>
+              <InputParameter DbType="Decimal">
+                <Name>?</Name>
+                <Value>%(RetrieveBusinessProcessVariables_MajorPitchDiam)</Value>
+              </InputParameter>
+              <InputParameter DbType="String">
+                <Name>?</Name>
+                <Value>%(RetrieveBusinessProcessVariables_CalNotes)</Value>
+              </InputParameter>
+              <InputParameter DbType="String">
+                <Name>?</Name>
+                <Value>%(RetrieveBusinessProcessVariables_EmployeeNumber)</Value>
+              </InputParameter>
+            </Criteria>
+            <ResultSetSize Rows="ReturnAllRows" Count="2" />
+            <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+          </Activity>
+          <Activity Type="Laserfiche.Workflow.Activities.Tracking.TrackTokenActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="8cdd1ddb-6883-4e46-9fbf-ace03b43e05f">
+            <Name>Track Tokens</Name>
+            <SafeName>TrackTokens</SafeName>
+            <Enabled>True</Enabled>
+            <Description ShowDescription="null" ShowSummary="null">Records the values of selected tokens when the workflow runs. You can view these values in the Tokens tab in the workflow's Search Details pane.</Description>
+            <Options TrackTokenManager="true">
+              <Tokens />
+            </Options>
+          </Activity>
+        </Activities>
+        <FaultHandlers />
+      </SequentialWorkflowActivityProxy>
+      <CanvasUI>
+        <Expanded>True</Expanded>
+        <Activity Name="Retrieve Business Process Variables" Key="847c7504-4cb6-4e6e-912d-4cb186ada135" />
+        <Activity Name="spRecallMissingThreadGage" Key="1283033a-66cd-4021-8492-6566467d0b4a" />
+        <Activity Name="spCalibrateThreadGage" Key="ddc87366-4386-4929-8192-49ae3b3928d0" />
+        <Activity Name="Track Tokens" Key="8cdd1ddb-6883-4e46-9fbf-ace03b43e05f" />
+        <UseCompactLayout>false</UseCompactLayout>
+        <ZoomLevel>1.0</ZoomLevel>
+      </CanvasUI>
+    </Designer>
+    <CreationRules Count="0" />
+    <Schedules Count="0" />
+  </ExportedWorkflow>
+  <LinkedObjects Count="2">
+    <LinkedObject>
+      <Id>46</Id>
+      <Name>GageCheckout</Name>
+      <Description />
+      <AttachmentType>DataSource</AttachmentType>
+      <LinkedWorkflows Count="1">
+        <LinkInfo>
+          <WorkflowName>RMS-GageMissingGages</WorkflowName>
+        </LinkInfo>
+      </LinkedWorkflows>
+      <XmlValue>&lt;SourceInformation DataSourceType="Odbc" DSNType="User" Authenticated="true"&gt;
+  &lt;Location&gt;
+    &lt;HostName&gt;rms-corplfsql1.cretexinc.com&lt;/HostName&gt;
+    &lt;ServerInstance /&gt;
+    &lt;DatabaseName&gt;GageCheckout&lt;/DatabaseName&gt;
+    &lt;LocationType&gt;ServerDatabase&lt;/LocationType&gt;
+  &lt;/Location&gt;
+  &lt;Authentication&gt;
+    &lt;UserName&gt;&lt;/UserName&gt;
+    &lt;SecureString Version="2" Value="" /&gt;
+  &lt;/Authentication&gt;
+  &lt;Adapter&gt;
+    &lt;type key="sql" default="false" category="ODBC"&gt;
+      &lt;typename&gt;Laserfiche.Project.Data.Runtime.Odbc.Sql, Laserfiche.Project.Data, Version=9.0.0.0, Culture=neutral, PublicKeyToken=607dd73ee2bd1c00&lt;/typename&gt;
+      &lt;names default="Sql"&gt;
+        &lt;add code="en" value="Sql" /&gt;
+      &lt;/names&gt;
+    &lt;/type&gt;
+  &lt;/Adapter&gt;
+  &lt;OtherOptions ActualType="Laserfiche.Collections.PropertyBag, Laserfiche.Base, Version=9.0.0.0, Culture=neutral, PublicKeyToken=607dd73ee2bd1c00"&gt;
+    &lt;Properties /&gt;
+  &lt;/OtherOptions&gt;
+&lt;/SourceInformation&gt;</XmlValue>
+    </LinkedObject>
+    <LinkedObject>
+      <Id>18</Id>
+      <Name>LFForms</Name>
+      <Description />
+      <AttachmentType>WebService</AttachmentType>
+      <LinkedWorkflows Count="1">
+        <LinkInfo>
+          <WorkflowName>RMS-GageMissingGages</WorkflowName>
+        </LinkInfo>
+      </LinkedWorkflows>
+      <XmlValue>&lt;WebService ServiceURL="http://rmslf/forms" WebServiceType="Laserfiche Forms" RunAsTasks="true" AcceptInvalidCertificates="true" /&gt;</XmlValue>
+    </LinkedObject>
+  </LinkedObjects>
+</ExportedWorkflows>

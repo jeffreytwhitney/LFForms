@@ -1,0 +1,476 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ExportedWorkflows Version="8.3.0.0" Count="1">
+  <ExportedWorkflow>
+    <Designer Version="10.4.3.139">
+      <SequentialWorkflowActivityProxy Type="Laserfiche.Workflow.Activities.Proxies.LfSequentialWorkflowProxy, Laserfiche.Workflow.Designer.Base, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="00bf8f10-0ecc-4d0e-9d21-d28950dc3e69" ActivityCountHint="14">
+        <Name>RMS-MPM-AutoPesterAssignees</Name>
+        <SafeName>RMSMPMAutoPesterAssignees</SafeName>
+        <Enabled>True</Enabled>
+        <Description ShowDescription="null" ShowSummary="null" />
+        <AttachedProperties>
+          <Property Key="ProfileCollection" PropertyType="Profiles">
+            <LinkedProperties Default="">
+              <LinkedProperty>
+                <Name>RMS Admin</Name>
+                <Id>-1</Id>
+                <Uuid>7e80f162-66ec-465a-849d-79f0878707a5</Uuid>
+                <Offline>
+                  <ConnectionProfile Version="2" xmlns="http:\laserfiche\workflow\connection">
+                    <ProfileId>lAyx2W1F4wL4oSXYh5svDVFY+jl2rvnY</ProfileId>
+                    <EncryptedData xmlns="http://www.w3/.org/2001/04/xmlenc#">
+                      <CipherData>
+                        <CipherValue>Io71v2MgxRJEz76XhmA00iQ3RjY5ceMKJtEUJogboTpRK0jw2pcuyM2Z1Sff6yxE4SMmarpC2wuq+8zUDeJGR4Dp1L9yLFuKSX22+TX7mF/dA6cvzS+PyPArlT5Fvffrhv4FQBd7B7UvhyjKxE1e5F0AZ+7dUf9RzCFUY+HImSRKC0jsmQWUhiWtb1WVdn/+naTer1ylGG7khdELUbrHNuc4IPBOtqL7BEKeCcAfzha69Q99WJtcISrIP6lJWZZehhYe13NcTtou/7dWaHXkafzFAzlSqnPy9E+vkO+tWZdCpv0HaDhhKuILCwCIWaijmIwwvlsnhSsHNMdykPIq0Ziken8NayC65Tu6IiX2qF61AUzu2MVbJ2WKFexYz3DhIpkgorzxwUw4UhFIj7QiQlKvyOGaAAc1mWsnbIlymHIbHgGga8AH9NNSiZhGz4khOZErPyuyERSCdbUT5jULr68aUAej1jaTvM4bAWidW9PmyMlSh/Mo7VYDtdahukpOXKOxkfRBA6Ze5zFy8Kvbfb5tvY8pdQkqcEhOu0Ec1KEgZtYvPiJsLdYUBP4CQmSSOpOHnPyTs3HzRU8mGHyIAQ6uqS+EP8hJNipQ2wUppN6y1mEV9p1wGy9iNdvTeTXsw4F6nYVB0x+WNbDGHdC2jTXab/ldbDgOcApQ01Fz6RY0qjTwctmtWo7soJVE/G9UzDRk+h4FOneMoCnFS/4x/2Zf6UQUN15mUt5ce2I6wUPnva+PAghWqLrnQT5Zi7UZZbP978yFyOSi1cNiU3+u5dQtVOrf02Na46Am9ufHPNqrVounLS1k6cAIvI7suRyd25q7grRgMkT/p+3BOPwXJ5qHw4ziQnV/BjeKENIQc4kDfXaMhPDZDzmm7VLIu405TrMUnL/wXvG9466e5CUOzjfDkURenoK9fRMz5AC7kTvwU7/qBJQ+147Es6zxrLcD0ROd15UMMcsvg48pVnGRdesOE19StNW7wKn86ihbI+ojiVOSl6a5kHXGNPw7b0LWYM1f7aIFIKs=</CipherValue>
+                      </CipherData>
+                    </EncryptedData>
+                  </ConnectionProfile>
+                </Offline>
+              </LinkedProperty>
+            </LinkedProperties>
+          </Property>
+          <Property Key="WorkflowDataSourceCollection" PropertyType="DataSources">
+            <LinkedProperties Default="">
+              <LinkedProperty>
+                <Name>LF_RMS_COMMS_MPM</Name>
+                <Id>47</Id>
+                <Uuid>f9a7eaaa-5420-4597-956c-6e2ca0d3d554</Uuid>
+                <Offline />
+                <Information>
+                  <SourceInformation Flags="OdbcType, ServerDatabase, UseSSPI" Adapter="Sql">
+                    <Host>rms-corplfsql1.cretexinc.com</Host>
+                    <Database>LF_RMS_COMMS_MPM</Database>
+                    <Server />
+                    <User />
+                  </SourceInformation>
+                </Information>
+              </LinkedProperty>
+            </LinkedProperties>
+          </Property>
+          <Property Key="EmailServerReferenceCollection" PropertyType="EmailServers">
+            <LinkedProperties Default="">
+              <LinkedProperty Host="rms-intstmprelay" IsDefault="false">
+                <Name>LF Notfications</Name>
+                <Id>10</Id>
+                <Uuid>26e2345d-1bb5-450b-b590-39cbf113e4cf</Uuid>
+                <Offline />
+              </LinkedProperty>
+            </LinkedProperties>
+          </Property>
+        </AttachedProperties>
+        <Projects>
+          <CSharpProject />
+          <VBProject />
+        </Projects>
+        <WorkflowBusinessProcessOptions LfProcessId="0" ProfileId="7e80f162-66ec-465a-849d-79f0878707a5" Flags="AllowStartingFromClients, CreateBusinessProcessEntity, RecordMilestoneEvents, RecordStepEvents, SetStartingMilestone, SetCompletedMilestone, SetCanceledMilestone" Enabled="false">
+          <Milestones>
+            <Starting>Running</Starting>
+            <Completed>Completed</Completed>
+            <Canceled>Terminated</Canceled>
+          </Milestones>
+          <CustomInstanceName />
+        </WorkflowBusinessProcessOptions>
+        <WorkflowParameters SetOutputValuesViaTokens="true" />
+        <Cultures>
+          <Culture>en-us</Culture>
+        </Cultures>
+        <MetadataStore Attributes="ExpectsStartingEntry, ValidateDesign">
+          <VersionHistory>
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpD39A.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="04/28/2025 04:28:18" EndTime="04/28/2025 04:54:29" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp4262.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="04/29/2025 04:11:55" EndTime="04/29/2025 04:16:39" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp2980.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="04/29/2025 04:16:39" EndTime="04/29/2025 04:26:22" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp5C55.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="04/29/2025 04:26:22" EndTime="04/29/2025 04:30:57" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp363E.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="04/29/2025 04:30:57" EndTime="04/29/2025 04:38:26" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp6440.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="05/05/2025 12:58:46" EndTime="05/05/2025 13:12:28" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpD589.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="05/05/2025 13:12:28" EndTime="05/05/2025 13:12:57" />
+          </VersionHistory>
+          <Metadata>
+            <Value Item="Author" Type="String">JTWhitney</Value>
+            <Value Item="PublishedDate" Type="DateTime">2025-05-05T13:12:42.66Z</Value>
+            <Value Item="WorkflowId" Type="Int32">147</Value>
+            <Value Item="WorkflowVersion" Type="Int32">3</Value>
+            <Value Item="WorkflowServerURL" Type="String">RMS-CORPLF1</Value>
+            <Value Item="WorkflowServerId" Type="String">8f6ebc76-1c3a-4b6f-b657-d705dfc3c51f</Value>
+          </Metadata>
+        </MetadataStore>
+        <Activities>
+          <Activity Type="Laserfiche.Workflow.Activities.CreateToken.CreateTokenActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="5124cc13-21f8-43d4-adaf-b73310fb5a94">
+            <Name>Assign Token Values</Name>
+            <SafeName>AssignTokenValues</SafeName>
+            <Enabled>True</Enabled>
+            <Description ShowDescription="null" ShowSummary="null">Creates new tokens and updates the values of existing tokens.</Description>
+            <Options>
+              <Tokens>
+                <TokenInformation Id="ea9530f3-4c34-4c18-824c-78be9ec9ccb6" IsMultivalued="false" UpdateExistingToken="false" AppendValues="false" TokenType="String">
+                  <TokenName>DayOfWeek</TokenName>
+                  <TokenFullName />
+                  <ActivityName />
+                  <TokenValues>
+                    <TokenValue xml:space="preserve">%(Date#"dddd"#)</TokenValue>
+                  </TokenValues>
+                </TokenInformation>
+              </Tokens>
+            </Options>
+          </Activity>
+          <Activity Type="Laserfiche.Workflow.Activities.Condition.ConditionalSequenceActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="1d303de1-47ac-4f60-a22d-8da5886aff2a">
+            <Name>Conditional Sequence</Name>
+            <SafeName>ConditionalSequence</SafeName>
+            <Enabled>True</Enabled>
+            <Description ShowDescription="null" ShowSummary="null">A sequence activity that only performs the contained activities if the conditions are satisfied.</Description>
+            <ProfileId>7e80f162-66ec-465a-849d-79f0878707a5</ProfileId>
+            <Condition Version="10.4.3.139" Name="" Negated="false" IsConjunction="false" ConditionType="Composite" Description="">
+              <Conditions>
+                <Condition ConditionType="Token" Operator="Equal">
+                  <Token Name="DayOfWeek" Length="0" MetaType="String">
+                    <Activity Display="Assign Token Values" Append="false">AssignTokenValues</Activity>
+                  </Token>
+                  <Values>
+                    <Value>Monday</Value>
+                  </Values>
+                </Condition>
+                <Condition ConditionType="Token" Operator="Equal">
+                  <Token Name="DayOfWeek" Length="0" MetaType="String">
+                    <Activity Display="Assign Token Values" Append="false">AssignTokenValues</Activity>
+                  </Token>
+                  <Values>
+                    <Value>Tuesday</Value>
+                  </Values>
+                </Condition>
+                <Condition ConditionType="Token" Operator="Equal">
+                  <Token Name="DayOfWeek" Length="0" MetaType="String">
+                    <Activity Display="Assign Token Values" Append="false">AssignTokenValues</Activity>
+                  </Token>
+                  <Values>
+                    <Value>Wednesday</Value>
+                  </Values>
+                </Condition>
+                <Condition ConditionType="Token" Operator="Equal">
+                  <Token Name="DayOfWeek" Length="0" MetaType="String">
+                    <Activity Display="Assign Token Values" Append="false">AssignTokenValues</Activity>
+                  </Token>
+                  <Values>
+                    <Value>Thursday</Value>
+                  </Values>
+                </Condition>
+                <Condition ConditionType="Token" Operator="Equal">
+                  <Token Name="DayOfWeek" Length="0" MetaType="String">
+                    <Activity Display="Assign Token Values" Append="false">AssignTokenValues</Activity>
+                  </Token>
+                  <Values>
+                    <Value>Friday</Value>
+                  </Values>
+                </Condition>
+              </Conditions>
+            </Condition>
+            <Activities>
+              <Activity Type="Laserfiche.Workflow.Activities.Exceptions.ExceptionCompositeProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="aebc5c8d-0969-4bd9-bfa7-25dec141ba3e">
+                <Name>Try-Catch</Name>
+                <SafeName>TryCatch</SafeName>
+                <Enabled>True</Enabled>
+                <Description ShowDescription="null" ShowSummary="null">Prevents a workflow from terminating if an activity encounters an error. A catch branch lets you specify activities that will be performed if the try branch encounters an error.</Description>
+                <Activities>
+                  <Activity Type="Laserfiche.Workflow.Activities.Exceptions.ExceptionTryProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="b53c8b65-85b1-4392-8837-866109785b26">
+                    <Name>Try Branch</Name>
+                    <SafeName>TryBranch</SafeName>
+                    <Enabled>True</Enabled>
+                    <Description ShowDescription="null" ShowSummary="null">Defines the default actions that will be attempted.</Description>
+                    <Activities>
+                      <Activity Type="Laserfiche.Workflow.Activities.Data.LookupActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="1863fcd5-18a3-4254-9a51-c52336119801">
+                        <Name>Sites</Name>
+                        <SafeName>Sites</SafeName>
+                        <Enabled>True</Enabled>
+                        <Description ShowDescription="null" ShowSummary="null">Retrieves records from the selected data source and creates tokens.</Description>
+                        <DataSourceId>f9a7eaaa-5420-4597-956c-6e2ca0d3d554</DataSourceId>
+                        <Criteria HasCustomQuery="false" IsCreateIdentityTokenEnabled="false" Timeout="-1">
+                          <Table Name="tblSite" HasIdentityColumn="false">
+                            <Columns Generated="1/1/0001 12:00:00 AM">
+                              <Column Name="ID" Type="System.Int32" ReadOnly="True" />
+                              <Column Name="SiteName" Type="System.String" ReadOnly="False" />
+                              <Column Name="EmailAddressCCList" Type="System.String" ReadOnly="False" />
+                              <Column Name="MetrologyEmailAddress" Type="System.String" ReadOnly="False" />
+                            </Columns>
+                          </Table>
+                        </Criteria>
+                        <ResultSetSize Rows="ReturnAllRows" Count="2" />
+                        <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+                      </Activity>
+                      <Activity Type="Laserfiche.Workflow.Activities.ForEach.ForEachResultActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="46880961-cb71-4de7-9622-f17d305c0bbd">
+                        <Name>For Each Site</Name>
+                        <SafeName>ForEachSite</SafeName>
+                        <Enabled>True</Enabled>
+                        <Description ShowDescription="null" ShowSummary="null">Runs the contained activities for each row returned by a Custom Query or Query Data activity, or for each result returned by activities that return collections of information.</Description>
+                        <Binding Name="Collection">
+                          <BindingPath Activity="Sites" Property="ResultFile" />
+                        </Binding>
+                        <Activities>
+                          <Activity Type="Laserfiche.Workflow.Activities.Data.LookupActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="ff875d0c-c8b9-4347-b74e-52e340d1b7ad">
+                            <Name>Get Assignee List</Name>
+                            <SafeName>GetAssigneeList</SafeName>
+                            <Enabled>True</Enabled>
+                            <Description ShowDescription="null" ShowSummary="null">Retrieves records from the selected data source and creates tokens.</Description>
+                            <DataSourceId>f9a7eaaa-5420-4597-956c-6e2ca0d3d554</DataSourceId>
+                            <Criteria HasCustomQuery="false" IsCreateIdentityTokenEnabled="false" Timeout="-1">
+                              <Table Name="qryAutoPesterAssigneeIDs" HasIdentityColumn="false">
+                                <Columns Generated="1/1/0001 12:00:00 AM">
+                                  <Column Name="SiteID" Type="System.Int32" ReadOnly="False" />
+                                  <Column Name="EMailAddress" Type="System.String" ReadOnly="False" />
+                                  <Column Name="AssignedToID" Type="System.Int32" ReadOnly="False" />
+                                </Columns>
+                              </Table>
+                              <Criterion Flags="None" Type="System.Int32" Column="SiteID" ReadOnly="false">
+                                <Value>%(ForEachSite_ID)</Value>
+                              </Criterion>
+                            </Criteria>
+                            <ResultSetSize Rows="ReturnAllRows" Count="2" />
+                            <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+                          </Activity>
+                          <Activity Type="Laserfiche.Workflow.Activities.ForEach.ForEachResultActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="a10aee04-9a97-4601-8248-dc6e2b33f9a6">
+                            <Name>For Each Assignee</Name>
+                            <SafeName>ForEachAssignee</SafeName>
+                            <Enabled>True</Enabled>
+                            <Description ShowDescription="null" ShowSummary="null">Runs the contained activities for each row returned by a Custom Query or Query Data activity, or for each result returned by activities that return collections of information.</Description>
+                            <Binding Name="Collection">
+                              <BindingPath Activity="Get Assignee List" Property="ResultFile" />
+                            </Binding>
+                            <Activities>
+                              <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="7b06eb6e-31b6-446b-8527-a4736f5f67f7">
+                                <Name>Get Email Message</Name>
+                                <SafeName>GetEmailMessage</SafeName>
+                                <Enabled>True</Enabled>
+                                <Description ShowDescription="null" ShowSummary="null">Performs the specified query in the selected data source.</Description>
+                                <DataSourceId>f9a7eaaa-5420-4597-956c-6e2ca0d3d554</DataSourceId>
+                                <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+                                  <Table Name="" HasIdentityColumn="false">
+                                    <Columns Generated="1/1/0001 12:00:00 AM">
+                                      <Column Name="" Type="System.String" ReadOnly="False" />
+                                    </Columns>
+                                  </Table>
+                                  <CustomQuery>EXECUTE spEMAIL_GetAutoPesterAssigneeEMailMessage ?, ?</CustomQuery>
+                                  <InputParameter DbType="Int32">
+                                    <Name>?</Name>
+                                    <Value>%(ForEachAssignee_AssignedToID)</Value>
+                                  </InputParameter>
+                                  <InputParameter>
+                                    <Name>?</Name>
+                                    <Value />
+                                  </InputParameter>
+                                </Criteria>
+                                <ResultSetSize Rows="ReturnAllRows" Count="2" />
+                                <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+                              </Activity>
+                              <Activity Type="Laserfiche.Workflow.Activities.CreateToken.CreateTokenActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="702f26a5-ac99-4040-ab6c-556ef9e79a38">
+                                <Name>PesterMessage</Name>
+                                <SafeName>PesterMessage</SafeName>
+                                <Enabled>True</Enabled>
+                                <Description ShowDescription="null" ShowSummary="null">Creates new tokens and updates the values of existing tokens.</Description>
+                                <Options>
+                                  <Tokens>
+                                    <TokenInformation Id="e5a85bfd-694b-42f7-88d1-f3295181994e" IsMultivalued="false" UpdateExistingToken="false" AppendValues="false" TokenType="String">
+                                      <TokenName>PesterMessage</TokenName>
+                                      <TokenFullName />
+                                      <ActivityName />
+                                      <TokenValues>
+                                        <TokenValue xml:space="preserve">%(GetEmailMessage_)</TokenValue>
+                                      </TokenValues>
+                                    </TokenInformation>
+                                  </Tokens>
+                                </Options>
+                              </Activity>
+                              <Activity Type="Laserfiche.Workflow.Activities.Email.EmailSequenceProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="7722d88e-85f3-4a6f-965d-efed4b8a4ff0">
+                                <Name>Email 2</Name>
+                                <SafeName>Email2</SafeName>
+                                <Enabled>True</Enabled>
+                                <Description ShowDescription="null" ShowSummary="null">Sends an email to one or more people.</Description>
+                                <Email TextOnlyBodyFormat="false" DeliveryReceipts="None">
+                                  <ToAddresses>
+                                    <Add>%(ForEachAssignee_EMailAddress)</Add>
+                                  </ToAddresses>
+                                  <CcAddresses>
+                                    <Add>%(ForEachSite_EmailAddressCCList)</Add>
+                                  </CcAddresses>
+                                  <BccAddresses />
+                                  <FromAddress />
+                                  <ReplyTo />
+                                  <Subject>You have overdue tasks in the schedule</Subject>
+                                  <Body>%(PesterMessage#"HTML"#)</Body>
+                                  <Priority>Normal</Priority>
+                                  <ServerReference>26e2345d-1bb5-450b-b590-39cbf113e4cf</ServerReference>
+                                  <UseBodyLengthLimit null="true" />
+                                  <Attachments>
+                                    <ExportedEntries />
+                                    <Options>
+                                      <UseZipFile>false</UseZipFile>
+                                      <LimitEntrySize>false</LimitEntrySize>
+                                      <EntrySizeLimit>51200</EntrySizeLimit>
+                                      <ReplaceBigEntriesWithShortcut>false</ReplaceBigEntriesWithShortcut>
+                                      <NotifyForEntriesFiles>true</NotifyForEntriesFiles>
+                                      <NotifyForNoContentEntries>true</NotifyForNoContentEntries>
+                                      <AttachShortcutForNoContentEntries>false</AttachShortcutForNoContentEntries>
+                                    </Options>
+                                  </Attachments>
+                                </Email>
+                              </Activity>
+                            </Activities>
+                            <FaultHandlers />
+                          </Activity>
+                        </Activities>
+                        <FaultHandlers />
+                      </Activity>
+                    </Activities>
+                    <FaultHandlers />
+                  </Activity>
+                  <Activity Type="Laserfiche.Workflow.Activities.Exceptions.ExceptionCatchProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="f8b79c70-6163-48cf-9ac7-c6e12cc7395b">
+                    <Name>Catch Branch</Name>
+                    <SafeName>CatchBranch</SafeName>
+                    <Enabled>True</Enabled>
+                    <Description ShowDescription="null" ShowSummary="null">Defines the actions that will take place if a specific error occurs.</Description>
+                    <FaultType>System.Exception</FaultType>
+                    <Activities>
+                      <Activity Type="Laserfiche.Workflow.Activities.Email.EmailSequenceProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="0ce45b53-be3f-4c76-afbd-23994e54451d">
+                        <Name>Email</Name>
+                        <SafeName>Email</SafeName>
+                        <Enabled>True</Enabled>
+                        <Description ShowDescription="null" ShowSummary="null">Sends an email to one or more people.</Description>
+                        <Email TextOnlyBodyFormat="false" DeliveryReceipts="None">
+                          <ToAddresses>
+                            <Add>%(Sites_MetrologyEmailAddress)</Add>
+                          </ToAddresses>
+                          <CcAddresses />
+                          <BccAddresses />
+                          <FromAddress />
+                          <ReplyTo />
+                          <Subject>Error Occurred While Trying to process Auto Pester QE's</Subject>
+                          <Body>Error Message: %(CatchBranch_Message)</Body>
+                          <Priority>Normal</Priority>
+                          <ServerReference />
+                          <UseBodyLengthLimit null="true" />
+                          <Attachments>
+                            <ExportedEntries />
+                            <Options>
+                              <UseZipFile>false</UseZipFile>
+                              <LimitEntrySize>false</LimitEntrySize>
+                              <EntrySizeLimit>51200</EntrySizeLimit>
+                              <ReplaceBigEntriesWithShortcut>false</ReplaceBigEntriesWithShortcut>
+                              <NotifyForEntriesFiles>true</NotifyForEntriesFiles>
+                              <NotifyForNoContentEntries>true</NotifyForNoContentEntries>
+                              <AttachShortcutForNoContentEntries>false</AttachShortcutForNoContentEntries>
+                            </Options>
+                          </Attachments>
+                        </Email>
+                      </Activity>
+                    </Activities>
+                    <FaultHandlers />
+                  </Activity>
+                </Activities>
+                <FaultHandlers />
+              </Activity>
+            </Activities>
+            <FaultHandlers />
+          </Activity>
+          <Activity Type="Laserfiche.Workflow.Activities.Tracking.TrackTokenActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="17ef0b5f-9eec-4a3c-8b85-c3c4c2fbea75">
+            <Name>Track Tokens</Name>
+            <SafeName>TrackTokens</SafeName>
+            <Enabled>True</Enabled>
+            <Description ShowDescription="null" ShowSummary="null">Records the values of selected tokens when the workflow runs. You can view these values in the Tokens tab in the workflow's Search Details pane.</Description>
+            <Options TrackTokenManager="true">
+              <Tokens />
+            </Options>
+          </Activity>
+        </Activities>
+        <FaultHandlers />
+      </SequentialWorkflowActivityProxy>
+      <CanvasUI>
+        <Expanded>True</Expanded>
+        <Activity Name="Assign Token Values" Key="5124cc13-21f8-43d4-adaf-b73310fb5a94" />
+        <Activity Name="Conditional Sequence" Key="1d303de1-47ac-4f60-a22d-8da5886aff2a">
+          <Expanded>True</Expanded>
+          <Activity Name="Try-Catch" Key="aebc5c8d-0969-4bd9-bfa7-25dec141ba3e">
+            <Expanded>True</Expanded>
+            <Activity Name="Try Branch" Key="b53c8b65-85b1-4392-8837-866109785b26">
+              <Expanded>True</Expanded>
+              <Activity Name="Sites" Key="1863fcd5-18a3-4254-9a51-c52336119801" />
+              <Activity Name="For Each Site" Key="46880961-cb71-4de7-9622-f17d305c0bbd">
+                <Expanded>True</Expanded>
+                <Activity Name="Get Assignee List" Key="ff875d0c-c8b9-4347-b74e-52e340d1b7ad" />
+                <Activity Name="For Each Assignee" Key="a10aee04-9a97-4601-8248-dc6e2b33f9a6">
+                  <Expanded>True</Expanded>
+                  <Activity Name="Get Email Message" Key="7b06eb6e-31b6-446b-8527-a4736f5f67f7" />
+                  <Activity Name="PesterMessage" Key="702f26a5-ac99-4040-ab6c-556ef9e79a38" />
+                  <Activity Name="Email 2" Key="7722d88e-85f3-4a6f-965d-efed4b8a4ff0" />
+                </Activity>
+              </Activity>
+            </Activity>
+            <Activity Name="Catch Branch" Key="f8b79c70-6163-48cf-9ac7-c6e12cc7395b">
+              <Expanded>True</Expanded>
+              <Activity Name="Email" Key="0ce45b53-be3f-4c76-afbd-23994e54451d" />
+            </Activity>
+          </Activity>
+        </Activity>
+        <Activity Name="Track Tokens" Key="17ef0b5f-9eec-4a3c-8b85-c3c4c2fbea75" />
+        <UseCompactLayout>false</UseCompactLayout>
+        <ZoomLevel>1.0</ZoomLevel>
+      </CanvasUI>
+    </Designer>
+    <CreationRules Count="0" />
+    <Schedules Count="0" />
+  </ExportedWorkflow>
+  <LinkedObjects Count="2">
+    <LinkedObject>
+      <Id>47</Id>
+      <Name>LF_RMS_COMMS_MPM</Name>
+      <Description />
+      <AttachmentType>DataSource</AttachmentType>
+      <LinkedWorkflows Count="1">
+        <LinkInfo>
+          <WorkflowName>RMS-MPM-AutoPesterAssignees</WorkflowName>
+        </LinkInfo>
+      </LinkedWorkflows>
+      <XmlValue>&lt;SourceInformation DataSourceType="Odbc" DSNType="System" Authenticated="true"&gt;
+  &lt;Location&gt;
+    &lt;HostName&gt;rms-corplfsql1.cretexinc.com&lt;/HostName&gt;
+    &lt;ServerInstance /&gt;
+    &lt;DatabaseName&gt;LF_RMS_COMMS_MPM&lt;/DatabaseName&gt;
+    &lt;LocationType&gt;ServerDatabase&lt;/LocationType&gt;
+  &lt;/Location&gt;
+  &lt;Authentication&gt;
+    &lt;UserName&gt;&lt;/UserName&gt;
+    &lt;SecureString Version="2" Value="" /&gt;
+  &lt;/Authentication&gt;
+  &lt;Adapter&gt;
+    &lt;type key="sql" default="false" category="ODBC"&gt;
+      &lt;typename&gt;Laserfiche.Project.Data.Runtime.Odbc.Sql, Laserfiche.Project.Data, Version=9.0.0.0, Culture=neutral, PublicKeyToken=607dd73ee2bd1c00&lt;/typename&gt;
+      &lt;names default="Sql"&gt;
+        &lt;add code="en" value="Sql" /&gt;
+      &lt;/names&gt;
+    &lt;/type&gt;
+  &lt;/Adapter&gt;
+  &lt;OtherOptions ActualType="Laserfiche.Collections.PropertyBag, Laserfiche.Base, Version=9.0.0.0, Culture=neutral, PublicKeyToken=607dd73ee2bd1c00"&gt;
+    &lt;Properties /&gt;
+  &lt;/OtherOptions&gt;
+&lt;/SourceInformation&gt;</XmlValue>
+    </LinkedObject>
+    <LinkedObject>
+      <Id>10</Id>
+      <Name>LF Notfications</Name>
+      <Description />
+      <AttachmentType>EmailServer</AttachmentType>
+      <LinkedWorkflows Count="1">
+        <LinkInfo>
+          <WorkflowName>RMS-MPM-AutoPesterAssignees</WorkflowName>
+        </LinkInfo>
+      </LinkedWorkflows>
+      <XmlValue>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;EmailServer IsProtected="true" SendTimeout="-1"&gt;
+  &lt;Name /&gt;
+  &lt;NetworkAddress&gt;rms-intstmprelay&lt;/NetworkAddress&gt;
+  &lt;Port&gt;25&lt;/Port&gt;
+  &lt;UserName /&gt;
+  &lt;Password&gt;6Dd9xl/YoLU=&lt;/Password&gt;
+  &lt;From&gt;LF_Notifications@machine.com&lt;/From&gt;
+  &lt;DefaultSubject /&gt;
+  &lt;UseIISPickup&gt;false&lt;/UseIISPickup&gt;
+  &lt;PickupDirectory /&gt;
+  &lt;UseSSL&gt;false&lt;/UseSSL&gt;
+  &lt;UseDefaultAuthentication&gt;true&lt;/UseDefaultAuthentication&gt;
+&lt;/EmailServer&gt;</XmlValue>
+    </LinkedObject>
+  </LinkedObjects>
+</ExportedWorkflows>

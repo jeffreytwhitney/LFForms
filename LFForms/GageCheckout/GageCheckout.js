@@ -36,7 +36,7 @@ $(document).ready(function () {
     }
   });
 
-  $(document).on('change', '[id^="Field174"]', function (e) {
+  $(document).on('change', '[id^="Field176"]', function (e) {
     generateMachineList();
   });
 
@@ -89,7 +89,7 @@ $(document).ready(function () {
 
 function generateMachineList() {
   var machineList = '';
-  $('[id^="Field174"]').each(function (index, element) {
+  $('[id^="Field176"]').each(function (index, element) {
     machineName = $(element).val();
     if (machineName != '') {
       if (machineList.length > 0) {

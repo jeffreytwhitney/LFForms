@@ -1,0 +1,1220 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ExportedWorkflows Version="8.3.0.0" Count="1">
+  <ExportedWorkflow>
+    <Designer Version="10.4.3.139">
+      <SequentialWorkflowActivityProxy Type="Laserfiche.Workflow.Activities.Proxies.LfSequentialWorkflowProxy, Laserfiche.Workflow.Designer.Base, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="9ef2e1f1-27db-4016-bbd9-fe6aabc7ce13" ActivityCountHint="31">
+        <Name>RMS - Gage Checkout</Name>
+        <SafeName>RMSGageCheckout</SafeName>
+        <Enabled>True</Enabled>
+        <Description ShowDescription="null" ShowSummary="null" />
+        <AttachedProperties>
+          <Property Key="ProfileCollection" PropertyType="Profiles">
+            <LinkedProperties Default="">
+              <LinkedProperty>
+                <Name>RMS</Name>
+                <Id>-1</Id>
+                <Uuid>16370d1c-2f0d-4ff5-8b7b-776f55eb5410</Uuid>
+                <Offline>
+                  <ConnectionProfile Version="2" xmlns="http:\laserfiche\workflow\connection">
+                    <ProfileId>HUN2coSQ/b6wuFK86D0QqBPsGptkoK3r</ProfileId>
+                    <EncryptedData xmlns="http://www.w3/.org/2001/04/xmlenc#">
+                      <CipherData>
+                        <CipherValue>R07SHbIWvps/wsO7+e4eBm0a3St6r7wLkziN6vnNvFIZnjORDAGXBgVrwqG8VYyNClWNGaBpZsp80oWRTgEbhb9GFLWHpiAMNcNaNPcIkMAxxyHiZHsYJc4/mz17ec4hmu6KSzWkIS8WDkx5c7u+HzEYwp9URVR4RCdK/4iikclnC+CXoGhwOEzn1K5kOlmFkGS25FR0PebyZx9haL7/oFUB8cN75iiosvAk4NwfIi/enFylG7389PIjnTi/gkXXgLt+XyQ/KLE1/zKlPQPggFJahOSFXHRYhncPfstl8aTm6XLXMmcS07fKEufRWCbz0EhkfYMbZyFVhZ4PHpMeCMCnUkZBNO/G6CJRDE2XgQoJFARKHKzF0A9vLnakKJ8G1+mE+W919wQjbaqW3w+u19eZNTXHpd3HMzb1SmJWbYjQ+NIEuiveSKES4Gy9wu1vr6DyDpoEokITJi1BuHrOseCLD5lHY3FayVZ99T5ga/oiM8jZPp1HHQu3clicwDD+Rr2KvTKz+jW2mCf+Uh9flPtKqmuud4z8wEqY3EVSwMQIbtxSs2G+/VVJOihiT44r57wQpzMbFGJNIWk/50OCyz2Z+6iivPl96f8+CeQSsRdDj5EA+0h9iWEyNxNZ2y8aARMqpYihXZaDwrUn4TbMcEGyNB3BsGJT/55/fF67dFcQTKaMcUNrl6w6DERwgVoy0ds3syjPvNN/5RS6rz9ehlQwpbG+YdDtQEHQoB1aU1V+hq5l7GBKMQa3Tv6Xs6kig4Gf6yY9g8lzEv7o9ikh+kwcHOKNM9ucG3p/9hPBWME3GBc7xpahhZEyik4vUpsBHoRo+cAn4Aw2V6aWbb2j7HEVLrS1ZN1oG1O33GXGsaP/jErkd0F6CZZlyEHCS5w9y4w6Hj/mx6kD0iMS8iaFaFb+Q2CZ5bEsFfTN2P1/jTYPrcLO+BccZrh/e3zzLDoIMMUMURK85OrkF+Zwrud6MVQlng6/blyIYvhDI74yi23kxPaxviwTswNK0dcTeMu57NTBGNc7VI3jxof9aHMWpQ==</CipherValue>
+                      </CipherData>
+                    </EncryptedData>
+                  </ConnectionProfile>
+                </Offline>
+              </LinkedProperty>
+            </LinkedProperties>
+          </Property>
+          <Property Key="WorkflowWebServiceCollection" PropertyType="WebServices">
+            <LinkedProperties Default="">
+              <LinkedProperty ServiceURL="http://rmslf/forms" User="admin" Type="Laserfiche Forms">
+                <Name>LFForms</Name>
+                <Id>18</Id>
+                <Uuid>eadb2c8a-4bba-48c6-82e2-8c17f9ed5bb9</Uuid>
+                <Offline />
+              </LinkedProperty>
+            </LinkedProperties>
+          </Property>
+          <Property Key="WorkflowDataSourceCollection" PropertyType="DataSources">
+            <LinkedProperties Default="">
+              <LinkedProperty>
+                <Name>GageCheckout</Name>
+                <Id>46</Id>
+                <Uuid>cd3a829a-c3ec-4c31-b8e6-72714e5d35cd</Uuid>
+                <Offline />
+                <Information>
+                  <SourceInformation Flags="OdbcType, ServerDatabase, UseSSPI" Adapter="Sql">
+                    <Host>rms-corplfsql1.cretexinc.com</Host>
+                    <Database>GageCheckout</Database>
+                    <Server />
+                    <User />
+                  </SourceInformation>
+                </Information>
+              </LinkedProperty>
+            </LinkedProperties>
+          </Property>
+        </AttachedProperties>
+        <Projects>
+          <CSharpProject Name="RMS - Gage Checkout" Key="45d17640-807d-44f6-8563-48e686bc1663" Language="CSharp">
+            <Reference Name="System" Key="5bea7679-168c-457a-bbaf-4b6fb081e381">
+              <FullName>System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</FullName>
+              <Path>C:\WINDOWS\Microsoft.Net\assembly\GAC_MSIL\System\v4.0_4.0.0.0__b77a5c561934e089\System.dll</Path>
+            </Reference>
+            <Reference Name="System.Core" Key="8fc9561b-ac42-49b7-bffe-fe8249f15ddf">
+              <FullName>System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</FullName>
+              <Path>C:\WINDOWS\Microsoft.Net\assembly\GAC_MSIL\System.Core\v4.0_4.0.0.0__b77a5c561934e089\System.Core.dll</Path>
+            </Reference>
+            <Reference Name="System.Data" Key="b316e6c9-4846-4896-adbd-390ca8658245">
+              <FullName>System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</FullName>
+              <Path>C:\WINDOWS\Microsoft.Net\assembly\GAC_64\System.Data\v4.0_4.0.0.0__b77a5c561934e089\System.Data.dll</Path>
+            </Reference>
+            <Reference Name="System.Xml" Key="b67965c9-6128-4e03-9d1d-01c316bc47f0">
+              <FullName>System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</FullName>
+              <Path>C:\WINDOWS\Microsoft.Net\assembly\GAC_MSIL\System.Xml\v4.0_4.0.0.0__b77a5c561934e089\System.Xml.dll</Path>
+            </Reference>
+            <Reference Name="Laserfiche.Workflow.Activities.83" Key="9baeb62c-1713-4d70-a003-11a6adba100d">
+              <FullName>Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda</FullName>
+              <Path>C:\Program Files\Laserfiche\Laserfiche Workflow 10.4\Laserfiche.Workflow.Activities.83.DLL</Path>
+            </Reference>
+            <Reference Name="Laserfiche.RepositoryAccess" Key="c77faaf5-9998-49eb-9b83-973a8c3a4250">
+              <FullName>Laserfiche.RepositoryAccess, Version=10.4.0.0, Culture=neutral, PublicKeyToken=3f98b3eaee6c16a6</FullName>
+              <Path />
+            </Reference>
+            <Folder Name="Shared Scripts" Key="0d2a6be5-82a7-4d81-b8be-2a33c2f82edd" />
+          </CSharpProject>
+          <VBProject Name="RMS - Gage Checkout" Key="fbb6d1f2-be82-49f6-81a9-c7779e770dee" Language="VB">
+            <Reference Name="System" Key="25189f33-f9eb-48f5-81cf-9dc314ac5fc6">
+              <FullName>System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</FullName>
+              <Path>C:\WINDOWS\Microsoft.Net\assembly\GAC_MSIL\System\v4.0_4.0.0.0__b77a5c561934e089\System.dll</Path>
+            </Reference>
+            <Reference Name="System.Core" Key="19c805d2-9840-43ac-91ad-d31c39b05546">
+              <FullName>System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</FullName>
+              <Path>C:\WINDOWS\Microsoft.Net\assembly\GAC_MSIL\System.Core\v4.0_4.0.0.0__b77a5c561934e089\System.Core.dll</Path>
+            </Reference>
+            <Reference Name="System.Data" Key="e36580ac-f6d5-4762-9a2b-2bd3211090b9">
+              <FullName>System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</FullName>
+              <Path>C:\WINDOWS\Microsoft.Net\assembly\GAC_64\System.Data\v4.0_4.0.0.0__b77a5c561934e089\System.Data.dll</Path>
+            </Reference>
+            <Reference Name="System.Xml" Key="24c9adc0-7fac-43c2-980f-2a076b3ac5de">
+              <FullName>System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</FullName>
+              <Path>C:\WINDOWS\Microsoft.Net\assembly\GAC_MSIL\System.Xml\v4.0_4.0.0.0__b77a5c561934e089\System.Xml.dll</Path>
+            </Reference>
+            <Reference Name="Microsoft.VisualBasic" Key="07130cf2-323e-4669-b35d-fd51d85bbbce">
+              <FullName>Microsoft.VisualBasic, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</FullName>
+              <Path>C:\WINDOWS\Microsoft.Net\assembly\GAC_MSIL\Microsoft.VisualBasic\v4.0_10.0.0.0__b03f5f7f11d50a3a\Microsoft.VisualBasic.dll</Path>
+            </Reference>
+            <Reference Name="Laserfiche.Workflow.Activities.83" Key="91c50041-0568-4269-bee6-fc68f1038061">
+              <FullName>Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda</FullName>
+              <Path>C:\Program Files\Laserfiche\Laserfiche Workflow 10.4\Laserfiche.Workflow.Activities.83.DLL</Path>
+            </Reference>
+            <Reference Name="Laserfiche.RepositoryAccess" Key="c143c005-67ec-4018-968a-31965694bef8">
+              <FullName>Laserfiche.RepositoryAccess, Version=10.4.0.0, Culture=neutral, PublicKeyToken=3f98b3eaee6c16a6</FullName>
+              <Path>C:\WINDOWS\Microsoft.Net\assembly\GAC_MSIL\Laserfiche.RepositoryAccess\v4.0_10.4.0.0__3f98b3eaee6c16a6\Laserfiche.RepositoryAccess.dll</Path>
+            </Reference>
+            <Folder Name="Shared Scripts" Key="1f247dd4-7c69-40a9-b069-00df054f1861" />
+          </VBProject>
+        </Projects>
+        <WorkflowBusinessProcessOptions LfProcessId="0" ProfileId="16370d1c-2f0d-4ff5-8b7b-776f55eb5410" Flags="AllowStartingFromClients, CreateBusinessProcessEntity, RecordMilestoneEvents, RecordStepEvents, SetStartingMilestone, SetCompletedMilestone, SetCanceledMilestone" Enabled="false">
+          <Milestones>
+            <Starting>Running</Starting>
+            <Completed>Completed</Completed>
+            <Canceled>Terminated</Canceled>
+          </Milestones>
+          <CustomInstanceName />
+        </WorkflowBusinessProcessOptions>
+        <WorkflowParameters SetOutputValuesViaTokens="true" />
+        <Cultures>
+          <Culture>en-us</Culture>
+        </Cultures>
+        <MetadataStore Attributes="ExpectsStartingEntry, ValidateDesign, ExpectsFormsInitiation">
+          <VersionHistory>
+            <Version FileName="C:\Users\meklund\AppData\Local\Temp\2\tmp7E37.tmp" Editor="MEKLUND" Machine="RMS-CORPLF1" StartTime="06/19/2024 02:42:45" EndTime="07/05/2024 02:01:03" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp904D.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="07/23/2024 05:19:05" EndTime="07/23/2024 05:57:44" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp48E5.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/13/2024 08:57:27" EndTime="08/13/2024 09:20:40" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpE089.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/14/2024 10:18:38" EndTime="08/14/2024 10:33:32" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp2D53.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/14/2024 10:33:32" EndTime="08/14/2024 10:44:47" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpE50D.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/15/2024 22:10:11" EndTime="08/15/2024 22:25:30" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpA17D.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/16/2024 18:01:35" EndTime="08/16/2024 18:17:24" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpB184.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/20/2024 02:12:15" EndTime="08/20/2024 02:54:03" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp176F.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/20/2024 02:54:03" EndTime="08/20/2024 03:09:47" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp875B.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/20/2024 03:09:47" EndTime="08/20/2024 03:22:16" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp41B2.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/21/2024 04:00:28" EndTime="08/21/2024 04:06:42" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp202D.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/21/2024 12:15:09" EndTime="08/21/2024 12:17:42" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp4961.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/21/2024 19:46:36" EndTime="08/21/2024 20:38:52" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp1998.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/23/2024 04:31:27" EndTime="08/23/2024 04:33:41" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp362B.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/23/2024 23:51:12" EndTime="08/24/2024 01:47:14" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpF9E6.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/25/2024 05:52:39" EndTime="08/25/2024 06:17:56" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp9B92.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/25/2024 11:48:41" EndTime="08/25/2024 12:41:39" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp2F66.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/25/2024 17:49:40" EndTime="08/25/2024 18:18:19" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpA879.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/25/2024 18:18:19" EndTime="08/25/2024 18:30:51" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp20CD.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/25/2024 18:30:51" EndTime="08/25/2024 18:44:28" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpC80A.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/25/2024 18:44:28" EndTime="08/25/2024 18:45:11" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp17D0.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="08/25/2024 18:45:11" EndTime="08/25/2024 18:56:27" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpE9D1.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="09/06/2024 03:39:23" EndTime="09/06/2024 03:43:18" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpA7A1.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="09/06/2024 08:49:25" EndTime="09/06/2024 08:51:45" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp5B12.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="09/14/2024 07:24:35" EndTime="09/14/2024 07:35:07" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp7960.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="09/14/2024 12:51:49" EndTime="09/14/2024 12:54:55" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp34FA.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="11/10/2024 01:53:17" EndTime="11/10/2024 02:01:44" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp52EE.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="11/12/2024 11:38:11" EndTime="11/12/2024 11:44:27" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp311C.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="11/12/2024 11:44:27" EndTime="11/12/2024 11:51:57" />
+            <Version FileName="C:\Users\JTWhitney\OneDrive - Cretex Companies, Inc\Documents\RMS - Gage Checkout.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="01/27/2025 14:35:42" EndTime="01/27/2025 14:36:18" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpC6ED.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="01/27/2025 14:36:18" EndTime="01/27/2025 14:48:43" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpBFAC.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="01/27/2025 21:01:07" EndTime="01/27/2025 21:06:10" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpF160.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="01/28/2025 07:48:11" EndTime="01/28/2025 08:03:28" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp5A3E.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="01/28/2025 08:03:28" EndTime="01/28/2025 08:07:12" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp79E8.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="01/31/2025 05:32:20" EndTime="01/31/2025 05:51:44" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp41CD.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="01/31/2025 12:38:02" EndTime="01/31/2025 13:22:09" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp18BB.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="01/31/2025 19:50:04" EndTime="01/31/2025 19:50:22" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpFFA.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/01/2025 01:54:33" EndTime="02/01/2025 01:59:04" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp6D7.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/01/2025 10:09:16" EndTime="02/01/2025 10:14:28" />
+            <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS - Gage Checkout.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/03/2025 14:47:17" EndTime="02/03/2025 14:56:12" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpF60B.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/03/2025 20:59:24" EndTime="02/03/2025 21:00:09" />
+            <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS - Gage Checkout.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/05/2025 03:23:24" EndTime="02/05/2025 03:41:49" />
+            <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS - Gage Checkout.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/05/2025 03:41:49" EndTime="02/05/2025 03:42:30" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpE878.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/05/2025 03:42:30" EndTime="02/05/2025 03:42:37" />
+            <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS - Gage Checkout.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/05/2025 03:42:37" EndTime="02/05/2025 03:43:56" />
+            <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS - Gage Checkout.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/05/2025 03:43:56" EndTime="02/05/2025 03:46:28" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp7B64.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/05/2025 03:46:28" EndTime="02/05/2025 03:46:31" />
+            <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS - Gage Checkout.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/05/2025 11:18:22" EndTime="02/05/2025 11:19:53" />
+            <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS - Gage Checkout.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/05/2025 11:19:53" EndTime="02/05/2025 11:21:07" />
+            <Version FileName="C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS - Gage Checkout.wfx" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/05/2025 17:39:10" EndTime="02/05/2025 20:07:08" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp2181.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/05/2025 20:07:08" EndTime="02/05/2025 20:07:11" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpF880.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="02/13/2025 18:01:59" EndTime="02/13/2025 18:09:17" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp2E94.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="05/20/2025 07:24:31" EndTime="05/20/2025 07:28:43" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpFFF9.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="07/21/2025 06:04:06" EndTime="07/21/2025 07:15:54" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmp83F7.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="07/21/2025 07:15:54" EndTime="07/21/2025 13:21:17" />
+            <Version FileName="C:\Users\JTWhitney\AppData\Local\Temp\tmpD448.tmp" Editor="JTWhitney" Machine="RMS-JTWHITNEYLT" StartTime="07/23/2025 15:04:40" EndTime="07/23/2025 15:11:12" />
+          </VersionHistory>
+          <Metadata>
+            <Value Item="Author" Type="String">MEKLUND</Value>
+            <Value Item="PublishedDate" Type="DateTime">2025-07-21T18:21:32.673Z</Value>
+            <Value Item="WorkflowId" Type="Int32">109</Value>
+            <Value Item="WorkflowVersion" Type="Int32">48</Value>
+            <Value Item="WorkflowServerURL" Type="String">RMS-CORPLF1</Value>
+            <Value Item="WorkflowServerId" Type="String">8f6ebc76-1c3a-4b6f-b657-d705dfc3c51f</Value>
+            <Value Item="WorkflowFilePath" Type="String">C:\Users\JTWhitney\source\repos\LFForms\LFForms\GageCheckout\Workflows\RMS - Gage Checkout.wfx</Value>
+          </Metadata>
+        </MetadataStore>
+        <Activities>
+          <Activity Type="Laserfiche.Workflow.Activities.Forms.RetrieveFormFieldValueProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="a68618fc-b351-46ca-8652-fca735724ccc">
+            <Name>Retrieve Business Process Variables</Name>
+            <SafeName>RetrieveBusinessProcessVariables</SafeName>
+            <Enabled>True</Enabled>
+            <Description ShowDescription="null" ShowSummary="null">Retrieves the values from a Laserfiche Forms business process instance and stores those values as tokens.</Description>
+            <RetrieveFormFieldValueOptions Id="eadb2c8a-4bba-48c6-82e2-8c17f9ed5bb9" OPT123332="true">
+              <SubmissionOptions UseStarting="true" SubmissionId="" InstanceId="" UseStartingInstance="true" />
+              <ProcessOptions ProcessId="40" ProcessName="RMS-GAGE-GageCheckout" />
+              <Fields>
+                <Attribute AttributeId="1877" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Cell Leader:" AttributeName="Cell_Leader_1" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="1883" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="1919" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="CellLeaderID" AttributeName="CellLeaderID" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="1925" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="1860" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Radio" Label="Ticket Type:" AttributeName="Checkout_Type" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="true" BoundPropertyName="" FormName="Gage Checkout" MemberPath="1866" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false">
+                  <Choices>
+                    <FormAttributeFieldChoice Label="Pin/Bin" Value="1" />
+                    <FormAttributeFieldChoice Label="Thread Gage" Value="2" />
+                  </Choices>
+                </Attribute>
+                <Attribute AttributeId="1917" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Select" Label="Department:" AttributeName="Department_Name" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="1923" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false">
+                  <Choices>
+                    <FormAttributeFieldChoice Label="choice 1" Value="choice_1" />
+                    <FormAttributeFieldChoice Label="choice 2" Value="choice_2" />
+                    <FormAttributeFieldChoice Label="choice 3" Value="choice_3" />
+                  </Choices>
+                </Attribute>
+                <Attribute AttributeId="1918" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="DepartmentID" AttributeName="DepartmentID" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="1924" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="1874" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Job/Lot Number:" AttributeName="Job_Lot_Number" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="1880" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="1873" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Select" Label="Machine Group:" AttributeName="Machine_Group" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="1879" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="1872" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Machine Name:" AttributeName="Machine_Name" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="1878" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="1925" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="MachineGroupID" AttributeName="MachineGroupID" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="1931" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="5032" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="MachineNameList" AttributeName="MachineNameList" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="5045" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="3030" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="guid" AttributeName="NewPrintID" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="3036" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="1875" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Part Number:" AttributeName="Part_Number" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="1881" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="1861" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Table" Label="Pins" AttributeName="Pin_Table" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="1867_" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false">
+                  <Choices>
+                    <FormAttributeFieldChoice Label="row 1" Value="row_1" />
+                  </Choices>
+                  <Children>
+                    <Attribute AttributeId="1867" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Number" Label="Pin Diameter" AttributeName="Pin_Diamter" ParentLabel="Pins" ParentName="Pin_Table" ParentPath="1867_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="1867_.1873" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                    <Attribute AttributeId="1868" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Number" Label="Number Of Pins" AttributeName="Number_Of_Pins" ParentLabel="Pins" ParentName="Pin_Table" ParentPath="1867_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="1867_.1874" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                    <Attribute AttributeId="1869" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Select" Label="Pin Type" AttributeName="Pin_Type" ParentLabel="Pins" ParentName="Pin_Table" ParentPath="1867_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="1867_.1875" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                    <Attribute AttributeId="1954" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="PinTypeID" AttributeName="PinTypeID_1" ParentLabel="Pins" ParentName="Pin_Table" ParentPath="1867_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="1867_.1960" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                    <Attribute AttributeId="2935" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Bin Number" AttributeName="BinNumber" ParentLabel="Pins" ParentName="Pin_Table" ParentPath="1867_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="1867_.2941" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                    <Attribute AttributeId="2936" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="ExistingBinTicketID" AttributeName="ExistingBinID" ParentLabel="Pins" ParentName="Pin_Table" ParentPath="1867_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="1867_.2942" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                    <Attribute AttributeId="2937" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="BinID" AttributeName="BinID" ParentLabel="Pins" ParentName="Pin_Table" ParentPath="1867_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="1867_.2943" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                  </Children>
+                </Attribute>
+                <Attribute AttributeId="2937" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="BinID" AttributeName="BinID" ParentLabel="Pins" ParentName="Pin_Table" ParentPath="1867_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="1867_.2943" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="2935" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Bin Number" AttributeName="BinNumber" ParentLabel="Pins" ParentName="Pin_Table" ParentPath="1867_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="1867_.2941" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="2936" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="ExistingBinTicketID" AttributeName="ExistingBinID" ParentLabel="Pins" ParentName="Pin_Table" ParentPath="1867_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="1867_.2942" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="1868" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Number" Label="Number Of Pins" AttributeName="Number_Of_Pins" ParentLabel="Pins" ParentName="Pin_Table" ParentPath="1867_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="1867_.1874" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="1867" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Number" Label="Pin Diameter" AttributeName="Pin_Diamter" ParentLabel="Pins" ParentName="Pin_Table" ParentPath="1867_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="1867_.1873" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="1869" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Select" Label="Pin Type" AttributeName="Pin_Type" ParentLabel="Pins" ParentName="Pin_Table" ParentPath="1867_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="1867_.1875" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="1954" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="PinTypeID" AttributeName="PinTypeID_1" ParentLabel="Pins" ParentName="Pin_Table" ParentPath="1867_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="1867_.1960" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="2475" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Print_TicketID" AttributeName="Print_TicketID" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="2481" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="2476" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Print_TicketTypeID" AttributeName="Print_TicketTypeID" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="2482" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="2940" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Select" Label="Site:" AttributeName="Site" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="2946" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="2941" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="SiteID" AttributeName="SiteID" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="2947" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="5029" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Radio" Label="Stage Ticket:" AttributeName="Stage_Ticket" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="true" BoundPropertyName="" FormName="Gage Checkout" MemberPath="5042" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false">
+                  <Choices>
+                    <FormAttributeFieldChoice Label="No" Value="0" />
+                    <FormAttributeFieldChoice Label="Yes" Value="1" />
+                  </Choices>
+                </Attribute>
+                <Attribute AttributeId="4849" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="submitEmployeeName" AttributeName="submitEmployeeName" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="4862" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="4848" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="submitEmployeeNumber" AttributeName="submitEmployeeNumber" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="4861" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="2027" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Table" Label="Thread Gages:" AttributeName="ThreadGages" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="2033_" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false">
+                  <Choices>
+                    <FormAttributeFieldChoice Label="row 1" Value="row_1" />
+                  </Choices>
+                  <Children>
+                    <Attribute AttributeId="2028" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Thread Gage Name" AttributeName="ThreadGageTable_ThreadGageName" ParentLabel="Thread Gages:" ParentName="ThreadGages" ParentPath="2033_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="2033_.2034" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                    <Attribute AttributeId="2029" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="ThreadGageID" AttributeName="ThreadGageTable_ThreadGageID" ParentLabel="Thread Gages:" ParentName="ThreadGages" ParentPath="2033_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="2033_.2035" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                    <Attribute AttributeId="2482" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Description" AttributeName="Description" ParentLabel="Thread Gages:" ParentName="ThreadGages" ParentPath="2033_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="2033_.2488" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                    <Attribute AttributeId="2938" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="ExistingThreadGageTicketID" AttributeName="ExistingThreadGageTicketID" ParentLabel="Thread Gages:" ParentName="ThreadGages" ParentPath="2033_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="2033_.2944" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                    <Attribute AttributeId="3162" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Radio" Label="Daily Cal" AttributeName="DailyCal" ParentLabel="Thread Gages:" ParentName="ThreadGages" ParentPath="2033_" AreChoiceValuesUsed="true" BoundPropertyName="" FormName="Gage Checkout" MemberPath="2033_.3168" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false">
+                      <Choices>
+                        <FormAttributeFieldChoice Label="No" Value="0" />
+                        <FormAttributeFieldChoice Label="Yes" Value="1" />
+                      </Choices>
+                    </Attribute>
+                    <Attribute AttributeId="3300" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="ExistingMissingThreadTicketNumber" AttributeName="ExistingMissingThreadTicketNumber" ParentLabel="Thread Gages:" ParentName="ThreadGages" ParentPath="2033_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="2033_.3306" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                  </Children>
+                </Attribute>
+                <Attribute AttributeId="3162" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Radio" Label="Daily Cal" AttributeName="DailyCal" ParentLabel="Thread Gages:" ParentName="ThreadGages" ParentPath="2033_" AreChoiceValuesUsed="true" BoundPropertyName="" FormName="Gage Checkout" MemberPath="2033_.3168" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false">
+                  <Choices>
+                    <FormAttributeFieldChoice Label="No" Value="0" />
+                    <FormAttributeFieldChoice Label="Yes" Value="1" />
+                  </Choices>
+                </Attribute>
+                <Attribute AttributeId="2482" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Description" AttributeName="Description" ParentLabel="Thread Gages:" ParentName="ThreadGages" ParentPath="2033_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="2033_.2488" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="2938" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="ExistingThreadGageTicketID" AttributeName="ExistingThreadGageTicketID" ParentLabel="Thread Gages:" ParentName="ThreadGages" ParentPath="2033_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="2033_.2944" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="2029" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="ThreadGageID" AttributeName="ThreadGageTable_ThreadGageID" ParentLabel="Thread Gages:" ParentName="ThreadGages" ParentPath="2033_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="2033_.2035" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                <Attribute AttributeId="2028" IsRepeatable="true" IsComplex="false" IsComplexField="false" Type="Text" Label="Thread Gage Name" AttributeName="ThreadGageTable_ThreadGageName" ParentLabel="Thread Gages:" ParentName="ThreadGages" ParentPath="2033_" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="2033_.2034" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+              </Fields>
+              <AdditionalVariableOptions>
+                <RetrievePaymentVariables>false</RetrievePaymentVariables>
+              </AdditionalVariableOptions>
+            </RetrieveFormFieldValueOptions>
+          </Activity>
+          <Activity Type="Laserfiche.Workflow.Activities.Condition.IfElseConditionProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="e6060b32-fe84-4a0d-a7da-bc616e9d51a2">
+            <Name>Is Staged</Name>
+            <SafeName>IsStaged</SafeName>
+            <Enabled>True</Enabled>
+            <Description ShowDescription="null" ShowSummary="null">Runs the FIRST branch that has satisfied conditions.</Description>
+            <ProfileId>16370d1c-2f0d-4ff5-8b7b-776f55eb5410</ProfileId>
+            <Activities>
+              <Activity Type="Laserfiche.Workflow.Activities.Condition.RoutingDecisionBranchProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="8d9cddfd-2e17-44e1-9295-ec98cfd22092">
+                <Name>Nope</Name>
+                <SafeName>Nope</SafeName>
+                <Enabled>True</Enabled>
+                <Description ShowDescription="null" ShowSummary="null">Contains activities that will run if the branch conditions are satisfied.</Description>
+                <Condition Version="10.4.3.139" Name="" Negated="false" IsConjunction="true" ConditionType="Composite" Description="">
+                  <Conditions>
+                    <Condition ConditionType="Token" Operator="Equal">
+                      <Token Name="Stage_Ticket" Length="0" MetaType="String, Field">
+                        <Activity Display="Retrieve Business Process Variables" Append="true">RetrieveBusinessProcessVariables</Activity>
+                      </Token>
+                      <Values>
+                        <Value>0</Value>
+                      </Values>
+                    </Condition>
+                  </Conditions>
+                </Condition>
+                <Activities>
+                  <Activity Type="Laserfiche.Workflow.Activities.Condition.IfElseConditionProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="358e8847-feed-4854-a878-31b08518fd6f">
+                    <Name>Gage Type 1</Name>
+                    <SafeName>GageType1</SafeName>
+                    <Enabled>True</Enabled>
+                    <Description ShowDescription="true" ShowSummary="null" />
+                    <ProfileId>16370d1c-2f0d-4ff5-8b7b-776f55eb5410</ProfileId>
+                    <Activities>
+                      <Activity Type="Laserfiche.Workflow.Activities.Condition.RoutingDecisionBranchProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="0f401785-a9d5-434c-a3f6-2fcc0573a05d">
+                        <Name>Pin</Name>
+                        <SafeName>Pin</SafeName>
+                        <Enabled>True</Enabled>
+                        <Description ShowDescription="true" ShowSummary="null" />
+                        <Condition Version="10.4.3.139" Name="" Negated="false" IsConjunction="true" ConditionType="Composite" Description="">
+                          <Conditions>
+                            <Condition ConditionType="Token" Operator="Equal">
+                              <Token Name="Checkout_Type" Length="0" MetaType="String, Field">
+                                <Activity Display="Retrieve Business Process Variables" Append="true">RetrieveBusinessProcessVariables</Activity>
+                              </Token>
+                              <Values>
+                                <Value>1</Value>
+                              </Values>
+                            </Condition>
+                          </Conditions>
+                        </Condition>
+                        <Activities>
+                          <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="1f8fbdd0-53d0-4699-9b76-c7a5382ada0c">
+                            <Name>spAddTicket</Name>
+                            <SafeName>spAddTicket</SafeName>
+                            <Enabled>True</Enabled>
+                            <Description ShowDescription="null" ShowSummary="null">Performs the specified query in the selected data source.</Description>
+                            <DataSourceId>cd3a829a-c3ec-4c31-b8e6-72714e5d35cd</DataSourceId>
+                            <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+                              <Table Name="" HasIdentityColumn="false">
+                                <Columns Generated="1/1/0001 12:00:00 AM">
+                                  <Column Name="Id" Type="System.Int32" ReadOnly="False" />
+                                  <Column Name="TicketNumber" Type="System.String" ReadOnly="False" />
+                                </Columns>
+                              </Table>
+                              <CustomQuery>EXECUTE [dbo].[spAddTicket] ?,?,?,?,?,?,?,?,?,?,?,?,?,?</CustomQuery>
+                              <InputParameter DbType="Int32">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_SiteID)</Value>
+                              </InputParameter>
+                              <InputParameter DbType="String">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_NewPrintID)</Value>
+                              </InputParameter>
+                              <InputParameter DbType="Int32">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_Checkout_Type)</Value>
+                              </InputParameter>
+                              <InputParameter DbType="Int16">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_Stage_Ticket)</Value>
+                              </InputParameter>
+                              <InputParameter DbType="String">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_MachineNameList)</Value>
+                              </InputParameter>
+                              <InputParameter DbType="Int32">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_MachineGroupID)</Value>
+                              </InputParameter>
+                              <InputParameter DbType="Int32">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_DepartmentID)</Value>
+                              </InputParameter>
+                              <InputParameter DbType="String">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_submitEmployeeNumber)</Value>
+                              </InputParameter>
+                              <InputParameter DbType="String">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_submitEmployeeName)</Value>
+                              </InputParameter>
+                              <InputParameter DbType="Int32">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_CellLeaderID)</Value>
+                              </InputParameter>
+                              <InputParameter DbType="String">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_Job_Lot_Number#"NULL"#)</Value>
+                              </InputParameter>
+                              <InputParameter DbType="String">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_Part_Number)</Value>
+                              </InputParameter>
+                              <InputParameter>
+                                <Name>?</Name>
+                                <Value />
+                              </InputParameter>
+                              <InputParameter>
+                                <Name>?</Name>
+                                <Value />
+                              </InputParameter>
+                            </Criteria>
+                            <ResultSetSize Rows="ReturnAllRows" Count="2" />
+                            <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+                          </Activity>
+                          <Activity Type="Laserfiche.Workflow.Activities.CreateToken.CreateTokenActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="dd6d5073-e06b-4e24-aadb-5f78fdcfe53b">
+                            <Name>Assign Token Values</Name>
+                            <SafeName>AssignTokenValues</SafeName>
+                            <Enabled>True</Enabled>
+                            <Description ShowDescription="null" ShowSummary="null">Creates new tokens and updates the values of existing tokens.</Description>
+                            <Options>
+                              <Tokens>
+                                <TokenInformation Id="80f30774-bbfe-4e70-a86e-d0a1547187d2" IsMultivalued="false" UpdateExistingToken="false" AppendValues="false" TokenType="Integer">
+                                  <TokenName>sp_AddTicket_NewID</TokenName>
+                                  <TokenFullName />
+                                  <ActivityName />
+                                  <TokenValues>
+                                    <TokenValue xml:space="preserve">%(spAddTicket_Id)</TokenValue>
+                                  </TokenValues>
+                                </TokenInformation>
+                                <TokenInformation Id="c7744565-cab6-4812-81be-f85c91d915b9" IsMultivalued="false" UpdateExistingToken="false" AppendValues="false" TokenType="String">
+                                  <TokenName>sp_AddTicket_TicketNumber</TokenName>
+                                  <TokenFullName />
+                                  <ActivityName />
+                                  <TokenValues>
+                                    <TokenValue xml:space="preserve">%(spAddTicket_TicketNumber)</TokenValue>
+                                  </TokenValues>
+                                </TokenInformation>
+                              </Tokens>
+                            </Options>
+                          </Activity>
+                          <Activity Type="Laserfiche.Workflow.Activities.Forms.SetBPVariablesActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="9d28357d-b861-4b0d-b823-acc2be7f2e7f">
+                            <Name>Set Business Process Variables 2</Name>
+                            <SafeName>SetBusinessProcessVariables2</SafeName>
+                            <Enabled>True</Enabled>
+                            <Description ShowDescription="null" ShowSummary="null">Sets an output parameter with variable values that will be processed by Laserfiche Forms when this workflow completes.</Description>
+                            <SetBPVariablesOptions Id="eadb2c8a-4bba-48c6-82e2-8c17f9ed5bb9" UseWorkflowAccount="true">
+                              <ProcessOptions ProcessId="40" ProcessName="RMS-GAGE-GageCheckout" />
+                              <Fields>
+                                <Attribute AttributeId="2475" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Print_TicketID" AttributeName="Print_TicketID" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="2481" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                              </Fields>
+                              <AdvancedQuery Enabled="true" xml:space="preserve">Print_TicketID=%(sp_AddTicket_NewID)</AdvancedQuery>
+                            </SetBPVariablesOptions>
+                          </Activity>
+                          <Activity Type="Laserfiche.Workflow.Activities.ForEach.ForEachResultActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="5820c30a-f345-40aa-bca4-6c3eb2c7ae1f">
+                            <Name>For Each Row</Name>
+                            <SafeName>ForEachRow</SafeName>
+                            <Enabled>True</Enabled>
+                            <Description ShowDescription="null" ShowSummary="null">Runs the contained activities for each row returned by a Custom Query or Query Data activity, or for each result returned by activities that return collections of information.</Description>
+                            <Binding Name="Collection">
+                              <BindingPath Activity="Retrieve Business Process Variables" Property="Attribute:Pin_Table" />
+                            </Binding>
+                            <Activities>
+                              <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="583561f2-7153-4fb6-bed0-238c240073ee">
+                                <Name>spAddPinToTicket</Name>
+                                <SafeName>spAddPinToTicket</SafeName>
+                                <Enabled>True</Enabled>
+                                <Description ShowDescription="true" ShowSummary="null" />
+                                <DataSourceId>cd3a829a-c3ec-4c31-b8e6-72714e5d35cd</DataSourceId>
+                                <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+                                  <Table Name="" HasIdentityColumn="false">
+                                    <Columns Generated="1/1/0001 12:00:00 AM">
+                                      <Column Name="" Type="System.String" ReadOnly="False" />
+                                    </Columns>
+                                  </Table>
+                                  <CustomQuery>EXECUTE dbo.spAddPinToTicket ?, ?, ?, ?, ?, ?</CustomQuery>
+                                  <InputParameter DbType="Int32">
+                                    <Name>?</Name>
+                                    <Value>%(sp_AddTicket_NewID)</Value>
+                                  </InputParameter>
+                                  <InputParameter DbType="Decimal">
+                                    <Name>?</Name>
+                                    <Value>%(ForEachRow_Pin_Diamter)</Value>
+                                  </InputParameter>
+                                  <InputParameter DbType="Int32">
+                                    <Name>?</Name>
+                                    <Value>%(ForEachRow_PinTypeID_1)</Value>
+                                  </InputParameter>
+                                  <InputParameter DbType="Int32">
+                                    <Name>?</Name>
+                                    <Value>%(ForEachRow_BinID#"NULL"#)</Value>
+                                  </InputParameter>
+                                  <InputParameter DbType="Int32">
+                                    <Name>?</Name>
+                                    <Value>%(ForEachRow_Number_Of_Pins)</Value>
+                                  </InputParameter>
+                                  <InputParameter DbType="String">
+                                    <Name>?</Name>
+                                    <Value>%(RetrieveBusinessProcessVariables_submitEmployeeNumber)</Value>
+                                  </InputParameter>
+                                </Criteria>
+                                <ResultSetSize Rows="ReturnAllRows" Count="2" />
+                                <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+                              </Activity>
+                            </Activities>
+                            <FaultHandlers />
+                          </Activity>
+                        </Activities>
+                        <FaultHandlers />
+                      </Activity>
+                      <Activity Type="Laserfiche.Workflow.Activities.Condition.RoutingDecisionBranchProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="cc435319-aa7e-48cc-9a1d-5492ff184dba">
+                        <Name>ThreadGage</Name>
+                        <SafeName>ThreadGage</SafeName>
+                        <Enabled>True</Enabled>
+                        <Description ShowDescription="true" ShowSummary="null" />
+                        <Condition Version="10.4.3.139" Name="" Negated="false" IsConjunction="true" ConditionType="Composite" Description="">
+                          <Conditions>
+                            <Condition ConditionType="Token" Operator="Equal">
+                              <Token Name="Checkout_Type" Length="0" MetaType="String, Field">
+                                <Activity Display="Retrieve Business Process Variables" Append="true">RetrieveBusinessProcessVariables</Activity>
+                              </Token>
+                              <Values>
+                                <Value>2</Value>
+                              </Values>
+                            </Condition>
+                          </Conditions>
+                        </Condition>
+                        <Activities>
+                          <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="ce93c431-b271-498a-b856-53c7915557b1">
+                            <Name>Call spAddTicket for Thread Gages</Name>
+                            <SafeName>CallspAddTicketforThreadGages</SafeName>
+                            <Enabled>True</Enabled>
+                            <Description ShowDescription="null" ShowSummary="null">Performs the specified query in the selected data source.</Description>
+                            <DataSourceId>cd3a829a-c3ec-4c31-b8e6-72714e5d35cd</DataSourceId>
+                            <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+                              <Table Name="" HasIdentityColumn="false">
+                                <Columns Generated="1/1/0001 12:00:00 AM">
+                                  <Column Name="Id" Type="System.Int32" ReadOnly="False" />
+                                  <Column Name="TicketNumber" Type="System.String" ReadOnly="False" />
+                                </Columns>
+                              </Table>
+                              <CustomQuery>EXECUTE [dbo].[spAddTicket] ?,?,?,?,?,?,?,?,?,?,?,?,?,?</CustomQuery>
+                              <InputParameter DbType="Int32">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_SiteID)</Value>
+                              </InputParameter>
+                              <InputParameter DbType="String">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_NewPrintID)</Value>
+                              </InputParameter>
+                              <InputParameter DbType="Int32">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_Checkout_Type)</Value>
+                              </InputParameter>
+                              <InputParameter DbType="Int16">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_Stage_Ticket)</Value>
+                              </InputParameter>
+                              <InputParameter DbType="String">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_MachineNameList)</Value>
+                              </InputParameter>
+                              <InputParameter DbType="Int32">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_MachineGroupID)</Value>
+                              </InputParameter>
+                              <InputParameter DbType="Int32">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_DepartmentID)</Value>
+                              </InputParameter>
+                              <InputParameter DbType="String">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_submitEmployeeNumber)</Value>
+                              </InputParameter>
+                              <InputParameter DbType="String">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_submitEmployeeName)</Value>
+                              </InputParameter>
+                              <InputParameter DbType="Int32">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_CellLeaderID)</Value>
+                              </InputParameter>
+                              <InputParameter DbType="String">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_Job_Lot_Number#"NULL"#)</Value>
+                              </InputParameter>
+                              <InputParameter DbType="String">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_Part_Number)</Value>
+                              </InputParameter>
+                              <InputParameter>
+                                <Name>?</Name>
+                                <Value />
+                              </InputParameter>
+                              <InputParameter>
+                                <Name>?</Name>
+                                <Value />
+                              </InputParameter>
+                            </Criteria>
+                            <ResultSetSize Rows="ReturnLimitedRows" Count="I:2" />
+                            <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+                          </Activity>
+                          <Activity Type="Laserfiche.Workflow.Activities.CreateToken.CreateTokenActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="bc25a36f-ebcb-4501-ba09-7e9d5597e52b">
+                            <Name>Assign_AddTicket_ThreadGage_Tokens</Name>
+                            <SafeName>Assign_AddTicket_ThreadGage_Tokens</SafeName>
+                            <Enabled>True</Enabled>
+                            <Description ShowDescription="null" ShowSummary="null">Creates new tokens and updates the values of existing tokens.</Description>
+                            <Options>
+                              <Tokens>
+                                <TokenInformation Id="d99650b9-2652-448c-9032-fe6929b71972" IsMultivalued="false" UpdateExistingToken="false" AppendValues="false" TokenType="String">
+                                  <TokenName>ThreadGage_AddTicket_ID</TokenName>
+                                  <TokenFullName />
+                                  <ActivityName />
+                                  <TokenValues>
+                                    <TokenValue xml:space="preserve">%(CallspAddTicketforThreadGages_Id)</TokenValue>
+                                  </TokenValues>
+                                </TokenInformation>
+                                <TokenInformation Id="9de23f9d-1a52-4680-bca8-92b3bbf4a7d1" IsMultivalued="false" UpdateExistingToken="false" AppendValues="false" TokenType="String">
+                                  <TokenName>ThreadGage_AddTicket_TicketNumber</TokenName>
+                                  <TokenFullName />
+                                  <ActivityName />
+                                  <TokenValues>
+                                    <TokenValue xml:space="preserve">%(CallspAddTicketforThreadGages_TicketNumber)</TokenValue>
+                                  </TokenValues>
+                                </TokenInformation>
+                              </Tokens>
+                            </Options>
+                          </Activity>
+                          <Activity Type="Laserfiche.Workflow.Activities.Forms.SetBPVariablesActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="93af9f1e-d182-4374-9ccc-202df008b42e">
+                            <Name>Set Print_TicketID For New Thread Gages</Name>
+                            <SafeName>SetPrint_TicketIDForNewThreadGages</SafeName>
+                            <Enabled>True</Enabled>
+                            <Description ShowDescription="null" ShowSummary="null">Sets an output parameter with variable values that will be processed by Laserfiche Forms when this workflow completes.</Description>
+                            <SetBPVariablesOptions Id="eadb2c8a-4bba-48c6-82e2-8c17f9ed5bb9" UseWorkflowAccount="true">
+                              <ProcessOptions ProcessId="40" ProcessName="RMS-GAGE-GageCheckout" />
+                              <Fields>
+                                <Attribute AttributeId="2475" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Print_TicketID" AttributeName="Print_TicketID" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="2481" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                              </Fields>
+                              <AdvancedQuery Enabled="true" xml:space="preserve">Print_TicketID=%(ThreadGage_AddTicket_ID)</AdvancedQuery>
+                            </SetBPVariablesOptions>
+                          </Activity>
+                          <Activity Type="Laserfiche.Workflow.Activities.ForEach.ForEachResultActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="d0648186-adb8-4959-9997-a3f879e19dfd">
+                            <Name>ForEachThreadGageRow</Name>
+                            <SafeName>ForEachThreadGageRow</SafeName>
+                            <Enabled>True</Enabled>
+                            <Description ShowDescription="null" ShowSummary="null">Runs the contained activities for each row returned by a Custom Query or Query Data activity, or for each result returned by activities that return collections of information.</Description>
+                            <Binding Name="Collection">
+                              <BindingPath Activity="Retrieve Business Process Variables" Property="Attribute:ThreadGages" />
+                            </Binding>
+                            <Activities>
+                              <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="6f0f7a5c-088a-4d50-811e-4d3c0842a5c5">
+                                <Name>AddThreadGageToTicket</Name>
+                                <SafeName>AddThreadGageToTicket</SafeName>
+                                <Enabled>True</Enabled>
+                                <Description ShowDescription="true" ShowSummary="null" />
+                                <DataSourceId>cd3a829a-c3ec-4c31-b8e6-72714e5d35cd</DataSourceId>
+                                <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+                                  <CustomQuery>Exec spAddThreadGageToTicket ?, ?, ?, ?</CustomQuery>
+                                  <InputParameter DbType="Int32">
+                                    <Name>?</Name>
+                                    <Value>%(ThreadGage_AddTicket_ID)</Value>
+                                  </InputParameter>
+                                  <InputParameter DbType="Int32">
+                                    <Name>?</Name>
+                                    <Value>%(ForEachThreadGageRow_ThreadGageTable_ThreadGageID)</Value>
+                                  </InputParameter>
+                                  <InputParameter DbType="Int16">
+                                    <Name>?</Name>
+                                    <Value>%(ForEachThreadGageRow_DailyCal)</Value>
+                                  </InputParameter>
+                                  <InputParameter DbType="String">
+                                    <Name>?</Name>
+                                    <Value>%(RetrieveBusinessProcessVariables_submitEmployeeNumber)</Value>
+                                  </InputParameter>
+                                </Criteria>
+                                <ResultSetSize Rows="ReturnAllRows" Count="2" />
+                                <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+                              </Activity>
+                            </Activities>
+                            <FaultHandlers />
+                          </Activity>
+                        </Activities>
+                        <FaultHandlers />
+                      </Activity>
+                    </Activities>
+                    <FaultHandlers />
+                  </Activity>
+                </Activities>
+                <FaultHandlers />
+              </Activity>
+              <Activity Type="Laserfiche.Workflow.Activities.Condition.RoutingDecisionBranchProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="27f2aa2a-df72-4850-b327-632ad6c17a57">
+                <Name>Yep</Name>
+                <SafeName>Yep</SafeName>
+                <Enabled>True</Enabled>
+                <Description ShowDescription="null" ShowSummary="null">Contains activities that will run if the branch conditions are satisfied.</Description>
+                <Condition Version="10.4.3.139" Name="" Negated="false" IsConjunction="true" ConditionType="Composite" Description="">
+                  <Conditions>
+                    <Condition ConditionType="Token" Operator="Equal">
+                      <Token Name="Stage_Ticket" Length="0" MetaType="String, Field">
+                        <Activity Display="Retrieve Business Process Variables" Append="true">RetrieveBusinessProcessVariables</Activity>
+                      </Token>
+                      <Values>
+                        <Value>1</Value>
+                      </Values>
+                    </Condition>
+                  </Conditions>
+                </Condition>
+                <Activities>
+                  <Activity Type="Laserfiche.Workflow.Activities.Condition.IfElseConditionProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="9587ff34-045e-4cf5-b06a-0f87ee395fd6">
+                    <Name>Gage Type 2</Name>
+                    <SafeName>GageType2</SafeName>
+                    <Enabled>True</Enabled>
+                    <Description ShowDescription="true" ShowSummary="null" />
+                    <ProfileId>16370d1c-2f0d-4ff5-8b7b-776f55eb5410</ProfileId>
+                    <Activities>
+                      <Activity Type="Laserfiche.Workflow.Activities.Condition.RoutingDecisionBranchProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="72780b57-def4-4578-9f29-3073931f3726">
+                        <Name>Pin 2</Name>
+                        <SafeName>Pin2</SafeName>
+                        <Enabled>True</Enabled>
+                        <Description ShowDescription="true" ShowSummary="null" />
+                        <Condition Version="10.4.3.139" Name="" Negated="false" IsConjunction="true" ConditionType="Composite" Description="">
+                          <Conditions>
+                            <Condition ConditionType="Token" Operator="Equal">
+                              <Token Name="Checkout_Type" Length="0" MetaType="String, Field">
+                                <Activity Display="Retrieve Business Process Variables" Append="true">RetrieveBusinessProcessVariables</Activity>
+                              </Token>
+                              <Values>
+                                <Value>1</Value>
+                              </Values>
+                            </Condition>
+                          </Conditions>
+                        </Condition>
+                        <Activities>
+                          <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="66ec86a9-813b-4848-ac67-4176c4d317e1">
+                            <Name>spAddTicket 2</Name>
+                            <SafeName>spAddTicket2</SafeName>
+                            <Enabled>True</Enabled>
+                            <Description ShowDescription="null" ShowSummary="null">Performs the specified query in the selected data source.</Description>
+                            <DataSourceId>cd3a829a-c3ec-4c31-b8e6-72714e5d35cd</DataSourceId>
+                            <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+                              <Table Name="" HasIdentityColumn="false">
+                                <Columns Generated="1/1/0001 12:00:00 AM">
+                                  <Column Name="Id" Type="System.Int32" ReadOnly="False" />
+                                  <Column Name="TicketNumber" Type="System.String" ReadOnly="False" />
+                                </Columns>
+                              </Table>
+                              <CustomQuery>EXECUTE [dbo].[spAddTicket] ?,?,?,?,?,?,?,?,?,?,?,?,?,?</CustomQuery>
+                              <InputParameter DbType="Int32">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_SiteID)</Value>
+                              </InputParameter>
+                              <InputParameter DbType="String">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_NewPrintID)</Value>
+                              </InputParameter>
+                              <InputParameter DbType="Int32">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_Checkout_Type)</Value>
+                              </InputParameter>
+                              <InputParameter DbType="Int16">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_Stage_Ticket)</Value>
+                              </InputParameter>
+                              <InputParameter DbType="String">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_Machine_Name)</Value>
+                              </InputParameter>
+                              <InputParameter DbType="Int32">
+                                <Name>?</Name>
+                                <Value>0</Value>
+                              </InputParameter>
+                              <InputParameter DbType="Int32">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_DepartmentID)</Value>
+                              </InputParameter>
+                              <InputParameter DbType="String">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_submitEmployeeNumber)</Value>
+                              </InputParameter>
+                              <InputParameter DbType="String">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_submitEmployeeName)</Value>
+                              </InputParameter>
+                              <InputParameter DbType="Int32">
+                                <Name>?</Name>
+                                <Value>0</Value>
+                              </InputParameter>
+                              <InputParameter DbType="String">
+                                <Name>?</Name>
+                                <Value />
+                              </InputParameter>
+                              <InputParameter DbType="String">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_Part_Number)</Value>
+                              </InputParameter>
+                              <InputParameter>
+                                <Name>?</Name>
+                                <Value />
+                              </InputParameter>
+                              <InputParameter>
+                                <Name>?</Name>
+                                <Value />
+                              </InputParameter>
+                            </Criteria>
+                            <ResultSetSize Rows="ReturnAllRows" Count="2" />
+                            <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+                          </Activity>
+                          <Activity Type="Laserfiche.Workflow.Activities.CreateToken.CreateTokenActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="72da4fae-7328-4702-b1fc-51d37a05d3c8">
+                            <Name>Assign Token Values 2</Name>
+                            <SafeName>AssignTokenValues2</SafeName>
+                            <Enabled>True</Enabled>
+                            <Description ShowDescription="null" ShowSummary="null">Creates new tokens and updates the values of existing tokens.</Description>
+                            <Options>
+                              <Tokens>
+                                <TokenInformation Id="80f30774-bbfe-4e70-a86e-d0a1547187d2" IsMultivalued="false" UpdateExistingToken="false" AppendValues="false" TokenType="Integer">
+                                  <TokenName>sp_AddTicket_NewID</TokenName>
+                                  <TokenFullName />
+                                  <ActivityName />
+                                  <TokenValues>
+                                    <TokenValue xml:space="preserve">%(spAddTicket2_Id)</TokenValue>
+                                  </TokenValues>
+                                </TokenInformation>
+                                <TokenInformation Id="c7744565-cab6-4812-81be-f85c91d915b9" IsMultivalued="false" UpdateExistingToken="false" AppendValues="false" TokenType="String">
+                                  <TokenName>sp_AddTicket_TicketNumber</TokenName>
+                                  <TokenFullName />
+                                  <ActivityName />
+                                  <TokenValues>
+                                    <TokenValue xml:space="preserve">%(spAddTicket2_TicketNumber)</TokenValue>
+                                  </TokenValues>
+                                </TokenInformation>
+                              </Tokens>
+                            </Options>
+                          </Activity>
+                          <Activity Type="Laserfiche.Workflow.Activities.Forms.SetBPVariablesActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="0a96d3a0-2d78-4aab-ab41-16f17eb71c71">
+                            <Name>Set Business Process Variables 3</Name>
+                            <SafeName>SetBusinessProcessVariables3</SafeName>
+                            <Enabled>True</Enabled>
+                            <Description ShowDescription="null" ShowSummary="null">Sets an output parameter with variable values that will be processed by Laserfiche Forms when this workflow completes.</Description>
+                            <SetBPVariablesOptions Id="eadb2c8a-4bba-48c6-82e2-8c17f9ed5bb9" UseWorkflowAccount="true">
+                              <ProcessOptions ProcessId="40" ProcessName="RMS-GAGE-GageCheckout" />
+                              <Fields>
+                                <Attribute AttributeId="2475" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Print_TicketID" AttributeName="Print_TicketID" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="2481" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                              </Fields>
+                              <AdvancedQuery Enabled="true" xml:space="preserve">Print_TicketID=%(sp_AddTicket_NewID)</AdvancedQuery>
+                            </SetBPVariablesOptions>
+                          </Activity>
+                          <Activity Type="Laserfiche.Workflow.Activities.ForEach.ForEachResultActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="8ed9434e-026c-43f3-a092-e4262d90bce2">
+                            <Name>For Each Row 2</Name>
+                            <SafeName>ForEachRow2</SafeName>
+                            <Enabled>True</Enabled>
+                            <Description ShowDescription="null" ShowSummary="null">Runs the contained activities for each row returned by a Custom Query or Query Data activity, or for each result returned by activities that return collections of information.</Description>
+                            <Binding Name="Collection">
+                              <BindingPath Activity="Retrieve Business Process Variables" Property="Attribute:Pin_Table" />
+                            </Binding>
+                            <Activities>
+                              <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="b38a2748-d045-4910-906d-84e64d23250e">
+                                <Name>spAddPinToTicket 2</Name>
+                                <SafeName>spAddPinToTicket2</SafeName>
+                                <Enabled>True</Enabled>
+                                <Description ShowDescription="true" ShowSummary="null" />
+                                <DataSourceId>cd3a829a-c3ec-4c31-b8e6-72714e5d35cd</DataSourceId>
+                                <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+                                  <Table Name="" HasIdentityColumn="false">
+                                    <Columns Generated="1/1/0001 12:00:00 AM">
+                                      <Column Name="" Type="System.String" ReadOnly="False" />
+                                    </Columns>
+                                  </Table>
+                                  <CustomQuery>EXECUTE dbo.spAddPinToTicket ?, ?, ?, ?, ?, ?</CustomQuery>
+                                  <InputParameter DbType="Int32">
+                                    <Name>?</Name>
+                                    <Value>%(sp_AddTicket_NewID)</Value>
+                                  </InputParameter>
+                                  <InputParameter DbType="Decimal">
+                                    <Name>?</Name>
+                                    <Value>%(ForEachRow2_Pin_Diamter)</Value>
+                                  </InputParameter>
+                                  <InputParameter DbType="Int32">
+                                    <Name>?</Name>
+                                    <Value>%(ForEachRow2_PinTypeID_1)</Value>
+                                  </InputParameter>
+                                  <InputParameter DbType="Int32">
+                                    <Name>?</Name>
+                                    <Value>%(ForEachRow2_BinID#"NULL"#)</Value>
+                                  </InputParameter>
+                                  <InputParameter DbType="Int32">
+                                    <Name>?</Name>
+                                    <Value>%(ForEachRow2_Number_Of_Pins)</Value>
+                                  </InputParameter>
+                                  <InputParameter DbType="String">
+                                    <Name>?</Name>
+                                    <Value>%(RetrieveBusinessProcessVariables_submitEmployeeNumber)</Value>
+                                  </InputParameter>
+                                </Criteria>
+                                <ResultSetSize Rows="ReturnAllRows" Count="2" />
+                                <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+                              </Activity>
+                            </Activities>
+                            <FaultHandlers />
+                          </Activity>
+                        </Activities>
+                        <FaultHandlers />
+                      </Activity>
+                      <Activity Type="Laserfiche.Workflow.Activities.Condition.RoutingDecisionBranchProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="caae9dd1-d17f-4d07-b2b0-22ea05d24f23">
+                        <Name>ThreadGage 2</Name>
+                        <SafeName>ThreadGage2</SafeName>
+                        <Enabled>True</Enabled>
+                        <Description ShowDescription="true" ShowSummary="null" />
+                        <Condition Version="10.4.3.139" Name="" Negated="false" IsConjunction="true" ConditionType="Composite" Description="">
+                          <Conditions>
+                            <Condition ConditionType="Token" Operator="Equal">
+                              <Token Name="Checkout_Type" Length="0" MetaType="String, Field">
+                                <Activity Display="Retrieve Business Process Variables" Append="true">RetrieveBusinessProcessVariables</Activity>
+                              </Token>
+                              <Values>
+                                <Value>2</Value>
+                              </Values>
+                            </Condition>
+                          </Conditions>
+                        </Condition>
+                        <Activities>
+                          <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="fcbc04fc-6732-4c2d-8f9d-64cf544c9c54">
+                            <Name>Call spAddTicket for Thread Gages 2</Name>
+                            <SafeName>CallspAddTicketforThreadGages2</SafeName>
+                            <Enabled>True</Enabled>
+                            <Description ShowDescription="null" ShowSummary="null">Performs the specified query in the selected data source.</Description>
+                            <DataSourceId>cd3a829a-c3ec-4c31-b8e6-72714e5d35cd</DataSourceId>
+                            <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+                              <Table Name="" HasIdentityColumn="false">
+                                <Columns Generated="1/1/0001 12:00:00 AM">
+                                  <Column Name="Id" Type="System.Int32" ReadOnly="False" />
+                                  <Column Name="TicketNumber" Type="System.String" ReadOnly="False" />
+                                </Columns>
+                              </Table>
+                              <CustomQuery>EXECUTE [dbo].[spAddTicket] ?,?,?,?,?,?,?,?,?,?,?,?,?,?</CustomQuery>
+                              <InputParameter DbType="Int32">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_SiteID)</Value>
+                              </InputParameter>
+                              <InputParameter DbType="String">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_NewPrintID)</Value>
+                              </InputParameter>
+                              <InputParameter DbType="Int32">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_Checkout_Type)</Value>
+                              </InputParameter>
+                              <InputParameter DbType="Int16">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_Stage_Ticket)</Value>
+                              </InputParameter>
+                              <InputParameter DbType="String">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_Machine_Name)</Value>
+                              </InputParameter>
+                              <InputParameter DbType="Int32">
+                                <Name>?</Name>
+                                <Value>0</Value>
+                              </InputParameter>
+                              <InputParameter DbType="Int32">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_DepartmentID)</Value>
+                              </InputParameter>
+                              <InputParameter DbType="String">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_submitEmployeeNumber)</Value>
+                              </InputParameter>
+                              <InputParameter DbType="String">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_submitEmployeeName)</Value>
+                              </InputParameter>
+                              <InputParameter DbType="Int32">
+                                <Name>?</Name>
+                                <Value>0</Value>
+                              </InputParameter>
+                              <InputParameter DbType="String">
+                                <Name>?</Name>
+                                <Value />
+                              </InputParameter>
+                              <InputParameter DbType="String">
+                                <Name>?</Name>
+                                <Value>%(RetrieveBusinessProcessVariables_Part_Number)</Value>
+                              </InputParameter>
+                              <InputParameter>
+                                <Name>?</Name>
+                                <Value />
+                              </InputParameter>
+                              <InputParameter>
+                                <Name>?</Name>
+                                <Value />
+                              </InputParameter>
+                            </Criteria>
+                            <ResultSetSize Rows="ReturnLimitedRows" Count="I:2" />
+                            <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+                          </Activity>
+                          <Activity Type="Laserfiche.Workflow.Activities.CreateToken.CreateTokenActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="1d7a6320-406e-46fb-83dd-4daa1a555ad5">
+                            <Name>Assign_AddTicket_ThreadGage_Tokens 2</Name>
+                            <SafeName>Assign_AddTicket_ThreadGage_Tokens2</SafeName>
+                            <Enabled>True</Enabled>
+                            <Description ShowDescription="null" ShowSummary="null">Creates new tokens and updates the values of existing tokens.</Description>
+                            <Options>
+                              <Tokens>
+                                <TokenInformation Id="d99650b9-2652-448c-9032-fe6929b71972" IsMultivalued="false" UpdateExistingToken="false" AppendValues="false" TokenType="String">
+                                  <TokenName>ThreadGage_AddTicket_ID</TokenName>
+                                  <TokenFullName />
+                                  <ActivityName />
+                                  <TokenValues>
+                                    <TokenValue xml:space="preserve">%(CallspAddTicketforThreadGages2_Id)</TokenValue>
+                                  </TokenValues>
+                                </TokenInformation>
+                                <TokenInformation Id="9de23f9d-1a52-4680-bca8-92b3bbf4a7d1" IsMultivalued="false" UpdateExistingToken="false" AppendValues="false" TokenType="String">
+                                  <TokenName>ThreadGage_AddTicket_TicketNumber</TokenName>
+                                  <TokenFullName />
+                                  <ActivityName />
+                                  <TokenValues>
+                                    <TokenValue xml:space="preserve">%(CallspAddTicketforThreadGages2_TicketNumber)</TokenValue>
+                                  </TokenValues>
+                                </TokenInformation>
+                              </Tokens>
+                            </Options>
+                          </Activity>
+                          <Activity Type="Laserfiche.Workflow.Activities.Forms.SetBPVariablesActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="6ee748dd-01fe-4a9b-a91d-bd455dd2715c">
+                            <Name>Set Print_TicketID For New Thread Gages 2</Name>
+                            <SafeName>SetPrint_TicketIDForNewThreadGages2</SafeName>
+                            <Enabled>True</Enabled>
+                            <Description ShowDescription="null" ShowSummary="null">Sets an output parameter with variable values that will be processed by Laserfiche Forms when this workflow completes.</Description>
+                            <SetBPVariablesOptions Id="eadb2c8a-4bba-48c6-82e2-8c17f9ed5bb9" UseWorkflowAccount="true">
+                              <ProcessOptions ProcessId="40" ProcessName="RMS-GAGE-GageCheckout" />
+                              <Fields>
+                                <Attribute AttributeId="2475" IsRepeatable="false" IsComplex="false" IsComplexField="false" Type="Text" Label="Print_TicketID" AttributeName="Print_TicketID" ParentLabel="" ParentName="" ParentPath="" AreChoiceValuesUsed="false" BoundPropertyName="" FormName="Gage Checkout" MemberPath="2481" OPT123332="true" ParentCollectionName="" ParentCollectionLabel="" HasPrimaryOptionSet="false" />
+                              </Fields>
+                              <AdvancedQuery Enabled="true" xml:space="preserve">Print_TicketID=%(ThreadGage_AddTicket_ID)</AdvancedQuery>
+                            </SetBPVariablesOptions>
+                          </Activity>
+                          <Activity Type="Laserfiche.Workflow.Activities.ForEach.ForEachResultActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="d5809557-b41b-4470-9341-a22bac9f5f30">
+                            <Name>ForEachThreadGageRow 2</Name>
+                            <SafeName>ForEachThreadGageRow2</SafeName>
+                            <Enabled>True</Enabled>
+                            <Description ShowDescription="null" ShowSummary="null">Runs the contained activities for each row returned by a Custom Query or Query Data activity, or for each result returned by activities that return collections of information.</Description>
+                            <Binding Name="Collection">
+                              <BindingPath Activity="Retrieve Business Process Variables" Property="Attribute:ThreadGages" />
+                            </Binding>
+                            <Activities>
+                              <Activity Type="Laserfiche.Workflow.Activities.Data.CustomQueryActivityProxy, Laserfiche.Workflow.Activities.83.External, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="19ff475b-12a9-40a8-a830-2b43d48b3d0e">
+                                <Name>AddThreadGageToTicket 2</Name>
+                                <SafeName>AddThreadGageToTicket2</SafeName>
+                                <Enabled>True</Enabled>
+                                <Description ShowDescription="true" ShowSummary="null" />
+                                <DataSourceId>cd3a829a-c3ec-4c31-b8e6-72714e5d35cd</DataSourceId>
+                                <Criteria HasCustomQuery="true" IsCreateIdentityTokenEnabled="false" Timeout="-1" Table="">
+                                  <CustomQuery>Exec spAddThreadGageToTicket ?, ?, ?, ?</CustomQuery>
+                                  <InputParameter DbType="Int32">
+                                    <Name>?</Name>
+                                    <Value>%(ThreadGage_AddTicket_ID)</Value>
+                                  </InputParameter>
+                                  <InputParameter DbType="Int32">
+                                    <Name>?</Name>
+                                    <Value>%(ForEachThreadGageRow2_ThreadGageTable_ThreadGageID)</Value>
+                                  </InputParameter>
+                                  <InputParameter DbType="Int16">
+                                    <Name>?</Name>
+                                    <Value>%(ForEachThreadGageRow2_DailyCal)</Value>
+                                  </InputParameter>
+                                  <InputParameter DbType="String">
+                                    <Name>?</Name>
+                                    <Value>%(RetrieveBusinessProcessVariables_submitEmployeeNumber)</Value>
+                                  </InputParameter>
+                                </Criteria>
+                                <ResultSetSize Rows="ReturnAllRows" Count="2" />
+                                <QueryOptions TimeoutOption="DBMSDefault" Timeout="30" />
+                              </Activity>
+                            </Activities>
+                            <FaultHandlers />
+                          </Activity>
+                        </Activities>
+                        <FaultHandlers />
+                      </Activity>
+                    </Activities>
+                    <FaultHandlers />
+                  </Activity>
+                </Activities>
+                <FaultHandlers />
+              </Activity>
+            </Activities>
+            <FaultHandlers />
+          </Activity>
+          <Activity Type="Laserfiche.Workflow.Activities.Tracking.TrackTokenActivityProxy, Laserfiche.Workflow.Activities.83, Version=8.3.0.0, Culture=neutral, PublicKeyToken=d8428ff9263e6cda" Key="e3c096a6-84ea-403e-b1fe-756a5aab468e">
+            <Name>Track Tokens</Name>
+            <SafeName>TrackTokens</SafeName>
+            <Enabled>True</Enabled>
+            <Description ShowDescription="null" ShowSummary="null">Records the values of selected tokens when the workflow runs. You can view these values in the Tokens tab in the workflow's Search Details pane.</Description>
+            <Options TrackTokenManager="true">
+              <Tokens />
+            </Options>
+          </Activity>
+        </Activities>
+        <FaultHandlers />
+      </SequentialWorkflowActivityProxy>
+      <CanvasUI>
+        <Expanded>True</Expanded>
+        <Activity Name="Retrieve Business Process Variables" Key="a68618fc-b351-46ca-8652-fca735724ccc" />
+        <Activity Name="Is Staged" Key="e6060b32-fe84-4a0d-a7da-bc616e9d51a2">
+          <Expanded>True</Expanded>
+          <Activity Name="Nope" Key="8d9cddfd-2e17-44e1-9295-ec98cfd22092">
+            <Expanded>True</Expanded>
+            <Activity Name="Gage Type 1" Key="358e8847-feed-4854-a878-31b08518fd6f">
+              <Expanded>True</Expanded>
+              <Activity Name="Pin" Key="0f401785-a9d5-434c-a3f6-2fcc0573a05d">
+                <Expanded>True</Expanded>
+                <Activity Name="spAddTicket" Key="1f8fbdd0-53d0-4699-9b76-c7a5382ada0c" />
+                <Activity Name="Assign Token Values" Key="dd6d5073-e06b-4e24-aadb-5f78fdcfe53b" />
+                <Activity Name="Set Business Process Variables 2" Key="9d28357d-b861-4b0d-b823-acc2be7f2e7f" />
+                <Activity Name="For Each Row" Key="5820c30a-f345-40aa-bca4-6c3eb2c7ae1f">
+                  <Expanded>True</Expanded>
+                  <Activity Name="spAddPinToTicket" Key="583561f2-7153-4fb6-bed0-238c240073ee" />
+                </Activity>
+              </Activity>
+              <Activity Name="ThreadGage" Key="cc435319-aa7e-48cc-9a1d-5492ff184dba">
+                <Expanded>True</Expanded>
+                <Activity Name="Call spAddTicket for Thread Gages" Key="ce93c431-b271-498a-b856-53c7915557b1" />
+                <Activity Name="Assign_AddTicket_ThreadGage_Tokens" Key="bc25a36f-ebcb-4501-ba09-7e9d5597e52b" />
+                <Activity Name="Set Print_TicketID For New Thread Gages" Key="93af9f1e-d182-4374-9ccc-202df008b42e" />
+                <Activity Name="ForEachThreadGageRow" Key="d0648186-adb8-4959-9997-a3f879e19dfd">
+                  <Expanded>True</Expanded>
+                  <Activity Name="AddThreadGageToTicket" Key="6f0f7a5c-088a-4d50-811e-4d3c0842a5c5" />
+                </Activity>
+              </Activity>
+            </Activity>
+          </Activity>
+          <Activity Name="Yep" Key="27f2aa2a-df72-4850-b327-632ad6c17a57">
+            <Expanded>True</Expanded>
+            <Activity Name="Gage Type 2" Key="9587ff34-045e-4cf5-b06a-0f87ee395fd6">
+              <Expanded>True</Expanded>
+              <Activity Name="Pin 2" Key="72780b57-def4-4578-9f29-3073931f3726">
+                <Expanded>True</Expanded>
+                <Activity Name="spAddTicket 2" Key="66ec86a9-813b-4848-ac67-4176c4d317e1" />
+                <Activity Name="Assign Token Values 2" Key="72da4fae-7328-4702-b1fc-51d37a05d3c8" />
+                <Activity Name="Set Business Process Variables 3" Key="0a96d3a0-2d78-4aab-ab41-16f17eb71c71" />
+                <Activity Name="For Each Row 2" Key="8ed9434e-026c-43f3-a092-e4262d90bce2">
+                  <Expanded>True</Expanded>
+                  <Activity Name="spAddPinToTicket 2" Key="b38a2748-d045-4910-906d-84e64d23250e" />
+                </Activity>
+              </Activity>
+              <Activity Name="ThreadGage 2" Key="caae9dd1-d17f-4d07-b2b0-22ea05d24f23">
+                <Expanded>True</Expanded>
+                <Activity Name="Call spAddTicket for Thread Gages 2" Key="fcbc04fc-6732-4c2d-8f9d-64cf544c9c54" />
+                <Activity Name="Assign_AddTicket_ThreadGage_Tokens 2" Key="1d7a6320-406e-46fb-83dd-4daa1a555ad5" />
+                <Activity Name="Set Print_TicketID For New Thread Gages 2" Key="6ee748dd-01fe-4a9b-a91d-bd455dd2715c" />
+                <Activity Name="ForEachThreadGageRow 2" Key="d5809557-b41b-4470-9341-a22bac9f5f30">
+                  <Expanded>True</Expanded>
+                  <Activity Name="AddThreadGageToTicket 2" Key="19ff475b-12a9-40a8-a830-2b43d48b3d0e" />
+                </Activity>
+              </Activity>
+            </Activity>
+          </Activity>
+        </Activity>
+        <Activity Name="Track Tokens" Key="e3c096a6-84ea-403e-b1fe-756a5aab468e" />
+        <UseCompactLayout>false</UseCompactLayout>
+        <ZoomLevel>1.0</ZoomLevel>
+      </CanvasUI>
+    </Designer>
+    <CreationRules Count="0" />
+    <Schedules Count="0" />
+  </ExportedWorkflow>
+  <LinkedObjects Count="2">
+    <LinkedObject>
+      <Id>46</Id>
+      <Name>GageCheckout</Name>
+      <Description />
+      <AttachmentType>DataSource</AttachmentType>
+      <LinkedWorkflows Count="1">
+        <LinkInfo>
+          <WorkflowName>RMS - Gage Checkout</WorkflowName>
+        </LinkInfo>
+      </LinkedWorkflows>
+      <XmlValue>&lt;SourceInformation DataSourceType="Odbc" DSNType="User" Authenticated="true"&gt;
+  &lt;Location&gt;
+    &lt;HostName&gt;rms-corplfsql1.cretexinc.com&lt;/HostName&gt;
+    &lt;ServerInstance /&gt;
+    &lt;DatabaseName&gt;GageCheckout&lt;/DatabaseName&gt;
+    &lt;LocationType&gt;ServerDatabase&lt;/LocationType&gt;
+  &lt;/Location&gt;
+  &lt;Authentication&gt;
+    &lt;UserName&gt;&lt;/UserName&gt;
+    &lt;SecureString Version="2" Value="" /&gt;
+  &lt;/Authentication&gt;
+  &lt;Adapter&gt;
+    &lt;type key="sql" default="false" category="ODBC"&gt;
+      &lt;typename&gt;Laserfiche.Project.Data.Runtime.Odbc.Sql, Laserfiche.Project.Data, Version=9.0.0.0, Culture=neutral, PublicKeyToken=607dd73ee2bd1c00&lt;/typename&gt;
+      &lt;names default="Sql"&gt;
+        &lt;add code="en" value="Sql" /&gt;
+      &lt;/names&gt;
+    &lt;/type&gt;
+  &lt;/Adapter&gt;
+  &lt;OtherOptions ActualType="Laserfiche.Collections.PropertyBag, Laserfiche.Base, Version=9.0.0.0, Culture=neutral, PublicKeyToken=607dd73ee2bd1c00"&gt;
+    &lt;Properties /&gt;
+  &lt;/OtherOptions&gt;
+&lt;/SourceInformation&gt;</XmlValue>
+    </LinkedObject>
+    <LinkedObject>
+      <Id>18</Id>
+      <Name>LFForms</Name>
+      <Description />
+      <AttachmentType>WebService</AttachmentType>
+      <LinkedWorkflows Count="1">
+        <LinkInfo>
+          <WorkflowName>RMS - Gage Checkout</WorkflowName>
+        </LinkInfo>
+      </LinkedWorkflows>
+      <XmlValue>&lt;WebService ServiceURL="http://rmslf/forms" WebServiceType="Laserfiche Forms" RunAsTasks="true" AcceptInvalidCertificates="true" /&gt;</XmlValue>
+    </LinkedObject>
+  </LinkedObjects>
+</ExportedWorkflows>
