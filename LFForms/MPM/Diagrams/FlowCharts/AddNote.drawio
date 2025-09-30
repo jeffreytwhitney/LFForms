@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.1.2 Chrome/138.0.7204.243 Electron/37.4.0 Safari/537.36" version="28.1.2" pages="2">
   <diagram name="Page-1" id="BGXGG2L2FOtsH3JLGTLd">
-    <mxGraphModel dx="1665" dy="849" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1700" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1426" dy="849" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1700" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -17,7 +17,7 @@
         <mxCell id="KDSde0uPzyH_XoyQi6kH-1" value="User" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" parent="1" vertex="1">
           <mxGeometry x="30" y="140" width="40" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="KDSde0uPzyH_XoyQi6kH-7" value="&lt;h1 style=&quot;margin-top: 0px;&quot;&gt;rms-MPM-AddNote&lt;/h1&gt;&lt;p&gt;Form used as popup by several other forms in the application. It is initialized via query string variables to specify the task and the note type.&lt;/p&gt;" style="text;html=1;whiteSpace=wrap;overflow=hidden;rounded=0;" parent="1" vertex="1">
+        <mxCell id="KDSde0uPzyH_XoyQi6kH-7" value="&lt;h1 style=&quot;margin-top: 0px;&quot;&gt;MPM-AddNote&lt;/h1&gt;&lt;p&gt;Form used as popup by several other forms in the application. It is initialized via query string variables to specify the task and the note type.&lt;/p&gt;" style="text;html=1;whiteSpace=wrap;overflow=hidden;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="10" y="10" width="230" height="120" as="geometry" />
         </mxCell>
         <mxCell id="KDSde0uPzyH_XoyQi6kH-10" value="LFF Process" style="swimlane;whiteSpace=wrap;html=1;movable=0;resizable=0;rotatable=0;deletable=0;editable=0;locked=1;connectable=0;" parent="1" vertex="1">

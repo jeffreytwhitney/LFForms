@@ -9,7 +9,7 @@
     <Folder Include="GageCheckout\SQL\Views\" />
     <Folder Include="GageCheckout\SQL\Stored Procedures\" />
     <Folder Include="GageCheckout\Workflows\pix\" />
-    <Folder Include="MPM\UPN\" />
+    <Folder Include="MPM\Diagrams\UPN\" />
     <Folder Include="MPM\SQL\Tables\" />
     <Folder Include="MPM\SQL\Functions\Scalar-valued Functions\" />
     <Folder Include="MPM\SQL\Views\" />
