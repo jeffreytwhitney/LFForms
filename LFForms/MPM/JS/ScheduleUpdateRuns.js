@@ -6,7 +6,7 @@
   Date:     9/29/2025
   
   Purpose:
-  - Orchestrates the Task Maintenance page behavior:
+    - Orchestrates the Task Maintenance page behavior:
     - Sets up page title, dependencies, and user display.
     - Persists selected site via cookie.
     - Generates action buttons in tables and handles navigation to details.

@@ -10,13 +10,8 @@ $(document).ready(function () {
     generateTextAreaDivs();
     parent.postMessage("printme", "*");
 
-  
-
   });
 
-  $(document).on('lookupcomplete', function (e) {
-
-  });
 });
 
 
