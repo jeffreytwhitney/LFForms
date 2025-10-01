@@ -1,11 +1,22 @@
 /**
   Programming Tickets – UI behaviors and helpers
  
+  Author:   Jeffrey Whitney
+            jtwhitney@machine.com
+            651-391-7982
+  Date:     9/29/2025
+
   Purpose:
   - Enhances a tabular "Programming Tickets" list with filtering, sorting, pagination, and detail dialogs.
   - Integrates lookup data (Departments, Initiators, Quality Engineers) to drive filters.
   - Provides actions to add a ticket and view ticket details in a popup iframe dialog.
  
+  Permissions: (See "User Permissions" below for details)
+    - Cell Leads (user-type-id == 5):               View only.
+    - Manufacturing Engineers (user-type-id == 4):  View only.
+    - Quality Engineers (user-type-id == 3):        Can add tickets.
+    - Metrology users (user-type-id == 1):          Full permissions.
+
   Dependencies (loaded at runtime):
   - jQuery
   - jQuery UI (Dialog)
@@ -13,7 +24,7 @@
   - jquery-confirm (lightweight dialogs)
   - simplePagination.css (styling only; pagination markup generated manually)
 
- Key Concepts:
+ KEY CONCEPTS:
     Dialog/Popup Mechanism:
      As with most things in LaserFiche Forms, there is no built-in way to open a popup dialog or iframe, so I had to build my own functionality.
      This is done via a combination of a hidden div on the form, and a jQuery UI dialog. The hidden div is populated with an iframe
@@ -27,20 +38,43 @@
      Therefore, it will then send a message to its parent, (namely, this form), informing it that the server-side 
      data has changed. When this form receives such a message, it closes the popup dialog, and then it calls a function refreshes the page.
      
-   User Permissions:
-      There is a user permission model in place to restrict which updates the user can make.
-      Metrology users (user-type-id == 1) and QE's (user-type-id == 3) have elevated permissions
-      QE's can add tickets, add tasks to tickets, add notes. 
-      They cannot, however, change tickets outside their department. They also cannot change task statuses or assign them to anyone.
-      Only Metrology users can do that.
+    User Permissions:
+      There is a user permission model in place to restrict which updates a user can make.
+      This is separate from LFF security, which can, (but in practice usually does not), limit who 
+      can even access a particular form. For our purposes, this is not particularly useful for our needs because we we want
+      all users to be able to view the forms. What we want instead is to limit their ability to do certain things
+      inside the application. 
+      There are several user types which are defined in the database users table, (tblUsers) each with their own
+      level of permission. They are:
+        - Cell Lead (user-type-id == 5). Cell Leads can only view tickets and tasks. They cannot make any changes.
+          In fact, cell leads are not logged in to LFF at all because they do no have LFF accounts.
+        - Manufacturing Engineer (user-type-id == 4). They do have LFF accounts, but still have read-only access. 
+        - Quality Engineers, (QE's) (user-type-id == 3). QE's can add tickets, add tasks to tickets, add notes. 
+          They cannot, however, change tickets outside their department.
+          They also cannot change task statuses or assign them to anyone.
+        - Metrology Calibration (user-type-id == 2). They have permissions to update Service Tickets, but not programming
+          tickets. (A service ticket is a non-programming type of ticket used for things like a machine being
+          down or needing service.)_
+        - Metrology users (user-type-id == 1). They have full permissions to change the status of tasks,
+          assign tasks. They can also add tickets, add tasks to tickets, add notes, etc.
+      
+      There is also a special case Metrology user, the Admin. This is designated in the User's table by the Admin 
+      flag being set to 1. Admin's can access forms that are not available to the "regular" Metrology user, such 
+      as "Department", or "Task Types". Lookup values which are not likely to change very often, if ever. There are also a 
+      few little things here and there that an Admin can do that a regular Metrology user cannot, such as 
+      sending off an Assignee Pester Message. (Emailing the Assignee of a task asking what's going on with it.)
+      
+      Lastly, there is a separate flag in the database called IsActive. If a user is inactivated, they have 
+      read-only access to the system, regardless of their former user type.
+      
       How authentication is performed: 
-      When the user first loads the form, LFF fills in the .lf-user-name field with CRETEX\username. 
-      (Predicated on the fact that the user has a LFF account and is logged in to LFF).
-      Because of the expense, Cell Leads have not been given LFF accounts, so the .lf-user-name field will be set to "Anonymous User" for them.
-      In any case, if the user is logged in to LFF, it sets the .lf-user-name to CRETEX\username, but we only want the username portion 
-      so we copy just the username portion (trimming off the "CRETEX/" part) into the .network-user-name field, 
-      which is what gets posted back to the server.
-      This will be matched against the user database table to determine the user's ID, user type, and department.
+        When the user first loads the form, LFF fills in the .lf-user-name field with CRETEX\username. 
+        (Predicated on the fact that the user has a LFF account and is logged in to LFF).
+        Because of the expense, Cell Leads have not been given LFF accounts, so the .lf-user-name field will be set to "Anonymous User" for them.
+        In any case, if the user is logged in to LFF, it sets the .lf-user-name to CRETEX\username, but we only want the username portion 
+        so we copy just the username portion (trimming off the "CRETEX/" part) into the .network-user-name field, 
+        which is what gets posted back to the server.
+        This will be matched against the user database table to determine the user's ID, user type, and department, etc.
 
    LaserFiche Events:
       There are two key LaserFiche events used in this script:
