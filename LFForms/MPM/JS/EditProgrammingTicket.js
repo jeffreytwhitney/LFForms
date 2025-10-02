@@ -1,6 +1,11 @@
 /**
  EditProgrammingTicket.js
  
+ Author:  Jeffrey Whitney
+          jtwhitney@machine.com
+          651-319-7982
+ Date:    9/29/2025
+
  Purpose:
  Drives the Edit Programming Ticket UI: loads lookup data, manages permissions, filters/sorts the task list,
  and wires actions such as Add Task, Add Time, Clone Task, Group Edit, Print, and Show Details.

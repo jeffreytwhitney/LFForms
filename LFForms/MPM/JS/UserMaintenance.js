@@ -113,6 +113,11 @@
           .sfo: Field to sort by (1 = Task Name, 2 = Task Type, 3 = Status, 4 = Assignee, 5 = Due Date, 6 = Priority)
           .sd: Sort direction (ASC or DESC)
 
+        Sort column mappings:
+          #q21    ->    User Name (default)
+          #q22    ->    User Type
+          #q23    ->    Department
+
       This gets us part of the way there, but we also need to have a way for the user to set these fields.
       This is done via a filter row which is added to the task list table. The filter row contains a text box for the task name filter,
       and dropdowns for the task type, status, and assignee filters. There is also a checkbox to include completed tasks.
@@ -741,9 +746,9 @@ function wireUpSortFields() {
 
   $('#q21 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
 
-  $('#q21').on('click', function () { sortTable(0, '#q21'); });
-  $('#q22').on('click', function () { sortTable(1, '#q22'); });
-  $('#q23').on('click', function () { sortTable(2, '#q23'); });
+  $('#q21').on('click', function () { sortTable(0, '#q21'); });   //User Name (default)
+  $('#q22').on('click', function () { sortTable(1, '#q22'); });   //User Type
+  $('#q23').on('click', function () { sortTable(2, '#q23'); });   //Department
 
 
 }

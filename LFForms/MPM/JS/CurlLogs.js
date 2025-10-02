@@ -1,6 +1,11 @@
 ﻿/**
  CurlLogs.js
- -----------------------------------------------------------------------------
+ 
+ Author:  Jeffrey Whitney
+          jtwhitney@machine.com
+          651-319-7982
+ Date:    9/29/2025
+
  UI controller for the Curl Logs page: handles pagination, filtering, sorting,
  site selection persistence, and late wiring after lookup data loads.
 

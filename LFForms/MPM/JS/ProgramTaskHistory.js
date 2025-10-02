@@ -1,5 +1,12 @@
 /*
  File: ProgramTaskHistory.js
+ 
+  Author:   Jeffrey Whitney
+            jtwhitney@machine.com
+            651-391-7982
+  Date:     9/29/2025
+
+
  Purpose: UI behavior for the "Programming Task History" page.
 
  Behavior:

@@ -1,6 +1,11 @@
 /**
   CloneTask.js
  
+ Author:  Jeffrey Whitney
+          jtwhitney@machine.com
+          651-319-7982
+ Date:    9/29/2025
+
   Purpose:
   Orchestrates the Clone Task dialog behavior and validation.
  

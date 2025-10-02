@@ -1,6 +1,11 @@
 /**
  ProbeAndTipAngles.js
  
+ Author:  Jeffrey Whitney
+          jtwhitney@machine.com
+          651-319-7982
+ Date:    9/29/2025
+
  Purpose
  This page allows users to view the CMM Programs which use various probes and tip angles. 
  There are two lists, one of probes and one tip angles but the tip angle one doesn't have anything in it

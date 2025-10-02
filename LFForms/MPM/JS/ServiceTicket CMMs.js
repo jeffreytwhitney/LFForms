@@ -6,11 +6,14 @@
             651-391-7982
   Date:     9/29/2025
 
- This form requires Admin permissions. (See "User Permissons" below for explanation.)
- Client-side behaviors for the "Service Ticket CMMs" Laserfiche Forms view.
- This form is for editing Service Ticket CMMs.
- (When the user is filling out a service ticket, when they choose "CMM Down"
- it give them a list of CMM's to choose from. This form edits that list.)
+ 
+ Purpose:
+   Client-side behaviors for the "Service Ticket CMMs" Laserfiche Forms view.
+   This form is for editing Service Ticket CMMs.
+   (When the user is filling out a service ticket, when they choose "CMM Down"
+   it give them a list of CMM's to choose from. This form edits that list.)
+
+Permissions: Metrology Admins only.
  
  Responsibilities:
  - Prefill and normalize the current network user into '.network-user-name input'.

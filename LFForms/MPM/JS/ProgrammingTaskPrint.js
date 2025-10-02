@@ -1,26 +1,30 @@
-/* global $ */
 /**
- * ProgrammingTaskPrint.js
- *
- * Purpose:
- * - Render a print-friendly view of the MPM Programming Task form.
- *
- * Behavior:
- * - Hides interactive controls not needed for printing.
- * - Ensures a jQuery UI theme stylesheet is present for consistent styling.
- * - After form data is loaded (via the custom 'onloadlookupfinished' event):
- *   - Updates the page title with the task name.
- *   - Converts all <textarea> elements into non-editable <div> blocks for printing.
- *   - Injects a Task History iframe when a valid task ID is present.
- *   - Notifies the parent window to initiate printing via postMessage('printme').
- *
- * Events:
- * - Document ready
- * - Custom 'onloadlookupfinished' (raised elsewhere when lookups/data have finished loading)
- *
- * Dependencies:
- * - jQuery
- * - Parent window listening for the "printme" postMessage to trigger printing
+ ProgrammingTaskPrint.js
+
+ Author:  Jeffrey Whitney
+          jtwhitney@machine.com
+          651-319-7982
+ Date:    9/29/2025
+
+ Purpose:
+ - Render a print-friendly view of the MPM Programming Task form.
+
+ Behavior:
+ - Hides interactive controls not needed for printing.
+ - Ensures a jQuery UI theme stylesheet is present for consistent styling.
+ - After form data is loaded (via the custom 'onloadlookupfinished' event):
+   - Updates the page title with the task name.
+   - Converts all <textarea> elements into non-editable <div> blocks for printing.
+   - Injects a Task History iframe when a valid task ID is present.
+   - Notifies the parent window to initiate printing via postMessage('printme').
+
+ Events:
+ - Document ready
+ - Custom 'onloadlookupfinished' (raised elsewhere when lookups/data have finished loading)
+
+ Dependencies:
+ - jQuery
+ - Parent window listening for the "printme" postMessage to trigger printing
  */
 
 $(document).ready(function () {

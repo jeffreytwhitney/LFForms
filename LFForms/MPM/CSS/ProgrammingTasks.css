@@ -1,0 +1,683 @@
+/*****     		  Globals            *****/
+#cf-formtitle {
+  height: 160px;
+}
+
+
+#preview-notice {
+  display: none;
+}
+
+.cf-form {
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+}
+
+.cf-section-header {
+  padding-top: 0px;
+}
+
+.table-button {
+  height: 20px;
+  width: 99%;
+  margin: 0px;
+}
+
+.form-focused {
+  background-color: transparent !important;
+}
+
+.ui-dialog-content {
+  overflow: hidden;
+}
+
+.cf-table .cf-field {
+  padding: 0px !important;
+  font-size: 11px !important;
+  width: 100%;
+}
+
+;
+
+.hidden-text {
+  display: none;
+}
+
+.section-header {
+  font-size: 1.25em;
+  font-weight: bold;
+}
+
+.section-footer {
+  padding-left: 600px;
+}
+
+.ui-datepicker-trigger {
+  display: none !important;
+}
+
+.mandate-chk {
+  height: 13px !important;
+  width: 13px !important;
+  margin: 0px 0px 0px 15px !important;
+}
+
+.isDisabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.tasklist-table {
+  padding: 0px;
+}
+
+#popUpDiv {
+  display: none;
+}
+
+#q234 {
+  width: 600px;
+}
+
+.tasklist-table {
+  padding: 0px !important;
+}
+
+/*****    		   Task Table   		   *****/
+
+#q3 .cf-section-header {
+  display: none;
+}
+
+@media (min-width: 1000px) {
+  .cf-formwrap {
+    margin-top: 0px;
+    width: 1600px !important;
+    max-width: 1600px !important;
+  }
+
+  .tasklist-table table {
+    width: 1550px;
+    padding: 0px !important;
+  }
+}
+
+@media (min-width: 1800px) {
+  .cf-formwrap {
+    margin-top: 0px;
+    width: 1780px !important;
+    max-width: 1780px !important;
+  }
+
+  .tasklist-table table {
+    width: 1710px;
+    padding: 0px !important;
+  }
+}
+
+
+
+
+
+
+.tasklist-table th {
+  font-size: 11px;
+  border: 1px solid !important;
+}
+
+  .tasklist-table th input {
+    height: 20px !important;
+    width: 100% !important;
+    font-size: 11px !important;
+  }
+
+  .tasklist-table th select {
+    height: 20px !important;
+    width: 100% !important;
+    font-size: 11px !important;
+  }
+
+  .tasklist-table th:last-child {
+    display: none;
+  }
+
+.tasklist-table tbody tr td:last-child {
+  display: none;
+}
+
+.colorOverDue td input[type="text"] {
+  color: #D0312D;
+  font-weight: 500;
+}
+
+  .colorOverDue td input[type="text"]:disabled {
+    color: #D0312D;
+    font-weight: 500;
+    background-color: white !important;
+  }
+
+.colorOverDue td select {
+  color: #D0312D;
+  font-weight: 500;
+}
+
+  .colorOverDue td select:disabled {
+    color: #D0312D;
+    font-weight: 500;
+    background-color: white !important;
+  }
+
+.colorOverDue td a {
+  color: #D0312D;
+  font-weight: 500;
+}
+
+.colorStarted td input[type="text"] {
+  color: #4cbb17;
+  font-weight: 500;
+}
+
+  .colorStarted td input[type="text"]:disabled {
+    color: #4cbb17;
+    font-weight: 500;
+    background-color: white !important;
+  }
+
+.colorStarted td select {
+  color: #4cbb17;
+  font-weight: 500;
+}
+
+  .colorStarted td select:disabled {
+    color: #4cbb17;
+    font-weight: 500;
+    background-color: white !important;
+  }
+
+.colorStarted td a {
+  color: #4cbb17;
+  font-weight: 500;
+}
+
+.colorStartedButOld td input[type="text"] {
+  color: #FF6600;
+  font-weight: 500;
+}
+
+  .colorStartedButOld td input[type="text"]:disabled {
+    color: #FF6600;
+    font-weight: 500;
+    background-color: white !important;
+  }
+
+.colorStartedButOld td select {
+  color: #FF6600;
+  font-weight: 500;
+}
+
+  .colorStartedButOld td select:disabled {
+    color: #FF6600;
+    font-weight: 500;
+    background-color: white !important;
+  }
+
+.colorStartedButOld td a {
+  color: #FF6600;
+  font-weight: 500;
+}
+
+.colorWaiting td input[type="text"] {
+  color: #0072C7;
+  font-weight: 500;
+}
+
+  .colorWaiting td input[type="text"]:disabled {
+    color: #0072C7;
+    font-weight: 500;
+    background-color: white !important;
+  }
+
+.colorWaiting td select {
+  color: #0072C7;
+  font-weight: 500;
+}
+
+  .colorWaiting td select:disabled {
+    color: #0072C7;
+    font-weight: 500;
+    background-color: white !important;
+  }
+
+.colorWaiting td a {
+  color: #0072C7;
+  font-weight: 500;
+}
+
+.site-name {
+  width: 300px;
+  font-size: 12px;
+  position: absolute;
+  top: 50px;
+}
+
+  .site-name select {
+    font-size: 12px;
+  }
+
+
+.colorClosedCancelled td {
+  color: #A9A9A9;
+  background-color: #F8F8F8 !important;
+}
+
+  .colorClosedCancelled td input[type="text"] {
+    color: #A9A9A9;
+    background-color: #F8F8F8 !important;
+  }
+
+    .colorClosedCancelled td input[type="text"]:disabled {
+      color: #A9A9A9;
+      background-color: #F8F8F8 !important;
+    }
+
+  .colorClosedCancelled td select {
+    color: #A9A9A9;
+    background-color: #F8F8F8 !important;
+  }
+
+    .colorClosedCancelled td select:disabled {
+      color: #A9A9A9;
+      background-color: #F8F8F8 !important;
+    }
+
+  .colorClosedCancelled td a {
+    color: #A9A9A9;
+    background-color: #F8F8F8 !important;
+  }
+
+.tasklist-table td {
+  font-size: 11px;
+  padding: 0px !important;
+  height: 20px !important;
+  border: 1px solid !important;
+}
+
+  .tasklist-table td input[type="text"] {
+    font-size: 11px !important;
+    width: 100% !important;
+    padding: 0px !important;
+    height: 20px !important;
+    border: 0px !important;
+  }
+
+  .tasklist-table td input:disabled {
+    background-color: white !important;
+  }
+
+  .tasklist-table td select:disabled {
+    background-color: white !important;
+  }
+
+
+  .tasklist-table td input[type="button"] {
+    font-size: 11px !important;
+    width: 100% !important;
+    padding: 0px !important;
+    height: 20px !important;
+    border: 0px !important;
+  }
+
+  .tasklist-table td select {
+    font-size: 11px !important;
+    width: 100% !important;
+    padding: 0px !important;
+    height: 20px !important;
+    border: 0px !important;
+  }
+
+
+
+
+/***  Button Columns ***/
+.task-list-clone-col input[type=text] {
+  display: none;
+}
+
+.tasklist-note-col input[type=text] {
+  display: none;
+}
+
+.tasklist-time-col input[type=text] {
+  display: none;
+}
+
+.tasklist-time-col input[type=text] {
+  display: none;
+}
+
+.tasklist-1f-col input[type=text] {
+  display: none;
+}
+
+/***  CheckBox Columns ***/
+.tasklist-mandate-col input[type=text] {
+  display: none;
+}
+
+/***  ComboBox Columns ***/
+.tasklist-status-id-col input[type=text] {
+  display: none;
+}
+
+.tasklist-assignee-id-col input[type=text] {
+  display: none;
+}
+
+/***  Link Columns ***/
+.tasklist-project-name-col input[type=text] {
+  display: none;
+}
+
+.tasklist-ticket-number-col input[type=text] {
+  display: none;
+}
+
+
+.project-link {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+.tasklist-task-name-col input[type=text] {
+  display: none;
+}
+
+.task-link {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+
+/***  Non-visible Columns ***/
+#q142, .tasklist-task-id-col {
+  display: none;
+}
+
+#q230, .tasklist-deptid-col {
+  display: none;
+}
+
+/***  Visible Columns ***/
+
+
+
+#q79 {
+  /*Note Column*/
+  width: 40px;
+}
+
+#q82 {
+  /*Time Column*/
+  width: 40px;
+}
+
+#q245 {
+  /*1f Column*/
+  width: 40px;
+}
+
+#q83 {
+  /*ProjectName Column*/
+  width: 180px;
+}
+
+
+#q84 {
+  /*TaskName Column*/
+  width: 180px;
+}
+
+#q87 {
+  /*TaskType Column*/
+  width: 80px;
+}
+
+.tasklist-task-type-col input {
+  pointer-events: none;
+}
+
+#q235 {
+  /*Assigned To Column*/
+  width: 110px;
+}
+
+.tasklist-assignee-cbo-col input {
+  pointer-events: none;
+}
+
+#q88 {
+  /*TicketNumber Column*/
+  width: 60px;
+}
+
+.tasklist-ticket-number-col input {
+  pointer-events: none;
+}
+
+#q248 {
+  /*Currently Running Column*/
+  width: 40px;
+}
+
+#q90 {
+  /*JobNumber Column*/
+  width: 70px;
+}
+
+.tasklist-jobnbr-col input {
+  pointer-events: none;
+}
+
+
+
+#q92 {
+  /*DateStarted Column*/
+  width: 70px;
+}
+
+.tasklist-datestarted-col input {
+  pointer-events: none;
+}
+
+#q236 {
+  /*Due Date Column*/
+  width: 70px;
+}
+
+.tasklist-duedate-col input {
+  pointer-events: none;
+}
+
+#q237 {
+  /*Sched Due Date Column*/
+  width: 70px;
+}
+
+.tasklist-schedduedate-col input {
+  pointer-events: none;
+}
+
+#q95 {
+  /*Man Date Column*/
+  width: 50px;
+}
+
+#q234 {
+  /*Status Column*/
+  width: 80px;
+}
+
+.tasklist-status-cbo-col input {
+  pointer-events: none;
+}
+
+#q101 {
+  /*Tot Hours Column*/
+  width: 50px;
+}
+
+.tasklist-tothours-col input {
+  pointer-events: none;
+}
+
+[id^="Field101"] {
+  /*Tot Hours Column*/
+  text-align: center;
+}
+
+
+#q102 {
+  /*Department Column*/
+  width: 80px;
+}
+
+.tasklist-dept-col input {
+  pointer-events: none;
+}
+
+
+
+#q221 {
+  /*Initiator Column*/
+  width: 100px;
+}
+
+.tasklist-initiator-col input {
+  pointer-events: none;
+}
+
+#q246 {
+  /*Op Column*/
+  width: 40px;
+}
+
+
+#q247 {
+  /*Rev Column*/
+  width: 40px;
+}
+
+
+
+/*****    		  TaskList Filter Checkboxes  		    *****/
+#q207 {
+  position: absolute;
+  top: 50px;
+  left: 300px;
+  background-color: #eee !important;
+}
+
+#FieldLabel206_hidden {
+  display: none;
+}
+
+
+/***** 			Task Summary Table 		*****/
+#q31 {
+  position: absolute;
+  top: 0px;
+  right: 100px;
+}
+
+  #q31 .cf-field {
+    height: 16px !important;
+  }
+
+  #q31 .cf-col-label {
+    margin-bottom: 0px;
+  }
+
+  #q31 .cf-section-header {
+    display: none;
+  }
+
+  #q31 table {
+    width: 350px;
+  }
+
+  #q31 th {
+    font-size: 11px;
+    height: 16px !important;
+    border: 1px solid;
+  }
+
+
+    #q31 th:last-child {
+      display: none;
+    }
+
+  #q31 tbody tr {
+    height: 16px !important;
+    line-height 16px !important;
+  }
+
+  #q31 tbody td {
+    font-size: 11px;
+    padding: 0px !important;
+    width: 30px !important;
+    border: 1px solid;
+    margin: 0px;
+    height: 16px !important;
+    line-height 16px !important;
+  }
+
+  #q31 td input {
+    font-size: 11px !important;
+    width: 100% !important;
+    padding: 0px !important;
+    height: 16px !important;
+    background-color: transparent !important;
+    border: 0px;
+  }
+
+  #q31 table tr td:nth-child(7) {
+    font-weight: bold;
+    background-color: #d3d3d3 !important;
+  }
+
+    #q31 table tr td:nth-child(7) input {
+      font-weight: bold;
+      background-color: #d3d3d3 !important;
+    }
+
+  #q31 table tr:last-child td {
+    font-weight: bold;
+    background-color: #d3d3d3 !important;
+  }
+
+    #q31 table tr:last-child td input {
+      font-weight: bold;
+      background-color: #d3d3d3 !important;
+    }
+
+#q32 {
+  /*Task Summary First Column*/
+  width: 60px !important;
+}
+
+
+#filterRow input {
+  border-width: 0px;
+  background-color: #F1EB9C;
+  font-weight: 600 !important;
+  height: 20px !important;
+}
+
+#filterRow select {
+  border-width: 0px;
+  background-color: #F1EB9C;
+  font-weight: 600 !important;
+  height: 20px !important;
+}

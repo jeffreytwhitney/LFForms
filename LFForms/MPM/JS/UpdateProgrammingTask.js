@@ -1,3 +1,162 @@
+/**
+UpdateProgrammingTask.js — Documentation
+ 
+  Author:   Jeffrey Whitney
+            jtwhitney@machine.com
+            651-391-7982
+  Date:     9/29/2025
+
+Permissions:
+    - Metrology users (user-type-id == 1) have full permissions.
+        This includes:
+          - Changing task status
+          - Changing task assignee
+          - Adding notes
+          - Generating pester messages to QE's.
+    - Metrology Admins can do everything a regular Metrology user can do, plus:
+        - Pester messages to assignees
+    - Quality Engineers (user-type-id == 3) can edit tasks only within their department. But they cannot change task status or assignment.
+    - Other user types have read-only access.
+
+Overview - Form for viewing/editing a programming task.
+
+
+ KEY CONCEPTS:
+   Dialog Looping Mechanism:
+     The form is called as a popup dialog from other pages, and it communicates with the parent window to close the dialog and refresh the parent 
+     page after this page is submitted.
+     This loop is essential to understand because it's a common pattern that you will see again and again in any form which is being used as a popup. 
+     This form is one of those. The way it works is when this page loads initially, the $('.closeme input') is not provided from the query string, 
+     and so is set to the default value of 0.
+     Submitting the form sets that value to 1. In LFF, when that the form is submitted it executes the workflow and then, 
+     the On Event Completion event redirects back to this same page, but this time with the closeme value set to 1 in the query string. 
+     This tells the page that it should close the dialog and refresh the parent page, so it sends off a message to the parent window to do that.
+
+   User Permissions:
+      There is a user permission model in place to restrict which updates a user can make.
+      This is separate from LFF security, which can, (but in practice usually does not), limit who 
+      can even access a particular form. For our purposes, the LFF security model is not particularly useful for our needs because we we want
+      all users to be able to view the forms. What we want instead is to limit their ability to do certain things inside the application. 
+      There are several user types which are defined in the database users table, (tblUsers) each with their own
+      level of permission. They are:
+        - Cell Lead (user-type-id == 5). Cell Leads can only view tickets and tasks. They cannot make any changes.
+          In fact, cell leads are not logged in to LFF at all because they do no have LFF accounts.
+        - Manufacturing Engineer (user-type-id == 4). They do have LFF accounts, but still have read-only access. 
+        - Quality Engineers, (QE's) (user-type-id == 3). QE's can add tickets, add tasks to tickets, add notes. 
+          They cannot, however, change tickets outside their department.
+          They also cannot change task statuses or assign them to anyone.
+        - Metrology Calibration (user-type-id == 2). They have permissions to update Service Tickets, but not programming
+          tickets. (A service ticket is a non-programming type of ticket used for things like a machine being
+          down or needing service, gaging, etc.)
+        - Metrology users (user-type-id == 1). They have full permissions to change the status of tasks,
+          assign tasks. They can also add tickets, add tasks to tickets, add notes, etc.
+      
+          There is also a special case Metrology user, the Admin. This is designated in the Users table by the Admin 
+          flag being set to 1. Admins can access forms that are not available to the "regular" Metrology user, such 
+          as "Department", or "Task Types". (Lookup values which are not likely to change very often, if ever.) There are also a 
+          few little things here and there that an Admin can do that a regular Metrology user cannot, such as 
+          sending off an Assignee Pester Message. (Emailing the Assignee of a task, asking what's going on with it.)
+      
+      Lastly, there is a separate flag in the database called IsActive. If a user is inactivated, they have 
+      read-only access to the system, regardless of their former user type.
+      
+      How authentication is performed: 
+        When the form first loads, LFF fills in the .lf-user-name field with CRETEX\username. 
+        (Predicated on the fact that the user has a LFF account and is logged in to LFF).
+        Because of the expense, Cell Leads have not been given LFF accounts, so the .lf-user-name field will be set to "Anonymous User" for them.
+        In any case, if the user is logged in to LFF, it sets the .lf-user-name to CRETEX\username, but we only want the username portion 
+        so we copy just the username portion (trimming off the "CRETEX\" part) into the .network-user-name field, 
+        which is what gets posted back to the server.
+        This will be matched against the user database table to determine the user's ID, user type, and department, etc.
+
+   LaserFiche Events:
+      There are two key LaserFiche events used in this script:
+        - onloadlookupfinished: The event fires only once, when all of the initial lookups have completed. The kinds of lookups that are completed
+                                under this event are the ones that do not have any arguments in them, meaning that they can be looked up immediately.
+                                Examples of this would be Task Types and Task Statuses. These lookups do not depend on any other fields being set.
+        - lookupcomplete: This event fires each time a lookup completes after the onloadlookupfinished event has been called. 
+                          Laserfiche has lookup rules applied to certain fields, so that when a field is changed, it triggers a lookup to fill in other fields.
+                          The fields themselves can either be changed by the user directly, or indirectly. 
+                          An example of an direct change would be when the user chooses a Site from the dropdown. 
+          
+    
+      Now this gets a bit tricky because the lookupcomplete event can fire multiple times, and we only want to do certain things once, so we need
+      to put logic in there so that it's not doing expensive things again and again.
+      There is a way of asking what the TriggerID of the lookup is. (A laserfiche function). But I found this to be kind of a pain to use because
+      you have to know the TriggerID of the lookup that you want to respond to and it's just an integer. Also, if you ever change anything 
+      in the form, you don't know if the trigger id has changed or not. So I found it easier to just put logic in the function that I want to run
+      to make sure that it doesn't, say iterate through a table or something getting values again and again when we only need it to do it once.
+    
+      For an example of what I'm talking about, we're setting the user name field in code and causing a lookup, (see 'User Permissions' above).
+      Because we're setting the field in code and causing a lookup, the onloadlookupfinished event has already fired. Therefore, any logic that 
+      relies on user fields being populated won't work if you call them from the onloadlookupfinished event. Instead, we have to call them from 
+      the lookupcomplete event. The unfortunate side effect of this is that the lookupcomplete event can fire multiple times, 
+      so we have to put logic in there so that it's not doing expensive things again and again. If you do this wrong, you can seriously lengthen
+      the load time of the form. Sometimes this is sort of unavoidable because of the way the LFF Lookup rules work, 
+      but you want to minimize it as much as possible.
+
+      Daisy-Chaining Lookups:
+        A side-effect of the way lookups work is how they sometimes daisy-chain. Let me explain with an example:
+        In our example, we have four fields: LFUserName, NetworkUserName, SiteID, DepartmentLookupTable.
+        At the beginning the only field which has anything in it is LFUserName, because LF has filled it in for us.
+        We take that value, keeping only the username portion an dput that in NetworkUserName. 
+        This causes a lookup for all of the user related fields, including SiteID. Once the SiteID is set, this in turn
+        causes another lookup to pull in all the departments related to that site. The Departments Lookup cannot be loaded until 
+        we know which site we're talking about. Sometimes this daisy-chaining can get 3 and sometimes even 4 levels deep because of all the relationships between
+        various fields on a form. This causes the form to be slower than it otherwise would have been, but there's not a lot we can do about it.
+        It sort of is what it is. This is what happens when you have to make an application with a non-application framework.
+
+
+Validation rules (`validateForm()`)
+- Required fields: task name, operation number, manuf rev, due date, scheduled due date.
+- Duplicate prevention: If `.existing-task-id select option` contains any non-zero option different from current task id, flag task name and operation 
+                        with duplicate error. If there is an existing task that has the same task name, operation number, 
+                        and task type within the same project, the system will not allow you to save the task.
+- Status/Hours consistency: Cannot set status to Not Started if `tracked-hours > 0`.
+- Assignment rules:
+  - You cannot unassign a task once it was assigned.
+  - Any status other than Not Started / Cancelled / Not Scheduled requires a valid assignee.
+- Returns boolean; `submitForm` halts on false and focuses offending fields.
+
+Status change flows (intercepted in `submitForm`)
+- Waiting: `callSetTaskToWaiting()`
+  - Requires selecting a waiting reason radio option.
+  - If “Other” (value 3) is chosen, a free-text note is required.
+  - Sets `.update-waiting-id` and optional `.submit-note` before submit.
+- Completed: `callCompleteTask()`
+  - Optional completion note; time addition: if “custom” (radio value `X`), amount must be > 1.
+  - Sets `.submit-note` then submits.
+- Cancelled: `callCancelTask()`
+  - Cancellation reason is required; sets `.submit-note` before submit.
+
+Dialogs, popups, and printing
+- Popup iframe host: `popupIFrame(src, title, height, width, cancelSubmit)` opens a jQuery UI dialog with an iframe.
+  - Used by: Add Note, Pester QE/Assignee, View Notes.
+  - Parent window listens for postMessage “CloseDialog” and “CloseDialogWithRefresh”.
+- Printing:
+  - `printTask()` loads `/Forms/MPM-ProgrammingTicketPrint?tid=...` into a hidden iframe via `loadiFrame`.
+  - A postMessage listener for “printme” triggers iframe printing with a slight delay.
+
+Cross-window messaging
+- Listeners:
+  - “printme” from child print iframe to trigger printing.
+  - “CloseDialog”/“CloseDialogWithRefresh” from note/view popups to close iframe dialog and optionally submit parent form.
+
+User experience notes
+- Title is updated as the task name changes.
+- “Manual Date” checkbox reflects and controls `.man-date input` values (0/1). Tasks with Manual Date set do not have their due dates updated
+   by the Schedule Refresh process.
+ */
+
+/**
+ * Status identifiers used by the form.
+ * 1: Not Started
+ * 2: Started
+ * 3: Waiting
+ * 4: Completed
+ * 5: Cancelled
+ * 7: Not Scheduled
+ */
 const status_NotStarted = 1;
 const status_Started = 2;
 const status_Waiting = 3;
@@ -5,16 +164,29 @@ const status_Completed = 4;
 const status_Cancelled = 5;
 const status_NotSched = 7;
 
+/**
+ * Main initialization for the Edit Programming Task page.
+ * - Injects required CSS/JS, resolves Bootstrap/jQuery UI button conflicts.
+ * - Wires event handlers for submit, double-click to view description, title update, time add UI.
+ * - Listens for postMessage to support print and popup lifecycle.
+ * - On "lookupcomplete": augments UI (pester/print), sets fields and enabled state.
+ * - On "onloadlookupfinished": adds buttons, history iframe, and file-path links.
+ */
 $(document).ready(function () {
   $(document).prop('title', 'Edit Programming Task');
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
 
+  // Resolve Bootstrap v jQuery UI button name collision.
   var bootstrapButton = $.fn.button.noConflict();
   $.fn.bootstrapBtn = bootstrapButton;
+
+  // Wire submit button and apply jQuery UI look.
   $('.Submit').addClass('ui-button ui-corner-all ui-widget');
   $('.Submit').click(function (e) { submitForm(e); });
+
+  // Normalize and copy the network username (DOMAIN\user -> USER) if present.
   var lfUserName = $('.lf-user-name input').val();
   if (lfUserName != '') {
     let networkUserName = $('.lf-user-name input').val().toUpperCase();
@@ -22,6 +194,7 @@ $(document).ready(function () {
     $('.network-user-name input').val(networkUserName).change();
   }
 
+  // Cross-window listener to trigger printing from child iframe.
   var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
   var printEvent = window[eventMethod];
   var messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
@@ -31,18 +204,20 @@ $(document).ready(function () {
       function show_print() {
         $("#print-iframe").get(0).contentWindow.print();
       };
-      window.setTimeout(show_print, 800); // 2 seconds
+      window.setTimeout(show_print, 800); 
     }
   });
 
-
+  // Keep page title in sync with task name.
   $(document).on('change', '.task-name input', function (e) {
     var task_name = $(this).val();
     $(document).prop('title', `Edit Task ${task_name}`);
   });
 
+  // Default "date to add" to today.
   $('.date-to-add input').val(moment().format('MM/DD/YYYY'));
 
+  // Quick view of long project description in a dialog on double-click.
   $(document).on('dblclick', '.project-description textarea', function (e) {
     var ticketDetail = $(this).val();
 
@@ -57,11 +232,13 @@ $(document).ready(function () {
     });
   });
 
+  // If server instructs close, hide form and request parent to refresh.
   if ($('.closeme input').val() == 1) {
     $('.cf-formwrap').hide();
     window.parent.postMessage('CloseDialogWithRefresh', '*');
   }
 
+  // Time addition radio group -> writes to hidden ".time-to-add".
   $('.add-time fieldset').change(function () {
     var time_to_add = $('.add-time fieldset input[type="radio"]:checked').val();
     if (time_to_add != 'X') {
@@ -72,10 +249,12 @@ $(document).ready(function () {
     }
   });
 
+  // Manual time amount controls ".time-to-add".
   $('.amount-of-time input').change(function () {
     $('.time-to-add input').val($('.amount-of-time input').val());
   });
 
+  // Popup iframe lifecycle control via postMessage.
   window.onmessage = function (event) {
     if (event.data == "CloseDialog") {
       $("#popupIFrame").dialog("destroy");
@@ -88,6 +267,7 @@ $(document).ready(function () {
     }
   };
 
+  // Data loaded and lookups ready: augment UI and set initial state.
   $(document).on('lookupcomplete', function (e) {
     if (isMetrologyUser()) {
       if (!$('#pester-qe').length) {
@@ -102,12 +282,11 @@ $(document).ready(function () {
       $('.task-name input').parent().append(`<div id='print-ticket' class='table-button ui-button' onclick='printTask()'><span title='Print Task' class='ui-button-icon ui-icon ui-icon-print'/></div>`);
     }
 
-
     setFormFields();
     setFormFieldEnableState();
-
   });
 
+  // Form fully initialized (custom host event).
   $(document).on("onloadlookupfinished", function (e) {
     let task_name = $('.task-name input').val();
     $('.closeme input').val(1);
@@ -124,6 +303,11 @@ $(document).ready(function () {
 });
 
 
+/**
+ * Opens the "Add Note" popup for the current task.
+ * Side effects:
+ * - Opens jQuery UI dialog with an iframe via popupIFrame.
+ */
 function callAddNote() {
   var task_id = $('.tid input').val();
   var task_name = $('.task-name input').val();
@@ -131,6 +315,13 @@ function callAddNote() {
 }
 
 
+/**
+ * Initiates cancellation flow:
+ * - Opens a dialog requiring a cancellation reason.
+ * - On OK: writes note to '.submit-note input' and submits the form.
+ * Validation:
+ * - Cancellation note must be non-empty.
+ */
 function callCancelTask() {
   var noteField = $('.section-cancellation-note');
   $(noteField).dialog({
@@ -158,6 +349,12 @@ function callCancelTask() {
 }
 
 
+/**
+ * Initiates completion flow:
+ * - Opens a dialog for optional completion note and time addition.
+ * - If "custom" time selected (value 'X'), amount must be > 1.
+ * - On OK: writes note to '.submit-note input' and submits the form.
+ */
 function callCompleteTask() {
   var noteField = $('.section-completion-time-note');
   $(noteField).dialog({
@@ -185,12 +382,14 @@ function callCompleteTask() {
   });
 
   $(noteField).dialog("open");
-
-
-
 }
 
 
+/**
+ * Opens a "Pester Assignee" note popup for the current task.
+ * Side effects:
+ * - Opens jQuery UI dialog with an iframe via popupIFrame.
+ */
 function callPesterAssignee() {
   var task_id = $('.tid input').val();
   var task_name = $('.task-name input').val();
@@ -199,6 +398,11 @@ function callPesterAssignee() {
 }
 
 
+/**
+ * Opens a "Pester QE" note popup for the current task.
+ * Side effects:
+ * - Opens jQuery UI dialog with an iframe via popupIFrame.
+ */
 function callPesterQE() {
   var task_id = $('.tid input').val();
   var task_name = $('.task-name input').val();
@@ -207,6 +411,12 @@ function callPesterQE() {
 }
 
 
+/**
+ * Initiates "Waiting" flow:
+ * - Requires selecting a waiting reason. If "Other" (value 3), a note is required.
+ * - Writes selected reason to '.update-waiting-id input' and optional note to '.submit-note input'.
+ * - Submits the form on success.
+ */
 function callSetTaskToWaiting() {
   var noteField = $('.section-waiting-note');
   $(noteField).dialog({
@@ -244,6 +454,12 @@ function callSetTaskToWaiting() {
 }
 
 
+/**
+ * Shows a copyable schedule file path for the given row index.
+ * @param {number} index - Index of the schedule/file-path row in the UI.
+ * Side effects:
+ * - Opens a jquery-confirm modal with a prefilled input containing the path.
+ */
 function callShowScheduleFilePath(index) {
   var schedule_name = $('.schedule-col input[type="text"]').eq(index).val();
   var file_path = $('.file-path-col input[type="text"]').eq(index).val();
@@ -268,6 +484,11 @@ function callShowScheduleFilePath(index) {
 }
 
 
+/**
+ * Opens the "View Notes" popup for the current task.
+ * Side effects:
+ * - Opens jQuery UI dialog with an iframe via popupIFrame.
+ */
 function callViewNotes() {
   var task_id = $('.tid input').val();
   var qe_name = $('.quality-engineer-name input').val();
@@ -275,6 +496,13 @@ function callViewNotes() {
 }
 
 
+/**
+ * Synchronizes the "manual date" checkbox with the hidden field '.man-date input':
+ * - Checked => value 1
+ * - Unchecked => value 0
+ * Side effects:
+ * - Updates the underlying hidden input value.
+ */
 function changeManualDate() {
   var manual_date_check = $('#manual-date-chk');
   if ($(manual_date_check).is(":checked")) {
@@ -286,6 +514,11 @@ function changeManualDate() {
 }
 
 
+/**
+ * Checks for existing tasks (same Name/Type/Op in current project).
+ * Reads options from '.existing-task-id select option' and compares to current '.tid input'.
+ * @returns {boolean} True if any different non-zero existing task id is found; otherwise false.
+ */
 function checkExistingTaskIDs() {
   var existing_task_ids = $('.existing-task-id select option');
   var task_id = $('.tid input').val();
@@ -303,6 +536,13 @@ function checkExistingTaskIDs() {
 }
 
 
+/**
+ * Evaluates whether the current user has permission to edit the task.
+ * Rules:
+ * - user_type_id 1 => full access
+ * - user_type_id 3 => access if user's department matches ticket's department
+ * @returns {boolean} True if user has edit permissions; otherwise false.
+ */
 function checkPermissions() {
 
   var user_type_id = Number($(".user-type-id input").val());
@@ -323,6 +563,10 @@ function checkPermissions() {
 }
 
 
+/**
+ * Indicates whether the current user is a Metrology user.
+ * @returns {boolean} True if '.user-type-id' is 1; otherwise false.
+ */
 function isMetrologyUser() {
   if ($('.user-type-id input').val() == 1) {
     return true;
@@ -331,6 +575,14 @@ function isMetrologyUser() {
 }
 
 
+/**
+ * Builds clickable links for each schedule name that open a file-path dialog.
+ * Expects aligned columns:
+ * - '.schedule-col input[type="text"]' for names
+ * - '.file-path-col input[type="text"]' for paths
+ * Side effects:
+ * - Appends anchor elements next to schedule names and a hidden div to hold path values.
+ */
 function generateFilePathLinks() {
   var scheduleNames = $('.schedule-col input[type="text"]'); 
   var filePaths = $('.file-path-col input[type="text"]');
@@ -349,6 +601,12 @@ function generateFilePathLinks() {
 }
 
 
+/**
+ * Renders the "manual date" checkbox next to '.man-date input' (if not already rendered)
+ * and reflects the current value ('1' => checked, otherwise unchecked).
+ * Side effects:
+ * - Appends '#man-date-div' wrapper with '#manual-date-chk' checkbox.
+ */
 function generateManualCheckBox() {
   if ($('.man-date input').val().length) {
     if (!$('#manual-date-chk').length) {
@@ -367,11 +625,22 @@ function generateManualCheckBox() {
 }
 
 
+/**
+ * Loads an iframe into '#popUpDiv' for printing (hidden until printed).
+ * @param {string} src - URL to load in the print iframe.
+ * Side effects:
+ * - Replaces '#popUpDiv' content with the print iframe.
+ */
 function loadiFrame(src) {
   $("#popUpDiv").html("<iframe id='print-iframe' name='print-iframe' src='" + src + "' />");
 }
 
 
+/**
+ * Disables editing for users without permissions (read-only mode).
+ * Side effects:
+ * - Adds 'ui-state-disabled' to various actionable elements.
+ */
 function lockFormNoPermissions() {
   $('.Submit').addClass("ui-state-disabled");
   $('#add-note').addClass("ui-state-disabled");
@@ -392,6 +661,11 @@ function lockFormNoPermissions() {
 }
 
 
+/**
+ * Disables editing when task is Completed or Cancelled.
+ * Side effects:
+ * - Adds 'ui-state-disabled' to various actionable elements (similar to no-permissions).
+ */
 function lockFormCompleteCancelled() {
 
   $('.Submit').addClass("ui-state-disabled");
@@ -411,6 +685,16 @@ function lockFormCompleteCancelled() {
 }
 
 
+/**
+ * Opens an iframe inside a jQuery UI dialog.
+ * @param {string} src - Iframe URL.
+ * @param {string} title - Dialog title.
+ * @param {number} height - Dialog/iframe height in px.
+ * @param {number} width - Dialog/iframe width in px.
+ * @param {boolean} cancelSubmit - If true, prevents dialog close from submitting.
+ * Side effects:
+ * - Creates and opens '#popupIFrame' dialog containing an iframe.
+ */
 function popupIFrame(src, title, height, width, cancelSubmit) {
 
   $("#popupIFrame").remove();
@@ -429,12 +713,16 @@ function popupIFrame(src, title, height, width, cancelSubmit) {
     }
   });
 
-
   $("#popupIFrame").dialog("open");
   $('#popupIFrame').attr('style', `width: 100%; height: ${height}px;`);
 }
 
 
+/**
+ * Initiates print of the current task by loading the print report in a hidden iframe.
+ * Side effects:
+ * - Calls loadiFrame with the task print URL; relies on postMessage "printme" to trigger printing.
+ */
 function printTask() {
 
   var taskID = $('.tid input').val();
@@ -443,7 +731,11 @@ function printTask() {
 }
 
 
-
+/**
+ * Clears all client-side validation error messages and styles.
+ * Side effects:
+ * - Removes error lists and 'parsley-error' classes from fields.
+ */
 function resetErrorFields() {
   var task_name = $('.task-name input');
   var task_status = $('.status-combo select');
@@ -461,10 +753,14 @@ function resetErrorFields() {
   task_status.removeClass('parsley-error');
   task_operation.removeClass('parsley-error');
   assignee.removeClass('parsley-error');
-
 }
 
 
+/**
+ * Restores enabled state for all actionable fields (removes 'ui-state-disabled').
+ * Side effects:
+ * - Re-enables controls before applying permission/status-specific locks.
+ */
 function resetEnabledState() {
   $('.Submit').removeClass("ui-state-disabled");
   $('#add-note').removeClass("ui-state-disabled");
@@ -485,6 +781,13 @@ function resetEnabledState() {
 }
 
 
+/**
+ * Applies enable/disable state to fields based on:
+ * - Task existence, user permissions, and current task status.
+ * - Metrology-specific rules for status/assignee changes and pester buttons.
+ * Side effects:
+ * - Calls resetEnabledState(), then conditionally locks form elements.
+ */
 function setFormFieldEnableState() {
   resetEnabledState();
 
@@ -503,7 +806,6 @@ function setFormFieldEnableState() {
     lockFormCompleteCancelled();
   }
 
-
   if (!isMetrologyUser()) {
     $('.status-combo select').addClass('ui-state-disabled');
     $('.assigned-to select').addClass('ui-state-disabled');
@@ -519,6 +821,15 @@ function setFormFieldEnableState() {
 }
 
 
+/**
+ * Normalizes and back-fills form fields after data is loaded.
+ * - Ensures related emails are loaded by triggering site change if needed.
+ * - Trims times from note and started dates (keeps yyyy-mm-dd/mm-dd-yyyy).
+ * - Syncs selects for assignee/status from name fields if needed.
+ * - Renders manual date checkbox UI.
+ * Side effects:
+ * - May trigger '.site-id input' change, and update select values with .change() to fire downstream handlers.
+ */
 function setFormFields() {
   if ((Number($('.site-id input').val()) != 0) && ($('.metrology-email input').val() == '')) {
     $('.site-id input').trigger("change");
@@ -538,6 +849,15 @@ function setFormFields() {
 }
 
 
+/**
+ * Submit handler for the form.
+ * - Validates client-side rules via validateForm(); prevents submit on failure.
+ * - Normalizes missing assignee numeric fields to 0.
+ * - If status changes, intercepts and opens appropriate dialog flows (Waiting/Completed/Cancelled).
+ * @param {JQuery.Event} e - Click/submit event to be optionally prevented.
+ * Side effects:
+ * - May open dialogs and delay submission until dialog completion.
+ */
 function submitForm(e) {
   
   var form_is_valid = validateForm();
@@ -582,6 +902,17 @@ function submitForm(e) {
 }
 
 
+/**
+ * Client-side validation for the form.
+ * Checks:
+ * - Required fields: task name, op number, manuf rev, due date, scheduled due date.
+ * - Duplicate tasks: via checkExistingTaskIDs().
+ * - Status/hours: cannot set to Not Started when tracked hours > 0.
+ * - Assignee rules: cannot unassign once assigned; non-start/cancel/not-sched statuses require assignee.
+ * @returns {boolean} True if form is valid; otherwise false.
+ * Side effects:
+ * - Adds error messages and 'parsley-error' classes to offending fields.
+ */
 function validateForm() {
   var task_name_field = $('.task-name input');
   var status_field = $('.status-combo select');

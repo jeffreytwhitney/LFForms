@@ -31,7 +31,7 @@ High-level behavior:
     - Wires filter change events, normalizes default page, restores site from cookie,
       triggers user name propagation, and shows the table.
 
-Key Concepts:
+KEY CONCEPTS:
     Dialog/Popup Mechanism:
      As with most things in LaserFiche Forms, there is no built-in way to open a popup dialog or iframe, so I had to build my own functionality.
      This is done via a combination of a hidden div on the form, and a jQuery UI dialog. The hidden div is populated with an iframe
@@ -92,7 +92,6 @@ Key Concepts:
                             Laserfiche has lookup rules applied to certain fields, so that when a field is changed, it triggers a lookup to fill in other fields.
                             The fields themselves can either be changed by the user directly, or indirectly. 
                             An example of an direct change would be when the user chooses a Site from the dropdown. 
-          
     
       Now this gets a bit tricky because the lookupcomplete event can fire multiple times, and we only want to do certain things once, so we need
       to put logic in there so that it's not doing expensive things again and again.
@@ -205,15 +204,52 @@ Key Concepts:
           .pg input: Page number (1-based), 999 = uninitialized. The page of results to return.   
           .ftname input: Task Name filter (partial match)
           .fpname input: Project Name filter (partial match)
+          .fttid input: Task Type ID filter (exact match)
+          .fsid input: Status ID filter (exact match)
+          .faid input: Assignee ID filter (exact match)
           .fpid input: Ticket Number filter (exact match)
           .fdid input: Department ID filter (exact match)
           .fqeid input: Quality Engineer ID filter (exact match)
           .finitemp input: Initiator ID filter (exact match)
           .inccom input: Include Completed filter (1 = include completed, 0 = exclude completed)
+          .incns input: Include Not Scheduled filter (1 = include not scheduled, 0 = exclude not scheduled) See an explanation of 'Not Scheduled' below.
+          .fexsd input: Exclude Same Day filter (1 = exclude same day, 0 = include same day) See an explanation of 'Same Day' below
+          .fexw input: Exclude Waiting filter. (Hide tasks where we're waiting on something. 1 = exclude waiting, 0 = include waiting)
+
+          Not Scheduled:  There are times that a QE will put in a ticket for part families. (A group of parts all under the same
+                          print that have differences. (Say, length for example.) We have only ever run 3 out of the 12 parts, so 
+                          we're not sure if the other 9 part numbers will EVER run. In this situation, we will make the other part 
+                          numbers "Not Scheduled", which means they are normally hidden from the list because we may or may not have to ever
+                          do anything for them. However, if they ever do show up on a production schedule, the refresh job will mark the 
+                          task as "Not Started" instead of "Not Scheduled", so that it will appear in our list.
+
+          Same Day:       When the QE first puts in the ticket, the Due Date and Scheduled Due date are initially the same. 
+                          (The Scheduled Due Date is the date that the floor needs it, the Due Date field is the date that we need to have it done by.)
+                          When the schedule update runs, it will change the Due Date equal to 1 business day earlier than the Scheduled Due Date. 
+                          When this happens, we know the due date is "real". Otherwise, it's a clue that it's not in any production 
+                          schedule yet, even though the QE has put in a ticket for it. By default, we show these tasks, but this allows us to hide them.
 
         Sorting:
-          .sort-field-ordinal input: Field to sort by (1 = Task Name, 2 = Task Type, 3 = Status, 4 = Assignee, 5 = Due Date, 6 = Priority)
-          .sort-direction input: Sort direction (ASC or DESC)
+          Sorting is handled via clickable column headers. Clicking a header sets the sort field and toggles the sort direction.
+          If you click on a sort field that is already the current sort field, it toggles the direction.  
+          If you click on a different sort field, it sets that field as the sort field and sets the direction to ascending.
+            
+            Hidden Sort Fields:
+              .sort-field-ordinal input: Field to sort by 
+              .sort-direction input: Sort direction (ASC or DESC)
+
+            Sort column mappings:
+              #q236  ->  Due Date (default)
+              #q88   ->  Ticket Number
+              #q83   ->  Ticket Name
+              #q84   ->  Task Name
+              #q234  ->  Status
+              #q87   ->  Task Type
+              #q235  ->  Assignee
+              #q102  ->  Department
+              #q221  ->  Submittor
+              #q241  ->  Create Date
+
 
       This gets us part of the way there, but we also need to have a way for the user to set these fields.
       This is done via a filter row which is added to the task list table. The filter row contains a text box for the task name filter,
@@ -475,7 +511,7 @@ function callAddNote(task_id) {
 
 
 /**
- * Open "Add Time" dialog for a given task (admin only).
+ * Open "Add Time" dialog for a given task (metrology only).
  * @param {number} task_id
  */
 function callAddTime(task_id) {
@@ -490,6 +526,8 @@ function callAddTime(task_id) {
 
 /**
  * Open 1Factory search in a new tab using the task name.
+ * I wish I could figure out how to open 1Factory and forward to the search page if you have to 
+ * log in to 1Factory, but I can't figure it out.
  * @param {string} task_name
  */
 function callOpenOneFactory(task_name) {
@@ -1353,14 +1391,14 @@ function wireUpSortFields() {
 
   $('#q236 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
 
-  $('#q236').on('click', function () { sortTable(0, '#q236'); });
-  $('#q88').on('click', function () { sortTable(1, '#q88'); });
-  $('#q83').on('click', function () { sortTable(2, '#q83'); });
-  $('#q84').on('click', function () { sortTable(3, '#q84'); });
-  $('#q234').on('click', function () { sortTable(4, '#q234'); });
-  $('#q87').on('click', function () { sortTable(5, '#q87'); });
-  $('#q235').on('click', function () { sortTable(6, '#q235'); });
-  $('#q102').on('click', function () { sortTable(7, '#q102'); });
-  $('#q221').on('click', function () { sortTable(8, '#q221'); });
-  $('#q241').on('click', function () { sortTable(9, '#q241'); });
+  $('#q236').on('click', function () { sortTable(0, '#q236'); });   // Due Date (default)
+  $('#q88').on('click', function () { sortTable(1, '#q88'); });     // Ticket Number
+  $('#q83').on('click', function () { sortTable(2, '#q83'); });     // Ticket Name
+  $('#q84').on('click', function () { sortTable(3, '#q84'); });     // Task Name
+  $('#q234').on('click', function () { sortTable(4, '#q234'); });   // Status
+  $('#q87').on('click', function () { sortTable(5, '#q87'); });     // Task Type
+  $('#q235').on('click', function () { sortTable(6, '#q235'); });   // Assignee
+  $('#q102').on('click', function () { sortTable(7, '#q102'); });   // Department
+  $('#q221').on('click', function () { sortTable(8, '#q221'); });   // Submittor
+  $('#q241').on('click', function () { sortTable(9, '#q241'); });   // Create Date
 }

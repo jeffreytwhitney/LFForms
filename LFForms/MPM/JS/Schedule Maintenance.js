@@ -1,5 +1,12 @@
 /*
 File: Schedule Maintenance.js
+
+  Author:   Jeffrey Whitney
+            jtwhitney@machine.com
+            651-391-7982
+  Date:     9/29/2025
+
+
 Purpose: UI logic for the "Schedule Maintenance" page.
 
 Permissions: Must be Metrology User to view. Only Admins can add/edit schedules. (See 'User Permissions' below.)
