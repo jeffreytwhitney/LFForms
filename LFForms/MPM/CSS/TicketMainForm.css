@@ -1,0 +1,160 @@
+.form-focused {
+  background-color: #FFFFFF;
+}
+
+.cf-formwrap {
+  margin-top: 0 !important;
+  margin-left: 0 !important;
+}
+
+.cf-form {
+  padding-bottom: 0px !important;
+  padding-top: 0px !important;
+}
+
+#preview-notice {
+  display: none;
+}
+
+iframe {
+  border-width: 0px;
+}
+
+.ui-tabs-anchor {
+  font-size: 12px;
+}
+
+#cf-formtitle {
+  display: none;
+}
+
+.user-name-display .cf-label {
+  display: none;
+}
+
+.schedule-update-message .cf-label {
+  display: none;
+}
+
+.task-schedule-info input {
+  display: none;
+}
+
+.schedule-update-message input[type="text"] {
+  display: none;
+}
+
+.schedule-update-message {
+  width: 400px;
+  font-size: 10px;
+  background-color: transparent;
+  position: absolute;
+  left: 600px;
+  top: -20px;
+}
+
+.user-name-display {
+  width: 300px;
+  font-size: 11px;
+  background-color: transparent;
+  position: absolute;
+  right: 300px;
+  top: -4px;
+}
+
+  .user-name-display input {
+    width: 220px;
+  }
+
+    .user-name-display input[type="text"] {
+      background-color: transparent;
+      border-width: 0px;
+      pointer-events: none;
+    }
+
+.curl-logs-link {
+  width: 80px;
+  font-size: 10px;
+  background-color: transparent;
+  padding-left: 20px;
+}
+
+
+@media (min-width: 800px) {
+  .cf-formwrap {
+    width: 1650px !important;
+    max-width: 1650px !important;
+  }
+
+  .ui-widget {
+    font-size: 10px;
+    width: 1625px;
+  }
+
+  #frm-servicetickets {
+    width: 1600px;
+    height: 845px;
+  }
+
+  #frm-programming-tasks {
+    width: 1600px;
+    height: 845px;
+  }
+
+  #frm-programming-tickets {
+    width: 1600px;
+    height: 845px;
+  }
+
+  .task-schedule-info {
+    display: none;
+  }
+}
+
+@media (min-width: 1850px) {
+  .cf-formwrap {
+    width: 1850px !important;
+    max-width: 1850px !important;
+  }
+
+  .ui-widget {
+    font-size: 10px;
+    width: 1825px;
+  }
+
+  #frm-servicetickets {
+    width: 1800px;
+    height: 845px;
+  }
+
+  #frm-programming-tasks {
+    width: 1800px;
+    height: 845px;
+  }
+
+  #frm-programming-tickets {
+    width: 1800px;
+    height: 845px;
+  }
+
+  .task-schedule-info {
+    width: 200px;
+    font-size: 10px;
+    background-color: transparent;
+    position: absolute;
+    right: 600px;
+    top: 1px;
+    display: block;
+  }
+
+    .task-schedule-info .cf-label {
+      display: none;
+    }
+
+    .task-schedule-info input[type="text"] {
+      background-color: transparent;
+      border-width: 1px;
+      height: 20px;
+      width: 80px;
+    }
+}

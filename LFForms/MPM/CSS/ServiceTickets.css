@@ -1,0 +1,287 @@
+/*****     		  Globals            *****/
+
+.cf-formwrap {
+  margin-top: 0px;
+  margin-left: 0px;
+}
+
+#preview-notice {
+  display: none;
+}
+
+.isDisabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.cf-form {
+  padding-top: 0px;
+}
+
+.cf-section-header {
+  padding-top: 0px;
+}
+
+.form-focused {
+  background-color: transparent !important;
+}
+
+.ui-dialog-content {
+  overflow: hidden;
+}
+
+.cf-table .cf-field {
+  padding: 0px !important;
+  font-size: 11px !important;
+  width: 100%;
+}
+
+;
+
+.hidden-text {
+  display: none;
+}
+
+
+@media (min-width: 1000px) {
+  .cf-formwrap {
+    margin-top: 0px;
+    width: 1600px !important;
+    max-width: 1600px !important;
+  }
+
+  .service-ticket-table table {
+    width: 1550px !important;
+    padding: 0px !important;
+  }
+
+  #q15 {
+    /*Ticket Number Column*/
+    width: 100px;
+  }
+
+  #q18 {
+    /*Ticket Name Column*/
+    width: 250px;
+  }
+
+  #q40 {
+    /*Initiator Name Column*/
+    width: 110px;
+  }
+
+  #q41 {
+    /*Contact Name Column*/
+    width: 110px;
+  }
+
+  #q42 {
+    /*Ticket Type Column*/
+    width: 110px;
+  }
+
+  #q43 {
+    /*Department Column*/
+    width: 110px;
+  }
+
+  #q44 {
+    /*Assigned To Column*/
+    width: 110px;
+  }
+
+  #q45 {
+    /*Status Column*/
+    width: 100px;
+  }
+
+  #q46 {
+    /*Due Date Column*/
+    width: 80px;
+  }
+
+  #q47 {
+    /*Last Updated Column*/
+    width: 110px;
+  }
+
+  #q48 {
+    /*Last Updated By Column*/
+    width: 110px;
+  }
+
+  #q51 {
+    /*Create Date Column*/
+    width: 80px;
+  }
+}
+
+@media (min-width: 1800px) {
+  .cf-formwrap {
+    margin-top: 0px;
+    width: 1800px !important;
+    max-width: 1800px !important;
+  }
+
+  .service-ticket-table table {
+    width: 1750px !important;
+    padding: 0px !important;
+  }
+
+  #q15 {
+    /*Ticket Number Column*/
+    width: 100px;
+  }
+
+  #q18 {
+    /*Ticket Name Column*/
+    width: 350px;
+  }
+
+  #q40 {
+    /*Initiator Name Column*/
+    width: 150px;
+  }
+
+  #q41 {
+    /*Contact Name Column*/
+    width: 130px;
+  }
+
+  #q42 {
+    /*Ticket Type Column*/
+    width: 130px;
+  }
+
+  #q43 {
+    /*Department Column*/
+    width: 130px;
+  }
+
+  #q44 {
+    /*Assigned To Column*/
+    width: 150px;
+  }
+
+  #q45 {
+    /*Status Column*/
+    width: 120px;
+  }
+
+  #q46 {
+    /*Due Date Column*/
+    width: 100px;
+  }
+
+  #q47 {
+    /*Last Updated Column*/
+    width: 130px;
+  }
+
+  #q48 {
+    /*Last Updated By Column*/
+    width: 150px;
+  }
+
+  #q51 {
+    /*Create Date Column*/
+    width: 80px;
+  }
+}
+
+
+
+
+
+
+.service-ticket-table table {
+  width: 1700px;
+  padding: 0px !important;
+}
+
+.service-ticket-table th {
+  font-size: 11px;
+  border: 1px solid !important;
+}
+
+  .service-ticket-table th input {
+    height: 20px !important;
+    width: 100% !important;
+    font-size: 11px !important;
+  }
+
+  .service-ticket-table th select {
+    height: 20px !important;
+    width: 100% !important;
+    font-size: 11px !important;
+  }
+
+
+.service-ticket-table td {
+  font-size: 11px;
+  padding: 0px !important;
+  height: 20px !important;
+  border: 1px solid !important;
+}
+
+  .service-ticket-table td input[type="text"] {
+    font-size: 11px !important;
+    width: 100% !important;
+    padding: 0px !important;
+    height: 20px !important;
+    border: 0px !important;
+  }
+
+  .service-ticket-table td input:disabled {
+    background-color: white !important;
+  }
+
+  .service-ticket-table td select:disabled {
+    background-color: white !important;
+  }
+
+.add-button {
+  font-size: 12px;
+  margin-bottom: 5px !important;
+}
+
+.site-name {
+  width: 250px;
+}
+
+  .site-name select {
+    font-size: 12px;
+    width: 120px;
+  }
+
+
+
+.include-choice {
+  position: absolute;
+  top: 20px;
+  right: 300px;
+}
+
+
+
+/***  Link Columns ***/
+
+.ticket-number-col input[type=text] {
+  display: none;
+}
+
+
+#filterRow input {
+  border-width: 0px;
+  background-color: #F1EB9C;
+  font-weight: 600 !important;
+}
+
+#filterRow select {
+  border-width: 0px;
+  background-color: #F1EB9C;
+  font-weight: 600 !important;
+}
+
+/* Service Tickets Table */
+

@@ -1,0 +1,285 @@
+/*****     		  Globals          *****/
+.cf-form {
+  padding-top: 0px;
+  padding-bottom: 40px;
+  padding-left: 10px;
+  padding-right: 10px;
+  clear: both;
+}
+
+
+.cf-formwrap {
+  margin: 0 !important;
+  border-width: 0;
+}
+
+.capitalize-me input {
+  text-transform: uppercase;
+}
+
+.capitalize-me textarea {
+  text-transform: uppercase;
+}
+
+
+#preview-notice {
+  display: none;
+}
+
+.ui-state-disabled, .ui-widget-content .ui-state-disabled, .ui-widget-header .ui-state-disabled {
+  opacity: .35;
+  filter: Alpha(Opacity = 35);
+  background-image: none;
+  pointer-events: none;
+}
+
+.cf-table .cf-field {
+  padding: 0px !important;
+  font-size: 11px !important;
+  width: 100%;
+}
+
+;
+
+.form-focused {
+  background-color: #FFFFFF;
+  padding: 0px;
+  margin: 0px;
+}
+
+.form-focused {
+  background-color: transparent !important;
+}
+
+
+#cf-formtitle {
+  height: 175px !important;
+}
+
+.ui-button {
+  padding: 0px;
+}
+
+ul li.form-q {
+  padding: 1px 0px;
+}
+
+.cf-table {
+  border: 1px solid black !important;
+}
+
+.table-button {
+  height: 25px;
+  margin-top: 1px;
+  margin-bottom: 2px;
+  margin-left: 3px;
+}
+
+
+
+/*****     	Details Section        *****/
+
+#q6 .cf-field input[type=text] {
+  font-size: 14px;
+}
+
+#q6 .cf-field select {
+  font-size: 14px;
+}
+
+#q6 .cf-field textarea {
+  font-size: 12px;
+}
+
+.ticket-number input {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.man-date input[type=text] {
+  display: none;
+}
+
+
+/*Notes Section*/
+.ui-dialog-content table {
+  width: 800px;
+  padding: 0px !important;
+}
+
+.ui-dialog-contenttable th {
+  font-size: 11px;
+  border: 1px solid !important;
+}
+
+  .ui-dialog-contenttable th input {
+    height: 20px !important;
+    width: 100% !important;
+    font-size: 11px !important;
+  }
+
+
+
+.ui-dialog-content table td {
+  font-size: 11px;
+  padding: 0px !important;
+  height: 20px !important;
+  border: 1px solid !important;
+}
+
+  .ui-dialog-content table td input[type="text"] {
+    font-size: 11px !important;
+    width: 100% !important;
+    padding: 0px !important;
+    height: 20px !important;
+    border: 0px !important;
+    pointer-events: none;
+  }
+
+  .ui-dialog-content table td textarea {
+    font-size: 11px !important;
+    width: 100% !important;
+    padding: 0px !important;
+    border: 0px !important;
+    pointer-events: none;
+  }
+
+
+/* Column Widths */
+#q54 {
+  /*Note Text*/
+  width: 400px;
+}
+
+
+/* Schedule Table */
+#q1 .cf-section-header {
+  display: none;
+}
+
+.schedule-table .cf-table_parent {
+  position: absolute;
+  left: 275px;
+  top: 20px;
+}
+
+
+.schedule-table table {
+  width: 325px;
+  padding: 0px !important;
+  overflow-y: scroll;
+  height: 125px;
+  display: block;
+}
+
+.schedule-table th {
+  font-size: 11px;
+  border: 1px solid !important;
+}
+
+.schedule-table .cf-col-label {
+  font-size: 11px;
+  margin-left: 3px !important;
+}
+
+.schedule-table table td {
+  font-size: 11px;
+  padding: 0px !important;
+  height: 20px !important;
+  border: 1px solid !important;
+}
+
+  .schedule-table table td input[type="text"] {
+    font-size: 11px !important;
+    width: 98% !important;
+    padding: 0px !important;
+    height: 20px !important;
+    border: 0px !important;
+    margin-left: 2px !important;
+    pointer-events: none;
+  }
+
+.schedule-col input[type="text"] {
+  display: none;
+}
+
+/* Schedule Col */
+#q2 {
+  width: 150px;
+}
+
+/* Machine Name */
+#q3 {
+  width: 120px;
+}
+
+#q81 {
+  width: 40px;
+}
+
+/*Completion Section*/
+.section-completion-time-note {
+  display: none;
+}
+
+  .section-completion-time-note .cf-section-header {
+    display: none;
+  }
+
+  .section-completion-time-note ul li {
+    list-style-type: none;
+  }
+
+
+/*Cancellation Section*/
+.section-cancellation-note {
+  display: none;
+}
+
+  .section-cancellation-note .cf-section-header {
+    display: none;
+  }
+
+  .section-cancellation-note ul li {
+    list-style-type: none;
+  }
+
+
+/*Waiting Section*/
+.section-waiting-note {
+  display: none;
+}
+
+  .section-waiting-note ul li {
+    list-style-type: none;
+  }
+
+  .section-waiting-note .cf-section-header {
+    display: none;
+  }
+
+
+
+
+.task-id .cf-label {
+  display: none;
+}
+
+.task-id .cf-field {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}
+
+.task-id input {
+  font-size: 8px;
+  width: 50px;
+  height: 15px;
+  border-width: 0px;
+  border-color: transparent;
+  background-color: transparent;
+}
+
+#print-iframe {
+  display: none;
+}

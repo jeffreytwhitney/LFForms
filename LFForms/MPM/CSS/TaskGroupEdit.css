@@ -1,0 +1,221 @@
+.cf-formwrap {
+  margin-top: 0px;
+}
+
+#preview-notice {
+  display: none;
+}
+
+.table-button {
+  height: 20px;
+  width: 99%;
+  margin: 0px;
+}
+
+.isDisabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.cf-form {
+  padding-top: 0px;
+}
+
+.cf-section-header {
+  padding-top: 0px;
+}
+
+.form-focused {
+  background-color: transparent !important;
+}
+
+.ui-dialog-content {
+  overflow: hidden;
+}
+
+.cf-table .cf-field {
+  padding: 0px !important;
+  font-size: 11px !important;
+  width: 100%;
+}
+
+;
+
+.hidden-text {
+  display: none;
+}
+
+
+.section-group-edit {
+  width: 800px;
+}
+
+.mandate-chk {
+  margin-left: 10px !important;
+}
+
+.check-all-manual {
+  margin-left: 10px !important;
+  height: 13px !important;
+}
+
+#Field18 .form-option-label {
+  display: none;
+}
+
+#Field94 .form-option-label {
+  display: none;
+}
+
+
+.tasklist-table {
+  padding: 0px;
+}
+
+  .tasklist-table table {
+    width: 1200px;
+    padding: 0px !important;
+  }
+
+  .tasklist-table th {
+    font-size: 11px;
+    border: 1px solid !important;
+  }
+
+  .tasklist-table thead th:last-child {
+    display: none;
+  }
+
+  .tasklist-table tbody td:last-child {
+    display: none;
+  }
+
+  .tasklist-table thead th input[type="text"] {
+    height: 24px !important;
+    width: 100% !important;
+    font-size: 11px !important;
+    border-width: 0px;
+    background-color: #F1EB9C;
+  }
+
+  .tasklist-table th select {
+    height: 24px !important;
+    width: 100% !important;
+    font-size: 11px !important;
+    border-width: 0px;
+    background-color: #F1EB9C;
+  }
+
+  .tasklist-table td {
+    font-size: 11px;
+    padding: 0px !important;
+    height: 20px !important;
+    border: 1px solid !important;
+  }
+
+    .tasklist-table td input[type="text"] {
+      font-size: 11px !important;
+      width: 100% !important;
+      padding: 0px !important;
+      height: 20px !important;
+      border: 0px !important;
+      pointer-events: none;
+    }
+
+
+/*'Select' Column*/
+input[id^='Field21'] {
+  margin-left: 10px;
+}
+
+div[id^='Field21'] .form-option-label {
+  display: none;
+}
+
+#q21 {
+  width: 40px;
+}
+
+
+/*Manual Date Column*/
+#q28 {
+  width: 40px;
+}
+
+.man-date-col input[type="text"] {
+  display: none;
+}
+
+/*Task Name*/
+#q24 {
+  width: 250px;
+}
+
+
+
+/*Task Type*/
+#q25 {
+  width: 100px;
+}
+
+#q82 {
+  width: 70px;
+}
+
+/*Assignee*/
+#q26 {
+  width: 120px;
+}
+/*Status*/
+#q27 {
+  width: 80px;
+}
+
+
+/*DueDate*/
+#q29 {
+  width: 80px;
+}
+
+/*SchedDueDate*/
+#q30 {
+  width: 80px;
+}
+
+/*SchedDueDate*/
+#q31 {
+  width: 80px;
+}
+
+#q66 .cf-col-label {
+  display: none;
+}
+
+
+.color-error td input[type="text"] {
+  color: #D0312D;
+  font-weight: 700;
+}
+
+.ui-dialog-buttonpane {
+  border-width: 0px;
+}
+
+.ui-dialog li {
+  list-style-type: none;
+}
+
+#q72 {
+  display: none;
+}
+
+
+#Field80 {
+  width: 550px;
+  height: 215px;
+}
+
+
+#q12 li {
+  padding: 2px 10px;
+}

@@ -1,0 +1,188 @@
+/*****     		  Globals            *****/
+
+.cf-formwrap {
+  margin-top: 0px;
+  margin-left: 0px;
+}
+
+#preview-notice {
+  display: none;
+}
+
+.cf-form {
+  padding-top: 0px;
+}
+
+ul li.form-q {
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
+
+.cf-section-header {
+  padding-top: 0px;
+}
+
+.form-focused {
+  background-color: transparent !important;
+}
+
+.ui-dialog-content {
+  overflow: hidden;
+}
+
+.cf-table .cf-field {
+  padding: 0px !important;
+  font-size: 11px !important;
+  width: 100%;
+}
+
+;
+/*Task Table Stuff*/
+.task-list-table table {
+  width: 1150px;
+  padding: 0px !important;
+}
+
+.task-list-table th {
+  font-size: 11px;
+  border: 1px solid !important;
+}
+
+  .task-list-table th:last-child {
+    display: none;
+  }
+
+  .task-list-table th input {
+    height: 20px !important;
+    width: 100% !important;
+    font-size: 11px !important;
+  }
+
+  .task-list-table th select {
+    height: 20px !important;
+    width: 100% !important;
+    font-size: 11px !important;
+  }
+
+
+.task-list-table td {
+  font-size: 11px;
+  padding: 0px !important;
+  height: 20px !important;
+  border: 1px solid !important;
+}
+
+.task-list-table tbody tr td:last-child {
+  display: none;
+}
+
+.task-list-table td input[type="text"] {
+  font-size: 11px !important;
+  width: 100% !important;
+  padding: 0px !important;
+  height: 20px !important;
+  border: 0px !important;
+}
+
+.task-list-table .cf-section-header {
+  display: none;
+}
+
+
+/*Ticket History Stuff*/
+.ticket-history-table table {
+  width: 1100px;
+  padding: 0px !important;
+}
+
+.ticket-history-table th {
+  font-size: 11px;
+  border: 1px solid !important;
+}
+
+  .ticket-history-table th input {
+    height: 20px !important;
+    width: 100% !important;
+    font-size: 11px !important;
+  }
+
+.ticket-history-table thead th:last-child {
+  display: none;
+}
+
+.ticket-history-table tbody tr td:last-child {
+  display: none;
+}
+
+.ticket-history-table td {
+  font-size: 11px;
+  padding: 0px !important;
+  height: 20px !important;
+  border: 1px solid !important;
+}
+
+  .ticket-history-table td input[type="text"] {
+    font-size: 11px !important;
+    width: 100% !important;
+    padding: 0px !important;
+    height: 20px !important;
+    border: 0px !important;
+    pointer-events: none;
+  }
+
+.ticket-history-table .cf-section-header {
+  display: none;
+}
+
+#q27 {
+  width: 80px;
+}
+
+#q28 {
+  width: 150px;
+}
+
+#q31 {
+  width: 80px;
+}
+
+#q32 {
+  width: 100px;
+}
+
+#q33 {
+  width: 120px;
+}
+
+#q34 {
+  width: 120px;
+}
+
+#q35 {
+  width: 120px;
+}
+
+#q36 {
+  width: 100px;
+}
+
+#q37 {
+  width: 120px;
+}
+
+
+
+/*Print stuff*/
+.textarea-div {
+  border: 1px solid !important;
+  border-color: light-dark(rgb(118, 118, 118), rgb(133, 133, 133)) !important;
+  min-height: 26px;
+  width: 92%;
+  font-size: 12px;
+}
+
+@media print {
+  .page-break {
+    break-after: page;
+  }
+}

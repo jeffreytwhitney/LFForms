@@ -368,20 +368,14 @@ var initiatorNameMap = new Map();
 
 
 $(document).ready(function () {
-  // Hide submit controls and set page name.
   $('.Submit').hide();
   $(document).prop('title', 'Task Maintenance');
-
-  // Load required 3rd-party scripts and styles used by this page.
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js');
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-
-  // Avoid Bootstrap/jQuery UI button() conflicts if both are present. This is so that popup dialogs show the X button correctly.
-  var bootstrapButton = $.fn.button.noConflict();
-  var bootstrapButton = $.fn.button.noConflict();
+  var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
   $.fn.bootstrapBtn = bootstrapButton;
 
   // Normalize and capture the current user into a hidden field.
