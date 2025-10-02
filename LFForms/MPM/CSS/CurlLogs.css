@@ -1,0 +1,115 @@
+.cf-table .cf-field {
+  padding: 0px !important;
+  font-size: 11px !important;
+  width: 100%;
+}
+
+.cf-formwrap {
+  margin-top: 0px;
+}
+
+#q22 {
+  width: 300px;
+}
+
+.site-name select {
+  font-size: 12px;
+}
+
+.form-focused {
+  background-color: transparent !important;
+}
+
+.isDisabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+#preview-notice {
+  display: none;
+}
+
+.log-table {
+  padding: 0px;
+}
+
+  .log-table table {
+    width: 1700px;
+    padding: 0px !important;
+  }
+
+  .log-table th {
+    font-size: 11px;
+    border: 1px solid !important;
+  }
+
+    .log-table th input {
+      height: 20px !important;
+      width: 100% !important;
+      font-size: 11px !important;
+    }
+
+  .log-table thead th:last-child {
+    display: none;
+  }
+
+  .log-table tbody tr td:last-child {
+    display: none;
+  }
+
+  .log-table td {
+    font-size: 11px;
+    padding: 0px !important;
+    height: 20px !important;
+    border: 1px solid !important;
+  }
+
+    .log-table td input[type="text"] {
+      font-size: 11px !important;
+      width: 100% !important;
+      padding: 0px !important;
+      height: 20px !important;
+      border: 0px !important;
+      pointer-events: none;
+    }
+
+#q20 {
+  width: 120px;
+}
+
+#q1 {
+  width: 100px;
+}
+
+#q2 {
+  width: 80px;
+}
+
+#q5 {
+  width: 100px;
+}
+
+#q6 {
+  width: 100px;
+}
+
+#q8 {
+  width: 100px;
+}
+
+#filterRow input {
+  border-width: 0px;
+  background-color: #F1EB9C;
+  font-weight: 600 !important;
+  font-size: 11px !important;
+  height: 20px !important;
+}
+
+#filterRow select {
+  border-width: 0px;
+  font-size: 11px !important;
+  background-color: #F1EB9C;
+  font-weight: 600 !important;
+  height: 20px !important;
+  width: 100% !important;
+}

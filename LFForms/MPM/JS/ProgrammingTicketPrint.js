@@ -21,9 +21,7 @@
     - Updates `#form-title-wrap h1` to "Programming Ticket Number {X}".
     - Calls `generateTextAreaDivs()` to replace all `<textarea>` elements with `<div class="textarea-div">` containing their values (print-friendly).
     - Sends `postMessage("printme", "*")` to the parent window to trigger printing.
-  - On `lookupcomplete`:
-    - Currently a no-op placeholder (reserved for future logic).
- 
+     
   Dependencies and environment
   - jQuery is required.
   - Expects the host (parent window) to listen for the `"printme"` message and invoke `window.print()`.
@@ -33,16 +31,7 @@
     - `.Submit` matches submit controls that should be hidden for print.
     - One or more `<textarea>` elements exist and should be rendered as static content for printing.
  
-  Side effects and considerations
-  - Textareas are permanently replaced with non-editable `<div>` elements; this is intended for a print-only view.
-  - The textarea value is injected via `innerHTML`; if values can contain user-supplied HTML, sanitize or escape
-    to prevent XSS. Consider using `text()` or building the node via `document.createElement` with `textContent`.
-  - Line breaks in textarea values may not render as expected in a `<div>` unless styled. Consider CSS:
-      .textarea-div { white-space: pre-wrap; }
-  - The CSS for jQuery UI is included via CDN; ensure network access and pin versions as needed.
-  - `postMessage` uses `"*"` as the target origin; for stricter security, specify the expected origin.
- 
-  Extensibility
+   Extensibility
   - Add print-specific styles for `.textarea-div`.
   - Implement logic in the `lookupcomplete` handler if needed.
   - If this runs outside of a parent container that listens for `"printme"`, you can fall back to `window.print()`.
@@ -60,9 +49,6 @@ $(document).ready(function () {
     parent.postMessage("printme", "*");
   });
 
-  $(document).on('lookupcomplete', function (e) {
-
-  });
 });
 
 /**

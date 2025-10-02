@@ -97,6 +97,15 @@ Key Concepts:
         various fields on a form. This causes the form to be slower than it otherwise would have been, but there's not a lot we can do about it.
         It sort of is what it is. This is what happens when you have to make an application with a non-application framework.
 
+      Mapping:
+       There are several differnent lookup tables on the form which are used to populate dropdowns, nearly all of which are for filtering.
+       Task types are stored both as ID?Name and Name?ID because LFF only stores the display value in the select, for example, the TaskType
+       select shows the names of the task types, but we are storing the TaskTypeID in a the database, so we need to have a way to 
+       figure out what the TaskTypeID is so that we can set the value of the hidden field that the workflow is going to use to 
+       set the value in the task table. So we need to be able to look up the ID by name when the user selects a task type.
+       The only way I've been able to figure out how to do this is to have a hidden lookup table on the page which contains all of the 
+       task types and their IDs. So when the page loads, we read that table and build two maps: one for ID?Name and one for Name?ID.
+       When the user selects a task type, we look up the ID by name and set the value of the hidden field.
 
 - On "lookupcomplete":
   - Generates per-row Edit buttons.

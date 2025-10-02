@@ -9,6 +9,11 @@ AddServiceTicketNote.js
 Purpose:
 Controls the UI behavior for adding a service ticket note.
 
+
+Permissions: Anybody can add a service ticket note. However, you have to enter a valid user name so that we can 
+tell who filled out the form. See 'User Permissions' below for more information. This isn't really a permission
+per se, but we do have to have a valid user name so that we can route the ticket to the correct department.
+
 Responsibilities:
 - Set page title and load client-side CSS dependencies.
 - Resolve Bootstrap/jQuery UI button plugin conflict.

@@ -1,0 +1,224 @@
+/*****     		  Globals            *****/
+
+.cf-formwrap {
+  margin-top: 0px;
+}
+
+#preview-notice {
+  display: none;
+}
+
+.isDisabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.cf-form {
+  padding-top: 0px;
+}
+
+.cf-section-header {
+  padding-top: 0px;
+}
+
+.form-focused {
+  background-color: transparent !important;
+}
+
+.ui-dialog-content {
+  overflow: hidden;
+}
+
+.cf-table .cf-field {
+  padding: 0px !important;
+  font-size: 11px !important;
+  width: 100%;
+}
+
+;
+
+.hidden-text {
+  display: none;
+}
+
+.site-name {
+  width: 300px;
+  font-size: 12px;
+  position: absolute;
+  top: 7px;
+  left: 300px;
+}
+
+  .site-name select {
+    font-size: 12px;
+  }
+
+
+
+
+@media (min-width: 1000px) {
+  .cf-formwrap {
+    margin-top: 0px;
+    width: 1600px !important;
+    max-width: 1600px !important;
+  }
+
+  .projectlist-table table {
+    width: 1550px !important;
+    padding: 0px !important;
+  }
+
+  #q56 {
+    /*Ticket Number*/
+    width: 300px;
+  }
+}
+
+@media (min-width: 1800px) {
+  .cf-formwrap {
+    margin-top: 0px;
+    width: 1800px !important;
+    max-width: 1800px !important;
+  }
+
+  .projectlist-table table {
+    width: 1750px !important;
+    padding: 0px !important;
+  }
+
+  #q56 {
+    /*Ticket Number*/
+    width: 500px;
+  }
+}
+
+
+
+.projectlist-table th {
+  font-size: 11px;
+  border: 1px solid !important;
+}
+
+  .projectlist-table th input {
+    height: 20px !important;
+    width: 100% !important;
+    font-size: 11px !important;
+  }
+
+  .projectlist-table th select {
+    height: 20px !important;
+    width: 100% !important;
+    font-size: 11px !important;
+  }
+
+
+.projectlist-table td {
+  font-size: 11px;
+  padding: 0px !important;
+  height: 20px !important;
+  border: 1px solid !important;
+}
+
+  .projectlist-table td input[type="text"] {
+    font-size: 11px !important;
+    width: 100% !important;
+    padding: 0px !important;
+    height: 20px !important;
+    border: 0px !important;
+  }
+
+  .projectlist-table td input:disabled {
+    background-color: white !important;
+  }
+
+  .projectlist-table td select:disabled {
+    background-color: white !important;
+  }
+
+.add-button {
+  font-size: 12px;
+  margin-bottom: 5px !important;
+}
+
+
+/***  Link Columns ***/
+
+.projectlist-ticket-number-col input[type=text] {
+  display: none;
+}
+
+
+
+
+.projectlist-project-id-col input[type=text] {
+}
+
+#q52 {
+  /*Ticket Number*/
+  width: 100px;
+}
+
+#q53 {
+  /*Ticket Number*/
+  width: 250px;
+}
+
+
+#q58 {
+  /*Department Column*/
+  width: 100px;
+}
+
+
+#q57 {
+  /*Number Of Active Tasks*/
+  width: 90px;
+}
+
+
+#q59 {
+  /*Manufacturing Engineer*/
+  width: 120px;
+}
+
+#q60 {
+  /*Quality Engineer*/
+  width: 120px;
+}
+
+#q61 {
+  /*Initiator*/
+  width: 120px;
+}
+
+#q66 {
+  /*Initiator*/
+  width: 90px;
+}
+
+
+.include-choice {
+  position: absolute;
+  top: 20px;
+  right: 100px;
+}
+
+#q10 .cf-section-header {
+  display: none;
+}
+
+
+
+
+
+#filterRow input {
+  border-width: 0px;
+  background-color: #F1EB9C;
+  font-weight: 600 !important;
+}
+
+#filterRow select {
+  border-width: 0px;
+  background-color: #F1EB9C;
+  font-weight: 600 !important;
+}

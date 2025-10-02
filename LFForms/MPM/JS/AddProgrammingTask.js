@@ -14,7 +14,7 @@
 Permissions:
    - Metrology users (user-type-id == 1) can add/edit tasks across all departments.
    - QE users can only add tasks for tickets within their own department. This way, if one QE is on vacation, 
-     another QE can add tasks to tickets in that department.
+     another QE can add ta sks to tickets in that department.
  
  KEY CONCEPTS:
   Dialog Looping Mechanism:
@@ -25,22 +25,8 @@ Permissions:
    default value of 0. Submitting the form sets that value to 1. In LFF, when that the form is submitted it executes the workflow and then, 
    the On Event Completion event redirects back to this same page, but this time with the closeme value set to 1 in the query string. 
    This tells the page that it should close the dialog and refresh the parent page, so it sends off a message to the parent window to do that.
- 
- KEY CONCEPTS:
-   Dialog Looping Mechanism:
-     The form is called as a popup dialog from other pages, and it communicates with the parent window to close the dialog 
-     and refresh the parent page after this page is submitted.
-     This loop is essential to understand because it's a common pattern that you will see again and again any form which 
-     is being used as a popup. This form is one of those.
-     The way it works is when this page loads initially, the $('.closeme input') is not provided from the query 
-     string, and so is set to the default value of 0.
-     Submitting the form sets that value to 1. In LFF, when that the form is submitted it executes the workflow 
-     and then, the On Event Completion event redirects back to this same page, but this time with the closeme value 
-     set to 1 in the query string. 
-     This tells the page that it should close the dialog and refresh the parent page, so it sends off a message 
-     to the parent window to do that.
 
-    User Permissions:
+  User Permissions:
       There is a user permission model in place to restrict which updates a user can make.
       This is separate from LFF security, which can, (but in practice usually does not), limit who 
       can even access a particular form. For our purposes, this is not particularly useful for our needs because we we want
@@ -159,7 +145,7 @@ Permissions:
 
 $(document).ready(function () {
   // Frame naming (may be used by parent window logic).
-  window.name = "AddEditTask";
+  window.name = "Add Programming Task";
 
   // Dynamically load external dependencies (jQuery Confirm + jQuery UI theme).
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');

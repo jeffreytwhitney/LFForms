@@ -1,0 +1,181 @@
+/*****     		  Globals            *****/
+
+.cf-formwrap {
+  margin-top: 0px;
+  margin-left: 0px;
+}
+
+#preview-notice {
+  display: none;
+}
+
+.isDisabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+
+#add-note-button {
+  position: absolute;
+  left: 650px;
+}
+
+.table-button {
+  height: 25px;
+  margin-top: 1px;
+  margin-bottom: 2px;
+  margin-left: 3px;
+}
+
+.note-author-date {
+  height: 26px !important;
+  padding 0;
+  font-weight: 800%;
+}
+
+  .note-author-date input {
+    font-size: 12px !important;
+    font-weight: 600 !important;
+  }
+
+.note-text textarea {
+  font-size: 12px !important;
+}
+
+.cf-form {
+  padding-top: 0px;
+}
+
+ul li.form-q {
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
+
+.cf-section-header {
+  padding-top: 0px;
+}
+
+.form-focused {
+  background-color: transparent !important;
+}
+
+.ui-dialog-content {
+  overflow: hidden;
+}
+
+.note-history-collection {
+  padding: 0px !important;
+}
+
+  .note-history-collection .cf-collection {
+    padding: 0px !important;
+  }
+
+
+
+.cf-table .cf-field {
+  padding: 0px !important;
+  font-size: 11px !important;
+  width: 100%;
+}
+
+;
+
+.hidden-text {
+  display: none;
+}
+
+.note-textarea {
+  /*width:540px;*/
+  width: 100%;
+  height: 325px;
+}
+
+.collapsible h2 {
+  font-size: 16px;
+}
+
+.ticket-history-table .cf-section-header {
+  display: none;
+}
+
+.note-history-collection .cf-section-header {
+  display: none;
+}
+
+.note-author-date .cf-label {
+  display: none;
+}
+
+.note-text .cf-label {
+  display: none;
+}
+
+.ticket-history-table table {
+  width: 700px;
+  padding: 0px !important;
+}
+
+.ticket-history-table th {
+  font-size: 11px;
+  border: 1px solid !important;
+}
+
+  .ticket-history-table th:last-child {
+    display: none;
+  }
+
+  .ticket-history-table th input {
+    height: 20px !important;
+    width: 100% !important;
+    font-size: 11px !important;
+  }
+
+  .ticket-history-table th select {
+    height: 20px !important;
+    width: 100% !important;
+    font-size: 11px !important;
+  }
+
+
+.ticket-history-table td {
+  font-size: 11px;
+  padding: 0px !important;
+  height: 20px !important;
+  border: 1px solid !important;
+}
+
+.ticket-history-table tbody tr td:last-child {
+  display: none;
+}
+
+.ticket-history-table td input[type="text"] {
+  font-size: 11px !important;
+  width: 100% !important;
+  padding: 0px !important;
+  height: 20px !important;
+  border: 0px !important;
+}
+
+.broken-probe-name-col select {
+  width: 150px;
+  font-size: 11px !important;
+}
+
+.replacement-number-col input {
+  width: 50px;
+  font-size: 11px !important;
+}
+
+.broken-probe-table label {
+  font-size: 11px !important;
+}
+
+#note-textarea {
+  border-width: 1px;
+  border-color: black;
+}
+
+#print-iframe {
+  display: none;
+}

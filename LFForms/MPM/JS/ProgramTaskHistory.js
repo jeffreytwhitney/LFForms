@@ -8,6 +8,7 @@
 
 
  Purpose: UI behavior for the "Programming Task History" page.
+          This page is loaded as an iframe inside the task details page.
 
  Behavior:
  - On DOM ready:

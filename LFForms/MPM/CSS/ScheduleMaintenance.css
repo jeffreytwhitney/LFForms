@@ -1,0 +1,136 @@
+.cf-formwrap {
+  margin-top: 0px;
+  margin-left: 0px;
+}
+
+#preview-notice {
+  display: none;
+}
+
+.site-name {
+  width: 200px;
+}
+
+  .site-name select {
+    width: 125px;
+  }
+
+.isDisabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.cf-form {
+  padding-top: 0px;
+}
+
+.cf-section-header {
+  padding-top: 0px;
+}
+
+.form-focused {
+  background-color: transparent !important;
+}
+
+.ui-dialog-content {
+  overflow: hidden;
+}
+
+.cf-table .cf-field {
+  padding: 0px !important;
+  font-size: 11px !important;
+  width: 100%;
+}
+
+;
+
+.hidden-text {
+  display: none;
+}
+
+.cf-formwrap {
+  margin-top: 0px;
+  width: 1600px !important;
+  max-width: 1600px !important;
+}
+
+
+
+
+.schedule-table table {
+  width: 1550px;
+  padding: 0px !important;
+}
+
+.schedule-table th {
+  font-size: 11px;
+  border: 1px solid !important;
+}
+
+  .schedule-table th input {
+    height: 20px !important;
+    width: 100% !important;
+    font-size: 11px !important;
+  }
+
+  .schedule-table th select {
+    height: 20px !important;
+    width: 100% !important;
+    font-size: 11px !important;
+  }
+
+
+.schedule-table td {
+  font-size: 11px;
+  padding: 0px !important;
+  height: 20px !important;
+  border: 1px solid !important;
+}
+
+  .schedule-table td input[type="text"] {
+    font-size: 11px !important;
+    width: 100% !important;
+    padding: 0px !important;
+    height: 20px !important;
+    border: 0px !important;
+  }
+
+.add-button {
+  font-size: 12px;
+  margin-bottom: 5px !important;
+}
+
+
+.edit-button-col input[type=text] {
+  display: none;
+}
+
+.table-button {
+  height: 20px;
+  width: 99%;
+  margin: 0px;
+}
+
+#q9 {
+  width: 40px !important;
+}
+
+#q10 {
+  width: 150px !important;
+}
+
+#q13 {
+  width: 70px !important;
+}
+
+#q14 {
+  width: 1000px !important;
+}
+
+#q15 {
+  width: 70px !important;
+}
+
+#q53 {
+  width: 100px !important;
+}

@@ -1,0 +1,36 @@
+.cf-formwrap {
+  margin-top: 250px;
+}
+
+
+ul {
+  list-style-type: none; /* Remove bullets */
+  padding: 0; /* Remove padding */
+  margin: 0; /* Remove margins */
+}
+
+li {
+  font-size: 14pt;
+  padding: 5px;
+}
+
+.disabledAnchor a {
+  pointer-events: none !important;
+  cursor: default;
+  color: Gray;
+}
+
+
+#row-delete-confirm::after {
+  padding-bottom: 25px;
+}
+
+.row {
+  clear: both;
+  padding-left: 60px;
+}
+
+.column {
+  width: 45%;
+  float: left;
+}
