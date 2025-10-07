@@ -212,6 +212,22 @@ $(document).ready(function () {
       $('.pg input').val(1).change();
     }
 
+    // Quick view of long error in a dialog on double-click.
+    $(document).on('dblclick', '.error-detail-col div', function (e) {
+      var errorDetail = $(this).find('input').val();
+
+      $.dialog({
+        escapeKey: true,
+        backgroundDismiss: true,
+        title: `Error Details:`,
+        content: errorDetail,
+        resizable: true,
+        width: 800,
+        height: 600,
+      });
+    });
+
+
     // Restore last-selected site from cookie.
     var sitename = $.cookie('site_name');
     if (sitename != null) {
