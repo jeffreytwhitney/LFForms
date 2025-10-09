@@ -179,6 +179,13 @@ $(document).ready(function () {
         iframeProgrammingTickets.attr('src', iframeProgrammingTickets.attr('src'));
       }
     }
+    else if (tabID == 'ui-id-4') {
+
+      let iframePurchaseOrders = $('#frm-purchase-orders');
+      if (iframePurchaseOrders.length) {
+        iframePurchaseOrders.attr('src', iframePurchaseOrders.attr('src'));
+      }
+    }
     //This is here to handle odd situations where the Schedule Update info doesn't show up.
     generateTitleInfo();
   });
@@ -329,6 +336,11 @@ function loadIFrames() {
   if ($('#frm-programming-tickets').length == 0) {
     $('#program-ticket-div').append(`<iframe id="frm-programming-tickets" src="http://rmslf/Forms/MPM-ProgrammingTickets"></iframe>`);
   }
+
+  if ($('#frm-purchase-orders').length == 0) {
+    $('#purchase-order-div').append(`<iframe id="frm-purchase-orders" src="http://rmslf/Forms/MPM-PurchaseOrders"></iframe>`);
+  }
+
 }
 
 /**
@@ -372,17 +384,21 @@ function tabifyFormSections() {
       }
     }
     else if (tab == 1) {
-
       let iframeProgrammingTasks = $('#frm-programming-tasks');
       if (iframeProgrammingTasks.length) {
         iframeProgrammingTasks.attr('src', iframeProgrammingTasks.attr('src'));
       }
     }
     else if (tab == 2) {
-
       let iframeProgrammingTickets = $('#frm-programming-tickets');
       if (iframeProgrammingTickets.length) {
         iframeProgrammingTickets.attr('src', iframeProgrammingTickets.attr('src'));
+      }
+    }
+    else if (tab == 3) {
+      let iframePurchaseOrders = $('#frm-purchase-orders');
+      if (iframePurchaseOrders.length) {
+        iframePurchaseOrders.attr('src', iframePurchaseOrders.attr('src'));
       }
     }
   });

@@ -1,0 +1,28 @@
+﻿There are [CountOfTasks] tasks which are past due by at least 5 days and in ‘Waiting’ status.
+<br>Could you please let someone in Metrology know what is going on with these tasks?
+<br>We can move the due date forward if you would like, but we need you to tell us what to do.
+<br>
+<style>
+    table, th, tr td {
+        border: 1px solid black;
+        text-align: left;
+        font-size: 14px;
+    }
+</style>
+<br>
+<br>
+<table>
+    <thead>
+        <tr>
+            <th style="width:100px;">Ticket Number</th>
+            <th style="width:150px;">Task Name/Part Number</th>
+            <th style="width:120px;">Task Type</th>
+            <th style="width:120px;">Assignee</th>
+            <th style="width:80px;">Due Date</th>
+            <th style="width:60px;">Days Past Due</th>
+            <th style="width:400px;">Waiting Reason</th>
+        </tr>
+    </thead>
+    <tbody>[TaskRows]</tbody>
+</table>
+<BR><span style="font-size:6px;">EID:{{AUTOPSTRQE}} SITE:{{[SITECODE]}}</span>

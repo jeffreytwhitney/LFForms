@@ -1,11 +1,7 @@
 USE [LF_RMS_COMMS_MPM]
 GO
 
-/****** Object:  StoredProcedure [spPURCHASEORDER_Update]    Script Date: 10/7/2025 9:21:39 AM ******/
-DROP PROCEDURE [spPURCHASEORDER_Update]
-GO
-
-/****** Object:  StoredProcedure [spPURCHASEORDER_Update]    Script Date: 10/7/2025 9:21:39 AM ******/
+/****** Object:  StoredProcedure [spPURCHASEORDER_Update]    Script Date: 10/9/2025 5:16:42 AM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -14,7 +10,7 @@ GO
 
 
 
-CREATE   PROCEDURE [spPURCHASEORDER_Update]
+CREATE OR ALTER   PROCEDURE [spPURCHASEORDER_Update]
     @ID										INT,
 		@PurchaseOrderNumber	VARCHAR(50) = NULL,
 		@StatusID							INT,

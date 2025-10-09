@@ -1,0 +1,29 @@
+There are [CountOfTasks] tasks which are assigned to you which are currently past due.
+<br>Please review the status of each of these tasks with the QE that owns it.
+<br>If possible, enter a note for each task providing current status information.
+<br>
+<style>
+    table, th, tr td {
+        border: 1px solid black;
+        text-align: left;
+        font-size: 14px;
+    }
+</style>
+<br>
+<br>
+<table>
+    <thead>
+        <tr>
+            <th style="width:100px;">Ticket Number</th>
+            <th style="width:150px;">Task Name/Part Number</th>
+            <th style="width:120px;">Task Type</th>
+            <th style="width:100px;">Status</th>
+            <th style="width:120px;">Assignee</th>
+            <th style="width:80px;">Due Date</th>
+            <th style="width:60px;">Days Past Due</th>
+            <th style="width:120px;">Quality Engineer</th>
+        </tr>
+    </thead>
+    <tbody>[TaskRows]</tbody>
+</table>
+<BR><span style="font-size:6px;">EID:{{AUTOPSTRASN}} SITE:{{[SITECODE]}}</span>

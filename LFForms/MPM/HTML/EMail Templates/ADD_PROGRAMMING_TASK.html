@@ -1,0 +1,34 @@
+<p><strong>Programming Ticket Update:[TicketNumber] - Task Added</strong></p>
+<br>Ticket Details:
+<br>
+<style>
+    table, th, tr td {
+        border: 1px solid black;
+        text-align: left;
+        font-size: 14px;
+    }
+</style>
+<table>
+    <tr><td>Site:</td><td>[SiteName]</td></tr>
+    <tr><td>Submittor:</td><td>[InitiatorName]</td></tr>
+    <tr><td>Ticket Name:</td><td>[TicketName]</td></tr>
+    <tr><td>Ticket Details:</td><td>[TicketDetails]</td></tr>
+    <tr><td>Department:</td><td>[Department]</td></tr>
+    <tr><td>Manufacturing Engineer:</td><td>[MEName]</td></tr>
+    <tr><td>Quality Engineer:</td><td>[QEName]</td></tr>
+</table>
+<br>Tasks:
+<br>
+<table>
+    <thead>
+        <tr>
+            <th style="width:200px;">Task Name</th>
+            <th style="width:120px;">Task Type</th>
+            <th>Due Date</th>
+        </tr>
+    </thead>
+    <tbody>[TaskRows]</tbody>
+</table>
+<br>
+<br><p><a href="http://rmslf/Forms/MPM-EditProgrammingTicket?tid=[TicketID]">View ticket</a></p>
+<BR><span style="font-size:6px;">EID:{{PRGTSKADD}} SITE:{{[SITECODE]}}</span>

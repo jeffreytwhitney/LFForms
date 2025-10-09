@@ -1,11 +1,7 @@
 USE [LF_RMS_COMMS_MPM]
 GO
 
-/****** Object:  StoredProcedure [spPURCHASEORDER_AddNew]    Script Date: 10/7/2025 9:21:33 AM ******/
-DROP PROCEDURE [spPURCHASEORDER_AddNew]
-GO
-
-/****** Object:  StoredProcedure [spPURCHASEORDER_AddNew]    Script Date: 10/7/2025 9:21:33 AM ******/
+/****** Object:  StoredProcedure [spPURCHASEORDER_AddNew]    Script Date: 10/9/2025 5:17:43 AM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -14,10 +10,11 @@ GO
 
 
 
-CREATE   PROCEDURE [spPURCHASEORDER_AddNew]
+
+
+CREATE OR ALTER   PROCEDURE [spPURCHASEORDER_AddNew]
 		@SiteID							 INT,
-    @PurchaseOrderNumber VARCHAR(50) = NULL,
-    @PurchaseOrderTypeID NCHAR(10),
+    @PurchaseOrderTypeID INT,
     @Vendor              VARCHAR(255),
     @GageIDSN            VARCHAR(500),
     @Description         VARCHAR(1000) = NULL,
@@ -29,33 +26,16 @@ CREATE   PROCEDURE [spPURCHASEORDER_AddNew]
 AS
 BEGIN
     SET NOCOUNT ON;
-
-      INSERT INTO [dbo].[tblPurchaseOrder] (
-					SiteID,
-					PurchaseOrderNumber,
-          PurchaseOrderStatusID,
-          [PurchaseOrderTypeID],
-          [Vendor],
-          [GageIDSN],
-          [Description],
-          [Quantity],
-          RequestorID,
-          [UpdateUserID],
-					TotalCost
-      )
-      VALUES (
-					@SiteID,
-					@PurchaseOrderNumber,
-					1,
-          @PurchaseOrderTypeID,
-          @Vendor,
-          @GageIDSN,
-          @Description,
-          @Quantity,
-          @RequestorID,
-          @UpdateUserID,
-					@TotalCost
-      );
+		IF @PurchaseOrderTypeID = 1
+			BEGIN
+				INSERT INTO [dbo].[tblPurchaseOrder] (SiteID, PurchaseOrderStatusID, [PurchaseOrderTypeID], [Vendor], [GageIDSN], [Description], [Quantity], RequestorID, [UpdateUserID], TotalCost				)
+				VALUES (@SiteID, 1, @PurchaseOrderTypeID, @Vendor, @GageIDSN, @Description, @Quantity, @RequestorID, @UpdateUserID, @TotalCost);
+			END
+		ELSE
+			BEGIN
+				INSERT INTO [dbo].[tblPurchaseOrder] (SiteID, PurchaseOrderStatusID, [PurchaseOrderTypeID], [Vendor], [GageIDSN], [Description], RequestorID, [UpdateUserID], TotalCost)
+				VALUES (@SiteID, 1, @PurchaseOrderTypeID, @Vendor, @GageIDSN, @Description, @RequestorID, @UpdateUserID, @TotalCost);
+			END
 
       SET @NewID = CAST(SCOPE_IDENTITY() AS INT);
       SELECT @NewID AS [ID];

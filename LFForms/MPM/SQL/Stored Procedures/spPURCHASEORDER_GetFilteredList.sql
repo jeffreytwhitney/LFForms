@@ -1,11 +1,7 @@
 USE [LF_RMS_COMMS_MPM]
 GO
 
-/****** Object:  StoredProcedure [spPROJECT_GetTaskList]    Script Date: 10/7/2025 8:40:01 AM ******/
-DROP PROCEDURE [spPURCHASEORDER_GetFilteredList]
-GO
-
-/****** Object:  StoredProcedure [spPROJECT_GetTaskList]    Script Date: 10/7/2025 8:40:01 AM ******/
+/****** Object:  StoredProcedure [spPURCHASEORDER_GetFilteredList]    Script Date: 10/9/2025 5:16:30 AM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -13,7 +9,9 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-CREATE PROCEDURE [spPURCHASEORDER_GetFilteredList]
+
+
+CREATE OR ALTER PROCEDURE [spPURCHASEORDER_GetFilteredList]
   @pg int = 1,
 	@site_id int,
 	@purchase_order_number varchar(50),
@@ -97,7 +95,7 @@ AS
 				WHEN @sort_field_ordinal = 3 THEN ' ORDER BY Vendor'
 				WHEN @sort_field_ordinal = 4 THEN ' ORDER BY GageIDSN'
 				WHEN @sort_field_ordinal = 5 THEN ' ORDER BY RequesterName'
-				
+				WHEN @sort_field_ordinal = 6 THEN ' ORDER BY PurchaseOrderType'
         ELSE ' ORDER BY DateCreated'
     END
 

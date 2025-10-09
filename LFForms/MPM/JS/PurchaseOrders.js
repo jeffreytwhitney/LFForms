@@ -530,6 +530,10 @@ function submitForm(e) {
   if ($('.edit-total-cost input').val() = '') { $('.edit-total-cost input').val(0); }
   if ($('.add-total-cost').val() = '') { $('.add-total-cost').val(0); }
 
+  if (actionID == 1) {
+    $('.add-note-text').val($('.add-note-text').val().trim());
+  }
+
   if (actionID == 2) {
     editStatusName = $('.edit-status-cbo select').val();
     editStatusID = statusNameMap.get(editStatusName);
