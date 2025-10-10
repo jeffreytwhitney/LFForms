@@ -75,8 +75,11 @@ $(document).ready(function () {
   $(document).on('change', '.edit-po-id input', function () {
     var poid = $('.edit-po-id input').val();
     $('#purchase-order-iframe').remove();
+    $('#notes-history-iframe').remove();
+
     if ((poid != '') && (poid != '0')) {
       $('#purchase-order-history').append(`<iframe id='purchase-order-iframe' name='purchase-order-iframe' src='http://rmslf/Forms/MPM-PurchaseOrderHistory?poid=${poid}' height='400' width='100%'/>`);
+      $('#notes-history').append(`<iframe id='notes-history-iframe' name='notes-history-iframe' src='http://rmslf/Forms/MPM-PurchaseOrderNotes?poid=${poid}' height='400' width='100%'/>`);
     }
   });
 

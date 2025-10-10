@@ -1,42 +1,42 @@
 ﻿/*!
- * File: ViewTaskNotes.js
- * Purpose: Enhances the Task Notes view with a double‑click "quick view" modal for long notes and
- *          loads UI dependencies required by the page.
- *
- * Behavior:
- * - On DOM ready:
- *   - Dynamically loads scripts (jquery-cookie, jquery-confirm) and styles (jQuery UI theme,
- *     simplePagination, jquery-confirm) from public CDNs.
- *   - Resolves a potential Bootstrap $.fn.button conflict and exposes it as $.fn.bootstrapBtn.
- *   - Hides elements with the class ".Submit".
- * - Registers a delegated double-click handler on ".note-text .cf-field":
- *   - Locates a descendant <textarea>, reads its current value, and shows it in a modal dialog
- *     using jquery-confirm (width: 800px, non-Bootstrap theme).
- *
- * Expected markup:
- *   <div class="note-text">
- *     <div class="cf-field">
- *       <textarea>Note text...</textarea>
- *     </div>
- *   </div>
- *
- * Dependencies loaded (via CDN):
- * - jquery-cookie v1.4.1 (https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js)
- * - jquery-confirm v3.3.2 JS/CSS (https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/)
- * - jQuery UI 1.13.3 Smoothness theme CSS
- * - simplePagination.js v1.6 CSS
- *
- * Assumptions:
- * - jQuery is already present on the page.
- * - Bootstrap is present if $.fn.button.noConflict() is used; otherwise this call would fail.
- * - The note text resides within a <textarea> inside ".note-text .cf-field".
- *
- * Notes and caveats:
- * - Content is injected into the modal as-is; if note text can contain user-supplied HTML, consider
- *   sanitizing or escaping prior to display to avoid XSS.
- * - Assets are fetched at runtime from CDNs; if offline operation or reduced latency is required,
- *   consider bundling locally or through a build pipeline.
- * - Handlers are delegated to document, so dynamically added notes are supported.
+File: ViewTaskNotes.js
+Purpose: Enhances the Task Notes view with a double‑click "quick view" modal for long notes and
+         loads UI dependencies required by the page.
+
+Behavior:
+- On DOM ready:
+  - Dynamically loads scripts (jquery-cookie, jquery-confirm) and styles (jQuery UI theme,
+    simplePagination, jquery-confirm) from public CDNs.
+  - Resolves a potential Bootstrap $.fn.button conflict and exposes it as $.fn.bootstrapBtn.
+  - Hides elements with the class ".Submit".
+- Registers a delegated double-click handler on ".note-text .cf-field":
+  - Locates a descendant <textarea>, reads its current value, and shows it in a modal dialog
+    using jquery-confirm (width: 800px, non-Bootstrap theme).
+
+Expected markup:
+  <div class="note-text">
+    <div class="cf-field">
+      <textarea>Note text...</textarea>
+    </div>
+  </div>
+
+Dependencies loaded (via CDN):
+- jquery-cookie v1.4.1 (https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js)
+- jquery-confirm v3.3.2 JS/CSS (https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/)
+- jQuery UI 1.13.3 Smoothness theme CSS
+- simplePagination.js v1.6 CSS
+
+Assumptions:
+- jQuery is already present on the page.
+- Bootstrap is present if $.fn.button.noConflict() is used; otherwise this call would fail.
+- The note text resides within a <textarea> inside ".note-text .cf-field".
+
+Notes and caveats:
+- Content is injected into the modal as-is; if note text can contain user-supplied HTML, consider
+  sanitizing or escaping prior to display to avoid XSS.
+- Assets are fetched at runtime from CDNs; if offline operation or reduced latency is required,
+  consider bundling locally or through a build pipeline.
+- Handlers are delegated to document, so dynamically added notes are supported.
  */
 
 $(document).ready(function () {
