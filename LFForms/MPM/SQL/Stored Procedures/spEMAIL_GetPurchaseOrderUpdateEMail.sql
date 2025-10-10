@@ -1,5 +1,7 @@
 USE [LF_RMS_COMMS_MPM]
 GO
+
+/****** Object:  StoredProcedure [spEMAIL_GetPurchaseOrderUpdateEMail]    Script Date: 10/9/2025 11:36:04 AM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -7,7 +9,8 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-CREATE OR ALTER PROCEDURE [spEMAIL_UpdatePurchaseOrder]
+
+CREATE OR ALTER   PROCEDURE [spEMAIL_GetPurchaseOrderUpdateEMail]
 	@purchase_order_id	INT,
 	@user_id						VARCHAR(10),
 	@email_message			VARCHAR(MAX) OUTPUT
@@ -16,7 +19,7 @@ AS
 	
 	BEGIN
 	/***************************************************************************************************
-	Procedure:      spEMAIL_UpdatePurchaseOrder
+	Procedure:      spEMAIL_GetPurchaseOrderUpdateEMail
 	Author:					Jeffrey Whitney
 									651-319-7982
 									jtwhitney@machine.com
@@ -53,7 +56,7 @@ AS
 
 	Example Invocation:
 		DECLARE @msg VARCHAR(MAX);
-		EXEC spEMAIL_UpdatePurchaseOrder
+		EXEC spEMAIL_GetPurchaseOrderUpdateEMail
 			 @purchase_order_id = 123,
 			 @user_id = '1234',
 			 @email_message = @msg OUTPUT;
@@ -152,7 +155,7 @@ AS
 		set @email_message = Replace(@email_message, '[HeaderLine]',@header_line);
 		set @email_message = Replace(@email_message, '[PurchaseOrderNumber]',@purchase_order_number);
 		set @email_message = Replace(@email_message, '[Submittor]',@submittor_name);
-		set @email_message = Replace(@email_message, '[Requester]', @submittor_name)
+		set @email_message = Replace(@email_message, '[Requester]', @requester_name)
 		set @email_message = Replace(@email_message, '[PurchaseOrderType]', @purchase_order_type)
 		set @email_message = Replace(@email_message, '[PurchaseOrderName]', @gage_idsn)
 
@@ -168,7 +171,6 @@ AS
 
 		set @email_message = Replace(@email_message, '[Description]', @description)
 		set @email_message = Replace(@email_message, '[Vendor]', @vendor)
-		set @email_message = Replace(@email_message, '[TotalCost]', @total_cost)
 		
 		IF @site_id = 1
 			BEGIN

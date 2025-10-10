@@ -62,6 +62,33 @@ $(document).ready(function () {
     });
   });
 
+  $(document).on('change', '.edit-status-cbo select', function () {
+    $('#status-error').remove();
+    $('#status-error').remove();
+    $('#po-number-error').remove();
+    $('#edit-cancellation-reason-error').remove();
+    editStatusName = $('.edit-status-cbo select').val();
+    editStatusID = statusNameMap.get(editStatusName);
+    $('.edit-status-id input').val(editStatusID).change();
+  });
+
+  $(document).on('change', '.edit-po-id input', function () {
+    var poid = $('.edit-po-id input').val();
+    $('#purchase-order-iframe').remove();
+    if ((poid != '') && (poid != '0')) {
+      $('#purchase-order-history').append(`<iframe id='purchase-order-iframe' name='purchase-order-iframe' src='http://rmslf/Forms/MPM-PurchaseOrderHistory?poid=${poid}' height='400' width='100%'/>`);
+    }
+  });
+
+  // Popup iframe lifecycle control via postMessage.
+  window.onmessage = function (event) {
+    if (event.data == "CloseDialog") {
+      $("#popupIFrame").dialog("destroy");
+      $("#popupIFrame").remove();
+    }
+  };
+
+
   // When lookup tables are available, finish wiring the grid.
   $(document).on('lookupcomplete', function (e) {
     loadRequesterMap();
@@ -72,10 +99,11 @@ $(document).ready(function () {
     $('.last-updated-col input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
 
     generateGoBackButtons();
-    generateTableButtons(".edit-button-col", "ui-icon-pencil", "Edit Purchase Order", "callEditPurchaseOrder"); 
+    generateTableButtons(".edit-button-col", "ui-icon-pencil", "Edit Purchase Order", "callEditPurchaseOrder");
     appendPagination(); // See "Pagination" above.
     generateFilterRow(); // See "Filtering and Sorting" above.
     colorCodeRows();
+    lockEditFormIfCompleted();
     $('.purchase-order-table').show();
 
     if (($('.edit-po-id input').val() != '0') && ($('.edit-status-id input').val() != '')) {
@@ -145,6 +173,29 @@ function appendPagination() {
 
 
 /**
+ * Opens the "Add Note" popup for the current task.
+ * Side effects:
+ * - Opens jQuery UI dialog with an iframe via popupIFrame.
+ */
+function callAddNote() {
+  var po_id = $('.edit-po-id input').val();
+  var po_number = $('.edit-po-number input').val();
+  var po_name = $('.edit-po-name input').val();
+  var popupTitle = '';
+
+  if (po_number.length > 0) {
+    popupTitle = `Add Note for Purchase Order ${po_number}`;
+  }
+  else {
+    popupTitle = `Add Note for Purchase Order '${po_name}'`;
+  }
+
+
+  popupIFrame(`http://rmslf/Forms/MPM-AddPurchaseOrderNote?poid=${po_id}&nt=1`, popupTitle, 400, 650, false);
+}
+
+
+/**
  * Switches the UI into Add PO mode.
  * - Selects the "Add" action radio
  * - Sets .add-po-id to 1
@@ -178,6 +229,10 @@ function callEditPurchaseOrder(poID) {
  * - Clears .add-po-id and .edit-po-id
  */
 function callGoBack() {
+  $('#status-error').remove();
+  $('#status-error').remove();
+  $('#po-number-error').remove();
+  $('#edit-cancellation-reason-error').remove();
   $(".add-po-id input").val(0).change();
   $(".edit-po-id input").val(0).change();
   $('.Submit').hide();
@@ -327,10 +382,19 @@ function generateFilterRow() {
     wireUpSortFields();
   }
 
+  if ($('#chkIncludeInActive').length == 0) {
+    chkIncludeCompleted = '<div class="choice include-choice"><input name="chkIncludeInActive" id="chkIncludeInActive" type="checkbox"><label class="form-option-label" for="chkIncludeInActive">Include Completed</label></div>'
+    $(chkIncludeCompleted).insertBefore('.purchase-order-table table');
+  }
+
   if (isAdminUser()) {
     if ($('.add-button').length == 0) {
-      var add_button = '<div class="ui-button add-button" onclick="callAddPurchaseOrder()"><span title="Add Purchase Order" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Purchase Order</div><div class="choice include-choice"><input name="chkIncludeInActive" id="chkIncludeInActive" type="checkbox"><label class="form-option-label" for="chkIncludeInActive">Include Completed</label></div>'
+      var add_button = '<div class="ui-button add-button" id="add-purchase-order" onclick="callAddPurchaseOrder()"><span title="Add Purchase Order" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Purchase Order</div>'
       $(add_button).insertBefore('.purchase-order-table table');
+    }
+    if ($('.add-note-button').length == 0) {
+      var add_note_button = '<div class="ui-button add-note-button" id="add-note-button" onclick="callAddNote()"><span title="Add Note" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Note</div>'
+      $('#spacer').append(add_note_button);
     }
   }
 
@@ -466,6 +530,71 @@ function loadStatusMap() {
 }
 
 
+function lockEditFormIfCompleted() {
+
+  if ($('.edit-po-id input').val() == '0') {
+    return;
+  }
+  $('.edit-po-number input').prop('disabled', false);
+  $('.edit-status-cbo select').prop('disabled', false);
+  $('.edit-quantity input').prop('disabled', false);
+  $('.edit-total-cost input').prop('disabled', false);
+  $('.edit-note-text').prop('disabled', false);
+  $('.edit-po-name input').prop('disabled', false);
+  $('.edit-po-description input').prop('disabled', false);
+  $('.edit-po-vendor input').prop('disabled', false);
+  $('.Submit').show();
+
+
+  originalStatusID = Number($('.edit-original-status-id input').val());
+  if ((originalStatusID == 3) || (originalStatusID == 4)) {
+    $('.edit-po-number input').prop('disabled', true);
+    $('.edit-status-cbo select').prop('disabled', true);
+    $('.edit-quantity input').prop('disabled', true);
+    $('.edit-total-cost input').prop('disabled', true);
+    $('.edit-note-text').prop('disabled', true);
+    $('.edit-po-name input').prop('disabled', true);
+    $('.edit-po-description input').prop('disabled', true);
+    $('.edit-po-vendor input').prop('disabled', true);
+    $('.Submit').hide();
+
+  }
+}
+
+
+/**
+ * Opens an iframe inside a jQuery UI dialog.
+ * @param {string} src - Iframe URL.
+ * @param {string} title - Dialog title.
+ * @param {number} height - Dialog/iframe height in px.
+ * @param {number} width - Dialog/iframe width in px.
+ * @param {boolean} cancelSubmit - If true, prevents dialog close from submitting.
+ * Side effects:
+ * - Creates and opens '#popupIFrame' dialog containing an iframe.
+ */
+function popupIFrame(src, title, height, width, cancelSubmit) {
+
+  $("#popupIFrame").remove();
+  $("#popUpDiv").html(`<div height='${height}' width='${width}'><iframe id='popupIFrame' name='myname' src='${src}' height='${height}' width='${width}'/></div>`);
+  $("#popupIFrame").dialog({
+    title: title,
+    height: height,
+    width: width,
+    autoOpen: false,
+    resizable: true,
+    modal: true,
+    close: function (event, ui) {
+      if (cancelSubmit) {
+        return false;
+      }
+    }
+  });
+
+  $("#popupIFrame").dialog("open");
+  $('#popupIFrame').attr('style', `width: 100%; height: ${height}px;`);
+}
+
+
 // Reset to page 1 and refresh the list.
 function resetPageNumber() {
   $('.purchase-order-table').hide();
@@ -523,22 +652,98 @@ function sortTable(newSortOrdinal, selector) {
  * @param {JQuery.Event} e - Click/submit event.
  */
 function submitForm(e) {
+ 
+  
   var actionID = Number($('.action-choice input[type="radio"]:checked').val());
 
-  if ($('.edit-quantity input').val() = '') {$('.edit-quantity input').val(0); }
-  if ($('.add-quantity input').val() = '') { $('.add-quantity input').val(0); }
-  if ($('.edit-total-cost input').val() = '') { $('.edit-total-cost input').val(0); }
-  if ($('.add-total-cost').val() = '') { $('.add-total-cost').val(0); }
+  if ($('.edit-quantity input').val() == '') { $('.edit-quantity input').val(0); }
+  if ($('.add-quantity input').val() == '') { $('.add-quantity input').val(0); }
+  if ($('.edit-total-cost input').val() == '') { $('.edit-total-cost input').val(0); }
+  if ($('.add-total-cost').val() == '') { $('.add-total-cost').val(0); }
 
   if (actionID == 1) {
-    $('.add-note-text').val($('.add-note-text').val().trim());
+    let addNote = $('.add-note-text').val().trim();
+    $('.add-note-text').val(addNote);
   }
 
   if (actionID == 2) {
-    editStatusName = $('.edit-status-cbo select').val();
-    editStatusID = statusNameMap.get(editStatusName);
-    $('.edit-status-id input').val(editStatusID);
+    if (!validateEdit()) {
+      e.preventDefault();
+      return;
+    }
+    let poNumber = $('.edit-po-number input').val().trim();
+    $('.edit-po-number input').val(poNumber);
   }
+}
+
+
+/**
+ * Validates the Edit Purchase Order form and renders inline error messages.
+ *
+ * Behavior:
+ * - Clears prior error lists with ids: `status-error`, `po-number-error`, `edit-cancellation-reason-error`.
+ * - Reads current values from:
+ *   - `.edit-status-id input` (current status id)
+ *   - `.edit-original-status-id input` (original status id)
+ *   - `.edit-po-number input` (PO number)
+ *   - `.edit-cancellation-reason input` (cancellation reason)
+ * - Appends Parsley-styled error lists next to offending inputs.
+ *
+ * Validation rules:
+ * - PO Number is required when Status is Issued (2) or Completed (3).
+ * - Status cannot change from any state > Submitted back to Submitted (1).
+ * - Cancellation Reason is required when Status is Cancelled (4).
+ *
+ * Side effects:
+ * - Mutates the DOM by adding/removing validation markup.
+ * - Uses implicit globals (`isValid`, `currentStatusID`, `originalStatusID`, etc.) due to missing `var/let/const`.
+ *
+ * Dependencies:
+ * - jQuery and the page’s CSS/DOM structure (selectors such as
+ *   `.edit-po-number`, `.edit-status-cbo`, `.edit-cancellation-reason`).
+ *
+ * Returns:
+ * - boolean — true if all rules pass; false otherwise.
+ *
+ * Note:
+ * - The implementation sets `isValid` but does not `return isValid`. Callers like `submitForm`
+ *   expect a boolean. Consider adding `return isValid;` at the end.
+ */
+function validateEdit() {
+  $('#status-error').remove();
+  $('#po-number-error').remove();
+  $('#edit-cancellation-reason-error').remove();
+
+  isValid = true;
+  currentStatusID = Number($('.edit-status-id input').val());
+  originalStatusID = Number($('.edit-original-status-id input').val());
+  purchaseOrderNumber = $('.edit-po-number input').val().trim();
+  cancellationReason = $('.edit-cancellation-reason textarea').val().trim();
+
+
+  if (purchaseOrderNumber.length == 0) {
+    if ((currentStatusID == 2) || (currentStatusID == 3)) {
+      $('.edit-po-number').append("<ul id='po-number-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Purchase Order Number is required when Status is 'Issued' or 'Completed'</li></ul>");
+      isValid = false;
+    }
+  }
+  else if (purchaseOrderNumber.length > 0) {
+    if (currentStatusID == 1) {
+      $('.edit-status-cbo').append("<ul id='status-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>If you assign a PO Number, you must change Status to 'Issued'.</li></ul>");
+      isValid = false;
+    }
+  }
+
+  if ((originalStatusID > 1) && (currentStatusID == 1)) {
+    $('.edit-status-cbo').append("<ul id='status-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Can't change status from 'Issued' back to 'Submitted'.</li></ul>");
+    isValid = false;
+  }
+
+  if ((currentStatusID == 4) && (cancellationReason.length == 0)) {
+    $('.edit-cancellation-reason').append("<ul id='edit-cancellation-reason-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Cancellation Reason is required when cancelling a Purchase Order.</li></ul>");
+    isValid = false;
+  }
+  return isValid;
 
 }
 

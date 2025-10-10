@@ -1,7 +1,7 @@
 USE [LF_RMS_COMMS_MPM]
 GO
 
-/****** Object:  StoredProcedure [spEMAIL_NewPurchaseOrder]    Script Date: 10/9/2025 7:41:39 AM ******/
+/****** Object:  StoredProcedure [spEMAIL_GetNewPurchaseOrderEMail]    Script Date: 10/9/2025 10:43:19 AM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -11,7 +11,7 @@ GO
 
 
 
-CREATE OR ALTER     PROCEDURE [spEMAIL_NewPurchaseOrder]
+CREATE OR ALTER     PROCEDURE [spEMAIL_GetNewPurchaseOrderEMail]
 	@purchase_order_id	INT,
 	@user_id						VARCHAR(10),
 	@email_message			VARCHAR(MAX) OUTPUT
@@ -20,7 +20,7 @@ AS
 	
 	BEGIN
 	/***************************************************************************************************
-	Procedure:      spEMAIL_NewPurchaseOrder
+	Procedure:      spEMAIL_GetNewPurchaseOrderEMail
 	Author:					Jeffrey Whitney
 									651-319-7982
 									jtwhitney@machine.com
@@ -57,7 +57,7 @@ AS
 
 	Example Invocation:
 		DECLARE @msg VARCHAR(MAX);
-		EXEC spEMAIL_NewPurchaseOrder
+		EXEC spEMAIL_GetNewPurchaseOrderEMail
 			 @purchase_order_id = 123,
 			 @user_id = '12345',
 			 @email_message = @msg OUTPUT;
@@ -148,7 +148,6 @@ AS
 
 		set @email_message = Replace(@email_message, '[Description]', @description)
 		set @email_message = Replace(@email_message, '[Vendor]', @vendor)
-		set @email_message = Replace(@email_message, '[TotalCost]', @total_cost)
 		set @email_message = Replace(@email_message, '[Note]', @note_text)
 		
 		IF @site_id = 1
