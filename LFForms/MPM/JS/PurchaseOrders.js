@@ -23,6 +23,17 @@ $(document).ready(function () {
     $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).change();
   }
 
+  var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
+  var printEvent = window[eventMethod];
+  var messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
+  printEvent(messageEvent, function (e) {
+
+    if (e.data === "printme" || e.message === "printme") {
+      $("#print-iframe").get(0).contentWindow.print();
+      $('.print-ticket-id input').val(null);
+    }
+  });
+
   // Persist selected site to a cookie.
   $(document).on('change', '.site-name select', function () {
     var sitename = $('.site-name select').val();
@@ -386,8 +397,10 @@ function generateFilterRow() {
   }
 
   if ($('#chkIncludeInActive').length == 0) {
-    chkIncludeCompleted = '<div class="choice include-choice"><input name="chkIncludeInActive" id="chkIncludeInActive" type="checkbox"><label class="form-option-label" for="chkIncludeInActive">Include Completed</label></div>'
+    chkIncludeCompleted = '<div class="choice include-choice" id="divIncludeInactive"><input name="chkIncludeInActive" id="chkIncludeInActive" type="checkbox"><label class="form-option-label" for="chkIncludeInActive">Include Completed</label></div>'
     $(chkIncludeCompleted).insertBefore('.purchase-order-table table');
+    printButton = '<div class="ui-button print-button" id="print-report" onclick="printReport()"><span title="Print Report" class="ui-button-icon ui-icon ui-icon-print"></span>Print</div>'
+    $(printButton).insertAfter('#divIncludeInactive');
   }
 
   if (isAdminUser()) {
@@ -595,6 +608,55 @@ function popupIFrame(src, title, height, width, cancelSubmit) {
 
   $("#popupIFrame").dialog("open");
   $('#popupIFrame').attr('style', `width: 100%; height: ${height}px;`);
+}
+
+
+function printReport() {
+
+  var domain = document.location.hostname;
+  var url_root = "http://" + domain + "/Forms/";
+  var report_url = "";
+  var site_id = $('.site-id input').val();
+  var finccom = Number($('.finccom input').val());
+  var freqid = Number($('.freqid input').val());
+  var fvname = $('.fvname input').val();
+  var fponame = $('.fponame input').val();  
+  var fponum = $('.fponum input').val();
+
+
+  report_url = url_root + "MPM-PurchaseOrderPrint?sid=" + site_id + "&fincom=" + finccom;
+
+  if (freqid != 0) {
+    report_url = report_url + "&freqid=" + freqid;
+  }
+
+  if (fponame.length > 0) {
+    report_url = report_url + "&fponame=" + encodeURIComponent(fponame);
+  }
+
+  if ((fvname != null) && (fvname.length > 0)) {
+    report_url = report_url + "&fvname=" + encodeURIComponent(fvname);
+  }
+
+  if (fponum.length > 0) {
+    report_url = report_url + "&fponum=" + encodeURIComponent(fponum);
+  }
+
+  if ($('.fdmin input').val().length > 0) {
+    
+    min_Date = moment($('.fdmin input').val()).format("YYYY-M-D");
+    console.log('Min Date Filter Value: ' + min_Date);
+    report_url = report_url + "&fdmin=" +min_Date;
+  }
+
+  if ($('.fdmax input').val().length > 0) {
+    max_Date = moment($('.fdmax input').val()).format("YYYY-M-D");
+    console.log('Max Date Filter Value: ' + max_Date);
+    report_url = report_url + "&fdmax=" +max_Date;
+  }
+
+
+  $("#popUpDiv").html("<iframe id='print-iframe' name='myname' src='" + report_url + "' />");
 }
 
 
