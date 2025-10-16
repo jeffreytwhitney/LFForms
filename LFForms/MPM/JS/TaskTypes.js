@@ -155,6 +155,14 @@ $(document).ready(function () {
     $(`.edit-requires-job-number-choice input[type='radio'][value='${requiresJobNumber}']`).prop("checked", true);
   });
 
+  // Keep radio group "Requires Models" in sync with hidden value.
+  $(document).on('change', '.edit-requires-model-value input', function () {
+    var requiresModel = $('.edit-requires-model-value input').val();
+    $(`.edit-requires-model-choice input[type='radio'][value='${requiresModel}']`).prop("checked", true);
+  });
+
+
+
   // Mirror radio "Is Active" selection back to the hidden field.
   $(document).on('change', ".edit-tasktype-is-active input[type='radio']", function () {
     var isActive = $(this).val();
@@ -166,6 +174,14 @@ $(document).ready(function () {
     var requiresJobNumber = $(this).val();
     $('.edit-requires-job-number-value input').val(requiresJobNumber);
   });
+
+
+  // Mirror radio "Requires Models" selection back to the hidden field.
+  $(document).on('change', ".edit-requires-model-choice input[type='radio']", function () {
+    var requiresModel = $(this).val();
+    $('.edit-requires-model-value input').val(requiresModel);
+  });
+
 
   // Keep the group name text input and the select in sync (text -> select).
   $(document).on('change', ".edit-tasktype-group-name input", function () {

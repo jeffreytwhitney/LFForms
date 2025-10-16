@@ -242,6 +242,19 @@ $(document).ready(function () {
     $('.qeid input').val(qeID);
   });
 
+  // Keep radio group "Requires Models" in sync with hidden value.
+  $(document).on('change', '.edit-requires-model-value input', function () {
+    var requiresModel = $('.edit-requires-model-value input').val();
+    $(`.edit-requires-model-choice input[type='radio'][value='${requiresModel}']`).prop("checked", true);
+  });
+
+  // Mirror radio "Requires Models" selection back to the hidden field.
+  $(document).on('change', ".edit-requires-model-choice input[type='radio']", function () {
+    var requiresModel = $(this).val();
+    $('.edit-requires-model-value input').val(requiresModel);
+  });
+
+
   $(document).on('change', '.manufacturing-engineer-combo select', function () {
     let meName = $('.manufacturing-engineer-combo select').val();
     if (meName.length == 0) {

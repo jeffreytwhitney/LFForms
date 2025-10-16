@@ -560,7 +560,7 @@ function generateTaskRowNumbers() {
   - Calls `callGoBack()` when finished.
  */
 function generateTasks() {
-  var isGenerateFormValid = ValidateGenerateForm();
+  var isGenerateFormValid = validateGenerateForm();
   if (isGenerateFormValid == false) {
     return;
   }
@@ -731,8 +731,13 @@ function loadTaskTypeMap() {
 - Parameters: `e` - Event object from the click event.
  */
 function submitForm(e) {
-
+  
   if (checkForDuplicateRows() == true) {
+    e.preventDefault();
+    return;
+  }
+
+  if (validateForm() == false) {
     e.preventDefault();
     return;
   }
@@ -742,6 +747,22 @@ function submitForm(e) {
   if ($('.ticket-me-id input').val().length == 0) {
     $('.ticket-me-id input').val(0);
   }
+}
+
+
+function validateForm() {
+  $('#me-required-error').remove(); 
+
+  var returnVal = true;
+  $('.manufacturing-engineer select').removeClass('parsley-error');
+  var meID = Number($('.ticket-me-id input').val());
+  var requiresModels = Number($(".add-requires-models-choice input[type='radio']:checked").val());
+  if (meID == 0 && requiresModels == 1) {
+    $('.manufacturing-engineer select').addClass('parsley-error');
+    $('.manufacturing-engineer').append("<ul id='me-required-error' class='parsley-errors-list filled'><li class='parsley-required'>This field is required.</li></ul>");
+    returnVal = false;
+  }
+  return returnVal;
 }
 
 
@@ -756,7 +777,7 @@ function submitForm(e) {
   - At least one op number (`.op-number-to-generate`) must be filled.
   Note: the reason I'm using .blur() is to trigger the parsley validation that LFF is using natively.
  */
-function ValidateGenerateForm() {
+function validateGenerateForm() {
   var returnVal = true;
   $('#empty-due-date-error').remove();
   $('.gen-due-date input').removeClass('parsley-error');
