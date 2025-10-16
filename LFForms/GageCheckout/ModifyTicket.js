@@ -249,7 +249,6 @@ function fillMachineNameCombos() {
     if ($(element).val() == '') {
       let machineNameInput = machineNameInputs[index];
       let machineNameInputVal = $(machineNameInput).val();
-      console.log(`MachineNameInputVal: ${machineNameInputVal}`);
       $(element).val(machineNameInputVal).change();
     }
     
@@ -328,7 +327,19 @@ function generateFilterRow() {
 
     var filter_row = "<TR id='filterRow'><TH/><TH/><TH><input type='text' id='txtFilter_TicketNumber'></TH><TH/><TH><select id='cboFilter_Status'/></TH><TH><select id='cboFilter_Department'/></TH><TH/><TH><select id='cboFilter_MachineGroup'/></TH><TH><select id='cboFilter_Operator'/></TH><TH><select id='cboFilter_CellLeader'/></TH><TH/><TH/><TH/><TH/><TH/><TH/>"
     $('.ticket-table table thead').append(filter_row);
-    $("#txtFilter_TicketNumber").on("change", function () { filterTicketTable(); });
+    $("#txtFilter_TicketNumber").on("change", function () {
+      stripAsterisks(this);
+      filterTicketTable();
+    });
+    $('#txtFilter_TicketNumber').on('keypress', function () {
+      var input = $(this);
+      setTimeout(function () {
+        var val = input.val().replace(/^\*+|\*+$/g, '');
+        input.val(val);
+      }, 0);
+    });
+
+
     //$("#cboFilter_TicketType").on("change", function () { filterTicketTable(); });
     $("#cboFilter_Department").on("change", function () { filterTicketTable(); });
     $("#cboFilter_MachineGroup").on("change", function () { filterTicketTable(); });
@@ -372,6 +383,8 @@ function generateFilterRow() {
     $("#cboFilter_CellLeader").html($(".cell-leader-lookup-cbo select").html());
     $("#cboFilter_CellLeader").find('option:eq(0)').prop('selected', true);
   }
+
+
 }
 
 
@@ -819,6 +832,15 @@ function sortTable(newSortOrdinal) {
 }
 
 
+function stripAsterisks(selector) {
+  var $input = $(selector);
+  var val = $input.val();
+  val = val.replace(/^\*+|\*+$/g, '');
+  $input.val(val);
+}
+
+
+
 function validateForm(e) {
   var isValid = true;
   var siteID = Number($('.site-id input').val());
@@ -889,7 +911,6 @@ function validateForm(e) {
       });
     }
     else if (ticketType == 2) {
-      console.log('validating');
       threadRows.each(function (index) {
         let threadGageName = $(this).find('.add-thread-gages-table-thread-gage-name input');
         let threadGageID = $(this).find('.add-thread-gages-table-new-thread-gage-id input');
