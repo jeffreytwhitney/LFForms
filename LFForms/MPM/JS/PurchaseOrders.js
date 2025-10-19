@@ -73,26 +73,8 @@ $(document).ready(function () {
     });
   });
 
-  $(document).on('change', '.edit-status-cbo select', function () {
-    $('#status-error').remove();
-    $('#status-error').remove();
-    $('#po-number-error').remove();
-    $('#edit-cancellation-reason-error').remove();
-    editStatusName = $('.edit-status-cbo select').val();
-    editStatusID = statusNameMap.get(editStatusName);
-    $('.edit-status-id input').val(editStatusID).change();
-  });
+ 
 
-  $(document).on('change', '.edit-po-id input', function () {
-    var poid = $('.edit-po-id input').val();
-    $('#purchase-order-iframe').remove();
-    $('#notes-history-iframe').remove();
-
-    if ((poid != '') && (poid != '0')) {
-      $('#purchase-order-history').append(`<iframe id='purchase-order-iframe' name='purchase-order-iframe' src='http://rmslf/Forms/MPM-PurchaseOrderHistory?poid=${poid}' height='400' width='100%'/>`);
-      $('#notes-history').append(`<iframe id='notes-history-iframe' name='notes-history-iframe' src='http://rmslf/Forms/MPM-PurchaseOrderNotes?poid=${poid}' height='400' width='100%'/>`);
-    }
-  });
 
   // Popup iframe lifecycle control via postMessage.
   window.onmessage = function (event) {
@@ -112,12 +94,10 @@ $(document).ready(function () {
     $('.create-date-col input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
     $('.last-updated-col input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
 
-    generateGoBackButtons();
     generateTableButtons(".edit-button-col", "ui-icon-pencil", "Edit Purchase Order", "callEditPurchaseOrder");
     appendPagination(); // See "Pagination" above.
     generateFilterRow(); // See "Filtering and Sorting" above.
     colorCodeRows();
-    lockEditFormIfCompleted();
     $('.purchase-order-table').show();
 
     if (($('.edit-po-id input').val() != '0') && ($('.edit-status-id input').val() != '')) {
@@ -210,46 +190,25 @@ function callAddNote() {
 
 
 /**
- * Switches the UI into Add PO mode.
- * - Selects the "Add" action radio
- * - Sets .add-po-id to 1
- * - Reveals the Submit button
+ * Opens the "Add Programming Ticket" form in a modal iframe dialog sized to the current window.
  */
 function callAddPurchaseOrder() {
-  $(`.action-choice input[type='radio'][value='1']`).prop("checked", true);
-  $('.add-po-id input').val(1).change();
-  $('.Submit').show();
+  var widowHeight = $(window).height();
+  var siteid = $('.site-id input').val();
+  widowHeight = widowHeight - 50;
+  popUpIframe(`http://rmslf/Forms/MPM-AddPurchaseOrder?siteid=${siteid}`, 'Add Purchase Order', widowHeight, 1500);
 }
-
 
 /**
  * Switches the UI into Edit PO mode for the specified PO.
- * - Selects the "Edit" action radio
- * - Sets .edit-po-id to the passed PO ID
- * - Reveals the Submit button only if current user is admin
+ * - Opens the "Edit Programming Ticket" form in a modal iframe dialog sized to the current window.
  * @param {number} poID - The PO ID to edit.
  */
 function callEditPurchaseOrder(poID) {
-  $(`.action-choice input[type='radio'][value='2']`).prop("checked", true);
-  $('.edit-po-id input').val(poID).change();
-  if (isAdminUser()) {
-    $('.Submit').show();
-  }
-}
-
-
-/**
- * Resets Add/Edit state and hides the Submit button.
- * - Clears .add-po-id and .edit-po-id
- */
-function callGoBack() {
-  $('#status-error').remove();
-  $('#status-error').remove();
-  $('#po-number-error').remove();
-  $('#edit-cancellation-reason-error').remove();
-  $(".add-po-id input").val(0).change();
-  $(".edit-po-id input").val(0).change();
-  $('.Submit').hide();
+  var widowHeight = $(window).height();
+  var siteid = $('.site-id input').val();
+  widowHeight = widowHeight - 50;
+  popUpIframe(`http://rmslf/Forms/MPM-EditPurchaseOrder?siteid=${siteid}`, 'Edit Purchase Order', widowHeight, 1500);
 }
 
 
@@ -444,18 +403,6 @@ function generateFilterRow() {
 }
 
 
-/**
- * Creates a "Go Back" button near each element with class .gobackbutton and removes the original placeholder.
- * The button invokes callGoBack().
- */
-function generateGoBackButtons() {
-  var $goback_buttons = $(".gobackbutton");
-  $goback_buttons.each(function (index) {
-    $(this).parent().append("<div id='go-back' class='ui-button ui-corner-all ui-widget' onclick='callGoBack()'><span class='ui-icon ui-icon-arrowreturnthick-1-w'></span>Go Back</div>");
-  });
-  $(".gobackbutton").remove();
-}
-
 
 /**
  * Render a button-like div with an icon for each row in a given column.
@@ -542,38 +489,6 @@ function loadStatusMap() {
       statusMap.set(statusID, statusName);
       statusNameMap.set(statusName, statusID);
     });
-  }
-}
-
-
-function lockEditFormIfCompleted() {
-
-  if ($('.edit-po-id input').val() == '0') {
-    return;
-  }
-  $('.edit-po-number input').prop('disabled', false);
-  $('.edit-status-cbo select').prop('disabled', false);
-  $('.edit-quantity input').prop('disabled', false);
-  $('.edit-total-cost input').prop('disabled', false);
-  $('.edit-note-text').prop('disabled', false);
-  $('.edit-po-name input').prop('disabled', false);
-  $('.edit-po-description input').prop('disabled', false);
-  $('.edit-po-vendor input').prop('disabled', false);
-  $('.Submit').show();
-
-
-  originalStatusID = Number($('.edit-original-status-id input').val());
-  if ((originalStatusID == 3) || (originalStatusID == 4)) {
-    $('.edit-po-number input').prop('disabled', true);
-    $('.edit-status-cbo select').prop('disabled', true);
-    $('.edit-quantity input').prop('disabled', true);
-    $('.edit-total-cost input').prop('disabled', true);
-    $('.edit-note-text').prop('disabled', true);
-    $('.edit-po-name input').prop('disabled', true);
-    $('.edit-po-description input').prop('disabled', true);
-    $('.edit-po-vendor input').prop('disabled', true);
-    $('.Submit').hide();
-
   }
 }
 
@@ -705,39 +620,6 @@ function sortTable(newSortOrdinal, selector) {
   }
   else {
     $(`${selector} .cf-col-label`).append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
-  }
-}
-
-
-/**
- * Centralized submit handler for the page.
- * - Reads the selected action (Add or Edit)
- * - Runs the appropriate validation routine
- * - Prevents submit when validation fails
- * @param {JQuery.Event} e - Click/submit event.
- */
-function submitForm(e) {
- 
-  
-  var actionID = Number($('.action-choice input[type="radio"]:checked').val());
-
-  if ($('.edit-quantity input').val() == '') { $('.edit-quantity input').val(0); }
-  if ($('.add-quantity input').val() == '') { $('.add-quantity input').val(0); }
-  if ($('.edit-total-cost input').val() == '') { $('.edit-total-cost input').val(0); }
-  if ($('.add-total-cost').val() == '') { $('.add-total-cost').val(0); }
-
-  if (actionID == 1) {
-    let addNote = $('.add-note-text').val().trim();
-    $('.add-note-text').val(addNote);
-  }
-
-  if (actionID == 2) {
-    if (!validateEdit()) {
-      e.preventDefault();
-      return;
-    }
-    let poNumber = $('.edit-po-number input').val().trim();
-    $('.edit-po-number input').val(poNumber);
   }
 }
 

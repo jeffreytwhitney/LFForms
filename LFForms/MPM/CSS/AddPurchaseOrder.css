@@ -1,0 +1,83 @@
+#preview-notice {
+  display: none;
+}
+
+.form-focused {
+  background-color: transparent !important;
+}
+
+
+.cf-formwrap {
+  margin: 0 !important;
+  border-width: 0px;
+}
+
+.cf-table .cf-field {
+  padding: 0px !important;
+  font-size: 11px !important;
+  width: 100%;
+}
+
+.table-button {
+  height: 20px;
+  width: 99%;
+  margin: 0px;
+}
+
+.lineitem-table {
+  width: 1100px !important;
+  padding: 0px !important;
+}
+
+.lineitem-table th {
+  font-size: 11px;
+  border: 1px solid !important;
+}
+
+.lineitem-table th:last-child {
+  display: none;
+}
+
+.lineitem-table th input {
+  height: 20px !important;
+  width: 100% !important;
+  font-size: 11px !important;
+}
+
+.lineitem-table th select {
+  height: 20px !important;
+  width: 100% !important;
+  font-size: 11px !important;
+}
+
+.lineitem-table td {
+  font-size: 11px;
+  padding: 0px !important;
+  height: 20px !important;
+  border: 1px solid !important;
+}
+
+
+input[id^='Field45'] {
+  width: 70% !important;
+  border-width: 0px 1px 0px 0px !important;
+  border-color: black !important;
+  border-style: solid !important;
+}
+
+.lineitem-table td input[type="text"] {
+  font-size: 11px !important;
+  width: 100%;
+  padding: 0px !important;
+  height: 20px !important;
+  border: 0px;
+}
+
+
+.lineitem-table td select {
+  font-size: 11px !important;
+  width: 100% !important;
+  padding: 0px !important;
+  height: 20px !important;
+  border: 0px !important;
+}
