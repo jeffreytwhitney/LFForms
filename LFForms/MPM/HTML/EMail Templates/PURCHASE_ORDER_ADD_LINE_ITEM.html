@@ -1,20 +1,20 @@
 A line item has been added to your purchase order by [Submittor].
 <br>
-<br>Details:
-<br>
+<h3>Details:</h3>
+
 <style>
     table, th {
         border: 1px solid black;
         border-collapse: collapse;
         text-align: left;
-        font-size: 11px;
+        font-size: 14px;
     }
 
     td {
         border: 1px solid black;
         border-collapse: collapse;
         text-align: left;
-        font-size: 11px;
+        font-size: 14px;
     }
 </style>
 <table>
@@ -22,22 +22,36 @@ A line item has been added to your purchase order by [Submittor].
     <tr><td>Purchase Order Number:</td><td>[PurchaseOrderNumber]</td></tr>
     <tr><td>Requester:</td><td>[Requester]</td></tr>
     <tr><td>Description:</td><td>[Description]</td></tr>
+    <tr><td>Status:</td><td>[PurchaseOrderStatus]</td></tr>
     <tr><td>Vendor:</td><td>[Vendor]</td></tr>
+    <tr><td>Date Created:</td><td>[DateCreated]</td></tr>
+    <tr><td>Last Updated:</td><td>[LastUpdated]</td></tr>
+    <tr><td>Last Updated By:</td><td>[LastUpdatedBy]</td></tr>
 </table>
 <br>
-<br>Line Items:
+<h3>Line Items:</h3>
 <table>
     <thead>
         <tr>
-            <th style="width:120px;">Line Item Type</th>
             <th style="width:250px;">Gage ID/SN</th>
-            <th style="width:80px;">Quantity</th>
+            <th style="width:120px;">Line Item Status</th>
+            <th style="width:120px;">Line Item Type</th>
+            <th style="width:80px;">Quantity*</th>
+            <th style="width:80px;">Service Date**</th>
+            <th style="width:80px;">Last Updated</th>
+            <th style="width:120px;">Last Updated By</th>
         </tr>
     </thead>
     <tbody>
         [LineItemRows]
     </tbody>
 </table>
-
+<br><b><i>+ Denotes the newly added line item.</i></b>
+<br><b><i>* For purchases only</i></b>
+<br><b><i>** For services only. Date the service will take place.</i></b>
+<br>
 <br>
 <span style="font-size:6px;">EID:{{PO_ADD_LI}} SITE:{{[SITECODE]}}</span>
+
+
+<tr><td>[GageIDSN]</td><td>[LineItemStatus]</td><td>[LineItemType]</td><td>[Quantity]</td><td>[ServiceDate]</td><td>[LineItemLastUpdated]</td><td>[LineItemLastUpdatedBy]</td></tr>

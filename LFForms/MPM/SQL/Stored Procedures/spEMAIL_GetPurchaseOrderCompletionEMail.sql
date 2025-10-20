@@ -1,7 +1,7 @@
 USE [LF_RMS_COMMS_MPM]
 GO
 
-/****** Object:  StoredProcedure [spEMAIL_GetPurchaseOrderCompletionEMail]    Script Date: 10/9/2025 11:33:06 AM ******/
+/****** Object:  StoredProcedure [spEMAIL_GetPurchaseOrderCompletionEMail]    Script Date: 10/20/2025 2:06:22 PM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -11,7 +11,10 @@ GO
 
 
 
-CREATE OR ALTER     PROCEDURE [spEMAIL_GetPurchaseOrderCompletionEMail]
+
+
+
+CREATE OR ALTER           PROCEDURE [spEMAIL_GetPurchaseOrderCompletionEMail]
 	@purchase_order_id	INT,
 	@user_id						VARCHAR(10),
 	@completion_note		VARCHAR(1000),

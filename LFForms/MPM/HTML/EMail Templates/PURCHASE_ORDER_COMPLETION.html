@@ -1,34 +1,61 @@
 [HeaderLine]
 <br>
-<br>Details:
-<br>
+<h3>Details:</h3>
 [CompletionNote]
 <br>
+<style>
+    table, th {
+        border: 1px solid black;
+        border-collapse: collapse;
+        text-align: left;
+        font-size: 14px;
+    }
+
+    td {
+        border: 1px solid black;
+        border-collapse: collapse;
+        text-align: left;
+        font-size: 14px;
+    }
+</style>
 <table>
+    <tr><td>Site:</td><td>[SiteName]</td></tr>
     <tr><td>Purchase Order Number:</td><td>[PurchaseOrderNumber]</td></tr>
     <tr><td>Requester:</td><td>[Requester]</td></tr>
-    <tr><td>Purchase Order Type:</td><td>[PurchaseOrderType]</td></tr>
-    <tr><td>Gage ID/SN:</td><td>[PurchaseOrderName]</td></tr>
     <tr><td>Description:</td><td>[Description]</td></tr>
+    <tr><td>Status:</td><td>Complete</td></tr>
     <tr><td>Vendor:</td><td>[Vendor]</td></tr>
-    <tr><td>Quantity:</td><td>[Quantity]</td></tr>
+    <tr><td>Date Created:</td><td>[DateCreated]</td></tr>
+    <tr><td>Last Updated:</td><td>[LastUpdated]</td></tr>
+    <tr><td>Last Updated By:</td><td>[LastUpdatedBy]</td></tr>
 </table>
 <br>
-<h3>Older Notes:</h3>
+<br>
+<h3>Line Items:</h3>
 <table>
-    <tr>
-        <td style="width:150px;"><b>Create Datetime:</b></td>
-        <td style="width:200px;"><b>Author:</b></td>
-        <td style="width:500px;"><b>Note Text:</b></td>
-    </tr>
-    [NoteRows]
+    <thead>
+        <tr>
+            <th style="width:250px;">Gage ID/SN</th>
+            <th style="width:120px;">Line Item Status</th>
+            <th style="width:120px;">Line Item Type</th>
+            <th style="width:80px;">Quantity*</th>
+            <th style="width:80px;">Service Date**</th>
+            <th style="width:80px;">Last Updated</th>
+            <th style="width:120px;">Last Updated By</th>
+        </tr>
+    </thead>
+    <tbody>
+        [LineItemRows]
+    </tbody>
 </table>
+<br><b><i>* For purchases only</i></b>
+<br><b><i>** For services only. Date the service will take place.</i></b>
+
 <br><span style="font-size:6px;">EID:{{PO_UPD}} SITE:{{[SITECODE]}}</span>
 
 
 
+<tr><td>[GageIDSN]</td><td>[LineItemStatus]</td><td>[LineItemType]</td><td>[Quantity]</td><td>[LineItemLastUpdated]</td><td>[LineItemLastUpdatedBy]</td></tr>
 
 
 
-
-<tr><td>[CreateDateTime]</td><td>[Author]</td><td>[NoteText]</td></tr>

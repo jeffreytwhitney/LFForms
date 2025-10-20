@@ -1,7 +1,7 @@
 USE [LF_RMS_COMMS_MPM]
 GO
 
-/****** Object:  StoredProcedure [spEMAIL_GetPurchaseOrderCancellationEMail]    Script Date: 10/9/2025 1:07:38 PM ******/
+/****** Object:  StoredProcedure [spEMAIL_GetPurchaseOrderCancellationEMail]    Script Date: 10/20/2025 2:06:44 PM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -9,7 +9,9 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-CREATE OR ALTER       PROCEDURE [spEMAIL_GetPurchaseOrderCancellationEMail]
+
+
+CREATE OR ALTER           PROCEDURE [spEMAIL_GetPurchaseOrderCancellationEMail]
 	@purchase_order_id			INT,
 	@user_id								VARCHAR(10),
 	@cancellation_reason		VARCHAR(1000),
