@@ -1,0 +1,43 @@
+A line item has been added to your purchase order by [Submittor].
+<br>
+<br>Details:
+<br>
+<style>
+    table, th {
+        border: 1px solid black;
+        border-collapse: collapse;
+        text-align: left;
+        font-size: 11px;
+    }
+
+    td {
+        border: 1px solid black;
+        border-collapse: collapse;
+        text-align: left;
+        font-size: 11px;
+    }
+</style>
+<table>
+    <tr><td>Site:</td><td>[SiteName]</td></tr>
+    <tr><td>Purchase Order Number:</td><td>[PurchaseOrderNumber]</td></tr>
+    <tr><td>Requester:</td><td>[Requester]</td></tr>
+    <tr><td>Description:</td><td>[Description]</td></tr>
+    <tr><td>Vendor:</td><td>[Vendor]</td></tr>
+</table>
+<br>
+<br>Line Items:
+<table>
+    <thead>
+        <tr>
+            <th style="width:120px;">Line Item Type</th>
+            <th style="width:250px;">Gage ID/SN</th>
+            <th style="width:80px;">Quantity</th>
+        </tr>
+    </thead>
+    <tbody>
+        [LineItemRows]
+    </tbody>
+</table>
+
+<br>
+<span style="font-size:6px;">EID:{{PO_ADD_LI}} SITE:{{[SITECODE]}}</span>

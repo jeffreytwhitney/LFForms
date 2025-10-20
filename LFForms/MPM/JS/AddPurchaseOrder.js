@@ -9,6 +9,7 @@ $(document).ready(function () {
   $.fn.bootstrapBtn = bootstrapButton;
 
   if ($('.closeme input').val() == 1) {
+    console.log('Calling home with refresh');
     window.parent.postMessage('CloseDialogWithRefresh', '*');
   }
 
@@ -26,7 +27,12 @@ $(document).ready(function () {
   });
 
   $(document).on('lookupcomplete', function (e) {
-
+    if (!isAdminUser()) {
+      $('.Submit').hide();
+    }
+    else {
+      $('.Submit').show();
+    }
 
   });
 
@@ -39,9 +45,7 @@ $(document).ready(function () {
       $('.Submit').hide();
     }
 
-    if (!isAdminUser()) {
-      $('.Submit').hide();
-    }
+    
 
   });
 

@@ -3,6 +3,7 @@ var requesterNameMap = new Map();
 var statusMap = new Map();
 var statusNameMap = new Map();
 
+
 $(document).ready(function () {
   $('.Submit').hide();
   $(document).prop('title', 'Purchase Orders');
@@ -22,6 +23,23 @@ $(document).ready(function () {
   if (lfUserName != 'Anonymous User') {
     $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).change();
   }
+
+
+  // Listen for messages from child iframes to close dialogs and optionally refresh
+  window.onmessage = function (event) {
+    console.log('Parent received message: ' + event.data);
+    if (event.data == "CloseDialog") {
+      $("#popupIFrame").dialog("destroy");
+      $("#popupIFrame").remove();
+    }
+    if (event.data == "CloseDialogWithRefresh") {
+      console.log('Closing dialog with refresh request.');
+      $("#popupIFrame").dialog("destroy");
+      $("#popupIFrame").remove();
+      refreshPage();
+    }
+  };
+
 
   var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
   var printEvent = window[eventMethod];
@@ -73,18 +91,6 @@ $(document).ready(function () {
     });
   });
 
- 
-
-
-  // Popup iframe lifecycle control via postMessage.
-  window.onmessage = function (event) {
-    if (event.data == "CloseDialog") {
-      $("#popupIFrame").dialog("destroy");
-      $("#popupIFrame").remove();
-    }
-  };
-
-
   // When lookup tables are available, finish wiring the grid.
   $(document).on('lookupcomplete', function (e) {
     loadRequesterMap();
@@ -97,6 +103,7 @@ $(document).ready(function () {
     generateTableButtons(".edit-button-col", "ui-icon-pencil", "Edit Purchase Order", "callEditPurchaseOrder");
     appendPagination(); // See "Pagination" above.
     generateFilterRow(); // See "Filtering and Sorting" above.
+    reApplyFilterValues();        // See "Page Refresh Quirks" above
     colorCodeRows();
     $('.purchase-order-table').show();
 
@@ -196,8 +203,9 @@ function callAddPurchaseOrder() {
   var widowHeight = $(window).height();
   var siteid = $('.site-id input').val();
   widowHeight = widowHeight - 50;
-  popUpIframe(`http://rmslf/Forms/MPM-AddPurchaseOrder?siteid=${siteid}`, 'Add Purchase Order', widowHeight, 1500);
+  popupIFrame(`http://rmslf/Forms/MPM-AddPurchaseOrder?siteid=${siteid}`, 'Add Purchase Order', widowHeight, 1500);
 }
+
 
 /**
  * Switches the UI into Edit PO mode for the specified PO.
@@ -206,9 +214,8 @@ function callAddPurchaseOrder() {
  */
 function callEditPurchaseOrder(poID) {
   var widowHeight = $(window).height();
-  var siteid = $('.site-id input').val();
   widowHeight = widowHeight - 50;
-  popUpIframe(`http://rmslf/Forms/MPM-EditPurchaseOrder?siteid=${siteid}`, 'Edit Purchase Order', widowHeight, 1500);
+  popUpIframe(`http://rmslf/Forms/MPM-EditPurchaseOrder?poid=${poID}`, 'Edit Purchase Order', widowHeight, 1500);
 }
 
 
@@ -291,13 +298,10 @@ function filterTable() {
   }
 
   var requesterFilterVal = $('#cboFilter_Requester').val();
-  console.log('Requester Filter Value: ' + requesterFilterVal);
   var vendorFilterVal = $('#cboFilter_Vendor').val();
-  console.log('Vendor Filter Value: ' + vendorFilterVal);
 
   if ((requesterFilterVal != null) && (requesterFilterVal.length > 0)) {
     let requesterID = requesterNameMap.get(requesterFilterVal);
-    console.log('Mapped Requester ID: ' + requesterID);
     $('.freqid input').val(requesterID);
   }
   else {
@@ -332,12 +336,11 @@ function generateFilterRow() {
 
   if ($('#filterRow').length == 0) {
 
-    var filter_row = "<TR id='filterRow'><TH/><TH><input id='txtFilter_PONumber'/></TH><TH/><TH/><TH><select id='cboFilter_Requester'/></TH><TH><input type='text' id='txtFilter_POName'></TH><TH/><TH><select id='cboFilter_Vendor'/></TH><TH/><TH/><TH><input type='text' id='txtFilter_CreateDateMin' placeholder='Min Date'><input type='text' id='txtFilter_CreateDateMax' placeholder='Max Date'><TH/><TH/><TH/></TR>"
+    var filter_row = "<TR id='filterRow'><TH/><TH><input id='txtFilter_PONumber'/></TH><TH/><TH><select id='cboFilter_Requester'/></TH><TH/><TH><select id='cboFilter_Vendor'/></TH><TH/><TH><input type='text' id='txtFilter_CreateDateMin' placeholder='Min Date'><input type='text' id='txtFilter_CreateDateMax' placeholder='Max Date'><TH/><TH/><TH/></TR>"
 
 
     $('.purchase-order-table table thead').append(filter_row);
     $("#txtFilter_PONumber").on("change", function () { filterTable(); });
-    $("#txtFilter_POName").on("change", function () { filterTable(); });
     $("#txtFilter_CreateDateMin").on("change", function () { filterTable(); });
     $("#txtFilter_CreateDateMax").on("change", function () { filterTable(); });
 
@@ -346,7 +349,6 @@ function generateFilterRow() {
 
     // Quick clear on double-click.
     $("#txtFilter_PONumber").dblclick(function () { $("#txtFilter_PONumber").val(null).change(); });
-    $("#txtFilter_POName").dblclick(function () { $("#txtFilter_POName").val(null).change(); });
     $("#txtFilter_CreateDateMin").dblclick(function () { $("#txtFilter_CreateDateMin").val(null).change(); });
     $("#txtFilter_CreateDateMax").dblclick(function () { $("#txtFilter_CreateDateMax").val(null).change(); });
     $("#cboFilter_Requester").dblclick(function () { $("#cboFilter_Requester").val(0).change(); });
@@ -401,7 +403,6 @@ function generateFilterRow() {
   }
 
 }
-
 
 
 /**
@@ -514,18 +515,26 @@ function popupIFrame(src, title, height, width, cancelSubmit) {
     autoOpen: false,
     resizable: true,
     modal: true,
+    position: { my: "left top", at: "left top", of: window },
     close: function (event, ui) {
-      if (cancelSubmit) {
-        return false;
-      }
+      // no-op
     }
   });
-
   $("#popupIFrame").dialog("open");
-  $('#popupIFrame').attr('style', `width: 100%; height: ${height}px;`);
+  $("#popupIFrame").attr('style', `width: ${width};`);
+
+  // Tweak jQuery UI resizable inline style (ensures width is applied)
+  var resizeableStyle = $('.ui-resizable').attr('style');
+  let newStyle = resizeableStyle.replaceAll('width: 0px;', `width: ${width}px;`);
+  $('.ui-resizable').attr('style', newStyle);
 }
 
 
+/**
+ * Constructs the report URL based on current filter values and loads it into the print iframe.
+ * Side effects:
+ * - Sets the 'src' of '#print-iframe' inside '#popUpDiv' to the constructed report URL.
+ */
 function printReport() {
 
   var domain = document.location.hostname;
@@ -572,6 +581,113 @@ function printReport() {
 
 
   $("#popUpDiv").html("<iframe id='print-iframe' name='myname' src='" + report_url + "' />");
+}
+
+
+/**
+ * Placeholder for restoring filter UI from hidden fields.
+ */
+function reApplyFilterValues() {
+  if ($('#filterRow').length == 0) {
+    return;
+  }
+
+  var includeCompleted = Number($('.finccom input').val());
+  var requesterIDFilterValue = Number($('.freqid input').val());
+  var vendorFilterValue = $('.fvname input').val();
+  var poNumberFilterValue = $('.fponum input').val();
+  var dateMinFilterValue = $('.fdmin input').val();
+  var dateMaxFilterValue = $('.fdmax input').val();
+
+  if (includeCompleted == 1) {
+    $('#chkIncludeInActive').prop('checked', true);
+  }
+  else {
+    $('#chkIncludeInActive').prop('checked', false);
+  }
+
+  if ((requesterIDFilterValue != NaN) && (requesterIDFilterValue > 0)) {
+    let requesterName = requesterMap.get(requesterIDFilterValue);
+    $('#cboFilter_Requester').val(requesterName);
+  }
+
+  if ((vendorFilterValue != null) && (vendorFilterValue.length > 0)) {
+    $('#txtFilter_Vendor').val(vendorFilterValue);
+  }
+
+  if ((poNumberFilterValue != null) && (poNumberFilterValue.length > 0)) {
+    $('#txtFilter_PONumber').val(poNumberFilterValue);
+  }
+
+  if ((dateMinFilterValue != null) && (dateMinFilterValue.length > 0)) {
+    $('#txtFilter_DateMin').val(dateMinFilterValue);
+  }
+
+  if ((dateMaxFilterValue != null) && (dateMaxFilterValue.length > 0)) {
+    $('#txtFilter_DateMax').val(dateMaxFilterValue);
+  }
+  
+}
+
+
+/**
+ * Rebuilds current page URL with query-string parameters mirroring current filter state,
+ * then navigates to that URL to cause a full server-side refresh.
+ */
+function refreshPage() {
+  var includeCompleted = Number($('.finccom input').val());
+  var requesterIDFilterValue = $('.freqid input').val();
+  var vendorFilterValue = $('.fvname input').val();
+  var poNumberFilterValue = $('.fponum input').val();
+  var dateMinFilterValue = $('.fdmin input').val();
+  var dateMaxFilterValue = $('.fdmax input').val();
+  var taskListPage = Number($('.pg input').val());
+  var sfo = Number($('.sfo input').val());
+  var sd = Number($('.sd input').val());
+
+  var current_url = window.location.href;
+  if (current_url.includes('?')) {
+    indexOfQuestionMark = current_url.indexOf('?');
+    current_url = current_url.substring(0, indexOfQuestionMark);
+  }
+
+  if ((taskListPage != null) && (taskListPage != NaN) && (taskListPage > 0)) {
+    current_url = current_url + `?pg=${taskListPage}`;
+  }
+
+  if ((requesterIDFilterValue != null) && (requesterIDFilterValue.length > 0)) {
+    current_url = current_url + `&freqid=${requesterIDFilterValue}`;
+  }
+
+  if ((includeCompleted != null) && (includeCompleted != NaN) && (includeCompleted > 0)) {
+    current_url = current_url + `&finccom=${includeCompleted}`;
+  }
+
+  if ((vendorFilterValue != null) && (vendorFilterValue.length > 0)) {
+    current_url = current_url + `&fvname=${encodeURIComponent(vendorFilterValue)}`;
+  }
+
+  if ((poNumberFilterValue != null) && (poNumberFilterValue.length > 0)) {
+    current_url = current_url + `&fponum=${encodeURIComponent(poNumberFilterValue)}`;
+  }
+
+  if ((dateMinFilterValue != null) && (dateMinFilterValue.length > 0)) {
+    current_url = current_url + `&fdmin=${encodeURIComponent(dateMinFilterValue)}`;
+  }
+
+  if ((dateMaxFilterValue != null) && (dateMaxFilterValue.length > 0)) {
+    current_url = current_url + `&fdmax=${encodeURIComponent(dateMaxFilterValue)}`;
+  }
+
+  if ((sfo != null) && (sfo != NaN)) {
+    current_url = current_url + `&sfo=${sfo}`;
+  }
+
+  if ((sd != null) && (sd != NaN)) {
+    current_url = current_url + `&sd=${sd}`;
+  }
+
+  window.location = current_url;
 }
 
 
@@ -625,77 +741,6 @@ function sortTable(newSortOrdinal, selector) {
 
 
 /**
- * Validates the Edit Purchase Order form and renders inline error messages.
- *
- * Behavior:
- * - Clears prior error lists with ids: `status-error`, `po-number-error`, `edit-cancellation-reason-error`.
- * - Reads current values from:
- *   - `.edit-status-id input` (current status id)
- *   - `.edit-original-status-id input` (original status id)
- *   - `.edit-po-number input` (PO number)
- *   - `.edit-cancellation-reason input` (cancellation reason)
- * - Appends Parsley-styled error lists next to offending inputs.
- *
- * Validation rules:
- * - PO Number is required when Status is Issued (2) or Completed (3).
- * - Status cannot change from any state > Submitted back to Submitted (1).
- * - Cancellation Reason is required when Status is Cancelled (4).
- *
- * Side effects:
- * - Mutates the DOM by adding/removing validation markup.
- * - Uses implicit globals (`isValid`, `currentStatusID`, `originalStatusID`, etc.) due to missing `var/let/const`.
- *
- * Dependencies:
- * - jQuery and the page’s CSS/DOM structure (selectors such as
- *   `.edit-po-number`, `.edit-status-cbo`, `.edit-cancellation-reason`).
- *
- * Returns:
- * - boolean — true if all rules pass; false otherwise.
- *
- * Note:
- * - The implementation sets `isValid` but does not `return isValid`. Callers like `submitForm`
- *   expect a boolean. Consider adding `return isValid;` at the end.
- */
-function validateEdit() {
-  $('#status-error').remove();
-  $('#po-number-error').remove();
-  $('#edit-cancellation-reason-error').remove();
-
-  isValid = true;
-  currentStatusID = Number($('.edit-status-id input').val());
-  originalStatusID = Number($('.edit-original-status-id input').val());
-  purchaseOrderNumber = $('.edit-po-number input').val().trim();
-  cancellationReason = $('.edit-cancellation-reason textarea').val().trim();
-
-
-  if (purchaseOrderNumber.length == 0) {
-    if ((currentStatusID == 2) || (currentStatusID == 3)) {
-      $('.edit-po-number').append("<ul id='po-number-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Purchase Order Number is required when Status is 'Issued' or 'Completed'</li></ul>");
-      isValid = false;
-    }
-  }
-  else if (purchaseOrderNumber.length > 0) {
-    if (currentStatusID == 1) {
-      $('.edit-status-cbo').append("<ul id='status-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>If you assign a PO Number, you must change Status to 'Issued'.</li></ul>");
-      isValid = false;
-    }
-  }
-
-  if ((originalStatusID > 1) && (currentStatusID == 1)) {
-    $('.edit-status-cbo').append("<ul id='status-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Can't change status from 'Issued' back to 'Submitted'.</li></ul>");
-    isValid = false;
-  }
-
-  if ((currentStatusID == 4) && (cancellationReason.length == 0)) {
-    $('.edit-cancellation-reason').append("<ul id='edit-cancellation-reason-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Cancellation Reason is required when cancelling a Purchase Order.</li></ul>");
-    isValid = false;
-  }
-  return isValid;
-
-}
-
-
-/**
 * Wires the sortable column headers and sets the initial sort indicator.
 */
 function wireUpSortFields() {
@@ -707,7 +752,5 @@ function wireUpSortFields() {
   $('#q24').on('click', function () { sortTable(3, '#q24'); });   //Vendor
   $('#q23').on('click', function () { sortTable(4, '#q23'); });   //Purchase Order Name
   $('#q28').on('click', function () { sortTable(5, '#q28'); });   //Requester
-  $('#q36').on('click', function () { sortTable(6, '#q36'); });   //Type
-
 
 }
