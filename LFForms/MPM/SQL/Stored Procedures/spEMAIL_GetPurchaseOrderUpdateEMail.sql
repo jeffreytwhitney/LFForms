@@ -112,11 +112,14 @@ AS
 		DECLARE @purchase_order_number VARCHAR(255)
 		DECLARE @purchase_order_type_id INT
 		DECLARE @vendor VARCHAR(255)
+		DECLARE @purchase_order_status_id INT
 		DECLARE @description VARCHAR(max)
-		DECLARE @short_description as VARCHAR(30)
+		DECLARE @short_description as VARCHAR(500)
 		DECLARE @last_updated	varchar(100)
 		DECLARE @last_updated_by varchar(255)
-		DECLARE @completion_note varchar(max)
+		DECLARE @completion_note varchar(max) = ''
+		DECLARE @completion_note_html VARCHAR(MAX) = ''
+		DECLARE @header_line_title varchar(500)
 
 		/*Line Item Variables*/
 		DECLARE @li_quantity VARCHAR(10)
@@ -133,60 +136,108 @@ AS
 		
 
 
-		DECLARE po_cursor CURSOR FOR SELECT SiteID, PurchaseOrderNumber, SiteName, Vendor, Description, PurchaseOrderStatus,  RequesterName, UpdatedBy, CONVERT(varchar, DateCreated, 101) as DateCreated, CONVERT(varchar, LastUpdated, 101) as LastUpdated
+		DECLARE po_cursor CURSOR FOR	SELECT SiteID, PurchaseOrderNumber, SiteName, Vendor, Description, PurchaseOrderStatusID, PurchaseOrderStatus, RequesterName, UpdatedBy,
+																	CONVERT(varchar, DateCreated, 101) as DateCreated, CONVERT(varchar, LastUpdated, 101) as LastUpdated
 																	FROM qryPurchaseOrderList where ID = @purchase_order_id;
 		OPEN po_cursor;
 		
-		FETCH NEXT FROM po_cursor INTO	@site_id, @purchase_order_number, @site_name, @vendor, @description, @purchase_order_status, @requester_name, @last_updated_by, @date_created, @last_updated
+		FETCH NEXT FROM po_cursor INTO	@site_id, @purchase_order_number, @site_name, @vendor, @description, @purchase_order_status_id, @purchase_order_status, @requester_name, @last_updated_by, @date_created, @last_updated
 
 		CLOSE po_cursor;
 		DEALLOCATE po_cursor;
 
-		
-		SET @short_description = LEFT(@description, 30);
-
-		SELECT Case 
-
+		SET @description = REPLACE(@description, '''', '')
+		SET @short_description = ' (''' + LEFT(@description, 50) + ''') '
 
 		IF LEN(TRIM(@purchase_order_number)) > 0
 			BEGIN
-				SET @header_line = 'Purchase Order ' + @purchase_order_number + ' (''' + @short_gage_idsn + ''') has been completed.'
-			END
-
-			SET @header_line = 'Update to Purchase Order ' + @purchase_order_number + ' (''' + @short_gage_idsn + ''')'
-			SET @header_line = 'Purchase Order ' + @purchase_order_number + ' (''' + @short_gage_idsn + ''') has been cancelled.'
-
-		
-		set @email_message = Replace(@email_message, '[HeaderLine]',@header_line);
-
-		IF @completion_note > 0
-			BEGIN
-				DECLARE @completion_note_html VARCHAR(MAX) = '<h3>Completion Note:</h3><div>' + @completion_note + '</div>'
-				set @email_message = Replace(@email_message, '[CompletionNote]', @completion_note_html);
+				SET @header_line_title = @purchase_order_number +  @short_description 
 			END
 		ELSE
 			BEGIN
-				set @email_message = Replace(@email_message, '[CompletionNote]', '');
-			END
-		
-		set @email_message = Replace(@email_message, '[PurchaseOrderNumber]',@purchase_order_number);
-		set @email_message = Replace(@email_message, '[Submittor]',@submittor_name);
-		set @email_message = Replace(@email_message, '[Requester]', @requester_name)
-		set @email_message = Replace(@email_message, '[PurchaseOrderType]', @purchase_order_type)
-		set @email_message = Replace(@email_message, '[PurchaseOrderName]', @gage_idsn)
-
-		if @purchase_order_type_id = 1
-			BEGIN
-				set @email_message = Replace(@email_message, '[Quantity]', Trim(@quantity))
-			END
-		
-		IF @purchase_order_type_id = 2
-			BEGIN
-				set @email_message = Replace(@email_message, '[Quantity]', 'N/A')
+				SET @header_line_title = ' ''' + LEFT(@description, 50) + ''' '
 			END
 
+		SET @header_line = CASE 
+			WHEN @purchase_order_status_id = 3 THEN 'Purchase Order ' + @header_line_title + ' has been completed.'
+			WHEN @purchase_order_status_id = 4 THEN 'Purchase Order ' + @header_line_title + ' has been cancelled.'
+			ELSE 'Update to Purchase Order ' + @header_line_title
+		END
+
+		IF @completion_note_id > 0
+			BEGIN
+				SET @completion_note = (Select poNote from tblPurchaseOrderNotes where id = @completion_note_id)
+				Print @completion_note
+				IF @purchase_order_status_id = 3
+					BEGIN
+						SET @completion_note_html = '<h4>Completion Note:</h4><blockquote>''' + @completion_note + '''</blockquote>'
+					END
+				
+				IF @purchase_order_status_id = 4
+					BEGIN
+						SET @completion_note_html = '<h4>Cancellation Reason:</h4><blockquote>''' + @completion_note + '''</blockquote>'
+					END
+			END
+		ELSE
+			BEGIN
+				SET @completion_note_html = ''
+			END
+
+		IF @purchase_order_number = ''
+			BEGIN
+				SET @purchase_order_number = 'Not Yet Assigned'
+			END
+
+
+
+		set @email_message = Replace(@email_message, '[HeaderLine]',@header_line);
+		set @email_message = Replace(@email_message, '[SiteName]', @site_name)
+		set @email_message = Replace(@email_message, '[PurchaseOrderNumber]', @purchase_order_number)
+		set @email_message = Replace(@email_message, '[CompletionNote]', @completion_note_html);
 		set @email_message = Replace(@email_message, '[Description]', @description)
+		set @email_message = Replace(@email_message, '[Requester]', @requester_name)
+		set @email_message = Replace(@email_message, '[PurchaseOrderStatus]', @purchase_order_status)
 		set @email_message = Replace(@email_message, '[Vendor]', @vendor)
+		set @email_message = Replace(@email_message, '[DateCreated]', @date_created)
+		set @email_message = Replace(@email_message, '[LastUpdated]', @last_updated)
+		set @email_message = Replace(@email_message, '[LastUpdatedBy]', @last_updated_by)
+
+	DECLARE li_cursor CURSOR FOR	SELECT ID, PurchaseOrderType, LineItemTypeID, GageIDSN, Status, CAST(Quantity as varchar) as Quantity, CONVERT(varchar, ServiceDate, 101) as ServiceDate,
+																	CONVERT(varchar, DateCreated, 101) as DateCreated, CONVERT(varchar, DateUpdated, 101) as DateUpdated, FullName
+																	FROM qryPurchaseOrderLineItems where PurchaseOrderID = @purchase_order_id ORDER BY ID DESC;
+		OPEN li_cursor;
+		
+		FETCH NEXT FROM li_cursor INTO @li_row_id, @li_type_name, @li_type_id, @li_gage_idsn, @li_status_name, @li_quantity, @li_service_date, @li_date_created, @li_last_updated, @li_last_updated_by
+		
+		WHILE @@FETCH_STATUS = 0  
+				BEGIN  
+					SET @lineitem_row = @email_row_template;
+					
+					/*Field Manipulation Logic*/
+					SET @li_status_name = ISNULL(@li_status_name, '');
+					SET @li_service_date = ISNULL(@li_service_date, '');
+
+					IF @li_type_id = 2
+						BEGIN
+							SET @li_quantity = ''
+						END
+
+					SET @lineitem_row = Replace(@lineitem_row, '[GageIDSN]', TRIM(@li_gage_idsn))
+					SET @lineitem_row = Replace(@lineitem_row, '[LineItemStatus]', @li_status_name);
+					SET @lineitem_row = Replace(@lineitem_row, '[LineItemType]', @li_type_name);
+					SET @lineitem_row = Replace(@lineitem_row, '[Quantity]', @li_quantity);
+					SET @lineitem_row = Replace(@lineitem_row, '[ServiceDate]', @li_service_date);
+					SET @lineitem_row = Replace(@lineitem_row, '[LineItemLastUpdated]', @li_last_updated);
+					SET @lineitem_row = Replace(@lineitem_row, '[LineItemLastUpdatedBy]', @li_last_updated_by);
+
+					SET @lineitem_rows = CONCAT(@lineitem_rows, @lineitem_row)
+					FETCH NEXT FROM li_cursor INTO @li_row_id, @li_type_name, @li_type_id, @li_gage_idsn, @li_status_name, @li_quantity, @li_service_date, @li_date_created, @li_last_updated, @li_last_updated_by
+				END;
+
+		CLOSE li_cursor;
+		DEALLOCATE li_cursor;
+
+		SET @email_message = Replace(@email_message, '[LineItemRows]', @lineitem_rows)	
 		
 		IF @site_id = 1
 			BEGIN
