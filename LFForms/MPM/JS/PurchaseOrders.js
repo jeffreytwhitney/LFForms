@@ -215,7 +215,7 @@ function callAddPurchaseOrder() {
 function callEditPurchaseOrder(poID) {
   var widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
-  popUpIframe(`http://rmslf/Forms/MPM-EditPurchaseOrder?poid=${poID}`, 'Edit Purchase Order', widowHeight, 1500);
+  popupIFrame(`http://rmslf/Forms/MPM-EditPurchaseOrder?poid=${poID}`, 'Edit Purchase Order', widowHeight, 1500);
 }
 
 
@@ -504,7 +504,7 @@ function loadStatusMap() {
  * Side effects:
  * - Creates and opens '#popupIFrame' dialog containing an iframe.
  */
-function popupIFrame(src, title, height, width, cancelSubmit) {
+function popupIFrame(src, title, height, width) {
 
   $("#popupIFrame").remove();
   $("#popUpDiv").html(`<div height='${height}' width='${width}'><iframe id='popupIFrame' name='myname' src='${src}' height='${height}' width='${width}'/></div>`);

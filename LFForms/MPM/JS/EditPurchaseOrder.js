@@ -38,11 +38,24 @@ $(document).ready(function () {
     }
 
     loadStatusMap();
+    generateLinkColumn('edit-id', 'gage-idsn-col', 'line-item-link', 'callEditLineItem');
 
     var statusid = Number($('.current-status-id input').val());
     var statusName = statusMap.get(statusid);
     if ($('.purchase-order-status select').val() == ''){
       $('.purchase-order-status select').val(statusName).change();
+    }
+
+    if (isAdminUser()) {
+      
+      if ($('.add-line-item-button').length == 0) {
+        var add_button = '<div class="ui-button add-line-item-button" id="add-line-item" onclick="callAddLineItem()"><span title="Add Line Item" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Line Item</div>'
+        $(add_button).insertBefore('.lineitem-table table');
+      }
+      if ($('.add-note-button').length == 0) {
+        var add_note_button = '<div class="ui-button add-note-button" id="add-note-button" onclick="callAddNote()"><span title="Add Note" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Note</div>'
+        $('#spacer').append(add_note_button);
+      }
     }
 
   });
@@ -51,6 +64,20 @@ $(document).ready(function () {
     $('.closeme input').val(1);
     $('#q0').append("<div class='hidden-text' id='popUpDiv'></div>");
     $('.network-user-name input').trigger("change");
+
+    var poid = Number($('.poid input').val());
+    if (poid > 0) {
+      $('#purchase-order-iframe').remove();
+      $('#notes-history-iframe').remove();
+
+      if ((poid != '') && (poid != '0')) {
+        $('#purchase-order-history').append(`<iframe id='purchase-order-iframe' name='purchase-order-iframe' src='http://rmslf/Forms/MPM-PurchaseOrderHistory?poid=${poid}' height='400' width='100%'/>`);
+        $('#notes-history').append(`<iframe id='notes-history-iframe' name='notes-history-iframe' src='http://rmslf/Forms/MPM-PurchaseOrderNotes?poid=${poid}' height='400' width='100%'/>`);
+      }
+    }
+
+
+
   });
 
 });
@@ -64,7 +91,7 @@ $(document).ready(function () {
 function callAddNote() {
   var po_id = $('.poid input').val();
   var po_number = $('.po-number input').val();
-  var po_description = $('.description input').val();
+  var po_description = $('.description textarea').val();
   var popupTitle = '';
 
   if (po_number.length > 0) {
@@ -75,7 +102,7 @@ function callAddNote() {
   }
 
 
-  popupIFrame(`http://rmslf/Forms/MPM-AddPurchaseOrderNote?poid=${po_id}&nt=1`, popupTitle, 400, 650, false);
+  popupIFrame(`http://rmslf/Forms/MPM-AddPurchaseOrderNote?poid=${po_id}&nt=1`, popupTitle, 400, 650, true);
 }
 
 
@@ -86,7 +113,7 @@ function callAddLineItem() {
   var widowHeight = $(window).height();
   var poid = $('.site-id input').val();
   widowHeight = widowHeight - 50;
-  popupIFrame(`http://rmslf/Forms/MPM-AddLineItem?poid=${poid}`, 'Add Line Item', widowHeight, 1500);
+  popupIFrame(`http://rmslf/Forms/MPM-AddPurchaseOrderLineItem?poid=${poid}`, 'Add Line Item', widowHeight, 1500, false);
 }
 
 
@@ -94,10 +121,10 @@ function callAddLineItem() {
  * Opens the "Edit Line Item" form in a modal iframe dialog sized to the current window.
  * @param {number} poID - The PO ID to edit.
  */
-function callEditLineItem(poID) {
+function callEditLineItem(liID) {
   var widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
-  popUpIframe(`http://rmslf/Forms/MPM-EditLineItem?poid=${poID}`, 'Edit Line Item', widowHeight, 1500);
+  popupIFrame(`http://rmslf/Forms/MPM-EditPurchaseOrderLineItem?liid=${liID}`, 'Edit Line Item', widowHeight, 1500, false);
 }
 
 
@@ -178,6 +205,30 @@ function completePurchaseOrder() {
 
 
 /**
+ * Generates a column of links based on the provided selectors and function.
+ * @param {string} idSelector - The selector for the link IDs.
+ * @param {string} titleSelector - The selector for the link titles.
+ * @param {string} linkSelector - The selector for the link elements.
+ * @param {string} functionToCall - The name of the function to call with the link ID.
+ */
+function generateLinkColumn(idSelector, titleSelector, linkSelector, functionToCall) {
+  $(`.${linkSelector}`).remove();
+  var link_titles = $(`.${titleSelector} input[type="text"]`);
+  var link_ids = $(`.${idSelector} input[type="text"]`);
+  link_titles.each(function (index) {
+    let link_id = $(link_ids[index]).val();
+    let link_title = $(this).val();
+    let link_html = $("<a>", { text: link_title, class: linkSelector, href: 'javascript:void(0);', onclick: `${functionToCall}(${link_id})` });
+    let has_link = $(this).parent().find(`.${linkSelector}`).length;
+    if (has_link == 0) {
+      $(this).parent().append(link_html);
+    }
+  });
+
+}
+
+
+/**
  * @returns {boolean} True when the current user is an admin user.
  */
 function isAdminUser() {
@@ -215,6 +266,54 @@ function lockForm() {
 
 
 /**
+ * Creates and opens a jQuery UI Dialog containing an iframe for forms/pages.
+ * Also adjusts resizable container styles for consistent width.
+ * @param {string} src - Iframe URL
+ * @param {string} title - Dialog title
+ * @param {number} height - Dialog height in pixels
+ * @param {number} width - Dialog width in pixels
+ */
+function popupIFrame(src, title, height, width, center) {
+  $("#popupIFrame").remove();
+  $("#popUpDiv").html(`<div height='${height}' width='${width}'><iframe id='popupIFrame' name='myname' src='${src}' height='${height}' width='${width}'/></div>`);
+  if (center === undefined || center === true) {
+    $("#popupIFrame").dialog({
+      title: title,
+      height: height,
+      width: width,
+      autoOpen: false,
+      resizable: true,
+      modal: true,
+      close: function (event, ui) {
+        // no-op
+      }
+    });
+    $("#popupIFrame").dialog("open");
+    $('#popupIFrame').attr('style', `width: 100%; height: ${height}px;`);
+  } else {
+    $("#popupIFrame").dialog({
+      title: title,
+      height: height,
+      width: width,
+      autoOpen: false,
+      resizable: true,
+      modal: true,
+      position: { my: "left top", at: "left top", of: window },
+      close: function (event, ui) {
+        // no-op
+      }
+    });
+    $("#popupIFrame").attr('style', `width: ${width};`);
+    $("#popupIFrame").dialog("open");
+    // Tweak jQuery UI resizable inline style (ensures width is applied)
+    var resizeableStyle = $('.ui-resizable').attr('style');
+    let newStyle = resizeableStyle.replaceAll('width: 0px;', `width: ${width}px;`);
+    $('.ui-resizable').attr('style', newStyle);
+  }
+}
+
+
+/**
  * Resets the error fields in the form.
  */
 function resetErrorFields() {
@@ -233,7 +332,7 @@ function resetErrorFields() {
  * @param {Event} e - The event object.
  */
 function submitForm(e) {
-  e.preventDefault();
+  
   var statusID = Number($('.new-status-id input').val());
   var form_is_valid = validateForm();
   if (form_is_valid == false) {
@@ -242,10 +341,12 @@ function submitForm(e) {
   }
 
   if (statusID == 3) {
+    e.preventDefault();
     completePurchaseOrder();
     return;
   }
   if (statusID == 4) {
+    e.preventDefault();
     cancelPurchaseOrder();
     return;
   }
