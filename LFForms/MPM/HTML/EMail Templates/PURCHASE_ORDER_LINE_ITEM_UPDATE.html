@@ -1,10 +1,9 @@
-A new note has been added to Purchase Order [PurchaseTitle] by [NoteBy] on [NoteDate].
+[HeaderLine]
 <br>
-<h3>Note Text:</h3>
-<blockquote>'[NoteText]'</blockquote>
+[CancellationReason]
 <br>
-<br>Purchase Order Details:
-<br>
+<h4>Details:</h4>
+
 <style>
     table, th {
         border: 1px solid black;
@@ -49,9 +48,12 @@ A new note has been added to Purchase Order [PurchaseTitle] by [NoteBy] on [Note
         [LineItemRows]
     </tbody>
 </table>
+<br><b><i>! Denotes the updated line item.</i></b>
 <br><b><i>* For purchases only</i></b>
 <br><b><i>** For services only. Date the service will take place.</i></b>
 <br>
 <br>
+<span style="font-size:6px;">EID:{{PO_LI_UPD}} SITE:{{[SITECODE]}}</span>
 
-<br><span style="font-size:6px;">EID:{{PO_ADDNOTE}} SITE:{{[SITECODE]}}</span>
+
+<tr><td>[GageIDSN]</td><td>[LineItemStatus]</td><td>[LineItemType]</td><td>[Quantity]</td><td>[ServiceDate]</td><td>[LineItemLastUpdated]</td><td>[LineItemLastUpdatedBy]</td></tr>

@@ -19,23 +19,51 @@ $(document).ready(function () {
   $('.Submit').click(function (e) { submitForm(e); });
   $('.network-user-name input').val($('.lf-user-name input').val().toUpperCase().substr($('.lf-user-name input').val().lastIndexOf('\\') + 1)).change();
 
+  // Listen for messages from child iframes to close dialogs and optionally refresh
+  window.onmessage = function (event) {
+    console.log('Parent received message: ' + event.data);
+    if (event.data == "CloseDialog") {
+      $("#popupIFrame").dialog("destroy");
+      $("#popupIFrame").remove();
+    }
+    if (event.data == "CloseDialogWithRefresh") {
+      console.log('Closing dialog with refresh request.');
+      $("#popupIFrame").dialog("destroy");
+      $("#popupIFrame").remove();
+      var current_url = window.location.href;
+      window.location = current_url;
+    }
+  };
+
 
   $(document).on('lookupcomplete', function (e) {
     var poid = Number($('.poid input').val());
     var statusid = Number($('.current-status-id input').val());
-    var po_number = $('.po-number input').val().trim();
 
     if ((!isAdminUser()) || (poid == 0)) {
       $('.Submit').hide();
       return;
     }
     else {
+
+      if ($('.add-line-item-button').length == 0) {
+        var add_button = '<div class="ui-button add-line-item-button" id="add-line-item" onclick="callAddLineItem()"><span title="Add Line Item" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Line Item</div>'
+        $(add_button).insertBefore('.lineitem-table table');
+      }
+      if ($('.add-note-button').length == 0) {
+        var add_note_button = '<div class="ui-button add-note-button" id="add-note-button" onclick="callAddNote()"><span title="Add Note" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Note</div>'
+        $('#spacer').append(add_note_button);
+      }
       $('.Submit').show();
     }
 
     if (statusid > 2) {
       lockForm();
     }
+
+    $('.date-scheduled-col input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
+    $('.service-date-col input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
+    $('.date-received-col input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
 
     loadStatusMap();
     generateLinkColumn('edit-id', 'gage-idsn-col', 'line-item-link', 'callEditLineItem');
@@ -46,17 +74,7 @@ $(document).ready(function () {
       $('.purchase-order-status select').val(statusName).change();
     }
 
-    if (isAdminUser()) {
-      
-      if ($('.add-line-item-button').length == 0) {
-        var add_button = '<div class="ui-button add-line-item-button" id="add-line-item" onclick="callAddLineItem()"><span title="Add Line Item" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Line Item</div>'
-        $(add_button).insertBefore('.lineitem-table table');
-      }
-      if ($('.add-note-button').length == 0) {
-        var add_note_button = '<div class="ui-button add-note-button" id="add-note-button" onclick="callAddNote()"><span title="Add Note" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Note</div>'
-        $('#spacer').append(add_note_button);
-      }
-    }
+    
 
   });
 
@@ -111,9 +129,9 @@ function callAddNote() {
  */
 function callAddLineItem() {
   var widowHeight = $(window).height();
-  var poid = $('.site-id input').val();
+  var poid = $('.poid input').val();
   widowHeight = widowHeight - 50;
-  popupIFrame(`http://rmslf/Forms/MPM-AddPurchaseOrderLineItem?poid=${poid}`, 'Add Line Item', widowHeight, 1500, false);
+  popupIFrame(`http://rmslf/Forms/MPM-AddPurchaseOrderLineItem?poid=${poid}`, 'Add Line Item', widowHeight, 1200, false);
 }
 
 
@@ -124,7 +142,7 @@ function callAddLineItem() {
 function callEditLineItem(liID) {
   var widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
-  popupIFrame(`http://rmslf/Forms/MPM-EditPurchaseOrderLineItem?liid=${liID}`, 'Edit Line Item', widowHeight, 1500, false);
+  popupIFrame(`http://rmslf/Forms/MPM-EditPurchaseOrderLineItem?liid=${liID}`, 'Edit Line Item', widowHeight, 1200, false);
 }
 
 
@@ -276,7 +294,9 @@ function lockForm() {
 function popupIFrame(src, title, height, width, center) {
   $("#popupIFrame").remove();
   $("#popUpDiv").html(`<div height='${height}' width='${width}'><iframe id='popupIFrame' name='myname' src='${src}' height='${height}' width='${width}'/></div>`);
+
   if (center === undefined || center === true) {
+
     $("#popupIFrame").dialog({
       title: title,
       height: height,
@@ -290,7 +310,9 @@ function popupIFrame(src, title, height, width, center) {
     });
     $("#popupIFrame").dialog("open");
     $('#popupIFrame').attr('style', `width: 100%; height: ${height}px;`);
+
   } else {
+
     $("#popupIFrame").dialog({
       title: title,
       height: height,
@@ -309,6 +331,11 @@ function popupIFrame(src, title, height, width, center) {
     var resizeableStyle = $('.ui-resizable').attr('style');
     let newStyle = resizeableStyle.replaceAll('width: 0px;', `width: ${width}px;`);
     $('.ui-resizable').attr('style', newStyle);
+
+    var iframeStyle = $('#popupIFrame').attr('style');
+    let newIframeStyle = iframeStyle.replaceAll('width: auto;', `width: 100%;`);
+    $('#popupIFrame').attr('style', newIframeStyle);
+
   }
 }
 

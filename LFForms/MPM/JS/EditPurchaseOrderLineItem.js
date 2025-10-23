@@ -1,4 +1,5 @@
-const Status = Object.freeze({ Active: 0, Scheduled: 1, Received: 2, Completed: 3, Cancelled: 4 });
+const Status = Object.freeze({ None: 0, Scheduled: 1, Received: 2, Completed: 3, Cancelled: 4 });
+const LineItemType = Object.freeze({ None: 0, Purchase: 1, Service: 2, Calibration: 3 });
 var statusMap = new Map();
 var statusNameMap = new Map();
 $(document).ready(function () {
@@ -20,12 +21,16 @@ $(document).ready(function () {
   $('.Submit').click(function (e) { submitForm(e); });
   $('.network-user-name input').val($('.lf-user-name input').val().toUpperCase().substr($('.lf-user-name input').val().lastIndexOf('\\') + 1)).change();
 
+  
+  $('<span class="cf-required">*</span>').insertAfter('.service-date span span');
+
+
 
   $(document).on('lookupcomplete', function (e) {
     var lineItemId = Number($('.liid input').val());
     var statusid = Number($('.current-status-id input').val());
 
-    if ((!isAdminUser()) || (lineItemId == 0)) {
+    if ((!isAdminUser()) || (lineItemId == LineItemType.None)) {
       $('.Submit').hide();
       return;
     }
@@ -41,6 +46,11 @@ $(document).ready(function () {
       setStatusComboValue();
     }
 
+    if (lineItemId > 0) {
+      $('#line-item-history-iframe').remove();
+      $('#line-item-history').append(`<iframe id='line-item-history-iframe' name='line-item-history-iframe' src='http://rmslf/Forms/MPM-PurchaseOrderLineItemHistory?liid=${lineItemId}' height='400' width='100%'>`);
+      }
+
   });
 
   $(document).on("onloadlookupfinished", function (e) {
@@ -48,15 +58,20 @@ $(document).ready(function () {
     $('#q0').append("<div class='hidden-text' id='popUpDiv'></div>");
     $('.network-user-name input').trigger("change");
 
-    var lineItemId = Number($('.liid input').val());
-    if (lineItemId > 0) {
-      $('#line-item-iframe').remove();
+  });
 
-      if ((lineItemId != '') && (lineItemId != '0')) {
-        $('#line-item-history').append(`<iframe id='line-item-iframe' name='line-item-iframe' src='http://rmslf/Forms/MPM-PurchaseOrderLineItemHistory?liid=${lineItemId}' height='400' width='100%'/>`);
-      }
-    }
+  $(document).on('change', '.purchase-status-cbo select', function () {
+    console.log('Purchase status changed');
+    var selectedStatusID = Number($(this).val());
+    console.log('Selected Status ID: ' + selectedStatusID);
+    $('.new-status-id input').val(selectedStatusID).change();
+  });
 
+  $(document).on('change', '.service-status-cbo select', function () {
+    console.log('Service status changed');
+    var selectedStatusID = Number($(this).val());
+    console.log('Selected Status ID: ' + selectedStatusID);
+    $('.new-status-id input').val(selectedStatusID).change();
   });
 
 });
@@ -69,8 +84,9 @@ $(document).ready(function () {
  * @returns {void}
  */
 function cancelLineItem() {
-  $('.section-add-note').append('<div id="section-add-note-content" class="section-add-note-content"><textarea id="note-textarea" rows="5" cols="50"></textarea></div>');
-  var contentClone = $('#section-add-note-content');
+  $('#section-cancellation-note-content').remove(); 
+  $('.section-cancellation-note').append('<div id="section-cancellation-note-content" class="section-cancellation-note-content"><textarea id="note-textarea" rows="5" cols="50"></textarea></div>');
+  var contentClone = $('#section-cancellation-note-content');
   $(contentClone).dialog({
     title: 'Add Cancellation Reason (Required)',
     modal: true,
@@ -82,16 +98,12 @@ function cancelLineItem() {
       'OK': function () {
         let noteText = contentClone.find('#note-textarea').val().trim();
         if (noteText == '') {
-          $.alert({ title: 'Must supply cancellation reason!', content: 'Sorry, you need to provide a reason for cancelling this purchase order.' });
+          $.alert({ title: 'Must supply cancellation reason!', content: 'Sorry, you need to provide a reason for cancelling this line item.' });
           return;
         }
 
         $('.cancellation-reason textarea').val(noteText);
         $('#form1').submit();
-
-        $('#section-add-note-content').remove();
-        $(this).dialog('close');
-
       }
     }
   });
@@ -143,17 +155,20 @@ function lockForm() {
 }
 
 
-
 /**
  * Resets the error fields in the form.
  */
 function resetErrorFields() {
-  var gage_idsn = $('.gage-idsn input');
-  var status = $('.status-combo select');
+  var serviceDateField = $('.service-date input');
+  var serviceStatusField = $('.service-status-cbo select');
+  var purchaseStatusField = $('.purchase-status-cbo select');
 
-  $('#wrong-status-error').remove();
+  $('#status-unset-error').remove();
+  $('#service-date-required-error').remove(); 
 
-  status.removeClass('parsley-error');
+  serviceStatusField.removeClass('parsley-error');
+  purchaseStatusField.removeClass('parsley-error');
+  serviceDateField.removeClass('parsley-error');
 }
 
 
@@ -165,19 +180,19 @@ function setStatusComboValue() {
   var newStatusID = Number($('.new-status-id input').val());
   var lineItemTypeID = Number($('.line-item-type-id input').val());
 
-  if ((statusMap.size == 0) || (lineItemTypeID == 0) || (currentStatusID == 0)) {
+  if ((lineItemTypeID == LineItemType.None) || (currentStatusID == Status.None)) {
     return;
   }
 
   // If no new status is set, default to current status
-  if (newStatusID == 0) {
+  if (newStatusID == Status.None) {
     newStatusID = currentStatusID;
   }
 
-  if (lineItemTypeID == 1) { // Purchase
+  if (lineItemTypeID == LineItemType.Purchase) { // Purchase
     $('.purchase-status-cbo select').val(newStatusID).change();
   }
-  else if (lineItemTypeID == 2) { // Service
+  else { // Service
     $('.service-status-cbo select').val(newStatusID).change();
   }
 
@@ -197,7 +212,7 @@ function submitForm(e) {
     return;
   }
 
-  if (statusID == 4) {
+  if (statusID == Status.Cancelled) {
     e.preventDefault();
     cancelLineItem();
     return;
@@ -216,32 +231,32 @@ function validateForm() {
   var typeID = Number($('.line-item-type-id input').val());
   var purchaseStatusField = $('.purchase-status-cbo select');
   var serviceStatusField = $('.service-status-cbo select');
+  var serviceDateField = $('.service-date input');
+  var serviceDateValue = serviceDateField.val().trim();
 
-  var po_numberField = $('.po-number input');
-  var statusField = $('.purchase-order-status select');
-  var po_number = $('.po-number input').val().trim();
-  var statusID = Number($('.new-status-id input').val());
   resetErrorFields();
 
-  if ((statusID == Status.Issued) && (po_number === '')) {
-    po_numberField.addClass('parsley-error');
-    po_numberField.parent().append("<ul id='po-number-required-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Purchase Order Number is required when Status = 'Issued'.</li></ul>");
-    is_valid = false;
+  if ((currentStatusID > Status.None) && (newStatusID == Status.None)) {
+    if (typeID == LineItemType.Purchase) {
+      purchaseStatusField.addClass('parsley-error');
+      purchaseStatusField.parent().append("<ul id='status-unset-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Once a status is set, it cannot be undone.</li></ul>");
+      is_valid = false;
+    }
+    else {
+      serviceStatusField.addClass('parsley-error');
+      serviceStatusField.parent().append("<ul id='status-unset-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Once a status is set, it cannot be undone.</li></ul>");
+      is_valid = false;
+    }
   }
 
-  if ((statusID == Status.Completed) && (po_number === '')) {
-    po_numberField.addClass('parsley-error');
-    po_numberField.parent().append("<ul id='po-number-required-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Purchase Order Number is required when Status = 'Completed'.</li></ul>");
-    is_valid = false;
+  if ((typeID > LineItemType.Purchase) && (newStatusID == Status.Scheduled)) {
+    if (serviceDateValue == '') {
+      serviceDateField.addClass('parsley-error');
+      serviceDateField.parent().append("<ul id='service-date-required-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Service Date is required when Status is Scheduled.</li></ul>");
+      is_valid = false;
+    }
   }
-
-  if ((statusID == Status.Active) && (po_number != '')) {
-    console.log('Status ID: ' + statusID);
-    console.log('PO Number: ' + po_number);
-    statusField.addClass('parsley-error');
-    statusField.parent().append("<ul id='wrong-status-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>If you enter a Purchase Order Number, you must set Status to 'Issued'.</li></ul>");
-    is_valid = false;
-  }
+  
 
   return is_valid;
 }
