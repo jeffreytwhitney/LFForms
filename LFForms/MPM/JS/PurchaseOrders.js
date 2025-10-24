@@ -299,6 +299,7 @@ function filterTable() {
 
   var requesterFilterVal = $('#cboFilter_Requester').val();
   var vendorFilterVal = $('#cboFilter_Vendor').val();
+  var descriptionFilterVal = $('#txtFilter_Description').val();
 
   if ((requesterFilterVal != null) && (requesterFilterVal.length > 0)) {
     let requesterID = requesterNameMap.get(requesterFilterVal);
@@ -319,6 +320,7 @@ function filterTable() {
   $('.fponum input').val($('#txtFilter_PONumber').val());
   $('.fdmin input').val($('#txtFilter_CreateDateMin').val());
   $('.fdmax input').val($('#txtFilter_CreateDateMax').val());
+  $('.fpodesc input').val(descriptionFilterVal);
 
 
   $('.purchase-order-table').hide();
@@ -336,11 +338,12 @@ function generateFilterRow() {
 
   if ($('#filterRow').length == 0) {
 
-    var filter_row = "<TR id='filterRow'><TH/><TH><input id='txtFilter_PONumber'/></TH><TH/><TH><select id='cboFilter_Requester'/></TH><TH/><TH><select id='cboFilter_Vendor'/></TH><TH/><TH><input type='text' id='txtFilter_CreateDateMin' placeholder='Min Date'><input type='text' id='txtFilter_CreateDateMax' placeholder='Max Date'><TH/><TH/><TH/></TR>"
+    var filter_row = "<TR id='filterRow'><TH/><TH><input id='txtFilter_PONumber'/></TH><TH/><TH><select id='cboFilter_Requester'/></TH><TH><input id='txtFilter_Description'/></TH><TH><select id='cboFilter_Vendor'/></TH><TH/><TH><input type='text' id='txtFilter_CreateDateMin' placeholder='Min Date'><input type='text' id='txtFilter_CreateDateMax' placeholder='Max Date'><TH/><TH/><TH/></TR>"
 
 
     $('.purchase-order-table table thead').append(filter_row);
     $("#txtFilter_PONumber").on("change", function () { filterTable(); });
+    $("#txtFilter_Description").on("change", function () { filterTable(); });
     $("#txtFilter_CreateDateMin").on("change", function () { filterTable(); });
     $("#txtFilter_CreateDateMax").on("change", function () { filterTable(); });
 
@@ -349,6 +352,7 @@ function generateFilterRow() {
 
     // Quick clear on double-click.
     $("#txtFilter_PONumber").dblclick(function () { $("#txtFilter_PONumber").val(null).change(); });
+    $("#txtFilter_Description").dblclick(function () { $("#txtFilter_Description").val(null).change(); });
     $("#txtFilter_CreateDateMin").dblclick(function () { $("#txtFilter_CreateDateMin").val(null).change(); });
     $("#txtFilter_CreateDateMax").dblclick(function () { $("#txtFilter_CreateDateMax").val(null).change(); });
     $("#cboFilter_Requester").dblclick(function () { $("#cboFilter_Requester").val(0).change(); });
@@ -377,8 +381,8 @@ function generateFilterRow() {
 
 
   // Repopulate the filter controls from backing fields if present.
-  if ((($('.fponame input').val() != null) && ($('.fponame input').val().length > 0)) && (($('#txtFilter_POName').val() == null) || ($('#txtFilter_POName').val() == ''))) {
-    $('#txtFilter_POName').val($('.fponame input').val());
+  if ((($('.fpodesc input').val() != null) && ($('.fpodesc input').val().length > 0)) && (($('#txtFilter_Description').val() == null) || ($('#txtFilter_Description').val() == ''))) {
+    $('#txtFilter_Description').val($('.fpodesc input').val());
   }
 
   if ((($('.fponum input').val() != null) && ($('.fponum input').val().length > 0)) && (($('#txtFilter_PONumber').val() == null) || ($('#txtFilter_PONumber').val() == ''))) {
@@ -544,7 +548,7 @@ function printReport() {
   var finccom = Number($('.finccom input').val());
   var freqid = Number($('.freqid input').val());
   var fvname = $('.fvname input').val();
-  var fponame = $('.fponame input').val();  
+  var fpodesc = $('.fpodesc input').val();
   var fponum = $('.fponum input').val();
 
 
@@ -554,8 +558,8 @@ function printReport() {
     report_url = report_url + "&freqid=" + freqid;
   }
 
-  if (fponame.length > 0) {
-    report_url = report_url + "&fponame=" + encodeURIComponent(fponame);
+  if (fpodesc.length > 0) {
+    report_url = report_url + "&fpodesc=" + encodeURIComponent(fpodesc);
   }
 
   if ((fvname != null) && (fvname.length > 0)) {
@@ -598,6 +602,7 @@ function reApplyFilterValues() {
   var poNumberFilterValue = $('.fponum input').val();
   var dateMinFilterValue = $('.fdmin input').val();
   var dateMaxFilterValue = $('.fdmax input').val();
+  var descriptionFilterValue = $('.fpodesc input').val();
 
   if (includeCompleted == 1) {
     $('#chkIncludeInActive').prop('checked', true);
@@ -609,6 +614,10 @@ function reApplyFilterValues() {
   if ((requesterIDFilterValue != NaN) && (requesterIDFilterValue > 0)) {
     let requesterName = requesterMap.get(requesterIDFilterValue);
     $('#cboFilter_Requester').val(requesterName);
+  }
+
+  if ((descriptionFilterValue != null) && (descriptionFilterValue.length > 0)) {
+    $('#txtFilter_Description').val(descriptionFilterValue);
   }
 
   if ((vendorFilterValue != null) && (vendorFilterValue.length > 0)) {
