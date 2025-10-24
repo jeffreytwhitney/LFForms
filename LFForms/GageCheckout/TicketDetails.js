@@ -147,7 +147,6 @@ function fillMachineNameCombos() {
     if ($(element).val() == '') {
       let machineNameInput = machineNameInputs[index];
       let machineNameInputVal = $(machineNameInput).val();
-      console.log(`MachineNameInputVal: ${machineNameInputVal}`);
       $(element).val(machineNameInputVal).change();
     }
 

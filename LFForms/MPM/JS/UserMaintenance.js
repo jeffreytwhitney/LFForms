@@ -696,7 +696,6 @@ function validateAdd() {
   $('#existing-user-error').remove();
   var addUserCount = $('.add-existing-users select option').length;
   var addNetworkUserNameField = $('.add-user-network-user-name input');
-  console.log(`addUserCount: ${addUserCount}`);
   if (addUserCount > 1) {
     addNetworkUserNameField.parent().append("<ul id='existing-user-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>There is another ACTIVE user with this network username. Please inactivate the other user first. Then you can add this one.</li></ul>");
     return false;
@@ -722,8 +721,6 @@ function validateEdit() {
 
   $(existingUserIDs).each(function (index) {
     let existingUserID = Number($(this).val());
-    console.log(`existingUserID: ${existingUserID}`);
-    console.log(`editUserID: ${editUserID}`);
     if (existingUserID == 0) {
       return;
     }

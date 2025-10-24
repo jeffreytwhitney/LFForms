@@ -347,7 +347,6 @@ $(document).ready(function () {
   $(document).on('dblclick', '[id^="Field56"]', function (e) {
     var ticketDetail = $(this).val();
     var ticketNumber = $(this).closest('tr').find('.projectlist-ticket-number-col input[type="text"]').val();
-    console.log(ticketDetail);
     $.dialog({
       escapeKey: true,
       backgroundDismiss: true,

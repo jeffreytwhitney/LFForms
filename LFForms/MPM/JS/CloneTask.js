@@ -250,7 +250,6 @@ function setFormEnabledState() {
  */
 function submitForm(e) {
   if (validateForm() == false) {
-    console.log('form is invalid');
     e.preventDefault();
     return;
   }

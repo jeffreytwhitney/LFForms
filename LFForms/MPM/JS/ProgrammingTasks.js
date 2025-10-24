@@ -1227,7 +1227,6 @@ function reApplyFilterValues() {
   }
   if (assigneeFilterVal != 0) {
     let assigneeName = assigneeMap.get(assigneeFilterVal);
-    console.log(`assigneeName: ${assigneeName}`);
     $('#cboFilter_Assignee').val(assigneeName);
 
   }

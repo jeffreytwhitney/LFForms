@@ -51,7 +51,6 @@ $(document).ready(function () {
       generatePinAllGoodButton();
     }
     else if (Number($('.ticket-type-id input').val()) == 2) {
-      console.log("Calling formatThreadGageTable");
       formatThreadGageTable();
       generateThreadAllGoodButton();
       threadGageFormatted = true;
@@ -81,7 +80,6 @@ $(document).ready(function () {
     if (!$(e.currentTarget).is(":checked")) {
       return;
     }
-    console.log('Field26 changed');
 
     var resultID = Number($(e.currentTarget).val());
     var parentRow = $(e.currentTarget).closest('tr');

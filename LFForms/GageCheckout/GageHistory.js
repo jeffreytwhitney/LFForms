@@ -248,7 +248,6 @@ function filterTicketHistoryRows() {
   var createEndDateFilter = Date.parse($('#txtTicketFilter_CreateEndDate').val());
 
   var gage_rows = $(".ticket-history-row");
-  console.log(gage_rows.length);
   gage_rows.each(function(index) {
 
     if (ticketNumberFilter !== '') {
@@ -277,7 +276,6 @@ function filterTicketHistoryRows() {
     
     if (operatorFilter !== '') {
       var row_Operator = $(this).find('.operator-col input[type=text]').val().toLowerCase();
-      console.log(`Row Operator:${row_Operator}`);
       if (operatorFilter != row_Operator) {
         $(this).hide();
         return;

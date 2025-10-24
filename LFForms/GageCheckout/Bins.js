@@ -409,7 +409,6 @@ function validateForm(e) {
   resetValidationErrors();
 
   var existingBinNameID = $('.existing-bin-name-id input').val();
-  console.log(`ExistingBinID:${existingBinNameID}`);
   var binNameField = $('.add-bin-name input');
 
   if (existingBinNameID.length > 0) {

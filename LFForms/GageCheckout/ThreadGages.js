@@ -433,7 +433,6 @@ function validateForm(e) {
   resetValidationErrors();
 
   var existingthreadNameID = $('.existing-thread-name-id input').val();
-  console.log(`ExistingthreadID:${existingthreadNameID}`);
   var threadNameField = $('.add-thread-name input');
 
   if (existingthreadNameID.length > 0) {

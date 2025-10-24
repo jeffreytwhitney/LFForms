@@ -418,7 +418,6 @@ function createShowGenerateButton() {
       Adding   parsley-error   to both rows’ relevant inputs.
  */
 function checkForDuplicateRows() {
-  console.log('checkForDuplicateRows');
   $('.task-name-col input').removeClass('parsley-error');
   $('.task-type-col select').removeClass('parsley-error');
   $('.op-number-col input').removeClass('parsley-error');
@@ -431,7 +430,6 @@ function checkForDuplicateRows() {
   var taskRows = $('.tasklist-table tbody tr');
   var rowCount = taskRows.length;
   taskRows.each(function (index) {
-    console.log('checkForDuplicateRows index: ' + index);
     let currentTaskName = $(this).find('.task-name-col input');
     let currentTaskType = $(this).find('.task-type-col select');
     let currentOpNumber = $(this).find('.op-number-col input');
@@ -442,7 +440,6 @@ function checkForDuplicateRows() {
     }
     if (errorMessageValue.length == 0) {
       for (i = index + 1; i < rowCount; i++) {
-        console.log('checkForDuplicateRows i: ' + i);
         if (isRowValid(i) == false) {
           return;
         }

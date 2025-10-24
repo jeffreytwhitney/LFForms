@@ -4,11 +4,9 @@ $(document).ready(
     $(document).prop('title', 'Gage User Maintenance');
 
     $('.edit-user-is-active-value input').change(function () {
-      console.log('boop');
       $('.edit-user-is-active-combo select').val(Number($('.edit-user-is-active-value input').val()));
     });
     $('.edit-user-is-admin-value input').change(function () {
-      console.log('beep');
       $('.edit-user-is-admin-combo select').val(Number($('.edit-user-is-admin-value input').val()))
     });
 

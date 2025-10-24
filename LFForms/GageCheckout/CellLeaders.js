@@ -162,7 +162,6 @@ function validateForm(e) {
   $('#bad-cell-leader-error').remove();
 
   var editedCellLeaderID = Number($('.edit-cellleader-id input').val());
-  console.log(`editedCellLeaderID: ${editedCellLeaderID}`);
   var countOfActiveTickets = Number($('.count-of-cell-leader-tickets input').val());
 
   if (countOfActiveTickets == 0) {
@@ -172,7 +171,6 @@ function validateForm(e) {
 
   ticketRows.each(function (index) {
     let cellLeaderAssigneeID = Number($(this).find('.assign-to-id input').val());
-    console.log(`cellLeaderAssigneeID: ${cellLeaderAssigneeID}`);
     let cellLeaderAssigneeName = $(this).find('.assign-to-cell-leader-combo-col select');
 
     if (cellLeaderAssigneeID == editedCellLeaderID) {

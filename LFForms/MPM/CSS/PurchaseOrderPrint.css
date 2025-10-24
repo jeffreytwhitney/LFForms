@@ -1,0 +1,274 @@
+/*****     		  Globals            *****/
+
+.cf-formwrap {
+  margin-top: 0px;
+  margin-left: 0px;
+}
+
+#preview-notice {
+  display: none;
+}
+
+.site-name {
+  width: 200px;
+}
+
+  .site-name select {
+    width: 125px;
+  }
+
+
+.isDisabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.cf-form {
+  padding-top: 0px;
+}
+
+.cf-section-header {
+  padding-top: 0px;
+}
+
+.form-focused {
+  background-color: transparent !important;
+}
+
+.ui-dialog-content {
+  overflow: hidden;
+}
+
+.cf-table .cf-field {
+  padding: 0px !important;
+  font-size: 12px !important;
+  width: 100%;
+}
+
+
+
+.hidden-text {
+  display: none;
+}
+
+.cf-formwrap {
+  margin-top: 0px;
+  width: 1550px !important;
+  max-width: 1550px !important;
+}
+
+[id^='Field26'] {
+  width: 80% !important;
+}
+
+.purchase-order-table .cf-section-header {
+  display: none;
+}
+
+.purchase-order-table th:last-child {
+  display: none;
+}
+
+.purchase-order-table tbody tr td:last-child {
+  display: none;
+}
+
+
+.purchase-order-table table {
+  width: 1500px;
+  padding: 0px !important;
+}
+
+.purchase-order-table th {
+  font-size: 14px;
+  border: 1px solid !important;
+}
+
+  .purchase-order-table th input {
+    height: 20px !important;
+    width: 100% !important;
+    font-size: 14px !important;
+  }
+
+  .purchase-order-table th select {
+    height: 20px !important;
+    width: 100% !important;
+    font-size: 14px !important;
+  }
+
+
+.purchase-order-table td {
+  font-size: 12px;
+  padding: 0px !important;
+  height: 20px !important;
+  border: 1px solid !important;
+  background-color: white !important;
+}
+
+  .purchase-order-table td input[type="text"] {
+    font-size: 14px !important;
+    width: 100%;
+    padding: 0px !important;
+    height: 20px !important;
+    border: 0px !important;
+    background-color: white !important;
+  }
+
+.add-button {
+  font-size: 14px;
+  margin-bottom: 5px !important;
+}
+
+.add-note-button {
+  font-size: 14px;
+  margin-bottom: 5px !important;
+  float: right;
+  margin-right: 100px;
+}
+
+#add-purchase-order {
+  margin-left: 30px;
+}
+
+.edit-button-col input[type=text] {
+  display: none;
+}
+
+.table-button {
+  height: 20px;
+  width: 99%;
+  margin: 0px;
+}
+
+.include-choice {
+  padding-left: 50px;
+}
+
+
+#filterRow input {
+  border-width: 0;
+  border-bottom-width: 1px;
+  background-color: #F1EB9C;
+  font-weight: 600 !important;
+}
+
+#filterRow select {
+  border-width: 0;
+  border-bottom-width: 1px;
+  background-color: #F1EB9C;
+  font-weight: 600 !important;
+}
+
+#txtFilter_CreateDateMax {
+  border-bottom-width: 0px !important;
+}
+
+.colorOverDue td input[type="text"] {
+  color: #D0312D;
+  font-weight: 600;
+}
+
+  .colorOverDue td input[type="text"]:disabled {
+    color: #D0312D;
+    font-weight: 600;
+    background-color: white !important;
+  }
+
+.colorOverDue td select {
+  color: #D0312D;
+  font-weight: 600;
+}
+
+  .colorOverDue td select:disabled {
+    color: #D0312D;
+    font-weight: 600;
+    background-color: white !important;
+  }
+
+.colorOverDue td a {
+  color: #D0312D;
+  font-weight: 600;
+}
+
+
+.colorClosedCancelled td {
+  color: #A9A9A9;
+  background-color: #F8F8F8 !important;
+}
+
+  .colorClosedCancelled td input[type="text"] {
+    color: #A9A9A9;
+    background-color: #F8F8F8 !important;
+  }
+
+    .colorClosedCancelled td input[type="text"]:disabled {
+      color: #A9A9A9;
+      background-color: #F8F8F8 !important;
+    }
+
+  .colorClosedCancelled td select {
+    color: #A9A9A9;
+    background-color: #F8F8F8 !important;
+  }
+
+    .colorClosedCancelled td select:disabled {
+      color: #A9A9A9;
+      background-color: #F8F8F8 !important;
+    }
+
+  .colorClosedCancelled td a {
+    color: #A9A9A9;
+    background-color: #F8F8F8 !important;
+  }
+
+#spacer {
+  padding-top: 20px !important;
+}
+
+#q4 {
+  width: 70px;
+}
+
+#q5 {
+  width: 70px;
+}
+
+#q8 {
+  width: 70px;
+}
+
+#q9 {
+  width: 100px;
+}
+
+#q10 {
+  width: 220px;
+}
+
+#q11 {
+  width: 250px;
+}
+
+#q12 {
+  width: 100px;
+}
+
+#q13 {
+  width: 80px;
+}
+
+#q26 {
+  width: 80px;
+}
+
+#q15 {
+  width: 65px;
+}
+
+#q16 {
+  width: 65px;
+}
+
+#q17 {
+  width: 80px;
+}

@@ -352,7 +352,6 @@ $(document).ready(function () {
     $('#q0').append("<div class='hidden-text' id='popUpDiv'></div>");
     $('.detail-input div').on("dblclick", function (e) {
       var notes = $(this).find('textarea').val();
-      console.log(notes);
       $.dialog({
         escapeKey: true,
         backgroundDismiss: true,
@@ -365,7 +364,6 @@ $(document).ready(function () {
     if ((ticketID != '') && (ticketID != '0')) {
       $('#ticket-history').append(`<iframe id='ticket-history-iframe' name='ticket-history-iframe' src='http://rmslf/Forms/MPM-ProgamTicketHistory?tid=${ticketID}' height='500' width='100%'/>`);
       if ($('.quality-engineer-combo select option').length == 1) {
-        console.log('No QE');
         $('.ticket-department-id input').trigger("change");
       }
     }

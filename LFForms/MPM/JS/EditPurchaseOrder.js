@@ -21,13 +21,11 @@ $(document).ready(function () {
 
   // Listen for messages from child iframes to close dialogs and optionally refresh
   window.onmessage = function (event) {
-    console.log('Parent received message: ' + event.data);
     if (event.data == "CloseDialog") {
       $("#popupIFrame").dialog("destroy");
       $("#popupIFrame").remove();
     }
     if (event.data == "CloseDialogWithRefresh") {
-      console.log('Closing dialog with refresh request.');
       $("#popupIFrame").dialog("destroy");
       $("#popupIFrame").remove();
       var current_url = window.location.href;
@@ -405,8 +403,6 @@ function validateForm() {
   }
  
   if ((statusID == 1) && (po_number != '')) {
-    console.log('Status ID: ' + statusID);
-    console.log('PO Number: ' + po_number);
     statusField.addClass('parsley-error');
     statusField.parent().append("<ul id='wrong-status-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>If you enter a Purchase Order Number, you must set Status to 'Issued'.</li></ul>");
     is_valid = false;

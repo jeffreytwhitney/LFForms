@@ -197,7 +197,6 @@ function validateForm(e) {
       let existingBinTicketNumber = $(this).find('.pin-table-existing-bin-ticket-id input');
       let binID = $(this).find('.pin-table-bin-id input');
       if ((pinTypeValue == 5) && ((binName.val().length > 0) && binID.val().length == 0)) {
-        console.log('pins!');
         binName.parent().find('#bad-pin-name-error').remove();
         binName.parent().append("<ul id='bad-pin-name-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Invalid Bin Name.</li></ul>");
         binName.addClass('parsley-error');

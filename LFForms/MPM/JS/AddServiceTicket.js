@@ -229,7 +229,6 @@ function getSiteNameFromCookie() {
  */
 function submitForm(e) {
   var ticketType = Number($('.ttid input').val());
-  console.log('about to call cclist');
   if (ticketType == 0) {
     e.preventDefault();
     return;

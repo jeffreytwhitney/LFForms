@@ -36,7 +36,6 @@ $(document).ready(function () {
 
     $('.cal-notes-col div').on("dblclick", function (e) {
       var notes = $(this).find('input[type="text"]').val();
-      console.log(notes);
       $.dialog({
         escapeKey: true,
         backgroundDismiss: true,

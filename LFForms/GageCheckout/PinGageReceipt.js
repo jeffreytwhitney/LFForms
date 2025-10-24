@@ -11,7 +11,6 @@ $(document).ready(function () {
     $('.last-cal-date input').val($('.last-cal-date input').val().split(" ")[0]);
     $('.cal-due-date input').val($('.cal-due-date input').val().split(" ")[0]);
     $('.print-date input').val(new Date().toLocaleString());
-    console.log('Calling Mom');
     parent.postMessage("printme", "*");
 
   });
@@ -22,7 +21,6 @@ $(document).ready(function () {
     var barcode_value = "*" + $('.ticket-number input').val() + "*";
     
     if ($('#barcode').length == 0) {
-      console.log('Creating Barcode');
       $('.ticket-number-barcode input').parent().append('<svg id="barcode"></svg>');
       JsBarcode("#barcode", barcode_value, {
         height: 20,
