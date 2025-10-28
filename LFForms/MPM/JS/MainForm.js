@@ -89,19 +89,34 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
   var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
   $.fn.bootstrapBtn = bootstrapButton;
-
-  // Copy username sans domain from #Field2 into #Field3, then trigger change.
-  $('#Field3').val($('#Field2').val().substr($('#Field2').val().lastIndexOf('\\') + 1)).change();
+  var lfUserName = $('.lf-user-name input').val();
+  $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).change();
 
   /**
    * Fired when lookup data is loaded.
-   * If the user is not an admin (`#Field6` != '1'), disable admin-only anchors.
+   * If the user is not an admin, disable admin-only anchors.
    */
   $(document).on('lookupcomplete', function (e) {
-    if ($('#Field6').val() != '1') {
+    if (!isAdmin()) {
       $(".is-admin").removeClass('disabledAnchor').addClass('disabledAnchor');
     }
   });
 
 
 });
+
+
+/**
+ * Returns whether the current user is an administrator.
+ * Reads the value from `.user-isadmin input` (expects 1 for true).
+ * @returns {boolean} True if admin; otherwise false.
+ */
+function isAdmin() {
+  var isAdmin = Number($('.user-isadmin input').val());
+  if (isAdmin == 1) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}

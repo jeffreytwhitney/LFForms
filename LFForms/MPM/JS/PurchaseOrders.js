@@ -586,17 +586,12 @@ function callPrevPage() {
  */
 function colorCodeRows() {
   var purchase_order_rows = $(".purchase-order-table table tbody tr");
-
-  var currentDate = new Date();
-  var aMonthAgoNumber = new Date().setDate(currentDate.getDate() - 30);
-  var aMonthAgo = new Date(aMonthAgoNumber).toISOString();
-
   $(purchase_order_rows).removeClass('colorOverDue');
   $(purchase_order_rows).removeClass('colorClosedCancelled');
 
   purchase_order_rows.each(function (index) {
     let purchase_order_row = purchase_order_rows[index];
-    let createDateString = $(purchase_order_row).find('.create-date-col input[type="text"]').val();
+    let is_past_due = $(purchase_order_row).find('.is-past-due-col input[type="text"]').val();
     let poStatus = $(purchase_order_row).find('.po-status-col input[type="text"]').val();
 
     if ((poStatus == 'Completed') || (poStatus == 'Cancelled')) {
@@ -604,9 +599,7 @@ function colorCodeRows() {
       return;
     }
 
-
-    let createDate = moment(createDateString, "M/D/YYYY").toDate().toISOString();
-    if (createDate <= aMonthAgo) {
+    if (is_past_due == 'True') {
       $(purchase_order_row).addClass('colorOverDue');
       return;
     }

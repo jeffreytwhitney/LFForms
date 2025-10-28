@@ -228,7 +228,8 @@ function isAdmin() {
  * @returns {boolean} True if user type is Metrology; otherwise false.
  */
 function isMetrologyUser() {
-  if (Number($('.user-type-id input').val()) == 1) {
+  userTypeID = Number($('.user-type-id input').val());
+  if ((userTypeID == 1) || (userTypeID == 2)) {
     return true;
   }
   return false;

@@ -159,7 +159,6 @@ $(document).ready(function () {
   var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
   $.fn.bootstrapBtn = bootstrapButton;
 
-  // Wire submit to the (currently placeholder) submit handler
   $('.Submit').click(function (e) { submitForm(e); });
 
   // Keep "Is Active" radio in sync with its corresponding text/value field
@@ -172,6 +171,12 @@ $(document).ready(function () {
   $(document).on('change', '.edit-is-bns-value input', function () {
     var setValue = $('.edit-is-bns-value input').val();
     $(`.edit-is-bns input[type='radio'][value='${setValue}']`).prop("checked", true);
+  });
+
+  // Keep "Is Ordered" radio in sync with its corresponding text/value field
+  $(document).on('change', '.edit-is-ordered-value input', function () {
+    var setValue = $('.edit-is-ordered-value input').val();
+    $(`.edit-probe-is-ordered input[type='radio'][value='${setValue}']`).prop("checked", true);
   });
 
   // Persist selected site to a cookie for 365 days
@@ -309,3 +314,32 @@ function isAdminUser() {
   return false;
 }
 
+
+function submitForm(e) {
+  editID = Number($('.edit-id input').val());
+  if (editID > 0) {
+    if (!validateEdit()) {
+      e.preventDefault();
+      return;
+    }
+  }
+}
+
+
+function validateEdit() {
+  var is_valid = true;
+  $(`.edit-probe-is-ordered input[type='radio']`).removeClass('parsley-error');
+  $('#is-ordered-value-error').remove();
+
+  var currentQuantity = Number($('.edit-current-quantity input').val());
+  var originalQuantity = Number($('.edit-original-quantity input').val());
+  var isOrdered = Number($('.edit-is-ordered-value input').val());
+
+  if ((isOrdered == 1) && (currentQuantity > originalQuantity)) {
+    $(`.edit-probe-is-ordered input[type='radio']`).parent().addClass('parsley-error');
+    $(`.edit-probe-is-ordered`).append("<ul id='is-ordered-value-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Is Ordered cannot be 'Yes' when the Current Quantity is greater than its original value.</li></ul>");
+    is_valid = false;
+  }
+
+  return is_valid;
+}
