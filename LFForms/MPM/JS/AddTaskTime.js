@@ -175,5 +175,30 @@ $(document).ready(function () {
       $('.Submit').addClass("ui-state-disabled");
       $('.add-time-radio fieldset').addClass("ui-state-disabled");
     }
+    generateTotalTrackedHoursMessage();
+    
+
+   
   });
 });
+
+
+function generateTotalTrackedHoursMessage() {
+  $('#existing-time-msg').remove();
+  var totalHours = parseFloat($('.total-task-hours input').val());
+  var totalHoursMessage = "";
+  if (isNaN(totalHours)) {
+    totalHours = 0;
+  }
+  if (totalHours == 0) {
+    totalHoursMessage = "<span id='existing-time-msg'>You currently have no hours logged for this task.</span>";
+  }
+  else if(totalHours == 1) {
+    totalHoursMessage = "<span id='existing-time-msg'>You currently have 1 hour logged for this task.</span>";
+  }
+  else {
+    totalHoursMessage = `<span id='existing-time-msg'>You currently have ${totalHours.toFixed(2)} hours logged for this task.</span>`;
+  }
+
+  $('#existing-time-div').append(totalHoursMessage);
+}

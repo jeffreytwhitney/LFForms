@@ -281,7 +281,7 @@ $(document).ready(function () {
     if (!$('#print-ticket').length) {
       $('.task-name input').parent().append(`<div id='print-ticket' class='table-button ui-button' onclick='printTask()'><span title='Print Task' class='ui-button-icon ui-icon ui-icon-print'/></div>`);
     }
-
+    generateTotalTrackedHoursMessage();
     setFormFields();
     setFormFieldEnableState();
   });
@@ -622,6 +622,31 @@ function generateManualCheckBox() {
       }
     }
   }
+}
+
+
+
+/**
+ * Generates a message displaying the total tracked hours for the task.
+ */
+function generateTotalTrackedHoursMessage() {
+  $('#existing-time-msg').remove();
+  var totalHours = parseFloat($('.tracked-hours input').val());
+  var totalHoursMessage = "";
+  if (isNaN(totalHours)) {
+    totalHours = 0;
+  }
+  if (totalHours == 0) {
+    totalHoursMessage = "<span id='existing-time-msg'>You currently have no hours logged for this task.</span>";
+  }
+  else if (totalHours == 1) {
+    totalHoursMessage = "<span id='existing-time-msg'>You currently have 1 hour logged for this task.</span>";
+  }
+  else {
+    totalHoursMessage = `<span id='existing-time-msg'>You currently have ${totalHours.toFixed(2)} hours logged for this task.</span>`;
+  }
+
+  $('#existing-time-div').append(totalHoursMessage);
 }
 
 
