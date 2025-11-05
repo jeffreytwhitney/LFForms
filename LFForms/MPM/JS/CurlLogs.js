@@ -310,11 +310,13 @@ function filterTable() {
   }
 
   var programFilterValue = $('#txtFilter_Program').val();
+  var fileNameFilterValue = $('#txtFilter_FileName').val();
   var machineNameFilterValue = $('#cboMachineName').val();
   var resultFilterValue = $('#cboResultStatus').val();
 
   $('.fpname input').val(programFilterValue);
   $('.fmname input').val(machineNameFilterValue);
+  $('.ffilename input').val(fileNameFilterValue);
 
   if (resultFilterValue != '') {
     $('.sid input').val(resultFilterValue);
@@ -338,15 +340,18 @@ function filterTable() {
  */
 function generateFilterRow() {
   if ($('#filterRow').length == 0) {
-    var filter_row = "<TR id='filterRow'><TH/><TH><input id='txtFilter_Program'/></TH><TH/><TH/><TH><select id='cboMachineName'/></TH><TH><select id='cboResultStatus'/></TH><TH/><TH/><TH/></TR>"
+    var filter_row = "<TR id='filterRow'><TH/><TH><input id='txtFilter_Program'/></TH><TH/><TH/><TH><select id='cboMachineName'/></TH><TH><select id='cboResultStatus'/></TH><TH><input id='txtFilter_FileName'/></TH><TH/><TH/></TR>"
 
     $('.log-table table thead').append(filter_row);
     $("#txtFilter_Program").on("change", function () { filterTable(); });
+    $("#txtFilter_FileName").on("change", function () { filterTable(); });
+
     $("#cboMachineName").on("change", function () { filterTable(); });
     $("#cboResultStatus").on("change", function () { filterTable(); });
 
     // Quick clear on double-click.
     $("#txtFilter_Program").dblclick(function () { $("#txtFilter_Program").val(null).change(); });
+    $("#txtFilter_FileName").dblclick(function () { $("#txtFilter_FileName").val(null).change(); });
     $("#cboMachineName").dblclick(function () {
       $("#cboMachineName").val(0).change();
     });
