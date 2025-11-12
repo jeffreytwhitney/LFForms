@@ -169,6 +169,7 @@ function callGoBack() {
 function callNextPage() {
   $('.ticket-table').hide();
   $('.ticket-detail-link').remove();
+  $('.table-button').remove();
   current_page = Number($('.pg input').val());
   $('.pg input').val(current_page + 1).change();
 }
@@ -177,6 +178,7 @@ function callNextPage() {
 function callPrevPage() {
   $('.ticket-table').hide();
   $('.ticket-detail-link').remove();
+  $('.table-button').remove();
   current_page = Number($('.pg input').val());
   if (current_page == 1) {
     return;
@@ -657,6 +659,7 @@ function reApplyFilterValues() {
 
 function removeAppendedFields() {
   $('.ticket-detail-link').remove();
+  $('.table-button').remove();
   $('#ticket-table-pagination').remove();
 }
 
@@ -664,6 +667,7 @@ function removeAppendedFields() {
 function resetPageNumber() {
   $('.ticket-table').hide();
   $('.ticket-detail-link').remove();
+  $('.table-button').remove();
   $('.pg input').val(1).change();
 }
 

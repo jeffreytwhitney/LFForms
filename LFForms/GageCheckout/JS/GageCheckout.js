@@ -23,7 +23,7 @@ $(document).ready(function () {
     if (e.triggerId == 'Field152') {
       if ($('#Field152').val()) {
         if ($('#Field152').val() != null) {
-          print_receipt();
+          setTimeout(print_receipt, 2000);
         }
       }
     }

@@ -354,9 +354,6 @@ $(document).ready(function () {
   var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
   $.fn.bootstrapBtn = bootstrapButton;
 
-  // Submit gate: defer to validateAdd/validateEdit based on action.
-  $('.Submit').click(function (e) { submitForm(e); });
-
   // Normalize and capture the current user into a hidden field.
   var lfUserName = $('.lf-user-name input').val();
   if (lfUserName != 'Anonymous User') {
@@ -391,6 +388,8 @@ $(document).ready(function () {
 
   // Persist selected site to a cookie.
   $(document).on('change', '.site-name select', function () {
+    $('.purchase-order-table').hide();
+    $('.table-button').remove();
     var sitename = $('.site-name select').val();
     $.cookie('site_name', sitename, { expires: 365, path: '/' });
   });
