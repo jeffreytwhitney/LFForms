@@ -56,7 +56,7 @@ $(document).ready(function () {
   });
 
   $('.Submit').hide();
-
+  $('.Submit').click(function (e) { submitForm(e); });
   $(document).prop('title', 'Production Machines');
 
   // Keep radio groups and hidden id fields in sync for "Is Active" and "Is Admin" controls.
@@ -343,13 +343,13 @@ function resetPageNumber() {
 function submitForm(e) {
   var actionID = Number($('.action-choice input[type="radio"]:checked').val());
   if (actionID == 1) {
-    if (validateAdd() == false) {
+    if (validateAdd() != true) {
       e.preventDefault();
       return;
     }
   }
   if (actionID == 2) {
-    if (validateEdit() == false) {
+    if (validateEdit() != true) {
       e.preventDefault();
       return;
     }
@@ -398,9 +398,7 @@ function validateEdit() {
     }
     if (existingMachineID != editMachineID) {
       editMachineNameField.parent().append("<ul id='existing-machine-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>There is another production machine with this name.</li></ul>");
-
-      returnValue == false;
-      return;
+      returnValue = false;
     }
   });
   return returnValue;
