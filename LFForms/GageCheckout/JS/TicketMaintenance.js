@@ -220,30 +220,7 @@ function callPrint(ticket_id) {
 
 function callReturn(ticket_id) {
 
-  $.confirm({
-    title: 'Are you sure?',
-    content: 'Are you sure you wish to check in this ticket? It cannot be undone.',
-
-    buttons: {
-      ok: {
-        text: "ok!",
-        keys: ['enter'],
-        action: function () {
-          var has_permissions = checkPermissions();
-          if (has_permissions) {
-            $('.return-ticket-id input').val(ticket_id); 
-            callCalibrate(ticket_id, 1);
-          }
-          else {
-            alert("Sorry, you do not have permissions to do this.");
-          }
-        }
-      },
-      cancel: function () {
-
-      }
-    }
-  });
+  callCalibrate(ticket_id, 1);
 
 }
 
