@@ -179,6 +179,11 @@ $(document).ready(function () {
     $(`.edit-probe-is-ordered input[type='radio'][value='${setValue}']`).prop("checked", true);
   });
 
+  $(document).on('change', '.edit-probe-is-ordered input[type=radio]', function () {
+    var isOrdered = $(`.edit-probe-is-ordered input[type='radio']:checked`).val();
+    $('.edit-is-ordered-value input').val(isOrdered).change();
+  });
+
   // Persist selected site to a cookie for 365 days
   $(document).on('change', '.site-name select', function () {
     var sitename = $('.site-name select').val();

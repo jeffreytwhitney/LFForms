@@ -188,7 +188,24 @@ $(document).ready(function () {
 
   // Add required asterisks to key labels (visual only).
   $('<span class="cf-required">*</span>').insertAfter('.quantity span span');
-  $('<span class="cf-required">*</span>').insertAfter('.cost-amount span span');
+
+  $(document).on('change', '.quantity input', function (e) {
+    
+    var quantity = Number($(this).val().replace(',', ''));
+    var perUnitCost = Number($('.per-unit-cost input').val().replace(',', ''));
+    var totalCost = quantity * perUnitCost;
+    var formattedTotalCost = addThousandsSeparator(totalCost.toFixed(2));
+    $('.cost-amount input').val(formattedTotalCost);
+  });
+
+  $(document).on('change', '.per-unit-cost input', function (e) {
+    var quantity = Number($('.quantity input').val().replace(',', ''));
+    var perUnitCost = Number($(this).val().replace(',', ''));
+    var totalCost = quantity * perUnitCost;
+    var formattedTotalCost = addThousandsSeparator(totalCost.toFixed(2));
+    $('.cost-amount input').val(formattedTotalCost);
+  });
+
 
 
   // Toggle submit availability after lookups complete.
@@ -214,6 +231,24 @@ $(document).ready(function () {
     }
   });
 });
+
+
+// Adds thousands separators (commas) to a numeric string.
+function addThousandsSeparator(numStr) {
+  // Remove any non-digit except decimal point
+  numStr = numStr.replace(/[^0-9.]/g, '');
+
+  // Split integer and decimal parts
+  let parts = numStr.split('.');
+  let integerPart = parts[0];
+  let decimalPart = parts.length > 1 ? '.' + parts[1] : '';
+
+  // Add commas to integer part
+  integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+  return integerPart + decimalPart;
+}
+
 
 
 /**

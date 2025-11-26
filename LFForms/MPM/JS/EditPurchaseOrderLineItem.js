@@ -124,7 +124,7 @@ Events listened for:
  * @enum {number}
  * @readonly
  */
-const Status = Object.freeze({ None: 0, Scheduled: 1, Received: 2, Completed: 3, Cancelled: 4 });
+const Status = Object.freeze({ None: 0, Scheduled: 1, Received: 2, Completed: 3, Cancelled: 4, PartialReceived: 5 });
 
 /**
  * Types of line items supported by the form.
@@ -178,7 +178,27 @@ $(document).ready(function () {
   // Mark required fields with asterisk for visual cue (in addition to validation).
   $('<span class="cf-required">*</span>').insertAfter('.service-date span span');
   $('<span class="cf-required">*</span>').insertAfter('.quantity span span');
-  $('<span class="cf-required">*</span>').insertAfter('.cost-amount span span');
+  $('<span class="cf-required">*</span>').insertAfter('.per-unit-cost span span');
+  $('<span class="cf-required">*</span>').insertAfter('.received-quantity span span');
+
+  $(document).on('change', '.quantity input', function (e) {
+
+    var quantity = Number($(this).val().replace(',', ''));
+    var perUnitCost = Number($('.per-unit-cost input').val().replace(',', ''));
+    var totalCost = quantity * perUnitCost;
+    var formattedTotalCost = addThousandsSeparator(totalCost.toFixed(2));
+    $('.cost-amount input').val(formattedTotalCost);
+  });
+
+  $(document).on('change', '.per-unit-cost input', function (e) {
+    var quantity = Number($('.quantity input').val().replace(',', ''));
+    var perUnitCost = Number($(this).val().replace(',', ''));
+    var totalCost = quantity * perUnitCost;
+    var formattedTotalCost = addThousandsSeparator(totalCost.toFixed(2));
+    $('.cost-amount input').val(formattedTotalCost);
+  });
+
+
 
   /**
    * Fired after data lookups populate hidden fields (IDs, status, etc.).
@@ -251,6 +271,24 @@ $(document).ready(function () {
   });
 
 });
+
+
+// Adds thousands separators (commas) to a numeric string.
+function addThousandsSeparator(numStr) {
+  // Remove any non-digit except decimal point
+  numStr = numStr.replace(/[^0-9.]/g, '');
+
+  // Split integer and decimal parts
+  let parts = numStr.split('.');
+  let integerPart = parts[0];
+  let decimalPart = parts.length > 1 ? '.' + parts[1] : '';
+
+  // Add commas to integer part
+  integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+  return integerPart + decimalPart;
+}
+
 
 /**
  * Prompts the user for a required cancellation reason and submits the form.
@@ -408,6 +446,12 @@ function submitForm(e) {
   var statusID = Number($('.new-status-id input').val());
   var form_is_valid = validateForm();
   var quantityValue = $('.quantity input').val();
+  var receivedQuantityValue = $('.received-quantity input').val();
+  var receivedQuantityField = $('.received-quantity input');
+
+  if (receivedQuantityValue == '') {
+    receivedQuantityField.val(0);
+  }
 
   if (form_is_valid == false) {
     e.preventDefault();
@@ -449,6 +493,8 @@ function validateForm() {
   var costAmountField = $('.cost-amount input');
   var quantityValue = Number(quantityField.val().trim());
   var costAmountValue = Number(costAmountField.val().trim());
+  var receivedQuantityValue = Number($('.received-quantity input').val().trim());
+  var receivedQuantityField = $('.received-quantity input');
 
   resetErrorFields();
 
@@ -488,6 +534,30 @@ function validateForm() {
     costAmountField.parent().append("<ul id='cost-amount-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Must Enter a valid cost amount. ($0.00 is invalid).</li></ul>");
     is_valid = false;
   }
+
+  if (newStatusID == Status.Received) {
+    if (receivedQuantityValue < quantityValue) {
+      receivedQuantityField.addClass('parsley-error');
+      receivedQuantityField.parent().append("<ul id='quantity-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>If Status = Received, Quantity must equal Order Quantity.</li></ul>");
+      is_valid = false;
+    }
+  }
+
+  if (newStatusID == Status.PartialReceived) {
+    if (receivedQuantityValue >= quantityValue || receivedQuantityValue == 0) {
+      receivedQuantityField.addClass('parsley-error');
+      receivedQuantityField.parent().append("<ul id='quantity-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>If Status = Partial Received, Received Quantity must be greater than 0 and less than Order Quantity.</li></ul>");
+      is_valid = false;
+    }
+  }
+
+  if ((newStatusID == Status.None) && (receivedQuantityValue > 0)) {
+    receivedQuantityField.addClass('parsley-error');
+    serviceStatusField.addClass('parsley-error');
+    receivedQuantityField.parent().append("<ul id='quantity-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>If Status is not set to Received or Partially Received, Received Quantity must be 0.</li></ul>");
+    is_valid = false;
+  }
+
 
   return is_valid;
 }

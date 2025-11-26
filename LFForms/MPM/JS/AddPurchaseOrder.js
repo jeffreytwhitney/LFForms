@@ -173,10 +173,28 @@ $(document).ready(function () {
   $(document).on('change', '.line-item-type-id-col input', function (e) {
     var row = $(this).closest('tr');
     if (Number($(this).val()) > 1) {
-      row.find('.quantity-col input').val(0).prop('readonly', true);
+      row.find('.quantity-col input').val(1).prop('readonly', true);
     } else {
       row.find('.quantity-col input').prop('readonly', false);
     }
+  });
+
+  $(document).on('change', '.quantity-col input', function (e) {
+    var row = $(this).closest('tr');
+    var quantity = Number($(this).val().replace(',', ''));
+    var perUnitCost = Number(row.find('.per-unit-cost-col input').val().replace(',', ''));
+    var totalCost = quantity * perUnitCost;
+    var formattedTotalCost = addThousandsSeparator(totalCost.toFixed(2));
+    row.find('.cost-col input').val(formattedTotalCost);
+  });
+
+  $(document).on('change', '.per-unit-cost-col input', function (e) {
+    var row = $(this).closest('tr');
+    var quantity = Number(row.find('.quantity-col input').val().replace(',', ''));
+    var perUnitCost = Number($(this).val().replace(',', ''));
+    var totalCost = quantity * perUnitCost;
+    var formattedTotalCost = addThousandsSeparator(totalCost.toFixed(2));
+    row.find('.cost-col input').val(formattedTotalCost);
   });
 
   /**
@@ -216,6 +234,21 @@ $(document).ready(function () {
   });
 
 });
+
+function addThousandsSeparator(numStr) {
+  // Remove any non-digit except decimal point
+  numStr = numStr.replace(/[^0-9.]/g, '');
+
+  // Split integer and decimal parts
+  let parts = numStr.split('.');
+  let integerPart = parts[0];
+  let decimalPart = parts.length > 1 ? '.' + parts[1] : '';
+
+  // Add commas to integer part
+  integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+  return integerPart + decimalPart;
+}
 
 
 /**
