@@ -3,13 +3,7 @@ var should_print_receipt = true;
 
 $(document).ready(function () {
 
-  var readonly = Number($('.ro input').val());
-  if (readonly != 1) {
-    $('.Submit').show();
-  }
-  else {
-    $('.Submit').hide();
-  }
+  
   $(document).prop('title', 'Ticket Details');
   $('.Submit').click(function (e) { validateForm(e);  });
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js');
@@ -43,6 +37,21 @@ $(document).ready(function () {
   });
 
   $(document).on('lookupcomplete', function (e) {
+
+    var readonly = Number($('.ro input').val());
+    if (readonly != 1) {
+      if (isActiveUser() == true) {
+        $('.Submit').show();
+      }
+      else {
+        $('.Submit').hide();
+      }
+    }
+    else {
+      $('.Submit').hide();
+    }
+
+
     if (e.triggerId == 'Field23') {
       if ($('#Field23').val()) {
         if ($('#Field23').val() != null) {
@@ -221,6 +230,12 @@ function generateThreadCalibrationLinkColumn() {
 }
 
 
+function isActiveUser() {
+  var userStatus = Number($('.user-is-active input').val());
+  return userStatus == 1;
+}
+
+
 function loadiFrame(src) {
   $("#popUpDiv").html("<iframe id='print-iframe' name='myname' src='" + src + "' />");
 }
@@ -319,11 +334,28 @@ function submitForm(e) {
   var isValid = validateForm(e);
   var ticketType = Number($('.ticket-type-id input').val());
   var pinRows = $('.add-pins-bins-table table tbody tr');
+  var statusID = Number($('.sid input').val());
+  var stagedMachineNameVal = $('.staged-machine-name input').val();
+  var machineListVal = $('.machine-name-list input').val();
+  var newMachineGroupID = Number($('.new-machine-group-id input').val());
+  if (newMachineGroupID == 0) {
+    $('.new-machine-group-id input').val(0);
+  }
 
   if (isValid == false) {
     e.preventDefault();
     return;
   }
+
+  if (statusID > 1) {
+    if (stagedMachineNameVal.length == 0) {
+      if (machineListVal.length > 0) {
+        $('.staged-machine-name input').val(machineListVal);
+      }
+    }
+
+  }
+
 
   if (ticketType == 1) {
     if (pinRows.length > 0) {

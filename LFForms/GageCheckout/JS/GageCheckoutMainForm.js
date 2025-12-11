@@ -1,7 +1,7 @@
 $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $('.Submit').hide();
-  $(document).prop('title', 'Modify Ticket');
+  $(document).prop('title', 'Gage Checkout');
   tabifyFormSections();
 
   // Force reload of the active iframe on tab header double-click.
@@ -23,7 +23,25 @@ $(document).ready(function () {
     }
   });
 
+  $(document).on("onloadlookupfinished", function () {
+    generateVersionLink();
+  });
+
 });
+
+
+function generateVersionLink() {
+  var current_version = $('.current-version input').val(); 
+
+  if (current_version.length == 0) {
+    return;
+  }
+
+  if ($('#version-div').length == 0) {
+    var versionInfo = `<div id="version-div"><a href="http://rmslf/Forms/RMS-GAGE-ApplicationVersion" target="_blank">App Version</a>: ${current_version} </div>`;
+    $(versionInfo).insertAfter('#ticket-history-tab');
+  }
+}
 
 
 function tabifyFormSections() {
@@ -48,8 +66,7 @@ function tabifyFormSections() {
       }
     }
   });
-
-
+  
 }
 
 

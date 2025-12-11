@@ -264,6 +264,10 @@ function filterTicketTable() {
     return;
   }
 
+  $('.projectlist-table').hide();
+  removeAppendedFields();
+
+
   var ticketNumberFilterValue = $('#txtFilter_TicketNumber').val();
   var departmentFilterVal = $('#cboFilter_Department').val();
   var machineGroupFilterVal = $('#cboFilter_MachineGroup').val();

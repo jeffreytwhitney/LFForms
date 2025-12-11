@@ -102,6 +102,16 @@ $(document).ready(function () {
     }
   });
 
+
+  $('.ticket-number input').on('keypress', function () {
+    var input = $(this);
+    setTimeout(function () {
+      var val = input.val().replace(/^\*+|\*+$/g, '');
+      input.val(val);
+    }, 0);
+  });
+
+
 });
 
 
@@ -240,3 +250,9 @@ function set_print_event() {
   });
 }
 
+function stripAsterisks(selector) {
+  var $input = $(selector);
+  var val = $input.val();
+  val = val.replace(/^\*+|\*+$/g, '');
+  $input.val(val);
+}

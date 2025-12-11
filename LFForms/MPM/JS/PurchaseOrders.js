@@ -691,7 +691,7 @@ function generateFilterRow() {
   }
 
   if ($('#chkIncludeInActive').length == 0) {
-    chkIncludeCompleted = '<div class="choice include-choice" id="divIncludeInactive"><input name="chkIncludeInActive" id="chkIncludeInActive" type="checkbox"><label class="form-option-label" for="chkIncludeInActive">Include Completed</label></div>'
+    chkIncludeCompleted = '<div class="choice include-choice" id="divIncludeInactive"><input name="chkIncludeInActive" id="chkIncludeInActive" type="checkbox"><label class="form-option-label" for="chkIncludeInActive">Show Completed</label></div>'
     $(chkIncludeCompleted).insertBefore('.purchase-order-table table');
     printButton = '<div class="ui-button print-button" id="print-report" onclick="printReport()"><span title="Print Report" class="ui-button-icon ui-icon ui-icon-print"></span>Print</div>'
     $(printButton).insertAfter('#divIncludeInactive');

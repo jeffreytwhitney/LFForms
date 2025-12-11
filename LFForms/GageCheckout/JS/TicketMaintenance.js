@@ -71,7 +71,7 @@ $(document).ready(function () {
     generateFormButtons();
     generateGoBackButtons();
     $('.ticket-table').show();
-
+    generateVersionLink();
   });
 
   $(document).on('lookupcomplete', function (e) {
@@ -282,6 +282,10 @@ function filterTicketTable() {
   if ($('#filterRow').length == 0) {
     return;
   }
+
+  $('.projectlist-table').hide();
+  removeAppendedFields();
+
 
   var ticketNumberFilterValue = $('#txtFilter_TicketNumber').val();
   //var ticketTypeFilterVal = $('#cboFilter_TicketType').val();
@@ -504,6 +508,20 @@ function generateTicketNumberColumn() {
     }
   });
 
+}
+
+
+function generateVersionLink() {
+  var current_version = $('.current-version input').val();
+
+  if (current_version.length == 0) {
+    return;
+  }
+
+  if ($('#version-div').length == 0) {
+    var versionInfo = `<div id="version-div"><a href="http://rmslf/Forms/RMS-GAGE-ApplicationVersion" target="_blank">App Version</a>: ${current_version} </div>`;
+    $('#form-title-wrap').append(versionInfo);
+  }
 }
 
 
