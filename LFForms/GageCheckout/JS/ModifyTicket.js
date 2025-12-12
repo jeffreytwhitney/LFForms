@@ -113,6 +113,23 @@ $(document).ready(function () {
     generateMachineList();
   });
 
+
+  $(document).on('change', '.cr-activate-employee-name input', function (e) {
+    let crActivateEmployeeNumberValue = $('.cr-activate-employee-number input').val();
+    let crActivateEmployeeNameValue = $('.cr-activate-employee-name input').val();
+
+    $('.activate-employee-number input').val(crActivateEmployeeNumberValue);
+    $('.activate-employee-name input').val(crActivateEmployeeNameValue);
+  });
+
+  $(document).on('change', '.anoka-activate-employee-name input', function (e) {
+    let anokaActivateEmployeeNumberValue = $('.anoka-activate-employee-number input').val();
+    let anokaActivateEmployeeNameValue = $('.anoka-activate-employee-name input').val();
+
+    $('.activate-employee-number input').val(anokaActivateEmployeeNumberValue);
+    $('.activate-employee-name input').val(anokaActivateEmployeeNameValue);
+  });
+
 });
 
 
@@ -862,23 +879,6 @@ function validateForm(e) {
 
   if (actionType == 3) {
     $('.print-ticket-id input').val($('.activate-guid input').val());
-
-    let activateSubmitEmployeeNumber = $('.activate-employee-number input');
-    let activateSubmitEmployeeName = $('.activate-employee-name input');
-    let crActivateEmployeeNumber = $('.cr-activate-employee-number input');
-    let anokaActivateEmployeeNumber = $('.anoka-activate-employee-number input');
-    let crActivateEmployeeName = $('.cr-activate-employee-name input');
-    let anokaActivateEmployeeName = $('.anoka-activate-employee-name input');
-
-    if (siteID == 1) {
-      activateSubmitEmployeeNumber.val(crActivateEmployeeNumber.val());
-      activateSubmitEmployeeName.val(crActivateEmployeeName.val());
-    }
-    if (siteID == 2) {
-      activateSubmitEmployeeNumber.val(anokaActivateEmployeeNumber.val());
-      activateSubmitEmployeeName.val(anokaActivateEmployeeName.val());
-    }
-
     return;
   }
 
