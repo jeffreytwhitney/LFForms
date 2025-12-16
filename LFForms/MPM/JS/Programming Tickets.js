@@ -564,7 +564,7 @@ function generateFilterRow() {
     $(add_button).insertBefore('.projectlist-table table');
 
     // Include Completed toggle
-    var includeCompleteCheckbox = '<div class="choice include-choice"><input name="chkIncludeComplete" id="chkIncludeComplete" type="checkbox" ><label class="form-option-label" for="chkIncludeComplete">Include Completed</label></div>'
+    var includeCompleteCheckbox = '<div class="choice include-choice"><input name="chkIncludeComplete" id="chkIncludeComplete" type="checkbox" ><label class="form-option-label" for="chkIncludeComplete">Show Completed</label></div>'
     $('.projectlist-table table').parent().prepend(includeCompleteCheckbox)
 
     // Filter row with text and select controls

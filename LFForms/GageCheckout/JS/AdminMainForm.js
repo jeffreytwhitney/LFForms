@@ -61,6 +61,7 @@ function generateAppliationLinks() {
   if (hasPermissions) {
     mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/GageTicketAdministration" title="Gage Administration" target="_self">Tickets</a></li>'
     mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/GageCalibration" title="Gage Calibration" target="_self">Calibration</a></li>'
+    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/GageRequestMaintenance" title="Gage Request Maintenance" target="_self">Gage Request Maintenance</a></li>'
     mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-CheckoutMainform" title="Gage Checkout" target="_self">Gage Checkout</a></li>'
     mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-TicketHistory" title="Ticket History" target="_self">Ticket History</a></li>'
     mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-BinHistory" title="Ticket History" target="_self">Bin History</a></li>'
@@ -87,6 +88,7 @@ function generateAppliationLinks() {
   else {
     mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Gage Administration" onclick="showPermissionAlert()">Tickets</a></li>';
     mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Gage Calibration" onclick="showPermissionAlert()">Calibration</a></li>';
+    mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Gage Request Maintenance" onclick="showPermissionAlert()">Gage Request Maintenance</a></li>';
     mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Gage Checkout" onclick="showPermissionAlert()">Gage Checkout</a></li>';
     mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Ticket History" onclick="showPermissionAlert()>Ticket History</a></li>'
     mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Bin History" onclick="showPermissionAlert()>Bin History</a></li>'

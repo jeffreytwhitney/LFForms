@@ -318,6 +318,8 @@ var initiatorMap = new Map();
 var initiatorNameMap = new Map();
 var ticketTypeMap = new Map();
 var ticketTypeNameMap = new Map();
+var assigneeMap = new Map();
+var assigneeNameMap = new Map();
 
 /**
  * DOM ready bootstrap.
@@ -374,6 +376,7 @@ $(document).ready(function () {
     loadDepartmentMap();
     loadInitiatorMap();
     loadTicketTypeMap();
+    loadAssigneeMap();
     $('.due-date-col input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
     $('.create-date-col input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
     generateTicketNumberColumn();
@@ -505,10 +508,11 @@ function filterTable() {
   var initiatorFilterVal = $('#cboFilter_Initiator').val();
   var ticketTypeFilterVal = $('#cboFilter_TicketType').val();
   var departmentFilterVal = $('#cboFilter_Department').val();
+  var assigneeFilterVal = $('#cboFilter_Assignee').val();
 
   $('.ftnum input').val(ticketNumberFilterValue);
   $('.ftname input').val(ticketNameFilterValue);
-  
+
   if ((departmentFilterVal != null) && (departmentFilterVal.length > 0)) {
     let departmentID = departmentNameMap.get(departmentFilterVal);
     $('.fdid input').val(departmentID);
@@ -531,6 +535,16 @@ function filterTable() {
   }
   else {
     $('.fttid input').val(0);
+  }
+
+  console.log("Assignee Filter Value: " + assigneeFilterVal);
+  if ((assigneeFilterVal != null) && (assigneeFilterVal.length > 0)) {
+    let assigneeID = assigneeNameMap.get(assigneeFilterVal);
+    console.log("Mapped Assignee ID: " + assigneeID);
+    $('.faid input').val(assigneeID);
+  }
+  else {
+    $('.faid input').val(0);
   }
 
   $('.service-ticket-table').hide();
@@ -556,10 +570,10 @@ function generateFilterRow() {
 
     $(add_button).insertBefore('.service-ticket-table table');
 
-    var includeCompleteCheckbox = '<div class="choice include-choice"><input name="chkIncludeComplete" id="chkIncludeComplete" type="checkbox" ><label class="form-option-label" for="chkIncludeComplete">Include Completed</label></div>'
+    var includeCompleteCheckbox = '<div class="choice include-choice"><input name="chkIncludeComplete" id="chkIncludeComplete" type="checkbox" ><label class="form-option-label" for="chkIncludeComplete">Show Completed</label></div>'
     $('.service-ticket-table table').parent().prepend(includeCompleteCheckbox)
 
-    var filter_row = "<TR id='filterRow'><TH><input id='txtFilter_TicketNumber'/></TH><TH><input id='txtFilter_TicketName'/></TH><TH><select id='cboFilter_Initiator'/></TH><TH><select id='cboFilter_TicketType'/></TH><TH><select id='cboFilter_Department'/></TH><TH></TH><TH></TH><TH></TH><TH></TH><TH></TH><TH></TH><TH></TH></TR>"
+    var filter_row = "<TR id='filterRow'><TH><input id='txtFilter_TicketNumber'/></TH><TH><input id='txtFilter_TicketName'/></TH><TH><select id='cboFilter_Initiator'/></TH><TH><select id='cboFilter_TicketType'/></TH><TH><select id='cboFilter_Department'/></TH><TH><select id='cboFilter_Assignee'/></TH><TH></TH><TH></TH><TH></TH><TH></TH><TH></TH><TH></TH></TR>"
 
 
     $('.service-ticket-table table thead').append(filter_row);
@@ -571,12 +585,14 @@ function generateFilterRow() {
     $("#cboFilter_Initiator").on("change", function () { filterTable(); });
     $("#cboFilter_TicketType").on("change", function () { filterTable(); });
     $("#cboFilter_Department").on("change", function () { filterTable(); });
+    $("#cboFilter_Assignee").on("change", function () { filterTable(); });
 
     $("#txtFilter_TicketNumber").dblclick(function () { $("#txtFilter_TicketNumber").val(null).change(); });
     $("#txtFilter_TicketName").dblclick(function () { $("#txtFilter_TicketName").val(null).change(); });
     $("#cboFilter_Initiator").dblclick(function () { $("#cboFilter_Initiator").val(0).change(); });
     $("#cboFilter_TicketType").dblclick(function () { $("#cboFilter_TicketType").val(0).change(); });
     $("#cboFilter_Department").dblclick(function () { $("#cboFilter_Department").val(null).change(); });
+    $("#cboFilter_Assignee").dblclick(function () { $("#cboFilter_Assignee").val(0).change(); });
     wireUpSortFields();
   }
 
@@ -599,6 +615,14 @@ function generateFilterRow() {
   if (($(".department-lookup-combo select option").length > 1) && ($("#cboFilter_Department option").length == 0)) {
     let departmentOptions = $(".department-lookup-combo select").html();
     $("#cboFilter_Department").html(departmentOptions);
+  }
+
+  if (($(".assignee-lookup-combo select option").length > 1) && ($("#cboFilter_Assignee option").length == 0)) {
+    $("#cboFilter_Assignee").html($(".assignee-lookup-combo select").html());
+    $("#cboFilter_Assignee option").eq(0).after($('<option>', {
+      value: 'Unassigned',
+      text: 'Unassigned'
+    }));
   }
 
 }
@@ -631,6 +655,30 @@ function generateTicketNumberColumn() {
 function getTableRowCount() {
   var row_count = $('.service-ticket-table tbody tr').length;
   return row_count;
+}
+
+
+/**
+ * Populates Assignee lookup maps from the assignee lookup table.
+ * - Fills both ID->Name and Name->ID maps.
+ * - No-op if the lookup table isn't present.
+ * @returns {void}
+ */
+function loadAssigneeMap() {
+  if (assigneeMap.keys.length == 0) {
+    var assignee_rows = $('.assignee-lookup-table table tbody tr');
+    if (assignee_rows.length == 0) {
+      return;
+    }
+    assignee_rows.each(function (index) {
+      assigneeID = Number($(this).find('.assignee-lookup-table-id input').val());
+      assigneeName = $(this).find('.assignee-lookup-table-name input').val();
+      assigneeMap.set(assigneeID, assigneeName);
+      assigneeNameMap.set(assigneeName, assigneeID);
+    });
+    assigneeMap.set(-1, 'Unassigned');
+    assigneeNameMap.set('Unassigned', -1);
+  }
 }
 
 
@@ -751,6 +799,7 @@ function reApplyFilterValues() {
   var initiatorFilterVal = $('.fiid input').val();
   var ticketTypeFilterVal = $('.fttid input').val();
   var departmentFilterVal = $('.fdid input').val();
+  var assigneeFilterVal = $('.faid input').val();
 
   if (includeCompleted == 1) {
     $('#chkIncludeComplete').prop('checked', true);
@@ -758,7 +807,7 @@ function reApplyFilterValues() {
   else {
     $('#chkIncludeComplete').prop('checked', false);
   }
-  
+
   if ((ticketNumberFilterValue != null) && (ticketNumberFilterValue.length > 0)) {
     $('#txtFilter_TicketNumber').val(ticketNumberFilterValue);
   }
@@ -781,6 +830,14 @@ function reApplyFilterValues() {
   }
   else {
     $("#cboFilter_Department").val($("#cboFilter_Department option:first").val());
+  }
+
+  if (assigneeFilterVal != 0) {
+    let assigneeName = assigneeMap.get(assigneeFilterVal);
+    $('#cboFilter_Assignee').val(assigneeName);
+  }
+  else {
+    $("#cboFilter_Assignee").val($("#cboFilter_Assignee option:first").val());
   }
 
   if (ticketTypeFilterVal != 0) {

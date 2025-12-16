@@ -545,7 +545,7 @@ function generateFilterRow() {
 
   if ($('#filterRow').length == 0) {
 
-    var filter_row = "<TR id='filterRow'><TH/><TH/><TH/><TH><input type='text' id='txtFilter_TaskName'></TH><TH/><TH/><TH><select id='cboFilter_TaskType'/></TH><TH><select id='cboFilter_Assignee'/></TH><TH><select id='cboFilter_Status'/></TH><TH/><TH/><TH/><TH><TH/><TH/></TR>"
+    var filter_row = "<TR id='filterRow'><TH/><TH/><TH/><TH><input type='text' id='txtFilter_TaskName'></TH><TH/><TH/><TH><select id='cboFilter_TaskType'/></TH><TH><select id='cboFilter_Assignee'/></TH><TH><select id='cboFilter_Status'/></TH><TH/><TH/><TH/><TH><TH/><TH/><TH/></TR>"
     $('.tasklist-table table thead').append(filter_row);
     $("#txtFilter_TaskName").on("change", function () { filterTable(); });
     $("#cboFilter_Status").on("change", function () { filterTable(); });

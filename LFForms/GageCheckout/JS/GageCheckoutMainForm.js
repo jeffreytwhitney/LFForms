@@ -14,11 +14,18 @@ $(document).ready(function () {
         iframeGageCheckout.attr('src', gageCheckoutSource);
       }
     }
-    else if (tabID == 'ui-id-2') {
+    if (tabID == 'ui-id-2') {
       let iframeModifyTicket = $('#frm-modify-ticket');
       if (iframeModifyTicket.length) {
         modifyTicketSource = trimQueryString(iframeModifyTicket.attr('src'));
         iframeModifyTicket.attr('src', modifyTicketSource);
+      }
+    }
+    if (tabID == 'ui-id-3') {
+      let iframeGageRequest = $('#frm-gage-request');
+      if (iframeGageRequest.length) {
+        gageRequestSource = trimQueryString(iframeGageRequest.attr('src'));
+        iframeGageRequest.attr('src', gageRequestSource);
       }
     }
   });
@@ -46,7 +53,7 @@ function generateVersionLink() {
 
 function tabifyFormSections() {
   $('#q0').children().wrapAll('<div id="history-tabs"></div>');
-  $('#history-tabs').prepend('<ul id="ticket-history-tab"><li><a href="#q2"><span>GageCheckout</span></a></li><li><a href="#q3"><span>Modify Existing Tickets</span></a></li></ul>');
+  $('#history-tabs').prepend('<ul id="ticket-history-tab"><li><a href="#q2"><span>GageCheckout</span></a></li><li><a href="#q3"><span>Modify Existing Tickets</span></a></li><li><a href="#q9"><span>Gage Requests</span></a></li></ul>');
   $('#history-tabs').tabs();
 
   $("#history-tabs").on("tabsactivate", function (event, ui) {
@@ -63,6 +70,13 @@ function tabifyFormSections() {
       if (iframeModifyTicket.length) {
         modifyTicketSource = trimQueryString(iframeModifyTicket.attr('src'));
         iframeModifyTicket.attr('src', modifyTicketSource);
+      }
+    }
+    else if (tab == 2) {
+      let iframeGageRequest = $('#frm-gage-request');
+      if (iframeGageRequest.length) {
+        gageRequestSource = trimQueryString(iframeGageRequest.attr('src'));
+        iframeGageRequest.attr('src', gageRequestSource );
       }
     }
   });
