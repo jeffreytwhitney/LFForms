@@ -136,7 +136,8 @@ Permissions: Metrology Admins only.
   - `.gobackbutton`                  : placeholder(s) replaced with a “Go Back” button
 
  */
-
+var machineTypeMap = new Map();
+var  machineTypeNameMap = new Map();
 $(document).ready(function () {
   // Normalize the current user name into a network-style account (substring after the last '\', uppercased)
   var lfUserName = $('.lf-user-name input').val();
@@ -190,11 +191,38 @@ $(document).ready(function () {
     $.cookie('site_name', sitename, { expires: 365, path: '/' });
   });
 
+  $(document).on('change', '[id^="Field45"]', function (e) {
+    generateMachineTypeIDList('add');
+  });
+
+  $(document).on('change', '[id^="Field49"]', function (e) {
+    generateMachineTypeIDList('edit');
+    var machineTypeID = $(this).val();
+    var machineTypeName = machineTypeMap.get(Number(machineTypeID));
+    var machineTypeNameField = $(this).closest('tr').find('.edit-machine-type-name select');
+      machineTypeNameField.val(machineTypeName);
+
+  });
+
+  $(document).on('change', '[id^="Field50"]', function (e) {
+    var machineTypeName = $(this).val();
+    if (machineTypeName == "") {
+      return;
+    }
+    
+    var machineTypeID = machineTypeNameMap.get(machineTypeName);
+    var machineTypeIDField = $(this).closest('tr').find('.edit-machine-type-id-col input');
+    machineTypeIDField.val(machineTypeID);
+    generateMachineTypeIDList('edit');
+
+  });
+
+
   // After data lookup completes, inject row buttons and admin-only "Add" button; replace Go Back placeholders
   $(document).on('lookupcomplete', function (e) {
     generateTableButtons(".edit-button-col", "ui-icon-pencil", "Edit Probe", "callEditProbe");
     generateGoBackButtons();
-
+    loadMachineTypeMap();
     if (isAdminUser()) {
       if ($('.add-button').length == 0) {
         var add_button = '<div class="ui-button add-button" onclick="callAddProbe()"><span title="Add Probe" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Probe</div>';
@@ -212,7 +240,10 @@ $(document).ready(function () {
     }
   });
 
+
+
 });
+
 
 /**
  * Initiate the Add Probe flow.
@@ -227,6 +258,7 @@ function callAddProbe() {
   $('.add-id input').val(1).change();
   $('.Submit').show();
 }
+
 
 /**
  * Initiate the Edit Probe flow for a given Probe ID.
@@ -245,6 +277,7 @@ function callEditProbe(probeID) {
   }
 }
 
+
 /**
  * Exit Add/Edit mode and return to the default view.
  * - Resets `.add-id input` and `.edit-id input` to `0`
@@ -257,6 +290,7 @@ function callGoBack() {
   $(".edit-id input").val(0).change();
   $('.Submit').hide();
 }
+
 
 /**
  * Replace `.gobackbutton` placeholders by appending a styled "Go Back" button
@@ -271,6 +305,38 @@ function generateGoBackButtons() {
   });
   $(".gobackbutton").remove();
 }
+
+
+/**
+ * Generate a list of Machine Type IDs from input fields in the machine-type-id-col.
+ *
+ * @returns {void}
+ */
+function generateMachineTypeIDList(add_or_edit) {
+  var machineTypeIDList = "";
+  var selector = "";
+  var machine_ids_selector = "";
+
+  if (add_or_edit == 'edit') {
+    selector = '[id^="Field49"]';
+    machine_ids_selector = '.edit-machine-type-ids input';
+  } else {
+    selector = '[id^="Field45"]';
+    machine_ids_selector = '.add-machine-type-ids input';
+  }
+
+
+  $(selector).each(function () {
+    var machineTypeID = $(this).val();
+    if (machineTypeIDList.length > 0) {
+      machineTypeIDList = machineTypeIDList + ", ";
+    }
+    machineTypeIDList = machineTypeIDList + machineTypeID;
+
+  });
+  $(machine_ids_selector).val(machineTypeIDList);
+}
+
 
 /**
  * Generate action buttons inside a table column, one per value-bearing input.
@@ -307,6 +373,7 @@ function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFu
   });
 }
 
+
 /**
  * Determine whether the current user has admin privileges.
  *
@@ -318,6 +385,27 @@ function isAdminUser() {
   }
   return false;
 }
+
+
+/**
+ * Populate machine type lookup maps (id->name and name->id) from hidden lookup table.
+ */
+function loadMachineTypeMap() {
+
+  if (machineTypeMap.keys.length == 0) {
+    var machineType_rows = $('.machine-type-lookup-table table tbody tr');
+    if (machineType_rows.length == 0) {
+      return;
+    }
+    machineType_rows.each(function (index) {
+      machineTypeID = Number($(this).find('.machine-type-lookup-id input').val());
+      machineTypeName = $(this).find('.machine-type-lookup-name input').val();
+      machineTypeMap.set(machineTypeID, machineTypeName);
+      machineTypeNameMap.set(machineTypeName, machineTypeID);
+    });
+  }
+}
+
 
 
 function submitForm(e) {

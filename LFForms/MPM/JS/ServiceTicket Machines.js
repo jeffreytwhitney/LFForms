@@ -1,5 +1,5 @@
 /**
- Service Ticket CMMs
+ Service Ticket Machines
 
   Author:   Jeffrey Whitney
             jtwhitney@machine.com
@@ -8,10 +8,10 @@
 
  
  Purpose:
-   Client-side behaviors for the "Service Ticket CMMs" Laserfiche Forms view.
-   This form is for editing Service Ticket CMMs.
-   (When the user is filling out a service ticket, when they choose "CMM Down"
-   it give them a list of CMM's to choose from. This form edits that list.)
+   Client-side behaviors for the "Service Ticket Machines" Laserfiche Forms view.
+   This form is for editing Service Ticket Machines.
+   (When the user is filling out a service ticket, when they choose "Machine Down"
+   it give them a list of Machine's to choose from. This form edits that list.)
 
 Permissions: Metrology Admins only.
  
@@ -20,7 +20,7 @@ Permissions: Metrology Admins only.
  - Set the page title and lazy-load external dependencies (jQuery Cookie, jQuery Confirm, UI CSS).
  - Drive UI state for Add/Edit/Go Back actions and toggle the Submit button accordingly.
  - Persist the selected site across sessions using the 'site_name' cookie.
- - Generate action buttons (Edit CMM, Add CMM, Go Back) once lookup data is rendered.
+ - Generate action buttons (Edit Machine, Add Machine, Go Back) once lookup data is rendered.
  - Keep radio groups in sync with their corresponding hidden/text value fields.
 
  KEY CONCEPTS:
@@ -120,17 +120,17 @@ Permissions: Metrology Admins only.
  - '.network-user-name input': receives USERNAME (uppercase, sans domain).
  - '.Submit': container for the form's submit control; hidden until allowed.
  - '.site-name select': site dropdown persisted to cookie 'site_name'.
- - '.edit-is-active-value input' -> mirrors to radio group '.edit-cmm-is-active'.
- - '.edit-is-bns-value input'   -> mirrors to radio group '.edit-is-bns'.
+ - '.edit-is-active-value input' -> mirrors to radio group '.edit-Machine-is-active'.
  - '.action-choice' radio: 1 = Add, 2 = Edit.
  - '.add-id input' and '.edit-id input': hidden fields indicating current action target IDs.
  - '.user-isadmin input': '1' when current user is an admin (client-side hint only).
- - '.cmm-table table': CMM listing table; used as insertion point for the "Add CMM" button.
+ - '.machine-table table': Machine listing table; used as insertion point for the "Add Machine" button.
  - '.edit-button-col input[type=text]': placeholder values used to render inline Edit buttons.
  - '.gobackbutton': placeholder elements converted into standardized "Go Back" buttons.
 
  */
-
+var machineTypeMap = new Map();
+var machineTypeNameMap = new Map();
 $(document).ready(function () {
   // Normalize logged-in user: extract USERNAME from DOMAIN\USERNAME, uppercase it, and sync the bound field.
   var lfUserName = $('.lf-user-name input').val();
@@ -140,7 +140,7 @@ $(document).ready(function () {
   $('.Submit').hide();
 
   // Set document title.
-  $(document).prop('title', 'Service Ticket CMMs');
+  $(document).prop('title', 'Service Ticket Machines');
 
   // Lazy-load optional libraries and CSS used by downstream UI interactions.
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js');
@@ -153,17 +153,24 @@ $(document).ready(function () {
   var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
   $.fn.bootstrapBtn = bootstrapButton;
 
-  // Keep ".edit-cmm-is-active" radios in sync when the bound value field changes.
+  // Keep ".edit-Machine-is-active" radios in sync when the bound value field changes.
   $(document).on('change', '.edit-is-active-value input', function () {
     var isActive = $('.edit-is-active-value input').val();
-    $(`.edit-cmm-is-active input[type='radio'][value='${isActive}']`).prop("checked", true);
+    console.log(`Setting edit-machine-is-active radio to ${isActive}`);
+    $(`.edit-machine-is-active input[type='radio'][value='${isActive}']`).prop("checked", true);
   });
 
-  // Keep ".edit-is-bns" radios in sync when the bound value field changes.
-  $(document).on('change', '.edit-is-bns-value input', function () {
-    var setValue = $('.edit-is-bns-value input').val();
-    $(`.edit-is-bns input[type='radio'][value='${setValue}']`).prop("checked", true);
+
+  $(document).on('change', '.edit-machine-type-id input', function (e) {
+    
+    var machineTypeID = $(this).val();
+    var machineTypeName = machineTypeMap.get(Number(machineTypeID));
+    var machineTypeNameField = $('.edit-machine-type-name select');
+    machineTypeNameField.val(machineTypeName);
+
   });
+
+
 
   // Persist selected site to cookie to maintain user preference across sessions.
   $(document).on('change', '.site-name select', function () {
@@ -173,12 +180,13 @@ $(document).ready(function () {
 
   // After lookup results are rendered, add per-row Edit buttons and a global Add button (admins only). Also generate Go Back buttons.
   $(document).on('lookupcomplete', function (e) {
-    generateTableButtons(".edit-button-col", "ui-icon-pencil", "Edit CMM", "callEditCMM");
+    generateTableButtons(".edit-button-col", "ui-icon-pencil", "Edit Machine", "callEditMachine");
     generateGoBackButtons();
+    loadMachineTypeMap();
     if (isAdminUser()) {
       if ($('.add-button').length == 0) {
-        var add_button = '<div class="ui-button add-button" onclick="callAddCMM()"><span title="Add CMM" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add CMM</div>';
-        $(add_button).insertBefore('.cmm-table table');
+        var add_button = '<div class="ui-button add-button" onclick="callAddMachine()"><span title="Add Machine" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Machine</div>';
+        $(add_button).insertBefore('.machine-table table');
       }
     }
   });
@@ -196,12 +204,12 @@ $(document).ready(function () {
 
 
 /**
- * Enter "Add CMM" mode.
+ * Enter "Add Machine" mode.
  * - Selects the "Add" action.
  * - Sets a non-zero add ID (1) to trigger related business rules.
  * - Reveals the Submit button.
  */
-function callAddCMM() {
+function callAddMachine() {
   $(`.action-choice input[type='radio'][value='1']`).prop("checked", true);
   $('.add-id input').val(1).change();
   $('.Submit').show();
@@ -209,16 +217,16 @@ function callAddCMM() {
 
 
 /**
- * Enter "Edit CMM" mode for a given CMM ID.
+ * Enter "Edit Machine" mode for a given Machine ID.
  * - Selects the "Edit" action.
  * - Sets the target edit ID.
  * - Reveals the Submit button only for admin users.
  *
- * @param {number|string} cmmID - Identifier of the CMM row to edit.
+ * @param {number|string} MachineID - Identifier of the Machine row to edit.
  */
-function callEditCMM(cmmID) {
+function callEditMachine(MachineID) {
   $(`.action-choice input[type='radio'][value='2']`).prop("checked", true);
-  $('.edit-id input').val(cmmID).change();
+  $('.edit-id input').val(MachineID).change();
   if (isAdminUser()) {
     $('.Submit').show();
   }
@@ -287,3 +295,22 @@ function isAdminUser() {
   return false;
 }
 
+
+/**
+* Populate machine type lookup maps (id->name and name->id) from hidden lookup table.
+*/
+function loadMachineTypeMap() {
+
+  if (machineTypeMap.keys.length == 0) {
+    var machineType_rows = $('.machine-type-lookup-table table tbody tr');
+    if (machineType_rows.length == 0) {
+      return;
+    }
+    machineType_rows.each(function (index) {
+      machineTypeID = Number($(this).find('.machine-type-lookup-id input').val());
+      machineTypeName = $(this).find('.machine-type-lookup-name input').val();
+      machineTypeMap.set(machineTypeID, machineTypeName);
+      machineTypeNameMap.set(machineTypeName, machineTypeID);
+    });
+  }
+}
