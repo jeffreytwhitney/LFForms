@@ -204,7 +204,7 @@ $(document).ready(function () {
       function show_print() {
         $("#print-iframe").get(0).contentWindow.print();
       };
-      window.setTimeout(show_print, 800); 
+      window.setTimeout(show_print, 800);
     }
   });
 
@@ -277,6 +277,11 @@ $(document).ready(function () {
         $('.assigned-to select').parent().append(`<div id='pester-assignee' class='table-button ui-button' onclick='callPesterAssignee()'><span title='Pester Assignee' class='ui-button-icon ui-icon ui-icon-mail-closed'/></div>`);
       }
     }
+
+    if (!$('#onefactory-button').length) {
+      $('.ticket-number input').parent().append(`<div id='onefactory-button' class='table-button ui-button' onclick='callOpenOneFactory()'><span title='OneFactory' class='ui-button-icon ui-icon ui-icon-extlink'/></div>`);
+    }
+
 
     if (!$('#print-ticket').length) {
       $('.task-name input').parent().append(`<div id='print-ticket' class='table-button ui-button' onclick='printTask()'><span title='Print Task' class='ui-button-icon ui-icon ui-icon-print'/></div>`);
@@ -366,7 +371,7 @@ function callCompleteTask() {
     resizable: false,
     buttons: {
       'OK': function () {
-        let selectedTimeAmount = $('.add-time .radio-checkbox-fieldset input[type="radio"]:checked').val(); 
+        let selectedTimeAmount = $('.add-time .radio-checkbox-fieldset input[type="radio"]:checked').val();
         let timeAmount = Number($('.amount-of-time input').val());
         if (selectedTimeAmount == 'X') {
           if (timeAmount <= 1) {
@@ -382,6 +387,13 @@ function callCompleteTask() {
   });
 
   $(noteField).dialog("open");
+}
+
+
+function callOpenOneFactory() {
+  
+  var task_name = $('.task-name input').val();
+  window.open(`https://val.1factory.com/plans/list?f3=0&search=${task_name}`, "_blank");
 }
 
 
@@ -429,7 +441,7 @@ function callSetTaskToWaiting() {
     buttons: {
       'OK': function () {
         var selectedLength = $('.waiting-reason .radio-checkbox-fieldset input[type="radio"]:checked').length;
-        
+
         if (selectedLength == 0) {
           $.alert({ title: 'Must select waiting reason!', content: 'Sorry, you need to select what you are waiting on.' });
           return;
@@ -445,7 +457,7 @@ function callSetTaskToWaiting() {
         }
         $('.update-waiting-id input').val(selectedWaitingValue).change();
         $(this).dialog('close');
-        
+
         $('#form1').submit();
       }
     }
@@ -463,7 +475,7 @@ function callSetTaskToWaiting() {
 function callShowScheduleFilePath(index) {
   var schedule_name = $('.schedule-col input[type="text"]').eq(index).val();
   var file_path = $('.file-path-col input[type="text"]').eq(index).val();
-  
+
 
   $.confirm({
     title: `File path for ${schedule_name} schedule`,
@@ -584,9 +596,9 @@ function isMetrologyUser() {
  * - Appends anchor elements next to schedule names and a hidden div to hold path values.
  */
 function generateFilePathLinks() {
-  var scheduleNames = $('.schedule-col input[type="text"]'); 
+  var scheduleNames = $('.schedule-col input[type="text"]');
   var filePaths = $('.file-path-col input[type="text"]');
-  
+
   scheduleNames.each(function (index) {
 
     let file_path = $(filePaths[index]);
@@ -669,7 +681,7 @@ function loadiFrame(src) {
 function lockFormNoPermissions() {
   $('.Submit').addClass("ui-state-disabled");
   $('#add-note').addClass("ui-state-disabled");
-  
+
   $('#pester-qe').addClass("ui-state-disabled");
   $('#pester-assignee').addClass("ui-state-disabled");
   $('.task-status select').addClass("ui-state-disabled");
@@ -751,7 +763,7 @@ function popupIFrame(src, title, height, width, cancelSubmit) {
 function printTask() {
 
   var taskID = $('.tid input').val();
-  var report_url = `http://rmslf/Forms/MPM-ProgrammingTicketPrint?tid=${taskID}`
+  var report_url = `http://rmslf/Forms/MPM-ProgrammingTaskPrint?tid=${taskID}`
   loadiFrame(report_url);
 }
 
@@ -884,7 +896,7 @@ function setFormFields() {
  * - May open dialogs and delay submission until dialog completion.
  */
 function submitForm(e) {
-  
+
   var form_is_valid = validateForm();
   if (form_is_valid == false) {
     e.preventDefault();
@@ -902,7 +914,7 @@ function submitForm(e) {
   }
   $('#man-date-div').remove();
 
-  if (statusID != newStatusID) { 
+  if (statusID != newStatusID) {
 
     if (newStatusID == status_Waiting) {
       e.preventDefault();
@@ -917,7 +929,7 @@ function submitForm(e) {
     }
 
     if (newStatusID == status_Cancelled) {
-      
+
       e.preventDefault();
       callCancelTask();
       return;
@@ -996,7 +1008,7 @@ function validateForm() {
     assignee_field.parent().append("<ul id='status-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>You can't unassign a task once it's been assigned to someone.</li></ul>");
     return_val = false;
   }
- 
+
   if (((new_status_val != status_NotStarted) && (new_status_val != status_Cancelled) && (new_status_val != status_NotSched)) && ((new_assignee_val == null) || (new_assignee_val == 0))) {
     assignee_field.addClass('parsley-error');
     assignee_field.parent().append("<ul id='status-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>You can't have a task status other than 'Not Started' if it's not assigned to someone.</li></ul>");
