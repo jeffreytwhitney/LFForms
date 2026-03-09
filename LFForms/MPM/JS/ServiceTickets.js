@@ -951,8 +951,14 @@ function sortTable(newSortOrdinal, selector) {
   }
   else {
     $('.sort-field-ordinal input').val(newSortOrdinal);
-    $('.sort-direction input').val(0).change();
-    sortDirection = 0;
+    if (newSortOrdinal == 1) {
+      sortDirection = 1
+      $('.sort-direction input').val(1).change();
+    }
+    else {
+      sortDirection = 0;
+      $('.sort-direction input').val(0).change();
+    }
   }
 
   if (sortDirection == 0) {
@@ -972,9 +978,9 @@ function sortTable(newSortOrdinal, selector) {
  */
 function wireUpSortFields() {
 
-  $('#q15 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
+  $('#q15 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
 
-  $('#q15').on('click', function () { sortTable(0, '#q15'); });   // Due Date (default)
+  $('#q15').on('click', function () { sortTable(0, '#q15'); });   // Ticket Number (default)
   $('#q18').on('click', function () { sortTable(1, '#q18'); });   // Ticket Name
   $('#q40').on('click', function () { sortTable(2, '#q40'); });   // Requester
   $('#q42').on('click', function () { sortTable(3, '#q42'); });   // Ticket Type
