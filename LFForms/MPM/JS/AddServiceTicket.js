@@ -178,6 +178,16 @@ $(document).ready(function () {
     }
   });
 
+  $(document).on('change', '.ttid input', function (e) {
+    var ticketTypeID = Number($('.ttid input').val());
+
+    $('.ticket-type select').parent().find('#programming-issue-warning').remove();
+
+    if (ticketTypeID == 3 || ticketTypeID == 4 || ticketTypeID == 9) {
+      $('.ticket-type select').parent().append('<div id="programming-issue-warning" >If you have a programming issue, please contact your Quality Engineer to put in a programming ticket.</div>');
+    }
+  });
+
   // Initial load finalization
   $(document).on("onloadlookupfinished", function () {
     $('.closeme input').val(1);
