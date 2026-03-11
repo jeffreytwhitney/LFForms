@@ -503,6 +503,14 @@ function filterTable() {
     $('.finccomp input').val(0);
   }
 
+  if ($("#chkExcludeGaging").is(":checked")) {
+    $('.fexgage input').val(1);
+  }
+  else {
+    $('.fexgage input').val(0);
+  }
+
+
   var ticketNumberFilterValue = $('#txtFilter_TicketNumber').val();
   var ticketNameFilterValue = $('#txtFilter_TicketName').val();
   var initiatorFilterVal = $('#cboFilter_Initiator').val();
@@ -573,12 +581,17 @@ function generateFilterRow() {
     var includeCompleteCheckbox = '<div class="choice include-choice"><input name="chkIncludeComplete" id="chkIncludeComplete" type="checkbox" ><label class="form-option-label" for="chkIncludeComplete">Show Completed</label></div>'
     $('.service-ticket-table table').parent().prepend(includeCompleteCheckbox)
 
+    var excludeGagingCheckbox = '<div class="choice exclude-gaging-choice"><input name="chkExcludeGaging" id="chkExcludeGaging" type="checkbox" ><label class="form-option-label" for="chkExcludeGaging">Exclude Gaging</label></div>'
+    $(excludeGagingCheckbox).insertAfter('.add-button');
+
+
     var filter_row = "<TR id='filterRow'><TH><input id='txtFilter_TicketNumber'/></TH><TH><input id='txtFilter_TicketName'/></TH><TH><select id='cboFilter_Initiator'/></TH><TH><select id='cboFilter_TicketType'/></TH><TH><select id='cboFilter_Department'/></TH><TH><select id='cboFilter_Assignee'/></TH><TH></TH><TH></TH><TH></TH><TH></TH><TH></TH><TH></TH></TR>"
 
 
     $('.service-ticket-table table thead').append(filter_row);
 
     $("#chkIncludeComplete").on("change", function () { filterTable(); });
+    $("#chkExcludeGaging").on("change", function () { filterTable(); });
 
     $("#txtFilter_TicketNumber").on("change", function () { filterTable(); });
     $("#txtFilter_TicketName").on("change", function () { filterTable(); });
