@@ -628,9 +628,12 @@ function print_receipt() {
 
   if (should_print_receipt == true) {
     if (receipt_url != "") {
-      loadiFrame(receipt_url);
-      should_print_receipt == false;
-      $('.print-ticket-id input').val(null).change();
+
+      setTimeout(function() {
+        loadiFrame(receipt_url);
+        should_print_receipt == false;
+        $('.print-ticket-id input').val(null).change();
+      }, 2000);
     }
   }
 }
