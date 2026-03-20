@@ -293,10 +293,12 @@ function filterTicketTable() {
   var statusFilterVal = $('#cboFilter_Status').val();
   var partNumberFilterValue = $('#txtFilter_PartNumber').val();
   var jobNumberFilterValue = $('#txtFilter_JobNumber').val();
+  var machineNameFilterValue = $('#txtFilter_MachineName').val();
 
   $('.ftname input').val(ticketNumberFilterValue);
   $('.fpnum input').val(partNumberFilterValue);
   $('.fjnum input').val(jobNumberFilterValue);
+  $('.fmachname input').val(machineNameFilterValue);
   $('.fsid input').val(statusFilterVal);
 
 
@@ -344,10 +346,13 @@ function generateFilterRow() {
 
   if ($('#filterRow').length == 0) {
 
-    var filter_row = "<TR id='filterRow'><TH/><TH/><TH><input type='text' id='txtFilter_TicketNumber'></TH><TH/><TH><select id='cboFilter_Status'/></TH><TH><select id='cboFilter_Department'/></TH><TH/><TH><select id='cboFilter_MachineGroup'/></TH><TH><select id='cboFilter_Operator'/></TH><TH><select id='cboFilter_CellLeader'/></TH><TH><input type='text' id='txtFilter_PartNumber'></TH><TH><input type='text' id='txtFilter_JobNumber'></TH><TH/><TH/><TH/><TH/>"
+    var filter_row = "<TR id='filterRow'><TH/><TH/><TH><input type='text' id='txtFilter_TicketNumber'></TH><TH/><TH><select id='cboFilter_Status'/></TH><TH><select id='cboFilter_Department'/></TH><TH><input type='text' id='txtFilter_MachineName'></TH><TH><select id='cboFilter_MachineGroup'/></TH><TH><select id='cboFilter_Operator'/></TH><TH><select id='cboFilter_CellLeader'/></TH><TH><input type='text' id='txtFilter_PartNumber'></TH><TH><input type='text' id='txtFilter_JobNumber'></TH><TH/><TH/><TH/><TH/>"
     $('.ticket-table table thead').append(filter_row);
     $("#txtFilter_TicketNumber").on("change", function () {
       stripAsterisks(this);
+      filterTicketTable();
+    });
+    $("#txtFilter_MachineName").on("change", function () {
       filterTicketTable();
     });
     $('#txtFilter_TicketNumber').on('keypress', function () {
@@ -371,6 +376,7 @@ function generateFilterRow() {
 
 
     $("#txtFilter_TicketNumber").dblclick(function () { $("#txtFilter_TicketNumber").val(null).change(); });
+    $("#txtFilter_MachineName").dblclick(function () { $("#txtFilter_MachineName").val(null).change(); });
     $("#cboFilter_Department").dblclick(function () { $("#cboFilter_Department").val(null).change(); });
     $("#cboFilter_MachineGroup").dblclick(function () { $("#cboFilter_MachineGroup").val(null).change(); });
     $("#cboFilter_Operator").dblclick(function () { $("#cboFilter_Operator").val(null).change(); });
@@ -652,9 +658,11 @@ function reApplyFilterValues() {
   var statusFilterVal = $('.fsid input').val();
   var partNumberFilterValue = $('.fpnum input').val();
   var jobNumberFilterValue = $('.fjnum input').val();
+  var machineNameFilterValue = $('.fmachname input').val();
 
   $('#txtFilter_PartNumber').val(partNumberFilterValue);
   $('#txtFilter_JobNumber').val(jobNumberFilterValue);
+  $('#txtFilter_MachineName').val(machineNameFilterValue);
 
   $('#cboFilter_Status').val(statusFilterVal);
 
