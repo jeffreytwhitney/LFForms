@@ -66,6 +66,7 @@ $(document).ready(function () {
     generateTicketNumberColumn();
     generatePrintButtons();
     generateActivateButtons();
+    generateCloneButtons();
     generateFilterRow();
     reApplyFilterValues();
     appendPagination();
@@ -169,10 +170,20 @@ function callActivate(ticket_id) {
 }
 
 
+function callClone(ticket_id) {
+  
+  $('.modify-action input').val(4);
+  $('.clone-ticket-id input').val(ticket_id).change();
+  $('.print-ticket-id input').val($('.clone-guid input').val());
+  $('.Submit').show();
+}
+
+
 function callGoBack() {
   $(".details-ticket-id input").val(null).change();
   $(".details-ticket-type-id input").val(null).change();
   $('.details-modifier-employee-number input').val(null).change();
+  $('.clone-ticket-id input').val(null).change();
   $('.add-pins-bins-table-new-bin-number input').val('');
   $('[id^="Field81"]').val(null).change();
   $('[id^="Field83"]').val('');
@@ -346,8 +357,10 @@ function generateFilterRow() {
 
   if ($('#filterRow').length == 0) {
 
-    var filter_row = "<TR id='filterRow'><TH/><TH/><TH><input type='text' id='txtFilter_TicketNumber'></TH><TH/><TH><select id='cboFilter_Status'/></TH><TH><select id='cboFilter_Department'/></TH><TH><input type='text' id='txtFilter_MachineName'></TH><TH><select id='cboFilter_MachineGroup'/></TH><TH><select id='cboFilter_Operator'/></TH><TH><select id='cboFilter_CellLeader'/></TH><TH><input type='text' id='txtFilter_PartNumber'></TH><TH><input type='text' id='txtFilter_JobNumber'></TH><TH/><TH/><TH/><TH/>"
+    var filter_row = "<TR id='filterRow'><TH/><TH/><TH/><TH/><TH><input type='text' id='txtFilter_TicketNumber'></TH><TH><select id='cboFilter_Status'/></TH><TH><select id='cboFilter_Department'/></TH><TH><input type='text' id='txtFilter_MachineName'></TH><TH><select id='cboFilter_MachineGroup'/></TH><TH><select id='cboFilter_Operator'/></TH><TH><select id='cboFilter_CellLeader'/></TH><TH><input type='text' id='txtFilter_PartNumber'></TH><TH><input type='text' id='txtFilter_JobNumber'></TH><TH/><TH/><TH/><TH/>"
     $('.ticket-table table thead').append(filter_row);
+
+
     $("#txtFilter_TicketNumber").on("change", function () {
       stripAsterisks(this);
       filterTicketTable();
@@ -486,6 +499,23 @@ function generateActivateButtons() {
       let has_button = $(this).parent().find('.activate-button').length;
       if (has_button == 0) {
         let btn_html = `<div class='table-button ui-button activate-button' onclick='callActivate(${ticket_id})'><span title='Activate' class='ui-button-icon ui-icon ui-icon-power'/></div>`
+        $(this).parent().append(btn_html);
+      }
+    }
+  });
+}
+
+function generateCloneButtons() {
+  var clone_textboxes = $(".clone-button input[type=text]");
+  var ticket_ids = $(".ticket-table-id input[type=text]");
+  var ticket_status_ids = $(".ticket-status-id-col input[type=text]");
+  clone_textboxes.each(function (index) {
+    let ticket_id = ticket_ids[index].value;
+    let ticket_status_id = ticket_status_ids[index].value;
+    if (ticket_status_id == '2') {
+      let has_button = $(this).parent().find('.clone-button').length;
+      if (has_button == 0) {
+        let btn_html = `<div class='table-button ui-button clone-button' onclick='callClone(${ticket_id})'><span title='Clone' class='ui-button-icon ui-icon ui-icon-copy'/></div>`
         $(this).parent().append(btn_html);
       }
     }
@@ -893,6 +923,12 @@ function validateForm(e) {
     return;
   }
 
+  if (actionType == 4) {
+    $('.print-ticket-id input').val($('.clone-guid input').val());
+    return;
+  }
+
+
   if (actionType == 2) {
     resetValidationErrors();
     var submitEmployeeNumber = $('.submit-employee-number input');
@@ -908,7 +944,6 @@ function validateForm(e) {
 
     var ticketType = $('.details-ticket-type-id input').val();
     var pinRows = $('.add-pins-bins-table table tbody tr');
-    var threadRows = $('.add-thread-gages-table table tbody tr');
 
     if (ticketType == 1) {
       pinRows.each(function (index) {
@@ -930,33 +965,7 @@ function validateForm(e) {
           isValid = false;
         }
       });
-    }
-    else if (ticketType == 2) {
-      threadRows.each(function (index) {
-        let threadGageName = $(this).find('.add-thread-gages-table-thread-gage-name input');
-        let threadGageID = $(this).find('.add-thread-gages-table-new-thread-gage-id input');
-        let existingThreadGageTicketNumber = $(this).find('.add-thread-gages-table-existing-thread-gage-id input');
-        let missingThreadGageTicketNumber = $(this).find('.existing-missing-thread-ticket-number input');
-
-        if ((threadGageID.val().length == 0) && (threadGageName.val().length > 0)) {
-          threadGageName.parent().find('#bad-thread-gage-error').remove();
-          threadGageName.parent().append("<ul id='bad-thread-gage-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Invalid Thread Gage Name.</li></ul>");
-          threadGageName.addClass('parsley-error');
-          isValid = false;
-        }
-        if (existingThreadGageTicketNumber.val().length > 0) {
-          threadGageName.parent().find('#preexisting-thread-gage-error').remove();
-          threadGageName.parent().append("<ul id='preexisting-thread-gage-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Thread Gage already marked as 'Checked Out'. See Metrology Calibration.</li></ul>");
-          threadGageName.addClass('parsley-error');
-          isValid = false;
-        }
-        if (missingThreadGageTicketNumber.val().length > 0) {
-          threadGageName.parent().find('#missing-thread-gage-error').remove();
-          threadGageName.parent().append("<ul id='missing-thread-gage-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Thread Gage marked as 'Missing' on another ticket. Bring gage to Metrology Calibration.</li></ul>");
-          threadGageName.addClass('parsley-error');
-          isValid = false;
-        }
-      });
+  
     }
 
     if (isValid == true) {

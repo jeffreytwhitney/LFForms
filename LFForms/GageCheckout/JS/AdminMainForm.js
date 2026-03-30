@@ -44,8 +44,6 @@ function checkPermissions() {
 
 function executeIFrameUpdate() {
 
-  var execute_url = `http://rmslf/Forms/RMS-GAGE-GenerateOverDueEmails`;
-
   $("#popupIFrame").remove();
   $("#popUpDiv").html(`<iframe id='popupIFrame' name='myname' src='${execute_url}'/>`);
 }
@@ -55,7 +53,6 @@ function generateAppliationLinks() {
 
   var hasPermissions = checkPermissions();
   var isAdmin = isUserAdmin();
-  var overdueTicketRunMessage = generateOverdueTicketMessage(false);
   var mainWindowHTML = '<div class="row"><div class="column"><ul>';
 
   if (hasPermissions) {
@@ -66,7 +63,6 @@ function generateAppliationLinks() {
     mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-TicketHistory" title="Ticket History" target="_self">Ticket History</a></li>'
     mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-BinHistory" title="Ticket History" target="_self">Bin History</a></li>'
     mainWindowHTML = mainWindowHTML + '<li></li>'
-    mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Generate Overdue Ticket EMails" onclick="generateOverdueEmails()">Generate Overdue Ticket EMails</a></li>'
     mainWindowHTML = mainWindowHTML + '</ul></div><div class="column"><ul>'
 
     if (isAdmin) {
@@ -93,7 +89,6 @@ function generateAppliationLinks() {
     mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Ticket History" onclick="showPermissionAlert()>Ticket History</a></li>'
     mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Bin History" onclick="showPermissionAlert()>Bin History</a></li>'
     mainWindowHTML = mainWindowHTML + '<li></li>'
-    mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Generate Overdue Ticket EMails" onclick="showPermissionAlert()">Generate Overdue Ticket EMails</a></li>';
     mainWindowHTML = mainWindowHTML + '</ul></div><div class="column"><ul>';
     mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Users" onclick="showPermissionAlert()">Users</a></li>';
     mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Cell Leaders" onclick="showPermissionAlert()">Cell Leaders</a></li>';
@@ -105,54 +100,11 @@ function generateAppliationLinks() {
     mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Sites" onclick="showPermissionAlert()">Sites</a></li>';
   }
 
-  mainWindowHTML = mainWindowHTML + `<div class="last-run-info">${overdueTicketRunMessage}</div>`;
+
 
   $('.main-window').html(mainWindowHTML);
 
 }
-
-
-function generateOverdueEmails() {
-  
-  if (checkPermissions() == false) {
-    showPermissionAlert();
-    return;
-  }
-  executeIFrameUpdate();
-  $('.last-run-info').text(generateOverdueTicketMessage(true));
-}
-
-
-function generateOverdueTicketMessage(useCurrentUser) {
-  var dateString = '';
-  var employee_name = '';
-  var overdueTicketMessage = '';
-
-  if (checkPermissions() == false) {
-    return overdueTicketMessage;
-  }
-
-  if (useCurrentUser) {
-    dateString = moment().format("MM/DD/YYYY hh:mm:ss A");
-    employee_name = $('.user-name input').val();
-  }
-  else {
-    dateString = $('.last-overdue-email-run-date input').val();
-    employee_name = $('.last-overdue-email-run-employee-name input').val();
-
-    if (typeof dateString === 'undefined') {
-      return overdueTicketMessage;
-    }
-    if (typeof employee_name === 'undefined') {
-      return overdueTicketMessage;
-    }
-  }
-
-  overdueTicketMessage = `Overdue Ticket emails last generated ${dateString} by ${employee_name}`;
-  
-  return overdueTicketMessage;
-}
-
 
 function isUserAdmin() {
   var return_val = true;

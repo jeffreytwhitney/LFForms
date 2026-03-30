@@ -1,0 +1,52 @@
+<p>There are [OVERDUE_TICKET_COUNT] tickets that are currently overdue for calibration.</p>
+
+<br />
+<div>
+    <h2>Overdue Tickets</h2>
+</div>
+<div>
+    <style>
+        td, th {
+            border: 1px solid;
+            border-collapse: collapse;
+            text-align: left;
+            border-spacing: 0px;
+            padding: 0px;
+            font-family: Tahoma;
+        }
+    </style>
+    <table style="width: 1500px; border-spacing: 0px; padding-top: 10px;">
+        <thead>
+            <tr>
+                <th>Ticket Number</th>
+                <th>Department</th>
+                <th>Machine Group:</th>
+                <th>Machine</th>
+                <th>Cell Leader</th>
+                <th>Operator</th>
+                <th>Part Number</th>
+                <th>Job Number</th>
+                <th>Last Calibration Date</th>
+                <th>Calibration Due Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            [OVERDUE_ROWS]       
+        </tbody>
+    </table>
+</div>
+
+
+
+<tr>
+    <td>[TICKET_NUMBER]</td>
+    <td>[DEPARTMENT]</td>
+    <td>[CELL_LEADER]</td>
+    <td>[MACHINE_GROUP]</td>
+    <td>[MACHINE]</td>
+    <td>[OPERATOR]</td>
+    <td>[PART_NUMBER]</td>
+    <td>[JOB_NUMBER]</td>
+    <td>[LAST_CALIBRATION_DATE]</td>
+    <td>[CALIBRATION_DUE_DATE]</td>
+</tr>
