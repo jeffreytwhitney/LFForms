@@ -106,6 +106,10 @@ $(document).ready(function () {
     generateMachineList();
   });
 
+  $(document).on('change', '[id^="Field170"]', function (e) {
+    generateMachineList();
+  });
+
   $(document).on('change', '[id^="Field131"]', function (e) {
     generateMachineList();
   });
@@ -450,6 +454,7 @@ function generateGoBackButtons() {
 function generateMachineList() {
   var detailTicketID = $('.details-ticket-id input').val();
   var activateTicketID = $('.activate-ticket-id input').val();
+  var cloneTicketID = $('.clone-ticket-id input').val();
   var machineList = '';
 
   if (detailTicketID != '') {
@@ -485,6 +490,23 @@ function generateMachineList() {
 
     $('.activate-machine-list input').val(machineList);
   }
+
+  if (cloneTicketID != '') {
+
+    $('[id^="Field170"]').each(function (index, element) {
+      machineName = $(element).val();
+      if (machineName != '') {
+        if (machineList.length > 0) {
+          machineList += ', ' + machineName;
+        }
+        else {
+          machineList = machineName;
+        }
+      }
+    });
+
+    $('.clone-machine-list input').val(machineList);
+  }
 }
 
 
@@ -504,6 +526,7 @@ function generateActivateButtons() {
     }
   });
 }
+
 
 function generateCloneButtons() {
   var clone_textboxes = $(".clone-button input[type=text]");
