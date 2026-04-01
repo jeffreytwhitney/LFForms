@@ -71,7 +71,7 @@ KEY CONCEPTS:
 
    LaserFiche Events:
       There are two key LaserFiche events used in this script:
-          - onloadlookupfinished: The event fires only once, when all of the initial lookups have completed. The kinds of lookups that are completed
+          - onloadlookupfinished: The event fires only once, when all the initial lookups have completed. The kinds of lookups that are completed
                                   under this event are the ones that do not have any arguments in them, meaning that they can be looked up immediately.
                                   Examples of this would be Task Types and Task Statuses. These lookups do not depend on any other fields being set.
           - lookupcomplete: This event fires each time a lookup completes after the onloadlookupfinished event has been called. 
@@ -100,8 +100,8 @@ KEY CONCEPTS:
         In our example, we have four fields: LFUserName, NetworkUserName, SiteID, DepartmentLookupTable.
         At the beginning the only field which has anything in it is LFUserName, because LF has filled it in for us.
         We take that value, keeping only the username portion an dput that in NetworkUserName. 
-        This causes a lookup for all of the user related fields, including SiteID. Once the SiteID is set, this in turn
-        causes another lookup to pull in all the departments related to that site. The Departments Lookup cannot be loaded until 
+        This causes a lookup for all the user related fields, including SiteID. Once the SiteID is set, this in turn
+        causes another lookup to pull in all the departments related to that site. The Department Lookup cannot be loaded until 
         we know which site we're talking about. Sometimes this daisy-chaining can get 3 and sometimes even 4 levels deep because of all the relationships between
         various fields on a form. This causes the form to be slower than it otherwise would have been, but there's not a lot we can do about it.
         It sort of is what it is. This is what happens when you have to make an application with a non-application framework.
@@ -146,7 +146,7 @@ KEY CONCEPTS:
        select shows the names of the task types, but we are storing the TaskTypeID in a the database, so we need to have a way to 
        figure out what the TaskTypeID is so that we can set the value of the hidden field that the workflow is going to use to 
        set the value in the task table. So we need to be able to look up the ID by name when the user selects a task type.
-       The only way I've been able to figure out how to do this is to have a hidden lookup table on the page which contains all of the 
+       The only way I've been able to figure out how to do this is to have a hidden lookup table on the page which contains all the 
        task types and their IDs. So when the page loads, we read that table and build two maps: one for ID?Name and one for Name?ID.
        When the user selects a task type, we look up the ID by name and set the value of the hidden field.
 

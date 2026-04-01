@@ -1,4 +1,4 @@
-/**
+﻿/**
 AddServiceTicketNote.js
 
  Author:  Jeffrey Whitney
@@ -70,7 +70,7 @@ Key Concepts:
 
    LaserFiche Events:
       There are two key LaserFiche events used in this script:
-        - onloadlookupfinished: The event fires only once, when all of the initial lookups have completed. The kinds of lookups that are completed
+        - onloadlookupfinished: The event fires only once, when all the initial lookups have completed. The kinds of lookups that are completed
                                 under this event are the ones that do not have any arguments in them, meaning that they can be looked up immediately.
                                 Examples of this would be Task Types and Task Statuses. These lookups do not depend on any other fields being set.
         - lookupcomplete: This event fires each time a lookup completes after the onloadlookupfinished event has been called. 
@@ -99,8 +99,8 @@ Key Concepts:
         In our example, we have four fields: LFUserName, NetworkUserName, SiteID, DepartmentLookupTable.
         At the beginning the only field which has anything in it is LFUserName, because LF has filled it in for us.
         We take that value, keeping only the username portion an dput that in NetworkUserName. 
-        This causes a lookup for all of the user related fields, including SiteID. Once the SiteID is set, this in turn
-        causes another lookup to pull in all the departments related to that site. The Departments Lookup cannot be loaded until 
+        This causes a lookup for all the user related fields, including SiteID. Once the SiteID is set, this in turn
+        causes another lookup to pull in all the departments related to that site. The Department Lookup cannot be loaded until 
         we know which site we're talking about. Sometimes this daisy-chaining can get 3 and sometimes even 4 levels deep because of all the relationships between
         various fields on a form. This causes the form to be slower than it otherwise would have been, but there's not a lot we can do about it.
         It sort of is what it is. This is what happens when you have to make an application with a non-application framework.

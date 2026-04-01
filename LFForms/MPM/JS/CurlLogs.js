@@ -21,7 +21,7 @@
  Key Concepts:
    LaserFiche Events:
       There are two key LaserFiche events used in this script:
-          - onloadlookupfinished: The event fires only once, when all of the initial lookups have completed. The kinds of lookups that are completed
+          - onloadlookupfinished: The event fires only once, when all the initial lookups have completed. The kinds of lookups that are completed
                                   under this event are the ones that do not have any arguments in them, meaning that they can be looked up immediately.
                                   Examples of this would be Task Types and Task Statuses. These lookups do not depend on any other fields being set.
           - lookupcomplete: This event fires each time a lookup completes after the onloadlookupfinished event has been called. 
@@ -50,8 +50,8 @@
         In our example, we have four fields: LFUserName, NetworkUserName, SiteID, DepartmentLookupTable.
         At the beginning the only field which has anything in it is LFUserName, because LF has filled it in for us.
         We take that value, keeping only the username portion an dput that in NetworkUserName. 
-        This causes a lookup for all of the user related fields, including SiteID. Once the SiteID is set, this in turn
-        causes another lookup to pull in all the departments related to that site. The Departments Lookup cannot be loaded until 
+        This causes a lookup for all the user related fields, including SiteID. Once the SiteID is set, this in turn
+        causes another lookup to pull in all the departments related to that site. The Department Lookup cannot be loaded until 
         we know which site we're talking about. Sometimes this daisy-chaining can get 3 and sometimes even 4 levels deep because of all the relationships between
         various fields on a form. This causes the form to be slower than it otherwise would have been, but there's not a lot we can do about it.
         It sort of is what it is. This is what happens when you have to make an application with a non-application framework.
@@ -98,7 +98,7 @@
      Quirk with LFF Events:
         Originally I had the table of results load as soon as the page loaded. It seemed obvious: other than the page, which should of
         course be defaulted to 1, there are no filters as yet. The problem occured because of the fact that I'm adding the filtering in
-        by hand. The way filtering works, is that there are a bunch of hidden lookup tables for stuff like Department. I grab all of the 
+        by hand. The way filtering works, is that there are a bunch of hidden lookup tables for stuff like Department. I grab all the 
         Department Name values out of the lookup table and put them into the filter value. But I can only add the filter row once the rows are all
         there. Therein lies the rub: LFF Lookups.
         
@@ -117,7 +117,7 @@
         filter dropdowns, and sometimes the lookup data wouldn't be there yet. It only happened some of the time, but it continued to 
         happen. It was absolutely maddening. The only way around this problem was to have the "pg" field, (which is the page of data
         that is going to be returned), set to 999 by default. The sproc is looking for this value and if it finds it, it won't return anything.
-        Then, in the lookupcomplete() function, which fires AFTER all of the initial lookups complete, then I ask if the page is set to 999 and 
+        Then, in the lookupcomplete() function, which fires AFTER all the initial lookups complete, then I ask if the page is set to 999 and 
         if it is, set it to 1 and initiate a lookup. This way, everything works as intended. The lookup data is there so I can make the filter row
         and the town rejoiced._
 
@@ -151,7 +151,7 @@
     4 -> #q6    Machine Name
 
     Note: The default sort, (Create Date), is sorted in descending order by default. (Because we want to see the most recent data first.)
-    All of the other sorts are Ascending first and then descending. So if the current sort is Create Date and the user clicks on 
+    All the other sorts are Ascending first and then descending. So if the current sort is Create Date and the user clicks on 
     the File Name column, it will flip the sort direction so the user will see file names in ascending order. Conversely, if they click 
     back on Created Date, it will flip the sort direction back to descending. This way, the user is seeing the data the way they expect to.
   

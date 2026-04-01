@@ -78,7 +78,7 @@
 
    LaserFiche Events:
       There are two key LaserFiche events used in this script:
-          - onloadlookupfinished: The event fires only once, when all of the initial lookups have completed. The kinds of lookups that are completed
+          - onloadlookupfinished: The event fires only once, when all the initial lookups have completed. The kinds of lookups that are completed
                                   under this event are the ones that do not have any arguments in them, meaning that they can be looked up immediately.
                                   Examples of this would be Task Types and Task Statuses. These lookups do not depend on any other fields being set.
           - lookupcomplete: This event fires each time a lookup completes after the onloadlookupfinished event has been called. 
@@ -107,8 +107,8 @@
         In our example, we have four fields: LFUserName, NetworkUserName, SiteID, DepartmentLookupTable.
         At the beginning the only field which has anything in it is LFUserName, because LF has filled it in for us.
         We take that value, keeping only the username portion an dput that in NetworkUserName. 
-        This causes a lookup for all of the user related fields, including SiteID. Once the SiteID is set, this in turn
-        causes another lookup to pull in all the departments related to that site. The Departments Lookup cannot be loaded until 
+        This causes a lookup for all the user related fields, including SiteID. Once the SiteID is set, this in turn
+        causes another lookup to pull in all the departments related to that site. The Department Lookup cannot be loaded until 
         we know which site we're talking about. Sometimes this daisy-chaining can get 3 and sometimes even 4 levels deep because of all the relationships between
         various fields on a form. This causes the form to be slower than it otherwise would have been, but there's not a lot we can do about it.
         It sort of is what it is. This is what happens when you have to make an application with a non-application framework.
@@ -153,7 +153,7 @@
       filter(s). That's annoying. 
       
       What to do? Two things. One done before doing the refresh, and one when you get back from refreshing.
-        #1. Instead of just setting the url to this page's url, what we need to do is append all of the currently chosen filters to the query 
+        #1. Instead of just setting the url to this page's url, what we need to do is append all the currently chosen filters to the query 
             string. So http://rmslf/forms/mypage would become something like: http://rmslf/forms/mypage?ftname=P-12345sortfield=2&sortdirection=ASC&pg=1.
             Then we navigate to that url. This way, when the page reloads, the filter/sort/pagination values are in the query string.
             What this does is it causes LFF to set the hidden fields that drive filtering and sorting back to the values that were there
@@ -173,7 +173,7 @@
       So now we have a situation where the hidden filter field value and the filter display value are different. This is going to cause confusion.
       How to handle that? 
         
-        #2. Once the filter row has been added back, you need to set all of the filter display values back to the appropriate value.
+        #2. Once the filter row has been added back, you need to set all the filter display values back to the appropriate value.
             In the case of a text search, like 'Name', you just set the display field equal to the hidden field. 
             In the case of a dropdown, like Department, you have to do a reverse lookup to find the Department Name associated with the
             Department ID that is in the hidden field, and set the dropdown to that value.
@@ -232,7 +232,7 @@
      Quirk with LFF Events:
         Originally I had the table of results load as soon as the page loaded. It seemed obvious: other than the page, which should of
         course be defaulted to 1, there are no filters as yet. The problem occured because of the fact that I'm adding the filtering in
-        by hand. The way filtering works, is that there are a bunch of hidden lookup tables for stuff like Department. I grab all of the 
+        by hand. The way filtering works, is that there are a bunch of hidden lookup tables for stuff like Department. I grab all the 
         Department Name values out of the lookup table and put them into the filter value. But I can only add the filter row once the rows are all
         there. Therein lies the rub: LFF Lookups.
         
@@ -251,7 +251,7 @@
         filter dropdowns, and sometimes the lookup data wouldn't be there yet. It only happened some of the time, but it continued to 
         happen. It was absolutely maddening. The only way around this problem was to have the "pg" field, (which is the page of data
         that is going to be returned), set to 999 by default. The sproc is looking for this value and if it finds it, it won't return anything.
-        Then, in the lookupcomplete() function, which fires AFTER all of the initial lookups complete, then I ask if the page is set to 999 and 
+        Then, in the lookupcomplete() function, which fires AFTER all the initial lookups complete, then I ask if the page is set to 999 and 
         if it is, set it to 1 and initiate a lookup. This way, everything works as intended. The lookup data is there so I can make the filter row
         and the town rejoiced._
 
@@ -282,7 +282,7 @@
      select shows the names of the task types, but we are storing the TaskTypeID in a the database, so we need to have a way to 
      figure out what the TaskTypeID is so that we can set the value of the hidden field that the workflow is going to use to 
      set the value in the task table. So we need to be able to look up the ID by name when the user selects a task type.
-     The only way I've been able to figure out how to do this is to have a hidden lookup table on the page which contains all of the 
+     The only way I've been able to figure out how to do this is to have a hidden lookup table on the page which contains all the 
      task types and their IDs. So when the page loads, we read that table and build two maps: one for ID?Name and one for Name?ID.
      When the user selects a task type, we look up the ID by name and set the value of the hidden field.    
 

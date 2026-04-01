@@ -1,4 +1,4 @@
-/*# AddProgrammingTicket.js � Documentation
+﻿/*# AddProgrammingTicket.js � Documentation
 
  Author:  Jeffrey Whitney
           jtwhitney@machine.com
@@ -21,10 +21,10 @@ Key Concepts:
     Dialog Looping Mechanism:
      The form is called as a popup dialog from other pages, and it communicates with the parent window to close the dialog and refresh the parent 
      page after this page is submitted.
-     This loop is essential to understand because it's a common pattern that you will see again and again in any form which is being used as a popup. 
+     This loop is essential to understand because it's a common pattern that you will see again and again in any form that is being used as a popup.
      This form is one of those. The way it works is when this page loads initially, the $('.closeme input') is not provided from the query string, 
      and so is set to the default value of 0.
-     Submitting the form sets that value to 1. In LFF, when that the form is submitted it executes the workflow and then, 
+     Submitting the form sets that value to 1. In LFF, when that the form is submitted, it executes the workflow, and then,
      the On Event Completion event redirects back to this same page, but this time with the closeme value set to 1 in the query string. 
      This tells the page that it should close the dialog and refresh the parent page, so it sends off a message to the parent window to do that.
 
@@ -34,11 +34,11 @@ Key Concepts:
       can even access a particular form. For our purposes, this is not particularly useful for our needs because we we want
       all users to be able to view the forms. What we want instead is to limit their ability to do certain things
       inside the application. 
-      There are several user types which are defined in the database users table, (tblUsers) each with their own
+      There are several user types that are defined in the database users table, (tblUsers) each with their own
       level of permission. They are:
         - Cell Lead (user-type-id == 5). Cell Leads can only view tickets and tasks. They cannot make any changes.
-          In fact, cell leads are not logged in to LFF at all because they do no have LFF accounts.
-        - Manufacturing Engineer (user-type-id == 4). They do have LFF accounts, but still have read-only access. 
+          In fact, cell leads are not logged in to LFF at all because they do not have LFF accounts.
+        - Manufacturing Engineer (user-type-id == 4). They do have LFF accounts but still have read-only access.
         - Quality Engineers, (QE's) (user-type-id == 3). QE's can add tickets, add tasks to tickets, add notes. 
           They cannot, however, change tickets outside their department.
           They also cannot change task statuses or assign them to anyone.
@@ -49,7 +49,7 @@ Key Concepts:
           assign tasks. They can also add tickets, add tasks to tickets, add notes, etc.
       
       There is also a special case Metrology user, the Admin. This is designated in the User's table by the Admin 
-      flag being set to 1. Admin's can access forms that are not available to the "regular" Metrology user, such 
+      flag being set to 1. Admins can access forms that are not available to the "regular" Metrology user, such
       as "Department", or "Task Types". Lookup values which are not likely to change very often, if ever. There are also a 
       few little things here and there that an Admin can do that a regular Metrology user cannot, such as 
       sending off an Assignee Pester Message. (Emailing the Assignee of a task asking what's going on with it.)
@@ -68,23 +68,23 @@ Key Concepts:
 
    LaserFiche Events:
       There are two key LaserFiche events used in this script:
-        - onloadlookupfinished: The event fires only once, when all of the initial lookups have completed. The kinds of lookups that are completed
+        - onloadlookupfinished: The event fires only once, when all the initial lookups have completed. The kinds of lookups that are completed
                                 under this event are the ones that do not have any arguments in them, meaning that they can be looked up immediately.
                                 Examples of this would be Task Types and Task Statuses. These lookups do not depend on any other fields being set.
         - lookupcomplete: This event fires each time a lookup completes after the onloadlookupfinished event has been called. 
                           Laserfiche has lookup rules applied to certain fields, so that when a field is changed, it triggers a lookup to fill in other fields.
-                          The fields themselves can either be changed by the user directly, or indirectly. 
-                          An example of an direct change would be when the user chooses a Site from the dropdown. 
+                          The user can either change the fields themselves directly, or indirectly.
+                          An example of and direct change would be when the user chooses a Site from the dropdown.
           
     
-      Now this gets a bit tricky because the lookupcomplete event can fire multiple times, and we only want to do certain things once, so we need
+      Now this gets a bit tricky. The lookupcomplete event can fire multiple times, and we only want to do certain things once, so we need
       to put logic in there so that it's not doing expensive things again and again.
       There is a way of asking what the TriggerID of the lookup is. (A laserfiche function). But I found this to be kind of a pain to use because
-      you have to know the TriggerID of the lookup that you want to respond to and it's just an integer. Also, if you ever change anything 
+      you have to know the TriggerID of the lookup that you want to respond to, and it's just an integer. Also, if you ever change anything
       in the form, you don't know if the trigger id has changed or not. So I found it easier to just put logic in the function that I want to run
-      to make sure that it doesn't, say iterate through a table or something getting values again and again when we only need it to do it once.
+      to make sure that it doesn't, say, iterate through a table or something getting values again and again when we only need it to do it once.
     
-      For an example of what I'm talking about, we're setting the user name field in code and causing a lookup, (see 'User Permissions' above).
+      For an example of what I'm talking about, we're setting the username field in code and causing a lookup (see 'User Permissions' above).
       Because we're setting the field in code and causing a lookup, the onloadlookupfinished event has already fired. Therefore, any logic that 
       relies on user fields being populated won't work if you call them from the onloadlookupfinished event. Instead, we have to call them from 
       the lookupcomplete event. The unfortunate side effect of this is that the lookupcomplete event can fire multiple times, 
@@ -93,12 +93,12 @@ Key Concepts:
       but you want to minimize it as much as possible.
 
       Daisy-Chaining Lookups:
-        A side-effect of the way lookups work is how they sometimes daisy-chain. Let me explain with an example:
+        A side effect of the way lookups work is how they sometimes daisy-chain. Let me explain with an example:
         In our example, we have four fields: LFUserName, NetworkUserName, SiteID, DepartmentLookupTable.
-        At the beginning the only field which has anything in it is LFUserName, because LF has filled it in for us.
-        We take that value, keeping only the username portion an dput that in NetworkUserName. 
-        This causes a lookup for all of the user related fields, including SiteID. Once the SiteID is set, this in turn
-        causes another lookup to pull in all the departments related to that site. The Departments Lookup cannot be loaded until 
+        In the beginning the only field which has anything in it is LFUserName, because LF has filled it in for us.
+        We take that value, keeping only the username portion and put that in NetworkUserName.
+        This causes a lookup for all the user related fields, including SiteID. Once the SiteID is set, this in turn
+        causes another lookup to pull in all the departments related to that site. The Department Lookup cannot be loaded until 
         we know which site we're talking about. Sometimes this daisy-chaining can get 3 and sometimes even 4 levels deep because of all the relationships between
         various fields on a form. This causes the form to be slower than it otherwise would have been, but there's not a lot we can do about it.
         It sort of is what it is. This is what happens when you have to make an application with a non-application framework.
@@ -108,7 +108,7 @@ Key Concepts:
      select shows the names of the task types, but we are storing the TaskTypeID in a the database, so we need to have a way to 
      figure out what the TaskTypeID is so that we can set the value of the hidden field that the workflow is going to use to 
      set the value in the task table. So we need to be able to look up the ID by name when the user selects a task type.
-     The only way I've been able to figure out how to do this is to have a hidden lookup table on the page which contains all of the 
+     The only way I've been able to figure out how to do this is to have a hidden lookup table on the page which contains all the 
      task types and their IDs. So when the page loads, we read that table and build two maps: one for ID?Name and one for Name?ID.
      When the user selects a task type, we look up the ID by name and set the value of the hidden field.
 
@@ -211,8 +211,8 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value so that popup close button displays correctly.
-  $.fn.bootstrapBtn = bootstrapButton;
+   // return $.fn.button to previously assigned value so that popup close button displays correctly.
+  $.fn.bootstrapBtn = $.fn.button.noConflict();
 
   if ($('.closeme input').val() === 1) {
     window.parent.postMessage('CloseDialogWithRefresh', '*');
@@ -220,14 +220,14 @@ $(document).ready(function () {
 
 
   $('.Submit').on("click", function (e) { submitForm(e); });
-  $('.network-user-name input').val($('.lf-username input').val().toUpperCase().substr($('.lf-username input').val().lastIndexOf('\\') + 1)).trigger("change");
-  $('.task-name-col input').keyup(function () { this.value = this.value.toLocaleUpperCase(); });
+  $('.network-user-name input').val($('.lf-username input').val().toUpperCase().substring($('.lf-username input').val().lastIndexOf('\\') + 1)).trigger("change");
+  $('.task-name-col input').on("keyup", function () { this.value = this.value.toLocaleUpperCase(); });
   $('.manf-rev input').on("change", function () { $('.manf-rev input').val($('.manf-rev input').val().toUpperCase()); });
 
   /**
    * On change of .task-type-col select, looks up TaskTypeID via taskTypeByNameMap and writes it to .task-type-id-col input.
    */
-  $(document).on('change', '.task-type-col select', function (e) {
+  $(document).on('change', '.task-type-col select', function () {
     const taskName = $(this).val();
     const taskID = taskTypeByNameMap.get(taskName);
     $(this).closest('tr').find('.task-type-id-col input').val(taskID);
@@ -238,7 +238,7 @@ $(document).ready(function () {
      For userTypeID === 3, defaults and disables .department select and .quality-engineer select when empty.
      Calls generateTaskRowNumbers() and generateTableButtons(".clone-col", "ui-icon-newwin", "Clone Task", "cloneRow").
    */
-  $(document).on('lookupcomplete', function (e) {
+  $(document).on('lookupcomplete', function () {
     loadTaskTypeMap();
 
     const userTypeID = Number($('.user-type-id input').val());
@@ -269,7 +269,7 @@ $(document).ready(function () {
       Calls generateGoBackButtons(), createShowGenerateButton(), and createExecuteTaskGenerationButton().
       Wires due date change to clear parsley errors.
    */
-  $(document).on("onloadlookupfinished", function (e) {
+  $(document).on("onloadlookupfinished", function () {
     $('.closeme input').val(1);
     $('#q0').append("<div class='hidden-text' id='popUpDiv'></div>");
     $('.network-user-name input').trigger("change");
@@ -288,7 +288,7 @@ $(document).ready(function () {
    * When the "Add" link gets clicked, LFF adds a row in the LFF code. I'm not privy to that code so I have to respond
    * instead to the click of that link. This re-runs row numbering and re-does the table buttons.
    */
-  $(document).on('click', '#q28', function (e) {
+  $(document).on('click', '#q28', function () {
     generateTaskRowNumbers();
     generateTableButtons(".clone-col", "ui-icon-newwin", "Clone Task", "cloneRow");
   });
@@ -303,7 +303,7 @@ $(document).ready(function () {
  */
 function createExecuteTaskGenerationButton() {
   const add_buttons = $(".execute-task-generation");
-  add_buttons.each(function (index) {
+  add_buttons.each(function () {
     $(this).replaceWith("<input class='return' style='visibilty:visible' type='button' value='GenerateTasks' onclick='generateTasks()' />");
   });
 }
@@ -400,7 +400,7 @@ function cloneRow(cloneRowID) {
  */
 function createShowGenerateButton() {
   const add_buttons = $("#show-generate-tasks");
-  add_buttons.each(function (index) {
+  add_buttons.each(function () {
     $(this).replaceWith("<input class='return' style='visibilty:visible' type='button' value='GenerateTasks' onclick='callShowGenerateTasks()' />");
   });
 
@@ -439,7 +439,7 @@ function checkForDuplicateRows() {
     if (isRowValid(index) === false) {
     }
     if (errorMessageValue.length === 0) {
-      for (i = index + 1; i < rowCount; i++) {
+      for (let i = index + 1; i < rowCount; i++) {
         if (isRowValid(i) === false) {
           return;
         }
@@ -484,7 +484,7 @@ function fillCCList() {
 
   let ccUserNames = '';
 
-  $('.cc-email-col input').each(function (index) {
+  $('.cc-email-col input').each(function () {
     const ccUserName = $(this).val();
     if (ccUserName.length > 0) {
       ccUserNames += ccUserName + ';';
@@ -578,7 +578,7 @@ function generateTasks() {
     $(taskTypes).each(function (j) {
       const taskTypeValue = $(this).val();
       const taskTypeIDValue = $(taskTypeIDs[j]).val();
-      $(opNumbers).each(function (k) {
+      $(opNumbers).each(function () {
         const opNumberValue = $(this).val();
 
         if (isLastRowEmpty() === false) {
@@ -650,12 +650,7 @@ function isLastRowEmpty() {
   const dueDateValue = $(lastTaskRow).find('.due-date-col input').val();
   const opNumberValue = $(lastTaskRow).find('.op-number-col input').val();
 
-  if ((taskNameValue === '') && (drawingNumberValue === '') && (taskTypeValue === '') && (taskTypeIDValue === '') && (dueDateValue === '') && (opNumberValue === '')) {
-    return true;
-  }
-  else {
-    return false;
-  }
+  return (taskNameValue === '') && (drawingNumberValue === '') && (taskTypeValue === '') && (taskTypeIDValue === '') && (dueDateValue === '') && (opNumberValue === '');
 
 }
 
@@ -708,8 +703,8 @@ function loadTaskTypeMap() {
       return;
     }
     tasktype_rows.each(function (index) {
-      tasktypeID = Number($(this).find('.task-type-lookup-table-id input').val());
-      tasktypeName = $(this).find('.task-type-lookup-table-name input').val();
+      let tasktypeID = Number($(this).find('.task-type-lookup-table-id input').val());
+      let tasktypeName = $(this).find('.task-type-lookup-table-name input').val();
       taskTypeMap.set(tasktypeID, tasktypeName);
       taskTypeByNameMap.set(tasktypeName, tasktypeID);
     });
@@ -781,19 +776,19 @@ function validateGenerateForm() {
 
 
   if (getRowCountOfTableWithValidValues('.task-types-to-generate-table-name') === 0) {
-    $('.task-types-to-generate-table-name input').blur();
+    $('.task-types-to-generate-table-name input').trigger('blur');
     returnVal = false;
   }
 
   const partNumberText = $(".part-numbers-to-generate textarea").val();
   if (partNumberText.length === 0) {
-    $(".part-numbers-to-generate textarea").blur();
+    $(".part-numbers-to-generate textarea").trigger('blur');
     returnVal = false;
   }
 
   const revNumberText = $(".gen-rev-number input").val();
   if (revNumberText.length === 0) {
-    $(".gen-rev-number input").blur();
+    $(".gen-rev-number input").trigger('blur');
     returnVal = false;
   }
 
@@ -806,7 +801,7 @@ function validateGenerateForm() {
   }
 
   if (getRowCountOfTableWithValidValues('.op-number-to-generate') === 0) {
-    $('.op-number-to-generate input').blur();
+    $('.op-number-to-generate input').trigger('blur');
     returnVal = false;
   }
 
