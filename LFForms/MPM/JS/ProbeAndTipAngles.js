@@ -56,7 +56,7 @@
 
 $(document).ready(function () {
   // Capture current LF user name (not used elsewhere in this script; available for diagnostics/auditing).
-  var lfUserName = $('.lf-user-name input').val();
+  const lfUserName = $('.lf-user-name input').val();
 
   // Hide Submit controls on this form/page.
   $('.Submit').hide();
@@ -74,7 +74,7 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
 
   // Resolve Bootstrap/jQuery UI button plugin naming conflict, if Bootstrap is present.
-  var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
+  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
   $.fn.bootstrapBtn = bootstrapButton;
 
   /**
@@ -83,10 +83,10 @@ $(document).ready(function () {
    * @param {JQuery.Event & {triggerId?: string}} e
    */
   $(document).on('lookupcomplete', function (e) {
-    if (e.triggerId == 'Field2') {
+    if (e.triggerId === 'Field2') {
       refreshProbes();
     }
-    if (e.triggerId == 'Field3') {
+    if (e.triggerId === 'Field3') {
       refreshTipAngles();
     }
   });
@@ -102,7 +102,7 @@ $(document).ready(function () {
    * </table>
    */
   $(document).on("onloadlookupfinished", function (e) {
-    if ($('#probe-tip-table-div table').length == 0) {
+    if ($('#probe-tip-table-div table').length === 0) {
       $('#probe-tip-table-div').append('<table class="probe-tip-table"><tr><td class="probe-table-cell"><fieldset class="probe-checkboxes"><legend>Probes</legend></td><td class="tip-table-cell"><fieldset class="tip-checkboxes"><legend>Tip Angles</legend></td></tr></table>');
     }
   });
@@ -132,19 +132,19 @@ $(document).ready(function () {
  */
 function refreshProbes() {
   // Kept for potential diagnostics/future use.
-  var probe_length = $('.probe-table table tbody tr').length;
+  const probe_length = $('.probe-table table tbody tr').length;
 
-  var probe_divs_html = '';
+  let probe_divs_html = '';
 
   // Clear outputs and prior UI before rebuilding.
-  $('.selected-probes input').val('').change();
-  $('.selected-tips input').val('').change();
+  $('.selected-probes input').val('').trigger("change");
+  $('.selected-tips input').val('').trigger("change");
   $('.tip-div').remove();
   $('.probe-div').remove();
 
   // Build probe checkbox items from lookup fields.
   $('[id^="Field9"]').each(function (index, element) {
-    let probeName = $(element).val();
+    const probeName = $(element).val();
     let probe_div_html = '';
     if (probeName) {
       probe_div_html = `<div class="probe-div"><input id="probe-chkbox${index}" type="checkbox" value="${probeName}" class="probe-chkbox"><label class="probe-label" for="probe-chkbox${index}">${probeName}</label></div>`;
@@ -164,17 +164,17 @@ function refreshProbes() {
  */
 function refreshTipAngles() {
   // Kept for potential diagnostics/future use.
-  var tipangle_length = $('.tipangle-table table tbody tr').length;
+  const tipangle_length = $('.tipangle-table table tbody tr').length;
 
-  var tipangle_divs_html = '';
+  let tipangle_divs_html = '';
 
   // Clear current Tip selections/UI before rebuilding.
-  $('.selected-tips input').val('').change();
+  $('.selected-tips input').val('').trigger("change");
   $('.tip-div').remove();
 
   // Build tip angle checkbox items from lookup fields.
   $('[id^="Field14"]').each(function (index, element) {
-    let tipName = $(element).val();
+    const tipName = $(element).val();
     let tip_div_html = '';
     if (tipName) {
       tip_div_html = `<div class="tip-div"><input id="tip-chkbox${index}" type="checkbox" value="${tipName}" class="tip-chkbox"><label class="tip-label" for="tip-chkbox${index}">${tipName}</label></div>`;
@@ -192,14 +192,14 @@ function refreshTipAngles() {
  * into the ".selected-probes input" element, then trigger change().
  */
 function generateSelectedProbeList() {
-  var selectedProbeList = '';
+  let selectedProbeList = '';
 
   $('.probe-chkbox').each(function (index, element) {
     // Using implicit global 'probeCheckBox' from original code; kept to avoid changing behavior.
     probeCheckBox = $(element);
 
     if ($(probeCheckBox).is(':checked')) {
-      if (selectedProbeList.length == 0) {
+      if (selectedProbeList.length === 0) {
         selectedProbeList = $(probeCheckBox).val().trim();
       }
       else {
@@ -208,7 +208,7 @@ function generateSelectedProbeList() {
     }
   });
 
-  $('.selected-probes input').val(selectedProbeList).change();
+  $('.selected-probes input').val(selectedProbeList).trigger("change");
 }
 
 
@@ -217,14 +217,14 @@ function generateSelectedProbeList() {
  * into the ".selected-tips input" element, then trigger change().
  */
 function generateSelectedTipAngles() {
-  var selectedTipList = '';
+  let selectedTipList = '';
 
   $('.tip-chkbox').each(function (index, element) {
     // Using implicit global 'tipCheckBox' from original code; kept to avoid changing behavior.
     tipCheckBox = $(element);
 
     if ($(tipCheckBox).is(':checked')) {
-      if (selectedTipList.length == 0) {
+      if (selectedTipList.length === 0) {
         selectedTipList = $(tipCheckBox).val().trim();
       }
       else {
@@ -233,5 +233,5 @@ function generateSelectedTipAngles() {
     }
   });
 
-  $('.selected-tips input').val(selectedTipList).change();
+  $('.selected-tips input').val(selectedTipList).trigger("change");
 }

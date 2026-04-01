@@ -1,4 +1,4 @@
-/**
+﻿/**
  # AddNote.js Documentation
  
  Author:  Jeffrey Whitney
@@ -213,7 +213,7 @@ const type_PesterAssignee = 3;      //Pester the Assignee only. It sends an emai
 $(document).ready(function () {
 
   //If there is no task ID, disable the submit button.
-  if (($('.task-id input').val() == null) || ($('.task-id input').val().length == 0)) {
+  if (($('.task-id input').val() === null) || ($('.task-id input').val().length === 0)) {
     $('.Submit').addClass("ui-state-disabled");
   }
 
@@ -221,30 +221,30 @@ $(document).ready(function () {
 
   //When the user clicks the submit button, we want to set the 'closeme' field to 1 so that when the form submits and comes 
   //back to the same page, it will know to call the parent page to close the dialog.
-  $('.Submit').click(function (e) {
+  $('.Submit').on("click", function (e) {
     e.preventDefault();
     $('.closeme input').val(1);
-    $(this.form).submit();
+    $(this.form).trigger("submit");
   });
 
   //When the user clicks one of the radio buttons to add time, we want to copy that value into the 'time-to-add' field, 
   //unless they choose 'X' which means they're hand-entering an amount of hours.
-  $('.add-time fieldset').change(function () {
-    var time_to_add = $('.add-time fieldset input[type="radio"]:checked').val();
-    if (time_to_add != 'X') {
+  $('.add-time fieldset').on("change", function () {
+    const time_to_add = $('.add-time fieldset input[type="radio"]:checked').val();
+    if (time_to_add !== 'X') {
       $('.time-to-add input').val(time_to_add);
     }
   });
 
   //If the user manually enters a time, we want to use that instead of the radio buttons.
   //'time-to-add' is the field that actually gets submitted to the workflow.
-  $('.amount-of-time input').change(function () {
+  $('.amount-of-time input').on("change", function () {
     $('.time-to-add input').val($('.amount-of-time input').val());
   });
 
   //This code runs when the form is reloaded after being submitted. If the closeme value is set to 1, it tells the parent page to close the dialog.
   //See 'Dialog Looping Mechanism' in the documentation above for an explanation of this.
-  if ($('.closeme input').val() == 1) {
+  if ($('.closeme input').val() === 1) {
     if ($('.nt input').val() > 3) {
       window.parent.postMessage('CloseDialogWithRefresh', '*');
     }
@@ -254,7 +254,7 @@ $(document).ready(function () {
 
   }
   //See 'User Permissions' in the documentation above for an explanation of this.
-  $('.network-user-name input').val($('.lf-user-name input').val().toUpperCase().substr($('.lf-user-name input').val().lastIndexOf('\\') + 1)).change();
+  $('.network-user-name input').val($('.lf-user-name input').val().toUpperCase().substr($('.lf-user-name input').val().lastIndexOf('\\') + 1)).trigger("change");
 
   /**
    * onloadlookupfinished Event Handler
@@ -263,7 +263,7 @@ $(document).ready(function () {
   $(document).on("onloadlookupfinished", function (e) {
     // If the note type is greater than 1 (i.e., requires higher permissions) and the user is not a Metrology User (user-type-id != 1)
     // 'nt' - Note Type. This is set in the query string when the form is opened.
-    if (($('.nt input').val() > 1) && ($('.user-type-id input').val() != 1)) {
+    if (($('.nt input').val() > 1) && ($('.user-type-id input').val() !== 1)) {
       $('.Submit').addClass("ui-state-disabled");
       $('.required-note textarea').addClass("ui-state-disabled");
       $('#q3').append('<p class="error"><b><font size="4">You do not have permission to add a note of this kind.</font></b></p>');

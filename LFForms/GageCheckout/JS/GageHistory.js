@@ -28,7 +28,7 @@ $(document).ready(function() {
   
   $(document).on("lookupcomplete",function(e) {
 
-    if (e.triggerId == 'Field14'){
+    if (e.triggerId === 'Field14'){
       processTicketDetailLookup();
     }
 
@@ -39,18 +39,18 @@ $(document).ready(function() {
 
 function processTicketDetailLookup(){
 
-  var ticketTypeID = $("#Field15").val();
+  const ticketTypeID = $("#Field15").val();
 
-  if (ticketTypeID == 1) {
+  if (ticketTypeID === 1) {
 	formatDateFields('Field60');
     $('#q70').show();
   }
-  if (ticketTypeID == 2) {
+  if (ticketTypeID === 2) {
     formatDateFields('Field35');
     formatDateFields('Field50');
     $('#q28').show();
   }
-  if (ticketTypeID == 3) {
+  if (ticketTypeID === 3) {
     //formatDateFields('?'); 
   }
 
@@ -73,7 +73,7 @@ function tabifyFormSections(){
 
 
 function generateGoBackButtons() {
-  var $goback_buttons = $(".gobackbutton");
+  const $goback_buttons = $(".gobackbutton");
   $goback_buttons.each(function(index) {
     $(this).replaceWith("<input class='return' type='button' value='Go Back' onclick='goBack()' />");
   });
@@ -81,17 +81,17 @@ function generateGoBackButtons() {
 
 
 function generateTicketDetailButtons() {
-  var $detail_buttons = $(".details-button-col input[type=text]");
+  const $detail_buttons = $(".details-button-col input[type=text]");
   $detail_buttons.each(function(index) {
-    var $ticket_id = $(this).val();
-    var $ticket_type_id = $(this).closest('.ticket-history-row').find('.ticket-type-id-col input[type=text]').val();
+    const $ticket_id = $(this).val();
+    const $ticket_type_id = $(this).closest('.ticket-history-row').find('.ticket-type-id-col input[type=text]').val();
     $(this).parent().append(`<input class='return' type='button' value='Details' onclick='callDetails(${$ticket_id}, ${$ticket_type_id})' />`);
   });
 }
 
 
 function generateTicketHistoryFilterRow() {
-  var $filter_row = "<tr id='filterRow'><td/><td><input type='text' name='txtTicketFilter_TicketNumber' id='txtTicketFilter_TicketNumber'></td><td><select name='cboTicketFilter_TicketType' id='cboTicketFilter_TicketType'></td><td><select name='cboTicketFilter_TicketStatus' id='cboTicketFilter_TicketStatus'></td><td><select name='cboTicketFilter_Operator' id='cboTicketFilter_Operator'></td><td><select name='cboTicketFilter_CellLeader' id='cboTicketFilter_CellLeader'></td><td><select name='cboTicketFilter_Department' id='cboTicketFilter_Department'></td><td><select name='cboTicketFilter_Machine' id='cboTicketFilter_Machine'></td><td><select name='cboTicketFilter_MachineGroup' id='cboTicketFilter_MachineGroup'></td><td><input type='text' name='txtTicketFilter_JobLot' id='txtTicketFilter_JobLot'></td><td><input type='text' name='txtTicketFilter_PartNumber' id='txtTicketFilter_PartNumber'></td><td><input type='text' name='txtTicketFilter_CreateStartDate' id='txtTicketFilter_CreateStartDate'><input type='text' name='txtTicketFilter_CreateEndDate' id='txtTicketFilter_CreateEndDate'></td><td/><td/></tr>";
+  const $filter_row = "<tr id='filterRow'><td/><td><input type='text' name='txtTicketFilter_TicketNumber' id='txtTicketFilter_TicketNumber'></td><td><select name='cboTicketFilter_TicketType' id='cboTicketFilter_TicketType'></td><td><select name='cboTicketFilter_TicketStatus' id='cboTicketFilter_TicketStatus'></td><td><select name='cboTicketFilter_Operator' id='cboTicketFilter_Operator'></td><td><select name='cboTicketFilter_CellLeader' id='cboTicketFilter_CellLeader'></td><td><select name='cboTicketFilter_Department' id='cboTicketFilter_Department'></td><td><select name='cboTicketFilter_Machine' id='cboTicketFilter_Machine'></td><td><select name='cboTicketFilter_MachineGroup' id='cboTicketFilter_MachineGroup'></td><td><input type='text' name='txtTicketFilter_JobLot' id='txtTicketFilter_JobLot'></td><td><input type='text' name='txtTicketFilter_PartNumber' id='txtTicketFilter_PartNumber'></td><td><input type='text' name='txtTicketFilter_CreateStartDate' id='txtTicketFilter_CreateStartDate'><input type='text' name='txtTicketFilter_CreateEndDate' id='txtTicketFilter_CreateEndDate'></td><td/><td/></tr>";
   $('.ticket-history-table table tbody tr:first').parent().prepend($filter_row);
 }
 
@@ -112,27 +112,27 @@ function callDetails(ticket_id, ticketTypeID) {
   $('.ticket-history-table').hide();
   $('#top-tab-links').hide();
   
-  $("#Field14").val(ticket_id).change();
-  $("#Field15").val(ticketTypeID).change();
+  $("#Field14").val(ticket_id).trigger("change");
+  $("#Field15").val(ticketTypeID).trigger("change");
   
   
 }
 
 
 function fillComboBoxWithUniqueValues(comboBoxSelector, rowSelector) {
-  var comboBox = $(comboBoxSelector);
-  var rowSelectorString = `[id^=${rowSelector}]`;
-  var comboSelectorString = `${comboBoxSelector} option`;
+  const comboBox = $(comboBoxSelector);
+  const rowSelectorString = `[id^=${rowSelector}]`;
+  const comboSelectorString = `${comboBoxSelector} option`;
   comboBox.empty();
   comboBox.append($('<option>', {
     value: "",
     text: ""
   }));
 
-  var rows = $(rowSelectorString);
+  const rows = $(rowSelectorString);
   rows.each(function() {
-    var row_Value = $(this).val();
-    var isExist = !! $(comboSelectorString).filter(function() {
+    const row_Value = $(this).val();
+    const isExist = !! $(comboSelectorString).filter(function() {
       return $(this).attr('value').toLowerCase() === row_Value.toLowerCase();
     }).length;
 
@@ -149,8 +149,8 @@ function fillComboBoxWithUniqueValues(comboBoxSelector, rowSelector) {
 	
 function sortComboBox(selector) {
   selector_options = `${selector} option`;
-  var options = $(selector_options);
-  var arr = options.map(function(_, o) {
+  const options = $(selector_options);
+  const arr = options.map(function(_, o) {
     return {
       t: $(o).text(),
       v: o.value
@@ -190,8 +190,8 @@ function goBack() {
   $('#q70').hide();
   
  
-  $("#Field14").val("").change();
-  $("#Field15").val("").change();
+  $("#Field14").val("").trigger("change");
+  $("#Field15").val("").trigger("change");
   
   $('#top-tab-links').show();
   $('.ticket-history-table').show();
@@ -200,7 +200,7 @@ function goBack() {
 
 
 function formatDateFields(selector){
-  var dateFields = $(`[id^='${selector}']`);
+  const dateFields = $(`[id^='${selector}']`);
   dateFields.each(function() {
     $(this).val($(this).val().split(" ")[0]);
   });
@@ -208,7 +208,7 @@ function formatDateFields(selector){
 
   
 function shouldFilterRows() {
-  var returnVal = false;
+  let returnVal = false;
   
   if ($('#txtTicketFilter_TicketNumber').val() !== '') {returnVal = true;}
   if ($('#cboTicketFilter_TicketType').val() !== '') {returnVal = true;}
@@ -234,24 +234,24 @@ function filterTicketHistoryRows() {
     return;
   }
 
-  var ticketNumberFilter = $('#txtTicketFilter_TicketNumber').val().toLowerCase();
-  var ticketTypeFilter = $('#cboTicketFilter_TicketType').val().toLowerCase();
-  var ticketStatusFilter = $('#cboTicketFilter_TicketStatus').val().toLowerCase();
-  var operatorFilter = $('#cboTicketFilter_Operator').val().toLowerCase();
-  var cellLeaderFilter = $('#cboTicketFilter_CellLeader').val().toLowerCase();
-  var departmentFilter = $('#cboTicketFilter_Department').val().toLowerCase();
-  var machineFilter = $('#cboTicketFilter_Machine').val().toLowerCase();
-  var machineGroupFilter = $('#cboTicketFilter_MachineGroup').val().toLowerCase();
-  var joblotFilter = $('#txtTicketFilter_JobLot').val().toLowerCase();
-  var partNumberFilter = $('#txtTicketFilter_PartNumber').val().toLowerCase();
-  var createStartDateFilter = Date.parse($('#txtTicketFilter_CreateStartDate').val());
-  var createEndDateFilter = Date.parse($('#txtTicketFilter_CreateEndDate').val());
+  const ticketNumberFilter = $('#txtTicketFilter_TicketNumber').val().toLowerCase();
+  const ticketTypeFilter = $('#cboTicketFilter_TicketType').val().toLowerCase();
+  const ticketStatusFilter = $('#cboTicketFilter_TicketStatus').val().toLowerCase();
+  const operatorFilter = $('#cboTicketFilter_Operator').val().toLowerCase();
+  const cellLeaderFilter = $('#cboTicketFilter_CellLeader').val().toLowerCase();
+  const departmentFilter = $('#cboTicketFilter_Department').val().toLowerCase();
+  const machineFilter = $('#cboTicketFilter_Machine').val().toLowerCase();
+  const machineGroupFilter = $('#cboTicketFilter_MachineGroup').val().toLowerCase();
+  const joblotFilter = $('#txtTicketFilter_JobLot').val().toLowerCase();
+  const partNumberFilter = $('#txtTicketFilter_PartNumber').val().toLowerCase();
+  const createStartDateFilter = Date.parse($('#txtTicketFilter_CreateStartDate').val());
+  const createEndDateFilter = Date.parse($('#txtTicketFilter_CreateEndDate').val());
 
-  var gage_rows = $(".ticket-history-row");
+  const gage_rows = $(".ticket-history-row");
   gage_rows.each(function(index) {
 
     if (ticketNumberFilter !== '') {
-      var row_ticketNumber = $(this).find('.ticket-number-col input[type=text]').val().toLowerCase();
+      const row_ticketNumber = $(this).find('.ticket-number-col input[type=text]').val().toLowerCase();
       if (!row_ticketNumber.includes(ticketNumberFilter)) {
         $(this).hide();
         return;
@@ -259,63 +259,63 @@ function filterTicketHistoryRows() {
     }
 
     if (ticketTypeFilter !== '') {
-      var row_ticketType = $(this).find('.ticket-type-col input[type=text]').val().toLowerCase();
-      if (ticketTypeFilter != row_ticketType) {
+      const row_ticketType = $(this).find('.ticket-type-col input[type=text]').val().toLowerCase();
+      if (ticketTypeFilter !== row_ticketType) {
         $(this).hide();
         return;
       }
     }
 
     if (ticketStatusFilter !== '') {
-      var row_ticketStatus = $(this).find('.ticket-status-col input[type=text]').val().toLowerCase();
-      if (ticketStatusFilter != row_ticketStatus) {
+      const row_ticketStatus = $(this).find('.ticket-status-col input[type=text]').val().toLowerCase();
+      if (ticketStatusFilter !== row_ticketStatus) {
         $(this).hide();
         return;
       }
     }
     
     if (operatorFilter !== '') {
-      var row_Operator = $(this).find('.operator-col input[type=text]').val().toLowerCase();
-      if (operatorFilter != row_Operator) {
+      const row_Operator = $(this).find('.operator-col input[type=text]').val().toLowerCase();
+      if (operatorFilter !== row_Operator) {
         $(this).hide();
         return;
       }
     }
     
     if (cellLeaderFilter !== '') {
-      var row_CellLeader = $(this).find('.cell-leader-col input[type=text]').val().toLowerCase();
-      if (cellLeaderFilter != row_CellLeader) {
+      const row_CellLeader = $(this).find('.cell-leader-col input[type=text]').val().toLowerCase();
+      if (cellLeaderFilter !== row_CellLeader) {
         $(this).hide();
         return;
       }
     }
     
     if (departmentFilter !== '') {
-      var row_department = $(this).find('.department-col input[type=text]').val().toLowerCase();
-      if (departmentFilter != row_department) {
+      const row_department = $(this).find('.department-col input[type=text]').val().toLowerCase();
+      if (departmentFilter !== row_department) {
         $(this).hide();
         return;
       }
     }
     
     if (machineFilter !== '') {
-      var row_Machine = $(this).find('.machine-name-col input[type=text]').val().toLowerCase();
-      if (machineFilter != row_Machine) {
+      const row_Machine = $(this).find('.machine-name-col input[type=text]').val().toLowerCase();
+      if (machineFilter !== row_Machine) {
         $(this).hide();
         return;
       }
     }
 
     if (machineGroupFilter !== '') {
-      var row_machineGroup = $(this).find('.machine-group-col input[type=text]').val().toLowerCase();
-      if (machineGroupFilter != row_machineGroup) {
+      const row_machineGroup = $(this).find('.machine-group-col input[type=text]').val().toLowerCase();
+      if (machineGroupFilter !== row_machineGroup) {
         $(this).hide();
         return;
       }
     }
 
     if (joblotFilter !== '') {
-      var row_JobLot = $(this).find('.joblot-col input[type=text]').val().toLowerCase();
+      const row_JobLot = $(this).find('.joblot-col input[type=text]').val().toLowerCase();
       if (!row_JobLot.includes(joblotFilter)) {
         $(this).hide();
         return;
@@ -323,7 +323,7 @@ function filterTicketHistoryRows() {
     }
     
     if (partNumberFilter !== '') {
-      var row_PartNumber = $(this).find('.part-number-col input[type=text]').val().toLowerCase();
+      const row_PartNumber = $(this).find('.part-number-col input[type=text]').val().toLowerCase();
       if (!row_PartNumber.includes(partNumberFilter)) {
         $(this).hide();
         return;
@@ -331,7 +331,7 @@ function filterTicketHistoryRows() {
     }
         
     if (createStartDateFilter !== '') {
-      var row_StartDate = Date.parse($(this).find('.creation-date-col input[type=text]').val());
+      const row_StartDate = Date.parse($(this).find('.creation-date-col input[type=text]').val());
       if (createStartDateFilter >= row_StartDate) {
         $(this).hide();
         return;
@@ -339,7 +339,7 @@ function filterTicketHistoryRows() {
     }
     
     if (createEndDateFilter !== '') {
-      var row_EndDate = Date.parse($(this).find('.creation-date-col input[type=text]').val());
+      const row_EndDate = Date.parse($(this).find('.creation-date-col input[type=text]').val());
       if (createEndDateFilter <= row_EndDate) {
         $(this).hide();
         return;

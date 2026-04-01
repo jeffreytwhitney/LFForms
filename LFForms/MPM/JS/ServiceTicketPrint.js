@@ -57,7 +57,7 @@ $(document).ready(function () {
   // Once external data lookups have finished, finalize the print view and trigger print in the parent.
   $(document).on("onloadlookupfinished", function () {
     // Update the visible title with the ticket number from the form.
-    var ticketNumber = $('.ticket-number input').val();
+    const ticketNumber = $('.ticket-number input').val();
     $('#form-title-wrap h1').text(`Service Ticket ${ticketNumber}`);
 
     // Convert all textareas into static divs to improve print layout.
@@ -83,14 +83,14 @@ $(document).ready(function () {
  *   - Replaces the parent element's entire inner HTML with a single div holding that value.
  *
  * Caveats
- * - Replacing the parent element’s HTML removes the original textarea and any siblings inside the same parent.
+ * - Replacing the parent elementï¿½s HTML removes the original textarea and any siblings inside the same parent.
  * - The value is injected as HTML (via .html()). If the value contains HTML, it will be interpreted.
  *   Escape content if raw text rendering is desired.
  */
 function generateTextAreaDivs() {
   $('.textarea-div').remove();
   $('textarea').each(function () {
-    let textarea_text = $(this).val();
+    const textarea_text = $(this).val();
     $(this).parent().html('<div class="textarea-div">' + textarea_text + '</div>');
   });
 }

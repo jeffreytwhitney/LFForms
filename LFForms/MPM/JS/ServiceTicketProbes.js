@@ -102,9 +102,9 @@ Permissions: Metrology Admins only.
  On DOM ready this script:
   - Normalizes the current user name into a network-style account and assigns it to `.network-user-name`.
   - Hides the `.Submit` action until an add/edit flow is initiated (and user is admin for edit).
-  - Sets the document title to “Service Ticket Probes”.
-  - Loads required UI libraries (via CDN) and resolves Bootstrap’s `button` plugin conflict.
-  - Subscribes to application events to inject “Edit”/“Add”/“Go Back” buttons and restore previously selected site from a cookie.
+  - Sets the document title to ï¿½Service Ticket Probesï¿½.
+  - Loads required UI libraries (via CDN) and resolves Bootstrapï¿½s `button` plugin conflict.
+  - Subscribes to application events to inject ï¿½Editï¿½/ï¿½Addï¿½/ï¿½Go Backï¿½ buttons and restore previously selected site from a cookie.
 
  External Dependencies (loaded/assumed):
   - jQuery (required)
@@ -112,7 +112,7 @@ Permissions: Metrology Admins only.
   - jquery-confirm (3.3.2) CSS/JS (loaded dynamically)
   - jQuery UI CSS (theme: smoothness) (loaded dynamically)
   - simplePagination (1.6) CSS (loaded dynamically)
-  - Bootstrap’s jQuery `button` plugin (assumed present; `$.fn.button.noConflict()` is called)
+  - Bootstrapï¿½s jQuery `button` plugin (assumed present; `$.fn.button.noConflict()` is called)
 
  Custom Events Consumed:
   - document#lookupcomplete: renders row Edit buttons, Go Back buttons, and admin-only Add button.
@@ -131,17 +131,17 @@ Permissions: Metrology Admins only.
   - `.edit-probe-is-active input[type=radio]`
   - `.edit-is-bns-value input`       : mirrored to `.edit-is-bns` radio group
   - `.edit-is-bns input[type=radio]`
-  - `.probe-table table`             : insertion point for “Add Probe” button
+  - `.probe-table table`             : insertion point for ï¿½Add Probeï¿½ button
   - `.edit-button-col input[type=text]` : value used as Probe ID to render per-row Edit button
-  - `.gobackbutton`                  : placeholder(s) replaced with a “Go Back” button
+  - `.gobackbutton`                  : placeholder(s) replaced with a ï¿½Go Backï¿½ button
 
  */
-var machineTypeMap = new Map();
-var  machineTypeNameMap = new Map();
+const machineTypeMap = new Map();
+const  machineTypeNameMap = new Map();
 $(document).ready(function () {
   // Normalize the current user name into a network-style account (substring after the last '\', uppercased)
-  var lfUserName = $('.lf-user-name input').val();
-  $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).change();
+  const lfUserName = $('.lf-user-name input').val();
+  $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
 
   // Hide submit until an action (add/edit) is initiated
   $('.Submit').hide();
@@ -157,37 +157,37 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
 
   // Resolve Bootstrap button plugin conflict (restore previous $.fn.button and alias to $.fn.bootstrapBtn)
-  var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
+  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
   $.fn.bootstrapBtn = bootstrapButton;
 
-  $('.Submit').click(function (e) { submitForm(e); });
+  $('.Submit').on("click", function (e) { submitForm(e); });
 
   // Keep "Is Active" radio in sync with its corresponding text/value field
   $(document).on('change', '.edit-is-active-value input', function () {
-    var isActive = $('.edit-is-active-value input').val();
+    const isActive = $('.edit-is-active-value input').val();
     $(`.edit-probe-is-active input[type='radio'][value='${isActive}']`).prop("checked", true);
   });
 
   // Keep "Is BNS" radio in sync with its corresponding text/value field
   $(document).on('change', '.edit-is-bns-value input', function () {
-    var setValue = $('.edit-is-bns-value input').val();
+    const setValue = $('.edit-is-bns-value input').val();
     $(`.edit-is-bns input[type='radio'][value='${setValue}']`).prop("checked", true);
   });
 
   // Keep "Is Ordered" radio in sync with its corresponding text/value field
   $(document).on('change', '.edit-is-ordered-value input', function () {
-    var setValue = $('.edit-is-ordered-value input').val();
+    const setValue = $('.edit-is-ordered-value input').val();
     $(`.edit-probe-is-ordered input[type='radio'][value='${setValue}']`).prop("checked", true);
   });
 
   $(document).on('change', '.edit-probe-is-ordered input[type=radio]', function () {
-    var isOrdered = $(`.edit-probe-is-ordered input[type='radio']:checked`).val();
-    $('.edit-is-ordered-value input').val(isOrdered).change();
+    const isOrdered = $(`.edit-probe-is-ordered input[type='radio']:checked`).val();
+    $('.edit-is-ordered-value input').val(isOrdered).trigger("change");
   });
 
   // Persist selected site to a cookie for 365 days
   $(document).on('change', '.site-name select', function () {
-    var sitename = $('.site-name select').val();
+    const sitename = $('.site-name select').val();
     $.cookie('site_name', sitename, { expires: 365, path: '/' });
   });
 
@@ -197,21 +197,21 @@ $(document).ready(function () {
 
   $(document).on('change', '[id^="Field49"]', function (e) {
     generateMachineTypeIDList('edit');
-    var machineTypeID = $(this).val();
-    var machineTypeName = machineTypeMap.get(Number(machineTypeID));
-    var machineTypeNameField = $(this).closest('tr').find('.edit-machine-type-name select');
+    const machineTypeID = $(this).val();
+    const machineTypeName = machineTypeMap.get(Number(machineTypeID));
+    const machineTypeNameField = $(this).closest('tr').find('.edit-machine-type-name select');
       machineTypeNameField.val(machineTypeName);
 
   });
 
   $(document).on('change', '[id^="Field50"]', function (e) {
-    var machineTypeName = $(this).val();
-    if (machineTypeName == "") {
+    const machineTypeName = $(this).val();
+    if (machineTypeName === "") {
       return;
     }
     
-    var machineTypeID = machineTypeNameMap.get(machineTypeName);
-    var machineTypeIDField = $(this).closest('tr').find('.edit-machine-type-id-col input');
+    const machineTypeID = machineTypeNameMap.get(machineTypeName);
+    const machineTypeIDField = $(this).closest('tr').find('.edit-machine-type-id-col input');
     machineTypeIDField.val(machineTypeID);
     generateMachineTypeIDList('edit');
 
@@ -224,8 +224,8 @@ $(document).ready(function () {
     generateGoBackButtons();
     loadMachineTypeMap();
     if (isAdminUser()) {
-      if ($('.add-button').length == 0) {
-        var add_button = '<div class="ui-button add-button" onclick="callAddProbe()"><span title="Add Probe" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Probe</div>';
+      if ($('.add-button').length === 0) {
+        const add_button = '<div class="ui-button add-button" onclick="callAddProbe()"><span title="Add Probe" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Probe</div>';
         $(add_button).insertBefore('.probe-table table');
       }
     }
@@ -234,9 +234,9 @@ $(document).ready(function () {
   // On initial load completion, propagate user change and restore site from cookie
   $(document).on("onloadlookupfinished", function (e) {
     $('.network-user-name input').trigger("change");
-    var sitename = $.cookie('site_name');
-    if (sitename != null) {
-      $('.site-name select').val(sitename).change();
+    const sitename = $.cookie('site_name');
+    if (sitename !== null) {
+      $('.site-name select').val(sitename).trigger("change");
     }
   });
 
@@ -255,7 +255,7 @@ $(document).ready(function () {
  */
 function callAddProbe() {
   $(`.action-choice input[type='radio'][value='1']`).prop("checked", true);
-  $('.add-id input').val(1).change();
+  $('.add-id input').val(1).trigger("change");
   $('.Submit').show();
 }
 
@@ -271,7 +271,7 @@ function callAddProbe() {
  */
 function callEditProbe(probeID) {
   $(`.action-choice input[type='radio'][value='2']`).prop("checked", true);
-  $('.edit-id input').val(probeID).change();
+  $('.edit-id input').val(probeID).trigger("change");
   if (isAdminUser()) {
     $('.Submit').show();
   }
@@ -286,8 +286,8 @@ function callEditProbe(probeID) {
  * @returns {void}
  */
 function callGoBack() {
-  $(".add-id input").val(0).change();
-  $(".edit-id input").val(0).change();
+  $(".add-id input").val(0).trigger("change");
+  $(".edit-id input").val(0).trigger("change");
   $('.Submit').hide();
 }
 
@@ -299,7 +299,7 @@ function callGoBack() {
  * @returns {void}
  */
 function generateGoBackButtons() {
-  var $goback_buttons = $(".gobackbutton");
+  const $goback_buttons = $(".gobackbutton");
   $goback_buttons.each(function (index) {
     $(this).parent().append("<div id='go-back' class='ui-button ui-corner-all ui-widget' onclick='callGoBack()'><span class='ui-icon ui-icon-arrowreturnthick-1-w'></span>Go Back</div>");
   });
@@ -313,11 +313,11 @@ function generateGoBackButtons() {
  * @returns {void}
  */
 function generateMachineTypeIDList(add_or_edit) {
-  var machineTypeIDList = "";
-  var selector = "";
-  var machine_ids_selector = "";
+  let machineTypeIDList = "";
+  let selector = "";
+  let machine_ids_selector = "";
 
-  if (add_or_edit == 'edit') {
+  if (add_or_edit === 'edit') {
     selector = '[id^="Field49"]';
     machine_ids_selector = '.edit-machine-type-ids input';
   } else {
@@ -327,7 +327,7 @@ function generateMachineTypeIDList(add_or_edit) {
 
 
   $(selector).each(function () {
-    var machineTypeID = $(this).val();
+    const machineTypeID = $(this).val();
     if (machineTypeIDList.length > 0) {
       machineTypeIDList = machineTypeIDList + ", ";
     }
@@ -360,14 +360,14 @@ function generateMachineTypeIDList(add_or_edit) {
  * // Result: Renders an Edit button invoking callEditProbe(123)
  */
 function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFunction) {
-  var selectionString = buttonSelector + " input[type=text]";
-  var buttons = $(selectionString);
+  const selectionString = buttonSelector + " input[type=text]";
+  const buttons = $(selectionString);
   buttons.each(function () {
-    var btn_value = $(this).val();
-    var btn_html = `<div class='table-button ui-button' onclick='${buttonFunction}(${btn_value})'><span title='${buttonTitle}' class='ui-button-icon ui-icon ${buttonClass}'/></div>`
+    const btn_value = $(this).val();
+    const btn_html = `<div class='table-button ui-button' onclick='${buttonFunction}(${btn_value})'><span title='${buttonTitle}' class='ui-button-icon ui-icon ${buttonClass}'/></div>`
 
-    var has_button = $(this).parent().find(`.${buttonClass}`).length;
-    if (has_button == 0) {
+    const has_button = $(this).parent().find(`.${buttonClass}`).length;
+    if (has_button === 0) {
       $(this).parent().append(btn_html);
     }
   });
@@ -380,7 +380,7 @@ function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFu
  * @returns {boolean} True if `.user-isadmin input` value is `'1'`; otherwise false.
  */
 function isAdminUser() {
-  if ($('.user-isadmin input').val() == '1') {
+  if ($('.user-isadmin input').val() === '1') {
     return true;
   }
   return false;
@@ -392,9 +392,9 @@ function isAdminUser() {
  */
 function loadMachineTypeMap() {
 
-  if (machineTypeMap.keys.length == 0) {
-    var machineType_rows = $('.machine-type-lookup-table table tbody tr');
-    if (machineType_rows.length == 0) {
+  if (machineTypeMap.keys.length === 0) {
+    const machineType_rows = $('.machine-type-lookup-table table tbody tr');
+    if (machineType_rows.length === 0) {
       return;
     }
     machineType_rows.each(function (index) {
@@ -420,15 +420,15 @@ function submitForm(e) {
 
 
 function validateEdit() {
-  var is_valid = true;
+  let is_valid = true;
   $(`.edit-probe-is-ordered input[type='radio']`).removeClass('parsley-error');
   $('#is-ordered-value-error').remove();
 
-  var currentQuantity = Number($('.edit-current-quantity input').val());
-  var originalQuantity = Number($('.edit-original-quantity input').val());
-  var isOrdered = Number($('.edit-is-ordered-value input').val());
+  const currentQuantity = Number($('.edit-current-quantity input').val());
+  const originalQuantity = Number($('.edit-original-quantity input').val());
+  const isOrdered = Number($('.edit-is-ordered-value input').val());
 
-  if ((isOrdered == 1) && (currentQuantity > originalQuantity)) {
+  if ((isOrdered === 1) && (currentQuantity > originalQuantity)) {
     $(`.edit-probe-is-ordered input[type='radio']`).parent().addClass('parsley-error');
     $(`.edit-probe-is-ordered`).append("<ul id='is-ordered-value-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Is Ordered cannot be 'Yes' when the Current Quantity is greater than its original value.</li></ul>");
     is_valid = false;

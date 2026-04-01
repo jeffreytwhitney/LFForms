@@ -122,12 +122,12 @@ Key Concepts:
 
 $(document).ready(function () {
   // Derive and set the network username (uppercase sans domain) See 'User Permissions' above
-  var lfUserName = $('.lf-user-name input').val();
-  $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).change();
+  const lfUserName = $('.lf-user-name input').val();
+  $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
 
   // Hide submit by default; shown only for allowed actions/roles
   $('.Submit').hide();
-  $('.Submit').click(function (e) { submitForm(e); });
+  $('.Submit').on("click", function (e) { submitForm(e); });
 
   // Set document title for the maintenance page
   $(document).prop('title', 'Department Maintenance');
@@ -140,20 +140,20 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
 
   // Resolve Bootstrap/jQuery UI button plugin conflict
-  var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
+  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
   $.fn.bootstrapBtn = bootstrapButton;
 
   // When the text "parent name" field changes, mirror it to the select (edit mode)
   $(document).on('change', '.edit-db-parent-name input', function (e) {
-    var editParentName = $('.edit-db-parent-name input').val();
+    const editParentName = $('.edit-db-parent-name input').val();
     if (editParentName.length > 0) {
-      $('.edit-parent-name select').val(editParentName).change();
+      $('.edit-parent-name select').val(editParentName).trigger("change");
     }
   });
 
   // Persist selected site in a cookie
   $(document).on('change', '.site-name select', function () {
-    var sitename = $('.site-name select').val();
+    const sitename = $('.site-name select').val();
     $.cookie('site_name', sitename, { expires: 365, path: '/' });
   });
 
@@ -161,8 +161,8 @@ $(document).ready(function () {
   $(document).on('lookupcomplete', function (e) {
     generateTableButtons(".edit-button-col", "ui-icon-pencil", "Edit Department", "callEditDepartment");
     if (isAdminUser()) {
-      if ($('.add-button').length == 0) {
-        var add_button = '<div class="ui-button add-button" onclick="callAddDepartment()"><span title="Add Department" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Department</div>'
+      if ($('.add-button').length === 0) {
+        const add_button = '<div class="ui-button add-button" onclick="callAddDepartment()"><span title="Add Department" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Department</div>'
         $(add_button).insertBefore('.department-table table');
       }
     }
@@ -172,9 +172,9 @@ $(document).ready(function () {
   $(document).on("onloadlookupfinished", function (e) {
     generateGoBackButtons();
     $('.network-user-name input').trigger("change");
-    var sitename = $.cookie('site_name');
-    if (sitename != null) {
-      $('.site-name select').val(sitename).change();
+    const sitename = $.cookie('site_name');
+    if (sitename !== null) {
+      $('.site-name select').val(sitename).trigger("change");
     }
   });
 
@@ -190,7 +190,7 @@ $(document).ready(function () {
  */
 function callAddDepartment() {
   $(`.action-choice input[type='radio'][value='1']`).prop("checked", true);
-  $('.add-department-id input').val(1).change();
+  $('.add-department-id input').val(1).trigger("change");
   $('.Submit').show();
 }
 
@@ -206,7 +206,7 @@ function callAddDepartment() {
  */
 function callEditDepartment(departmentID) {
   $(`.action-choice input[type='radio'][value='2']`).prop("checked", true);
-  $('.edit-department-id input').val(departmentID).change();
+  $('.edit-department-id input').val(departmentID).trigger("change");
   if (isAdminUser()) {
     $('.Submit').show();
   }
@@ -220,8 +220,8 @@ function callEditDepartment(departmentID) {
  *   This is done by use of LaserFiche Field Rules, which show/hide panels based on these values.
  */
 function callGoBack() {
-  $(".add-department-id input").val(0).change();
-  $(".edit-department-id input").val(0).change();
+  $(".add-department-id input").val(0).trigger("change");
+  $(".edit-department-id input").val(0).trigger("change");
   $('.Submit').hide();
 }
 
@@ -232,7 +232,7 @@ function callGoBack() {
  * This is done because there is no way to add a button in the LF Forms designer.
  */
 function generateGoBackButtons() {
-  var $goback_buttons = $(".gobackbutton");
+  const $goback_buttons = $(".gobackbutton");
   $goback_buttons.each(function (index) {
     $(this).parent().append("<div id='go-back' class='ui-button ui-corner-all ui-widget' onclick='callGoBack()'><span class='ui-icon ui-icon-arrowreturnthick-1-w'></span>Go Back</div>");
   });
@@ -250,14 +250,14 @@ function generateGoBackButtons() {
  * @param {string} buttonFunction  Function name to invoke with the row value.
  */
 function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFunction) {
-  var selectionString = buttonSelector + " input[type=text]";
-  var buttons = $(selectionString);
+  const selectionString = buttonSelector + " input[type=text]";
+  const buttons = $(selectionString);
   buttons.each(function () {
-    var btn_value = $(this).val();
-    var btn_html = `<div class='table-button ui-button' onclick='${buttonFunction}(${btn_value})'><span title='${buttonTitle}' class='ui-button-icon ui-icon ${buttonClass}' /></div>`
+    const btn_value = $(this).val();
+    const btn_html = `<div class='table-button ui-button' onclick='${buttonFunction}(${btn_value})'><span title='${buttonTitle}' class='ui-button-icon ui-icon ${buttonClass}' /></div>`
 
-    var has_button = $(this).parent().find(`.${buttonClass}`).length;
-    if (has_button == 0) {
+    const has_button = $(this).parent().find(`.${buttonClass}`).length;
+    if (has_button === 0) {
       $(this).parent().append(btn_html);
     }
   });
@@ -269,7 +269,7 @@ function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFu
  * @returns {boolean} True if `.user-isadmin` equals '1'; otherwise false.
  */
 function isAdminUser() {
-  if ($('.user-isadmin input').val() == '1') {
+  if ($('.user-isadmin input').val() === '1') {
     return true;
   }
   return false;
@@ -285,12 +285,12 @@ function isAdminUser() {
  * The stored procedure expects a 0 when there is no parent department.
  */
 function submitForm(e) {
-  var editParentID = Number($('.edit-parent-id input').val());
-  var addParentID = Number($('.add-parent-id input').val());
-  if (editParentID == 0) {
+  const editParentID = Number($('.edit-parent-id input').val());
+  const addParentID = Number($('.add-parent-id input').val());
+  if (editParentID === 0) {
     $('.edit-parent-id input').val(0);
   }
-  if (addParentID == 0) {
+  if (addParentID === 0) {
     $('.add-parent-id input').val(0);
   }
 

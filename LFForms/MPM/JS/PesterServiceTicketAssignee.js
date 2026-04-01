@@ -131,18 +131,18 @@ $(document).ready(function () {
 	$("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
 	$("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
 	$("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-	var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
+	const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
 	$.fn.bootstrapBtn = bootstrapButton;
 
 
-	if ($('.closeme input').val() == 1) {
+	if ($('.closeme input').val() === 1) {
 		window.parent.postMessage('CloseDialog', '*');
 	}
 
-	var lfUserName = $('.lf-user-name input').val();
-	var networkUserName = $('.network-user-name input').val();
-	if (lfUserName != 'Anonymous User' && networkUserName == '') {
-		$('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).change();
+	const lfUserName = $('.lf-user-name input').val();
+	const networkUserName = $('.network-user-name input').val();
+	if (lfUserName !== 'Anonymous User' && networkUserName === '') {
+		$('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
 	}
 
 	// Finalize initial state once all lookups are finished.
@@ -156,11 +156,11 @@ $(document).ready(function () {
 		$('.Submit').show();
 		$('.note-text textarea').removeClass("ui-state-disabled");
 
-		if ($('.tid input').val() == '') {
+		if ($('.tid input').val() === '') {
 			$('.Submit').hide();
 			$('.note-text textarea').addClass("ui-state-disabled");
 		}
-		if ($('.employee-number input').val() == '') {
+		if ($('.employee-number input').val() === '') {
 			$('.Submit').hide();
 			$('.note-text textarea').addClass("ui-state-disabled");
 		}

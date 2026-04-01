@@ -129,12 +129,12 @@ Permissions: Metrology Admins only.
  - '.gobackbutton': placeholder elements converted into standardized "Go Back" buttons.
 
  */
-var machineTypeMap = new Map();
-var machineTypeNameMap = new Map();
+const machineTypeMap = new Map();
+const machineTypeNameMap = new Map();
 $(document).ready(function () {
   // Normalize logged-in user: extract USERNAME from DOMAIN\USERNAME, uppercase it, and sync the bound field.
-  var lfUserName = $('.lf-user-name input').val();
-  $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).change();
+  const lfUserName = $('.lf-user-name input').val();
+  $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
 
   // Hide submit until an action is chosen and permitted.
   $('.Submit').hide();
@@ -150,12 +150,12 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
 
   // Resolve Bootstrap/jQuery UI button name collision if Bootstrap is present.
-  var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
+  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
   $.fn.bootstrapBtn = bootstrapButton;
 
   // Keep ".edit-Machine-is-active" radios in sync when the bound value field changes.
   $(document).on('change', '.edit-is-active-value input', function () {
-    var isActive = $('.edit-is-active-value input').val();
+    const isActive = $('.edit-is-active-value input').val();
     console.log(`Setting edit-machine-is-active radio to ${isActive}`);
     $(`.edit-machine-is-active input[type='radio'][value='${isActive}']`).prop("checked", true);
   });
@@ -163,9 +163,9 @@ $(document).ready(function () {
 
   $(document).on('change', '.edit-machine-type-id input', function (e) {
     
-    var machineTypeID = $(this).val();
-    var machineTypeName = machineTypeMap.get(Number(machineTypeID));
-    var machineTypeNameField = $('.edit-machine-type-name select');
+    const machineTypeID = $(this).val();
+    const machineTypeName = machineTypeMap.get(Number(machineTypeID));
+    const machineTypeNameField = $('.edit-machine-type-name select');
     machineTypeNameField.val(machineTypeName);
 
   });
@@ -174,7 +174,7 @@ $(document).ready(function () {
 
   // Persist selected site to cookie to maintain user preference across sessions.
   $(document).on('change', '.site-name select', function () {
-    var sitename = $('.site-name select').val();
+    const sitename = $('.site-name select').val();
     $.cookie('site_name', sitename, { expires: 365, path: '/' });
   });
 
@@ -184,8 +184,8 @@ $(document).ready(function () {
     generateGoBackButtons();
     loadMachineTypeMap();
     if (isAdminUser()) {
-      if ($('.add-button').length == 0) {
-        var add_button = '<div class="ui-button add-button" onclick="callAddMachine()"><span title="Add Machine" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Machine</div>';
+      if ($('.add-button').length === 0) {
+        const add_button = '<div class="ui-button add-button" onclick="callAddMachine()"><span title="Add Machine" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Machine</div>';
         $(add_button).insertBefore('.machine-table table');
       }
     }
@@ -194,9 +194,9 @@ $(document).ready(function () {
   // On initial load, restore the last selected site and ensure the normalized username is propagated.
   $(document).on("onloadlookupfinished", function (e) {
     $('.network-user-name input').trigger("change");
-    var sitename = $.cookie('site_name');
-    if (sitename != null) {
-      $('.site-name select').val(sitename).change();
+    const sitename = $.cookie('site_name');
+    if (sitename !== null) {
+      $('.site-name select').val(sitename).trigger("change");
     }
   });
 
@@ -211,7 +211,7 @@ $(document).ready(function () {
  */
 function callAddMachine() {
   $(`.action-choice input[type='radio'][value='1']`).prop("checked", true);
-  $('.add-id input').val(1).change();
+  $('.add-id input').val(1).trigger("change");
   $('.Submit').show();
 }
 
@@ -226,7 +226,7 @@ function callAddMachine() {
  */
 function callEditMachine(MachineID) {
   $(`.action-choice input[type='radio'][value='2']`).prop("checked", true);
-  $('.edit-id input').val(MachineID).change();
+  $('.edit-id input').val(MachineID).trigger("change");
   if (isAdminUser()) {
     $('.Submit').show();
   }
@@ -239,8 +239,8 @@ function callEditMachine(MachineID) {
  * - Hides the Submit button.
  */
 function callGoBack() {
-  $(".add-id input").val(0).change();
-  $(".edit-id input").val(0).change();
+  $(".add-id input").val(0).trigger("change");
+  $(".edit-id input").val(0).trigger("change");
   $('.Submit').hide();
 }
 
@@ -250,7 +250,7 @@ function callGoBack() {
  * This ensures consistent look-and-feel and single-click behavior.
  */
 function generateGoBackButtons() {
-  var $goback_buttons = $(".gobackbutton");
+  const $goback_buttons = $(".gobackbutton");
   $goback_buttons.each(function (index) {
     $(this).parent().append("<div id='go-back' class='ui-button ui-corner-all ui-widget' onclick='callGoBack()'><span class='ui-icon ui-icon-arrowreturnthick-1-w'></span>Go Back</div>");
   });
@@ -267,14 +267,14 @@ function generateGoBackButtons() {
  * @param {string} buttonFunction - Global function name to invoke on click, receives the placeholder value.
  */
 function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFunction) {
-  var selectionString = buttonSelector + " input[type=text]";
-  var buttons = $(selectionString);
+  const selectionString = buttonSelector + " input[type=text]";
+  const buttons = $(selectionString);
   buttons.each(function () {
-    var btn_value = $(this).val();
-    var btn_html = `<div class='table-button ui-button' onclick='${buttonFunction}(${btn_value})'><span title='${buttonTitle}' class='ui-button-icon ui-icon ${buttonClass}'/></div>`
+    const btn_value = $(this).val();
+    const btn_html = `<div class='table-button ui-button' onclick='${buttonFunction}(${btn_value})'><span title='${buttonTitle}' class='ui-button-icon ui-icon ${buttonClass}'/></div>`
 
-    var has_button = $(this).parent().find(`.${buttonClass}`).length;
-    if (has_button == 0) {
+    const has_button = $(this).parent().find(`.${buttonClass}`).length;
+    if (has_button === 0) {
       $(this).parent().append(btn_html);
     }
   });
@@ -289,7 +289,7 @@ function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFu
  * @returns {boolean} True if current user is admin; otherwise false.
  */
 function isAdminUser() {
-  if ($('.user-isadmin input').val() == '1') {
+  if ($('.user-isadmin input').val() === '1') {
     return true;
   }
   return false;
@@ -301,9 +301,9 @@ function isAdminUser() {
 */
 function loadMachineTypeMap() {
 
-  if (machineTypeMap.keys.length == 0) {
-    var machineType_rows = $('.machine-type-lookup-table table tbody tr');
-    if (machineType_rows.length == 0) {
+  if (machineTypeMap.keys.length === 0) {
+    const machineType_rows = $('.machine-type-lookup-table table tbody tr');
+    if (machineType_rows.length === 0) {
       return;
     }
     machineType_rows.each(function (index) {

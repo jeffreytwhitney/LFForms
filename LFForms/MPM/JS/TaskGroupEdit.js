@@ -1,5 +1,5 @@
-/*!
-# TaskGroupEdit.js � Documentation
+﻿/*!
+# TaskGroupEdit.js ï¿½ Documentation
 
   Author:   Jeffrey Whitney
             jtwhitney@machine.com
@@ -158,9 +158,9 @@ KEY CONCEPTS:
 - simplePagination.css (styles only)
 
 Dialogs
-- `popupCancelNote(e)` � requires non-empty note; writes to `#Field90`, submits.
-- `popupCompletionNote(e)` � optional note; writes to `#Field90`, submits.
-- `popupWaitingNote(e)` � requires non-empty note; writes to `#Field90`, submits.
+- `popupCancelNote(e)` ï¿½ requires non-empty note; writes to `#Field90`, submits.
+- `popupCompletionNote(e)` ï¿½ optional note; writes to `#Field90`, submits.
+- `popupWaitingNote(e)` ï¿½ requires non-empty note; writes to `#Field90`, submits.
 
 ## Validation rules
 
@@ -188,10 +188,10 @@ const status_NotSched = 7;
  * - taskTypeMap: id -> name
  * - taskTypeByNameMap: name -> id
  */
-var assigneeMap = new Map();
-var assigneeNameMap = new Map();
-var taskTypeMap = new Map();
-var taskTypeByNameMap = new Map();
+const assigneeMap = new Map();
+const assigneeNameMap = new Map();
+const taskTypeMap = new Map();
+const taskTypeByNameMap = new Map();
 
 $(document).ready(function () {
   /* Page bootstrap: set title, load assets, wire submit, compute user display name */
@@ -201,17 +201,17 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
 
-  $('.Submit').click(function (e) { submitForm(e); });
+  $('.Submit').on("click", function (e) { submitForm(e); });
 
   /* Avoid Bootstrap/jQuery UI plugin name conflicts */
-  var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
+  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
   $.fn.bootstrapBtn = bootstrapButton;
 
   /* Compute DOMAIN\user -> USER and push into .network-user-name. See 'User Permissions' above */
-  $('.network-user-name input').val($('.lf-username input').val().toUpperCase().substr($('.lf-username input').val().lastIndexOf('\\') + 1)).change();
+  $('.network-user-name input').val($('.lf-username input').val().toUpperCase().substr($('.lf-username input').val().lastIndexOf('\\') + 1)).trigger("change");
 
   /* If host requests dialog close, notify parent See 'Dialog Looping Mechanism' above */
-  if ($('.closeme input').val() == 1) {
+  if ($('.closeme input').val() === 1) {
     window.parent.postMessage('CloseDialogWithRefresh', '*');
   }
 
@@ -244,7 +244,7 @@ $(document).ready(function () {
     $('.network-user-name input').trigger("change");
 
     /* Ensure site-specific assignee combo is populated */
-    if (($('.site-id input').val() != '0') && ($('.site-id input').val().length > 0)) {
+    if (($('.site-id input').val() !== '0') && ($('.site-id input').val().length > 0)) {
       if ($('.assignee-name-combo select option').length < 2) {
         $('.site-id input').trigger("change");
       }
@@ -293,31 +293,31 @@ $(document).ready(function () {
  */
 function checkPermissions() {
 
-  var user_id = $(".user-id input").val();
-  var is_active_user = $(".user-isactive input").val();
-  var user_type_id = $(".user-type-id input").val();
-  var return_val = true;
+  const user_id = $(".user-id input").val();
+  const is_active_user = $(".user-isactive input").val();
+  const user_type_id = $(".user-type-id input").val();
+  let return_val = true;
 
-  if ((user_type_id == null) || (user_type_id == '')) {
+  if ((user_type_id === null) || (user_type_id === '')) {
     return_val = false;
   }
 
-  if ((user_id == null) || (user_id == '')) {
+  if ((user_id === null) || (user_id === '')) {
     return_val = false;
   }
-  if ((is_active_user == null) || (is_active_user == '')) {
-    return_val = false;
-  }
-
-  if (is_active_user == '0') {
+  if ((is_active_user === null) || (is_active_user === '')) {
     return_val = false;
   }
 
-  if (user_id == '0') {
+  if (is_active_user === '0') {
     return_val = false;
   }
 
-  if (user_type_id != '1') {
+  if (user_id === '0') {
+    return_val = false;
+  }
+
+  if (user_type_id !== '1') {
     return_val = false;
   }
 
@@ -336,13 +336,13 @@ function checkPermissions() {
  */
 function hasPreexistingTask(taskName, taskID, opNumber) {
 
-  var return_val = false;
-  var preexisting_rows = $('.preexisting-task-lookup-table table tbody tr');
+  let return_val = false;
+  const preexisting_rows = $('.preexisting-task-lookup-table table tbody tr');
   preexisting_rows.each(function (index) {
-    let preexistingTaskName = $(this).find('.preexisting-task-lookup-table-name input').val();
-    let preexistingTaskID = Number($(this).find('.preexisting-task-lookup-table-id input').val());
-    let preexistingOpNumber = $(this).find('.preexisting-task-lookup-table-op input').val();
-    if ((taskName == preexistingTaskName) && (opNumber == preexistingOpNumber) && (taskID != preexistingTaskID)) {
+    const preexistingTaskName = $(this).find('.preexisting-task-lookup-table-name input').val();
+    const preexistingTaskID = Number($(this).find('.preexisting-task-lookup-table-id input').val());
+    const preexistingOpNumber = $(this).find('.preexisting-task-lookup-table-op input').val();
+    if ((taskName === preexistingTaskName) && (opNumber === preexistingOpNumber) && (taskID !== preexistingTaskID)) {
       return_val = true;
     }
   });
@@ -355,26 +355,26 @@ function hasPreexistingTask(taskName, taskID, opNumber) {
  * - Clears UI extras, unselects all, and triggers `.tid` change to refresh.
  */
 function filterTable() {
-  if ($('#filterRow').length == 0) {
+  if ($('#filterRow').length === 0) {
     return;
   }
 
-  var taskNameFilterValue = $('#txtFilter_TaskName').val();
-  var taskTypeFilterVal = $('#cboFilter_TaskType').val();
-  var assigneeFilterVal = $('#cboFilter_Assignee').val();
+  const taskNameFilterValue = $('#txtFilter_TaskName').val();
+  const taskTypeFilterVal = $('#cboFilter_TaskType').val();
+  const assigneeFilterVal = $('#cboFilter_Assignee').val();
 
   $('.ftname input').val(taskNameFilterValue);
 
-  if ((taskTypeFilterVal != null) && (taskTypeFilterVal.length > 0)) {
-    let taskTypeID = taskTypeByNameMap.get(taskTypeFilterVal);
+  if ((taskTypeFilterVal !== null) && (taskTypeFilterVal.length > 0)) {
+    const taskTypeID = taskTypeByNameMap.get(taskTypeFilterVal);
     $('.fttid input').val(taskTypeID);
   }
   else {
     $('.fttid input').val(0);
   }
 
-  if ((assigneeFilterVal != null) && (assigneeFilterVal.length > 0)) {
-    let assigneeID = assigneeNameMap.get(assigneeFilterVal);
+  if ((assigneeFilterVal !== null) && (assigneeFilterVal.length > 0)) {
+    const assigneeID = assigneeNameMap.get(assigneeFilterVal);
     $('.faid input').val(assigneeID);
   }
   else {
@@ -394,16 +394,16 @@ function filterTable() {
  * Side effects: updates the hidden CSV field.
  */
 function fillSelectedIDs() {
-  var checkboxes = $("input[id^='Field21']");
-  var selectedIDField = $('.selected-id-list input');
+  const checkboxes = $("input[id^='Field21']");
+  const selectedIDField = $('.selected-id-list input');
   $(selectedIDField).val('');
-  if (checkboxes.length == 0) {
+  if (checkboxes.length === 0) {
     return;
   }
   checkboxes.each(function () {
     if ($(this).is(':checked')) {
-      var taskID = $(this).closest('tr').find('.task-id-col input').val();
-      if (selectedIDField.val() == '') {
+      const taskID = $(this).closest('tr').find('.task-id-col input').val();
+      if (selectedIDField.val() === '') {
         selectedIDField.val(taskID);
       }
       else {
@@ -421,21 +421,21 @@ function fillSelectedIDs() {
  * @param {string} checkboxClass - CSS class for appended checkbox.
  */
 function generateTableCheckBox(selector, checkboxClass) {
-  var selectionString = selector + " input[type=text]";
-  var checkboxes = $(selectionString);
+  const selectionString = selector + " input[type=text]";
+  const checkboxes = $(selectionString);
   checkboxes.each(function () {
-    var btn_value = $(this).val();
-    if (btn_value == '1') {
-      var btn_html = "<input class='" + checkboxClass + "' type='checkbox' disabled checked/>";
-      var has_button = $(this).parent().find(`.${checkboxClass}`).length;
-      if (has_button == 0) {
+    const btn_value = $(this).val();
+    if (btn_value === '1') {
+      const btn_html = "<input class='" + checkboxClass + "' type='checkbox' disabled checked/>";
+      const has_button = $(this).parent().find(`.${checkboxClass}`).length;
+      if (has_button === 0) {
         $(this).parent().append(btn_html);
       }
     }
     else {
-      var btn_html = "<input class='" + checkboxClass + "' type='checkbox' disabled/>";
-      var has_button = $(this).parent().find(`.${checkboxClass}`).length;
-      if (has_button == 0) {
+      const btn_html = "<input class='" + checkboxClass + "' type='checkbox' disabled/>";
+      const has_button = $(this).parent().find(`.${checkboxClass}`).length;
+      if (has_button === 0) {
         $(this).parent().append(btn_html);
       }
     }
@@ -453,8 +453,8 @@ function generateTableCheckBox(selector, checkboxClass) {
  */
 function generateFilterRow() {
 
-  if ($('#filterRow').length == 0) {
-    var filter_row = "<TR id='filterRow'><TH><input name='chkSelectAll' id='chkSelectAll' type='checkbox' class='check-all-manual'></TH><TH/><TH><input id='txtFilter_TaskName' type='text'/></TH><TH><select id='cboFilter_TaskType'/></TH><TH/><TH><select id='cboFilter_Assignee'/></TH><TH/><TH/><TH/><TH/><TH/><TH/><TH/></TR>"
+  if ($('#filterRow').length === 0) {
+    const filter_row = "<TR id='filterRow'><TH><input name='chkSelectAll' id='chkSelectAll' type='checkbox' class='check-all-manual'></TH><TH/><TH><input id='txtFilter_TaskName' type='text'/></TH><TH><select id='cboFilter_TaskType'/></TH><TH/><TH><select id='cboFilter_Assignee'/></TH><TH/><TH/><TH/><TH/><TH/><TH/><TH/></TR>"
 
     $('.tasklist-table table thead').append(filter_row);
 
@@ -473,19 +473,19 @@ function generateFilterRow() {
     $("#cboFilter_TaskType").on("change", function () { filterTable(); });
     $("#cboFilter_Assignee").on("change", function () { filterTable(); });
 
-    $("#txtFilter_TaskName").dblclick(function () { $("#txtFilter_TaskName").val(null).change(); });
-    $("#cboFilter_TaskType").dblclick(function () { $("#cboFilter_TaskType").val(0).change(); });
-    $("#cboFilter_Assignee").dblclick(function () { $("#cboFilter_Assignee").val(0).change(); });
+    $("#txtFilter_TaskName").on("dblclick", function () { $("#txtFilter_TaskName").val(null).trigger("change"); });
+    $("#cboFilter_TaskType").on("dblclick", function () { $("#cboFilter_TaskType").val(0).trigger("change"); });
+    $("#cboFilter_Assignee").on("dblclick", function () { $("#cboFilter_Assignee").val(0).trigger("change"); });
     wireUpSortFields();
   }
 
-  if ((($('.ftname input').val() != null) && ($('.ftname input').val().length > 0)) && (($('#txtFilter_TaskName').val() == null) || ($('#txtFilter_TaskName').val() == ''))) {
+  if ((($('.ftname input').val() !== null) && ($('.ftname input').val().length > 0)) && (($('#txtFilter_TaskName').val() === null) || ($('#txtFilter_TaskName').val() === ''))) {
     $('#txtFilter_TaskName').val($('.ftname input').val());
   }
-  if (($(".tasktype-lookup-combo select option").length > 1) && ($("#cboFilter_TaskType option").length == 0)) {
+  if (($(".tasktype-lookup-combo select option").length > 1) && ($("#cboFilter_TaskType option").length === 0)) {
     $("#cboFilter_TaskType").html($(".tasktype-lookup-combo select").html());
   }
-  if (($(".assignee-lookup-combo select option").length > 1) && ($("#cboFilter_Assignee option").length == 0)) {
+  if (($(".assignee-lookup-combo select option").length > 1) && ($("#cboFilter_Assignee option").length === 0)) {
     $("#cboFilter_Assignee").html($(".assignee-lookup-combo select").html());
   }
 
@@ -496,11 +496,11 @@ function generateFilterRow() {
  * @returns {number} Number of checked row selectors.
  */
 function getSelectedCount() {
-  var checkboxes = $("input[id^='Field21']");
-  if (checkboxes.length == 0) {
+  const checkboxes = $("input[id^='Field21']");
+  if (checkboxes.length === 0) {
     return 0;
   }
-  var count = 0;
+  let count = 0;
   checkboxes.each(function () {
     if ($(this).is(':checked')) {
       count++;
@@ -515,9 +515,9 @@ function getSelectedCount() {
  */
 function loadAssigneeMap() {
 
-  if (assigneeMap.keys.length == 0) {
-    var assignee_rows = $('.assignee-lookup-table table tbody tr');
-    if (assignee_rows.length == 0) {
+  if (assigneeMap.keys.length === 0) {
+    const assignee_rows = $('.assignee-lookup-table table tbody tr');
+    if (assignee_rows.length === 0) {
       return;
     }
     assignee_rows.each(function (index) {
@@ -535,9 +535,9 @@ function loadAssigneeMap() {
  */
 function loadTaskTypeMap() {
 
-  if (taskTypeMap.keys.length == 0) {
-    var tasktype_rows = $('.tasktype-lookup-table table tbody tr');
-    if (tasktype_rows.length == 0) {
+  if (taskTypeMap.keys.length === 0) {
+    const tasktype_rows = $('.tasktype-lookup-table table tbody tr');
+    if (tasktype_rows.length === 0) {
       return;
     }
     tasktype_rows.each(function (index) {
@@ -569,8 +569,8 @@ function popupCancelNote(e) {
         text: "OK",
         click: function () {
           $('#Field80').val($('#Field80').val().trim());
-          let note_text = $('#Field80').val();
-          if (note_text.length == 0) {
+          const note_text = $('#Field80').val();
+          if (note_text.length === 0) {
             $.alert({
               title: 'Error',
               content: 'You have to enter a reason for cancelling. You cannot save otherwise.',
@@ -585,7 +585,7 @@ function popupCancelNote(e) {
           else {
             $('#Field90').val(note_text);
             $("#q80").dialog("close");
-            $('#form1').submit();
+            $('#form1').trigger("submit");
           }
         }
       }
@@ -612,10 +612,10 @@ function popupCompletionNote(e) {
       {
         text: "OK",
         click: function () {
-          var note_text = $('#Field80').val();
+          const note_text = $('#Field80').val();
           $('#Field90').val(note_text);
           $("#q80").dialog("close");
-          $('#form1').submit();
+          $('#form1').trigger("submit");
         }
       }
     ]
@@ -640,8 +640,8 @@ function popupWaitingNote(e) {
         text: "OK",
         click: function () {
           $('#Field80').val($('#Field80').val().trim());
-          var note_text = $('#Field80').val();
-          if (note_text.length == 0) {
+          const note_text = $('#Field80').val();
+          if (note_text.length === 0) {
             $.alert({
               title: 'Error',
               content: 'You have to enter what you are waiting on. You cannot save otherwise.',
@@ -656,7 +656,7 @@ function popupWaitingNote(e) {
           else {
             $('#Field90').val(note_text);
             $("#q80").dialog("close");
-            $('#form1').submit();
+            $('#form1').trigger("submit");
           }
         }
       }
@@ -682,15 +682,15 @@ function removeAppendedFields() {
  * @param {boolean} check_on - True to select all; false to clear.
  */
 function selectAllTasks(check_on) {
-  var checkboxes = $("input[id^='Field21']");
-  if (checkboxes.length == 0) {
+  const checkboxes = $("input[id^='Field21']");
+  if (checkboxes.length === 0) {
     return;
   }
   checkboxes.each(function () {
-    if (check_on == true)
-      $(this).prop('checked', true).change();
+    if (check_on === true)
+      $(this).prop('checked', true).trigger("change");
     else
-      $(this).prop('checked', false).change();
+      $(this).prop('checked', false).trigger("change");
   });
   fillSelectedIDs();
   $('.select-task-count input').val(getSelectedCount());
@@ -709,26 +709,26 @@ function sortTable(newSortOrdinal, selector) {
   removeAppendedFields();
   $('.sort-icon').remove();
 
-  var currentSortOrdinal = Number($('.sort-field-ordinal input').val());
-  var sortDirection = Number($('.sort-direction input').val());
+  const currentSortOrdinal = Number($('.sort-field-ordinal input').val());
+  let sortDirection = Number($('.sort-direction input').val());
 
-  if (newSortOrdinal == currentSortOrdinal) {
-    if (sortDirection == 0) {
+  if (newSortOrdinal === currentSortOrdinal) {
+    if (sortDirection === 0) {
       sortDirection = 1
-      $('.sort-direction input').val(1).change();
+      $('.sort-direction input').val(1).trigger("change");
     }
     else {
       sortDirection = 0;
-      $('.sort-direction input').val(0).change();
+      $('.sort-direction input').val(0).trigger("change");
     }
   }
   else {
     $('.sort-field-ordinal input').val(newSortOrdinal);
-    $('.sort-direction input').val(0).change();
+    $('.sort-direction input').val(0).trigger("change");
     sortDirection = 0;
   }
 
-  if (sortDirection == 0) {
+  if (sortDirection === 0) {
     $(`${selector} .cf-col-label`).append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
   }
   else {
@@ -765,38 +765,38 @@ function wireUpSortFields() {
  * @param {Event} e - Click/submit event; may be prevented.
  */
 function submitForm(e) {
-  if (validateForm() == false) {
+  if (validateForm() === false) {
     e.preventDefault();
     return;
   }
 
-  if ($('.update-status-id input').val() == '') {
+  if ($('.update-status-id input').val() === '') {
     $('.update-status-id input').val(0);
   }
-  if ($('.update-assignee-id input').val() == '') {
+  if ($('.update-assignee-id input').val() === '') {
     $('.update-assignee-id input').val(0);
   }
-  if ($('.update-task-type-id input').val() == '') {
+  if ($('.update-task-type-id input').val() === '') {
     $('.update-task-type-id input').val(0);
   }
 
-  var statusID = Number($('.update-status-id input').val());
+  const statusID = Number($('.update-status-id input').val());
 
-  if (statusID != 0) {
-    if (statusID == status_Cancelled) {
+  if (statusID !== 0) {
+    if (statusID === status_Cancelled) {
       e.preventDefault();
       popupCancelNote(e);
     }
-    else if (statusID == status_Completed) {
+    else if (statusID === status_Completed) {
       e.preventDefault();
       popupCompletionNote();
     }
-    else if (statusID == status_Waiting) {
+    else if (statusID === status_Waiting) {
       e.preventDefault();
       popupWaitingNote();
     }
     else {
-      $('#form1').submit();
+      $('#form1').trigger("submit");
     }
   }
  
@@ -816,9 +816,9 @@ function validateForm() {
   $('.error-message input').val('');
   $('.color-error').removeClass('color-error');
 
-  var formIsValid = true;
-  var selectedCount = getSelectedCount();
-  if (selectedCount == 0) {
+  let formIsValid = true;
+  const selectedCount = getSelectedCount();
+  if (selectedCount === 0) {
     $.alert({
       title: 'Error',
       content: 'Please select at least one task to update.',
@@ -831,19 +831,19 @@ function validateForm() {
     formIsValid = false;
   }
 
-  var updateTaskTypeID = Number($('.update-task-type-id input').val());
-  var updateStatusID = Number($('.update-status-id input').val());
-  var updateOpNumber = $('.update-op-number input').val();
-  var checked_rows = $("input[id^='Field21']").filter(':checked').closest('tr');
+  const updateTaskTypeID = Number($('.update-task-type-id input').val());
+  const updateStatusID = Number($('.update-status-id input').val());
+  const updateOpNumber = $('.update-op-number input').val();
+  const checked_rows = $("input[id^='Field21']").filter(':checked').closest('tr');
 
   checked_rows.each(function (index) {
-    let taskID = Number($(this).find('.task-id-col input').val());
-    let totalHours = Number($(this).find('.total-hours-col input').val());
-    let taskName = $(this).find('.task-name-col input').val();
-    let opNumber = $(this).find('.op-number-col input').val();
+    const taskID = Number($(this).find('.task-id-col input').val());
+    const totalHours = Number($(this).find('.total-hours-col input').val());
+    const taskName = $(this).find('.task-name-col input').val();
+    const opNumber = $(this).find('.op-number-col input').val();
 
     /* Rule: cannot return to Not Started if hours already logged */
-    if (updateStatusID == status_NotStarted) {
+    if (updateStatusID === status_NotStarted) {
       if (totalHours > 0) {
         formIsValid = false;
         $(this).addClass('color-error');

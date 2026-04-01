@@ -18,9 +18,9 @@ $(document).ready(function () {
   $(document).on("lookupcomplete", function (e) {
 
     $('#ticket-title').val($('.ticket-number input').val());
-    var barcode_value = "*" + $('.ticket-number input').val() + "*";
+    const barcode_value = "*" + $('.ticket-number input').val() + "*";
     
-    if ($('#barcode').length == 0) {
+    if ($('#barcode').length === 0) {
       $('.ticket-number-barcode input').parent().append('<svg id="barcode"></svg>');
       JsBarcode("#barcode", barcode_value, {
         height: 20,

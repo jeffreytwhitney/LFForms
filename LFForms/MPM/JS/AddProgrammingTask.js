@@ -135,7 +135,7 @@ Permissions:
 
  Accessibility / UI Notes:
   - Uses class 'parsley-error' to style invalid fields.
-  - Disables submit by adding 'ui-state-disabled' (maintains original approach—no structural change).
+  - Disables submit by adding 'ui-state-disabled' (maintains original approachï¿½no structural change).
 
  Potential Improvements (not implemented, informational only):
   - Replace class-based disabling with .prop('disabled', true) for semantic clarity.
@@ -155,22 +155,22 @@ $(document).ready(function () {
   // Avoid Bootstrap button plugin conflicts (restore original jQuery UI button if needed).
   // This is specifically used so that the X button in the upper right of the dialog displays properly.
   // It's probably not needed on this form, but I have it in every form just so that I don't have to think about it.
-  var bootstrapButton = $.fn.button.noConflict();
+  const bootstrapButton = $.fn.button.noConflict();
   $.fn.bootstrapBtn = bootstrapButton;
 
   // Attach submit handler (centralized validation path).
-  $('.Submit').click(function (e) { submitForm(e); });
+  $('.Submit').on("click", function (e) { submitForm(e); });
 
   // Normalize and populate network user name (strip domain, uppercase).
-  var lfUserName = $('.lf-user-name input').val();
-  if (lfUserName != "") {
+  const lfUserName = $('.lf-user-name input').val();
+  if (lfUserName !== "") {
     let networkUserName = lfUserName.toUpperCase();
     networkUserName = networkUserName.substr(networkUserName.lastIndexOf('\\') + 1);
-    $('.network-user-name input').val(networkUserName).change();
+    $('.network-user-name input').val(networkUserName).trigger("change");
   }
 
   // If flagged, request parent window to close dialog (with refresh).
-  if ($('.closeme input').val() == 1) {
+  if ($('.closeme input').val() === 1) {
     window.parent.postMessage('CloseDialogWithRefresh', '*');
   }
 
@@ -182,7 +182,7 @@ $(document).ready(function () {
   // After lookups complete, enforce permission-driven UI state; ensure department ID triggers downstream logic if missing email.
   $(document).on('lookupcomplete', function (e) {
     setFormFieldEnableState();
-    if ($('.department-email-address input').val() == '') {
+    if ($('.department-email-address input').val() === '') {
       $('.did input').trigger("change");
     }
   });
@@ -201,15 +201,15 @@ $(document).ready(function () {
  * @returns {boolean} True if at least one different (non-zero) task ID is present; otherwise false.
  */
 function checkExistingTaskIDs() {
-  var existing_task_ids = $('.existing-task-id select option');
-  var task_id = $('.tid input').val();
-  var returnVal = false;
+  const existing_task_ids = $('.existing-task-id select option');
+  const task_id = $('.tid input').val();
+  let returnVal = false;
   existing_task_ids.each(function () {
     option_value = Number($(this).val());
     if (isNaN(option_value)) {
       return;
     }
-    if ((option_value != 0) && (option_value != task_id)) {
+    if ((option_value !== 0) && (option_value !== task_id)) {
       returnVal = true;
     }
   });
@@ -225,18 +225,18 @@ function checkExistingTaskIDs() {
  * @returns {boolean} True if permitted; false otherwise.
  */
 function checkPermissions() {
-  var user_id = Number($(".user-id input").val());
-  var user_department_id = Number($(".user-department-id input").val());
-  var ticket_department_id = Number($(".did input").val());
+  const user_id = Number($(".user-id input").val());
+  const user_department_id = Number($(".user-department-id input").val());
+  const ticket_department_id = Number($(".did input").val());
 
-  var return_val = true;
+  let return_val = true;
 
-  if (user_id == 0) {
+  if (user_id === 0) {
     return_val = false;
   }
 
   if (!isMetrologyUser()) {
-    if (user_department_id != ticket_department_id) {
+    if (user_department_id !== ticket_department_id) {
       return_val = false;
     }
   }
@@ -251,7 +251,7 @@ function checkPermissions() {
  * @returns {boolean} True if metrology user; false otherwise.
  */
 function isMetrologyUser() {
-  if (Number($('.user-type-id input').val()) == 1) {
+  if (Number($('.user-type-id input').val()) === 1) {
     return true;
   }
   return false;
@@ -264,9 +264,9 @@ function isMetrologyUser() {
  *  - Removes 'parsley-error' class from related inputs.
  */
 function resetErrorFields() {
-  var task_name = $('.task-name input');
-  var task_type = $('.task-type select');
-  var task_operation = $('.op-number input');
+  const task_name = $('.task-name input');
+  const task_type = $('.task-type select');
+  const task_operation = $('.op-number input');
 
   $('#operation-error').remove();
   $('#taskname-error').remove();
@@ -283,8 +283,8 @@ function resetErrorFields() {
  * Only executes when a user-type-id value is present (non-zero, non-empty).
  */
 function setFormFieldEnableState() {
-  if (($('.user-type-id input').val() != 0) && ($('.user-type-id input').val() != '')) {
-    var has_permission = checkPermissions();
+  if (($('.user-type-id input').val() !== 0) && ($('.user-type-id input').val() !== '')) {
+    const has_permission = checkPermissions();
     if (!has_permission) {
       $('.Submit').addClass("ui-state-disabled");
     }
@@ -317,20 +317,20 @@ function submitForm(e) {
  * @returns {boolean} True if form is valid and user is authorized; false otherwise.
  */
 function validateForm() {
-  var has_permission = checkPermissions();
+  const has_permission = checkPermissions();
   if (!has_permission) {
     $('.Submit').addClass("ui-state-disabled");
     return false;
   }
 
   resetErrorFields();
-  var return_val = true;
-  var task_name_field = $('.task-name input');
-  var task_type_field = $('.task-type select');
-  var opnumber_field = $('.op-number input');
-  var existingTaskID = $('.existing-task-id input').val();
+  let return_val = true;
+  const task_name_field = $('.task-name input');
+  const task_type_field = $('.task-type select');
+  const opnumber_field = $('.op-number input');
+  const existingTaskID = $('.existing-task-id input').val();
 
-  if (existingTaskID != '') {
+  if (existingTaskID !== '') {
     
     task_name_field.addClass('parsley-error');
     task_name_field.parent().append("<ul id='taskname-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>A task with this Name, Type, and Op already exist in this project.</li></ul>");

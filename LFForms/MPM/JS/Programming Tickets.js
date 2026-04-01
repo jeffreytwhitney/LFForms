@@ -1,5 +1,5 @@
-/**
-  Programming Tickets � UI behaviors and helpers
+﻿/**
+  Programming Tickets ï¿½ UI behaviors and helpers
  
   Author:   Jeffrey Whitney
             jtwhitney@machine.com
@@ -295,12 +295,12 @@
  */
 
 // Lookup maps between IDs and display names for filter synchronization.
-var departmentMap = new Map();          // Map<number, string> departmentID -> departmentName
-var departmentNameMap = new Map();      // Map<string, number> departmentName -> departmentID
-var initiatorMap = new Map();           // Map<string|number, string> initiatorID -> initiatorName
-var initiatorNameMap = new Map();       // Map<string, string|number> initiatorName -> initiatorID
-var qualityEngineerMap = new Map();     // Map<number, string> qeID -> qeName
-var qualityEngineerNameMap = new Map(); // Map<string, number> qeName -> qeID
+const departmentMap = new Map();          // Map<number, string> departmentID -> departmentName
+const departmentNameMap = new Map();      // Map<string, number> departmentName -> departmentID
+const initiatorMap = new Map();           // Map<string|number, string> initiatorID -> initiatorName
+const initiatorNameMap = new Map();       // Map<string, string|number> initiatorName -> initiatorID
+const qualityEngineerMap = new Map();     // Map<number, string> qeID -> qeName
+const qualityEngineerNameMap = new Map(); // Map<string, number> qeName -> qeID
 
 $(document).ready(function () {
   // Initial UI setup
@@ -315,22 +315,22 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
 
   // Prevent Bootstrap/jQuery UI naming conflicts if Bootstrap is present
-  var bootstrapButton = $.fn.button.noConflict();
+  const bootstrapButton = $.fn.button.noConflict();
   $.fn.bootstrapBtn = bootstrapButton;
 
   // Sync the LF Forms username into the network username field
-  var lfUserName = $('.lf-user-name input').val();
-  if (lfUserName != 'Anonymous User') {
-    $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).change();
+  const lfUserName = $('.lf-user-name input').val();
+  if (lfUserName !== 'Anonymous User') {
+    $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
   }
 
   // Listen for messages from child iframes to close dialogs and optionally refresh
   window.onmessage = function (event) {
-    if (event.data == "CloseDialog") {
+    if (event.data === "CloseDialog") {
       $("#popupIFrame").dialog("destroy");
       $("#popupIFrame").remove();
     }
-    if (event.data == "CloseDialogWithRefresh") {
+    if (event.data === "CloseDialogWithRefresh") {
       $("#popupIFrame").dialog("destroy");
       $("#popupIFrame").remove();
       refreshPage();
@@ -339,14 +339,14 @@ $(document).ready(function () {
 
   // Persist selected site in a cookie for recall on subsequent loads
   $(document).on('change', '.site-name select', function () {
-    var sitename = $('.site-name select').val();
+    const sitename = $('.site-name select').val();
     $.cookie('site_name', sitename, { expires: 365, path: '/' });
   });
 
-  // Show long �Details� text in a quick modal on double-click (Field56 appears to be details)
+  // Show long ï¿½Detailsï¿½ text in a quick modal on double-click (Field56 appears to be details)
   $(document).on('dblclick', '[id^="Field56"]', function (e) {
-    var ticketDetail = $(this).val();
-    var ticketNumber = $(this).closest('tr').find('.projectlist-ticket-number-col input[type="text"]').val();
+    const ticketDetail = $(this).val();
+    const ticketNumber = $(this).closest('tr').find('.projectlist-ticket-number-col input[type="text"]').val();
     $.dialog({
       escapeKey: true,
       backgroundDismiss: true,
@@ -360,8 +360,8 @@ $(document).ready(function () {
     $('.projectlist-table').hide();
 
     // Initialize paging on first load (pg=999 indicates "uninitialized")
-    if ($('.pg input').val() == '999') {
-      $('.pg input').val(1).change();
+    if ($('.pg input').val() === '999') {
+      $('.pg input').val(1).trigger("change");
       $('.network-user-name input').trigger("change");
     }
 
@@ -377,7 +377,7 @@ $(document).ready(function () {
     appendPagination();           // See "Pagination" above
 
     // Container for popup iframe dialogs
-    if ($('#popUpDiv').length == 0) {
+    if ($('#popUpDiv').length === 0) {
       $('.section-iframe').append("<div class='hidden-text' id='popUpDiv'></div>");
     }
 
@@ -385,12 +385,12 @@ $(document).ready(function () {
     $('.create-date-col input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
 
     // Enable Add button only for authorized user types (1 or 3)
-    var userTypeID = Number($('.user-type-id input').val());
+    const userTypeID = Number($('.user-type-id input').val());
     if (typeof $('.user-type-id input').val() === 'undefined') {
       $('.add-button').addClass("ui-state-disabled");
     }
     else {
-      if ((userTypeID != 1) && (userTypeID != 3)) {
+      if ((userTypeID !== 1) && (userTypeID !== 3)) {
         $('.add-button').addClass("ui-state-disabled");
       }
       else {
@@ -403,9 +403,9 @@ $(document).ready(function () {
 
   // Restore previously selected site (from cookie) once all onload lookups have completed
   $(document).on("onloadlookupfinished", function (e) {
-    var sitename = $.cookie('site_name');
-    if (sitename != null) {
-      $('.site-name select').val(sitename).change();
+    const sitename = $.cookie('site_name');
+    if (sitename !== null) {
+      $('.site-name select').val(sitename).trigger("change");
     }
   });
 
@@ -417,32 +417,32 @@ $(document).ready(function () {
  * Produces a simple 3-button widget: first/prev and next (with disabled states).
  */
 function appendPagination() {
-  var current_page = Number($('.pg input').val());
-  if (current_page == 999) { return; }
+  const current_page = Number($('.pg input').val());
+  if (current_page === 999) { return; }
 
-  var row_count = $('.projectlist-table table tbody tr').length;
+  const row_count = $('.projectlist-table table tbody tr').length;
 
   if (row_count > 0) {
     $('#projectlist-pagination').remove();
 
     // Page 1 with less than one page of rows: only disabled arrows
-    if ((current_page == 1) && (row_count < 25)) {
-      $('.projectlist-table table').parent().append("<div id='projectlist-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>��</a></li><li><a class='page-link prev isDisabled'>�</a></li><li><a class='page-link next isDisabled'>�</a></li></ul></div>");
+    if ((current_page === 1) && (row_count < 25)) {
+      $('.projectlist-table table').parent().append("<div id='projectlist-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>ï¿½ï¿½</a></li><li><a class='page-link prev isDisabled'>ï¿½</a></li><li><a class='page-link next isDisabled'>ï¿½</a></li></ul></div>");
       return;
     }
     // Page 1 with exactly one page: can go next
-    if ((current_page == 1) && (row_count == 25)) {
-      $('.projectlist-table table').parent().append("<div id='projectlist-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>��</a></li><li><a class='page-link prev isDisabled'>�</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>�</a></li></ul></div>")
+    if ((current_page === 1) && (row_count === 25)) {
+      $('.projectlist-table table').parent().append("<div id='projectlist-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>ï¿½ï¿½</a></li><li><a class='page-link prev isDisabled'>ï¿½</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>ï¿½</a></li></ul></div>")
       return;
     }
     // Middle pages: can go first, prev, next
-    if ((current_page > 1) && (row_count == 25)) {
-      $('.projectlist-table table').parent().append("<div id='projectlist-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>��</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>�</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>�</a></li></ul></div>")
+    if ((current_page > 1) && (row_count === 25)) {
+      $('.projectlist-table table').parent().append("<div id='projectlist-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>ï¿½ï¿½</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>ï¿½</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>ï¿½</a></li></ul></div>")
       return;
     }
     // Last page: can go first, prev; next disabled
     if ((current_page > 1) && (row_count < 25)) {
-      $('.projectlist-table table').parent().append("<div id='projectlist-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>��</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>�</a></li><li><a class='page-link next isDisabled'>�</a></li></ul></div>")
+      $('.projectlist-table table').parent().append("<div id='projectlist-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>ï¿½ï¿½</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>ï¿½</a></li><li><a class='page-link next isDisabled'>ï¿½</a></li></ul></div>")
       return;
     }
   }
@@ -452,7 +452,7 @@ function appendPagination() {
  * Opens the "Add Programming Ticket" form in a modal iframe dialog sized to the current window.
  */
 function addTicket() {
-  var widowHeight = $(window).height();
+  let widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
   popUpIframe(`http://rmslf/Forms/RMS-MPM-AddProgrammingTicket`, 'Add Programming Ticket', widowHeight, 1500);
 }
@@ -465,7 +465,7 @@ function callNextPage() {
   $('.projectlist-table').hide();
   removeAppendedFields();
   current_page = Number($('.pg input').val());
-  $('.pg input').val(current_page + 1).change();
+  $('.pg input').val(current_page + 1).trigger("change");
 }
 
 /**
@@ -475,10 +475,10 @@ function callPrevPage() {
   $('.projectlist-table').hide();
   removeAppendedFields();
   current_page = Number($('.pg input').val());
-  if (current_page == 1) {
+  if (current_page === 1) {
     return;
   }
-  $('.pg input').val(current_page - 1).change();
+  $('.pg input').val(current_page - 1).trigger("change");
 }
 
 /**
@@ -486,7 +486,7 @@ function callPrevPage() {
  * @param {number|string} ticket_id - The ticket ID used by the edit form.
  */
 function callShowDetails(ticket_id) {
-  var widowHeight = $(window).height();
+  let widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
   popUpIframe(`http://rmslf/Forms/MPM-EditProgrammingTicket?tid=${ticket_id}`, 'Ticket Details', widowHeight, 1500);
 }
@@ -496,7 +496,7 @@ function callShowDetails(ticket_id) {
  * Requires lookup maps to translate display names to IDs.
  */
 function filterTable() {
-  if ($('#filterRow').length == 0) {
+  if ($('#filterRow').length === 0) {
     return;
   }
 
@@ -509,12 +509,12 @@ function filterTable() {
   }
 
   // Read filter UI values
-  var taskNameFilterValue = $('#txtFilter_TaskName').val();
-  var projectNameFilterValue = $('#txtFilter_ProjectName').val();
-  var ticketNumberFilterValue = $('#txtFilter_TicketNumber').val();
-  var departmentFilterVal = $('#cboFilter_Department').val();
-  var qeFilterVal = $('#cboFilter_QE').val();
-  var initiatorFilterVal = $('#cboFilter_Initiator').val();
+  const taskNameFilterValue = $('#txtFilter_TaskName').val();
+  const projectNameFilterValue = $('#txtFilter_ProjectName').val();
+  const ticketNumberFilterValue = $('#txtFilter_TicketNumber').val();
+  const departmentFilterVal = $('#cboFilter_Department').val();
+  const qeFilterVal = $('#cboFilter_QE').val();
+  const initiatorFilterVal = $('#cboFilter_Initiator').val();
 
   // Push straight text filters into hidden fields
   $('.ftname input').val(taskNameFilterValue);
@@ -522,24 +522,24 @@ function filterTable() {
   $('.fpid input').val(ticketNumberFilterValue);
 
   // Translate selected names to IDs using lookup maps
-  if ((departmentFilterVal != null) && (departmentFilterVal.length > 0)) {
-    let departmentID = departmentNameMap.get(departmentFilterVal);
+  if ((departmentFilterVal !== null) && (departmentFilterVal.length > 0)) {
+    const departmentID = departmentNameMap.get(departmentFilterVal);
     $('.fdid input').val(departmentID);
   }
   else {
     $('.fdid input').val(0);
   }
 
-  if ((qeFilterVal != null) && (qeFilterVal.length > 0)) {
-    let qeID = qualityEngineerNameMap.get(qeFilterVal);
+  if ((qeFilterVal !== null) && (qeFilterVal.length > 0)) {
+    const qeID = qualityEngineerNameMap.get(qeFilterVal);
     $('.fqeid input').val(qeID);
   }
   else {
     $('.fqeid input').val(0);
   }
 
-  if ((initiatorFilterVal != null) && (initiatorFilterVal.length > 0)) {
-    let initiatorID = initiatorNameMap.get(initiatorFilterVal);
+  if ((initiatorFilterVal !== null) && (initiatorFilterVal.length > 0)) {
+    const initiatorID = initiatorNameMap.get(initiatorFilterVal);
     $('.finitemp input').val(initiatorID);
   }
   else {
@@ -549,7 +549,7 @@ function filterTable() {
   // Reload from page 1
   $('.projectlist-table').hide();
   removeAppendedFields();
-  $('.pg input').val(1).change();
+  $('.pg input').val(1).trigger("change");
 }
 
 /**
@@ -558,17 +558,17 @@ function filterTable() {
  * Also initializes sort click handlers.
  */
 function generateFilterRow() {
-  if ($('#filterRow').length == 0) {
+  if ($('#filterRow').length === 0) {
     // Add Ticket button
-    var add_button = '<div class="table-button ui-button add-button" onclick="addTicket()"><span title="AddTicket" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Ticket</div>'
+    const add_button = '<div class="table-button ui-button add-button" onclick="addTicket()"><span title="AddTicket" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Ticket</div>'
     $(add_button).insertBefore('.projectlist-table table');
 
     // Include Completed toggle
-    var includeCompleteCheckbox = '<div class="choice include-choice"><input name="chkIncludeComplete" id="chkIncludeComplete" type="checkbox" ><label class="form-option-label" for="chkIncludeComplete">Show Completed</label></div>'
+    const includeCompleteCheckbox = '<div class="choice include-choice"><input name="chkIncludeComplete" id="chkIncludeComplete" type="checkbox" ><label class="form-option-label" for="chkIncludeComplete">Show Completed</label></div>'
     $('.projectlist-table table').parent().prepend(includeCompleteCheckbox)
 
     // Filter row with text and select controls
-    var filter_row = "<TR id='filterRow'><TH><input id='txtFilter_TicketNumber'/></TH><TH><input type='text' id='txtFilter_ProjectName'></TH><TH/><TH><select id='cboFilter_Department'/></TH><TH/><TH/><TH><select id='cboFilter_QE'/></TH><TH><select id='cboFilter_Initiator'/></TH><TH/><TH><input type='text' id='txtFilter_TaskName'></TH></TR>"
+    const filter_row = "<TR id='filterRow'><TH><input id='txtFilter_TicketNumber'/></TH><TH><input type='text' id='txtFilter_ProjectName'></TH><TH/><TH><select id='cboFilter_Department'/></TH><TH/><TH/><TH><select id='cboFilter_QE'/></TH><TH><select id='cboFilter_Initiator'/></TH><TH/><TH><input type='text' id='txtFilter_TaskName'></TH></TR>"
 
     // Clarify the purpose of the last column
     $('.projectlist-table table thead th:last-child').text('Search By Task Name');
@@ -585,41 +585,41 @@ function generateFilterRow() {
     $("#chkIncludeComplete").on("change", function () { filterTable(); });
 
     // Quick clear via double-click
-    $("#txtFilter_TicketNumber").dblclick(function () { $("#txtFilter_TicketNumber").val(null).change(); });
-    $("#txtFilter_ProjectName").dblclick(function () { $("#txtFilter_ProjectName").val(null).change(); });
-    $("#cboFilter_Department").dblclick(function () { $("#cboFilter_Department").val(null).change(); });
-    $("#cboFilter_QE").dblclick(function () { $("#cboFilter_QE").val(0).change(); });
-    $("#cboFilter_Initiator").dblclick(function () { $("#cboFilter_Initiator").val(0).change(); });
-    $("#txtFilter_TaskName").dblclick(function () { $("#txtFilter_TaskName").val(null).change(); });
+    $("#txtFilter_TicketNumber").on("dblclick", function () { $("#txtFilter_TicketNumber").val(null).trigger("change"); });
+    $("#txtFilter_ProjectName").on("dblclick", function () { $("#txtFilter_ProjectName").val(null).trigger("change"); });
+    $("#cboFilter_Department").on("dblclick", function () { $("#cboFilter_Department").val(null).trigger("change"); });
+    $("#cboFilter_QE").on("dblclick", function () { $("#cboFilter_QE").val(0).trigger("change"); });
+    $("#cboFilter_Initiator").on("dblclick", function () { $("#cboFilter_Initiator").val(0).trigger("change"); });
+    $("#txtFilter_TaskName").on("dblclick", function () { $("#txtFilter_TaskName").val(null).trigger("change"); });
 
     // Sorting hooks on column headers
     wireUpSortFields();
   }
 
   // Pre-fill filter inputs from hidden fields when present (restores state across reloads)
-  if ((($('.ftname input').val() != null) && ($('.ftname input').val().length > 0)) && (($('#txtFilter_TaskName').val() == null) || ($('#txtFilter_TaskName').val() == ''))) {
+  if ((($('.ftname input').val() !== null) && ($('.ftname input').val().length > 0)) && (($('#txtFilter_TaskName').val() === null) || ($('#txtFilter_TaskName').val() === ''))) {
     $('#txtFilter_TaskName').val($('.ftname input').val());
   }
 
-  if ((($('.fpname input').val() != null) && ($('.fpname input').val().length > 0)) && (($('#txtFilter_ProjectName').val() == null) || ($('#txtFilter_ProjectName').val() == ''))) {
+  if ((($('.fpname input').val() !== null) && ($('.fpname input').val().length > 0)) && (($('#txtFilter_ProjectName').val() === null) || ($('#txtFilter_ProjectName').val() === ''))) {
     $('#txtFilter_ProjectName').val($('.fpname input').val());
   }
 
-  if ((($('.fpid input').val() != null) && ($('.fpid input').val().length > 0)) && (($('#txtFilter_TicketNumber').val() == null) || ($('#txtFilter_TicketNumber').val() == ''))) {
+  if ((($('.fpid input').val() !== null) && ($('.fpid input').val().length > 0)) && (($('#txtFilter_TicketNumber').val() === null) || ($('#txtFilter_TicketNumber').val() === ''))) {
     $('#txtFilter_TicketNumber').val($('.fpid input').val());
   }
 
   // Populate select options from hidden lookup combos (avoids duplicating source of truth)
-  if (($(".department-lookup-combo select option").length > 1) && ($("#cboFilter_Department option").length == 0)) {
-    let departmentOptions = $(".department-lookup-combo select").html();
+  if (($(".department-lookup-combo select option").length > 1) && ($("#cboFilter_Department option").length === 0)) {
+    const departmentOptions = $(".department-lookup-combo select").html();
     $("#cboFilter_Department").html(departmentOptions);
   }
 
-  if (($(".qe-lookup-combo select option").length > 1) && ($("#cboFilter_QE option").length == 0)) {
+  if (($(".qe-lookup-combo select option").length > 1) && ($("#cboFilter_QE option").length === 0)) {
     $("#cboFilter_QE").html($(".qe-lookup-combo select").html());
   }
 
-  if (($(".initiator-lookup-combo select option").length > 1) && ($("#cboFilter_Initiator option").length == 0)) {
+  if (($(".initiator-lookup-combo select option").length > 1) && ($("#cboFilter_Initiator option").length === 0)) {
     $("#cboFilter_Initiator").html($(".initiator-lookup-combo select").html());
   }
 }
@@ -629,14 +629,14 @@ function generateFilterRow() {
  * Assumes `.projectlist-ticket-id-col` and `.projectlist-ticket-number-col` column structure.
  */
 function generateTicketNumberColumn() {
-  var ticket_ids = $('.projectlist-ticket-id-col input[type="text"]');
-  var ticket_numbers = $('.projectlist-ticket-number-col input[type="text"]');
+  const ticket_ids = $('.projectlist-ticket-id-col input[type="text"]');
+  const ticket_numbers = $('.projectlist-ticket-number-col input[type="text"]');
 
   ticket_numbers.each(function (index) {
-    let ticket_id = $(ticket_ids[index]).val();
-    let ticket_number = $(this).val();
-    let project_link = $("<a>", { text: ticket_number, class: 'project-link', href: `javascript:void(0);`, onclick: `callShowDetails(${ticket_id})` });
-    if ($(this).parent().find('.project-link').length == 0) {
+    const ticket_id = $(ticket_ids[index]).val();
+    const ticket_number = $(this).val();
+    const project_link = $("<a>", { text: ticket_number, class: 'project-link', href: `javascript:void(0);`, onclick: `callShowDetails(${ticket_id})` });
+    if ($(this).parent().find('.project-link').length === 0) {
       $(this).parent().append(project_link);
     }
   });
@@ -647,9 +647,9 @@ function generateTicketNumberColumn() {
  * Note: Guard uses Map.keys.length which is always 0; function executes each time.
  */
 function loadDepartmentMap() {
-  if (departmentMap.keys.length == 0) {
-    var department_rows = $('.department-lookup-table table tbody tr');
-    if (department_rows.length == 0) {
+  if (departmentMap.keys.length === 0) {
+    const department_rows = $('.department-lookup-table table tbody tr');
+    if (department_rows.length === 0) {
       return;
     }
     department_rows.each(function (index) {
@@ -666,9 +666,9 @@ function loadDepartmentMap() {
  * Note: Guard uses Map.keys.length which is always 0; function executes each time.
  */
 function loadQualityEngineerMap() {
-  if (qualityEngineerMap.keys.length == 0) {
-    var qe_rows = $('.qe-lookup-table table tbody tr');
-    if (qe_rows.length == 0) {
+  if (qualityEngineerMap.keys.length === 0) {
+    const qe_rows = $('.qe-lookup-table table tbody tr');
+    if (qe_rows.length === 0) {
       return;
     }
     qe_rows.each(function (index) {
@@ -685,9 +685,9 @@ function loadQualityEngineerMap() {
  * Note: Guard uses Map.keys.length which is always 0; function executes each time.
  */
 function loadInitiatorMap() {
-  if (initiatorMap.keys.length == 0) {
-    var initiator_rows = $('.initiator-lookup-table table tbody tr');
-    if (initiator_rows.length == 0) {
+  if (initiatorMap.keys.length === 0) {
+    const initiator_rows = $('.initiator-lookup-table table tbody tr');
+    if (initiator_rows.length === 0) {
       return;
     }
     initiator_rows.each(function (index) {
@@ -726,8 +726,8 @@ function popUpIframe(src, title, height, width) {
   $("#popupIFrame").attr('style', `width: ${width};`);
 
   // Tweak jQuery UI resizable inline style (ensures width is applied)
-  var resizeableStyle = $('.ui-resizable').attr('style');
-  let newStyle = resizeableStyle.replaceAll('width: 0px;', `width: ${width}px;`);
+  const resizeableStyle = $('.ui-resizable').attr('style');
+  const newStyle = resizeableStyle.replaceAll('width: 0px;', `width: ${width}px;`);
   $('.ui-resizable').attr('style', newStyle);
 }
 
@@ -811,35 +811,35 @@ function reApplyFilterValues() {
  * then navigates to that URL to cause a full server-side refresh.
  */
 function refreshPage() {
-  var taskNameFilter = $('.ftname input').val();
-  var include_Complete = Number($('.inccom input').val());
-  var projectIDFilter = Number($('.fpid input').val());
-  var departmentIDFilter = Number($('.fdid input').val());
-  var taskListPage = Number($('.tasklist-page input').val());
+  const taskNameFilter = $('.ftname input').val();
+  const include_Complete = Number($('.inccom input').val());
+  const projectIDFilter = Number($('.fpid input').val());
+  const departmentIDFilter = Number($('.fdid input').val());
+  const taskListPage = Number($('.tasklist-page input').val());
 
-  var current_url = window.location.href;
+  let current_url = window.location.href;
   if (current_url.includes('?')) {
     indexOfQuestionMark = current_url.indexOf('?');
     current_url = current_url.substring(0, indexOfQuestionMark);
   }
 
-  if ((taskListPage != null) && (taskListPage != NaN) && (taskListPage > 0)) {
+  if ((taskListPage !== null) && (taskListPage !== NaN) && (taskListPage > 0)) {
     current_url = current_url + `?pg=${taskListPage}`;
   }
 
-  if ((taskNameFilter != null) && (taskNameFilter.length > 0)) {
+  if ((taskNameFilter !== null) && (taskNameFilter.length > 0)) {
     current_url = current_url + `&ftname=${taskNameFilter}`;
   }
 
-  if ((include_Complete != null) && (include_Complete != NaN) && (include_Complete > 0)) {
+  if ((include_Complete !== null) && (include_Complete !== NaN) && (include_Complete > 0)) {
     current_url = current_url + `&inccom=${include_Complete}`;
   }
 
-  if ((projectIDFilter != null) && (projectIDFilter != NaN) && (projectIDFilter > 0)) {
+  if ((projectIDFilter !== null) && (projectIDFilter !== NaN) && (projectIDFilter > 0)) {
     current_url = current_url + `&fpid=${projectIDFilter}`;
   }
 
-  if ((departmentIDFilter != null) && (departmentIDFilter != NaN) && (departmentIDFilter > 0)) {
+  if ((departmentIDFilter !== null) && (departmentIDFilter !== NaN) && (departmentIDFilter > 0)) {
     current_url = current_url + `&fdid=${departmentIDFilter}`;
   }
   window.location = current_url;
@@ -859,7 +859,7 @@ function removeAppendedFields() {
 function resetPageNumber() {
   $('.projectlist-table').hide();
   removeAppendedFields();
-  $('.pg input').val(1).change();
+  $('.pg input').val(1).trigger("change");
 }
 
 /**
@@ -874,70 +874,70 @@ function sortTable(newSortOrdinal) {
   removeAppendedFields();
   $('.sort-icon').remove();
 
-  var currentSortOrdinal = Number($('.sort-field-ordinal input').val());
-  var sortDirection = Number($('.sort-direction input').val());
+  const currentSortOrdinal = Number($('.sort-field-ordinal input').val());
+  let sortDirection = Number($('.sort-direction input').val());
 
   // Toggle direction if same column; otherwise set new column with ascending (0)
-  if (newSortOrdinal == currentSortOrdinal) {
-    if (sortDirection == 0) {
+  if (newSortOrdinal === currentSortOrdinal) {
+    if (sortDirection === 0) {
       sortDirection = 1
-      $('.sort-direction input').val(1).change();
+      $('.sort-direction input').val(1).trigger("change");
     }
     else {
       sortDirection = 0;
-      $('.sort-direction input').val(0).change();
+      $('.sort-direction input').val(0).trigger("change");
     }
   }
   else {
     $('.sort-field-ordinal input').val(newSortOrdinal);
-    $('.sort-direction input').val(0).change();
+    $('.sort-direction input').val(0).trigger("change");
     sortDirection = 0;
   }
 
   // Add visual sort indicators to the appropriate header label
-  if (newSortOrdinal == 0) {
-    if (sortDirection == 0) {
+  if (newSortOrdinal === 0) {
+    if (sortDirection === 0) {
       $('#q53 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
     }
     else {
       $('#q53 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
     }
   }
-  if (newSortOrdinal == 1) {
+  if (newSortOrdinal === 1) {
 
-    if (sortDirection == 0) {
+    if (sortDirection === 0) {
       $('#q52 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
     }
     else {
       $('#q52 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
     }
   }
-  if (newSortOrdinal == 2) {
-    if (sortDirection == 0) {
+  if (newSortOrdinal === 2) {
+    if (sortDirection === 0) {
       $('#q58 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
     }
     else {
       $('#q58 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
     }
   }
-  if (newSortOrdinal == 3) {
-    if (sortDirection == 0) {
+  if (newSortOrdinal === 3) {
+    if (sortDirection === 0) {
       $('#q60 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
     }
     else {
       $('#q60 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
     }
   }
-  if (newSortOrdinal == 4) {
-    if (sortDirection == 0) {
+  if (newSortOrdinal === 4) {
+    if (sortDirection === 0) {
       $('#q61 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
     }
     else {
       $('#q61 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
     }
   }
-  if (newSortOrdinal == 5) {
-    if (sortDirection == 0) {
+  if (newSortOrdinal === 5) {
+    if (sortDirection === 0) {
       $('#q66 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
     }
     else {

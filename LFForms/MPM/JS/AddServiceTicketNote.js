@@ -137,21 +137,21 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-  var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
+  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
   $.fn.bootstrapBtn = bootstrapButton;
    
 
-  if ($('.closeme input').val() == 1) {
+  if ($('.closeme input').val() === 1) {
       window.parent.postMessage('CloseDialogWithRefresh', '*');
   }
 
   // Finalize initial state once all lookups are finished.
   $(document).on("onloadlookupfinished", function () {
-    if ($('.tid input').val() == '') {
+    if ($('.tid input').val() === '') {
       $('.Submit').hide();
       $('.note-text textarea').addClass("ui-state-disabled");
     }
-    if ($('.uid input').val() == '') {
+    if ($('.uid input').val() === '') {
       $('.Submit').hide();
       $('.note-text textarea').addClass("ui-state-disabled"); 
     }
@@ -183,13 +183,13 @@ $(document).ready(function () {
  *   3 is QE, 4 is ME, which have their own email fields in the Department table.
  */
 function setDepartmentEmail() {
-  var userTypeID = Number($('.contact-user-type-id input').val());
-  var cellLeadEmail = $('.cell-lead-email-address input').val();
-  var qeEmail = $('.qe-email-address input').val();
-  var meEmail = $('.me-email-address input').val();
-  var submitEmailAddressField = $('.department-email-address input');
+  const userTypeID = Number($('.contact-user-type-id input').val());
+  const cellLeadEmail = $('.cell-lead-email-address input').val();
+  const qeEmail = $('.qe-email-address input').val();
+  const meEmail = $('.me-email-address input').val();
+  const submitEmailAddressField = $('.department-email-address input');
 
-  if (userTypeID == 0) {
+  if (userTypeID === 0) {
     return;
   }
 

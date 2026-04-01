@@ -1,7 +1,7 @@
 $(document).ready(function () {
   // Normalize Network User Name based on LF user name. Store uppercase simple username portion.
-  var lfUserName = $('.lf-user-name input').val();
-  $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).change();
+  const lfUserName = $('.lf-user-name input').val();
+  $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
 
   // Initial UI setup.
   $('.Submit').hide();
@@ -15,11 +15,11 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
 
   // Avoid Bootstrap/jQuery UI .button() conflicts.
-  var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
+  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
   $.fn.bootstrapBtn = bootstrapButton;
 
   // Submit gate: defer to validateAdd/validateEdit based on action.
-  $('.Submit').click(function (e) { submitForm(e); });
+  $('.Submit').on("click", function (e) { submitForm(e); });
 
 
 
@@ -27,8 +27,8 @@ $(document).ready(function () {
   $(document).on('lookupcomplete', function (e) {
     generateTableButtons(".edit-vendor-col", "ui-icon-pencil", "Edit Vendor", "callEditVendor");
     if (isAdminUser()) {
-      if ($('.add-button').length == 0) {
-        var add_button = '<div class="ui-button add-button" onclick="callAddVendor()"><span title="Add Vendor" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Vendor</div>'
+      if ($('.add-button').length === 0) {
+        const add_button = '<div class="ui-button add-button" onclick="callAddVendor()"><span title="Add Vendor" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Vendor</div>'
         $(add_button).insertBefore('.vendor-table table');
       }
     }
@@ -57,7 +57,7 @@ function callAddVendor() {
     return;
   }
   $(`.action-choice input[type='radio'][value='1']`).prop("checked", true);
-  $('.add-vendor-id input').val(1).change();
+  $('.add-vendor-id input').val(1).trigger("change");
   $('.Submit').show();
 }
 
@@ -71,7 +71,7 @@ function callAddVendor() {
  */
 function callEditVendor(vendorID) {
   $(`.action-choice input[type='radio'][value='2']`).prop("checked", true);
-  $('.edit-vendor-id input').val(vendorID).change();
+  $('.edit-vendor-id input').val(vendorID).trigger("change");
   if (isAdminUser()) {
     $('.Submit').show();
   }
@@ -83,8 +83,8 @@ function callEditVendor(vendorID) {
  * - Clears .add-user-id and .edit-user-id
  */
 function callGoBack() {
-  $(".add-vendor-id input").val(0).change();
-  $(".edit-vendor-id input").val(0).change();
+  $(".add-vendor-id input").val(0).trigger("change");
+  $(".edit-vendor-id input").val(0).trigger("change");
   $('.Submit').hide();
 }
 
@@ -94,7 +94,7 @@ function callGoBack() {
  * The button invokes callGoBack().
  */
 function generateGoBackButtons() {
-  var $goback_buttons = $(".gobackbutton");
+  const $goback_buttons = $(".gobackbutton");
   $goback_buttons.each(function (index) {
     $(this).parent().append("<div id='go-back' class='ui-button ui-corner-all ui-widget' onclick='callGoBack()'><span class='ui-icon ui-icon-arrowreturnthick-1-w'></span>Go Back</div>");
   });
@@ -112,14 +112,14 @@ function generateGoBackButtons() {
  * @param {string} buttonFunction - Global function name to invoke, receives the value as first argument.
  */
 function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFunction) {
-  var selectionString = buttonSelector + " input[type=text]";
-  var buttons = $(selectionString);
+  const selectionString = buttonSelector + " input[type=text]";
+  const buttons = $(selectionString);
   buttons.each(function () {
-    var btn_value = $(this).val();
-    var btn_html = `<div class='table-button ui-button' onclick='${buttonFunction}(${btn_value})'><span title='${buttonTitle}' class='ui-button-icon ui-icon ${buttonClass}'/></div>`
+    const btn_value = $(this).val();
+    const btn_html = `<div class='table-button ui-button' onclick='${buttonFunction}(${btn_value})'><span title='${buttonTitle}' class='ui-button-icon ui-icon ${buttonClass}'/></div>`
 
-    var has_button = $(this).parent().find(`.${buttonClass}`).length;
-    if (has_button == 0) {
+    const has_button = $(this).parent().find(`.${buttonClass}`).length;
+    if (has_button === 0) {
       $(this).parent().append(btn_html);
     }
   });
@@ -132,7 +132,7 @@ function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFu
  * @returns {boolean} True when the current user is an admin user.
  */
 function isAdminUser() {
-  if ($('.user-isadmin input').val() == '1') {
+  if ($('.user-isadmin input').val() === '1') {
     return true;
   }
   return false;

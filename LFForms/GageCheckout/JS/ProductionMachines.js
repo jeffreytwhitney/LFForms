@@ -1,4 +1,4 @@
-/**
+﻿/**
  * ProductionMachines.js
  * ---------------------
  * UI behavior and client-side interaction logic for the Production Machines maintenance screen.
@@ -16,7 +16,7 @@
  * - Hidden field wrappers are addressed using class selectors (e.g., ".pg input", ".edit-machine-id input").
  * - Page number sentinel value "999" indicates uninitialized paging.
  * - Machine Add / Edit mode is toggled by radio button group #Field16-(0|1) and corresponding hidden ids.
- * - All DOM mutations that cause server-side refresh invoke .change() on the hidden input to trigger form logic.
+ * - All DOM mutations that cause server-side refresh invoke .trigger("change") on the hidden input to trigger form logic.
  *
  * Dependencies Loaded Dynamically:
  * - jquery.cookie (persist site)
@@ -31,7 +31,7 @@
  * - generateTableButtons(...) can be reused for any column needing a button icon.
  * - filterTable() can be extended to add more filter criteria (mirror additional fields to hidden inputs before refresh).
  *
- * NOTE: This file assumes the server-side form process reacts to .change() events by re-querying data.
+ * NOTE: This file assumes the server-side form process reacts to .trigger("change") events by re-querying data.
  */
 
 $(document).ready(function () {
@@ -40,46 +40,46 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-  var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
+  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
   $.fn.bootstrapBtn = bootstrapButton;
 
   // Normalize and capture the current user into a hidden field.
-  var lfUserName = $('.lf-user-name input').val();
-  if (lfUserName != 'Anonymous User') {
-    $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).change();
+  const lfUserName = $('.lf-user-name input').val();
+  if (lfUserName !== 'Anonymous User') {
+    $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
   }
 
   // Persist selected site name in a cookie for 1 year.
   $(document).on('change', '.site-name select', function () {
-    var sitename = $('.site-name select').val();
+    const sitename = $('.site-name select').val();
     $.cookie('site_name', sitename, { expires: 365, path: '/' });
   });
 
   $('.Submit').hide();
-  $('.Submit').click(function (e) { submitForm(e); });
+  $('.Submit').on("click", function (e) { submitForm(e); });
   $(document).prop('title', 'Production Machines');
 
   // Keep radio groups and hidden id fields in sync for "Is Active" and "Is Admin" controls.
   $(document).on('change', '.edit-is-active-value input', function () {
-    var isActive = $('.edit-is-active-value input').val();
+    const isActive = $('.edit-is-active-value input').val();
     $(`.edit-is-active-rdo input[type='radio'][value='${isActive}']`).prop("checked", true);
   });
   $(document).on('change', ".edit-is-active-rdo input[type='radio']", function () {
-    var isActive = $(this).val();
+    const isActive = $(this).val();
     $('.edit-is-active-value input').val(isActive);
   });
 
   $(document).on("onloadlookupfinished", function () {
     // Initialize paging on first load (pg=999 indicates "uninitialized")
-    if ($('.pg input').val() == '999') {
-      $('.pg input').val(1).change();
+    if ($('.pg input').val() === '999') {
+      $('.pg input').val(1).trigger("change");
     }
     generateGoBackButtons();
     generateEditButtons();
     // Restore site selection from cookie if present.
-    var sitename = $.cookie('site_name');
-    if (sitename != null) {
-      $('.site-name select').val(sitename).change();
+    const sitename = $.cookie('site_name');
+    if (sitename !== null) {
+      $('.site-name select').val(sitename).trigger("change");
     }
     $('.machine-table').show();
   });
@@ -101,27 +101,27 @@ $(document).ready(function () {
  * - No-op when page is the sentinel 999.
  */
 function appendPagination() {
-  var current_page = Number($('.pg input').val());
-  if (current_page == 999) { return; }
+  const current_page = Number($('.pg input').val());
+  if (current_page === 999) { return; }
 
-  var row_count = getTableRowCount();
+  const row_count = getTableRowCount();
 
   if (row_count > 0) {
     $('#user-pagination').remove();
-    if ((current_page == 1) && (row_count < 25)) {
-      $('.machine-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>��</a></li><li><a class='page-link prev isDisabled'>�</a></li><li><a class='page-link next isDisabled'>�</a></li></ul></div>");
+    if ((current_page === 1) && (row_count < 25)) {
+      $('.machine-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>ï¿½ï¿½</a></li><li><a class='page-link prev isDisabled'>ï¿½</a></li><li><a class='page-link next isDisabled'>ï¿½</a></li></ul></div>");
       return;
     }
-    if ((current_page == 1) && (row_count == 25)) {
-      $('.machine-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>��</a></li><li><a class='page-link prev isDisabled'>�</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>�</a></li></ul></div>")
+    if ((current_page === 1) && (row_count === 25)) {
+      $('.machine-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>ï¿½ï¿½</a></li><li><a class='page-link prev isDisabled'>ï¿½</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>ï¿½</a></li></ul></div>")
       return;
     }
-    if ((current_page > 1) && (row_count == 25)) {
-      $('.machine-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>��</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>�</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>�</a></li></ul></div>")
+    if ((current_page > 1) && (row_count === 25)) {
+      $('.machine-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>ï¿½ï¿½</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>ï¿½</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>ï¿½</a></li></ul></div>")
       return;
     }
     if ((current_page > 1) && (row_count < 25)) {
-      $('.machine-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>��</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>�</a></li><li><a class='page-link next isDisabled'>�</a></li></ul></div>")
+      $('.machine-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>ï¿½ï¿½</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>ï¿½</a></li><li><a class='page-link next isDisabled'>ï¿½</a></li></ul></div>")
       return;
     }
   }
@@ -132,11 +132,11 @@ function appendPagination() {
  * Enter "Add Machine" mode:
  * - Sets radio #Field16-0 (assumed Add flag) and .add-machine-id to 1.
  * - Reveals Submit button for admin users.
- * Side Effects: Mutates hidden fields and may trigger server refresh via .change().
+ * Side Effects: Mutates hidden fields and may trigger server refresh via .trigger("change").
  */
 function callAddProductionMachine() {
-  $("#Field16-0").prop("checked", true).change();
-  $(".add-machine-id input").val(1).change();
+  $("#Field16-0").prop("checked", true).trigger("change");
+  $(".add-machine-id input").val(1).trigger("change");
   if (isAdminUser()) {
     $('.Submit').show();
   }
@@ -149,8 +149,8 @@ function callAddProductionMachine() {
  * Side Effects: Sets radio #Field16-1, populates .edit-machine-id, shows Submit when admin.
  */
 function callEditProductionMachine(machine_id) {
-  $("#Field16-1").prop("checked", true).change();
-  $(".edit-machine-id input").val(machine_id).change();
+  $("#Field16-1").prop("checked", true).trigger("change");
+  $(".edit-machine-id input").val(machine_id).trigger("change");
   if (isAdminUser()) {
     $('.Submit').show();
   }
@@ -163,8 +163,8 @@ function callEditProductionMachine(machine_id) {
  * Side Effects: Hides .Submit.
  */
 function callGoBack() {
-  $(".add-machine-id input").val(0).change();
-  $(".edit-machine-id input").val(0).change();
+  $(".add-machine-id input").val(0).trigger("change");
+  $(".edit-machine-id input").val(0).trigger("change");
   $('.Submit').hide();
 }
 
@@ -175,13 +175,13 @@ function callGoBack() {
  * - Clears existing table action buttons.
  * - Increments .pg hidden field.
  * Preconditions: .pg must hold a numeric current page.
- * Side Effects: Triggers data reload (server-side) via .change().
+ * Side Effects: Triggers data reload (server-side) via .trigger("change").
  */
 function callNextPage() {
   $('.machine-table').hide();
   $('.table-button').remove();
   current_page = Number($('.pg input').val());
-  $('.pg input').val(current_page + 1).change();
+  $('.pg input').val(current_page + 1).trigger("change");
 }
 
 
@@ -189,16 +189,16 @@ function callNextPage() {
  * Goes to the previous page of results (no-op if already page 1).
  * - Hides table for refresh.
  * - Clears existing table action buttons.
- * Side Effects: Decrements .pg and triggers server refresh via .change().
+ * Side Effects: Decrements .pg and triggers server refresh via .trigger("change").
  */
 function callPrevPage() {
   $('.machine-table').hide();
   $('.table-button').remove();
   current_page = Number($('.pg input').val());
-  if (current_page == 1) {
+  if (current_page === 1) {
     return;
   }
-  $('.pg input').val(current_page - 1).change();
+  $('.pg input').val(current_page - 1).trigger("change");
 }
 
 
@@ -210,14 +210,14 @@ function callPrevPage() {
  * Side Effects: Mutates hidden inputs, resets pagination, hides table (awaiting refresh).
  */
 function filterTable() {
-  if ($('#filterRow').length == 0) {
+  if ($('#filterRow').length === 0) {
     return;
   }
 
-  $('.fmname input').val($('#txtFilter_TicketNumber').val()).change();
+  $('.fmname input').val($('#txtFilter_TicketNumber').val()).trigger("change");
   $('.machine-table').hide();
   $('.table-button').remove();
-  $('.pg input').val(1).change();
+  $('.pg input').val(1).trigger("change");
 }
 
 
@@ -229,16 +229,16 @@ function filterTable() {
  * Side Effects: Mutates DOM (thead + optional button insertion).
  */
 function generateFilterRow() {
-  if ($('#filterRow').length == 0) {
-    var filter_row = "<TR id='filterRow'><TH/><TH><input type='text' id='txtFilter_TicketNumber'></TH><TH/><TH/>"
+  if ($('#filterRow').length === 0) {
+    const filter_row = "<TR id='filterRow'><TH/><TH><input type='text' id='txtFilter_TicketNumber'></TH><TH/><TH/>"
     $('.machine-table table thead').append(filter_row);
     $("#txtFilter_TicketNumber").on("change", function () { filterTable(); });
-    $("#txtFilter_TicketNumber").dblclick(function () { $("#txtFilter_TicketNumber").val(null).change(); });
+    $("#txtFilter_TicketNumber").on("dblclick", function () { $("#txtFilter_TicketNumber").val(null).trigger("change"); });
   }
 
   if (isAdminUser()) {
-    if ($('.add-button').length == 0) {
-      var add_button = '<div class="ui-button add-button" onclick="callAddProductionMachine()"><span title="Add Machine" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Machine</div>'
+    if ($('.add-button').length === 0) {
+      const add_button = '<div class="ui-button add-button" onclick="callAddProductionMachine()"><span title="Add Machine" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Machine</div>'
       $(add_button).insertBefore('.machine-table table');
     }
   }
@@ -253,9 +253,9 @@ function generateFilterRow() {
  */
 function generateEditButtons() {
   $('.table-button').remove();
-  var edit_buttons = $(".edit-button input[type=text]");
+  const edit_buttons = $(".edit-button input[type=text]");
   edit_buttons.each(function (index) {
-    var btn_value = $(this).val();
+    const btn_value = $(this).val();
     if (isAdminUser()) {
       $(this).parent().append("<input class='table-button' type='button' value='Edit' onclick='callEditMachine(" + btn_value + ")' />");
     }
@@ -268,7 +268,7 @@ function generateEditButtons() {
  * Side Effects: DOM replacement; new button triggers callGoBack().
  */
 function generateGoBackButtons() {
-  var $goback_buttons = $(".gobackbutton");
+  const $goback_buttons = $(".gobackbutton");
   $goback_buttons.each(function (index) {
     $(this).replaceWith("<input class='return' type='button' value='Go Back' onclick='callGoBack()' />");
   });
@@ -286,11 +286,11 @@ function generateGoBackButtons() {
  * Guard: Will not duplicate a button if an element with icon class already exists in the cell.
  */
 function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFunction, isArgNumeric) {
-  var btn_html
-  var selectionString = buttonSelector + " input[type=text]";
-  var buttons = $(selectionString);
+  let btn_html
+  const selectionString = buttonSelector + " input[type=text]";
+  const buttons = $(selectionString);
   buttons.each(function () {
-    var btn_value = $(this).val();
+    const btn_value = $(this).val();
     if (isArgNumeric) {
       btn_html = `<div class='table-button ui-button' onclick='${buttonFunction}(${btn_value})'><span title='${buttonTitle}' class='ui-button-icon ui-icon ${buttonClass}'/></div>`
     }
@@ -298,8 +298,8 @@ function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFu
       btn_html = `<div class='table-button ui-button' onclick='${buttonFunction}("${btn_value}")'><span title='${buttonTitle}' class='ui-button-icon ui-icon ${buttonClass}'/></div>`
     }
 
-    var has_button = $(this).parent().find(`.${buttonClass}`).length;
-    if (has_button == 0) {
+    const has_button = $(this).parent().find(`.${buttonClass}`).length;
+    if (has_button === 0) {
       $(this).parent().append(btn_html);
     }
   });
@@ -311,7 +311,7 @@ function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFu
  * @returns {number} Count of <tr> elements under .machine-table tbody.
  */
 function getTableRowCount() {
-  var row_count = $('.machine-table table tbody tr').length;
+  const row_count = $('.machine-table table tbody tr').length;
   return row_count;
 }
 
@@ -321,7 +321,7 @@ function getTableRowCount() {
  * @returns {boolean} True when the hidden .user-isadmin input has value '1'.
  */
 function isAdminUser() {
-  if ($('.user-isadmin input').val() == '1') {
+  if ($('.user-isadmin input').val() === '1') {
     return true;
   }
   return false;
@@ -329,7 +329,7 @@ function isAdminUser() {
 
 
 function resetPageNumber() {
-  $('.pg input').val(1).change();
+  $('.pg input').val(1).trigger("change");
 }
 
 
@@ -341,15 +341,15 @@ function resetPageNumber() {
 * @param {JQuery.Event} e - Click/submit event.
 */
 function submitForm(e) {
-  var actionID = Number($('.action-choice input[type="radio"]:checked').val());
-  if (actionID == 1) {
-    if (validateAdd() != true) {
+  const actionID = Number($('.action-choice input[type="radio"]:checked').val());
+  if (actionID === 1) {
+    if (validateAdd() !== true) {
       e.preventDefault();
       return;
     }
   }
-  if (actionID == 2) {
-    if (validateEdit() != true) {
+  if (actionID === 2) {
+    if (validateEdit() !== true) {
       e.preventDefault();
       return;
     }
@@ -366,8 +366,8 @@ function submitForm(e) {
  */
 function validateAdd() {
   $('#existing-machine-error').remove();
-  var addMachineCount = $('.add-existing-machine-names select option').length;
-  var addMachineNameField = $('.add-machine-name input');
+  const addMachineCount = $('.add-existing-machine-names select option').length;
+  const addMachineNameField = $('.add-machine-name input');
   if (addMachineCount > 1) {
     addMachineNameField.parent().append("<ul id='existing-machine-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>There is another production machine with this name.</li></ul>");
     return false;
@@ -386,17 +386,17 @@ function validateAdd() {
  */
 function validateEdit() {
   $('#existing-machine-error').remove();
-  var returnValue = true;
-  var editMachineNameField = $('.edit-machine-name input');
-  var editMachineID = Number($('.edit-machine-id input').val());
-  var existingMachineIDs = $('.edit-existing-machine-names select option');
+  let returnValue = true;
+  const editMachineNameField = $('.edit-machine-name input');
+  const editMachineID = Number($('.edit-machine-id input').val());
+  const existingMachineIDs = $('.edit-existing-machine-names select option');
 
   $(existingMachineIDs).each(function (index) {
-    let existingMachineID = Number($(this).val());
-    if (existingMachineID == 0) {
+    const existingMachineID = Number($(this).val());
+    if (existingMachineID === 0) {
       return;
     }
-    if (existingMachineID != editMachineID) {
+    if (existingMachineID !== editMachineID) {
       editMachineNameField.parent().append("<ul id='existing-machine-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>There is another production machine with this name.</li></ul>");
       returnValue = false;
     }

@@ -1,11 +1,11 @@
-var departmentMap = new Map();
-var departmentNameMap = new Map();
-var machineGroupMap = new Map();
-var machineGroupNameMap = new Map();
-var cellLeaderMap = new Map();
-var cellLeaderNameMap = new Map();
+﻿const departmentMap = new Map();
+const departmentNameMap = new Map();
+const machineGroupMap = new Map();
+const machineGroupNameMap = new Map();
+const cellLeaderMap = new Map();
+const cellLeaderNameMap = new Map();
 
-var should_print_receipt = true;
+const should_print_receipt = true;
 
 $(document).ready(function () {
 
@@ -16,7 +16,7 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-  var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
+  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
   $.fn.bootstrapBtn = bootstrapButton;
 
   $(document).prop('title', 'Ticket History');
@@ -28,9 +28,9 @@ $(document).ready(function () {
 
   $(document).on("onloadlookupfinished", function () {
     $('.Submit').hide();
-    var sitename = $.cookie('site_name');
-    if (sitename != null) {
-      $('.site-name select').val(sitename).change();
+    const sitename = $.cookie('site_name');
+    if (sitename !== null) {
+      $('.site-name select').val(sitename).trigger("change");
     }
     generateTicketNumberColumn();
     $('.ticket-table').show();
@@ -40,8 +40,8 @@ $(document).ready(function () {
 
   $(document).on('lookupcomplete', function (e) {
 
-    if ($('.pg input').val() == '999') {
-      $('.pg input').val(1).change();
+    if ($('.pg input').val() === '999') {
+      $('.pg input').val(1).trigger("change");
     }
 
     loadDepartmentMap();
@@ -66,27 +66,27 @@ $(document).ready(function () {
 
 function appendPagination() {
 
-  var current_page = Number($('.pg input').val());
-  if (current_page == 999) { return; }
+  const current_page = Number($('.pg input').val());
+  if (current_page === 999) { return; }
 
-  var row_count = getTicketRowCount();
+  const row_count = getTicketRowCount();
 
   if (row_count > 0) {
     $('#ticket-table-pagination').remove();
-    if ((current_page == 1) && (row_count < 25)) {
-      $('.ticket-table table').parent().append("<div id='ticket-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>��</a></li><li><a class='page-link prev isDisabled'>�</a></li><li><a class='page-link next isDisabled'>�</a></li></ul></div>");
+    if ((current_page === 1) && (row_count < 25)) {
+      $('.ticket-table table').parent().append("<div id='ticket-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>ï¿½ï¿½</a></li><li><a class='page-link prev isDisabled'>ï¿½</a></li><li><a class='page-link next isDisabled'>ï¿½</a></li></ul></div>");
       return;
     }
-    if ((current_page == 1) && (row_count == 25)) {
-      $('.ticket-table table').parent().append("<div id='ticket-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>��</a></li><li><a class='page-link prev isDisabled'>�</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>�</a></li></ul></div>")
+    if ((current_page === 1) && (row_count === 25)) {
+      $('.ticket-table table').parent().append("<div id='ticket-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>ï¿½ï¿½</a></li><li><a class='page-link prev isDisabled'>ï¿½</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>ï¿½</a></li></ul></div>")
       return;
     }
-    if ((current_page > 1) && (row_count == 25)) {
-      $('.ticket-table table').parent().append("<div id='ticket-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>��</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>�</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>�</a></li></ul></div>")
+    if ((current_page > 1) && (row_count === 25)) {
+      $('.ticket-table table').parent().append("<div id='ticket-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>ï¿½ï¿½</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>ï¿½</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>ï¿½</a></li></ul></div>")
       return;
     }
     if ((current_page > 1) && (row_count < 25)) {
-      $('.ticket-table table').parent().append("<div id='ticket-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>��</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>�</a></li><li><a class='page-link next isDisabled'>�</a></li></ul></div>")
+      $('.ticket-table table').parent().append("<div id='ticket-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>ï¿½ï¿½</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>ï¿½</a></li><li><a class='page-link next isDisabled'>ï¿½</a></li></ul></div>")
       return;
     }
   }
@@ -97,7 +97,7 @@ function callNextPage() {
   $('.tasklist-table').hide();
   removeAppendedFields();
   current_page = Number($('.pg input').val());
-  $('.tasklist-page input').val(current_page + 1).change();
+  $('.tasklist-page input').val(current_page + 1).trigger("change");
 }
 
 
@@ -105,24 +105,24 @@ function callPrevPage() {
   $('.tasklist-table').hide();
   removeAppendedFields();
   current_page = Number($('.pg input').val());
-  if (current_page == 1) {
+  if (current_page === 1) {
     return;
   }
-  $('.tasklist-page input').val(current_page - 1).change();
+  $('.tasklist-page input').val(current_page - 1).trigger("change");
 }
 
 
 function checkPermissions() {
 
-  var employee_number = $("#Field87").val();
-  var is_active_user = $("#Field88").val().toString();
-  var return_val = true;
+  const employee_number = $("#Field87").val();
+  const is_active_user = $("#Field88").val().toString();
+  let return_val = true;
 
-  if (is_active_user == "False") {
+  if (is_active_user === "False") {
     return_val = false;
   }
 
-  if (employee_number == '') {
+  if (employee_number === '') {
     return_val = false;
   }
 
@@ -133,16 +133,16 @@ function checkPermissions() {
 
 function filterTicketTable() {
 
-  if ($('#filterRow').length == 0) {
+  if ($('#filterRow').length === 0) {
     return;
   }
 
-  var ticketNumberFilterValue = $('#txtFilter_TicketNumber').val();
-  var ticketTypeFilterVal = $('#cboFilter_TicketType').val();
-  var departmentFilterVal = $('#cboFilter_Department').val();
-  var machineGroupFilterVal = $('#cboFilter_MachineGroup').val();
-  var operatorFilterVal = $('#cboFilter_Operator').val();
-  var cellLeaderFilterVal = $('#cboFilter_CellLeader').val();
+  const ticketNumberFilterValue = $('#txtFilter_TicketNumber').val();
+  const ticketTypeFilterVal = $('#cboFilter_TicketType').val();
+  const departmentFilterVal = $('#cboFilter_Department').val();
+  const machineGroupFilterVal = $('#cboFilter_MachineGroup').val();
+  const operatorFilterVal = $('#cboFilter_Operator').val();
+  const cellLeaderFilterVal = $('#cboFilter_CellLeader').val();
 
   $('.ftname input').val(ticketNumberFilterValue);
 
@@ -156,38 +156,38 @@ function filterTicketTable() {
   }
 
 
-  if (ticketTypeFilterVal != null) {
+  if (ticketTypeFilterVal !== null) {
     $('.fttid input').val(ticketTypeFilterVal);
   }
   else {
     $('.fttid input').val(0);
   }
 
-  if ((departmentFilterVal != 0) && (departmentFilterVal.length > 0)) {
-    let taskDepartmentID = departmentNameMap.get(departmentFilterVal);
+  if ((departmentFilterVal !== 0) && (departmentFilterVal.length > 0)) {
+    const taskDepartmentID = departmentNameMap.get(departmentFilterVal);
     $('.fdid input').val(taskDepartmentID);
   }
   else {
     $('.fdid input').val(0);
   }
 
-  if ((machineGroupFilterVal != 0) && (machineGroupFilterVal.length > 0)) {
-    let machineGroupID = machineGroupNameMap.get(machineGroupFilterVal);
+  if ((machineGroupFilterVal !== 0) && (machineGroupFilterVal.length > 0)) {
+    const machineGroupID = machineGroupNameMap.get(machineGroupFilterVal);
     $('.fmgid input').val(machineGroupID);
   }
   else {
     $('.fmgid input').val(null);
   }
 
-  if ((operatorFilterVal != null) && (operatorFilterVal.length > 0)) {
+  if ((operatorFilterVal !== null) && (operatorFilterVal.length > 0)) {
     $('.fopname input').val(operatorFilterVal);
   }
   else {
     $('.fopname input').val(null);
   }
 
-  if ((cellLeaderFilterVal != 0) && (cellLeaderFilterVal.length > 0)) {
-    let cellLeaderID = cellLeaderNameMap.get(cellLeaderFilterVal);
+  if ((cellLeaderFilterVal !== 0) && (cellLeaderFilterVal.length > 0)) {
+    const cellLeaderID = cellLeaderNameMap.get(cellLeaderFilterVal);
     $('.fclid input').val(cellLeaderID);
   }
   else {
@@ -196,7 +196,7 @@ function filterTicketTable() {
 
   $('.ticket-table').hide();
   $('.ticket-detail-link').remove();
-  $('.pg input').val(1).change();
+  $('.pg input').val(1).trigger("change");
 
 }
 
@@ -210,9 +210,9 @@ function formatDateFields(selector) {
 
 function generateFilterRow() {
 
-  if ($('#filterRow').length == 0) {
+  if ($('#filterRow').length === 0) {
 
-    var filter_row = "<TR id='filterRow'><TH><input type='text' id='txtFilter_TicketNumber'></TH><TH/><TH><select id='cboFilter_TicketType'/></TH><TH><select id='cboFilter_Department'/></TH><TH/><TH><select id='cboFilter_MachineGroup'/></TH><TH><select id='cboFilter_Operator'/></TH><TH><select id='cboFilter_CellLeader'/></TH><TH/><TH/><TH/><TH/><TH/><TH/><TH/><TH/>"
+    const filter_row = "<TR id='filterRow'><TH><input type='text' id='txtFilter_TicketNumber'></TH><TH/><TH><select id='cboFilter_TicketType'/></TH><TH><select id='cboFilter_Department'/></TH><TH/><TH><select id='cboFilter_MachineGroup'/></TH><TH><select id='cboFilter_Operator'/></TH><TH><select id='cboFilter_CellLeader'/></TH><TH/><TH/><TH/><TH/><TH/><TH/><TH/><TH/>"
     $('.ticket-table table thead').append(filter_row);
     $("#txtFilter_TicketNumber").on("change", function () { filterTicketTable(); });
     $("#cboFilter_TicketType").on("change", function () { filterTicketTable(); });
@@ -222,32 +222,32 @@ function generateFilterRow() {
     $("#cboFilter_CellLeader").on("change", function () { filterTicketTable(); });
 
 
-    $("#txtFilter_TicketNumber").dblclick(function () { $("#txtFilter_TicketNumber").val(null).change(); });
-    $("#cboFilter_TicketType").dblclick(function () { $("#cboFilter_TicketType").val(null).change(); });
-    $("#cboFilter_Department").dblclick(function () { $("#cboFilter_Department").val(null).change(); });
-    $("#cboFilter_MachineGroup").dblclick(function () { $("#cboFilter_MachineGroup").val(null).change(); });
-    $("#cboFilter_Operator").dblclick(function () { $("#cboFilter_Operator").val(null).change(); });
-    $("#cboFilter_CellLeader").dblclick(function () { $("#cboFilter_CellLeader").val(null).change(); });
+    $("#txtFilter_TicketNumber").on("dblclick", function () { $("#txtFilter_TicketNumber").val(null).trigger("change"); });
+    $("#cboFilter_TicketType").on("dblclick", function () { $("#cboFilter_TicketType").val(null).trigger("change"); });
+    $("#cboFilter_Department").on("dblclick", function () { $("#cboFilter_Department").val(null).trigger("change"); });
+    $("#cboFilter_MachineGroup").on("dblclick", function () { $("#cboFilter_MachineGroup").val(null).trigger("change"); });
+    $("#cboFilter_Operator").on("dblclick", function () { $("#cboFilter_Operator").val(null).trigger("change"); });
+    $("#cboFilter_CellLeader").on("dblclick", function () { $("#cboFilter_CellLeader").val(null).trigger("change"); });
   }
 
-  if (($(".ticket-type-lookup-cbo select option").length > 0) && ($('#cboFilter_TicketType option' == 0))) {
+  if (($(".ticket-type-lookup-cbo select option").length > 0) && ($('#cboFilter_TicketType option' === 0))) {
     $("#cboFilter_TicketType").html($(".ticket-type-lookup-cbo select").html());
   }
 
-  if (($(".department-lookup-cbo select option").length > 0) && ($('#cboFilter_Department option' == 0))) {
+  if (($(".department-lookup-cbo select option").length > 0) && ($('#cboFilter_Department option' === 0))) {
     $("#cboFilter_Department").html($(".department-lookup-cbo select").html());
   }
 
-  if (($(".machine-group-lookup-cbo select option").length > 0) && ($('#cboFilter_MachineGroup option' == 0))) {
+  if (($(".machine-group-lookup-cbo select option").length > 0) && ($('#cboFilter_MachineGroup option' === 0))) {
     $("#cboFilter_MachineGroup").html($(".machine-group-lookup-cbo select").html());
   }
 
-  if (($(".operator-lookup-cbo select option").length > 0) && ($('#cboFilter_Operator option' == 0))) {
+  if (($(".operator-lookup-cbo select option").length > 0) && ($('#cboFilter_Operator option' === 0))) {
     $("#cboFilter_Operator").html($(".operator-lookup-cbo select").html());
     $("#cboFilter_Operator").find('option:eq(0)').prop('selected', true);
   }
 
-  if (($(".cell-leader-lookup-cbo select option").length > 0) && ($('#cboFilter_CellLeader option' == 0))) {
+  if (($(".cell-leader-lookup-cbo select option").length > 0) && ($('#cboFilter_CellLeader option' === 0))) {
     $("#cboFilter_CellLeader").html($(".cell-leader-lookup-cbo select").html());
     $("#cboFilter_CellLeader").find('option:eq(0)').prop('selected', true);
   }
@@ -256,14 +256,14 @@ function generateFilterRow() {
 
 function generateTicketNumberColumn() {
   $('.ticket-link').remove();
-  var ticket_numbers = $('.ticket-number-col input[type="text"]');
-  var ticket_ids = $('.ticket-id-col input[type="text"]');
+  const ticket_numbers = $('.ticket-number-col input[type="text"]');
+  const ticket_ids = $('.ticket-id-col input[type="text"]');
   ticket_numbers.each(function (index) {
-    let ticket_id = $(ticket_ids[index]).val();
-    let ticket_number = $(this).val();
-    let ticket_number_link = $("<a>", { text: ticket_number, class: 'ticket-link', href: 'javascript:void(0);', onclick: `showDetails(${ticket_id})` });
-    let has_link = $(this).parent().find('.ticket-link').length;
-    if (has_link == 0) {
+    const ticket_id = $(ticket_ids[index]).val();
+    const ticket_number = $(this).val();
+    const ticket_number_link = $("<a>", { text: ticket_number, class: 'ticket-link', href: 'javascript:void(0);', onclick: `showDetails(${ticket_id})` });
+    const has_link = $(this).parent().find('.ticket-link').length;
+    if (has_link === 0) {
       $(this).parent().append(ticket_number_link);
     }
   });
@@ -272,20 +272,20 @@ function generateTicketNumberColumn() {
 
 
 function getTicketRowCount() {
-  var row_count = $('.ticket-table table tbody tr').length;
+  const row_count = $('.ticket-table table tbody tr').length;
   return row_count;
 }
 
 
 function getTicketTypeIDByTicketID(ticket_id) {
-  var ticket_type_id;
-  var ticket_ids = $(".ticket-id-col input[type=text]");
-  var ticket_type_ids = $(".ticket-type-id-col input[type=text]");
+  let ticket_type_id;
+  const ticket_ids = $(".ticket-id-col input[type=text]");
+  const ticket_type_ids = $(".ticket-type-id-col input[type=text]");
 
   ticket_ids.each(function (index) {
-    var row_ticket_id = $(this).val();
-    var row_ticket_type_id = ticket_type_ids[index].value;
-    if (row_ticket_id == ticket_id) {
+    const row_ticket_id = $(this).val();
+    const row_ticket_type_id = ticket_type_ids[index].value;
+    if (row_ticket_id === ticket_id) {
       ticket_type_id = row_ticket_type_id;
       return;
     }
@@ -300,9 +300,9 @@ function loadiFrame(src) {
 
 
 function loadCellLeaderMap() {
-  if (cellLeaderMap.keys.length == 0) {
-    var cellLeader_rows = $('.cellleader-lookup-table table tbody tr');
-    if (cellLeader_rows.length == 0) {
+  if (cellLeaderMap.keys.length === 0) {
+    const cellLeader_rows = $('.cellleader-lookup-table table tbody tr');
+    if (cellLeader_rows.length === 0) {
       return;
     }
     cellLeader_rows.each(function (index) {
@@ -316,9 +316,9 @@ function loadCellLeaderMap() {
 
 
 function loadDepartmentMap() {
-  if (departmentMap.keys.length == 0) {
-    var department_rows = $('.department-lookup-table table tbody tr');
-    if (department_rows.length == 0) {
+  if (departmentMap.keys.length === 0) {
+    const department_rows = $('.department-lookup-table table tbody tr');
+    if (department_rows.length === 0) {
       return;
     }
     department_rows.each(function (index) {
@@ -332,9 +332,9 @@ function loadDepartmentMap() {
 
 
 function loadMachineGroupMap() {
-  if (machineGroupMap.keys.length == 0) {
-    var machine_group_rows = $('.machine-group-lookup-table table tbody tr');
-    if (machine_group_rows.length == 0) {
+  if (machineGroupMap.keys.length === 0) {
+    const machine_group_rows = $('.machine-group-lookup-table table tbody tr');
+    if (machine_group_rows.length === 0) {
       return;
     }
     machine_group_rows.each(function (index) {
@@ -372,20 +372,20 @@ function popUpIframe(src, title, height, width) {
 
 
 function reApplyFilterValues() {
-  if ($('#filterRow').length == 0) {
+  if ($('#filterRow').length === 0) {
     return;
   }
 
-  var ticketNumberFilterValue = $('.ftname input').val();
-  var ticketTypeFilterVal = $('.fttid input').val();
-  var departmentFilterVal = Number($('.fdid input').val());
-  var machineGroupFilterVal = Number($('.fmgid input').val());
-  var operatorFilterVal = $('.fopname input').val();
-  var cellLeaderFilterVal = Number($('.fclid input').val());
-  var includeClosedTicketsVal = Number($('.fincret input').val());
+  const ticketNumberFilterValue = $('.ftname input').val();
+  const ticketTypeFilterVal = $('.fttid input').val();
+  const departmentFilterVal = Number($('.fdid input').val());
+  const machineGroupFilterVal = Number($('.fmgid input').val());
+  const operatorFilterVal = $('.fopname input').val();
+  const cellLeaderFilterVal = Number($('.fclid input').val());
+  const includeClosedTicketsVal = Number($('.fincret input').val());
 
 
-  if (includeClosedTicketsVal == 1) {
+  if (includeClosedTicketsVal === 1) {
     $('#Field52-0').prop('checked', true);
   }
   else {
@@ -393,30 +393,30 @@ function reApplyFilterValues() {
   }
 
 
-  if ((ticketNumberFilterValue != null) && (ticketNumberFilterValue.length > 0)) {
+  if ((ticketNumberFilterValue !== null) && (ticketNumberFilterValue.length > 0)) {
     $('#txtFilter_TicketNumber').val(ticketNumberFilterValue);
   }
 
-  if (ticketTypeFilterVal != 0) {
+  if (ticketTypeFilterVal !== 0) {
     $("#cboFilter_TicketType").val(ticketTypeFilterVal);
   }
 
-  if (departmentFilterVal != 0) {
-    let departmentName = departmentMap.get(departmentFilterVal);
+  if (departmentFilterVal !== 0) {
+    const departmentName = departmentMap.get(departmentFilterVal);
     $('#cboFilter_Department').val(departmentName);
   }
 
-  if (machineGroupFilterVal != 0) {
-    let machineGroupName = machineGroupMap.get(machineGroupFilterVal);
+  if (machineGroupFilterVal !== 0) {
+    const machineGroupName = machineGroupMap.get(machineGroupFilterVal);
     $('#cboFilter_MachineGroup').val(machineGroupName);
   }
 
-  if ((operatorFilterVal != null) && (operatorFilterVal.length > 0)) {
+  if ((operatorFilterVal !== null) && (operatorFilterVal.length > 0)) {
     $("#cboFilter_Operator").val(operatorFilterVal);
   }
 
-  if (cellLeaderFilterVal != 0) {
-    let cellLeaderName = cellLeaderMap.get(cellLeaderFilterVal);
+  if (cellLeaderFilterVal !== 0) {
+    const cellLeaderName = cellLeaderMap.get(cellLeaderFilterVal);
     $("#cboFilter_CellLeader").val(cellLeaderName);
   }
 }
@@ -424,16 +424,16 @@ function reApplyFilterValues() {
 
 function refreshPage() {
 
-  var ticketNumberFilterValue = $('.ftname input').val();
-  var ticketTypeFilterVal = $('.fttid input').val();
-  var departmentFilterVal = Number($('.fdid input').val());
-  var machineGroupFilterVal = Number($('.fmgid input').val());
-  var operatorFilterVal = $('.fopname input').val();
-  var cellLeaderFilterVal = Number($('.fclid input').val());
-  var page_number = Number($('.pg input').val());
+  const ticketNumberFilterValue = $('.ftname input').val();
+  const ticketTypeFilterVal = $('.fttid input').val();
+  const departmentFilterVal = Number($('.fdid input').val());
+  const machineGroupFilterVal = Number($('.fmgid input').val());
+  const operatorFilterVal = $('.fopname input').val();
+  const cellLeaderFilterVal = Number($('.fclid input').val());
+  const page_number = Number($('.pg input').val());
 
 
-  var current_url = window.location.href;
+  let current_url = window.location.href;
   if (current_url.includes('?')) {
     indexOfQuestionMark = current_url.indexOf('?');
     current_url = current_url.substring(0, indexOfQuestionMark);
@@ -443,23 +443,23 @@ function refreshPage() {
     current_url = current_url + `?pg=${page_number}`;
   }
 
-  if ((ticketNumberFilterValue != null) && (ticketNumberFilterValue.length > 0)) {
+  if ((ticketNumberFilterValue !== null) && (ticketNumberFilterValue.length > 0)) {
     current_url = current_url + `&ftname=${ticketNumberFilterValue}`;
   }
 
-  if ((departmentFilterVal != null) && (departmentFilterVal > 0)) {
+  if ((departmentFilterVal !== null) && (departmentFilterVal > 0)) {
     current_url = current_url + `&fdid=${departmentFilterVal}`;
   }
-  if ((ticketTypeFilterVal != null) && (ticketTypeFilterVal > 0)) {
+  if ((ticketTypeFilterVal !== null) && (ticketTypeFilterVal > 0)) {
     current_url = current_url + `&fttid=${ticketTypeFilterVal}`;
   }
-  if ((machineGroupFilterVal != null) && (machineGroupFilterVal > 0)) {
+  if ((machineGroupFilterVal !== null) && (machineGroupFilterVal > 0)) {
     current_url = current_url + `&fmgid=${machineGroupFilterVal}`;
   }
-  if ((operatorFilterVal != null) && (operatorFilterVal != '')) {
+  if ((operatorFilterVal !== null) && (operatorFilterVal !== '')) {
     current_url = current_url + `&fopname=${operatorFilterVal}`;
   }
-  if ((cellLeaderFilterVal != null) && (cellLeaderFilterVal > 0)) {
+  if ((cellLeaderFilterVal !== null) && (cellLeaderFilterVal > 0)) {
     current_url = current_url + `&fclid=${cellLeaderFilterVal}`;
   }
 
@@ -474,10 +474,10 @@ function removeAppendedFields() {
 
 
 function removeRow(ticket_id) {
-  var ticket_ids = $(".ticket-id-col input[type=text]");
+  const ticket_ids = $(".ticket-id-col input[type=text]");
   ticket_ids.each(function (index) {
-    var row_ticket_id = $(this).val();
-    if (row_ticket_id == ticket_id) {
+    const row_ticket_id = $(this).val();
+    if (row_ticket_id === ticket_id) {
       $(this).closest('tr').remove();
       return;
     }
@@ -488,13 +488,14 @@ function removeRow(ticket_id) {
 function resetPageNumber() {
   $('.ticket-table').hide();
   removeAppendedFields();
-  $('.pg input').val(1).change();
+  $('.pg input').val(1).trigger("change");
 }
 
 
 function showDetails(ticket_id) {
-  var widowHeight = $(window).height();
+  let widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
   popUpIframe(`http://rmslf/Forms/RMS-GAGE-TicketDetails?tid=${ticket_id}&ro=1`, 'Ticket Details', widowHeight, 1200);
 }
+
 

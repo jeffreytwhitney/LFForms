@@ -1,5 +1,5 @@
 /**
- Sites.js — UI behaviors for Site Maintenance.
+ Sites.js ï¿½ UI behaviors for Site Maintenance.
  
   Author:   Jeffrey Whitney
             jtwhitney@machine.com
@@ -120,8 +120,8 @@
 
 $(document).ready(function () {
   // Normalize and display the current user's network/SAM account (uppercase, post-back safe).
-  var lfUserName = $('.lf-user-name input').val();
-  $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).change();
+  const lfUserName = $('.lf-user-name input').val();
+  $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
 
   // Hide the submit control by default; it will be shown on actionable states.
   $('.Submit').hide();
@@ -138,7 +138,7 @@ $(document).ready(function () {
 
   // Resolve Bootstrap's $.fn.button conflict if Bootstrap is present.
   // Restores original $.fn.button and re-exports as $.fn.bootstrapBtn.
-  var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
+  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
   $.fn.bootstrapBtn = bootstrapButton;
 
   // When the data lookup completes, add per-row edit buttons and a global "Add Site" button (admins only).
@@ -151,8 +151,8 @@ $(document).ready(function () {
 
     // Add a top-level "Add Site" button once for admin users.
     if (isAdminUser()) {
-      if ($('.add-button').length == 0) {
-        var add_button = '<div class="ui-button add-button" onclick="callAddSite()"><span title="Add Site" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Site</div>';
+      if ($('.add-button').length === 0) {
+        const add_button = '<div class="ui-button add-button" onclick="callAddSite()"><span title="Add Site" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Site</div>';
         $(add_button).insertBefore('.site-table table');
       }
     }
@@ -174,7 +174,7 @@ $(document).ready(function () {
  */
 function callAddSite() {
   $(`.action-choice input[type='radio'][value='1']`).prop("checked", true);
-  $('.add-id input').val(1).change();
+  $('.add-id input').val(1).trigger("change");
   $('.Submit').show();
 }
 
@@ -189,7 +189,7 @@ function callAddSite() {
  */
 function callEditSite(siteID) {
   $(`.action-choice input[type='radio'][value='2']`).prop("checked", true);
-  $('.edit-id input').val(siteID).change();
+  $('.edit-id input').val(siteID).trigger("change");
   if (isAdminUser()) {
     $('.Submit').show();
   }
@@ -202,8 +202,8 @@ function callEditSite(siteID) {
  * - Hides the submit control.
  */
 function callGoBack() {
-  $(".add-id input").val(0).change();
-  $(".edit-id input").val(0).change();
+  $(".add-id input").val(0).trigger("change");
+  $(".edit-id input").val(0).trigger("change");
   $('.Submit').hide();
 }
 
@@ -217,7 +217,7 @@ function callGoBack() {
  * - Placeholder elements must exist at the desired insertion points.
  */
 function generateGoBackButtons() {
-  var $goback_buttons = $(".gobackbutton");
+  const $goback_buttons = $(".gobackbutton");
   $goback_buttons.each(function (index) {
     $(this).parent().append("<div id='go-back' class='ui-button ui-corner-all ui-widget' onclick='callGoBack()'><span class='ui-icon ui-icon-arrowreturnthick-1-w'></span>Go Back</div>");
   });
@@ -244,14 +244,14 @@ function generateGoBackButtons() {
  * @param {string} buttonFunction - Name of the global function to invoke (e.g., "callEditSite").
  */
 function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFunction) {
-  var selectionString = buttonSelector + " input[type=text]";
-  var buttons = $(selectionString);
+  const selectionString = buttonSelector + " input[type=text]";
+  const buttons = $(selectionString);
   buttons.each(function () {
-    var btn_value = $(this).val();
-    var btn_html = `<div class='table-button ui-button' onclick='${buttonFunction}(${btn_value})'><span title='${buttonTitle}' class='ui-button-icon ui-icon ${buttonClass}'/></div>`
+    const btn_value = $(this).val();
+    const btn_html = `<div class='table-button ui-button' onclick='${buttonFunction}(${btn_value})'><span title='${buttonTitle}' class='ui-button-icon ui-icon ${buttonClass}'/></div>`
 
-    var has_button = $(this).parent().find(`.${buttonClass}`).length;
-    if (has_button == 0) {
+    const has_button = $(this).parent().find(`.${buttonClass}`).length;
+    if (has_button === 0) {
       $(this).parent().append(btn_html);
     }
   });
@@ -264,7 +264,7 @@ function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFu
  * @returns {boolean} True if ".user-isadmin input" has the value "1"; otherwise false.
  */
 function isAdminUser() {
-  if ($('.user-isadmin input').val() == '1') {
+  if ($('.user-isadmin input').val() === '1') {
     return true;
   }
   return false;

@@ -1,4 +1,4 @@
-var should_print_receipt = true;
+let should_print_receipt = true;
 
 
 $(document).ready(function () {
@@ -7,18 +7,18 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-  var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
+  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
   $.fn.bootstrapBtn = bootstrapButton;
   $('.Submit').hide();
   $(document).prop('title', 'Gage Calibration');
   $('#q0').append("<div class='hidden' id='print_output'></div>");
 
-  if ($('.closeme input').val() == 1) {
+  if ($('.closeme input').val() === 1) {
     $('#q2').hide();
     $('#q3').hide();
   }
 
-  $('.Submit').click(function (e) {
+  $('.Submit').on("click", function (e) {
     if ($('.tid input').val().length > 0) {
       $('.closeme input').val(1);
     }
@@ -32,9 +32,9 @@ $(document).ready(function () {
 
   $(document).on("lookupcomplete", function (e) {
 
-    if (e.triggerId == 'Field37') {
+    if (e.triggerId === 'Field37') {
       if ($('#Field37').val()) {
-        if ($('#Field37').val() != "0") {
+        if ($('#Field37').val() !== "0") {
           print_receipt();
         }
       }
@@ -47,10 +47,10 @@ $(document).ready(function () {
       $('.Submit').hide();
     }
 
-    if (Number($('.ticket-type-id input').val()) == 1) {
+    if (Number($('.ticket-type-id input').val()) === 1) {
       generatePinAllGoodButton();
     }
-    else if (Number($('.ticket-type-id input').val()) == 2) {
+    else if (Number($('.ticket-type-id input').val()) === 2) {
       formatThreadGageTable();
       generateThreadAllGoodButton();
       threadGageFormatted = true;
@@ -58,14 +58,14 @@ $(document).ready(function () {
   });
 
   $(".pin-table-notes textarea").on("change", function (e) {
-    var note_text = $(e.currentTarget).val();
+    let note_text = $(e.currentTarget).val();
     note_text = note_text.replace(/'/g, '');
     note_text = note_text.replace(/"/g, '');
     $(e.currentTarget).val(note_text);
   });
 
   $(".thread-cal-notes-col textarea").on("change", function (e) {
-    var note_text = $(e.currentTarget).val();
+    let note_text = $(e.currentTarget).val();
     note_text = note_text.replace(/'/g, '');
     note_text = note_text.replace(/"/g, '');
     $(e.currentTarget).val(note_text);
@@ -81,15 +81,15 @@ $(document).ready(function () {
       return;
     }
 
-    var resultID = Number($(e.currentTarget).val());
-    var parentRow = $(e.currentTarget).closest('tr');
-    var threadTypeID = Number(parentRow.find('.thread-type-id-col input[type="text"]').val());
-    var goDiameterField = parentRow.find('.go-pitch-diameter-col input[type="text"]');
-    var noGoDiameterField = parentRow.find('.nogo-pitch-diameter-col input[type="text"]');
-    var majorDiameterField = parentRow.find('.major-diameter-col input[type="text"]');
+    const resultID = Number($(e.currentTarget).val());
+    const parentRow = $(e.currentTarget).closest('tr');
+    const threadTypeID = Number(parentRow.find('.thread-type-id-col input[type="text"]').val());
+    const goDiameterField = parentRow.find('.go-pitch-diameter-col input[type="text"]');
+    const noGoDiameterField = parentRow.find('.nogo-pitch-diameter-col input[type="text"]');
+    const majorDiameterField = parentRow.find('.major-diameter-col input[type="text"]');
 
-    if (threadTypeID == 1) {
-      if (resultID == 4) {
+    if (threadTypeID === 1) {
+      if (resultID === 4) {
         $(goDiameterField).val(0).removeClass("ui-state-disabled").addClass("ui-state-disabled");
         $(noGoDiameterField).val(0).removeClass("ui-state-disabled").addClass("ui-state-disabled");
         $(majorDiameterField).val(0).removeClass("ui-state-disabled").addClass("ui-state-disabled");
@@ -104,9 +104,9 @@ $(document).ready(function () {
 
 
   $('.ticket-number input').on('keypress', function () {
-    var input = $(this);
+    const input = $(this);
     setTimeout(function () {
-      var val = input.val().replace(/^\*+|\*+$/g, '');
+      const val = input.val().replace(/^\*+|\*+$/g, '');
       input.val(val);
     }, 0);
   });
@@ -117,9 +117,9 @@ $(document).ready(function () {
 
 function callPinAllGood() {
   
-  var threadGageRows = $('.pin-table tbody tr');
+  const threadGageRows = $('.pin-table tbody tr');
   threadGageRows.each(function (index) {
-    let adjustedRadioField = $(this).find('.pin-table-result fieldset span.choice').eq(0).find('input[type="radio"]');
+    const adjustedRadioField = $(this).find('.pin-table-result fieldset span.choice').eq(0).find('input[type="radio"]');
     $(adjustedRadioField).prop("checked", true);
 
   });
@@ -127,24 +127,24 @@ function callPinAllGood() {
 
 
 function callThreadAllGood() {
-  var threadGageRows = $('.thread-gage-table tbody tr');
+  const threadGageRows = $('.thread-gage-table tbody tr');
   threadGageRows.each(function (index) {
-    let adjustedRadioField = $(this).find('.plug-thread-cal-result-col fieldset span.choice').eq(0).find('input[type="radio"]');
-    $(adjustedRadioField).prop("checked", true).change();
+    const adjustedRadioField = $(this).find('.plug-thread-cal-result-col fieldset span.choice').eq(0).find('input[type="radio"]');
+    $(adjustedRadioField).prop("checked", true).trigger("change");
   });
 }
 
 
 function generatePinAllGoodButton() {
   $('.all-good-pin-button').remove();
-  var btn_html = `<div class='pin-allgood-button ui-button all-good-pin-button' onclick='callPinAllGood()'><span title='All Good' class='ui-button-icon ui-icon ui-icon-check'></span> Mark All as 'Pass'</div>`
+  const btn_html = `<div class='pin-allgood-button ui-button all-good-pin-button' onclick='callPinAllGood()'><span title='All Good' class='ui-button-icon ui-icon ui-icon-check'></span> Mark All as 'Pass'</div>`
   $('.pin-table .cf-section-header').append(btn_html);
 }
 
 
 function generateThreadAllGoodButton() {
   $('.thread-allgood-button').remove();
-  var btn_html = `<div class='thread-allgood-button ui-button all-good-thread-button' onclick='callThreadAllGood()'><span title='All Good' class='ui-button-icon ui-icon ui-icon-check'></span> Mark All as 'Pass'</div>`
+  const btn_html = `<div class='thread-allgood-button ui-button all-good-thread-button' onclick='callThreadAllGood()'><span title='All Good' class='ui-button-icon ui-icon ui-icon-check'></span> Mark All as 'Pass'</div>`
 
   $('.thread-gage-table .cf-section-header').append(btn_html);
 }
@@ -153,27 +153,27 @@ function generateThreadAllGoodButton() {
 function formatThreadGageTable() {
   $('.thread-nominal').remove();
 
-  var threadGageRows = $('.thread-gage-table tbody tr');
-  var threadTypeIDs = $('.thread-type-id-col input[type="text"]');
-  var goDiameterCols = $('.go-pitch-diameter-col input[type="text"]');
-  var noGoDiameterCols = $('.nogo-pitch-diameter-col input[type="text"]');
-  var majorDiameterCols = $('.major-diameter-col input[type="text"]');
-  var nominalGoDiameterCols = $('.nominal-go-pitch-diameter-col input[type="text"]');
-  var nominalNoGoDiameterCols = $('.nominal-nogo-pitch-diameter-col input[type="text"]');
-  var nominalMajorDiameterCols = $('.nominal-major-diameter-col input[type="text"]');
+  const threadGageRows = $('.thread-gage-table tbody tr');
+  const threadTypeIDs = $('.thread-type-id-col input[type="text"]');
+  const goDiameterCols = $('.go-pitch-diameter-col input[type="text"]');
+  const noGoDiameterCols = $('.nogo-pitch-diameter-col input[type="text"]');
+  const majorDiameterCols = $('.major-diameter-col input[type="text"]');
+  const nominalGoDiameterCols = $('.nominal-go-pitch-diameter-col input[type="text"]');
+  const nominalNoGoDiameterCols = $('.nominal-nogo-pitch-diameter-col input[type="text"]');
+  const nominalMajorDiameterCols = $('.nominal-major-diameter-col input[type="text"]');
 
   threadGageRows.each(function (index) {
-    let adjustedRadioField = $(this).find('.plug-thread-cal-result-col fieldset span.choice').eq(1);
+    const adjustedRadioField = $(this).find('.plug-thread-cal-result-col fieldset span.choice').eq(1);
 
-    let threadTypeIDValue = Number($(threadTypeIDs[index]).val());
-    let goDiameterField = goDiameterCols[index];
+    const threadTypeIDValue = Number($(threadTypeIDs[index]).val());
+    const goDiameterField = goDiameterCols[index];
     
-    let noGoDiameterField = noGoDiameterCols[index];
-    let majorDiameterField = majorDiameterCols[index];
-    let nominalGoDiameterValue = nominalGoDiameterCols[index].value;
-    let nominalNoGoDiameterValue = nominalNoGoDiameterCols[index].value;
-    let nominalMajorDiameterValue = nominalMajorDiameterCols[index].value;
-    if (threadTypeIDValue == 1) {
+    const noGoDiameterField = noGoDiameterCols[index];
+    const majorDiameterField = majorDiameterCols[index];
+    const nominalGoDiameterValue = nominalGoDiameterCols[index].value;
+    const nominalNoGoDiameterValue = nominalNoGoDiameterCols[index].value;
+    const nominalMajorDiameterValue = nominalMajorDiameterCols[index].value;
+    if (threadTypeIDValue === 1) {
       $(adjustedRadioField).removeClass("hidden").addClass("hidden");
       $(goDiameterField).parent().append(`<span class='thread-nominal'>${nominalGoDiameterValue}</span>`);
       $(noGoDiameterField).parent().append(`<span class='thread-nominal'>${nominalNoGoDiameterValue}</span>`);
@@ -195,54 +195,54 @@ function loadiFrame(src) {
 
 
 function print_receipt() {
-  var calForReturn = Number($('.cal-for-return input').val()); 
-  if (calForReturn == 1) {
+  const calForReturn = Number($('.cal-for-return input').val()); 
+  if (calForReturn === 1) {
     should_print_receipt = false;
     return;
   }
 
-  var domain = document.location.hostname;
-  var receipt_url_root = "http://" + domain + "/Forms/";
-  var receipt_url = "";
+  const domain = document.location.hostname;
+  const receipt_url_root = "http://" + domain + "/Forms/";
+  let receipt_url = "";
 
 
 
-  if ($('#Field34').val() == 1) {
+  if ($('#Field34').val() === 1) {
     receipt_url = receipt_url_root + "PinGageReceipt?guid=" + $('#Field37').val();
   }
-  if ($('#Field34').val() == 2) {
+  if ($('#Field34').val() === 2) {
     receipt_url = receipt_url_root + "ThreadReceipt?guid=" + $('#Field37').val();
   }
 
-  if (should_print_receipt == true) {
-    if (receipt_url != "") {
+  if (should_print_receipt === true) {
+    if (receipt_url !== "") {
       loadiFrame(receipt_url);
-      should_print_receipt == false;
-      $('#Field37').val(0).change();
+      should_print_receipt === false;
+      $('#Field37').val(0).trigger("change");
     }
   }
 }
 
 
 function set_print_event() {
-  var calForReturn = Number($('.cal-for-return input').val());
-  if (calForReturn == 1) {
-    if ($('.closeme input').val() == 1) {
+  const calForReturn = Number($('.cal-for-return input').val());
+  if (calForReturn === 1) {
+    if ($('.closeme input').val() === 1) {
       window.parent.postMessage('CloseDialogWithRefresh', '*');
     }
     return;
   }
 
 
-  var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
-  var printEvent = window[eventMethod];
-  var messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
+  const eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
+  const printEvent = window[eventMethod];
+  const messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
 
   printEvent(messageEvent, function (e) {
 
     if (e.data === "printme" || e.message === "printme") {
       $("#myiframe").get(0).contentWindow.print();
-      if ($('.closeme input').val() == 1) {
+      if ($('.closeme input').val() === 1) {
         window.parent.postMessage('CloseDialogWithRefresh', '*');
       }
 
@@ -251,8 +251,8 @@ function set_print_event() {
 }
 
 function stripAsterisks(selector) {
-  var $input = $(selector);
-  var val = $input.val();
+  const $input = $(selector);
+  let val = $input.val();
   val = val.replace(/^\*+|\*+$/g, '');
   $input.val(val);
 }

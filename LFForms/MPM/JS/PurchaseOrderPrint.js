@@ -146,7 +146,7 @@ $(document).ready(function () {
       .append('<label style="display:block;font-size:12px;">Print Date: ' + new Date().toLocaleString() + '</label>');
 
     // Trigger any site-dependent refreshes.
-    $('.site-id input').change();
+    $('.site-id input').trigger("change");
     
     // Give the DOM time to settle, then request the parent window to print.
     setTimeout(function () {
@@ -161,17 +161,17 @@ $(document).ready(function () {
    */
   $(document).on('lookupcomplete', function (e) {
     // Trim time portion from "Create Date" if present.
-    if (($('.create-date-col input').val() != '') && ($('.create-date-col input').val() != undefined)) {
+    if (($('.create-date-col input').val() !== '') && ($('.create-date-col input').val() !== undefined)) {
       $('.create-date-col input').val($('.create-date-col input').val().split(" ")[0]);
     }
 
     // Trim time portion from "Last Updated" if present.
-    if (($('.last-updated-col input').val() != '') && ($('.last-updated-col input').val() != undefined)) {
+    if (($('.last-updated-col input').val() !== '') && ($('.last-updated-col input').val() !== undefined)) {
       $('.last-updated-col input').val($('.last-updated-col input').val().split(" ")[0]);
     }
 
     // Add "Grand Total" row once and only if there are PO rows.
-    if (($('.grand-total').length == 0) && ($('.purchase-order-table tbody tr').length > 0)) {
+    if (($('.grand-total').length === 0) && ($('.purchase-order-table tbody tr').length > 0)) {
       $('.purchase-order-table tbody').append(generateGrandTotalLine());
     }
   });
@@ -195,18 +195,18 @@ $(document).ready(function () {
  * @requires moment
  */
 function generateFilterText() {
-  var filterText = "";
-  var fincom = Number($('.fincom input').val()); 
-  var freqid = Number($('.freqid input').val());
-  var freqname = $('.freqname input').val();
-  var fvname = $('.fvname input').val();
-  var fpodesc = $('.fpodesc input').val();
-  var fponum = $('.fponum input').val();
-  var fdmin = $('.fdmin input').val();
-  var fdmax = $('.fdmax input').val();
+  let filterText = "";
+  const fincom = Number($('.fincom input').val()); 
+  const freqid = Number($('.freqid input').val());
+  const freqname = $('.freqname input').val();
+  const fvname = $('.fvname input').val();
+  const fpodesc = $('.fpodesc input').val();
+  const fponum = $('.fponum input').val();
+  const fdmin = $('.fdmin input').val();
+  const fdmax = $('.fdmax input').val();
 
   // Site
-  if ($('.site-name input').val() != '') {
+  if ($('.site-name input').val() !== '') {
     filterText += "SELECTED FILTERS: Site= '" + $('.site-name input').val() + "'";
   }
 
@@ -216,30 +216,30 @@ function generateFilterText() {
   }
 
   // Vendor
-  if (fvname != '') {
+  if (fvname !== '') {
     filterText += ", Vendor= '" + fvname + "'";
   }
 
   // Description (wildcard)
-  if (fpodesc != '') {
+  if (fpodesc !== '') {
     filterText += ", Description= '*" + fpodesc + "*'";
   }
 
   // PO Number
-  if (fponum != '') {
+  if (fponum !== '') {
     filterText += ", PO Number= '" + fponum + "'";
   }
 
   // Create Date range
-  if ((fdmin != '') && (fdmax == '')) {
+  if ((fdmin !== '') && (fdmax === '')) {
     filterText += ", Create Date >=: '" + moment(fdmin).format('MM/DD/YYYY') + "'";
   }
 
-  if ((fdmin == '') && (fdmax != '')) {
+  if ((fdmin === '') && (fdmax !== '')) {
     filterText += ", Create Date <=: '" + moment(fdmax).format('MM/DD/YYYY') + "'";
   }
 
-  if ((fdmin != '') && (fdmax != '')) {
+  if ((fdmin !== '') && (fdmax !== '')) {
     filterText += ", Create Date Between: '" + moment(fdmin).format('MM/DD/YYYY') + "' and '" + moment(fdmax).format('MM/DD/YYYY') + "'";
   }
 
@@ -268,11 +268,11 @@ function generateFilterText() {
  * @returns {string} The HTML string for the "Grand Total" row.
  */
 function generateGrandTotalLine() {
-  var grandTotal = 0;
+  let grandTotal = 0;
 
   // Sum all visible line item totals (handling thousands separators).
   $('.line-total-col input[type="text"]').each(function () {
-    var lineTotal = parseNumberWithCommas($(this).val());
+    const lineTotal = parseNumberWithCommas($(this).val());
     if (!isNaN(lineTotal)) {
       grandTotal += lineTotal;
     }
@@ -283,7 +283,7 @@ function generateGrandTotalLine() {
   grandTotalDisplay = grandTotal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
   // Construct a single-row grand total footer.
-  var grandTotalLine = '<tr class="grand-total"><td/><td/><td/><td/><td style="text-align:center;font-weight:bold;font-size:16px;">Grand Total: </td><td style="font-weight:bold;font-size:16px;">$ ' + grandTotalDisplay + '</td><td/><td/><td/><td/></tr>'; 
+  const grandTotalLine = '<tr class="grand-total"><td/><td/><td/><td/><td style="text-align:center;font-weight:bold;font-size:16px;">Grand Total: </td><td style="font-weight:bold;font-size:16px;">$ ' + grandTotalDisplay + '</td><td/><td/><td/><td/></tr>'; 
   return grandTotalLine;
 }
 

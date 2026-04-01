@@ -132,9 +132,9 @@ $(document).ready(function () {
   $.when(
     $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js')
   ).done(function () {
-    var sitename = $.cookie('site_name');
-    if (sitename != null) {
-      $('.site-name input').val(sitename).change();
+    const sitename = $.cookie('site_name');
+    if (sitename !== null) {
+      $('.site-name input').val(sitename).trigger("change");
     }
   });
 
@@ -143,9 +143,9 @@ $(document).ready(function () {
   $(document).prop('title', 'Metrology Tickets');
 
   // Normalize/display the current user and load iframes for anonymous users.
-  var lfUserName = $('.lf-user-name input').val();
-  if (lfUserName != 'Anonymous User') {
-    $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).change();
+  const lfUserName = $('.lf-user-name input').val();
+  if (lfUserName !== 'Anonymous User') {
+    $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
   }
   else {
     loadIFrames();
@@ -158,30 +158,30 @@ $(document).ready(function () {
 
   // Force reload of the active iframe on tab header double-click.
   $(document).on('dblclick', '.ui-tabs-anchor', function () {
-    var tabID = $(this).attr('id');
-    if (tabID == 'ui-id-1') {
-      let iframeServiceTickets = $('#frm-servicetickets');
+    const tabID = $(this).attr('id');
+    if (tabID === 'ui-id-1') {
+      const iframeServiceTickets = $('#frm-servicetickets');
       if (iframeServiceTickets.length) {
         iframeServiceTickets.attr('src', iframeServiceTickets.attr('src'));
       }
     }
-    else if (tabID == 'ui-id-2') {
+    else if (tabID === 'ui-id-2') {
 
-      let iframeProgrammingTasks = $('#frm-programming-tasks');
+      const iframeProgrammingTasks = $('#frm-programming-tasks');
       if (iframeProgrammingTasks.length) {
         iframeProgrammingTasks.attr('src', iframeProgrammingTasks.attr('src'));
       }
     }
-    else if (tabID == 'ui-id-3') {
+    else if (tabID === 'ui-id-3') {
 
-      let iframeProgrammingTickets = $('#frm-programming-tickets');
+      const iframeProgrammingTickets = $('#frm-programming-tickets');
       if (iframeProgrammingTickets.length) {
         iframeProgrammingTickets.attr('src', iframeProgrammingTickets.attr('src'));
       }
     }
-    else if (tabID == 'ui-id-4') {
+    else if (tabID === 'ui-id-4') {
 
-      let iframePurchaseOrders = $('#frm-purchase-orders');
+      const iframePurchaseOrders = $('#frm-purchase-orders');
       if (iframePurchaseOrders.length) {
         iframePurchaseOrders.attr('src', iframePurchaseOrders.attr('src'));
       }
@@ -213,8 +213,8 @@ $(document).ready(function () {
  * @returns {boolean} True if admin; otherwise false.
  */
 function isAdmin() {
-  var isAdmin = Number($('.user-isadmin input').val());
-  if (isAdmin == 1) {
+  const isAdmin = Number($('.user-isadmin input').val());
+  if (isAdmin === 1) {
     return true;
   }
   else {
@@ -229,7 +229,7 @@ function isAdmin() {
  */
 function isMetrologyUser() {
   userTypeID = Number($('.user-type-id input').val());
-  if ((userTypeID == 1) || (userTypeID == 2)) {
+  if ((userTypeID === 1) || (userTypeID === 2)) {
     return true;
   }
   return false;
@@ -246,21 +246,21 @@ function isMetrologyUser() {
  */
 function generateTitleInfo() {
 
-  if ($('.user-name-display input').val() == '') {
-    var lfUserName = $('.lf-user-name input').val();
-    if (lfUserName == 'Anonymous User') {
+  if ($('.user-name-display input').val() === '') {
+    const lfUserName = $('.lf-user-name input').val();
+    if (lfUserName === 'Anonymous User') {
       $('.user-name-display input').val('User :Anonymous');
-      let login_link = $("<a>", { text: 'Log In', class: 'login-link', href: 'http://rmslf/Forms/account/login?returnUrl=%2fForms%2fMPM-TicketMainform' });
+      const login_link = $("<a>", { text: 'Log In', class: 'login-link', href: 'http://rmslf/Forms/account/login?returnUrl=%2fForms%2fMPM-TicketMainform' });
       $('.user-name-display').append(login_link);
       loadIFrames();
     }
     else {
-      let userName = $('.user-name-hidden input').val()
-      if (userName != '') {
-        let userText = `User: ${userName}`
+      const userName = $('.user-name-hidden input').val()
+      if (userName !== '') {
+        const userText = `User: ${userName}`
         $('.user-name-display input').val(userText);
         if (isMetrologyUser()) {
-          let admin_link = $("<a>", { text: 'Admin', class: 'admin-link', href: 'http://rmslf/Forms/MPM-AdminMainform', target: '_blank' });
+          const admin_link = $("<a>", { text: 'Admin', class: 'admin-link', href: 'http://rmslf/Forms/MPM-AdminMainform', target: '_blank' });
           $('.user-name-display').append(admin_link);
         }
       }
@@ -268,7 +268,7 @@ function generateTitleInfo() {
   }
 
   generateLastRunMessage();
-  if ($('.task-search-button').length == 0) {
+  if ($('.task-search-button').length === 0) {
     $('.task-schedule-info input').show();
     $('.task-schedule-info input').parent().append('<span class="ui-icon ui-icon-search task-search-button" onclick="searchScheduleByTaskName()"></span>')
   }
@@ -284,24 +284,24 @@ function generateTitleInfo() {
  * Side effects: Appends `#last-run-div` into `.schedule-update-message`.
  */
 function generateLastRunMessage() {
-  var lastRunDate = $('.last-schedule-update-run input').val();
-  var lastRunBy = $('.last-schedule-run-by input').val();
-  var isAutomated = Number($('.last-schedule-is-automated input').val());
-  var lastRunID = $('.last-schedule-run-id input').val();
-  var lastRunMessage = "";
+  const lastRunDate = $('.last-schedule-update-run input').val();
+  const lastRunBy = $('.last-schedule-run-by input').val();
+  const isAutomated = Number($('.last-schedule-is-automated input').val());
+  const lastRunID = $('.last-schedule-run-id input').val();
+  let lastRunMessage = "";
 
-  if ($('#last-run-div').length == 0) {
+  if ($('#last-run-div').length === 0) {
 
     // For manual runs, require both date and user.
-    if (isAutomated != 1) {
-      if (lastRunDate == '' || lastRunBy == '') {
+    if (isAutomated !== 1) {
+      if (lastRunDate === '' || lastRunBy === '') {
         return;
       }
     }
 
-    let schedule_page_link = `<a href='http://rmslf/Forms/MPM-ScheduleUpdate' target='_blank' class='schedule-page-link'>Schedules</a>`
-    let schedule_link = `<a href='http://rmslf/Forms/MPM-ScheduleUpdate?rid=${lastRunID}' target='_blank' class='schedule-run-link'>${lastRunDate}</a>`
-    if (isAutomated == 1) {
+    const schedule_page_link = `<a href='http://rmslf/Forms/MPM-ScheduleUpdate' target='_blank' class='schedule-page-link'>Schedules</a>`
+    const schedule_link = `<a href='http://rmslf/Forms/MPM-ScheduleUpdate?rid=${lastRunID}' target='_blank' class='schedule-run-link'>${lastRunDate}</a>`
+    if (isAutomated === 1) {
       lastRunMessage = `<div id="last-run-div">${schedule_page_link} Updated: ${schedule_link} (Automated)</div>`;
     }
     else {
@@ -310,8 +310,8 @@ function generateLastRunMessage() {
 
     $('.schedule-update-message').append(lastRunMessage);
 
-    if ($('.curl-logs-link').length == 0) {
-      let curl_logs_link = $("<a>", { text: 'Curl Logs', class: 'curl-logs-link', href: 'http://rmslf/Forms/RMS-MPM-CurlLogs', target: '_blank' });
+    if ($('.curl-logs-link').length === 0) {
+      const curl_logs_link = $("<a>", { text: 'Curl Logs', class: 'curl-logs-link', href: 'http://rmslf/Forms/RMS-MPM-CurlLogs', target: '_blank' });
       $('#last-run-div').append(curl_logs_link);
     }
   }
@@ -326,19 +326,19 @@ function generateLastRunMessage() {
  * Side effects: Appends iframes to their respective container divs.
  */
 function loadIFrames() {
-  if ($('#frm-servicetickets').length == 0) {
+  if ($('#frm-servicetickets').length === 0) {
     $('#service-ticket-div').append(`<iframe id="frm-servicetickets" src="http://rmslf/Forms/RMS-MPM-ServiceTickets/"></iframe>`);
   }
 
-  if ($('#frm-programming-tasks').length == 0) {
+  if ($('#frm-programming-tasks').length === 0) {
     $('#program-task-div').append(`<iframe id="frm-programming-tasks" src="http://rmslf/Forms/MPM-ProgrammingTasks/"></iframe>`);
   }
 
-  if ($('#frm-programming-tickets').length == 0) {
+  if ($('#frm-programming-tickets').length === 0) {
     $('#program-ticket-div').append(`<iframe id="frm-programming-tickets" src="http://rmslf/Forms/MPM-ProgrammingTickets"></iframe>`);
   }
 
-  if ($('#frm-purchase-orders').length == 0) {
+  if ($('#frm-purchase-orders').length === 0) {
     $('#purchase-order-div').append(`<iframe id="frm-purchase-orders" src="http://rmslf/Forms/MPM-PurchaseOrders"></iframe>`);
   }
 
@@ -350,10 +350,10 @@ function loadIFrames() {
  * Side effects: `window.open` for the search URL.
  */
 function searchScheduleByTaskName() {
-  var searchTaskName = $('.task-schedule-info input').val();
-  var searchURL
+  const searchTaskName = $('.task-schedule-info input').val();
+  let searchURL
 
-  if (searchTaskName == '') {
+  if (searchTaskName === '') {
     searchURL = `http://rmslf/Forms/MPM-SearchScheduleByTaskName`;
   }
   else {
@@ -377,27 +377,27 @@ function tabifyFormSections() {
   $('#ticket-tabs').tabs();
 
   $("#ticket-tabs").on("tabsactivate", function (event, ui) {
-    var tab = ui.newTab.index();
-    if (tab == 0) {
-      let iframeServiceTickets = $('#frm-servicetickets');
+    const tab = ui.newTab.index();
+    if (tab === 0) {
+      const iframeServiceTickets = $('#frm-servicetickets');
       if (iframeServiceTickets.length) {
         iframeServiceTickets.attr('src', iframeServiceTickets.attr('src'));
       }
     }
-    else if (tab == 1) {
-      let iframeProgrammingTasks = $('#frm-programming-tasks');
+    else if (tab === 1) {
+      const iframeProgrammingTasks = $('#frm-programming-tasks');
       if (iframeProgrammingTasks.length) {
         iframeProgrammingTasks.attr('src', iframeProgrammingTasks.attr('src'));
       }
     }
-    else if (tab == 2) {
-      let iframeProgrammingTickets = $('#frm-programming-tickets');
+    else if (tab === 2) {
+      const iframeProgrammingTickets = $('#frm-programming-tickets');
       if (iframeProgrammingTickets.length) {
         iframeProgrammingTickets.attr('src', iframeProgrammingTickets.attr('src'));
       }
     }
-    else if (tab == 3) {
-      let iframePurchaseOrders = $('#frm-purchase-orders');
+    else if (tab === 3) {
+      const iframePurchaseOrders = $('#frm-purchase-orders');
       if (iframePurchaseOrders.length) {
         iframePurchaseOrders.attr('src', iframePurchaseOrders.attr('src'));
       }

@@ -43,7 +43,7 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
 
   // Resolve potential Bootstrap button plugin conflicts and expose the original under a new name.
-  var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
+  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
   $.fn.bootstrapBtn = bootstrapButton;
 
   // Hide any legacy/duplicate submit controls on this view.
@@ -51,8 +51,8 @@ $(document).ready(function () {
 
   // Double-click any note field container to preview full note content in a dialog.
   $(document).on('dblclick', '.note-text .cf-field', function () {
-    var noteTextField = $(this).find('textarea');
-    var currentText = $(noteTextField).val();
+    const noteTextField = $(this).find('textarea');
+    const currentText = $(noteTextField).val();
 
     $.dialog({
       title: 'Note',

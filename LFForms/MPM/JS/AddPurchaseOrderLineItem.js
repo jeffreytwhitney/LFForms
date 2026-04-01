@@ -170,39 +170,38 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
 
   // Resolve Bootstrap's $.fn.button conflict so jQuery Confirm dialog buttons render and close correctly.
-  var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value so that popup close button displays correctly.
+  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value so that popup close button displays correctly.
   $.fn.bootstrapBtn = bootstrapButton;
 
   // Wire up Submit button.
-  $('.Submit').click(function (e) { submitForm(e); });
+  $('.Submit').on("click", function (e) { submitForm(e); });
 
   // If instructed by the host, close the dialog (with refresh) immediately.
-  if ($('.closeme input').val() == 1) {
+  if ($('.closeme input').val() === 1) {
     window.parent.postMessage('CloseDialogWithRefresh', '*');
   }
 
   // Populate the "network user name" as the uppercase username (strip DOMAIN\).
   $('.network-user-name input')
-    .val($('.lf-user-name input').val().toUpperCase().substr($('.lf-user-name input').val().lastIndexOf('\\') + 1))
-    .change();
+    .val($('.lf-user-name input').val().toUpperCase().substr($('.lf-user-name input').val().lastIndexOf('\\') + 1)).trigger("change");
 
   // Add required asterisks to key labels (visual only).
   $('<span class="cf-required">*</span>').insertAfter('.quantity span span');
 
   $(document).on('change', '.quantity input', function (e) {
     
-    var quantity = Number($(this).val().replace(',', ''));
-    var perUnitCost = Number($('.per-unit-cost input').val().replace(',', ''));
-    var totalCost = quantity * perUnitCost;
-    var formattedTotalCost = addThousandsSeparator(totalCost.toFixed(2));
+    const quantity = Number($(this).val().replace(',', ''));
+    const perUnitCost = Number($('.per-unit-cost input').val().replace(',', ''));
+    const totalCost = quantity * perUnitCost;
+    const formattedTotalCost = addThousandsSeparator(totalCost.toFixed(2));
     $('.cost-amount input').val(formattedTotalCost);
   });
 
   $(document).on('change', '.per-unit-cost input', function (e) {
-    var quantity = Number($('.quantity input').val().replace(',', ''));
-    var perUnitCost = Number($(this).val().replace(',', ''));
-    var totalCost = quantity * perUnitCost;
-    var formattedTotalCost = addThousandsSeparator(totalCost.toFixed(2));
+    const quantity = Number($('.quantity input').val().replace(',', ''));
+    const perUnitCost = Number($(this).val().replace(',', ''));
+    const totalCost = quantity * perUnitCost;
+    const formattedTotalCost = addThousandsSeparator(totalCost.toFixed(2));
     $('.cost-amount input').val(formattedTotalCost);
   });
 
@@ -211,7 +210,7 @@ $(document).ready(function () {
   // Toggle submit availability after lookups complete.
   // Hide for non-admins or when PO has not been created (no POID).
   $(document).on('lookupcomplete', function () {
-    if ((!isAdminUser()) || ($('.poid input').val() == '')) {
+    if ((!isAdminUser()) || ($('.poid input').val() === '')) {
       $('.Submit').hide();
     } else {
       $('.Submit').show();
@@ -226,7 +225,7 @@ $(document).ready(function () {
   $(document).on("onloadlookupfinished", function () {
     $('.closeme input').val(1);
     $('.network-user-name input').trigger("change");
-    if ($('.po-number input').val() == '') {
+    if ($('.po-number input').val() === '') {
       $('.po-number input').val('Not Yet Assigned');
     }
   });
@@ -239,9 +238,9 @@ function addThousandsSeparator(numStr) {
   numStr = numStr.replace(/[^0-9.]/g, '');
 
   // Split integer and decimal parts
-  let parts = numStr.split('.');
+  const parts = numStr.split('.');
   let integerPart = parts[0];
-  let decimalPart = parts.length > 1 ? '.' + parts[1] : '';
+  const decimalPart = parts.length > 1 ? '.' + parts[1] : '';
 
   // Add commas to integer part
   integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -257,7 +256,7 @@ function addThousandsSeparator(numStr) {
  * @returns {boolean} True when the current user is an admin user; otherwise, false.
  */
 function isAdminUser() {
-  if ($('.user-isadmin input').val() == '1') {
+  if ($('.user-isadmin input').val() === '1') {
     return true;
   }
   return false;
@@ -270,9 +269,9 @@ function isAdminUser() {
  */
 function resetErrorFields() {
   /** @type {JQuery<HTMLInputElement>} */
-  var quantityField = $('.quantity input');
+  const quantityField = $('.quantity input');
   /** @type {JQuery<HTMLInputElement>} */
-  var costAmountField = $('.cost-amount input');
+  const costAmountField = $('.cost-amount input');
 
   $('#quantity-error').remove();
   $('#cost-amount-error').remove();
@@ -292,7 +291,7 @@ function resetErrorFields() {
 function submitForm(e) {
   e.preventDefault();
 
-  var typeID = Number($('.line-item-type-id input').val());
+  const typeID = Number($('.line-item-type-id input').val());
   if (typeID !== LineItemType.Purchase) {
     $('.quantity input').val(0);
   }
@@ -301,7 +300,7 @@ function submitForm(e) {
     return;
   }
 
-  $('#form1').submit();
+  $('#form1').trigger("submit");
 }
 
 
@@ -313,14 +312,14 @@ function submitForm(e) {
  * @returns {boolean} True if the form is valid; otherwise, false.
  */
 function validateForm() {
-  var is_valid = true;
+  let is_valid = true;
 
-  var typeID = Number($('.line-item-type-id input').val());
-  var quantityField = $('.quantity input');
-  var costAmountField = $('.cost-amount input');
+  const typeID = Number($('.line-item-type-id input').val());
+  const quantityField = $('.quantity input');
+  const costAmountField = $('.cost-amount input');
 
-  var quantityValue = Number(String(quantityField.val()).trim());
-  var costAmountValue = Number(String(costAmountField.val()).trim());
+  const quantityValue = Number(String(quantityField.val()).trim());
+  const costAmountValue = Number(String(costAmountField.val()).trim());
 
   resetErrorFields();
 

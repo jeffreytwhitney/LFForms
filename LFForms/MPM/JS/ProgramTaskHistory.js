@@ -55,16 +55,16 @@ $(document).ready(function () {
  * @returns {void}
  */
 function generateTableCheckBox(selector, checkboxClass) {
-  var selectionString = selector + " input[type=text]";
-  var checkboxes = $(selectionString);
+  const selectionString = selector + " input[type=text]";
+  const checkboxes = $(selectionString);
 
   checkboxes.each(function () {
-    var btn_value = $(this).val();
-    var isChecked = btn_value == '1';
-    var btn_html = "<input class='" + checkboxClass + "' type='checkbox' disabled" + (isChecked ? " checked" : "") + "/>";
-    var has_button = $(this).parent().find(`.${checkboxClass}`).length;
+    const btn_value = $(this).val();
+    const isChecked = btn_value === '1';
+    const btn_html = "<input class='" + checkboxClass + "' type='checkbox' disabled" + (isChecked ? " checked" : "") + "/>";
+    const has_button = $(this).parent().find(`.${checkboxClass}`).length;
 
-    if (has_button == 0) {
+    if (has_button === 0) {
       $(this).parent().append(btn_html);
     }
   });

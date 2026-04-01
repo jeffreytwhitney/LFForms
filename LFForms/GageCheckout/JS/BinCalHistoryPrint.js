@@ -15,9 +15,9 @@ $(document).ready(function () {
 
   $(document).on('lookupcomplete', function (e) {
 
-    if (($('.ed input').val() == '') || ($('.ed input').val() == null)) {
-      var curdate = moment().format("MM/DD/YYYY");
-      $('.ed input').val(curdate).change();
+    if (($('.ed input').val() === '') || ($('.ed input').val() === null)) {
+      const curdate = moment().format("MM/DD/YYYY");
+      $('.ed input').val(curdate).trigger("change");
     }
 
     generateNoteDivs();
@@ -29,7 +29,7 @@ $(document).ready(function () {
 function generateNoteDivs() {
   $('.note-div').remove();
   $('.cal-notes-col input[type="text"]').each(function () {
-    let note_text = $(this).val();
+    const note_text = $(this).val();
     $(this).parent().html('<div class="note-div">' + note_text + '</div>');
   });
 
@@ -37,14 +37,14 @@ function generateNoteDivs() {
 
 
 function generateFilterText() {
-  var startDateFilterValue = $('.std input').val();
-  var endDateFilterVal = $('.ed input').val();
+  const startDateFilterValue = $('.std input').val();
+  const endDateFilterVal = $('.ed input').val();
 
-  var filterText = 'Date Range Shown: ';
-  if (startDateFilterValue != '01/01/1980') {
+  let filterText = 'Date Range Shown: ';
+  if (startDateFilterValue !== '01/01/1980') {
     filterText += 'Start Date: <b>' + startDateFilterValue + '</b>    ';
   }
-  if (endDateFilterVal != '') {
+  if (endDateFilterVal !== '') {
     filterText += 'End Date: <b>' + endDateFilterVal + '</b>';
   }
   $('#filter-text').html(filterText);
@@ -55,7 +55,7 @@ function generateFilterText() {
 
 
 function getTableRowCount() {
-  var row_count = $('.cal-table table tbody tr').length;
+  const row_count = $('.cal-table table tbody tr').length;
   return row_count;
 }
 

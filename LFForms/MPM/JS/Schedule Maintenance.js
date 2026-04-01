@@ -126,13 +126,13 @@ Dependencies:
   - Bootstrap JS (button plugin conflict resolved via noConflict)
  */
 
-var cellLeadMap = new Map();      // Maps OwnerID -> OwnerName
-var cellLeadNameMap = new Map();  // Maps OwnerName -> OwnerID
+const cellLeadMap = new Map();      // Maps OwnerID -> OwnerName
+const cellLeadNameMap = new Map();  // Maps OwnerName -> OwnerID
 
 $(document).ready(function () {
   // Normalize and copy LF username into the network user field (USER portion of DOMAIN\USER).
-  var lfUserName = $('.lf-user-name input').val();
-  $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).change();
+  const lfUserName = $('.lf-user-name input').val();
+  $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
 
   // Initial page setup.
   $('.Submit').hide();
@@ -146,34 +146,34 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
 
   // Resolve Bootstrap button plugin conflict with jQuery UI.
-  var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
+  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
   $.fn.bootstrapBtn = bootstrapButton;
 
   // Keep hidden "is active" value and radio group in sync (Edit section).
   $(document).on('change', '.edit-is-active-value input', function () {
-    var isActive = $('.edit-is-active-value input').val();
+    const isActive = $('.edit-is-active-value input').val();
     $(`.edit-schedule-is-active input[type='radio'][value='${isActive}']`).prop("checked", true);
   });
   $(document).on('change', ".edit-schedule-is-active input[type='radio']", function () {
-    var isActive = $(this).val();
+    const isActive = $(this).val();
     $('.edit-is-active-value input').val(isActive);
   });
 
   // Keep hidden "name trimming" value and radio group in sync (Edit section).
   $(document).on('change', '.edit-name-trimming-value input', function () {
-    var isAdmin = $('.edit-name-trimming-value input').val();
+    const isAdmin = $('.edit-name-trimming-value input').val();
     $(`.edit-do-part-name-trimming input[type='radio'][value='${isAdmin}']`).prop("checked", true);
   });
   $(document).on('change', ".edit-do-part-name-trimming input[type='radio']", function () {
-    var isAdmin = $(this).val();
+    const isAdmin = $(this).val();
     $('.edit-name-trimming-value input').val(isAdmin);
   });
 
   // When owner name changes, set the corresponding owner ID (Edit section).
   $(document).on('change', '.edit-schedule-owner-cbo select', function () {
-    var ownerName = $(this).val();
+    const ownerName = $(this).val();
     if (cellLeadNameMap.has(ownerName)) {
-      var ownerID = cellLeadNameMap.get(ownerName);
+      const ownerID = cellLeadNameMap.get(ownerName);
       $('.edit-owner-id input').val(ownerID);
     }
     else {
@@ -183,7 +183,7 @@ $(document).ready(function () {
 
   // Persist selected site to cookie.
   $(document).on('change', '.site-name select', function () {
-    var sitename = $('.site-name select').val();
+    const sitename = $('.site-name select').val();
     $.cookie('site_name', sitename, { expires: 365, path: '/' });
   });
 
@@ -194,8 +194,8 @@ $(document).ready(function () {
     loadCellLeadMap();
 
     if (isAdminUser()) {
-      if ($('.add-button').length == 0) {
-        var add_button = '<div class="ui-button add-button" onclick="callAddSchedule()"><span title="Add Schedule" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Schedule</div>';
+      if ($('.add-button').length === 0) {
+        const add_button = '<div class="ui-button add-button" onclick="callAddSchedule()"><span title="Add Schedule" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Schedule</div>';
         $(add_button).insertBefore('.schedule-table table');
       }
     }
@@ -207,9 +207,9 @@ $(document).ready(function () {
    */
   $(document).on("onloadlookupfinished", function () {
     $('.network-user-name input').trigger("change");
-    var sitename = $.cookie('site_name');
-    if (sitename != null) {
-      $('.site-name select').val(sitename).change();
+    const sitename = $.cookie('site_name');
+    if (sitename !== null) {
+      $('.site-name select').val(sitename).trigger("change");
     }
   });
 });
@@ -221,7 +221,7 @@ $(document).ready(function () {
  */
 function callAddSchedule() {
   $(`.action-choice input[type='radio'][value='1']`).prop("checked", true);
-  $('.add-id input').val(1).change();
+  $('.add-id input').val(1).trigger("change");
   $('.Submit').show();
 }
 
@@ -234,7 +234,7 @@ function callAddSchedule() {
  */
 function callEditSchedule(scheduleID) {
   $(`.action-choice input[type='radio'][value='2']`).prop("checked", true);
-  $('.edit-id input').val(scheduleID).change();
+  $('.edit-id input').val(scheduleID).trigger("change");
   if (isAdminUser()) {
     $('.Submit').show();
   }
@@ -246,14 +246,14 @@ function callEditSchedule(scheduleID) {
  * Intended for use by the dynamically generated "Go Back" buttons.
  */
 function callGoBack() {
-  $(".add-id input").val(0).change();
-  $('.add-owner-id input').val(0).change();
-  $('.add-department-id input').val(0).change();
+  $(".add-id input").val(0).trigger("change");
+  $('.add-owner-id input').val(0).trigger("change");
+  $('.add-department-id input').val(0).trigger("change");
   $('.add-schedule-owner-cbo select').val('');
 
-  $(".edit-id input").val(0).change();
-  $('.edit-owner-id input').val(0).change();
-  $('.edit-department-id input').val(0).change();
+  $(".edit-id input").val(0).trigger("change");
+  $('.edit-owner-id input').val(0).trigger("change");
+  $('.edit-department-id input').val(0).trigger("change");
   $('.edit-schedule-owner-cbo select').val('');
 
   $('.Submit').hide();
@@ -265,11 +265,11 @@ function callGoBack() {
  * if that ID exists in the loaded Cell Lead map.
  */
 function fillCellLeadSelect() {
-  var ownerID = Number($('.edit-owner-id input').val());
-  var selectLength = $('.edit-schedule-owner-cbo select option').length;
+  const ownerID = Number($('.edit-owner-id input').val());
+  const selectLength = $('.edit-schedule-owner-cbo select option').length;
 
   if ((cellLeadMap.has(ownerID)) && (selectLength > 1)) {
-    var ownerName = cellLeadMap.get(ownerID);
+    const ownerName = cellLeadMap.get(ownerID);
     $('.edit-schedule-owner-cbo select').val(ownerName);
   }
   else {
@@ -283,7 +283,7 @@ function fillCellLeadSelect() {
  * The original placeholder elements are removed.
  */
 function generateGoBackButtons() {
-  var $goback_buttons = $(".gobackbutton");
+  const $goback_buttons = $(".gobackbutton");
   $goback_buttons.each(function () {
     $(this).parent().append("<div id='go-back' class='ui-button ui-corner-all ui-widget' onclick='callGoBack()'><span class='ui-icon ui-icon-arrowreturnthick-1-w'></span>Go Back</div>");
   });
@@ -300,14 +300,14 @@ function generateGoBackButtons() {
  * @param {string} buttonFunction - Global function name to invoke on click; receives the hidden input's value.
  */
 function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFunction) {
-  var selectionString = buttonSelector + " input[type=text]";
-  var buttons = $(selectionString);
+  const selectionString = buttonSelector + " input[type=text]";
+  const buttons = $(selectionString);
   buttons.each(function () {
-    var btn_value = $(this).val();
-    var btn_html = `<div class='table-button ui-button' onclick='${buttonFunction}(${btn_value})'><span title='${buttonTitle}' class='ui-button-icon ui-icon ${buttonClass}'/></div>`;
+    const btn_value = $(this).val();
+    const btn_html = `<div class='table-button ui-button' onclick='${buttonFunction}(${btn_value})'><span title='${buttonTitle}' class='ui-button-icon ui-icon ${buttonClass}'/></div>`;
 
-    var has_button = $(this).parent().find(`.${buttonClass}`).length;
-    if (has_button == 0) {
+    const has_button = $(this).parent().find(`.${buttonClass}`).length;
+    if (has_button === 0) {
       $(this).parent().append(btn_html);
     }
   });
@@ -320,7 +320,7 @@ function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFu
  * @returns {boolean} True if user is admin; otherwise, false.
  */
 function isAdminUser() {
-  if ($('.user-isadmin input').val() == '1') {
+  if ($('.user-isadmin input').val() === '1') {
     return true;
   }
   return false;
@@ -333,13 +333,13 @@ function isAdminUser() {
  */
 function loadCellLeadMap() {
   if (cellLeadMap.size === 0) {
-    var cellLead_rows = $('.celllead-lookup-table table tbody tr');
-    if (cellLead_rows.length == 0) {
+    const cellLead_rows = $('.celllead-lookup-table table tbody tr');
+    if (cellLead_rows.length === 0) {
       return;
     }
     cellLead_rows.each(function () {
-      var cellLeadID = Number($(this).find('.celllead-lookup-table-id input').val());
-      var cellLeadName = $(this).find('.celllead-lookup-table-name input').val();
+      const cellLeadID = Number($(this).find('.celllead-lookup-table-id input').val());
+      const cellLeadName = $(this).find('.celllead-lookup-table-name input').val();
       cellLeadMap.set(cellLeadID, cellLeadName);
       cellLeadNameMap.set(cellLeadName, cellLeadID);
     });

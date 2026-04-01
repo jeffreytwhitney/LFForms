@@ -4,7 +4,7 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-  var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
+  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
   $.fn.bootstrapBtn = bootstrapButton;
   $('.Submit').hide();
   $(document).on("onloadlookupfinished", function () {
@@ -19,17 +19,17 @@ function generateNoteButtons() {
   $('.notes-button').remove();
 
 
-  var notes = $(".cal-notes input[type=text]");
-  var note_buttons = $(".cal-notes-button input[type=text]");
-  var cal_ids = $(".calibration-id input[type=text]");
+  const notes = $(".cal-notes input[type=text]");
+  const note_buttons = $(".cal-notes-button input[type=text]");
+  const cal_ids = $(".calibration-id input[type=text]");
   note_buttons.each(function (index) {
-    let cal_id = cal_ids[index].value;
-    let note = notes[index];
-    let note_text = $(note).val();
+    const cal_id = cal_ids[index].value;
+    const note = notes[index];
+    const note_text = $(note).val();
 
     
     if (note_text.length > 0) {
-      var btn_html = `<div class='ui-button notes-button' onclick='showNotes(${cal_id})'><span title='Notes' class='ui-button-icon ui-icon ui-icon-document'></span></div>`
+      const btn_html = `<div class='ui-button notes-button' onclick='showNotes(${cal_id})'><span title='Notes' class='ui-button-icon ui-icon ui-icon-document'></span></div>`
       $(this).replaceWith(btn_html);
     }
     else {
@@ -40,13 +40,13 @@ function generateNoteButtons() {
 
 
 function showNotes(cal_id_to_show) {
-  var cal_ids = $(".calibration-id input[type=text]");
-  var notes = $(".cal-notes input[type=text]");
+  const cal_ids = $(".calibration-id input[type=text]");
+  const notes = $(".cal-notes input[type=text]");
 
   cal_ids.each(function (index) {
-    let cal_id = cal_ids[index].value;
-    let note = notes[index].value;
-    if (cal_id == cal_id_to_show) {
+    const cal_id = cal_ids[index].value;
+    const note = notes[index].value;
+    if (cal_id === cal_id_to_show) {
       $.dialog({
         escapeKey: true,
         title: 'Notes',

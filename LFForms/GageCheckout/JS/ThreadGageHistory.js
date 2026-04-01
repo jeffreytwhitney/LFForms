@@ -1,11 +1,11 @@
-$(document).ready(function () {
+﻿$(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $('.Submit').hide();
   $(document).prop('title', 'Thread Gage History');
   tabifyFormSections();
 
   $('.thread-gage-is-active-val input').on('change', function () {
-    if ($(this).val() == '0') {
+    if ($(this).val() === '0') {
       $('.thread-gage-is-active-display input').val('No');
     }
     else {
@@ -14,11 +14,11 @@ $(document).ready(function () {
   });
 
   $('.gid input').on('change', function () {
-    if (($(this).val() != null) && ($(this).val().length > 0)) {
+    if (($(this).val() !== null) && ($(this).val().length > 0)) {
       $('#q12 .collapsible').trigger('click');
     }
   });
-  $('.thread-gage-name input[type="text"]').dblclick(function () { $('.thread-gage-name input[type="text"]').val(null).change(); });
+  $('.thread-gage-name input[type="text"]').on("dblclick", function () { $('.thread-gage-name input[type="text"]').val(null).trigger("change"); });
 
 
   $(document).on('lookupcomplete', function (e) {
@@ -29,11 +29,11 @@ $(document).ready(function () {
 
 
 function fillIFrames() {
-  var ginID = $('.gid input').val();
+  const ginID = $('.gid input').val();
   $('#frm-ticket-history').remove();
   $('#frm-calibration-history').remove();
 
-  if ((ginID != '') && (ginID != null)) {
+  if ((ginID !== '') && (ginID !== null)) {
     $('#ticket-history-iframe').prepend(`<iframe id="frm-ticket-history" src="http://rmslf/Forms/RMS-GAGE-ThreadTicketHistory/?gid=${ginID}"></iframe>`);
     $('#calibration-history-iframe').prepend(`<iframe id="frm-calibration-history" src="http://rmslf/Forms/RMS-GAGE-ThreadCalibrationHistory/?gid=${ginID}"></iframe>`);
   }

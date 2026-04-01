@@ -1,31 +1,31 @@
-var departmentMap = new Map();
-var departmentNameMap = new Map();
-var machineGroupMap = new Map();
-var machineGroupNameMap = new Map();
-var cellLeaderMap = new Map();
-var cellLeaderNameMap = new Map();
+﻿const departmentMap = new Map();
+const departmentNameMap = new Map();
+const machineGroupMap = new Map();
+const machineGroupNameMap = new Map();
+const cellLeaderMap = new Map();
+const cellLeaderNameMap = new Map();
 
 
-var should_print_receipt = true;
+let should_print_receipt = true;
 
 
 $(document).ready(function () {
   $('.Submit').hide();
   $(document).prop('title', 'Modify Ticket');
-  $('.Submit').click(function (e) { validateForm(e); });
+  $('.Submit').on("click", function (e) { validateForm(e); });
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js');
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-  var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
+  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
   $.fn.bootstrapBtn = bootstrapButton;
 
   $('#q0').append("<div class='hidden' id='popUpDiv'></div>");
 
-  var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
-  var printEvent = window[eventMethod];
-  var messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
+  const eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
+  const printEvent = window[eventMethod];
+  const messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
   printEvent(messageEvent, function (e) {
 
     if (e.data === "printme" || e.message === "printme") {
@@ -35,24 +35,24 @@ $(document).ready(function () {
   });
 
   $(document).on("onloadlookupfinished", function () {
-    var sitename = $.cookie('site_name');
-    if (sitename != null) {
-      $('.site-name select').val(sitename).change();
+    const sitename = $.cookie('site_name');
+    if (sitename !== null) {
+      $('.site-name select').val(sitename).trigger("change");
     }
     generateGoBackButtons();
   });
 
   $(document).on('lookupcomplete', function (e) {
-    if (e.triggerId == 'Field2') {
+    if (e.triggerId === 'Field2') {
       if ($('#Field2').val()) {
-        if ($('#Field2').val() != null) {
+        if ($('#Field2').val() !== null) {
           print_receipt();
         }
       }
     }
 
-    if ($('.pg input').val() == '999') {
-      $('.pg input').val(1).change();
+    if ($('.pg input').val() === '999') {
+      $('.pg input').val(1).trigger("change");
     }
 
     loadDepartmentMap();
@@ -71,7 +71,7 @@ $(document).ready(function () {
     reApplyFilterValues();
     appendPagination();
     fillMachineNameCombos();
-    if ($('.details-ticket-type-id input').val() == '2') {
+    if ($('.details-ticket-type-id input').val() === '2') {
       setDailyCalValues();
     }
     $('.ticket-table').show();
@@ -79,12 +79,12 @@ $(document).ready(function () {
   });
 
   $(document).on('change', '.site-name select', function () {
-    var sitename = $('.site-name select').val();
+    const sitename = $('.site-name select').val();
     $.cookie('site_name', sitename, { expires: 365, path: '/' });
   });
 
   $(document).on('change', '[id^="Field81"]', function (e) {
-    if ($(e.currentTarget).val() == 'BIN') {
+    if ($(e.currentTarget).val() === 'BIN') {
       $(e.currentTarget).closest('tr').find('.add-pins-bins-table-diameter input').val(0).addClass("ui-state-disabled");
       $(e.currentTarget).closest('tr').find('.add-pins-bins-table-number-of-pins input').val(1).addClass("ui-state-disabled");
     }
@@ -120,16 +120,16 @@ $(document).ready(function () {
 
 
   $(document).on('change', '.cr-activate-employee-name input', function (e) {
-    let crActivateEmployeeNumberValue = $('.cr-activate-employee-number input').val();
-    let crActivateEmployeeNameValue = $('.cr-activate-employee-name input').val();
+    const crActivateEmployeeNumberValue = $('.cr-activate-employee-number input').val();
+    const crActivateEmployeeNameValue = $('.cr-activate-employee-name input').val();
 
     $('.activate-employee-number input').val(crActivateEmployeeNumberValue);
     $('.activate-employee-name input').val(crActivateEmployeeNameValue);
   });
 
   $(document).on('change', '.anoka-activate-employee-name input', function (e) {
-    let anokaActivateEmployeeNumberValue = $('.anoka-activate-employee-number input').val();
-    let anokaActivateEmployeeNameValue = $('.anoka-activate-employee-name input').val();
+    const anokaActivateEmployeeNumberValue = $('.anoka-activate-employee-number input').val();
+    const anokaActivateEmployeeNameValue = $('.anoka-activate-employee-name input').val();
 
     $('.activate-employee-number input').val(anokaActivateEmployeeNumberValue);
     $('.activate-employee-name input').val(anokaActivateEmployeeNameValue);
@@ -140,27 +140,27 @@ $(document).ready(function () {
 
 function appendPagination() {
 
-  var current_page = Number($('.pg input').val());
-  if (current_page == 999) { return; }
+  const current_page = Number($('.pg input').val());
+  if (current_page === 999) { return; }
 
-  var row_count = getTicketRowCount();
+  const row_count = getTicketRowCount();
 
   if (row_count > 0) {
     $('#ticket-table-pagination').remove();
-    if ((current_page == 1) && (row_count < 25)) {
-      $('.ticket-table table').parent().append("<div id='ticket-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>��</a></li><li><a class='page-link prev isDisabled'>�</a></li><li><a class='page-link next isDisabled'>�</a></li></ul></div>");
+    if ((current_page === 1) && (row_count < 25)) {
+      $('.ticket-table table').parent().append("<div id='ticket-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>ï¿½ï¿½</a></li><li><a class='page-link prev isDisabled'>ï¿½</a></li><li><a class='page-link next isDisabled'>ï¿½</a></li></ul></div>");
       return;
     }
-    if ((current_page == 1) && (row_count == 25)) {
-      $('.ticket-table table').parent().append("<div id='ticket-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>��</a></li><li><a class='page-link prev isDisabled'>�</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>�</a></li></ul></div>")
+    if ((current_page === 1) && (row_count === 25)) {
+      $('.ticket-table table').parent().append("<div id='ticket-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>ï¿½ï¿½</a></li><li><a class='page-link prev isDisabled'>ï¿½</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>ï¿½</a></li></ul></div>")
       return;
     }
-    if ((current_page > 1) && (row_count == 25)) {
-      $('.ticket-table table').parent().append("<div id='ticket-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>��</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>�</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>�</a></li></ul></div>")
+    if ((current_page > 1) && (row_count === 25)) {
+      $('.ticket-table table').parent().append("<div id='ticket-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>ï¿½ï¿½</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>ï¿½</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>ï¿½</a></li></ul></div>")
       return;
     }
     if ((current_page > 1) && (row_count < 25)) {
-      $('.ticket-table table').parent().append("<div id='ticket-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>��</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>�</a></li><li><a class='page-link next isDisabled'>�</a></li></ul></div>")
+      $('.ticket-table table').parent().append("<div id='ticket-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>ï¿½ï¿½</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>ï¿½</a></li><li><a class='page-link next isDisabled'>ï¿½</a></li></ul></div>")
       return;
     }
   }
@@ -169,7 +169,7 @@ function appendPagination() {
 
 function callActivate(ticket_id) {
   $('.modify-action input').val(3);
-  $('.activate-ticket-id input').val(ticket_id).change();
+  $('.activate-ticket-id input').val(ticket_id).trigger("change");
   $('.Submit').show();
 }
 
@@ -177,22 +177,22 @@ function callActivate(ticket_id) {
 function callClone(ticket_id) {
   
   $('.modify-action input').val(4);
-  $('.clone-ticket-id input').val(ticket_id).change();
+  $('.clone-ticket-id input').val(ticket_id).trigger("change");
   $('.print-ticket-id input').val($('.clone-guid input').val());
   $('.Submit').show();
 }
 
 
 function callGoBack() {
-  $(".details-ticket-id input").val(null).change();
-  $(".details-ticket-type-id input").val(null).change();
-  $('.details-modifier-employee-number input').val(null).change();
-  $('.clone-ticket-id input').val(null).change();
+  $(".details-ticket-id input").val(null).trigger("change");
+  $(".details-ticket-type-id input").val(null).trigger("change");
+  $('.details-modifier-employee-number input').val(null).trigger("change");
+  $('.clone-ticket-id input').val(null).trigger("change");
   $('.add-pins-bins-table-new-bin-number input').val('');
-  $('[id^="Field81"]').val(null).change();
+  $('[id^="Field81"]').val(null).trigger("change");
   $('[id^="Field83"]').val('');
   $('[id^="Field92"]').val('');
-  $('.activate-ticket-id input').val(null).change();
+  $('.activate-ticket-id input').val(null).trigger("change");
   $('.modify-action input').val(0);
   $('.Submit').hide();
 }
@@ -203,7 +203,7 @@ function callNextPage() {
   $('.ticket-detail-link').remove();
   $('.table-button').remove();
   current_page = Number($('.pg input').val());
-  $('.pg input').val(current_page + 1).change();
+  $('.pg input').val(current_page + 1).trigger("change");
 }
 
 
@@ -212,17 +212,17 @@ function callPrevPage() {
   $('.ticket-detail-link').remove();
   $('.table-button').remove();
   current_page = Number($('.pg input').val());
-  if (current_page == 1) {
+  if (current_page === 1) {
     return;
   }
-  $('.pg input').val(current_page - 1).change();
+  $('.pg input').val(current_page - 1).trigger("change");
 }
 
 
 function callPrint(ticket_id) {
   should_print_receipt = true;
-  var ticketTypeID = getTicketTypeIDByTicketID(ticket_id);
-  var ticketGuid = getTicketGuidByTicketID(ticket_id);
+  const ticketTypeID = getTicketTypeIDByTicketID(ticket_id);
+  const ticketGuid = getTicketGuidByTicketID(ticket_id);
   $('.print-ticket-id input').val(ticketGuid);
   $('.print-ticket-type-id input').val(ticketTypeID);
   print_receipt();
@@ -231,9 +231,9 @@ function callPrint(ticket_id) {
 
 function callReturnTicket() {
 
-  var siteID = Number($('.site-id input').val());
-  if (siteID == 1) {
-    if ($('.cr-employee-name input').val().length == 0) {
+  const siteID = Number($('.site-id input').val());
+  if (siteID === 1) {
+    if ($('.cr-employee-name input').val().length === 0) {
       $.alert({
         title: 'Enter Your Employee Number!',
         content: 'You have to enter your employee number before you can return this ticket.',
@@ -241,8 +241,8 @@ function callReturnTicket() {
       return;
     }
   }
-  if (siteID == 2) {
-    if ($('.anoka-employee-name input').val().length == 0) {
+  if (siteID === 2) {
+    if ($('.anoka-employee-name input').val().length === 0) {
       $.alert({
         title: 'Enter Your Employee Number!',
         content: 'You have to enter your employee number before you can return this ticket.',
@@ -264,8 +264,8 @@ function callReturnTicket() {
         keys: ['enter'],
         action: function () {
           $('.modify-action input').val(1);
-          $('.print-ticket-id input').val(null).change();
-          $('#form1').submit();
+          $('.print-ticket-id input').val(null).trigger("change");
+          $('#form1').trigger("submit");
         }
       },
       cancel: function () {
@@ -277,13 +277,13 @@ function callReturnTicket() {
 
 
 function fillMachineNameCombos() {
-  var machineNameInputs = $('[id^="Field122"]');
+  const machineNameInputs = $('[id^="Field122"]');
 
   $('[id^="Field152"]').each(function (index, element) {
-    if ($(element).val() == '') {
-      let machineNameInput = machineNameInputs[index];
-      let machineNameInputVal = $(machineNameInput).val();
-      $(element).val(machineNameInputVal).change();
+    if ($(element).val() === '') {
+      const machineNameInput = machineNameInputs[index];
+      const machineNameInputVal = $(machineNameInput).val();
+      $(element).val(machineNameInputVal).trigger("change");
     }
 
   });
@@ -292,7 +292,7 @@ function fillMachineNameCombos() {
 
 function filterTicketTable() {
 
-  if ($('#filterRow').length == 0) {
+  if ($('#filterRow').length === 0) {
     return;
   }
 
@@ -300,15 +300,15 @@ function filterTicketTable() {
   removeAppendedFields();
 
 
-  var ticketNumberFilterValue = $('#txtFilter_TicketNumber').val();
-  var departmentFilterVal = $('#cboFilter_Department').val();
-  var machineGroupFilterVal = $('#cboFilter_MachineGroup').val();
-  var operatorFilterVal = $('#cboFilter_Operator').val();
-  var cellLeaderFilterVal = $('#cboFilter_CellLeader').val();
-  var statusFilterVal = $('#cboFilter_Status').val();
-  var partNumberFilterValue = $('#txtFilter_PartNumber').val();
-  var jobNumberFilterValue = $('#txtFilter_JobNumber').val();
-  var machineNameFilterValue = $('#txtFilter_MachineName').val();
+  const ticketNumberFilterValue = $('#txtFilter_TicketNumber').val();
+  const departmentFilterVal = $('#cboFilter_Department').val();
+  const machineGroupFilterVal = $('#cboFilter_MachineGroup').val();
+  const operatorFilterVal = $('#cboFilter_Operator').val();
+  const cellLeaderFilterVal = $('#cboFilter_CellLeader').val();
+  const statusFilterVal = $('#cboFilter_Status').val();
+  const partNumberFilterValue = $('#txtFilter_PartNumber').val();
+  const jobNumberFilterValue = $('#txtFilter_JobNumber').val();
+  const machineNameFilterValue = $('#txtFilter_MachineName').val();
 
   $('.ftname input').val(ticketNumberFilterValue);
   $('.fpnum input').val(partNumberFilterValue);
@@ -318,31 +318,31 @@ function filterTicketTable() {
 
 
 
-  if ((departmentFilterVal != 0) && (departmentFilterVal.length > 0)) {
-    let taskDepartmentID = departmentNameMap.get(departmentFilterVal);
+  if ((departmentFilterVal !== 0) && (departmentFilterVal.length > 0)) {
+    const taskDepartmentID = departmentNameMap.get(departmentFilterVal);
     $('.fdid input').val(taskDepartmentID);
   }
   else {
     $('.fdid input').val(0);
   }
 
-  if ((machineGroupFilterVal != 0) && (machineGroupFilterVal.length > 0)) {
-    let machineGroupID = machineGroupNameMap.get(machineGroupFilterVal);
+  if ((machineGroupFilterVal !== 0) && (machineGroupFilterVal.length > 0)) {
+    const machineGroupID = machineGroupNameMap.get(machineGroupFilterVal);
     $('.fmgid input').val(machineGroupID);
   }
   else {
     $('.fmgid input').val(null);
   }
 
-  if ((operatorFilterVal != null) && (operatorFilterVal.length > 0)) {
+  if ((operatorFilterVal !== null) && (operatorFilterVal.length > 0)) {
     $('.fopname input').val(operatorFilterVal);
   }
   else {
     $('.fopname input').val(null);
   }
 
-  if ((cellLeaderFilterVal != 0) && (cellLeaderFilterVal.length > 0)) {
-    let cellLeaderID = cellLeaderNameMap.get(cellLeaderFilterVal);
+  if ((cellLeaderFilterVal !== 0) && (cellLeaderFilterVal.length > 0)) {
+    const cellLeaderID = cellLeaderNameMap.get(cellLeaderFilterVal);
 
     $('.fclid input').val(cellLeaderID);
   }
@@ -352,16 +352,16 @@ function filterTicketTable() {
 
   $('.ticket-table').hide();
   $('.ticket-detail-link').remove();
-  $('.pg input').val(1).change();
+  $('.pg input').val(1).trigger("change");
 
 }
 
 
 function generateFilterRow() {
 
-  if ($('#filterRow').length == 0) {
+  if ($('#filterRow').length === 0) {
 
-    var filter_row = "<TR id='filterRow'><TH/><TH/><TH/><TH/><TH><input type='text' id='txtFilter_TicketNumber'></TH><TH><select id='cboFilter_Status'/></TH><TH><select id='cboFilter_Department'/></TH><TH><input type='text' id='txtFilter_MachineName'></TH><TH><select id='cboFilter_MachineGroup'/></TH><TH><select id='cboFilter_Operator'/></TH><TH><select id='cboFilter_CellLeader'/></TH><TH><input type='text' id='txtFilter_PartNumber'></TH><TH><input type='text' id='txtFilter_JobNumber'></TH><TH/><TH/><TH/><TH/>"
+    const filter_row = "<TR id='filterRow'><TH/><TH/><TH/><TH/><TH><input type='text' id='txtFilter_TicketNumber'></TH><TH><select id='cboFilter_Status'/></TH><TH><select id='cboFilter_Department'/></TH><TH><input type='text' id='txtFilter_MachineName'></TH><TH><select id='cboFilter_MachineGroup'/></TH><TH><select id='cboFilter_Operator'/></TH><TH><select id='cboFilter_CellLeader'/></TH><TH><input type='text' id='txtFilter_PartNumber'></TH><TH><input type='text' id='txtFilter_JobNumber'></TH><TH/><TH/><TH/><TH/>"
     $('.ticket-table table thead').append(filter_row);
 
 
@@ -373,9 +373,9 @@ function generateFilterRow() {
       filterTicketTable();
     });
     $('#txtFilter_TicketNumber').on('keypress', function () {
-      var input = $(this);
+      const input = $(this);
       setTimeout(function () {
-        var val = input.val().replace(/^\*+|\*+$/g, '');
+        const val = input.val().replace(/^\*+|\*+$/g, '');
         input.val(val);
       }, 0);
     });
@@ -392,17 +392,17 @@ function generateFilterRow() {
 
 
 
-    $("#txtFilter_TicketNumber").dblclick(function () { $("#txtFilter_TicketNumber").val(null).change(); });
-    $("#txtFilter_MachineName").dblclick(function () { $("#txtFilter_MachineName").val(null).change(); });
-    $("#cboFilter_Department").dblclick(function () { $("#cboFilter_Department").val(null).change(); });
-    $("#cboFilter_MachineGroup").dblclick(function () { $("#cboFilter_MachineGroup").val(null).change(); });
-    $("#cboFilter_Operator").dblclick(function () { $("#cboFilter_Operator").val(null).change(); });
-    $("#cboFilter_CellLeader").dblclick(function () { $("#cboFilter_CellLeader").val(null).change(); });
+    $("#txtFilter_TicketNumber").on("dblclick", function () { $("#txtFilter_TicketNumber").val(null).trigger("change"); });
+    $("#txtFilter_MachineName").on("dblclick", function () { $("#txtFilter_MachineName").val(null).trigger("change"); });
+    $("#cboFilter_Department").on("dblclick", function () { $("#cboFilter_Department").val(null).trigger("change"); });
+    $("#cboFilter_MachineGroup").on("dblclick", function () { $("#cboFilter_MachineGroup").val(null).trigger("change"); });
+    $("#cboFilter_Operator").on("dblclick", function () { $("#cboFilter_Operator").val(null).trigger("change"); });
+    $("#cboFilter_CellLeader").on("dblclick", function () { $("#cboFilter_CellLeader").val(null).trigger("change"); });
 
-    $("#txtFilter_PartNumber").dblclick(function () { $("#txtFilter_PartNumber").val(null).change(); });
-    $("#txtFilter_JobNumber").dblclick(function () { $("#txtFilter_JobNumber").val(null).change(); });
+    $("#txtFilter_PartNumber").on("dblclick", function () { $("#txtFilter_PartNumber").val(null).trigger("change"); });
+    $("#txtFilter_JobNumber").on("dblclick", function () { $("#txtFilter_JobNumber").val(null).trigger("change"); });
 
-    $("#cboFilter_Status").dblclick(function () { $("#cboFilter_Status").val(null).change(); });
+    $("#cboFilter_Status").on("dblclick", function () { $("#cboFilter_Status").val(null).trigger("change"); });
 
 
     wireUpSortFields();
@@ -410,24 +410,24 @@ function generateFilterRow() {
 
 
 
-  if (($(".status-lookup-cbo select option").length > 0) && ($('#cboFilter_Status option' == 0))) {
+  if (($(".status-lookup-cbo select option").length > 0) && ($('#cboFilter_Status option' === 0))) {
     $("#cboFilter_Status").html($(".status-lookup-cbo select").html());
   }
 
-  if (($(".department-lookup-cbo select option").length > 0) && ($('#cboFilter_Department option' == 0))) {
+  if (($(".department-lookup-cbo select option").length > 0) && ($('#cboFilter_Department option' === 0))) {
     $("#cboFilter_Department").html($(".department-lookup-cbo select").html());
   }
 
-  if (($(".machine-group-lookup-cbo select option").length > 0) && ($('#cboFilter_MachineGroup option' == 0))) {
+  if (($(".machine-group-lookup-cbo select option").length > 0) && ($('#cboFilter_MachineGroup option' === 0))) {
     $("#cboFilter_MachineGroup").html($(".machine-group-lookup-cbo select").html());
   }
 
-  if (($(".operator-lookup-cbo select option").length > 0) && ($('#cboFilter_Operator option' == 0))) {
+  if (($(".operator-lookup-cbo select option").length > 0) && ($('#cboFilter_Operator option' === 0))) {
     $("#cboFilter_Operator").html($(".operator-lookup-cbo select").html());
     $("#cboFilter_Operator").find('option:eq(0)').prop('selected', true);
   }
 
-  if (($(".cell-leader-lookup-cbo select option").length > 0) && ($('#cboFilter_CellLeader option' == 0))) {
+  if (($(".cell-leader-lookup-cbo select option").length > 0) && ($('#cboFilter_CellLeader option' === 0))) {
     $("#cboFilter_CellLeader").html($(".cell-leader-lookup-cbo select").html());
     $("#cboFilter_CellLeader").find('option:eq(0)').prop('selected', true);
   }
@@ -437,13 +437,13 @@ function generateFilterRow() {
 
 
 function generateGoBackButtons() {
-  var $goback_buttons = $(".gobackbutton");
+  const $goback_buttons = $(".gobackbutton");
   $goback_buttons.each(function (index) {
     $(this).parent().append("<div id='go-back' class='ui-button ui-corner-all ui-widget' onclick='callGoBack()'><span class='ui-icon ui-icon-arrowreturnthick-1-w'></span>Go Back</div><div id='return-ticket' class='ui-button ui-corner-all ui-widget' onclick='callReturnTicket()'><span class='ui-icon ui-icon-check'></span>Return Ticket</div>");
   });
   $(".gobackbutton").remove();
 
-  var $gobackactivate_buttons = $(".goback_activate");
+  const $gobackactivate_buttons = $(".goback_activate");
   $gobackactivate_buttons.each(function (index) {
     $(this).parent().append("<div id='go-back' class='ui-button ui-corner-all ui-widget' onclick='callGoBack()'><span class='ui-icon ui-icon-arrowreturnthick-1-w'></span>Go Back</div>");
   });
@@ -452,16 +452,16 @@ function generateGoBackButtons() {
 
 
 function generateMachineList() {
-  var detailTicketID = $('.details-ticket-id input').val();
-  var activateTicketID = $('.activate-ticket-id input').val();
-  var cloneTicketID = $('.clone-ticket-id input').val();
-  var machineList = '';
+  const detailTicketID = $('.details-ticket-id input').val();
+  const activateTicketID = $('.activate-ticket-id input').val();
+  const cloneTicketID = $('.clone-ticket-id input').val();
+  let machineList = '';
 
-  if (detailTicketID != '') {
+  if (detailTicketID !== '') {
 
     $('[id^="Field152"]').each(function (index, element) {
       machineName = $(element).val();
-      if (machineName != '') {
+      if (machineName !== '') {
         if (machineList.length > 0) {
           machineList += ', ' + machineName;
         }
@@ -474,11 +474,11 @@ function generateMachineList() {
     $('.machine-name-list input').val(machineList);
   }
 
-  if (activateTicketID != '') {
+  if (activateTicketID !== '') {
 
     $('[id^="Field131"]').each(function (index, element) {
       machineName = $(element).val();
-      if (machineName != '') {
+      if (machineName !== '') {
         if (machineList.length > 0) {
           machineList += ', ' + machineName;
         }
@@ -491,11 +491,11 @@ function generateMachineList() {
     $('.activate-machine-list input').val(machineList);
   }
 
-  if (cloneTicketID != '') {
+  if (cloneTicketID !== '') {
 
     $('[id^="Field170"]').each(function (index, element) {
       machineName = $(element).val();
-      if (machineName != '') {
+      if (machineName !== '') {
         if (machineList.length > 0) {
           machineList += ', ' + machineName;
         }
@@ -511,16 +511,16 @@ function generateMachineList() {
 
 
 function generateActivateButtons() {
-  var activate_textboxes = $(".activate-ticket-button input[type=text]");
-  var ticket_ids = $(".ticket-table-id input[type=text]");
-  var ticket_status_ids = $(".ticket-status-id-col input[type=text]");
+  const activate_textboxes = $(".activate-ticket-button input[type=text]");
+  const ticket_ids = $(".ticket-table-id input[type=text]");
+  const ticket_status_ids = $(".ticket-status-id-col input[type=text]");
   activate_textboxes.each(function (index) {
-    let ticket_id = ticket_ids[index].value;
-    let ticket_status_id = ticket_status_ids[index].value;
-    if (ticket_status_id == '1') {
-      let has_button = $(this).parent().find('.activate-button').length;
-      if (has_button == 0) {
-        let btn_html = `<div class='table-button ui-button activate-button' onclick='callActivate(${ticket_id})'><span title='Activate' class='ui-button-icon ui-icon ui-icon-power'/></div>`
+    const ticket_id = ticket_ids[index].value;
+    const ticket_status_id = ticket_status_ids[index].value;
+    if (ticket_status_id === '1') {
+      const has_button = $(this).parent().find('.activate-button').length;
+      if (has_button === 0) {
+        const btn_html = `<div class='table-button ui-button activate-button' onclick='callActivate(${ticket_id})'><span title='Activate' class='ui-button-icon ui-icon ui-icon-power'/></div>`
         $(this).parent().append(btn_html);
       }
     }
@@ -529,16 +529,16 @@ function generateActivateButtons() {
 
 
 function generateCloneButtons() {
-  var clone_textboxes = $(".clone-button input[type=text]");
-  var ticket_ids = $(".ticket-table-id input[type=text]");
-  var ticket_status_ids = $(".ticket-status-id-col input[type=text]");
+  const clone_textboxes = $(".clone-button input[type=text]");
+  const ticket_ids = $(".ticket-table-id input[type=text]");
+  const ticket_status_ids = $(".ticket-status-id-col input[type=text]");
   clone_textboxes.each(function (index) {
-    let ticket_id = ticket_ids[index].value;
-    let ticket_status_id = ticket_status_ids[index].value;
-    if (ticket_status_id == '2') {
-      let has_button = $(this).parent().find('.clone-button').length;
-      if (has_button == 0) {
-        let btn_html = `<div class='table-button ui-button clone-button' onclick='callClone(${ticket_id})'><span title='Clone' class='ui-button-icon ui-icon ui-icon-copy'/></div>`
+    const ticket_id = ticket_ids[index].value;
+    const ticket_status_id = ticket_status_ids[index].value;
+    if (ticket_status_id === '2') {
+      const has_button = $(this).parent().find('.clone-button').length;
+      if (has_button === 0) {
+        const btn_html = `<div class='table-button ui-button clone-button' onclick='callClone(${ticket_id})'><span title='Clone' class='ui-button-icon ui-icon ui-icon-copy'/></div>`
         $(this).parent().append(btn_html);
       }
     }
@@ -547,13 +547,13 @@ function generateCloneButtons() {
 
 
 function generatePrintButtons() {
-  var print_buttons = $(".ticket-table-print-button input[type=text]");
-  var ticket_ids = $(".ticket-table-id input[type=text]");
+  const print_buttons = $(".ticket-table-print-button input[type=text]");
+  const ticket_ids = $(".ticket-table-id input[type=text]");
   print_buttons.each(function (index) {
-    let ticket_id = ticket_ids[index].value;
-    let has_button = $(this).parent().find('.print-button').length;
-    if (has_button == 0) {
-      let btn_html = `<div class='table-button ui-button print-button' onclick='callPrint(${ticket_id})'><span title='Print' class='ui-button-icon ui-icon ui-icon-print'/></div>`
+    const ticket_id = ticket_ids[index].value;
+    const has_button = $(this).parent().find('.print-button').length;
+    if (has_button === 0) {
+      const btn_html = `<div class='table-button ui-button print-button' onclick='callPrint(${ticket_id})'><span title='Print' class='ui-button-icon ui-icon ui-icon-print'/></div>`
       $(this).parent().append(btn_html);
     }
   });
@@ -562,12 +562,12 @@ function generatePrintButtons() {
 
 function generateTicketNumberColumn() {
   $('.ticket-detail-link').remove();
-  var ticket_numbers = $('.ticket-table-ticket-number input[type="text"]');
-  var ticket_ids = $('.ticket-table-id input[type="text"]');
+  const ticket_numbers = $('.ticket-table-ticket-number input[type="text"]');
+  const ticket_ids = $('.ticket-table-id input[type="text"]');
   ticket_numbers.each(function (index) {
-    let ticket_id = $(ticket_ids[index]).val();
-    let ticket_number = $(this).val();
-    let ticket_number_link = $("<a>", { text: ticket_number, class: 'ticket-detail-link', href: 'javascript:void(0);', onclick: `showDetails(${ticket_id})` });
+    const ticket_id = $(ticket_ids[index]).val();
+    const ticket_number = $(this).val();
+    const ticket_number_link = $("<a>", { text: ticket_number, class: 'ticket-detail-link', href: 'javascript:void(0);', onclick: `showDetails(${ticket_id})` });
     $(this).parent().append(ticket_number_link);
   });
 
@@ -575,14 +575,14 @@ function generateTicketNumberColumn() {
 
 
 function getTicketGuidByTicketID(ticket_id) {
-  var ticket_guid;
-  var ticket_ids = $(".ticket-table-id input[type=text]");
-  var ticket_guids = $(".ticket-table-print-button input[type=text]");
+  let ticket_guid;
+  const ticket_ids = $(".ticket-table-id input[type=text]");
+  const ticket_guids = $(".ticket-table-print-button input[type=text]");
 
   ticket_ids.each(function (index) {
-    var row_ticket_id = $(this).val();
-    var row_ticket_guid = ticket_guids[index].value;
-    if (row_ticket_id == ticket_id) {
+    const row_ticket_id = $(this).val();
+    const row_ticket_guid = ticket_guids[index].value;
+    if (row_ticket_id === ticket_id) {
       ticket_guid = row_ticket_guid;
       return;
     }
@@ -592,20 +592,20 @@ function getTicketGuidByTicketID(ticket_id) {
 
 
 function getTicketRowCount() {
-  var row_count = $('.ticket-table table tbody tr').length;
+  const row_count = $('.ticket-table table tbody tr').length;
   return row_count;
 }
 
 
 function getTicketTypeIDByTicketID(ticket_id) {
-  var ticket_type_id;
-  var ticket_ids = $(".ticket-table-id input[type=text]");
-  var ticket_type_ids = $(".ticket-table-ticket-type-id input[type=text]");
+  let ticket_type_id;
+  const ticket_ids = $(".ticket-table-id input[type=text]");
+  const ticket_type_ids = $(".ticket-table-ticket-type-id input[type=text]");
 
   ticket_ids.each(function (index) {
-    var row_ticket_id = $(this).val();
-    var row_ticket_type_id = ticket_type_ids[index].value;
-    if (row_ticket_id == ticket_id) {
+    const row_ticket_id = $(this).val();
+    const row_ticket_type_id = ticket_type_ids[index].value;
+    if (row_ticket_id === ticket_id) {
       ticket_type_id = row_ticket_type_id;
       return;
     }
@@ -617,9 +617,9 @@ function getTicketTypeIDByTicketID(ticket_id) {
 
 
 function loadCellLeaderMap() {
-  if (cellLeaderMap.keys.length == 0) {
-    var cellLeader_rows = $('.cellleader-lookup-table table tbody tr');
-    if (cellLeader_rows.length == 0) {
+  if (cellLeaderMap.keys.length === 0) {
+    const cellLeader_rows = $('.cellleader-lookup-table table tbody tr');
+    if (cellLeader_rows.length === 0) {
       return;
     }
     cellLeader_rows.each(function (index) {
@@ -633,9 +633,9 @@ function loadCellLeaderMap() {
 
 
 function loadDepartmentMap() {
-  if (departmentMap.keys.length == 0) {
-    var department_rows = $('.department-lookup-table table tbody tr');
-    if (department_rows.length == 0) {
+  if (departmentMap.keys.length === 0) {
+    const department_rows = $('.department-lookup-table table tbody tr');
+    if (department_rows.length === 0) {
       return;
     }
     department_rows.each(function (index) {
@@ -654,9 +654,9 @@ function loadiFrame(src) {
 
 
 function loadMachineGroupMap() {
-  if (machineGroupMap.keys.length == 0) {
-    var machine_group_rows = $('.machine-group-lookup-table table tbody tr');
-    if (machine_group_rows.length == 0) {
+  if (machineGroupMap.keys.length === 0) {
+    const machine_group_rows = $('.machine-group-lookup-table table tbody tr');
+    if (machine_group_rows.length === 0) {
       return;
     }
     machine_group_rows.each(function (index) {
@@ -672,26 +672,26 @@ function loadMachineGroupMap() {
 
 function print_receipt() {
 
-  var domain = document.location.hostname;
-  var receipt_url_root = "http://" + domain + "/Forms/";
-  var receipt_url = "";
+  const domain = document.location.hostname;
+  const receipt_url_root = "http://" + domain + "/Forms/";
+  let receipt_url = "";
 
 
 
-  if ($('.print-ticket-type-id input').val() == 1) {
+  if ($('.print-ticket-type-id input').val() === 1) {
     receipt_url = receipt_url_root + "PinGageReceipt?guid=" + $('.print-ticket-id input').val();
   }
-  if ($('.print-ticket-type-id input').val() == 2) {
+  if ($('.print-ticket-type-id input').val() === 2) {
     receipt_url = receipt_url_root + "ThreadReceipt?guid=" + $('.print-ticket-id input').val();
   }
 
-  if (should_print_receipt == true) {
-    if (receipt_url != "") {
+  if (should_print_receipt === true) {
+    if (receipt_url !== "") {
 
       setTimeout(function() {
         loadiFrame(receipt_url);
-        should_print_receipt == false;
-        $('.print-ticket-id input').val(null).change();
+        should_print_receipt === false;
+        $('.print-ticket-id input').val(null).trigger("change");
       }, 2000);
     }
   }
@@ -699,19 +699,19 @@ function print_receipt() {
 
 
 function reApplyFilterValues() {
-  if ($('#filterRow').length == 0) {
+  if ($('#filterRow').length === 0) {
     return;
   }
 
-  var ticketNumberFilterValue = $('.ftname input').val();
-  var departmentFilterVal = Number($('.fdid input').val());
-  var machineGroupFilterVal = Number($('.fmgid input').val());
-  var operatorFilterVal = $('.fopname input').val();
-  var cellLeaderFilterVal = Number($('.fclid input').val());
-  var statusFilterVal = $('.fsid input').val();
-  var partNumberFilterValue = $('.fpnum input').val();
-  var jobNumberFilterValue = $('.fjnum input').val();
-  var machineNameFilterValue = $('.fmachname input').val();
+  const ticketNumberFilterValue = $('.ftname input').val();
+  const departmentFilterVal = Number($('.fdid input').val());
+  const machineGroupFilterVal = Number($('.fmgid input').val());
+  const operatorFilterVal = $('.fopname input').val();
+  const cellLeaderFilterVal = Number($('.fclid input').val());
+  const statusFilterVal = $('.fsid input').val();
+  const partNumberFilterValue = $('.fpnum input').val();
+  const jobNumberFilterValue = $('.fjnum input').val();
+  const machineNameFilterValue = $('.fmachname input').val();
 
   $('#txtFilter_PartNumber').val(partNumberFilterValue);
   $('#txtFilter_JobNumber').val(jobNumberFilterValue);
@@ -719,27 +719,27 @@ function reApplyFilterValues() {
 
   $('#cboFilter_Status').val(statusFilterVal);
 
-  if ((ticketNumberFilterValue != null) && (ticketNumberFilterValue.length > 0)) {
+  if ((ticketNumberFilterValue !== null) && (ticketNumberFilterValue.length > 0)) {
     $('#txtFilter_TicketNumber').val(ticketNumberFilterValue);
   }
 
 
-  if (departmentFilterVal != 0) {
-    let departmentName = departmentMap.get(departmentFilterVal);
+  if (departmentFilterVal !== 0) {
+    const departmentName = departmentMap.get(departmentFilterVal);
     $('#cboFilter_Department').val(departmentName);
   }
 
-  if (machineGroupFilterVal != 0) {
-    let machineGroupName = machineGroupMap.get(machineGroupFilterVal);
+  if (machineGroupFilterVal !== 0) {
+    const machineGroupName = machineGroupMap.get(machineGroupFilterVal);
     $('#cboFilter_MachineGroup').val(machineGroupName);
   }
 
-  if ((operatorFilterVal != null) && (operatorFilterVal.length > 0)) {
+  if ((operatorFilterVal !== null) && (operatorFilterVal.length > 0)) {
     $("#cboFilter_Operator").val(operatorFilterVal);
   }
 
-  if (cellLeaderFilterVal != 0) {
-    let cellLeaderName = cellLeaderMap.get(cellLeaderFilterVal);
+  if (cellLeaderFilterVal !== 0) {
+    const cellLeaderName = cellLeaderMap.get(cellLeaderFilterVal);
     $("#cboFilter_CellLeader").val(cellLeaderName);
   }
 }
@@ -756,7 +756,7 @@ function resetPageNumber() {
   $('.ticket-table').hide();
   $('.ticket-detail-link').remove();
   $('.table-button').remove();
-  $('.pg input').val(1).change();
+  $('.pg input').val(1).trigger("change");
 }
 
 
@@ -775,16 +775,16 @@ function resetValidationErrors() {
 
 
 function setDailyCalValues() {
-  var dailyCalValues = $('.existing-thread-gages-daily-cal-value input');
-  var dailyCalDisplay = $('.existing-thread-gages-daily-cal fieldset');
+  const dailyCalValues = $('.existing-thread-gages-daily-cal-value input');
+  const dailyCalDisplay = $('.existing-thread-gages-daily-cal fieldset');
 
   dailyCalValues.each(function (i) {
-    let dailyCalValue = $(this).val();
-    let dailyCalDisplayField = dailyCalDisplay[i];
-    let dailyDisplayInputs = $(dailyCalDisplayField).find('input');
+    const dailyCalValue = $(this).val();
+    const dailyCalDisplayField = dailyCalDisplay[i];
+    const dailyDisplayInputs = $(dailyCalDisplayField).find('input');
     dailyDisplayInputs.each(function (ii) {
-      let inputValue = $(this).val();
-      if (dailyCalValue == inputValue) {
+      const inputValue = $(this).val();
+      if (dailyCalValue === inputValue) {
         $(this).attr('checked', 'checked');
       }
     });
@@ -795,7 +795,7 @@ function setDailyCalValues() {
 function showDetails(ticket_id) {
   $('.modify-action input').val(2)
   $('.details-modifier-employee-number input').focus();
-  $(".details-ticket-id input").val(ticket_id).change();
+  $(".details-ticket-id input").val(ticket_id).trigger("change");
   $('.Submit').show();
 }
 
@@ -805,116 +805,116 @@ function sortTable(newSortOrdinal) {
   removeAppendedFields();
   $('.sort-icon').remove();
 
-  var currentSortOrdinal = Number($('.sort-field-ordinal input').val());
-  var sortDirection = Number($('.sort-direction input').val());
+  const currentSortOrdinal = Number($('.sort-field-ordinal input').val());
+  let sortDirection = Number($('.sort-direction input').val());
 
-  if (newSortOrdinal == currentSortOrdinal) {
-    if (sortDirection == 0) {
+  if (newSortOrdinal === currentSortOrdinal) {
+    if (sortDirection === 0) {
       sortDirection = 1
-      $('.sort-direction input').val(1).change();
+      $('.sort-direction input').val(1).trigger("change");
     }
     else {
       sortDirection = 0;
-      $('.sort-direction input').val(0).change();
+      $('.sort-direction input').val(0).trigger("change");
     }
   }
   else {
     $('.sort-field-ordinal input').val(newSortOrdinal);
-    $('.sort-direction input').val(0).change();
+    $('.sort-direction input').val(0).trigger("change");
     sortDirection = 0;
   }
 
-  if (newSortOrdinal == 0) {
-    if (sortDirection == 0) {
+  if (newSortOrdinal === 0) {
+    if (sortDirection === 0) {
       $('#q30 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
     }
     else {
       $('#q30 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
     }
   }
-  if (newSortOrdinal == 1) {
+  if (newSortOrdinal === 1) {
 
-    if (sortDirection == 0) {
+    if (sortDirection === 0) {
       $('#q33 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
     }
     else {
       $('#q33 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
     }
   }
-  if (newSortOrdinal == 2) {
-    if (sortDirection == 0) {
+  if (newSortOrdinal === 2) {
+    if (sortDirection === 0) {
       $('#q34 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
     }
     else {
       $('#q34 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
     }
   }
-  if (newSortOrdinal == 3) {
-    if (sortDirection == 0) {
+  if (newSortOrdinal === 3) {
+    if (sortDirection === 0) {
       $('#q36 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
     }
     else {
       $('#q36 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
     }
   }
-  if (newSortOrdinal == 4) {
-    if (sortDirection == 0) {
+  if (newSortOrdinal === 4) {
+    if (sortDirection === 0) {
       $('#q35 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
     }
     else {
       $('#q35 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
     }
   }
-  if (newSortOrdinal == 5) {
-    if (sortDirection == 0) {
+  if (newSortOrdinal === 5) {
+    if (sortDirection === 0) {
       $('#q37 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
     }
     else {
       $('#q37 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
     }
   }
-  if (newSortOrdinal == 6) {
-    if (sortDirection == 0) {
+  if (newSortOrdinal === 6) {
+    if (sortDirection === 0) {
       $('#q38 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
     }
     else {
       $('#q38 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
     }
   }
-  if (newSortOrdinal == 7) {
-    if (sortDirection == 0) {
+  if (newSortOrdinal === 7) {
+    if (sortDirection === 0) {
       $('#q39 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
     }
     else {
       $('#q39 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
     }
   }
-  if (newSortOrdinal == 8) {
-    if (sortDirection == 0) {
+  if (newSortOrdinal === 8) {
+    if (sortDirection === 0) {
       $('#q40 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
     }
     else {
       $('#q40 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
     }
   }
-  if (newSortOrdinal == 9) {
-    if (sortDirection == 0) {
+  if (newSortOrdinal === 9) {
+    if (sortDirection === 0) {
       $('#q41 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
     }
     else {
       $('#q41 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
     }
   }
-  if (newSortOrdinal == 10) {
-    if (sortDirection == 0) {
+  if (newSortOrdinal === 10) {
+    if (sortDirection === 0) {
       $('#q42 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
     }
     else {
       $('#q42 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
     }
   }
-  if (newSortOrdinal == 11) {
-    if (sortDirection == 0) {
+  if (newSortOrdinal === 11) {
+    if (sortDirection === 0) {
       $('#q44 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
     }
     else {
@@ -925,57 +925,57 @@ function sortTable(newSortOrdinal) {
 
 
 function stripAsterisks(selector) {
-  var $input = $(selector);
-  var val = $input.val();
+  const $input = $(selector);
+  let val = $input.val();
   val = val.replace(/^\*+|\*+$/g, '');
   $input.val(val);
 }
 
 
 function validateForm(e) {
-  var isValid = true;
-  var siteID = Number($('.site-id input').val());
-  var actionType = Number($('.modify-action input').val());
+  let isValid = true;
+  const siteID = Number($('.site-id input').val());
+  const actionType = Number($('.modify-action input').val());
 
-  if (actionType == 1) {
+  if (actionType === 1) {
     return;
   }
 
-  if (actionType == 3) {
+  if (actionType === 3) {
     $('.print-ticket-id input').val($('.activate-guid input').val());
     return;
   }
 
-  if (actionType == 4) {
+  if (actionType === 4) {
     $('.print-ticket-id input').val($('.clone-guid input').val());
     return;
   }
 
 
-  if (actionType == 2) {
+  if (actionType === 2) {
     resetValidationErrors();
-    var submitEmployeeNumber = $('.submit-employee-number input');
-    var crEmployeeNumber = $('.cr-employee-number input');
-    var anokaEmployeeNumber = $('.anoka-employee-number input');
+    const submitEmployeeNumber = $('.submit-employee-number input');
+    const crEmployeeNumber = $('.cr-employee-number input');
+    const anokaEmployeeNumber = $('.anoka-employee-number input');
 
-    if (siteID == 1) {
+    if (siteID === 1) {
       submitEmployeeNumber.val(crEmployeeNumber.val());
     }
-    if (siteID == 2) {
+    if (siteID === 2) {
       submitEmployeeNumber.val(anokaEmployeeNumber.val());
     }
 
-    var ticketType = $('.details-ticket-type-id input').val();
-    var pinRows = $('.add-pins-bins-table table tbody tr');
+    const ticketType = $('.details-ticket-type-id input').val();
+    const pinRows = $('.add-pins-bins-table table tbody tr');
 
-    if (ticketType == 1) {
+    if (ticketType === 1) {
       pinRows.each(function (index) {
 
-        let pinTypeValue = Number($(this).find('.add-pins-bins-table-pin-type-id input').val());
-        let binName = $(this).find('.add-pins-bins-table-new-bin-number input');
-        let existingBinTicketNumber = $(this).find('.add-pins-bins-table-existing-bin-id input');
-        let binID = $(this).find('.add-pins-bins-table-new-bin-id input');
-        if ((pinTypeValue == 5) && ((binName.val().length > 0) && binID.val().length == 0)) {
+        const pinTypeValue = Number($(this).find('.add-pins-bins-table-pin-type-id input').val());
+        const binName = $(this).find('.add-pins-bins-table-new-bin-number input');
+        const existingBinTicketNumber = $(this).find('.add-pins-bins-table-existing-bin-id input');
+        const binID = $(this).find('.add-pins-bins-table-new-bin-id input');
+        if ((pinTypeValue === 5) && ((binName.val().length > 0) && binID.val().length === 0)) {
           binName.parent().find('#bad-pin-name-error').remove();
           binName.parent().append("<ul id='bad-pin-name-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Invalid Pin Name.</li></ul>");
           binName.addClass('parsley-error');
@@ -991,7 +991,7 @@ function validateForm(e) {
   
     }
 
-    if (isValid == true) {
+    if (isValid === true) {
       $('.print-ticket-id input').val($('.details-guid input').val());
     }
     else {

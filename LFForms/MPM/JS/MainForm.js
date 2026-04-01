@@ -1,4 +1,4 @@
-/*# MainForm.js — Documentation
+/*# MainForm.js ï¿½ Documentation
 
  Author:  Jeffrey Whitney
           jtwhitney@machine.com
@@ -23,7 +23,7 @@ Dependencies
 - jQuery
 - jQuery UI (CSS theme)
 - jquery-confirm (CSS/JS)
-- Uses Bootstrap’s jQuery plugin; resolves conflict via `$.fn.button.noConflict()`.
+- Uses Bootstrapï¿½s jQuery plugin; resolves conflict via `$.fn.button.noConflict()`.
 
 KEY CONCEPTS:
    User Permissions:
@@ -87,10 +87,10 @@ $(document).ready(function () {
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-  var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
+  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
   $.fn.bootstrapBtn = bootstrapButton;
-  var lfUserName = $('.lf-user-name input').val();
-  $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).change();
+  const lfUserName = $('.lf-user-name input').val();
+  $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
 
   /**
    * Fired when lookup data is loaded.
@@ -112,8 +112,8 @@ $(document).ready(function () {
  * @returns {boolean} True if admin; otherwise false.
  */
 function isAdmin() {
-  var isAdmin = Number($('.user-isadmin input').val());
-  if (isAdmin == 1) {
+  const isAdmin = Number($('.user-isadmin input').val());
+  if (isAdmin === 1) {
     return true;
   }
   else {

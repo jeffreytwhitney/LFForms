@@ -123,8 +123,8 @@ Expected Markup (selected elements/classes):
 
 $(document).ready(function () {
   // Normalize the displayed network user name to a SAM-style uppercase username (portion after '\').
-  var lfUserName = $('.lf-user-name input').val();
-  $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).change();
+  const lfUserName = $('.lf-user-name input').val();
+  $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
 
   // Initial page state.
   $('.Submit').hide();
@@ -140,24 +140,24 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
 
   // Resolve Bootstrap $.fn.button conflicts (retain original via alias).
-  var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
+  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
   $.fn.bootstrapBtn = bootstrapButton;
 
   // Keep radio group "Is Active" in sync with hidden value.
   $(document).on('change', '.edit-is-active-value input', function () {
-    var isActive = $('.edit-is-active-value input').val();
+    const isActive = $('.edit-is-active-value input').val();
     $(`.edit-tasktype-is-active input[type='radio'][value='${isActive}']`).prop("checked", true);
   });
 
   // Keep radio group "Requires Job Number" in sync with hidden value.
   $(document).on('change', '.edit-requires-job-number-value input', function () {
-    var requiresJobNumber = $('.edit-requires-job-number-value input').val();
+    const requiresJobNumber = $('.edit-requires-job-number-value input').val();
     $(`.edit-requires-job-number-choice input[type='radio'][value='${requiresJobNumber}']`).prop("checked", true);
   });
 
   // Keep radio group "Requires Models" in sync with hidden value.
   $(document).on('change', '.edit-requires-model-value input', function () {
-    var requiresModel = $('.edit-requires-model-value input').val();
+    const requiresModel = $('.edit-requires-model-value input').val();
     $(`.edit-requires-model-choice input[type='radio'][value='${requiresModel}']`).prop("checked", true);
   });
 
@@ -165,20 +165,20 @@ $(document).ready(function () {
 
   // Mirror radio "Is Active" selection back to the hidden field.
   $(document).on('change', ".edit-tasktype-is-active input[type='radio']", function () {
-    var isActive = $(this).val();
+    const isActive = $(this).val();
     $('.edit-is-active-value input').val(isActive);
   });
 
   // Mirror radio "Requires Job Number" selection back to the hidden field.
   $(document).on('change', ".edit-requires-job-number-choice input[type='radio']", function () {
-    var requiresJobNumber = $(this).val();
+    const requiresJobNumber = $(this).val();
     $('.edit-requires-job-number-value input').val(requiresJobNumber);
   });
 
 
   // Mirror radio "Requires Models" selection back to the hidden field.
   $(document).on('change', ".edit-requires-model-choice input[type='radio']", function () {
-    var requiresModel = $(this).val();
+    const requiresModel = $(this).val();
     $('.edit-requires-model-value input').val(requiresModel);
   });
 
@@ -193,8 +193,8 @@ $(document).ready(function () {
     generateTableButtons(".edit-button-col", "ui-icon-pencil", "Edit TaskType", "callEditTaskType");
     generateGoBackButtons();
     if (isAdminUser()) {
-      if ($('.add-button').length == 0) {
-        var add_button = '<div class="ui-button add-button" onclick="callAddTaskType()"><span title="Add TaskType" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add TaskType</div>';
+      if ($('.add-button').length === 0) {
+        const add_button = '<div class="ui-button add-button" onclick="callAddTaskType()"><span title="Add TaskType" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add TaskType</div>';
         $(add_button).insertBefore('.tasktype-table table');
       }
     }
@@ -216,7 +216,7 @@ $(document).ready(function () {
  */
 function callAddTaskType() {
   $(`.action-choice input[type='radio'][value='1']`).prop("checked", true);
-  $('.add-id input').val(1).change();
+  $('.add-id input').val(1).trigger("change");
   $('.Submit').show();
 }
 
@@ -231,7 +231,7 @@ function callAddTaskType() {
  */
 function callEditTaskType(tasktypeID) {
   $(`.action-choice input[type='radio'][value='2']`).prop("checked", true);
-  $('.edit-id input').val(tasktypeID).change();
+  $('.edit-id input').val(tasktypeID).trigger("change");
   if (isAdminUser()) {
     $('.Submit').show();
   }
@@ -244,8 +244,8 @@ function callEditTaskType(tasktypeID) {
  * - Hides the ".Submit" area.
  */
 function callGoBack() {
-  $(".add-id input").val(0).change();
-  $(".edit-id input").val(0).change();
+  $(".add-id input").val(0).trigger("change");
+  $(".edit-id input").val(0).trigger("change");
   $('.Submit').hide();
 }
 
@@ -256,7 +256,7 @@ function callGoBack() {
  * then removes the placeholder element.
  */
 function generateGoBackButtons() {
-  var $goback_buttons = $(".gobackbutton");
+  const $goback_buttons = $(".gobackbutton");
   $goback_buttons.each(function (index) {
     $(this).parent().append("<div id='go-back' class='ui-button ui-corner-all ui-widget' onclick='callGoBack()'><span class='ui-icon ui-icon-arrowreturnthick-1-w'></span>Go Back</div>");
   });
@@ -279,14 +279,14 @@ function generateGoBackButtons() {
  * @param {string} buttonFunction - Global function name to call on click; receives the row id as an argument.
  */
 function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFunction) {
-  var selectionString = buttonSelector + " input[type=text]";
-  var buttons = $(selectionString);
+  const selectionString = buttonSelector + " input[type=text]";
+  const buttons = $(selectionString);
   buttons.each(function () {
-    var btn_value = $(this).val();
-    var btn_html = `<div class='table-button ui-button' onclick='${buttonFunction}(${btn_value})'><span title='${buttonTitle}' class='ui-button-icon ui-icon ${buttonClass}'/></div>`
+    const btn_value = $(this).val();
+    const btn_html = `<div class='table-button ui-button' onclick='${buttonFunction}(${btn_value})'><span title='${buttonTitle}' class='ui-button-icon ui-icon ${buttonClass}'/></div>`
 
-    var has_button = $(this).parent().find(`.${buttonClass}`).length;
-    if (has_button == 0) {
+    const has_button = $(this).parent().find(`.${buttonClass}`).length;
+    if (has_button === 0) {
       $(this).parent().append(btn_html);
     }
   });
@@ -299,7 +299,7 @@ function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFu
  * @returns {boolean} True if ".user-isadmin input" has value "1"; otherwise false.
  */
 function isAdminUser() {
-  if ($('.user-isadmin input').val() == '1') {
+  if ($('.user-isadmin input').val() === '1') {
     return true;
   }
   return false;

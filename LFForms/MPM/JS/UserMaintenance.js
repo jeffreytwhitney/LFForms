@@ -1,4 +1,4 @@
-/**
+﻿/**
  UserMaintenance.js
  
   Author:   Jeffrey Whitney
@@ -222,7 +222,7 @@
  - Sorting only toggles indicators/hidden inputs; server or external components react to changes.
  
  Conventions in this file:
- - Functions are side-effect oriented; most trigger DOM updates and set hidden inputs, then call .change().
+ - Functions are side-effect oriented; most trigger DOM updates and set hidden inputs, then call .trigger("change").
  - Uses <span> with jQuery UI icon classes for action buttons in table cells.
  */
 
@@ -231,15 +231,15 @@
 // - departmentNameMap: departmentName (string) => departmentId (number)
 // - userTypeMap:       userTypeId (number) => userTypeName (string)
 // - userTypeNameMap:   userTypeName (string) => userTypeId (number)
-var departmentMap = new Map();
-var departmentNameMap = new Map();
-var userTypeMap = new Map();
-var userTypeNameMap = new Map();
+const departmentMap = new Map();
+const departmentNameMap = new Map();
+const userTypeMap = new Map();
+const userTypeNameMap = new Map();
 
 $(document).ready(function () {
   // Normalize Network User Name based on LF user name. Store uppercase simple username portion.
-  var lfUserName = $('.lf-user-name input').val();
-  $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).change();
+  const lfUserName = $('.lf-user-name input').val();
+  $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
 
   // Initial UI setup.
   $('.Submit').hide();
@@ -253,27 +253,27 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
 
   // Avoid Bootstrap/jQuery UI .button() conflicts.
-  var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
+  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
   $.fn.bootstrapBtn = bootstrapButton;
 
   // Submit gate: defer to validateAdd/validateEdit based on action.
-  $('.Submit').click(function (e) { submitForm(e); });
+  $('.Submit').on("click", function (e) { submitForm(e); });
 
   // Keep radio groups and hidden id fields in sync for "Is Active" and "Is Admin" controls.
   $(document).on('change', '.edit-user-is-active-id input', function () {
-    var isActive = $('.edit-user-is-active-id input').val();
+    const isActive = $('.edit-user-is-active-id input').val();
     $(`.edit-user-is-active input[type='radio'][value='${isActive}']`).prop("checked", true);
   });
   $(document).on('change', '.edit-user-is-admin-id input', function () {
-    var isAdmin = $('.edit-user-is-admin-id input').val();
+    const isAdmin = $('.edit-user-is-admin-id input').val();
     $(`.edit-user-is-admin input[type='radio'][value='${isAdmin}']`).prop("checked", true);
   });
   $(document).on('change', ".edit-user-is-active input[type='radio']", function () {
-    var isActive = $(this).val();
+    const isActive = $(this).val();
     $('.edit-user-is-active-id input').val(isActive);
   });
   $(document).on('change', ".edit-user-is-admin input[type='radio']", function () {
-    var isAdmin = $(this).val();
+    const isAdmin = $(this).val();
     $('.edit-user-is-admin-id input').val(isAdmin);
   });
 
@@ -284,7 +284,7 @@ $(document).ready(function () {
 
   // Persist selected site name in a cookie for 1 year.
   $(document).on('change', '.site-name select', function () {
-    var sitename = $('.site-name select').val();
+    const sitename = $('.site-name select').val();
     $.cookie('site_name', sitename, { expires: 365, path: '/' });
   });
 
@@ -305,17 +305,17 @@ $(document).ready(function () {
   $(document).on("onloadlookupfinished", function (e) {
 
     generateGoBackButtons();
-    if ($('.pg input').val() == '999') {
+    if ($('.pg input').val() === '999') {
       // If 999 sentinel slips through, reset to page 1.
-      $('.pg input').val(1).change();
+      $('.pg input').val(1).trigger("change");
     }
     // Normalize network user name on load.
     $('.network-user-name input').trigger("change");
 
     // Restore site selection from cookie if present.
-    var sitename = $.cookie('site_name');
-    if (sitename != null) {
-      $('.site-name select').val(sitename).change();
+    const sitename = $.cookie('site_name');
+    if (sitename !== null) {
+      $('.site-name select').val(sitename).trigger("change");
     }
     $('.user-table').show();
   });
@@ -331,27 +331,27 @@ $(document).ready(function () {
  */
 function appendPagination() {
 
-  var current_page = Number($('.pg input').val());
-  if (current_page == 999) { return; }
+  const current_page = Number($('.pg input').val());
+  if (current_page === 999) { return; }
 
-  var row_count = getTableRowCount();
+  const row_count = getTableRowCount();
 
   if (row_count > 0) {
     $('#user-pagination').remove();
-    if ((current_page == 1) && (row_count < 25)) {
-      $('.user-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>��</a></li><li><a class='page-link prev isDisabled'>�</a></li><li><a class='page-link next isDisabled'>�</a></li></ul></div>");
+    if ((current_page === 1) && (row_count < 25)) {
+      $('.user-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>ï¿½ï¿½</a></li><li><a class='page-link prev isDisabled'>ï¿½</a></li><li><a class='page-link next isDisabled'>ï¿½</a></li></ul></div>");
       return;
     }
-    if ((current_page == 1) && (row_count == 25)) {
-      $('.user-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>��</a></li><li><a class='page-link prev isDisabled'>�</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>�</a></li></ul></div>")
+    if ((current_page === 1) && (row_count === 25)) {
+      $('.user-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>ï¿½ï¿½</a></li><li><a class='page-link prev isDisabled'>ï¿½</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>ï¿½</a></li></ul></div>")
       return;
     }
-    if ((current_page > 1) && (row_count == 25)) {
-      $('.user-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>��</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>�</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>�</a></li></ul></div>")
+    if ((current_page > 1) && (row_count === 25)) {
+      $('.user-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>ï¿½ï¿½</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>ï¿½</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>ï¿½</a></li></ul></div>")
       return;
     }
     if ((current_page > 1) && (row_count < 25)) {
-      $('.user-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>��</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>�</a></li><li><a class='page-link next isDisabled'>�</a></li></ul></div>")
+      $('.user-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>ï¿½ï¿½</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>ï¿½</a></li><li><a class='page-link next isDisabled'>ï¿½</a></li></ul></div>")
       return;
     }
   }
@@ -366,7 +366,7 @@ function appendPagination() {
  */
 function callAddUser() {
   $(`.action-choice input[type='radio'][value='1']`).prop("checked", true);
-  $('.add-user-id input').val(1).change();
+  $('.add-user-id input').val(1).trigger("change");
   $('.Submit').show();
 }
 
@@ -380,7 +380,7 @@ function callAddUser() {
  */
 function callEditUser(userID) {
   $(`.action-choice input[type='radio'][value='2']`).prop("checked", true);
-  $('.edit-user-id input').val(userID).change();
+  $('.edit-user-id input').val(userID).trigger("change");
   if (isAdminUser()) {
     $('.Submit').show();
   }
@@ -392,8 +392,8 @@ function callEditUser(userID) {
  * - Clears .add-user-id and .edit-user-id
  */
 function callGoBack() {
-  $(".add-user-id input").val(0).change();
-  $(".edit-user-id input").val(0).change();
+  $(".add-user-id input").val(0).trigger("change");
+  $(".edit-user-id input").val(0).trigger("change");
   $('.Submit').hide();
 }
 
@@ -409,7 +409,7 @@ function callNextPage() {
   $('.table-button').remove();
 
   current_page = Number($('.pg input').val());
-  $('.pg input').val(current_page + 1).change();
+  $('.pg input').val(current_page + 1).trigger("change");
 }
 
 
@@ -424,10 +424,10 @@ function callPrevPage() {
   $('.table-button').remove();
 
   current_page = Number($('.pg input').val());
-  if (current_page == 1) {
+  if (current_page === 1) {
     return;
   }
-  $('.pg input').val(current_page - 1).change();
+  $('.pg input').val(current_page - 1).trigger("change");
 }
 
 
@@ -440,7 +440,7 @@ function callPrevPage() {
  * - Resets page to 1 and triggers refresh.
  */
 function filterTable() {
-  if ($('#filterRow').length == 0) {
+  if ($('#filterRow').length === 0) {
     return;
   }
 
@@ -451,19 +451,19 @@ function filterTable() {
     $('.finc-inactive input').val(0);
   }
 
-  var departmentFilterVal = $('#cboFilter_Department').val();
-  var userTypeFilterVal = $('#cboFilter_UserType').val();
+  const departmentFilterVal = $('#cboFilter_Department').val();
+  const userTypeFilterVal = $('#cboFilter_UserType').val();
 
-  if ((departmentFilterVal != null) && (departmentFilterVal.length > 0)) {
-    let departmentID = departmentNameMap.get(departmentFilterVal);
+  if ((departmentFilterVal !== null) && (departmentFilterVal.length > 0)) {
+    const departmentID = departmentNameMap.get(departmentFilterVal);
     $('.fdid input').val(departmentID);
   }
   else {
     $('.fdid input').val(0);
   }
 
-  if ((userTypeFilterVal != null) && (userTypeFilterVal.length > 0)) {
-    let userTypeID = userTypeNameMap.get(userTypeFilterVal);
+  if ((userTypeFilterVal !== null) && (userTypeFilterVal.length > 0)) {
+    const userTypeID = userTypeNameMap.get(userTypeFilterVal);
     $('.futid input').val(userTypeID);
   }
   else {
@@ -472,7 +472,7 @@ function filterTable() {
 
   $('.user-table').hide();
   $('.table-button').remove();
-  $('.pg input').val(1).change();
+  $('.pg input').val(1).trigger("change");
 
 }
 
@@ -487,31 +487,31 @@ function filterTable() {
  */
 function generateFilterRow() {
 
-  if ($('#filterRow').length == 0) {
-    var filter_row = "<TR id='filterRow'><TH/><TH/><TH/><TH><select id='cboFilter_UserType'/></TH><TH><select id='cboFilter_Department'/></TH><TH/><TH/><TH/></TR>"
+  if ($('#filterRow').length === 0) {
+    const filter_row = "<TR id='filterRow'><TH/><TH/><TH/><TH><select id='cboFilter_UserType'/></TH><TH><select id='cboFilter_Department'/></TH><TH/><TH/><TH/></TR>"
     $('.user-table table thead').append(filter_row);
 
     $("#cboFilter_UserType").on("change", function () { filterTable(); });
     $("#cboFilter_Department").on("change", function () { filterTable(); });
     
 
-    $("#cboFilter_Department").dblclick(function () { $("#cboFilter_Department").val(0).change(); });
-    $("#cboFilter_UserType").dblclick(function () { $("#cboFilter_UserType").val(0).change(); });
+    $("#cboFilter_Department").on("dblclick", function () { $("#cboFilter_Department").val(0).trigger("change"); });
+    $("#cboFilter_UserType").on("dblclick", function () { $("#cboFilter_UserType").val(0).trigger("change"); });
     wireUpSortFields();
   }
 
   if (isAdminUser()) {
-    if ($('.add-button').length == 0) {
-      var add_button = '<div class="ui-button add-button" onclick="callAddUser()"><span title="Add User" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add User</div><div class="choice include-choice"><input name="chkIncludeInActive" id="chkIncludeInActive" type="checkbox"><label class="form-option-label" for="chkIncludeInActive">Include InActive</label></div>'
+    if ($('.add-button').length === 0) {
+      const add_button = '<div class="ui-button add-button" onclick="callAddUser()"><span title="Add User" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add User</div><div class="choice include-choice"><input name="chkIncludeInActive" id="chkIncludeInActive" type="checkbox"><label class="form-option-label" for="chkIncludeInActive">Include InActive</label></div>'
       $(add_button).insertBefore('.user-table table');
     }
   }
 
   // Populate filter dropdowns once lookup combos are loaded.
-  if (($(".department-combo select option").length > 1) && ($("#cboFilter_Department option").length == 0)) {
+  if (($(".department-combo select option").length > 1) && ($("#cboFilter_Department option").length === 0)) {
     $("#cboFilter_Department").html($(".department-combo select").html());
   }
-  if (($(".user-type-combo select option").length > 1) && ($("#cboFilter_UserType option").length == 0)) {
+  if (($(".user-type-combo select option").length > 1) && ($("#cboFilter_UserType option").length === 0)) {
     $("#cboFilter_UserType").html($(".user-type-combo select").html());
   }
 }
@@ -522,7 +522,7 @@ function generateFilterRow() {
  * The button invokes callGoBack().
  */
 function generateGoBackButtons() {
-  var $goback_buttons = $(".gobackbutton");
+  const $goback_buttons = $(".gobackbutton");
   $goback_buttons.each(function (index) {
     $(this).parent().append("<div id='go-back' class='ui-button ui-corner-all ui-widget' onclick='callGoBack()'><span class='ui-icon ui-icon-arrowreturnthick-1-w'></span>Go Back</div>");
   });
@@ -540,14 +540,14 @@ function generateGoBackButtons() {
  * @param {string} buttonFunction - Global function name to invoke, receives the value as first argument.
  */
 function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFunction) {
-  var selectionString = buttonSelector + " input[type=text]";
-  var buttons = $(selectionString);
+  const selectionString = buttonSelector + " input[type=text]";
+  const buttons = $(selectionString);
   buttons.each(function () {
-    var btn_value = $(this).val();
-    var btn_html = `<div class='table-button ui-button' onclick='${buttonFunction}(${btn_value})'><span title='${buttonTitle}' class='ui-button-icon ui-icon ${buttonClass}'/></div>`
+    const btn_value = $(this).val();
+    const btn_html = `<div class='table-button ui-button' onclick='${buttonFunction}(${btn_value})'><span title='${buttonTitle}' class='ui-button-icon ui-icon ${buttonClass}'/></div>`
 
-    var has_button = $(this).parent().find(`.${buttonClass}`).length;
-    if (has_button == 0) {
+    const has_button = $(this).parent().find(`.${buttonClass}`).length;
+    if (has_button === 0) {
       $(this).parent().append(btn_html);
     }
   });
@@ -558,7 +558,7 @@ function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFu
  * @returns {number} The number of data rows rendered in the user table tbody.
  */
 function getTableRowCount() {
-  var row_count = $('.user-table tbody tr').length;
+  const row_count = $('.user-table tbody tr').length;
   return row_count;
 }
 
@@ -567,7 +567,7 @@ function getTableRowCount() {
  * @returns {boolean} True when the current user is an admin user.
  */
 function isAdminUser() {
-  if ($('.user-isadmin input').val() == '1') {
+  if ($('.user-isadmin input').val() === '1') {
     return true;
   }
   return false;
@@ -582,9 +582,9 @@ function isAdminUser() {
  *  - .department-lookup-table-name input=> name string
  */
 function loadDepartmentMap() {
-  if (departmentMap.keys.length == 0) {
-    var department_rows = $('.department-lookup-table table tbody tr');
-    if (department_rows.length == 0) {
+  if (departmentMap.keys.length === 0) {
+    const department_rows = $('.department-lookup-table table tbody tr');
+    if (department_rows.length === 0) {
       return;
     }
     department_rows.each(function (index) {
@@ -605,9 +605,9 @@ function loadDepartmentMap() {
  *  - .usertype-lookup-table-name input => name string
  */
 function loadUserTypeMap() {
-  if (userTypeMap.keys.length == 0) {
-    var userType_rows = $('.usertype-lookup-table table tbody tr');
-    if (userType_rows.length == 0) {
+  if (userTypeMap.keys.length === 0) {
+    const userType_rows = $('.usertype-lookup-table table tbody tr');
+    if (userType_rows.length === 0) {
       return;
     }
     userType_rows.each(function (index) {
@@ -633,26 +633,26 @@ function sortTable(newSortOrdinal, selector) {
   $('.table-button').remove();
   $('.sort-icon').remove();
 
-  var currentSortOrdinal = Number($('.sfo input').val());
-  var sortDirection = Number($('.sd input').val());
+  const currentSortOrdinal = Number($('.sfo input').val());
+  let sortDirection = Number($('.sd input').val());
 
-  if (newSortOrdinal == currentSortOrdinal) {
-    if (sortDirection == 0) {
+  if (newSortOrdinal === currentSortOrdinal) {
+    if (sortDirection === 0) {
       sortDirection = 1
-      $('.sd input').val(1).change();
+      $('.sd input').val(1).trigger("change");
     }
     else {
       sortDirection = 0;
-      $('.sd input').val(0).change();
+      $('.sd input').val(0).trigger("change");
     }
   }
   else {
     $('.sfo input').val(newSortOrdinal);
-    $('.sd input').val(0).change();
+    $('.sd input').val(0).trigger("change");
     sortDirection = 0;
   }
 
-  if (sortDirection == 0) {
+  if (sortDirection === 0) {
     $(`${selector} .cf-col-label`).append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
   }
   else {
@@ -669,15 +669,15 @@ function sortTable(newSortOrdinal, selector) {
  * @param {JQuery.Event} e - Click/submit event.
  */
 function submitForm(e) {
-  var actionID = Number($('.action-choice input[type="radio"]:checked').val());
-  if (actionID == 1) {
-    if (validateAdd() == false) {
+  const actionID = Number($('.action-choice input[type="radio"]:checked').val());
+  if (actionID === 1) {
+    if (validateAdd() === false) {
       e.preventDefault();
       return;
     }
   }
-  if (actionID == 2) {
-    if (validateEdit() == false) {
+  if (actionID === 2) {
+    if (validateEdit() === false) {
       e.preventDefault();
       return;
     }
@@ -694,8 +694,8 @@ function submitForm(e) {
  */
 function validateAdd() {
   $('#existing-user-error').remove();
-  var addUserCount = $('.add-existing-users select option').length;
-  var addNetworkUserNameField = $('.add-user-network-user-name input');
+  const addUserCount = $('.add-existing-users select option').length;
+  const addNetworkUserNameField = $('.add-user-network-user-name input');
   if (addUserCount > 1) {
     addNetworkUserNameField.parent().append("<ul id='existing-user-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>There is another ACTIVE user with this network username. Please inactivate the other user first. Then you can add this one.</li></ul>");
     return false;
@@ -714,20 +714,20 @@ function validateAdd() {
  */
 function validateEdit() {
   $('#existing-user-error').remove();
-  var returnValue = true;
-  var editNetworkUserNameField = $('.edit-user-network-user-name input');
-  var editUserID = Number($('.edit-user-id input').val());
-  var existingUserIDs = $('.edit-existing-users select option');
+  const returnValue = true;
+  const editNetworkUserNameField = $('.edit-user-network-user-name input');
+  const editUserID = Number($('.edit-user-id input').val());
+  const existingUserIDs = $('.edit-existing-users select option');
 
   $(existingUserIDs).each(function (index) {
-    let existingUserID = Number($(this).val());
-    if (existingUserID == 0) {
+    const existingUserID = Number($(this).val());
+    if (existingUserID === 0) {
       return;
     }
-    if (existingUserID != editUserID) {
+    if (existingUserID !== editUserID) {
       editNetworkUserNameField.parent().append("<ul id='existing-user-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>There is another ACTIVE user with this network username. Please inactivate the other user first. Then you can change this one.</li></ul>");
 
-      returnValue == false;
+      returnValue === false;
       return;
     }
   });

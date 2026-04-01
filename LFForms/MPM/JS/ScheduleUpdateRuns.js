@@ -139,18 +139,18 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
 
   // Avoid Bootstrap/jQuery UI button plugin conflicts by renaming Bootstrap's .button to .bootstrapBtn.
-  var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
+  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
   $.fn.bootstrapBtn = bootstrapButton;
 
   // Populate ".network-user-name" from LF username when available (maps DOMAIN\user -> USER).
-  var lfUserName = $('.lf-user-name input').val();
-  if (lfUserName != 'Anonymous User') {
-    $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).change();
+  const lfUserName = $('.lf-user-name input').val();
+  if (lfUserName !== 'Anonymous User') {
+    $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
   }
 
   // Persist selected site to a cookie so it is restored on next visit.
   $(document).on('change', '.site-name select', function () {
-    var sitename = $('.site-name select').val();
+    const sitename = $('.site-name select').val();
     $.cookie('site_name', sitename, { expires: 365, path: '/' });
   });
 
@@ -159,9 +159,9 @@ $(document).ready(function () {
     generateTableButtons(".edit-button-col", "ui-icon-pencil", "Edit User", "callShowDetails");
     appendPagination();
     if (isMetrologyUser()) {
-      if ($('.add-button').length == 0) {
+      if ($('.add-button').length === 0) {
         // Adds a "Refresh Dates" button ahead of the schedule table for Metrology users.
-        var add_button = '<div class="ui-button add-button" onclick="callStartRun()"><span title="Refresh Dates" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Refresh Dates</div>';
+        const add_button = '<div class="ui-button add-button" onclick="callStartRun()"><span title="Refresh Dates" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Refresh Dates</div>';
         $(add_button).insertBefore('.schedule-runs-table table');
       }
     }
@@ -177,17 +177,17 @@ $(document).ready(function () {
     $('#q0').append("<div class='hidden-text' id='popUpDiv'></div>");
 
     // Restore site from cookie, if present.
-    var sitename = $.cookie('site_name');
-    if (sitename != null) {
-      $('.site-name select').val(sitename).change();
+    const sitename = $.cookie('site_name');
+    if (sitename !== null) {
+      $('.site-name select').val(sitename).trigger("change");
     }
 
     // Trigger user field change to propagate network user value.
     $('.network-user-name input').trigger("change");
    
     // Normalize paging default if sentinel value is present.
-    if ($('.pg input').val() == '999') {
-      $('.pg input').val(1).change();
+    if ($('.pg input').val() === '999') {
+      $('.pg input').val(1).trigger("change");
     }
 
     // Replace placeholder "Go Back" controls with styled UI buttons.
@@ -211,27 +211,27 @@ $(document).ready(function () {
  */
 function appendPagination() {
 
-  var current_page = Number($('.pg input').val());
-  if (current_page == 999) { return; }
+  const current_page = Number($('.pg input').val());
+  if (current_page === 999) { return; }
 
-  var row_count = getTableRowCount();
+  const row_count = getTableRowCount();
 
   if (row_count > 0) {
     $('#user-pagination').remove();
-    if ((current_page == 1) && (row_count < 25)) {
-      $('.schedule-runs-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>‹‹</a></li><li><a class='page-link prev isDisabled'>‹</a></li><li><a class='page-link next isDisabled'>›</a></li></ul></div>");
+    if ((current_page === 1) && (row_count < 25)) {
+      $('.schedule-runs-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>ï¿½ï¿½</a></li><li><a class='page-link prev isDisabled'>ï¿½</a></li><li><a class='page-link next isDisabled'>ï¿½</a></li></ul></div>");
       return;
     }
-    if ((current_page == 1) && (row_count == 25)) {
-      $('.schedule-runs-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>‹‹</a></li><li><a class='page-link prev isDisabled'>‹</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>›</a></li></ul></div>")
+    if ((current_page === 1) && (row_count === 25)) {
+      $('.schedule-runs-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>ï¿½ï¿½</a></li><li><a class='page-link prev isDisabled'>ï¿½</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>ï¿½</a></li></ul></div>")
       return;
     }
-    if ((current_page > 1) && (row_count == 25)) {
-      $('.schedule-runs-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>‹‹</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>‹</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>›</a></li></ul></div>")
+    if ((current_page > 1) && (row_count === 25)) {
+      $('.schedule-runs-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>ï¿½ï¿½</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>ï¿½</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>ï¿½</a></li></ul></div>")
       return;
     }
     if ((current_page > 1) && (row_count < 25)) {
-      $('.schedule-runs-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>‹‹</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>‹</a></li><li><a class='page-link next isDisabled'>›</a></li></ul></div>")
+      $('.schedule-runs-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>ï¿½ï¿½</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>ï¿½</a></li><li><a class='page-link next isDisabled'>ï¿½</a></li></ul></div>")
       return;
     }
   }
@@ -242,7 +242,7 @@ function appendPagination() {
  * Typically available only to Metrology users via a UI button.
  */
 function callStartRun() {
-  $('#form1').submit();
+  $('#form1').trigger("submit");
 }
 
 /**
@@ -251,7 +251,7 @@ function callStartRun() {
  * @param {number|string} runID - The run identifier to load.
  */
 function callShowDetails(runID) {
-  $('.rid input').val(runID).change();
+  $('.rid input').val(runID).trigger("change");
   
 }
 
@@ -259,7 +259,7 @@ function callShowDetails(runID) {
  * Returns from a details view to the list by clearing the current run ID and triggering change.
  */
 function callGoBack() {
-  $('.rid input').val(0).change(); 
+  $('.rid input').val(0).trigger("change"); 
 }
 
 /**
@@ -272,7 +272,7 @@ function callNextPage() {
   $('.table-button').remove();
 
   current_page = Number($('.pg input').val());
-  $('.pg input').val(current_page + 1).change();
+  $('.pg input').val(current_page + 1).trigger("change");
 }
 
 /**
@@ -285,10 +285,10 @@ function callPrevPage() {
   $('.table-button').remove();
 
   current_page = Number($('.pg input').val());
-  if (current_page == 1) {
+  if (current_page === 1) {
     return;
   }
-  $('.pg input').val(current_page - 1).change();
+  $('.pg input').val(current_page - 1).trigger("change");
 }
 
 /**
@@ -296,7 +296,7 @@ function callPrevPage() {
  * that invoke callGoBack(), then removes the placeholders.
  */
 function generateGoBackButtons() {
-  var $goback_buttons = $(".gobackbutton");
+  const $goback_buttons = $(".gobackbutton");
   $goback_buttons.each(function (index) {
     $(this).parent().append("<div id='go-back' class='ui-button ui-corner-all ui-widget' onclick='callGoBack()'><span class='ui-icon ui-icon-arrowreturnthick-1-w'></span>Go Back</div>");
   });
@@ -316,14 +316,14 @@ function generateGoBackButtons() {
  * @param {string} buttonFunction - Global function name that receives the hidden input value (e.g., "callShowDetails").
  */
 function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFunction) {
-  var selectionString = buttonSelector + " input[type=text]";
-  var buttons = $(selectionString);
+  const selectionString = buttonSelector + " input[type=text]";
+  const buttons = $(selectionString);
   buttons.each(function () {
-    var btn_value = $(this).val();
-    var btn_html = `<div class='table-button ui-button' onclick='${buttonFunction}(${btn_value})'><span title='${buttonTitle}' class='ui-button-icon ui-icon ${buttonClass}'/></div>`
+    const btn_value = $(this).val();
+    const btn_html = `<div class='table-button ui-button' onclick='${buttonFunction}(${btn_value})'><span title='${buttonTitle}' class='ui-button-icon ui-icon ${buttonClass}'/></div>`
 
-    var has_button = $(this).parent().find(`.${buttonClass}`).length;
-    if (has_button == 0) {
+    const has_button = $(this).parent().find(`.${buttonClass}`).length;
+    if (has_button === 0) {
       $(this).parent().append(btn_html);
     }
   });
@@ -335,7 +335,7 @@ function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFu
  * @returns {number} Count of tbody rows within ".schedule-runs-table".
  */
 function getTableRowCount() {
-  var row_count = $('.schedule-runs-table tbody tr').length;
+  const row_count = $('.schedule-runs-table tbody tr').length;
   return row_count;
 }
 
@@ -345,7 +345,7 @@ function getTableRowCount() {
  * @returns {boolean} True if ".user-type-id input" equals 1; otherwise false.
  */
 function isMetrologyUser() {
-  if (Number($('.user-type-id input').val()) == 1) {
+  if (Number($('.user-type-id input').val()) === 1) {
     return true;
   }
   return false;
@@ -356,5 +356,5 @@ function isMetrologyUser() {
  */
 function resetPageNumber() {
   $('.schedule-runs-table').hide();
-  $('.pg input').val(1).change();
+  $('.pg input').val(1).trigger("change");
 }

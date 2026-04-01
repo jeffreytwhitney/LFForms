@@ -9,7 +9,7 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-  var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
+  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
   $.fn.bootstrapBtn = bootstrapButton;
 
   $('#q0').append("<div class='hidden' id='popUpDiv'></div>");
@@ -25,8 +25,8 @@ $(document).ready(function () {
 
   $(document).on('lookupcomplete', function (e) {
 
-    if ($('.pg input').val() == '999') {
-      $('.pg input').val(1).change();
+    if ($('.pg input').val() === '999') {
+      $('.pg input').val(1).trigger("change");
     }
 
     $('.creation-date-col input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
@@ -44,33 +44,33 @@ $(document).ready(function () {
 
 function appendPagination() {
 
-  var current_page = Number($('.pg input').val());
-  if (current_page == 999) { return; }
+  const current_page = Number($('.pg input').val());
+  if (current_page === 999) { return; }
 
-  var row_count = getTicketRowCount();
+  const row_count = getTicketRowCount();
 
   if (row_count > 0) {
     $('#ticket-table-pagination').remove();
-    if ((current_page == 1) && (row_count < 25)) {
-      $('.ticket-table table').parent().append("<div id='ticket-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>‹‹</a></li><li><a class='page-link prev isDisabled'>‹</a></li><li><a class='page-link next isDisabled'>›</a></li></ul></div>");
+    if ((current_page === 1) && (row_count < 25)) {
+      $('.ticket-table table').parent().append("<div id='ticket-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>ï¿½ï¿½</a></li><li><a class='page-link prev isDisabled'>ï¿½</a></li><li><a class='page-link next isDisabled'>ï¿½</a></li></ul></div>");
       return;
     }
-    if ((current_page == 1) && (row_count == 25)) {
-      $('.ticket-table table').parent().append("<div id='ticket-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>‹‹</a></li><li><a class='page-link prev isDisabled'>‹</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>›</a></li></ul></div>")
+    if ((current_page === 1) && (row_count === 25)) {
+      $('.ticket-table table').parent().append("<div id='ticket-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>ï¿½ï¿½</a></li><li><a class='page-link prev isDisabled'>ï¿½</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>ï¿½</a></li></ul></div>")
       return;
     }
-    if ((current_page > 1) && (row_count == 25)) {
-      $('.ticket-table table').parent().append("<div id='ticket-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>‹‹</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>‹</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>›</a></li></ul></div>")
+    if ((current_page > 1) && (row_count === 25)) {
+      $('.ticket-table table').parent().append("<div id='ticket-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>ï¿½ï¿½</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>ï¿½</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>ï¿½</a></li></ul></div>")
       return;
     }
     if ((current_page > 1) && (row_count < 25)) {
-      $('.ticket-table table').parent().append("<div id='ticket-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>‹‹</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>‹</a></li><li><a class='page-link next isDisabled'>›</a></li></ul></div>")
+      $('.ticket-table table').parent().append("<div id='ticket-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>ï¿½ï¿½</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>ï¿½</a></li><li><a class='page-link next isDisabled'>ï¿½</a></li></ul></div>")
       return;
     }
   }
   else {
     $('#ticket-table-pagination').remove();
-    $('.ticket-table table').parent().append("<div id='ticket-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled' href='javascript:void(0);'>‹‹</a></li><li><a class='page-link prev isDisabled' href='javascript:void(0);'>‹</a></li><li><a class='page-link next isDisabled'>›</a></li></ul></div>")
+    $('.ticket-table table').parent().append("<div id='ticket-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled' href='javascript:void(0);'>ï¿½ï¿½</a></li><li><a class='page-link prev isDisabled' href='javascript:void(0);'>ï¿½</a></li><li><a class='page-link next isDisabled'>ï¿½</a></li></ul></div>")
     return;
   }
 }
@@ -80,7 +80,7 @@ function callNextPage() {
   $('.tasklist-table').hide();
   removeAppendedFields();
   current_page = Number($('.pg input').val());
-  $('.tasklist-page input').val(current_page + 1).change();
+  $('.tasklist-page input').val(current_page + 1).trigger("change");
 }
 
 
@@ -88,24 +88,24 @@ function callPrevPage() {
   $('.tasklist-table').hide();
   removeAppendedFields();
   current_page = Number($('.pg input').val());
-  if (current_page == 1) {
+  if (current_page === 1) {
     return;
   }
-  $('.tasklist-page input').val(current_page - 1).change();
+  $('.tasklist-page input').val(current_page - 1).trigger("change");
 }
 
 
 function checkPermissions() {
 
-  var employee_number = $("#Field87").val();
-  var is_active_user = $("#Field88").val().toString();
-  var return_val = true;
+  const employee_number = $("#Field87").val();
+  const is_active_user = $("#Field88").val().toString();
+  let return_val = true;
 
-  if (is_active_user == "False") {
+  if (is_active_user === "False") {
     return_val = false;
   }
 
-  if (employee_number == '') {
+  if (employee_number === '') {
     return_val = false;
   }
 
@@ -123,14 +123,14 @@ function formatDateFields(selector) {
 
 function generateTicketNumberColumn() {
   $('.ticket-link').remove();
-  var ticket_numbers = $('.ticket-number-col input[type="text"]');
-  var ticket_ids = $('.ticket-id-col input[type="text"]');
+  const ticket_numbers = $('.ticket-number-col input[type="text"]');
+  const ticket_ids = $('.ticket-id-col input[type="text"]');
   ticket_numbers.each(function (index) {
-    let ticket_id = $(ticket_ids[index]).val();
-    let ticket_number = $(this).val();
-    let ticket_number_link = $("<a>", { text: ticket_number, class: 'ticket-link', href: 'javascript:void(0);', onclick: `showDetails(${ticket_id})` });
-    let has_link = $(this).parent().find('.ticket-link').length;
-    if (has_link == 0) {
+    const ticket_id = $(ticket_ids[index]).val();
+    const ticket_number = $(this).val();
+    const ticket_number_link = $("<a>", { text: ticket_number, class: 'ticket-link', href: 'javascript:void(0);', onclick: `showDetails(${ticket_id})` });
+    const has_link = $(this).parent().find('.ticket-link').length;
+    if (has_link === 0) {
       $(this).parent().append(ticket_number_link);
     }
   });
@@ -139,7 +139,7 @@ function generateTicketNumberColumn() {
 
 
 function getTicketRowCount() {
-  var row_count = $('.ticket-table table tbody tr').length;
+  const row_count = $('.ticket-table table tbody tr').length;
   return row_count;
 }
 
@@ -179,7 +179,7 @@ function removeAppendedFields() {
 
 
 function showDetails(ticket_id) {
-  var widowHeight = $(window).height();
+  let widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
   popUpIframe(`http://rmslf/Forms/RMS-GAGE-TicketDetails?tid=${ticket_id}&ro=1`, 'Ticket Details', widowHeight, 1200);
 }

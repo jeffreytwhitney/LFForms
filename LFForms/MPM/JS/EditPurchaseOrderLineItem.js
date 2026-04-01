@@ -137,13 +137,13 @@ const LineItemType = Object.freeze({ None: 0, Purchase: 1, Service: 2, Calibrati
  * Map of status id -> status name loaded from the page's lookup table.
  * @type {Map<number, string>}
  */
-var statusMap = new Map();
+const statusMap = new Map();
 
 /**
  * Map of status name -> status id loaded from the page's lookup table.
  * @type {Map<string, number>}
  */
-var statusNameMap = new Map();
+const statusNameMap = new Map();
 
 $(document).ready(function () {
   // Page chrome and third-party script/style setup.
@@ -157,23 +157,22 @@ $(document).ready(function () {
    * Restore Bootstrap button plugin if a conflict exists so jQuery UI dialog
    * close buttons render and behave correctly.
    */
-  var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value so that popup close button displays correctly.
+  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value so that popup close button displays correctly.
   $.fn.bootstrapBtn = bootstrapButton;
 
   // If upstream logic requests the dialog to close, notify parent and stop initialization.
-  if ($('.closeme input').val() == 1) {
+  if ($('.closeme input').val() === 1) {
     window.parent.postMessage('CloseDialogWithRefresh', '*');
     $('.Submit').hide();
     return;
   }
 
   // Wire up submit button to centralized submit handler.
-  $('.Submit').click(function (e) { submitForm(e); });
+  $('.Submit').on("click", function (e) { submitForm(e); });
 
   // Populate a normalized network user name (uppercase, sans domain).
   $('.network-user-name input')
-    .val($('.lf-user-name input').val().toUpperCase().substr($('.lf-user-name input').val().lastIndexOf('\\') + 1))
-    .change();
+    .val($('.lf-user-name input').val().toUpperCase().substr($('.lf-user-name input').val().lastIndexOf('\\') + 1)).trigger("change");
 
   // Mark required fields with asterisk for visual cue (in addition to validation).
   $('<span class="cf-required">*</span>').insertAfter('.service-date span span');
@@ -183,18 +182,18 @@ $(document).ready(function () {
 
   $(document).on('change', '.quantity input', function (e) {
 
-    var quantity = Number($(this).val().replace(',', ''));
-    var perUnitCost = Number($('.per-unit-cost input').val().replace(',', ''));
-    var totalCost = quantity * perUnitCost;
-    var formattedTotalCost = addThousandsSeparator(totalCost.toFixed(2));
+    const quantity = Number($(this).val().replace(',', ''));
+    const perUnitCost = Number($('.per-unit-cost input').val().replace(',', ''));
+    const totalCost = quantity * perUnitCost;
+    const formattedTotalCost = addThousandsSeparator(totalCost.toFixed(2));
     $('.cost-amount input').val(formattedTotalCost);
   });
 
   $(document).on('change', '.per-unit-cost input', function (e) {
-    var quantity = Number($('.quantity input').val().replace(',', ''));
-    var perUnitCost = Number($(this).val().replace(',', ''));
-    var totalCost = quantity * perUnitCost;
-    var formattedTotalCost = addThousandsSeparator(totalCost.toFixed(2));
+    const quantity = Number($('.quantity input').val().replace(',', ''));
+    const perUnitCost = Number($(this).val().replace(',', ''));
+    const totalCost = quantity * perUnitCost;
+    const formattedTotalCost = addThousandsSeparator(totalCost.toFixed(2));
     $('.cost-amount input').val(formattedTotalCost);
   });
 
@@ -208,10 +207,10 @@ $(document).ready(function () {
    * - Injects the line item history iframe when an item exists.
    */
   $(document).on('lookupcomplete', function (e) {
-    var lineItemId = Number($('.liid input').val());
-    var statusid = Number($('.current-status-id input').val());
+    const lineItemId = Number($('.liid input').val());
+    const statusid = Number($('.current-status-id input').val());
 
-    if ((!isAdminUser()) || (lineItemId == LineItemType.None)) {
+    if ((!isAdminUser()) || (lineItemId === LineItemType.None)) {
       $('.Submit').hide();
       return;
     }
@@ -249,7 +248,7 @@ $(document).ready(function () {
     $('.closeme input').val(1);
     $('#q0').append("<div class='hidden-text' id='popUpDiv'></div>");
     $('.network-user-name input').trigger("change");
-    if ($('.po-number input').val() == '') {
+    if ($('.po-number input').val() === '') {
       $('.po-number input').val('Not Yet Assigned')
     } 
   });
@@ -258,16 +257,16 @@ $(document).ready(function () {
    * Keep hidden 'new-status-id' in sync when the Purchase status combobox changes.
    */
   $(document).on('change', '.purchase-status-cbo select', function () {
-    var selectedStatusID = Number($(this).val());
-    $('.new-status-id input').val(selectedStatusID).change();
+    const selectedStatusID = Number($(this).val());
+    $('.new-status-id input').val(selectedStatusID).trigger("change");
   });
 
   /**
    * Keep hidden 'new-status-id' in sync when the Service status combobox changes.
    */
   $(document).on('change', '.service-status-cbo select', function () {
-    var selectedStatusID = Number($(this).val());
-    $('.new-status-id input').val(selectedStatusID).change();
+    const selectedStatusID = Number($(this).val());
+    $('.new-status-id input').val(selectedStatusID).trigger("change");
   });
 
 });
@@ -279,9 +278,9 @@ function addThousandsSeparator(numStr) {
   numStr = numStr.replace(/[^0-9.]/g, '');
 
   // Split integer and decimal parts
-  let parts = numStr.split('.');
+  const parts = numStr.split('.');
   let integerPart = parts[0];
-  let decimalPart = parts.length > 1 ? '.' + parts[1] : '';
+  const decimalPart = parts.length > 1 ? '.' + parts[1] : '';
 
   // Add commas to integer part
   integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -302,7 +301,7 @@ function cancelLineItem() {
   // Build dialog content fresh each time to ensure a clean state.
   $('#section-cancellation-note-content').remove(); 
   $('.section-cancellation-note').append('<div id="section-cancellation-note-content" class="section-cancellation-note-content"><textarea id="note-textarea" rows="5" cols="50"></textarea></div>');
-  var contentClone = $('#section-cancellation-note-content');
+  const contentClone = $('#section-cancellation-note-content');
   $(contentClone).dialog({
     title: 'Add Cancellation Reason (Required)',
     modal: true,
@@ -312,21 +311,21 @@ function cancelLineItem() {
     resizable: false,
     buttons: {
       'OK': function () {
-        let noteText = contentClone.find('#note-textarea').val().trim();
-        if (noteText == '') {
+        const noteText = contentClone.find('#note-textarea').val().trim();
+        if (noteText === '') {
           $.alert({ title: 'Must supply cancellation reason!', content: 'Sorry, you need to provide a reason for cancelling this line item.' });
           return;
         }
 
         $('.cancellation-reason textarea').val(noteText);
-        $('#form1').submit();
+        $('#form1').trigger("submit");
       }
     }
   });
 
   // Improve textarea visuals and open dialog.
-  var resizeableStyle = $('#note-textarea').attr('style');
-  let newStyle = resizeableStyle + 'border-width: thin;border-color: black;border-style: solid;height: 200px;';
+  const resizeableStyle = $('#note-textarea').attr('style');
+  const newStyle = resizeableStyle + 'border-width: thin;border-color: black;border-style: solid;height: 200px;';
   $('#note-textarea').attr('style', newStyle);
   $(contentClone).dialog("open");
 }
@@ -336,7 +335,7 @@ function cancelLineItem() {
  * @returns {boolean} True when the current user is an admin user.
  */
 function isAdminUser() {
-  if ($('.user-isadmin input').val() == '1') {
+  if ($('.user-isadmin input').val() === '1') {
     return true;
   }
   return false;
@@ -382,11 +381,11 @@ function lockForm() {
  * @returns {void}
  */
 function resetErrorFields() {
-  var quantityField = $('.quantity input');
-  var costAmountField = $('.cost-amount input');
-  var serviceDateField = $('.service-date input');
-  var serviceStatusField = $('.service-status-cbo select');
-  var purchaseStatusField = $('.purchase-status-cbo select');
+  const quantityField = $('.quantity input');
+  const costAmountField = $('.cost-amount input');
+  const serviceDateField = $('.service-date input');
+  const serviceStatusField = $('.service-status-cbo select');
+  const purchaseStatusField = $('.purchase-status-cbo select');
 
   // Remove any prior error message lists.
   $('#quantity-error').remove();
@@ -411,24 +410,24 @@ function resetErrorFields() {
  * @returns {void}
  */
 function setStatusComboValue() {
-  var currentStatusID = Number($('.current-status-id input').val());
-  var newStatusID = Number($('.new-status-id input').val());
-  var lineItemTypeID = Number($('.line-item-type-id input').val());
+  const currentStatusID = Number($('.current-status-id input').val());
+  let newStatusID = Number($('.new-status-id input').val());
+  const lineItemTypeID = Number($('.line-item-type-id input').val());
 
-  if ((lineItemTypeID == LineItemType.None) || (currentStatusID == Status.None)) {
+  if ((lineItemTypeID === LineItemType.None) || (currentStatusID === Status.None)) {
     return;
   }
 
   // If no new status is set, default to current status
-  if (newStatusID == Status.None) {
+  if (newStatusID === Status.None) {
     newStatusID = currentStatusID;
   }
 
-  if (lineItemTypeID == LineItemType.Purchase) { // Purchase
-    $('.purchase-status-cbo select').val(newStatusID).change();
+  if (lineItemTypeID === LineItemType.Purchase) { // Purchase
+    $('.purchase-status-cbo select').val(newStatusID).trigger("change");
   }
   else { // Service
-    $('.service-status-cbo select').val(newStatusID).change();
+    $('.service-status-cbo select').val(newStatusID).trigger("change");
   }
 
 }
@@ -442,29 +441,29 @@ function setStatusComboValue() {
  * @returns {void}
  */
 function submitForm(e) {
-  var lineItemTypeID = Number($('.line-item-type-id input').val());
-  var statusID = Number($('.new-status-id input').val());
-  var form_is_valid = validateForm();
-  var quantityValue = $('.quantity input').val();
-  var receivedQuantityValue = $('.received-quantity input').val();
-  var receivedQuantityField = $('.received-quantity input');
+  const lineItemTypeID = Number($('.line-item-type-id input').val());
+  const statusID = Number($('.new-status-id input').val());
+  const form_is_valid = validateForm();
+  const quantityValue = $('.quantity input').val();
+  const receivedQuantityValue = $('.received-quantity input').val();
+  const receivedQuantityField = $('.received-quantity input');
 
-  if (receivedQuantityValue == '') {
+  if (receivedQuantityValue === '') {
     receivedQuantityField.val(0);
   }
 
-  if (form_is_valid == false) {
+  if (form_is_valid === false) {
     e.preventDefault();
     return;
   }
 
   // Service line items allow 0 quantity; normalize empty to 0.
-  if ((lineItemTypeID == LineItemType.Service) && (quantityValue == '0' || quantityValue == '')) {
+  if ((lineItemTypeID === LineItemType.Service) && (quantityValue === '0' || quantityValue === '')) {
     $('.quantity input').val(0);
   }
 
   // If cancelling, collect a reason via modal dialog before allowing submit.
-  if (statusID == Status.Cancelled) {
+  if (statusID === Status.Cancelled) {
     e.preventDefault();
     cancelLineItem();
     return;
@@ -481,26 +480,26 @@ function submitForm(e) {
  * @returns {boolean} True if the form is valid, false otherwise.
  */
 function validateForm() {
-  var is_valid = true;
-  var currentStatusID = Number($('.current-status-id input').val());
-  var newStatusID = Number($('.new-status-id input').val());
-  var typeID = Number($('.line-item-type-id input').val());
-  var purchaseStatusField = $('.purchase-status-cbo select');
-  var serviceStatusField = $('.service-status-cbo select');
-  var serviceDateField = $('.service-date input');
-  var serviceDateValue = serviceDateField.val().trim();
-  var quantityField = $('.quantity input');
-  var costAmountField = $('.cost-amount input');
-  var quantityValue = Number(quantityField.val().trim());
-  var costAmountValue = Number(costAmountField.val().trim());
-  var receivedQuantityValue = Number($('.received-quantity input').val().trim());
-  var receivedQuantityField = $('.received-quantity input');
+  let is_valid = true;
+  const currentStatusID = Number($('.current-status-id input').val());
+  const newStatusID = Number($('.new-status-id input').val());
+  const typeID = Number($('.line-item-type-id input').val());
+  const purchaseStatusField = $('.purchase-status-cbo select');
+  const serviceStatusField = $('.service-status-cbo select');
+  const serviceDateField = $('.service-date input');
+  const serviceDateValue = serviceDateField.val().trim();
+  const quantityField = $('.quantity input');
+  const costAmountField = $('.cost-amount input');
+  const quantityValue = Number(quantityField.val().trim());
+  const costAmountValue = Number(costAmountField.val().trim());
+  const receivedQuantityValue = Number($('.received-quantity input').val().trim());
+  const receivedQuantityField = $('.received-quantity input');
 
   resetErrorFields();
 
   // Once any status is set, it cannot be reverted to None.
-  if ((currentStatusID > Status.None) && (newStatusID == Status.None)) {
-    if (typeID == LineItemType.Purchase) {
+  if ((currentStatusID > Status.None) && (newStatusID === Status.None)) {
+    if (typeID === LineItemType.Purchase) {
       purchaseStatusField.addClass('parsley-error');
       purchaseStatusField.parent().append("<ul id='status-unset-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Once a status is set, it cannot be undone.</li></ul>");
       is_valid = false;
@@ -513,8 +512,8 @@ function validateForm() {
   }
 
   // Service/Calibration items require a Service Date when moving to Scheduled.
-  if ((typeID > LineItemType.Purchase) && (newStatusID == Status.Scheduled)) {
-    if (serviceDateValue == '') {
+  if ((typeID > LineItemType.Purchase) && (newStatusID === Status.Scheduled)) {
+    if (serviceDateValue === '') {
       serviceDateField.addClass('parsley-error');
       serviceDateField.parent().append("<ul id='service-date-required-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Service Date is required when Status is Scheduled.</li></ul>");
       is_valid = false;
@@ -522,20 +521,20 @@ function validateForm() {
   }
 
   // Purchase items must have quantity > 0.
-  if ((typeID == LineItemType.Purchase) && (quantityValue == 0)) {
+  if ((typeID === LineItemType.Purchase) && (quantityValue === 0)) {
     quantityField.addClass('parsley-error');
     quantityField.parent().append("<ul id='quantity-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Must Enter a valid quantity.</li></ul>");
     is_valid = false;
   }
 
   // Cost amount must be > 0 for all item types.
-  if (costAmountValue == 0 ) {
+  if (costAmountValue === 0 ) {
     costAmountField.addClass('parsley-error');
     costAmountField.parent().append("<ul id='cost-amount-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Must Enter a valid cost amount. ($0.00 is invalid).</li></ul>");
     is_valid = false;
   }
 
-  if (newStatusID == Status.Received) {
+  if (newStatusID === Status.Received) {
     if (receivedQuantityValue < quantityValue) {
       receivedQuantityField.addClass('parsley-error');
       receivedQuantityField.parent().append("<ul id='quantity-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>If Status = Received, Quantity must equal Order Quantity.</li></ul>");
@@ -543,15 +542,15 @@ function validateForm() {
     }
   }
 
-  if (newStatusID == Status.PartialReceived) {
-    if (receivedQuantityValue >= quantityValue || receivedQuantityValue == 0) {
+  if (newStatusID === Status.PartialReceived) {
+    if (receivedQuantityValue >= quantityValue || receivedQuantityValue === 0) {
       receivedQuantityField.addClass('parsley-error');
       receivedQuantityField.parent().append("<ul id='quantity-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>If Status = Partial Received, Received Quantity must be greater than 0 and less than Order Quantity.</li></ul>");
       is_valid = false;
     }
   }
 
-  if ((newStatusID == Status.None) && (receivedQuantityValue > 0)) {
+  if ((newStatusID === Status.None) && (receivedQuantityValue > 0)) {
     receivedQuantityField.addClass('parsley-error');
     serviceStatusField.addClass('parsley-error');
     receivedQuantityField.parent().append("<ul id='quantity-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>If Status is not set to Received or Partially Received, Received Quantity must be 0.</li></ul>");

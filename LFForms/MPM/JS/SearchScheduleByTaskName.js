@@ -61,13 +61,13 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
 
   // Avoid Bootstrap/jQuery UI plugin conflicts; re-alias Bootstrap's button plugin.
-  var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
+  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
   $.fn.bootstrapBtn = bootstrapButton;
 
   // Normalize and populate the network username (strip domain, uppercase).
-  var lfUserName = $('.lf-user-name input').val();
-  if (lfUserName != 'Anonymous User') {
-    $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).change();
+  const lfUserName = $('.lf-user-name input').val();
+  if (lfUserName !== 'Anonymous User') {
+    $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
   }
 
   // Handle post-lookup UI work: pagination, page normalization, cookie-based site restore, reveal table.
@@ -76,15 +76,15 @@ $(document).ready(function () {
     appendPagination();
 
     // If "no paging" sentinel (999) slipped through, normalize to page 1 for subsequent paging.
-    if ($('.pg input').val() == '999') {
-      $('.pg input').val(1).change();
+    if ($('.pg input').val() === '999') {
+      $('.pg input').val(1).trigger("change");
     }
 
     // If site is not set, attempt to restore from cookie.
-    if ($('.site-name input').val() == '') {
-      var sitename = $.cookie('site_name');
-      if (sitename != null) {
-        $('.site-name input').val(sitename).change();
+    if ($('.site-name input').val() === '') {
+      const sitename = $.cookie('site_name');
+      if (sitename !== null) {
+        $('.site-name input').val(sitename).trigger("change");
         // Trigger a change on site id input to drive any dependent lookups.
         $('.site-id input').trigger("change");
       }
@@ -104,41 +104,41 @@ $(document).ready(function () {
  *
  * Markup notes:
  *  - Inserts a container with id `user-pagination`.
- *  - Adds Prev (‹, ‹‹) and Next (›) anchors with enabled/disabled states and click handlers.
+ *  - Adds Prev (ï¿½, ï¿½ï¿½) and Next (ï¿½) anchors with enabled/disabled states and click handlers.
  *  - Removes an existing `#user-pagination` prior to rendering a new one.
  */
 function appendPagination() {
 
-  var current_page = Number($('.pg input').val());
-  if (current_page == 999) { return; }
+  const current_page = Number($('.pg input').val());
+  if (current_page === 999) { return; }
 
-  var row_count = getTableRowCount();
+  const row_count = getTableRowCount();
 
   if (row_count > 0) {
     // Clear any previously injected pagination UI.
     $('#user-pagination').remove();
 
     // Case: first page and fewer than a full page of rows -> no next page.
-    if ((current_page == 1) && (row_count < 25)) {
-      $('.task-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>‹‹</a></li><li><a class='page-link prev isDisabled'>‹</a></li><li><a class='page-link next isDisabled'>›</a></li></ul></div>");
+    if ((current_page === 1) && (row_count < 25)) {
+      $('.task-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>ï¿½ï¿½</a></li><li><a class='page-link prev isDisabled'>ï¿½</a></li><li><a class='page-link next isDisabled'>ï¿½</a></li></ul></div>");
       return;
     }
 
     // Case: first page and exactly a full page of rows -> next page enabled.
-    if ((current_page == 1) && (row_count == 25)) {
-      $('.task-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>‹‹</a></li><li><a class='page-link prev isDisabled'>‹</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>›</a></li></ul></div>")
+    if ((current_page === 1) && (row_count === 25)) {
+      $('.task-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>ï¿½ï¿½</a></li><li><a class='page-link prev isDisabled'>ï¿½</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>ï¿½</a></li></ul></div>")
       return;
     }
 
     // Case: middle pages and full page of rows -> next and prev enabled.
-    if ((current_page > 1) && (row_count == 25)) {
-      $('.task-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>‹‹</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>‹</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>›</a></li></ul></div>")
+    if ((current_page > 1) && (row_count === 25)) {
+      $('.task-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>ï¿½ï¿½</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>ï¿½</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>ï¿½</a></li></ul></div>")
       return;
     }
 
     // Case: last page (fewer than a full page of rows) -> prev enabled, next disabled.
     if ((current_page > 1) && (row_count < 25)) {
-      $('.task-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>‹‹</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>‹</a></li><li><a class='page-link next isDisabled'>›</a></li></ul></div>")
+      $('.task-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>ï¿½ï¿½</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>ï¿½</a></li><li><a class='page-link next isDisabled'>ï¿½</a></li></ul></div>")
       return;
     }
   }
@@ -154,7 +154,7 @@ function callNextPage() {
   $('.task-table').hide();
 
   current_page = Number($('.pg input').val());
-  $('.pg input').val(current_page + 1).change();
+  $('.pg input').val(current_page + 1).trigger("change");
 }
 
 
@@ -166,10 +166,10 @@ function callPrevPage() {
   $('.task-table').hide();
 
   current_page = Number($('.pg input').val());
-  if (current_page == 1) {
+  if (current_page === 1) {
     return;
   }
-  $('.pg input').val(current_page - 1).change();
+  $('.pg input').val(current_page - 1).trigger("change");
 }
 
 
@@ -179,7 +179,7 @@ function callPrevPage() {
  */
 function resetPageNumber() {
   $('.task-table').hide();
-  $('.pg input').val(1).change();
+  $('.pg input').val(1).trigger("change");
 }
 
 
@@ -188,6 +188,6 @@ function resetPageNumber() {
  * @returns {number} The count of `<tr>` elements within `.task-table tbody`.
  */
 function getTableRowCount() {
-  var row_count = $('.task-table tbody tr').length;
+  const row_count = $('.task-table tbody tr').length;
   return row_count;
 }

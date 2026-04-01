@@ -37,15 +37,15 @@ $(document).ready(function () {
   // When the form's lookup/data population completes, finalize the print-friendly rendering.
   $(document).on("onloadlookupfinished", function () {
     // Update the page title with the task name (e.g., "Programming Task MyTask").
-    var taskName = $('.task-name input').val();
+    const taskName = $('.task-name input').val();
     $('#form-title-wrap h1').text(`Programming Task ${taskName}`);
 
     // Replace all textareas with static <div> blocks for a cleaner print layout.
     generateTextAreaDivs();
 
     // If a valid task ID exists, embed the Task History for context in the printout.
-    var taskID = $('.tid input').val();
-    if ((taskID != '') && (taskID != '0')) {
+    const taskID = $('.tid input').val();
+    if ((taskID !== '') && (taskID !== '0')) {
       $('#task-history').append(`<iframe id='task-history-iframe' name='task-history-iframe' src='http://rmslf/Forms/MPM-ProgamTaskHistory?tid=${taskID}' height='500' width='100%'/>`);
     }
 
@@ -72,7 +72,7 @@ $(document).ready(function () {
 function generateTextAreaDivs() {
   $('.textarea-div').remove();
   $('textarea').each(function () {
-    let textarea_text = $(this).val();
+    const textarea_text = $(this).val();
     $(this).parent().html('<div class="textarea-div">' + textarea_text + '</div>');
   });
 

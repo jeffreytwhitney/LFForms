@@ -1,4 +1,4 @@
-/**
+﻿/**
 ServiceTickets.js
 
   Author:   Jeffrey Whitney
@@ -312,14 +312,14 @@ DOM/selector conventions used by this script:
   .ticket-number-col, .edit-ticket-col
  */
 
-var departmentMap = new Map();
-var departmentNameMap = new Map();
-var initiatorMap = new Map();
-var initiatorNameMap = new Map();
-var ticketTypeMap = new Map();
-var ticketTypeNameMap = new Map();
-var assigneeMap = new Map();
-var assigneeNameMap = new Map();
+const departmentMap = new Map();
+const departmentNameMap = new Map();
+const initiatorMap = new Map();
+const initiatorNameMap = new Map();
+const ticketTypeMap = new Map();
+const ticketTypeNameMap = new Map();
+const assigneeMap = new Map();
+const assigneeNameMap = new Map();
 
 /**
  * DOM ready bootstrap.
@@ -338,21 +338,21 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-  var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
+  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
   $.fn.bootstrapBtn = bootstrapButton;
   $('#q0').append("<div class='hidden' id='popUpDiv'></div>");
 
-  var lfUserName = $('.lf-user-name input').val();
-  if (lfUserName != 'Anonymous User') {
-    $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).change();
+  const lfUserName = $('.lf-user-name input').val();
+  if (lfUserName !== 'Anonymous User') {
+    $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
   }
 
   window.onmessage = function (event) {
-    if (event.data == "CloseDialog") {
+    if (event.data === "CloseDialog") {
       $("#popupIFrame").dialog("destroy");
       $("#popupIFrame").remove();
     }
-    if (event.data == "CloseDialogWithRefresh") {
+    if (event.data === "CloseDialogWithRefresh") {
       $("#popupIFrame").dialog("destroy");
       $("#popupIFrame").remove();
       refreshPage();
@@ -360,16 +360,16 @@ $(document).ready(function () {
   };
 
   $(document).on("onloadlookupfinished", function () {
-    var sitename = $.cookie('site_name');
-    if (sitename != null) {
-      $('.site-name select').val(sitename).change();
+    const sitename = $.cookie('site_name');
+    if (sitename !== null) {
+      $('.site-name select').val(sitename).trigger("change");
     }
   });
 
   $(document).on('lookupcomplete', function (e) {
     $('.projectlist-table').hide();
-    if ($('.pg input').val() == '999') {
-      $('.pg input').val(1).change();
+    if ($('.pg input').val() === '999') {
+      $('.pg input').val(1).trigger("change");
 
       $('.network-user-name input').trigger("change");
     }
@@ -388,7 +388,7 @@ $(document).ready(function () {
   });
 
   $(document).on('change', '.site-name select', function () {
-    var sitename = $('.site-name select').val();
+    const sitename = $('.site-name select').val();
     $.cookie('site_name', sitename, { expires: 365, path: '/' });
   });
 });
@@ -400,7 +400,7 @@ $(document).ready(function () {
  * @returns {void}
  */
 function addTicket() {
-  var widowHeight = $(window).height();
+  let widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
   popUpIframe(`http://rmslf/Forms/RMS-MPM-AddServiceTicket`, 'Add Service Ticket', widowHeight, 1500);
 }
@@ -415,27 +415,27 @@ function addTicket() {
  */
 function appendPagination() {
 
-  var current_page = Number($('.pg input').val());
-  if (current_page == 999) { return; }
+  const current_page = Number($('.pg input').val());
+  if (current_page === 999) { return; }
 
-  var row_count = getTableRowCount();
+  const row_count = getTableRowCount();
 
   if (row_count > 0) {
     $('#table-pagination').remove();
-    if ((current_page == 1) && (row_count < 25)) {
-      $('.service-ticket-table table').parent().append("<div id='table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>��</a></li><li><a class='page-link prev isDisabled'>�</a></li><li><a class='page-link next isDisabled'>�</a></li></ul></div>");
+    if ((current_page === 1) && (row_count < 25)) {
+      $('.service-ticket-table table').parent().append("<div id='table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>ï¿½ï¿½</a></li><li><a class='page-link prev isDisabled'>ï¿½</a></li><li><a class='page-link next isDisabled'>ï¿½</a></li></ul></div>");
       return;
     }
-    if ((current_page == 1) && (row_count == 25)) {
-      $('.service-ticket-table table').parent().append("<div id='table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>��</a></li><li><a class='page-link prev isDisabled'>�</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>�</a></li></ul></div>")
+    if ((current_page === 1) && (row_count === 25)) {
+      $('.service-ticket-table table').parent().append("<div id='table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>ï¿½ï¿½</a></li><li><a class='page-link prev isDisabled'>ï¿½</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>ï¿½</a></li></ul></div>")
       return;
     }
-    if ((current_page > 1) && (row_count == 25)) {
-      $('.service-ticket-table table').parent().append("<div id='table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>��</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>�</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>�</a></li></ul></div>")
+    if ((current_page > 1) && (row_count === 25)) {
+      $('.service-ticket-table table').parent().append("<div id='table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>ï¿½ï¿½</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>ï¿½</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>ï¿½</a></li></ul></div>")
       return;
     }
     if ((current_page > 1) && (row_count < 25)) {
-      $('.service-ticket-table table').parent().append("<div id='table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>��</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>�</a></li><li><a class='page-link next isDisabled'>�</a></li></ul></div>")
+      $('.service-ticket-table table').parent().append("<div id='table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>ï¿½ï¿½</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>ï¿½</a></li><li><a class='page-link next isDisabled'>ï¿½</a></li></ul></div>")
       return;
     }
   }
@@ -451,7 +451,7 @@ function callNextPage() {
   $('.service-ticket-table').hide();
   removeAppendedFields();
   current_page = Number($('.pg input').val());
-  $('.pg input').val(current_page + 1).change();
+  $('.pg input').val(current_page + 1).trigger("change");
 }
 
 
@@ -464,10 +464,10 @@ function callPrevPage() {
   $('.service-ticket-table').hide();
   removeAppendedFields();
   current_page = Number($('.pg input').val());
-  if (current_page == 1) {
+  if (current_page === 1) {
     return;
   }
-  $('.pg input').val(current_page - 1).change();
+  $('.pg input').val(current_page - 1).trigger("change");
 }
 
 
@@ -477,7 +477,7 @@ function callPrevPage() {
  * @returns {void}
  */
 function editTicket(ticketID) {
-  var widowHeight = $(window).height();
+  let widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
   popUpIframe(`http://rmslf/Forms/MPM-EditServiceTicket?tid=${ticketID}`, 'Edit Service Ticket', widowHeight, 1200);
 }
@@ -492,7 +492,7 @@ function editTicket(ticketID) {
  * @returns {void}
  */
 function filterTable() {
-  if ($('#filterRow').length == 0) {
+  if ($('#filterRow').length === 0) {
     return;
   }
 
@@ -511,34 +511,34 @@ function filterTable() {
   }
 
 
-  var ticketNumberFilterValue = $('#txtFilter_TicketNumber').val();
-  var ticketNameFilterValue = $('#txtFilter_TicketName').val();
-  var initiatorFilterVal = $('#cboFilter_Initiator').val();
-  var ticketTypeFilterVal = $('#cboFilter_TicketType').val();
-  var departmentFilterVal = $('#cboFilter_Department').val();
-  var assigneeFilterVal = $('#cboFilter_Assignee').val();
+  const ticketNumberFilterValue = $('#txtFilter_TicketNumber').val();
+  const ticketNameFilterValue = $('#txtFilter_TicketName').val();
+  const initiatorFilterVal = $('#cboFilter_Initiator').val();
+  const ticketTypeFilterVal = $('#cboFilter_TicketType').val();
+  const departmentFilterVal = $('#cboFilter_Department').val();
+  const assigneeFilterVal = $('#cboFilter_Assignee').val();
 
   $('.ftnum input').val(ticketNumberFilterValue);
   $('.ftname input').val(ticketNameFilterValue);
 
-  if ((departmentFilterVal != null) && (departmentFilterVal.length > 0)) {
-    let departmentID = departmentNameMap.get(departmentFilterVal);
+  if ((departmentFilterVal !== null) && (departmentFilterVal.length > 0)) {
+    const departmentID = departmentNameMap.get(departmentFilterVal);
     $('.fdid input').val(departmentID);
   }
   else {
     $('.fdid input').val(0);
   }
 
-  if ((initiatorFilterVal != null) && (initiatorFilterVal.length > 0)) {
-    let initiatorID = initiatorNameMap.get(initiatorFilterVal);
+  if ((initiatorFilterVal !== null) && (initiatorFilterVal.length > 0)) {
+    const initiatorID = initiatorNameMap.get(initiatorFilterVal);
     $('.fiid input').val(initiatorID);
   }
   else {
     $('.fiid input').val(0);
   }
 
-  if ((ticketTypeFilterVal != null) && (ticketTypeFilterVal.length > 0)) {
-    let ticketTypeID = ticketTypeNameMap.get(ticketTypeFilterVal);
+  if ((ticketTypeFilterVal !== null) && (ticketTypeFilterVal.length > 0)) {
+    const ticketTypeID = ticketTypeNameMap.get(ticketTypeFilterVal);
     $('.fttid input').val(ticketTypeID);
   }
   else {
@@ -546,8 +546,8 @@ function filterTable() {
   }
 
   console.log("Assignee Filter Value: " + assigneeFilterVal);
-  if ((assigneeFilterVal != null) && (assigneeFilterVal.length > 0)) {
-    let assigneeID = assigneeNameMap.get(assigneeFilterVal);
+  if ((assigneeFilterVal !== null) && (assigneeFilterVal.length > 0)) {
+    const assigneeID = assigneeNameMap.get(assigneeFilterVal);
     console.log("Mapped Assignee ID: " + assigneeID);
     $('.faid input').val(assigneeID);
   }
@@ -557,7 +557,7 @@ function filterTable() {
 
   $('.service-ticket-table').hide();
   removeAppendedFields();
-  $('.pg input').val(1).change();
+  $('.pg input').val(1).trigger("change");
 
 }
 
@@ -573,19 +573,19 @@ function filterTable() {
  */
 function generateFilterRow() {
 
-  if ($('#filterRow').length == 0) {
-    var add_button = '<div class="table-button ui-button add-button" onclick="addTicket()"><span title="AddTicket" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Ticket</div>'
+  if ($('#filterRow').length === 0) {
+    const add_button = '<div class="table-button ui-button add-button" onclick="addTicket()"><span title="AddTicket" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Ticket</div>'
 
     $(add_button).insertBefore('.service-ticket-table table');
 
-    var includeCompleteCheckbox = '<div class="choice include-choice"><input name="chkIncludeComplete" id="chkIncludeComplete" type="checkbox" ><label class="form-option-label" for="chkIncludeComplete">Show Completed</label></div>'
+    const includeCompleteCheckbox = '<div class="choice include-choice"><input name="chkIncludeComplete" id="chkIncludeComplete" type="checkbox" ><label class="form-option-label" for="chkIncludeComplete">Show Completed</label></div>'
     $('.service-ticket-table table').parent().prepend(includeCompleteCheckbox)
 
-    var excludeGagingCheckbox = '<div class="choice exclude-gaging-choice"><input name="chkExcludeGaging" id="chkExcludeGaging" type="checkbox" ><label class="form-option-label" for="chkExcludeGaging">Exclude Gaging</label></div>'
+    const excludeGagingCheckbox = '<div class="choice exclude-gaging-choice"><input name="chkExcludeGaging" id="chkExcludeGaging" type="checkbox" ><label class="form-option-label" for="chkExcludeGaging">Exclude Gaging</label></div>'
     $(excludeGagingCheckbox).insertAfter('.add-button');
 
 
-    var filter_row = "<TR id='filterRow'><TH><input id='txtFilter_TicketNumber'/></TH><TH><input id='txtFilter_TicketName'/></TH><TH><select id='cboFilter_Initiator'/></TH><TH><select id='cboFilter_TicketType'/></TH><TH><select id='cboFilter_Department'/></TH><TH><select id='cboFilter_Assignee'/></TH><TH></TH><TH></TH><TH></TH><TH></TH><TH></TH><TH></TH></TR>"
+    const filter_row = "<TR id='filterRow'><TH><input id='txtFilter_TicketNumber'/></TH><TH><input id='txtFilter_TicketName'/></TH><TH><select id='cboFilter_Initiator'/></TH><TH><select id='cboFilter_TicketType'/></TH><TH><select id='cboFilter_Department'/></TH><TH><select id='cboFilter_Assignee'/></TH><TH></TH><TH></TH><TH></TH><TH></TH><TH></TH><TH></TH></TR>"
 
 
     $('.service-ticket-table table thead').append(filter_row);
@@ -600,37 +600,37 @@ function generateFilterRow() {
     $("#cboFilter_Department").on("change", function () { filterTable(); });
     $("#cboFilter_Assignee").on("change", function () { filterTable(); });
 
-    $("#txtFilter_TicketNumber").dblclick(function () { $("#txtFilter_TicketNumber").val(null).change(); });
-    $("#txtFilter_TicketName").dblclick(function () { $("#txtFilter_TicketName").val(null).change(); });
-    $("#cboFilter_Initiator").dblclick(function () { $("#cboFilter_Initiator").val(0).change(); });
-    $("#cboFilter_TicketType").dblclick(function () { $("#cboFilter_TicketType").val(0).change(); });
-    $("#cboFilter_Department").dblclick(function () { $("#cboFilter_Department").val(null).change(); });
-    $("#cboFilter_Assignee").dblclick(function () { $("#cboFilter_Assignee").val(0).change(); });
+    $("#txtFilter_TicketNumber").on("dblclick", function () { $("#txtFilter_TicketNumber").val(null).trigger("change"); });
+    $("#txtFilter_TicketName").on("dblclick", function () { $("#txtFilter_TicketName").val(null).trigger("change"); });
+    $("#cboFilter_Initiator").on("dblclick", function () { $("#cboFilter_Initiator").val(0).trigger("change"); });
+    $("#cboFilter_TicketType").on("dblclick", function () { $("#cboFilter_TicketType").val(0).trigger("change"); });
+    $("#cboFilter_Department").on("dblclick", function () { $("#cboFilter_Department").val(null).trigger("change"); });
+    $("#cboFilter_Assignee").on("dblclick", function () { $("#cboFilter_Assignee").val(0).trigger("change"); });
     wireUpSortFields();
   }
 
-  if ((($('.ftnum input').val() != null) && ($('.ftnum input').val().length > 0)) && (($('#txtFilter_TicketNumber').val() == null) || ($('#txtFilter_TicketNumber').val() == ''))) {
+  if ((($('.ftnum input').val() !== null) && ($('.ftnum input').val().length > 0)) && (($('#txtFilter_TicketNumber').val() === null) || ($('#txtFilter_TicketNumber').val() === ''))) {
     $('#txtFilter_TicketNumber').val($('.ftnum input').val());
   }
 
-  if ((($('.ftname input').val() != null) && ($('.ftname input').val().length > 0)) && (($('#txtFilter_TicketName').val() == null) || ($('#txtFilter_TicketName').val() == ''))) {
+  if ((($('.ftname input').val() !== null) && ($('.ftname input').val().length > 0)) && (($('#txtFilter_TicketName').val() === null) || ($('#txtFilter_TicketName').val() === ''))) {
     $('#txtFilter_TicketName').val($('.ftname input').val());
   }
 
-  if (($(".initiator-lookup-combo select option").length > 1) && ($("#cboFilter_Initiator option").length == 0)) {
+  if (($(".initiator-lookup-combo select option").length > 1) && ($("#cboFilter_Initiator option").length === 0)) {
     $("#cboFilter_Initiator").html($(".initiator-lookup-combo select").html());
   }
 
-  if (($(".ticket-type-lookup select option").length > 1) && ($("#cboFilter_TicketType option").length == 0)) {
+  if (($(".ticket-type-lookup select option").length > 1) && ($("#cboFilter_TicketType option").length === 0)) {
     $("#cboFilter_TicketType").html($(".ticket-type-lookup select").html());
   }
 
-  if (($(".department-lookup-combo select option").length > 1) && ($("#cboFilter_Department option").length == 0)) {
-    let departmentOptions = $(".department-lookup-combo select").html();
+  if (($(".department-lookup-combo select option").length > 1) && ($("#cboFilter_Department option").length === 0)) {
+    const departmentOptions = $(".department-lookup-combo select").html();
     $("#cboFilter_Department").html(departmentOptions);
   }
 
-  if (($(".assignee-lookup-combo select option").length > 1) && ($("#cboFilter_Assignee option").length == 0)) {
+  if (($(".assignee-lookup-combo select option").length > 1) && ($("#cboFilter_Assignee option").length === 0)) {
     $("#cboFilter_Assignee").html($(".assignee-lookup-combo select").html());
     $("#cboFilter_Assignee option").eq(0).after($('<option>', {
       value: 'Unassigned',
@@ -648,13 +648,13 @@ function generateFilterRow() {
  * @returns {void}
  */
 function generateTicketNumberColumn() {
-  var ticket_numbers = $('.ticket-number-col input[type="text"]');
-  var ticket_ids = $('.edit-ticket-col input[type="text"]');
+  const ticket_numbers = $('.ticket-number-col input[type="text"]');
+  const ticket_ids = $('.edit-ticket-col input[type="text"]');
   ticket_numbers.each(function (index) {
-    let ticket_id = $(ticket_ids[index]).val();
-    let ticket_number = $(this).val();
-    let ticket_link = $("<a>", { text: ticket_number.substr(0, 30), class: 'ticket-link', href: `javascript:void(0);`, onclick: `editTicket(${ticket_id})` });
-    if ($(this).parent().find('.ticket-link').length == 0) {
+    const ticket_id = $(ticket_ids[index]).val();
+    const ticket_number = $(this).val();
+    const ticket_link = $("<a>", { text: ticket_number.substr(0, 30), class: 'ticket-link', href: `javascript:void(0);`, onclick: `editTicket(${ticket_id})` });
+    if ($(this).parent().find('.ticket-link').length === 0) {
       $(this).parent().append(ticket_link);
     }
   });
@@ -666,7 +666,7 @@ function generateTicketNumberColumn() {
  * @returns {number} Count of rows.
  */
 function getTableRowCount() {
-  var row_count = $('.service-ticket-table tbody tr').length;
+  const row_count = $('.service-ticket-table tbody tr').length;
   return row_count;
 }
 
@@ -678,9 +678,9 @@ function getTableRowCount() {
  * @returns {void}
  */
 function loadAssigneeMap() {
-  if (assigneeMap.keys.length == 0) {
-    var assignee_rows = $('.assignee-lookup-table table tbody tr');
-    if (assignee_rows.length == 0) {
+  if (assigneeMap.keys.length === 0) {
+    const assignee_rows = $('.assignee-lookup-table table tbody tr');
+    if (assignee_rows.length === 0) {
       return;
     }
     assignee_rows.each(function (index) {
@@ -702,9 +702,9 @@ function loadAssigneeMap() {
  * @returns {void}
  */
 function loadDepartmentMap() {
-  if (departmentMap.keys.length == 0) {
-    var department_rows = $('.department-lookup-table table tbody tr');
-    if (department_rows.length == 0) {
+  if (departmentMap.keys.length === 0) {
+    const department_rows = $('.department-lookup-table table tbody tr');
+    if (department_rows.length === 0) {
       return;
     }
     department_rows.each(function (index) {
@@ -724,9 +724,9 @@ function loadDepartmentMap() {
  * @returns {void}
  */
 function loadInitiatorMap() {
-  if (initiatorMap.keys.length == 0) {
-    var initiator_rows = $('.initiator-lookup-table table tbody tr');
-    if (initiator_rows.length == 0) {
+  if (initiatorMap.keys.length === 0) {
+    const initiator_rows = $('.initiator-lookup-table table tbody tr');
+    if (initiator_rows.length === 0) {
       return;
     }
     initiator_rows.each(function (index) {
@@ -746,9 +746,9 @@ function loadInitiatorMap() {
  * @returns {void}
  */
 function loadTicketTypeMap() {
-  if (ticketTypeMap.keys.length == 0) {
-    var ticketType_rows = $('.ticket-type-lookup-table table tbody tr');
-    if (ticketType_rows.length == 0) {
+  if (ticketTypeMap.keys.length === 0) {
+    const ticketType_rows = $('.ticket-type-lookup-table table tbody tr');
+    if (ticketType_rows.length === 0) {
       return;
     }
     ticketType_rows.each(function (index) {
@@ -789,8 +789,8 @@ function popUpIframe(src, title, height, width) {
 
   $("#popupIFrame").dialog("open");
   $("#popupIFrame").attr('style', `width: ${width};`);
-  var resizeableStyle = $('.ui-resizable').attr('style');
-  let newStyle = resizeableStyle.replaceAll('width: 0px;', `width: ${width}px;`);
+  const resizeableStyle = $('.ui-resizable').attr('style');
+  const newStyle = resizeableStyle.replaceAll('width: 0px;', `width: ${width}px;`);
   $('.ui-resizable').attr('style', newStyle);
 }
 
@@ -802,59 +802,59 @@ function popUpIframe(src, title, height, width) {
  * @returns {void}
  */
 function reApplyFilterValues() {
-  if ($('#filterRow').length == 0) {
+  if ($('#filterRow').length === 0) {
     return;
   }
 
-  var includeCompleted = Number($('.finccomp input').val());
-  var ticketNumberFilterValue = $('.ftnum input').val();
-  var ticketNameFilterValue = $('.ftname input').val();
-  var initiatorFilterVal = $('.fiid input').val();
-  var ticketTypeFilterVal = $('.fttid input').val();
-  var departmentFilterVal = $('.fdid input').val();
-  var assigneeFilterVal = $('.faid input').val();
+  const includeCompleted = Number($('.finccomp input').val());
+  const ticketNumberFilterValue = $('.ftnum input').val();
+  const ticketNameFilterValue = $('.ftname input').val();
+  const initiatorFilterVal = $('.fiid input').val();
+  const ticketTypeFilterVal = $('.fttid input').val();
+  const departmentFilterVal = $('.fdid input').val();
+  const assigneeFilterVal = $('.faid input').val();
 
-  if (includeCompleted == 1) {
+  if (includeCompleted === 1) {
     $('#chkIncludeComplete').prop('checked', true);
   }
   else {
     $('#chkIncludeComplete').prop('checked', false);
   }
 
-  if ((ticketNumberFilterValue != null) && (ticketNumberFilterValue.length > 0)) {
+  if ((ticketNumberFilterValue !== null) && (ticketNumberFilterValue.length > 0)) {
     $('#txtFilter_TicketNumber').val(ticketNumberFilterValue);
   }
 
-  if ((ticketNameFilterValue != null) && (ticketNameFilterValue.length > 0)) {
+  if ((ticketNameFilterValue !== null) && (ticketNameFilterValue.length > 0)) {
     $('#txtFilter_TicketName').val(ticketNameFilterValue);
   }
 
-  if (initiatorFilterVal != 0) {
-    let initiatorName = initiatorMap.get(initiatorFilterVal);
+  if (initiatorFilterVal !== 0) {
+    const initiatorName = initiatorMap.get(initiatorFilterVal);
     $('#cboFilter_Initiator').val(initiatorName);
   }
   else {
     $("#cboFilter_Initiator").val($("#cboFilter_Initiator option:first").val());
   }
 
-  if (departmentFilterVal != 0) {
-    let departmentName = departmentMap.get(departmentFilterVal);
+  if (departmentFilterVal !== 0) {
+    const departmentName = departmentMap.get(departmentFilterVal);
     $('#cboFilter_Department').val(departmentName);
   }
   else {
     $("#cboFilter_Department").val($("#cboFilter_Department option:first").val());
   }
 
-  if (assigneeFilterVal != 0) {
-    let assigneeName = assigneeMap.get(assigneeFilterVal);
+  if (assigneeFilterVal !== 0) {
+    const assigneeName = assigneeMap.get(assigneeFilterVal);
     $('#cboFilter_Assignee').val(assigneeName);
   }
   else {
     $("#cboFilter_Assignee").val($("#cboFilter_Assignee option:first").val());
   }
 
-  if (ticketTypeFilterVal != 0) {
-    let ticketTypeName = ticketTypeMap.get(ticketTypeFilterVal);
+  if (ticketTypeFilterVal !== 0) {
+    const ticketTypeName = ticketTypeMap.get(ticketTypeFilterVal);
     $('#cboFilter_TicketType').val(ticketTypeName);
   }
   else {
@@ -871,46 +871,46 @@ function reApplyFilterValues() {
  */
 function refreshPage() {
 
-  var ticketNameFilter = $('.ftname input').val();
-  var ticketNumberFilter = $('.ftnum input').val();
-  var include_Complete = Number($('.finccomp input').val());
-  var departmentIDFilter = Number($('.fdid input').val());
-  var ticketTypeIDFilter = Number($('.fttid input').val());
-  var initiatorIDFilter = Number($('.fiid input').val());
+  const ticketNameFilter = $('.ftname input').val();
+  const ticketNumberFilter = $('.ftnum input').val();
+  const include_Complete = Number($('.finccomp input').val());
+  const departmentIDFilter = Number($('.fdid input').val());
+  const ticketTypeIDFilter = Number($('.fttid input').val());
+  const initiatorIDFilter = Number($('.fiid input').val());
 
-  var pageNumber = Number($('.pg input').val());
+  const pageNumber = Number($('.pg input').val());
 
-  var current_url = window.location.href;
+  let current_url = window.location.href;
   if (current_url.includes('?')) {
     indexOfQuestionMark = current_url.indexOf('?');
     current_url = current_url.substring(0, indexOfQuestionMark);
   }
 
-  if ((pageNumber != null) && (pageNumber != NaN) && (pageNumber > 0)) {
+  if ((pageNumber !== null) && (pageNumber !== NaN) && (pageNumber > 0)) {
     current_url = current_url + `?pg=${pageNumber}`;
   }
 
-  if ((ticketNameFilter != null) && (ticketNameFilter.length > 0)) {
+  if ((ticketNameFilter !== null) && (ticketNameFilter.length > 0)) {
     current_url = current_url + `&ftname=${ticketNameFilter}`;
   }
 
-  if ((ticketNumberFilter != null) && (ticketNumberFilter.length > 0)) {
+  if ((ticketNumberFilter !== null) && (ticketNumberFilter.length > 0)) {
     current_url = current_url + `&ftnum=${ticketNumberFilter}`;
   }
 
-  if ((ticketTypeIDFilter != null) && (ticketTypeIDFilter != NaN) && (ticketTypeIDFilter > 0)) {
+  if ((ticketTypeIDFilter !== null) && (ticketTypeIDFilter !== NaN) && (ticketTypeIDFilter > 0)) {
     current_url = current_url + `&fttid=${ticketTypeIDFilter}`;
   }
 
-  if ((initiatorIDFilter != null) && (initiatorIDFilter.length > 0)) {
+  if ((initiatorIDFilter !== null) && (initiatorIDFilter.length > 0)) {
     current_url = current_url + `&fiid=${initiatorIDFilter}`;
   }
 
-  if ((include_Complete != null) && (include_Complete != NaN) && (include_Complete > 0)) {
+  if ((include_Complete !== null) && (include_Complete !== NaN) && (include_Complete > 0)) {
     current_url = current_url + `&finccomp=${include_Complete}`;
   }
 
-  if ((departmentIDFilter != null) && (departmentIDFilter != NaN) && (departmentIDFilter > 0)) {
+  if ((departmentIDFilter !== null) && (departmentIDFilter !== NaN) && (departmentIDFilter > 0)) {
     current_url = current_url + `&fdid=${departmentIDFilter}`;
   }
   window.location = current_url;
@@ -939,7 +939,7 @@ function removeAppendedFields() {
 function resetPageNumber() {
   $('.service-ticket-table').hide();
   removeAppendedFields();
-  $('.pg input').val(1).change();
+  $('.pg input').val(1).trigger("change");
 }
 
 
@@ -949,32 +949,32 @@ function sortTable(newSortOrdinal, selector) {
   removeAppendedFields();
   $('.sort-icon').remove();
 
-  var currentSortOrdinal = Number($('.sort-field-ordinal input').val());
-  var sortDirection = Number($('.sort-direction input').val());
+  const currentSortOrdinal = Number($('.sort-field-ordinal input').val());
+  let sortDirection = Number($('.sort-direction input').val());
 
-  if (newSortOrdinal == currentSortOrdinal) {
-    if (sortDirection == 0) {
+  if (newSortOrdinal === currentSortOrdinal) {
+    if (sortDirection === 0) {
       sortDirection = 1
-      $('.sort-direction input').val(1).change();
+      $('.sort-direction input').val(1).trigger("change");
     }
     else {
       sortDirection = 0;
-      $('.sort-direction input').val(0).change();
+      $('.sort-direction input').val(0).trigger("change");
     }
   }
   else {
     $('.sort-field-ordinal input').val(newSortOrdinal);
-    if (newSortOrdinal == 1) {
+    if (newSortOrdinal === 1) {
       sortDirection = 1
-      $('.sort-direction input').val(1).change();
+      $('.sort-direction input').val(1).trigger("change");
     }
     else {
       sortDirection = 0;
-      $('.sort-direction input').val(0).change();
+      $('.sort-direction input').val(0).trigger("change");
     }
   }
 
-  if (sortDirection == 0) {
+  if (sortDirection === 0) {
     $(`${selector} .cf-col-label`).append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
   }
   else {

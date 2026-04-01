@@ -5,7 +5,7 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-  var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
+  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
   $.fn.bootstrapBtn = bootstrapButton;
 
 
@@ -33,27 +33,27 @@ $(document).ready(function () {
 
 function callAddSite() {
 
-  $("#Field9-1").prop("checked", true).change();
-  $(".add-site-id input").val(1).change();
+  $("#Field9-1").prop("checked", true).trigger("change");
+  $(".add-site-id input").val(1).trigger("change");
   $('.Submit').show();
 
 }
 
 
 function callEditSite(thread_id) {
-  $("#Field9-0").prop("checked", true).change();
-  $(".edit-site-id input").val(thread_id).change();
+  $("#Field9-0").prop("checked", true).trigger("change");
+  $(".edit-site-id input").val(thread_id).trigger("change");
   $('.Submit').show();
 }
 
 
 function checkPermissions() {
 
-  var employee_number = $(".user-employee-number input").val();
-  var is_user_active = Number($(".user-isactive input").val());
-  var return_val = true;
+  const employee_number = $(".user-employee-number input").val();
+  const is_user_active = Number($(".user-isactive input").val());
+  let return_val = true;
 
-  if (is_user_active == 0) {
+  if (is_user_active === 0) {
     return_val = false;
   }
 
@@ -66,8 +66,8 @@ function checkPermissions() {
 
 
 function generateAddButton() {
-  var add_buttons = $(".addbutton");
-  var is_admin = checkPermissions();
+  const add_buttons = $(".addbutton");
+  const is_admin = checkPermissions();
 
   add_buttons.each(function (index) {
     if (is_admin) {
@@ -82,11 +82,11 @@ function generateAddButton() {
 
 
 function generateEditButtons() {
-  var is_admin = checkPermissions();
+  const is_admin = checkPermissions();
   $('.table-button').remove();
-  var edit_buttons = $(".edit-button input[type=text]");
+  const edit_buttons = $(".edit-button input[type=text]");
   edit_buttons.each(function (index) {
-    var btn_value = $(this).val();
+    const btn_value = $(this).val();
     if (is_admin) {
       $(this).parent().append("<input class='table-button' type='button' value='Edit' onclick='callEditSite(" + btn_value + ")' />");
     }
@@ -96,7 +96,7 @@ function generateEditButtons() {
 
 
 function generateGoBackButtons() {
-  var $goback_buttons = $(".gobackbutton");
+  const $goback_buttons = $(".gobackbutton");
   $goback_buttons.each(function (index) {
     $(this).replaceWith("<input class='return' type='button' value='Go Back' onclick='goBack()' />");
   });
@@ -104,8 +104,8 @@ function generateGoBackButtons() {
 
 
 function goBack() {
-  $(".edit-site-id input").val("").change(); 
-  $(".add-site-id input").val("").change(); 
+  $(".edit-site-id input").val("").trigger("change"); 
+  $(".add-site-id input").val("").trigger("change"); 
   $('.Submit').hide();
 }
 

@@ -195,7 +195,7 @@ $(document).ready(function () {
 
   // Persist selected site name to a cookie.
   $(document).on('change', '.site-name select', function () {
-    var sitename = $('.site-name select').val();
+    const sitename = $('.site-name select').val();
     $.cookie('site_name', sitename, { expires: 365, path: '/' });
   });
 
@@ -208,13 +208,13 @@ $(document).ready(function () {
   // Final page activation after load / lookup completion.
   $(document).on("onloadlookupfinished", function (e) {
     
-    if ($('.pg input').val() == '999') {
-      $('.pg input').val(1).change();
+    if ($('.pg input').val() === '999') {
+      $('.pg input').val(1).trigger("change");
     }
 
     // Quick view of long error in a dialog on double-click.
     $(document).on('dblclick', '.error-detail-col div', function (e) {
-      var errorDetail = $(this).find('input').val();
+      const errorDetail = $(this).find('input').val();
 
       $.dialog({
         escapeKey: true,
@@ -229,9 +229,9 @@ $(document).ready(function () {
 
 
     // Restore last-selected site from cookie.
-    var sitename = $.cookie('site_name');
-    if (sitename != null) {
-      $('.site-name select').val(sitename).change();
+    const sitename = $.cookie('site_name');
+    if (sitename !== null) {
+      $('.site-name select').val(sitename).trigger("change");
     }
   });
 
@@ -248,22 +248,22 @@ $(document).ready(function () {
  * Skips rendering entirely if current page is sentinel 999 (no pagination).
  */
 function appendPagination() {
-  var current_page = Number($('.pg input').val());
-  if (current_page == 999) { return; }
+  const current_page = Number($('.pg input').val());
+  if (current_page === 999) { return; }
 
-  var row_count = getTableRowCount();
+  const row_count = getTableRowCount();
 
   if (row_count > 0) {
     $('#log-pagination').remove();
-    if ((current_page == 1) && (row_count < 25)) {
+    if ((current_page === 1) && (row_count < 25)) {
       $('.log-table table').parent().append("<div id='log-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>‹‹</a></li><li><a class='page-link prev isDisabled'>‹</a></li><li><a class='page-link next isDisabled'>›</a></li></ul></div>");
       return;
     }
-    if ((current_page == 1) && (row_count == 25)) {
+    if ((current_page === 1) && (row_count === 25)) {
       $('.log-table table').parent().append("<div id='log-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>‹‹</a></li><li><a class='page-link prev isDisabled'>‹</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>›</a></li></ul></div>")
       return;
     }
-    if ((current_page > 1) && (row_count == 25)) {
+    if ((current_page > 1) && (row_count === 25)) {
       $('.log-table table').parent().append("<div id='log-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>‹‹</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>‹</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>›</a></li></ul></div>")
       return;
     }
@@ -281,7 +281,7 @@ function appendPagination() {
  */
 function callNextPage() {
   current_page = Number($('.pg input').val());
-  $('.pg input').val(current_page + 1).change();
+  $('.pg input').val(current_page + 1).trigger("change");
 }
 
 
@@ -290,10 +290,10 @@ function callNextPage() {
  */
 function callPrevPage() {
   current_page = Number($('.pg input').val());
-  if (current_page == 1) {
+  if (current_page === 1) {
     return;
   }
-  $('.pg input').val(current_page - 1).change();
+  $('.pg input').val(current_page - 1).trigger("change");
 }
 
 
@@ -305,27 +305,27 @@ function callPrevPage() {
  *  - Result status dropdown -> .sid input ( -1 when cleared )
  */
 function filterTable() {
-  if ($('#filterRow').length == 0) {
+  if ($('#filterRow').length === 0) {
     return;
   }
 
-  var programFilterValue = $('#txtFilter_Program').val();
-  var fileNameFilterValue = $('#txtFilter_FileName').val();
-  var machineNameFilterValue = $('#cboMachineName').val();
-  var resultFilterValue = $('#cboResultStatus').val();
+  const programFilterValue = $('#txtFilter_Program').val();
+  const fileNameFilterValue = $('#txtFilter_FileName').val();
+  const machineNameFilterValue = $('#cboMachineName').val();
+  const resultFilterValue = $('#cboResultStatus').val();
 
   $('.fpname input').val(programFilterValue);
   $('.fmname input').val(machineNameFilterValue);
   $('.ffilename input').val(fileNameFilterValue);
 
-  if (resultFilterValue != '') {
+  if (resultFilterValue !== '') {
     $('.sid input').val(resultFilterValue);
   }
   else {
     $('.sid input').val(-1);
   }
 
-  $('.pg input').val(1).change();
+  $('.pg input').val(1).trigger("change");
 }
 
 
@@ -339,8 +339,8 @@ function filterTable() {
  * Wires sorting after row insertion.
  */
 function generateFilterRow() {
-  if ($('#filterRow').length == 0) {
-    var filter_row = "<TR id='filterRow'><TH/><TH><input id='txtFilter_Program'/></TH><TH/><TH/><TH><select id='cboMachineName'/></TH><TH><select id='cboResultStatus'/></TH><TH><input id='txtFilter_FileName'/></TH><TH/><TH/></TR>"
+  if ($('#filterRow').length === 0) {
+    const filter_row = "<TR id='filterRow'><TH/><TH><input id='txtFilter_Program'/></TH><TH/><TH/><TH><select id='cboMachineName'/></TH><TH><select id='cboResultStatus'/></TH><TH><input id='txtFilter_FileName'/></TH><TH/><TH/></TR>"
 
     $('.log-table table thead').append(filter_row);
     $("#txtFilter_Program").on("change", function () { filterTable(); });
@@ -350,24 +350,24 @@ function generateFilterRow() {
     $("#cboResultStatus").on("change", function () { filterTable(); });
 
     // Quick clear on double-click.
-    $("#txtFilter_Program").dblclick(function () { $("#txtFilter_Program").val(null).change(); });
-    $("#txtFilter_FileName").dblclick(function () { $("#txtFilter_FileName").val(null).change(); });
-    $("#cboMachineName").dblclick(function () {
-      $("#cboMachineName").val(0).change();
+    $("#txtFilter_Program").on("dblclick", function () { $("#txtFilter_Program").val(null).trigger("change"); });
+    $("#txtFilter_FileName").on("dblclick", function () { $("#txtFilter_FileName").val(null).trigger("change"); });
+    $("#cboMachineName").on("dblclick", function () {
+      $("#cboMachineName").val(0).trigger("change");
     });
-    $("#cboResultStatus").dblclick(function () {
-      $('#cboResultStatus option:first').prop('selected', true).change();
+    $("#cboResultStatus").on("dblclick", function () {
+      $('#cboResultStatus option:first').prop('selected', true).trigger("change");
     });
 
     wireUpSortFields();
   }
 
   // Populate dropdowns from lookup combos (do this once).
-  if (($(".machine-name-lookup select option").length > 1) && ($("#cboMachineName option").length == 0)) {
+  if (($(".machine-name-lookup select option").length > 1) && ($("#cboMachineName option").length === 0)) {
     $("#cboMachineName").html($(".machine-name-lookup select").html());
   }
 
-  if (($(".status-lookup select option").length > 1) && ($("#cboResultStatus option").length == 0)) {
+  if (($(".status-lookup select option").length > 1) && ($("#cboResultStatus option").length === 0)) {
     $("#cboResultStatus").html($(".status-lookup select").html());
   }
 }
@@ -378,7 +378,7 @@ function generateFilterRow() {
  * @returns {number} Row count
  */
 function getTableRowCount() {
-  var row_count = $('.log-table table tbody tr').length;
+  const row_count = $('.log-table table tbody tr').length;
   return row_count;
 }
 
@@ -387,7 +387,7 @@ function getTableRowCount() {
  * Reset page to 1 and refresh data through the .pg input change handler.
  */
 function resetPageNumber() {
-  $('.pg input').val(1).change();
+  $('.pg input').val(1).trigger("change");
 }
 
 
@@ -406,33 +406,33 @@ function resetPageNumber() {
 function sortTable(newSortOrdinal, selector) {
   $('.sort-icon').remove();
 
-  var currentSortOrdinal = Number($('.sfo input').val());
-  var sortDirection = Number($('.sfd input').val());
+  const currentSortOrdinal = Number($('.sfo input').val());
+  let sortDirection = Number($('.sfd input').val());
 
-  if (newSortOrdinal == currentSortOrdinal) {
-    if (sortDirection == 0) {
+  if (newSortOrdinal === currentSortOrdinal) {
+    if (sortDirection === 0) {
       sortDirection = 1
-      $('.sfd input').val(1).change();
+      $('.sfd input').val(1).trigger("change");
     }
     else {
       sortDirection = 0;
-      $('.sfd input').val(0).change();
+      $('.sfd input').val(0).trigger("change");
     }
   }
   else {
-    if (selector == '#q20') {
+    if (selector === '#q20') {
       $('.sfo input').val(newSortOrdinal);
-      $('.sfd input').val(1).change();
+      $('.sfd input').val(1).trigger("change");
       sortDirection = 1;
     }
     else {
       $('.sfo input').val(newSortOrdinal);
-      $('.sfd input').val(0).change();
+      $('.sfd input').val(0).trigger("change");
       sortDirection = 0;
     }
   }
 
-  if (sortDirection == 0) {
+  if (sortDirection === 0) {
     $(`${selector} .cf-col-label`).append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
   }
   else {

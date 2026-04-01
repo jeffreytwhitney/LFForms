@@ -1,15 +1,15 @@
-var should_print_receipt = true;
+const should_print_receipt = true;
 $(document).ready(function () {
   $(document).prop('title', 'Gage Checkout');
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js');
 
-  $('.Submit').click(function (e) { validateForm(e); });
+  $('.Submit').on("click", function (e) { validateForm(e); });
 
   $('#q0').append("<div class='hidden' id='print_output'></div>");
 
-  var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
-  var printEvent = window[eventMethod];
-  var messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
+  const eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
+  const printEvent = window[eventMethod];
+  const messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
   printEvent(messageEvent, function (e) {
 
     if (e.data === "printme" || e.message === "printme") {
@@ -20,9 +20,9 @@ $(document).ready(function () {
 
   $(document).on('lookupcomplete', function (e) {
     validateForm();
-    if (e.triggerId == 'Field152') {
+    if (e.triggerId === 'Field152') {
       if ($('#Field152').val()) {
-        if ($('#Field152').val() != null) {
+        if ($('#Field152').val() !== null) {
           setTimeout(print_receipt, 2000);
         }
       }
@@ -30,9 +30,9 @@ $(document).ready(function () {
   });
 
   $(document).on("onloadlookupfinished", function () {
-    var sitename = $.cookie('site_name');
-    if (sitename != null) {
-      $('#Field162').val(sitename).change();
+    const sitename = $.cookie('site_name');
+    if (sitename !== null) {
+      $('#Field162').val(sitename).trigger("change");
     }
   });
 
@@ -47,7 +47,7 @@ $(document).ready(function () {
 
 
   $(document).on('change', '.pin-table-pin-type select', function (e) {
-    if ($(e.currentTarget).val() == 'BIN') {
+    if ($(e.currentTarget).val() === 'BIN') {
       $(e.currentTarget).closest('tr').find('.pin-table-diameter input').val(1).addClass("ui-state-disabled");
       $(e.currentTarget).closest('tr').find('.pin-table-number-of-pins input').val(1).addClass("ui-state-disabled");
     }
@@ -57,7 +57,7 @@ $(document).ready(function () {
     }
   });
 
-  $('.ticket-type-radio fieldset input[type="radio"]').change(function (e) {
+  $('.ticket-type-radio fieldset input[type="radio"]').on("change", function (e) {
     $('.pin-table-bin-number input').removeClass('parsley-error');
     $('.thread-gage-name input').removeClass('parsley-error');
     $('#bad-pin-name-error').remove();
@@ -70,16 +70,16 @@ $(document).ready(function () {
     $('.existing-missing-thread-ticket-number input').val('');
   });
 
-  $('.existing-missing-thread-ticket-number input').change(function (e) {
+  $('.existing-missing-thread-ticket-number input').on("change", function (e) {
     validateForm();
   });
 
-  $('.thread-gage-table-existing-ticket-id input').change(function (e) {
+  $('.thread-gage-table-existing-ticket-id input').on("change", function (e) {
     validateForm();
   });
 
   $(document).on('change', '#Field162', function () {
-    var sitename = $('#Field162').val();
+    const sitename = $('#Field162').val();
     $.cookie('site_name', sitename, { expires: 365, path: '/' });
   });
 
@@ -88,10 +88,10 @@ $(document).ready(function () {
 
 
 function generateMachineList() {
-  var machineList = '';
+  let machineList = '';
   $('[id^="Field176"]').each(function (index, element) {
     machineName = $(element).val();
-    if (machineName != '') {
+    if (machineName !== '') {
       if (machineList.length > 0) {
         machineList += ', ' + machineName;
       }
@@ -112,24 +112,24 @@ function loadiFrame(src) {
 
 function print_receipt() {
 
-  var domain = document.location.hostname;
-  var receipt_url_root = "http://" + domain + "/Forms/";
-  var receipt_url = "";
+  const domain = document.location.hostname;
+  const receipt_url_root = "http://" + domain + "/Forms/";
+  let receipt_url = "";
 
 
 
-  if ($('.print-ticket-type-id input').val() == 1) {
+  if ($('.print-ticket-type-id input').val() === 1) {
     receipt_url = receipt_url_root + "PinGageReceipt?guid=" + $('.print-ticket-id input').val();
   }
-  if ($('.print-ticket-type-id input').val() == 2) {
+  if ($('.print-ticket-type-id input').val() === 2) {
     receipt_url = receipt_url_root + "ThreadReceipt?guid=" + $('.print-ticket-id input').val();
   }
 
-  if (should_print_receipt == true) {
-    if (receipt_url != "") {
+  if (should_print_receipt === true) {
+    if (receipt_url !== "") {
       loadiFrame(receipt_url);
-      should_print_receipt == false;
-      $('.print-ticket-id input').val(null).change();
+      should_print_receipt === false;
+      $('.print-ticket-id input').val(null).trigger("change");
     }
   }
 }
@@ -153,28 +153,28 @@ function validateForm(e) {
   $('#preexisting-thread-gage-error').remove();
   $('#missing-thread-gage-error').remove();
 
-  var ticketType = $('.ticket-type-radio fieldset input[type="radio"]:checked').val();
-  var cellLeaderID = $('.cell-leader-id input');
-  var cellLeaderName = $('.cell-leader-name input');
+  const ticketType = $('.ticket-type-radio fieldset input[type="radio"]:checked').val();
+  const cellLeaderID = $('.cell-leader-id input');
+  const cellLeaderName = $('.cell-leader-name input');
 
-  var pinRows = $('.pin-table table tbody tr');
-  var threadRows = $('.thread-gage-table table tbody tr');
+  const pinRows = $('.pin-table table tbody tr');
+  const threadRows = $('.thread-gage-table table tbody tr');
 
-  var siteID = Number($('.site-id input').val());
-  var submitEmployeeName = $('.submit-employee-name input');
-  var crEmployeeName = $('.cr-employee-name input');
-  var anokaEmployeeName = $('.anoka-employee-name input');
+  const siteID = Number($('.site-id input').val());
+  const submitEmployeeName = $('.submit-employee-name input');
+  const crEmployeeName = $('.cr-employee-name input');
+  const anokaEmployeeName = $('.anoka-employee-name input');
 
-  var submitEmployeeNumber = $('.submit-employee-number input');
-  var crEmployeeNumber = $('.cr-employee-number input');
-  var anokaEmployeeNumber = $('.anoka-employee-number input');
+  const submitEmployeeNumber = $('.submit-employee-number input');
+  const crEmployeeNumber = $('.cr-employee-number input');
+  const anokaEmployeeNumber = $('.anoka-employee-number input');
 
-  if (siteID == 1) {
+  if (siteID === 1) {
     submitEmployeeNumber.val(crEmployeeNumber.val());
     submitEmployeeName.val(crEmployeeName.val());
     
   }
-  if (siteID == 2) {
+  if (siteID === 2) {
     submitEmployeeNumber.val(anokaEmployeeNumber.val());
     submitEmployeeName.val(anokaEmployeeName.val());
    
@@ -190,13 +190,13 @@ function validateForm(e) {
     }
   }
 
-  if (ticketType == 1) {
+  if (ticketType === 1) {
     pinRows.each(function (index) {
-      let pinTypeValue = Number($(this).find('.pin-table-pin-type-id input').val());
-      let binName = $(this).find('.pin-table-bin-number input');
-      let existingBinTicketNumber = $(this).find('.pin-table-existing-bin-ticket-id input');
-      let binID = $(this).find('.pin-table-bin-id input');
-      if ((pinTypeValue == 5) && ((binName.val().length > 0) && binID.val().length == 0)) {
+      const pinTypeValue = Number($(this).find('.pin-table-pin-type-id input').val());
+      const binName = $(this).find('.pin-table-bin-number input');
+      const existingBinTicketNumber = $(this).find('.pin-table-existing-bin-ticket-id input');
+      const binID = $(this).find('.pin-table-bin-id input');
+      if ((pinTypeValue === 5) && ((binName.val().length > 0) && binID.val().length === 0)) {
         binName.parent().find('#bad-pin-name-error').remove();
         binName.parent().append("<ul id='bad-pin-name-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Invalid Bin Name.</li></ul>");
         binName.addClass('parsley-error');
@@ -218,12 +218,12 @@ function validateForm(e) {
   }
   else {
     threadRows.each(function (index) {
-      let threadGageName = $(this).find('.thread-gage-table-name input');
-      let threadGageID = $(this).find('.thread-gage-table-id input');
-      let missingThreadGageTicketNumber = $(this).find('.existing-missing-thread-ticket-number input');
-      let existingThreadGageTicketNumber = $(this).find('.thread-gage-table-existing-ticket-id input');
+      const threadGageName = $(this).find('.thread-gage-table-name input');
+      const threadGageID = $(this).find('.thread-gage-table-id input');
+      const missingThreadGageTicketNumber = $(this).find('.existing-missing-thread-ticket-number input');
+      const existingThreadGageTicketNumber = $(this).find('.thread-gage-table-existing-ticket-id input');
 
-      if ((threadGageID.val().length == 0) && (threadGageName.val().length > 0)) {
+      if ((threadGageID.val().length === 0) && (threadGageName.val().length > 0)) {
         threadGageName.parent().find('#bad-thread-gage-error').remove();
         threadGageName.parent().append("<ul id='bad-thread-gage-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Invalid Thread Gage Name.</li></ul>");
         threadGageName.addClass('parsley-error');

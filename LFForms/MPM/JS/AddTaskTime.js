@@ -1,4 +1,4 @@
-/**
+﻿/**
 AddTaskTime.js
 
  Author:  Jeffrey Whitney
@@ -129,21 +129,21 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
 
   // Resolve Bootstrap/jQuery UI button conflicts and style the submit button
-  var bootstrapButton = $.fn.button.noConflict();
+  const bootstrapButton = $.fn.button.noConflict();
   $.fn.bootstrapBtn = bootstrapButton;
   $('.Submit').addClass('ui-button ui-corner-all ui-widget');
 
   // Submit: mark close flag and submit underlying form
-  $('.Submit').click(function (e) {
+  $('.Submit').on("click", function (e) {
     e.preventDefault();
     $('.closeme input').val(1);
-    $(this.form).submit();
+    $(this.form).trigger("submit");
   });
 
   // Mirror radio selection into `.time-to-add`; 'X' means custom value (cleared here)
-  $('.add-time-radio fieldset').change(function () {
-    var time_to_add = $('.add-time-radio fieldset input[type="radio"]:checked').val();
-    if (time_to_add != 'X') {
+  $('.add-time-radio fieldset').on("change", function () {
+    const time_to_add = $('.add-time-radio fieldset input[type="radio"]:checked').val();
+    if (time_to_add !== 'X') {
       $('.time-to-add input').val(time_to_add);
     }
     else {
@@ -152,17 +152,17 @@ $(document).ready(function () {
   });
 
   // Mirror custom hours into `.time-to-add`
-  $('.user-defined-hours input').change(function () {
+  $('.user-defined-hours input').on("change", function () {
     $('.time-to-add input').val($('.user-defined-hours input').val());
   });
 
   // Close dialog if flagged
-  if ($('.closeme input').val() == 1) {
+  if ($('.closeme input').val() === 1) {
     window.parent.postMessage('CloseDialogWithRefresh', '*');
   }
 
   // Derive network username from domain\user and uppercase it
-  $('.network-user-name input').val($('.lf-user-name input').val().toUpperCase().substr($('.lf-user-name input').val().lastIndexOf('\\') + 1)).change();
+  $('.network-user-name input').val($('.lf-user-name input').val().toUpperCase().substr($('.lf-user-name input').val().lastIndexOf('\\') + 1)).trigger("change");
 
   // After lookups, set today's date (locale format) in `.date-to-add`
   $(document).on("onloadlookupfinished", function (e) {
@@ -171,7 +171,7 @@ $(document).ready(function () {
 
   // Disable controls when no Task ID is available
   $(document).on('lookupcomplete', function (e) {
-    if (($('.tid input').val() == null) || ($('.tid input').val().length == 0)) {
+    if (($('.tid input').val() === null) || ($('.tid input').val().length === 0)) {
       $('.Submit').addClass("ui-state-disabled");
       $('.add-time-radio fieldset').addClass("ui-state-disabled");
     }
@@ -185,15 +185,15 @@ $(document).ready(function () {
 
 function generateTotalTrackedHoursMessage() {
   $('#existing-time-msg').remove();
-  var totalHours = parseFloat($('.total-task-hours input').val());
-  var totalHoursMessage = "";
+  let totalHours = parseFloat($('.total-task-hours input').val());
+  let totalHoursMessage = "";
   if (isNaN(totalHours)) {
     totalHours = 0;
   }
-  if (totalHours == 0) {
+  if (totalHours === 0) {
     totalHoursMessage = "<span id='existing-time-msg'>You currently have no hours logged for this task.</span>";
   }
-  else if(totalHours == 1) {
+  else if(totalHours === 1) {
     totalHoursMessage = "<span id='existing-time-msg'>You currently have 1 hour logged for this task.</span>";
   }
   else {

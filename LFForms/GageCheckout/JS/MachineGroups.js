@@ -39,7 +39,7 @@
  * @type {Map<number, string>}
  * @example departmentMap.get(5) // Returns "Engineering"
  */
-var departmentMap = new Map();
+const departmentMap = new Map();
 
 /**
  * Global map storing department name to department ID mappings.
@@ -48,7 +48,7 @@ var departmentMap = new Map();
  * @type {Map<string, number>}
  * @example departmentNameMap.get("Engineering") // Returns 5
  */
-var departmentNameMap = new Map();
+const departmentNameMap = new Map();
 
 /**
  * Document ready handler - Initializes the Machine Group Maintenance interface.
@@ -72,11 +72,11 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
 
   // Resolve Bootstrap/jQuery UI button conflict
-  var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
+  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
   $.fn.bootstrapBtn = bootstrapButton;
 
 
-  $('.Submit').click(function (e) { validateForm(e); });
+  $('.Submit').on("click", function (e) { validateForm(e); });
   $('.Submit').hide();
 
   $(document).prop('title', 'Machine Group Maintenance');
@@ -128,8 +128,8 @@ $(document).ready(function () {
  * callAddMachineGroup();
  */
 function callAddMachineGroup() {
-  $("#Field9-1").prop("checked", true).change();  // Set form to add mode
-  $(".add-machinegroup-id input").val(1).change(); // Initialize ID
+  $("#Field9-1").prop("checked", true).trigger("change");  // Set form to add mode
+  $(".add-machinegroup-id input").val(1).trigger("change"); // Initialize ID
   $('.Submit').show();  // Display submit button
 }
 
@@ -156,8 +156,8 @@ function callAddMachineGroup() {
  * callEditMachineGroup(42);
  */
 function callEditMachineGroup(machinegroup_id) {
-  $("#Field9-0").prop("checked", true).change();  // Set form to edit mode
-  $(".edit-machinegroup-id input").val(machinegroup_id).change();  // Load machine group ID
+  $("#Field9-0").prop("checked", true).trigger("change");  // Set form to edit mode
+  $(".edit-machinegroup-id input").val(machinegroup_id).trigger("change");  // Load machine group ID
   $('.Submit').show();  // Display submit button
 }
 
@@ -185,9 +185,9 @@ function callEditMachineGroup(machinegroup_id) {
  * // Field36-1, Field36-2, etc. will all be converted
  */
 function changeNumericToYesNo(selector) {
-  var isactive = $(`[id^='${selector}']`);  // Find all fields starting with selector
+  const isactive = $(`[id^='${selector}']`);  // Find all fields starting with selector
   isactive.each(function (index) {
-    var isactive_value = $(this).val();
+    const isactive_value = $(this).val();
     if ((isactive_value === '1') || (isactive_value === 'Yes')) {
       $(this).val('Yes');
     }
@@ -227,12 +227,12 @@ function changeNumericToYesNo(selector) {
  * }
  */
 function checkPermissions() {
-  var employee_number = $(".user-employee-number input").val();
-  var is_user_active = Number($(".user-isactive input").val());
-  var return_val = true;
+  const employee_number = $(".user-employee-number input").val();
+  const is_user_active = Number($(".user-isactive input").val());
+  let return_val = true;
 
   // Check if user is active
-  if (is_user_active == 0) {
+  if (is_user_active === 0) {
     return_val = false;
   }
 
@@ -271,8 +271,8 @@ function checkPermissions() {
  * generateAddButton();
  */
 function generateAddButton() {
-  var add_buttons = $(".addbutton");
-  var is_admin = checkPermissions();
+  const add_buttons = $(".addbutton");
+  const is_admin = checkPermissions();
 
   add_buttons.each(function (index) {
     if (is_admin) {
@@ -317,12 +317,12 @@ function generateAddButton() {
  * generateEditButtons();
  */
 function generateEditButtons() {
-  var is_admin = checkPermissions();
+  const is_admin = checkPermissions();
   $('.table-button').remove();  // Clean up existing buttons
-  var edit_buttons = $(".edit-button input[type=text]");
+  const edit_buttons = $(".edit-button input[type=text]");
 
   edit_buttons.each(function (index) {
-    var btn_value = $(this).val();  // Machine group ID
+    const btn_value = $(this).val();  // Machine group ID
     if (is_admin) {
       // Append edit button with machine group ID
       $(this).parent().append("<input class='table-button' type='button' value='Edit' onclick='callEditMachineGroup(" + btn_value + ")' />");
@@ -352,7 +352,7 @@ function generateEditButtons() {
  * generateGoBackButtons();
  */
 function generateGoBackButtons() {
-  var $goback_buttons = $(".gobackbutton");
+  const $goback_buttons = $(".gobackbutton");
   $goback_buttons.each(function (index) {
     // Replace placeholder with functional Go Back button
     $(this).replaceWith("<input class='return' type='button' value='Go Back' onclick='goBack()' />");
@@ -381,8 +381,8 @@ function generateGoBackButtons() {
  * goBack();
  */
 function goBack() {
-  $(".edit-machinegroup-id input").val("").change();  // Clear edit ID
-  $(".add-machinegroup-id input").val("").change();   // Clear add ID
+  $(".edit-machinegroup-id input").val("").trigger("change");  // Clear edit ID
+  $(".add-machinegroup-id input").val("").trigger("change");   // Clear add ID
   $('.Submit').hide();  // Hide submit button
 }
 
@@ -416,9 +416,9 @@ function goBack() {
  * // departmentNameMap: {"Engineering": 1, "Production": 2, ...}
  */
 function loadDepartmentMap() {
-  if (departmentMap.keys.length == 0) {  // Only load if not already populated
-    var department_rows = $('.department-lookup-table table tbody tr');
-    if (department_rows.length == 0) {
+  if (departmentMap.keys.length === 0) {  // Only load if not already populated
+    const department_rows = $('.department-lookup-table table tbody tr');
+    if (department_rows.length === 0) {
       return;  // No data available
     }
 
@@ -472,46 +472,46 @@ function loadDepartmentMap() {
  */
 function wireUpChangeEvents() {
   // EDIT MODE - Active Status synchronization
-  $('.edit-isactive-value input').change(function () {
+  $('.edit-isactive-value input').on("change", function () {
     $('.edit-isactive-combo select').val(Number($('.edit-isactive-value input').val()));
   });
-  $('.edit-isactive-combo select').change(function () {
+  $('.edit-isactive-combo select').on("change", function () {
     $('.edit-isactive-value input').val(Number($('.edit-isactive-combo select').val()));
   });
 
   // EDIT MODE - Department synchronization (with name/ID conversion)
-  $('.edit-department-combo select').change(function () {
-    let departmentID = departmentNameMap.get($('.edit-department-combo select').val());
+  $('.edit-department-combo select').on("change", function () {
+    const departmentID = departmentNameMap.get($('.edit-department-combo select').val());
     $('.edit-department-id input').val(departmentID);
   });
-  $('.edit-department-id input').change(function () {
-    let departmentName = departmentMap.get(Number($('.edit-department-id input').val()));
+  $('.edit-department-id input').on("change", function () {
+    const departmentName = departmentMap.get(Number($('.edit-department-id input').val()));
     $('.edit-department-combo select').val(departmentName);
   });
 
   // ADD MODE - Department synchronization (with name/ID conversion)
-  $('.add-department-combo select').change(function () {
-    let departmentID = departmentNameMap.get($('.add-department-combo select').val());
+  $('.add-department-combo select').on("change", function () {
+    const departmentID = departmentNameMap.get($('.add-department-combo select').val());
     $('.add-department-id input').val(departmentID);
   });
-  $('.add-department-id input').change(function () {
-    let departmentName = departmentMap.get(Number($('.add-department-id input').val()));
+  $('.add-department-id input').on("change", function () {
+    const departmentName = departmentMap.get(Number($('.add-department-id input').val()));
     $('.add-department-combo select').val(departmentName);
   });
 
   // EDIT MODE - Weekday synchronization
-  $('.edit-weekday-value input').change(function () {
+  $('.edit-weekday-value input').on("change", function () {
     $('.edit-weekday-combo select').val(Number($('.edit-weekday-value input').val()));
   });
-  $('.edit-weekday-combo select').change(function () {
+  $('.edit-weekday-combo select').on("change", function () {
     $('.edit-weekday-value input').val(Number($('.edit-weekday-combo select').val()));
   });
 
   // ADD MODE - Weekday synchronization
-  $('.add-weekday-value input').change(function () {
+  $('.add-weekday-value input').on("change", function () {
     $('.add-weekday-combo select').val(Number($('.add-weekday-value input').val()));
   });
-  $('.add-weekday-combo select').change(function () {
+  $('.add-weekday-combo select').on("change", function () {
     $('.add-weekday-value input').val(Number($('.add-weekday-combo select').val()));
   });
 }

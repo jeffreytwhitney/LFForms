@@ -1,4 +1,4 @@
-
+﻿
 
 $(document).ready(function () {
 
@@ -9,13 +9,13 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-  var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
+  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
   $.fn.bootstrapBtn = bootstrapButton;
 
   $('#q0').append("<div class='hidden' id='popUpDiv'></div>");
-  var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
-  var printEvent = window[eventMethod];
-  var messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
+  const eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
+  const printEvent = window[eventMethod];
+  const messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
   printEvent(messageEvent, function (e) {
 
     if (e.data === "printme" || e.message === "printme") {
@@ -32,7 +32,7 @@ $(document).ready(function () {
     generateTicketNumberColumn();
 
     $('.cal-notes-col div').on("dblclick", function(e) {
-      var notes = $(this).find('input[type="text"]').val();
+      const notes = $(this).find('input[type="text"]').val();
       $.dialog({
         escapeKey: true,
         backgroundDismiss: true,
@@ -47,13 +47,13 @@ $(document).ready(function () {
 
   $(document).on('lookupcomplete', function (e) {
 
-    if ($('.pg input').val() == '999') {
-      $('.pg input').val(1).change();
+    if ($('.pg input').val() === '999') {
+      $('.pg input').val(1).trigger("change");
     }
 
-    if (($('.ed input').val() == '') || ($('.ed input').val() == null)) {
-      var curdate = moment().format("MM/DD/YYYY");
-      $('.ed input').val(curdate).change();
+    if (($('.ed input').val() === '') || ($('.ed input').val() === null)) {
+      const curdate = moment().format("MM/DD/YYYY");
+      $('.ed input').val(curdate).trigger("change");
     }
 
 
@@ -71,33 +71,33 @@ $(document).ready(function () {
 
 function appendPagination() {
 
-  var current_page = Number($('.pg input').val());
-  if (current_page == 999) { return; }
+  const current_page = Number($('.pg input').val());
+  if (current_page === 999) { return; }
 
-  var row_count = getTableRowCount();
+  const row_count = getTableRowCount();
 
   if (row_count > 0) {
     $('#cal-table-pagination').remove();
-    if ((current_page == 1) && (row_count < 25)) {
-      $('.cal-table table').parent().append("<div id='cal-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>��</a></li><li><a class='page-link prev isDisabled'>�</a></li><li><a class='page-link next isDisabled'>�</a></li></ul></div>");
+    if ((current_page === 1) && (row_count < 25)) {
+      $('.cal-table table').parent().append("<div id='cal-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>ï¿½ï¿½</a></li><li><a class='page-link prev isDisabled'>ï¿½</a></li><li><a class='page-link next isDisabled'>ï¿½</a></li></ul></div>");
       return;
     }
-    if ((current_page == 1) && (row_count == 25)) {
-      $('.cal-table table').parent().append("<div id='cal-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>��</a></li><li><a class='page-link prev isDisabled'>�</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>�</a></li></ul></div>")
+    if ((current_page === 1) && (row_count === 25)) {
+      $('.cal-table table').parent().append("<div id='cal-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>ï¿½ï¿½</a></li><li><a class='page-link prev isDisabled'>ï¿½</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>ï¿½</a></li></ul></div>")
       return;
     }
-    if ((current_page > 1) && (row_count == 25)) {
-      $('.cal-table table').parent().append("<div id='cal-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>��</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>�</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>�</a></li></ul></div>")
+    if ((current_page > 1) && (row_count === 25)) {
+      $('.cal-table table').parent().append("<div id='cal-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>ï¿½ï¿½</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>ï¿½</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>ï¿½</a></li></ul></div>")
       return;
     }
     if ((current_page > 1) && (row_count < 25)) {
-      $('.cal-table table').parent().append("<div id='cal-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>��</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>�</a></li><li><a class='page-link next isDisabled'>�</a></li></ul></div>")
+      $('.cal-table table').parent().append("<div id='cal-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>ï¿½ï¿½</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>ï¿½</a></li><li><a class='page-link next isDisabled'>ï¿½</a></li></ul></div>")
       return;
     }
   }
   else {
     $('#cal-table-pagination').remove();
-    $('.cal-table table').parent().append("<div id='cal-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled' href='javascript:void(0);'>��</a></li><li><a class='page-link prev isDisabled' href='javascript:void(0);'>�</a></li><li><a class='page-link next isDisabled'>�</a></li></ul></div>")
+    $('.cal-table table').parent().append("<div id='cal-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled' href='javascript:void(0);'>ï¿½ï¿½</a></li><li><a class='page-link prev isDisabled' href='javascript:void(0);'>ï¿½</a></li><li><a class='page-link next isDisabled'>ï¿½</a></li></ul></div>")
     return;
   }
 }
@@ -107,7 +107,7 @@ function callNextPage() {
   $('.cal-table').hide();
   $('.ticket-detail-link').remove();
   current_page = Number($('.pg input').val());
-  $('.pg input').val(current_page + 1).change();
+  $('.pg input').val(current_page + 1).trigger("change");
 }
 
 
@@ -115,32 +115,32 @@ function callPrevPage() {
   $('.cal-table').hide();
   $('.ticket-detail-link').remove();
   current_page = Number($('.pg input').val());
-  if (current_page == 1) {
+  if (current_page === 1) {
     return;
   }
-  $('.pg input').val(current_page - 1).change();
+  $('.pg input').val(current_page - 1).trigger("change");
 }
 
 
 function filterTable() {
 
-  if ($('#filterRow').length == 0) {
+  if ($('#filterRow').length === 0) {
     return;
   }
 
-  var startDateFilterValue = $('#txtFilter_StartDate').val();
-  var endDateFilterVal = $('#txtFilter_EndDate').val();
-  var curdate = moment().format("MM/DD/YYYY");
+  const startDateFilterValue = $('#txtFilter_StartDate').val();
+  const endDateFilterVal = $('#txtFilter_EndDate').val();
+  const curdate = moment().format("MM/DD/YYYY");
 
 
-  if ((startDateFilterValue != null) && (startDateFilterValue != '')) {
+  if ((startDateFilterValue !== null) && (startDateFilterValue !== '')) {
     $('.std input').val(startDateFilterValue);
   }
   else {
     $('.std input').val('01/01/1980');
   }
 
-  if ((endDateFilterVal != null) && (endDateFilterVal != ''))  {
+  if ((endDateFilterVal !== null) && (endDateFilterVal !== ''))  {
     $('.ed input').val(endDateFilterVal);
   }
   else {
@@ -151,22 +151,22 @@ function filterTable() {
 
   $('.cal-table').hide();
   $('.ticket-detail-link').remove();
-  $('.pg input').val(1).change();
+  $('.pg input').val(1).trigger("change");
 
 }
 
 
 function generateFilterRow() {
 
-  if ($('#filterRow').length == 0) {
-    var print_button = '<div class="table-button ui-button print-button" onclick="printReport()"><span title="Print" class="ui-button-icon ui-icon ui-icon-print"></span>Print</div>'
-    var filter_row = `<TR id='filterRow'><TH>${print_button}</TH><TH/><TH/><TH><input type='text' class='date-filter' id='txtFilter_StartDate'><input type='text' class='date-filter' id='txtFilter_EndDate'></TH><TH/><TH/><TH/><TH/>`
+  if ($('#filterRow').length === 0) {
+    const print_button = '<div class="table-button ui-button print-button" onclick="printReport()"><span title="Print" class="ui-button-icon ui-icon ui-icon-print"></span>Print</div>'
+    const filter_row = `<TR id='filterRow'><TH>${print_button}</TH><TH/><TH/><TH><input type='text' class='date-filter' id='txtFilter_StartDate'><input type='text' class='date-filter' id='txtFilter_EndDate'></TH><TH/><TH/><TH/><TH/>`
     $('.cal-table table thead').append(filter_row);
     $("#txtFilter_StartDate").on("change", function () { filterTable(); });
     $("#txtFilter_EndDate").on("change", function () { filterTable(); });
 
-    $("#txtFilter_StartDate").dblclick(function () { $("#txtFilter_StartDate").val(null).change(); });
-    $("#txtFilter_EndDate").dblclick(function () { $("#txtFilter_EndDate").val(null).change(); });
+    $("#txtFilter_StartDate").on("dblclick", function () { $("#txtFilter_StartDate").val(null).trigger("change"); });
+    $("#txtFilter_EndDate").on("dblclick", function () { $("#txtFilter_EndDate").val(null).trigger("change"); });
 
   }
 
@@ -175,14 +175,14 @@ function generateFilterRow() {
 
 function generateTicketNumberColumn() {
   $('.ticket-link').remove();
-  var ticket_numbers = $('.ticket-number-col input[type="text"]');
-  var ticket_ids = $('.ticket-id-col input[type="text"]');
+  const ticket_numbers = $('.ticket-number-col input[type="text"]');
+  const ticket_ids = $('.ticket-id-col input[type="text"]');
   ticket_numbers.each(function (index) {
-    let ticket_id = $(ticket_ids[index]).val();
-    let ticket_number = $(this).val();
-    let ticket_number_link = $("<a>", { text: ticket_number, class: 'ticket-link', href: 'javascript:void(0);', onclick: `showDetails(${ticket_id})` });
-    let has_link = $(this).parent().find('.ticket-link').length;
-    if (has_link == 0) {
+    const ticket_id = $(ticket_ids[index]).val();
+    const ticket_number = $(this).val();
+    const ticket_number_link = $("<a>", { text: ticket_number, class: 'ticket-link', href: 'javascript:void(0);', onclick: `showDetails(${ticket_id})` });
+    const has_link = $(this).parent().find('.ticket-link').length;
+    if (has_link === 0) {
       $(this).parent().append(ticket_number_link);
     }
   });
@@ -191,7 +191,7 @@ function generateTicketNumberColumn() {
 
 
 function getTableRowCount() {
-  var row_count = $('.cal-table table tbody tr').length;
+  const row_count = $('.cal-table table tbody tr').length;
   return row_count;
 }
 
@@ -227,21 +227,21 @@ function popUpIframe(src, title, height, width) {
 function printReport() {
 
   should_print_report = true;
-  var domain = document.location.hostname;
-  var report_url_root = "http://" + domain + "/Forms/";
-  var report_url = "";
+  const domain = document.location.hostname;
+  const report_url_root = "http://" + domain + "/Forms/";
+  let report_url = "";
 
-  var bin_gage_id = $('.bid input').val();
-  var start_date = $('#txtFilter_StartDate').val();
-  var end_date = $('#txtFilter_EndDate').val();
+  const bin_gage_id = $('.bid input').val();
+  const start_date = $('#txtFilter_StartDate').val();
+  const end_date = $('#txtFilter_EndDate').val();
 
-  if (bin_gage_id.length == 0) {
+  if (bin_gage_id.length === 0) {
     return;
   }
 
   report_url = report_url_root + `RMS-GAGE-BinCalHistory-Print?bid=${bin_gage_id}`;
 
-  if ((start_date != null) && (start_date != '')) {
+  if ((start_date !== null) && (start_date !== '')) {
     if ($.datepicker.parseDate("dd/mm/yy", start_date)) {
       report_url = report_url + "&std=" + start_date;
     }
@@ -254,7 +254,7 @@ function printReport() {
     }
   }
 
-  if ((end_date != null) && (end_date != '')) {
+  if ((end_date !== null) && (end_date !== '')) {
     if ($.datepicker.parseDate("dd/mm/yy", end_date)) {
       report_url = report_url + "&ed=" + end_date;
     }
@@ -270,7 +270,7 @@ function printReport() {
 
 
   loadiFrame(report_url);
-  should_print_report == false;
+  should_print_report === false;
 }
 
 
@@ -281,9 +281,10 @@ function removeAppendedFields() {
 
 
 function showDetails(ticket_id) {
-  var widowHeight = $(window).height();
+  let widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
   popUpIframe(`http://rmslf/Forms/RMS-GAGE-TicketDetails?tid=${ticket_id}&ro=1`, 'Ticket Details', widowHeight, 1200);
 }
+
 
 

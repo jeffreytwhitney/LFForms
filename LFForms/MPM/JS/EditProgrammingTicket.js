@@ -1,4 +1,4 @@
-/**
+﻿/**
  EditProgrammingTicket.js
  
  Author:  Jeffrey Whitney
@@ -169,7 +169,7 @@
  Notes:
  - Assumes backend populates hidden inputs/lookup tables; this file translates and orchestrates UI behavior.
  - Uses jQuery UI Dialog for pop-up iframes.
- - Filtering writes to hidden fields and triggers LF lookup via `.change()` where appropriate.
+ - Filtering writes to hidden fields and triggers LF lookup via `.trigger("change")` where appropriate.
  - Sorting only toggles indicators and hidden sort fields; actual sort performed by backend lookup.
  
  Potential improvements (informational only):
@@ -179,29 +179,29 @@
  * - Centralize permission checks to avoid duplication.
  */
 
-var mfgEngineerMap = new Map();
-var mfgEngineerNameMap = new Map();
-var qualEngineerMap = new Map();
-var qualEngineerNameMap = new Map();
-var assigneeMap = new Map();
-var assigneeNameMap = new Map();
-var taskTypeMap = new Map();
-var taskTypeByNameMap = new Map();
-var taskStatusMap = new Map();
-var taskStatusNameMap = new Map();
+const mfgEngineerMap = new Map();
+const mfgEngineerNameMap = new Map();
+const qualEngineerMap = new Map();
+const qualEngineerNameMap = new Map();
+const assigneeMap = new Map();
+const assigneeNameMap = new Map();
+const taskTypeMap = new Map();
+const taskTypeByNameMap = new Map();
+const taskStatusMap = new Map();
+const taskStatusNameMap = new Map();
 
 
 $(document).ready(function () {
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-  var bootstrapButton = $.fn.button.noConflict();
+  const bootstrapButton = $.fn.button.noConflict();
   $.fn.bootstrapBtn = bootstrapButton;
 
   // Window message print hook
-  var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
-  var printEvent = window[eventMethod];
-  var messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
+  const eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
+  const printEvent = window[eventMethod];
+  const messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
   printEvent(messageEvent, function (e) {
 
     if (e.data === "printme" || e.message === "printme") {
@@ -213,55 +213,55 @@ $(document).ready(function () {
   });
 
   $('.Submit').addClass('ui-button ui-corner-all ui-widget');
-  $('.Submit').click(function (e) { submitForm(e); });
+  $('.Submit').on("click", function (e) { submitForm(e); });
 
   // Normalize network username from domain\user
-  var lfUserName = $('.lf-user-name input').val();
-  if (lfUserName != "") {
+  const lfUserName = $('.lf-user-name input').val();
+  if (lfUserName !== "") {
     let networkUserName = lfUserName.toUpperCase();
     networkUserName = networkUserName.substr(networkUserName.lastIndexOf('\\') + 1);
-    $('.network-user-name input').val(networkUserName).change();
+    $('.network-user-name input').val(networkUserName).trigger("change");
   }
 
   // Reflect ticket number in document title
   $(document).on('change', '.ticket-number input', function (e) {
-    var ticket_name = $(this).val();
+    const ticket_name = $(this).val();
     $(document).prop('title', `Edit Ticket ${ticket_name}`);
   });
 
   // Close/refresh integration for dialog hosting
-  if ($('.closeme input').val() == 1) {
+  if ($('.closeme input').val() === 1) {
     $('#form1').hide();
     window.parent.postMessage('CloseDialogWithRefresh', '*');
   }
 
   // Keep hidden QE/ME ID fields in sync with selected names
   $(document).on('change', '.quality-engineer-combo select', function () {
-    let qeName = $('.quality-engineer-combo select').val();
-    let qeID = qualEngineerNameMap.get(qeName);
+    const qeName = $('.quality-engineer-combo select').val();
+    const qeID = qualEngineerNameMap.get(qeName);
     $('.qeid input').val(qeID);
   });
 
   // Keep radio group "Requires Models" in sync with hidden value.
   $(document).on('change', '.edit-requires-model-value input', function () {
-    var requiresModel = $('.edit-requires-model-value input').val();
+    const requiresModel = $('.edit-requires-model-value input').val();
     $(`.edit-requires-model-choice input[type='radio'][value='${requiresModel}']`).prop("checked", true);
   });
 
   // Mirror radio "Requires Models" selection back to the hidden field.
   $(document).on('change', ".edit-requires-model-choice input[type='radio']", function () {
-    var requiresModel = $(this).val();
+    const requiresModel = $(this).val();
     $('.edit-requires-model-value input').val(requiresModel);
   });
 
 
   $(document).on('change', '.manufacturing-engineer-combo select', function () {
-    let meName = $('.manufacturing-engineer-combo select').val();
-    if (meName.length == 0) {
+    const meName = $('.manufacturing-engineer-combo select').val();
+    if (meName.length === 0) {
       $('.meid input').val(0);
     }
     else {
-      let meID = mfgEngineerNameMap.get(meName);
+      const meID = mfgEngineerNameMap.get(meName);
       $('.meid input').val(meID);
     }
   });
@@ -271,7 +271,7 @@ $(document).ready(function () {
   // Dialog close from child iframes should refresh this form
   window.onmessage = function (event) {
 
-    if (event.data == "CloseDialogWithRefresh") {
+    if (event.data === "CloseDialogWithRefresh") {
       $("#popupIFrame").dialog("destroy");
       $("#popupIFrame").remove();
       refreshForm();
@@ -286,18 +286,18 @@ $(document).ready(function () {
     loadStatusMap();
     loadTaskTypeMap();
 
-    if (($('.mename input').val() != null) && ($('.manufacturing-engineer-combo select option').length > 0)) {
+    if (($('.mename input').val() !== null) && ($('.manufacturing-engineer-combo select option').length > 0)) {
       $('.manufacturing-engineer-combo select').val($('.mename input').val());
       $('.meid input').val(mfgEngineerNameMap.get($('.mename input').val()));
     }
-    if (($('.qename input').val() != null) && ($('.quality-engineer-combo select option').length > 0)) {
+    if (($('.qename input').val() !== null) && ($('.quality-engineer-combo select option').length > 0)) {
       $('.quality-engineer-combo select').val($('.qename input').val());
       $('.qeid input').val(qualEngineerNameMap.get($('.qename input').val()));
     }
     generateTaskListColumnFields();
 
     // Enforce permissions for editing and adding
-    if (checkPermissions() == false) {
+    if (checkPermissions() === false) {
       $('.Submit').hide();
       $('.manufacturing-engineer-combo select').removeClass('ui-state-disabled').addClass('ui-state-disabled');
       $('.quality-engineer-combo select').removeClass('ui-state-disabled').addClass('ui-state-disabled');
@@ -314,20 +314,20 @@ $(document).ready(function () {
 
     // Add group edit button (Metrology users) and Include Completed checkbox
     if (isMetrologyUser()) {
-      if ($('.group-edit-button').length == 0) {
+      if ($('.group-edit-button').length === 0) {
         $('.tasklist-table .cf-section-header').prepend('<div class="choice include-choice"><input name="chkIncludeComplete" id="chkIncludeComplete" type="checkbox" ><label class="form-option-label" for="chkIncludeComplete">Include Completed</label></div><div class="ui-button group-edit-button" onclick="callGroupEdit()"><span title="Group Edit" class="ui-button-icon ui-icon ui-icon-clipboard"></span>Group Edit</div>');
       }
     }
     else {
       if ($('.include-choice').length > 0) {
-        let include_chk = '<div class="choice include-choice"><input name="chkIncludeComplete" id="chkIncludeComplete" type="checkbox" ><label class="form-option-label" for="chkIncludeComplete">Include Completed</label></div>'
+        const include_chk = '<div class="choice include-choice"><input name="chkIncludeComplete" id="chkIncludeComplete" type="checkbox" ><label class="form-option-label" for="chkIncludeComplete">Include Completed</label></div>'
         $('.tasklist-table .cf-section-header').prepend(include_chk);
       }
     }
 
     // Add "Add Task" button if missing
-    if ($('.add-button').length == 0) {
-      let add_button = '<div class="ui-button add-button" onclick="addTask()"><span title="AddTicket" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Task</div>';
+    if ($('.add-button').length === 0) {
+      const add_button = '<div class="ui-button add-button" onclick="addTask()"><span title="AddTicket" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Task</div>';
       $(add_button).insertBefore('.tasklist-table table')
     }
 
@@ -351,7 +351,7 @@ $(document).ready(function () {
     $('.closeme input').val(1);
     $('#q0').append("<div class='hidden-text' id='popUpDiv'></div>");
     $('.detail-input div').on("dblclick", function (e) {
-      var notes = $(this).find('textarea').val();
+      const notes = $(this).find('textarea').val();
       $.dialog({
         escapeKey: true,
         backgroundDismiss: true,
@@ -360,16 +360,16 @@ $(document).ready(function () {
       });
     });
 
-    var ticketID = $('.tid input').val();
-    if ((ticketID != '') && (ticketID != '0')) {
+    const ticketID = $('.tid input').val();
+    if ((ticketID !== '') && (ticketID !== '0')) {
       $('#ticket-history').append(`<iframe id='ticket-history-iframe' name='ticket-history-iframe' src='http://rmslf/Forms/MPM-ProgamTicketHistory?tid=${ticketID}' height='500' width='100%'/>`);
-      if ($('.quality-engineer-combo select option').length == 1) {
+      if ($('.quality-engineer-combo select option').length === 1) {
         $('.ticket-department-id input').trigger("change");
       }
     }
 
-    if (($('.site-id input').val() != '0') && ($('.site-id input').val() != '')) {
-      let assingeesCombo = $('.assignee-lookup-combo select option');
+    if (($('.site-id input').val() !== '0') && ($('.site-id input').val() !== '')) {
+      const assingeesCombo = $('.assignee-lookup-combo select option');
       if (typeof assingeesCombo !== 'undefined') {
         $('.site-id input').trigger("change");
       }
@@ -379,7 +379,7 @@ $(document).ready(function () {
     }
 
     $('.network-user-name input').trigger("change");
-    $('.fincomp input').val(0).change();
+    $('.fincomp input').val(0).trigger("change");
   });
 });
 
@@ -387,8 +387,8 @@ $(document).ready(function () {
  * Opens Add Task dialog for the current ticket in a popup iframe.
  */
 function addTask() {
-  var ticketID = $('.tid input').val();
-  var widowHeight = $(window).height();
+  const ticketID = $('.tid input').val();
+  let widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
   popUpIframe(`http://rmslf/Forms/MPM-AddProgrammingTask?pid=${ticketID}`, 'Add Task', widowHeight, 1300);
 }
@@ -398,8 +398,8 @@ function addTask() {
  * @param {number} task_id
  */
 function callAddTime(task_id) {
-  if (checkPermissions() == true) {
-    var task_name = getColumnValueByTaskID(task_id, '.tasklist-task-name-col input[type="text"]');
+  if (checkPermissions() === true) {
+    const task_name = getColumnValueByTaskID(task_id, '.tasklist-task-name-col input[type="text"]');
     popUpIframe(`http://rmslf/Forms/MPMAddTaskTime?tid=${task_id}`, `Add Time to task '${task_name}'`, 300, 800, false, task_id);
   }
 }
@@ -409,23 +409,23 @@ function callAddTime(task_id) {
  * @param {number} task_id
  */
 function callCloneTask(task_id) {
-  var user_type_id = Number($(".user-type-id input").val());
-  var userDepartmentID = $(".user-department-id input").val();
-  var departmentID = $(".ticket-department-id input").val();
+  const user_type_id = Number($(".user-type-id input").val());
+  const userDepartmentID = $(".user-department-id input").val();
+  const departmentID = $(".ticket-department-id input").val();
 
-  if (user_type_id == 2 || user_type_id == 4 || user_type_id == 5) {
+  if (user_type_id === 2 || user_type_id === 4 || user_type_id === 5) {
     $.alert({ title: 'Nope!', content: 'Sorry, you do not have permissions to do this.' });
     return;
   }
 
-  if (user_type_id == 3) {
-    if (departmentID != userDepartmentID) {
+  if (user_type_id === 3) {
+    if (departmentID !== userDepartmentID) {
       $.alert({ title: 'Nope!', content: 'Sorry, you do not have permissions to do this.' });
       return;
     }
   }
 
-  var task_name = getColumnValueByTaskID(task_id, '.tasklist-task-name-col input[type="text"]');
+  const task_name = getColumnValueByTaskID(task_id, '.tasklist-task-name-col input[type="text"]');
   popUpIframe(`http://rmslf/Forms/MPMCloneTask?tid=${task_id}`, `Clone task '${task_name}'`, 300, 750, false, task_id);
 }
 
@@ -433,9 +433,9 @@ function callCloneTask(task_id) {
  * Opens Group Edit dialog for the current ticket.
  */
 function callGroupEdit() {
-  var ticketId = $('.tid input').val();
-  var ticketNumber = $('.ticket-number input').val();
-  var widowHeight = $(window).height();
+  const ticketId = $('.tid input').val();
+  const ticketNumber = $('.ticket-number input').val();
+  let widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
   popUpIframe(`http://rmslf/Forms/MPM-TaskGroupEdit?tid=${ticketId}`, `Group Edit Ticket '${ticketNumber}'`, widowHeight, 1300);
 }
@@ -445,7 +445,7 @@ function callGroupEdit() {
  * @param {number} task_id
  */
 function callShowDetails(task_id) {
-  var widowHeight = $(window).height();
+  let widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
   popUpIframe(`http://rmslf/Forms/MPM-EditProgrammingTask?tid=${task_id}`, 'Task Details', widowHeight, 1300);
 }
@@ -457,19 +457,19 @@ function callShowDetails(task_id) {
  * @returns {boolean}
  */
 function checkPermissions() {
-  var user_type_id = Number($(".user-type-id input").val());
-  var user_department_id = Number($(".user-department-id input").val());
-  var ticket_department_id = Number($(".ticket-department-id input").val());
+  const user_type_id = Number($(".user-type-id input").val());
+  const user_department_id = Number($(".user-department-id input").val());
+  const ticket_department_id = Number($(".ticket-department-id input").val());
 
   if (typeof $('.user-type-id input').val() === 'undefined') {
     return false;
   }
 
-  if (user_type_id == 1) {
+  if (user_type_id === 1) {
     return true;
   }
   else {
-    if (user_department_id == ticket_department_id) {
+    if (user_department_id === ticket_department_id) {
       return true;
     }
   }
@@ -481,22 +481,22 @@ function checkPermissions() {
  * Applies current filter controls to hidden filter fields and triggers lookup refresh.
  */
 function filterTable() {
-  if ($('#filterRow').length == 0) {
+  if ($('#filterRow').length === 0) {
     return;
   }
 
   //$('.tasklist-table').hide();
-  var includeCompleted = $('#chkIncludeComplete').is(':checked');
-  var taskNameFilterValue = $('#txtFilter_TaskName').val();
-  var taskTypeFilterVal = $('#cboFilter_TaskType').val();
-  var statusFilterVal = $('#cboFilter_Status').val();
-  var assigneeFilterVal = $('#cboFilter_Assignee').val();
+  const includeCompleted = $('#chkIncludeComplete').is(':checked');
+  const taskNameFilterValue = $('#txtFilter_TaskName').val();
+  const taskTypeFilterVal = $('#cboFilter_TaskType').val();
+  const statusFilterVal = $('#cboFilter_Status').val();
+  const assigneeFilterVal = $('#cboFilter_Assignee').val();
 
 
   $('.ftname input').val(taskNameFilterValue);
 
-  if ((taskTypeFilterVal != null) && (taskTypeFilterVal.length > 0)) {
-    let taskTypeID = taskTypeByNameMap.get(taskTypeFilterVal);
+  if ((taskTypeFilterVal !== null) && (taskTypeFilterVal.length > 0)) {
+    const taskTypeID = taskTypeByNameMap.get(taskTypeFilterVal);
     $('.fttid input').val(taskTypeID);
   }
   else {
@@ -504,16 +504,16 @@ function filterTable() {
   }
 
 
-  if ((statusFilterVal != null) && (statusFilterVal.length > 0)) {
-    let statusID = taskStatusNameMap.get(statusFilterVal);
+  if ((statusFilterVal !== null) && (statusFilterVal.length > 0)) {
+    const statusID = taskStatusNameMap.get(statusFilterVal);
     $('.fsid input').val(statusID);
   }
   else {
     $('.fsid input').val(0);
   }
 
-  if ((assigneeFilterVal != null) && (assigneeFilterVal.length > 0)) {
-    let assigneeID = assigneeNameMap.get(assigneeFilterVal);
+  if ((assigneeFilterVal !== null) && (assigneeFilterVal.length > 0)) {
+    const assigneeID = assigneeNameMap.get(assigneeFilterVal);
     $('.faid input').val(assigneeID);
   }
   else {
@@ -522,12 +522,12 @@ function filterTable() {
 
   removeAppendedFields();
 
-  /**We only want to call .change() once at the very end by which time all of the filter fields have been set.*/
+  /**We only want to call .trigger("change") once at the very end by which time all of the filter fields have been set.*/
   if (includeCompleted) {
-    $('.fincomp input').val(1).change();
+    $('.fincomp input').val(1).trigger("change");
   }
   else {
-    $('.fincomp input').val(0).change();
+    $('.fincomp input').val(0).trigger("change");
   }
 
 }
@@ -543,33 +543,33 @@ function filterTable() {
  */
 function generateFilterRow() {
 
-  if ($('#filterRow').length == 0) {
+  if ($('#filterRow').length === 0) {
 
-    var filter_row = "<TR id='filterRow'><TH/><TH/><TH/><TH><input type='text' id='txtFilter_TaskName'></TH><TH/><TH/><TH><select id='cboFilter_TaskType'/></TH><TH><select id='cboFilter_Assignee'/></TH><TH><select id='cboFilter_Status'/></TH><TH/><TH/><TH/><TH><TH/><TH/><TH/></TR>"
+    const filter_row = "<TR id='filterRow'><TH/><TH/><TH/><TH><input type='text' id='txtFilter_TaskName'></TH><TH/><TH/><TH><select id='cboFilter_TaskType'/></TH><TH><select id='cboFilter_Assignee'/></TH><TH><select id='cboFilter_Status'/></TH><TH/><TH/><TH/><TH><TH/><TH/><TH/></TR>"
     $('.tasklist-table table thead').append(filter_row);
     $("#txtFilter_TaskName").on("change", function () { filterTable(); });
     $("#cboFilter_Status").on("change", function () { filterTable(); });
     $("#cboFilter_TaskType").on("change", function () { filterTable(); });
     $("#cboFilter_Assignee").on("change", function () { filterTable(); });
 
-    $("#txtFilter_TaskName").dblclick(function () { $("#txtFilter_TaskName").val(null).change(); });
-    $("#cboFilter_Status").dblclick(function () { $("#cboFilter_Status").val(0).change(); });
-    $("#cboFilter_TaskType").dblclick(function () { $("#cboFilter_TaskType").val(0).change(); });
-    $("#cboFilter_Assignee").dblclick(function () { $("#cboFilter_Assignee").val(0).change(); });
+    $("#txtFilter_TaskName").on("dblclick", function () { $("#txtFilter_TaskName").val(null).trigger("change"); });
+    $("#cboFilter_Status").on("dblclick", function () { $("#cboFilter_Status").val(0).trigger("change"); });
+    $("#cboFilter_TaskType").on("dblclick", function () { $("#cboFilter_TaskType").val(0).trigger("change"); });
+    $("#cboFilter_Assignee").on("dblclick", function () { $("#cboFilter_Assignee").val(0).trigger("change"); });
     wireUpSortFields();
   }
 
-  if ((($('.ftname input').val() != null) && ($('.ftname input').val().length > 0)) && (($('#txtFilter_TaskName').val() == null) || ($('#txtFilter_TaskName').val() == ''))) {
+  if ((($('.ftname input').val() !== null) && ($('.ftname input').val().length > 0)) && (($('#txtFilter_TaskName').val() === null) || ($('#txtFilter_TaskName').val() === ''))) {
     $('#txtFilter_TaskName').val($('.ftname input').val());
   }
 
-  if (($(".status-lookup-combo select option").length > 1) && ($("#cboFilter_Status option").length == 0)) {
+  if (($(".status-lookup-combo select option").length > 1) && ($("#cboFilter_Status option").length === 0)) {
     $("#cboFilter_Status").html($(".status-lookup-combo select").html());
   }
-  if (($(".tasktype-lookup-combo select option").length > 1) && ($("#cboFilter_TaskType option").length == 0)) {
+  if (($(".tasktype-lookup-combo select option").length > 1) && ($("#cboFilter_TaskType option").length === 0)) {
     $("#cboFilter_TaskType").html($(".tasktype-lookup-combo select").html());
   }
-  if (($(".assignee-lookup-combo select option").length > 1) && ($("#cboFilter_Assignee option").length == 0)) {
+  if (($(".assignee-lookup-combo select option").length > 1) && ($("#cboFilter_Assignee option").length === 0)) {
     $("#cboFilter_Assignee").html($(".assignee-lookup-combo select").html());
     $("#cboFilter_Assignee option").eq(0).after($('<option>', {
       value: 'Unassigned',
@@ -589,15 +589,15 @@ function generateFilterRow() {
  * @param {boolean} disabled Render disabled button when true.
  */
 function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFunction, disabled) {
-  var btn_html = '';
-  var selectionString = buttonSelector + " input[type=text]";
-  var buttons = $(selectionString);
+  let btn_html = '';
+  const selectionString = buttonSelector + " input[type=text]";
+  const buttons = $(selectionString);
   buttons.each(function () {
-    let btn_value = $(this).val();
+    const btn_value = $(this).val();
     $(this).parent().find(`.table-button`).remove();
 
 
-    if (disabled == true) {
+    if (disabled === true) {
       btn_html = `<div class='table-button ui-button ui-state-disabled' onclick='javascript:void(0);'><span title='${buttonTitle}' class='ui-button-icon ui-icon ui-state-disabled ${buttonClass}'/></div>`
     }
     else {
@@ -615,21 +615,21 @@ function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFu
  * @param {string} checkboxClass Class assigned to the added checkbox input.
  */
 function generateTableCheckBox(selector, checkboxClass) {
-  var selectionString = selector + " input[type=text]";
-  var checkboxes = $(selectionString);
+  const selectionString = selector + " input[type=text]";
+  const checkboxes = $(selectionString);
   checkboxes.each(function () {
-    var btn_value = $(this).val();
-    if (btn_value == '1') {
-      var btn_html = "<input class='" + checkboxClass + "' type='checkbox' disabled checked/>";
-      var has_button = $(this).parent().find(`.${checkboxClass}`).length;
-      if (has_button == 0) {
+    const btn_value = $(this).val();
+    if (btn_value === '1') {
+      const btn_html = "<input class='" + checkboxClass + "' type='checkbox' disabled checked/>";
+      const has_button = $(this).parent().find(`.${checkboxClass}`).length;
+      if (has_button === 0) {
         $(this).parent().append(btn_html);
       }
     }
     else {
-      var btn_html = "<input class='" + checkboxClass + "' type='checkbox' disabled/>";
-      var has_button = $(this).parent().find(`.${checkboxClass}`).length;
-      if (has_button == 0) {
+      const btn_html = "<input class='" + checkboxClass + "' type='checkbox' disabled/>";
+      const has_button = $(this).parent().find(`.${checkboxClass}`).length;
+      if (has_button === 0) {
         $(this).parent().append(btn_html);
       }
     }
@@ -640,14 +640,14 @@ function generateTableCheckBox(selector, checkboxClass) {
  * Adds a clickable task name link to open Task Details for each row (id->name col).
  */
 function generateTaskColumn() {
-  var task_names = $('.tasklist-task-name-col input[type="text"]');
-  var task_ids = $('.tasklist-task-id-col input[type="text"]');
+  const task_names = $('.tasklist-task-name-col input[type="text"]');
+  const task_ids = $('.tasklist-task-id-col input[type="text"]');
   task_names.each(function (index) {
-    let has_link = $(this).parent().find('.task-link').length;
+    const has_link = $(this).parent().find('.task-link').length;
     if (!has_link) {
-      let task_id = $(task_ids[index]).val();
-      let task_name = $(this).val();
-      let task_link = $("<a>", { text: task_name.substr(0, 30), class: 'task-link', href: `javascript:void(0);`, onclick: `callShowDetails(${task_id})` });
+      const task_id = $(task_ids[index]).val();
+      const task_name = $(this).val();
+      const task_link = $("<a>", { text: task_name.substr(0, 30), class: 'task-link', href: `javascript:void(0);`, onclick: `callShowDetails(${task_id})` });
       $(this).parent().append(task_link);
     }
   });
@@ -658,10 +658,10 @@ function generateTaskColumn() {
  */
 function generateTaskListColumnFields() {
 
-  var has_permissions = checkPermissions();
+  const has_permissions = checkPermissions();
 
   if ($('.tasklist-table table tbody tr').length > 0) {
-    if (has_permissions == false) {
+    if (has_permissions === false) {
       generateTableButtons(".task-list-clone-col", "ui-icon-newwin", "Clone Task", "callCloneTask", true);
       generateTableButtons(".tasklist-time-col", "ui-icon-clock", "Add Time", "callAddTime", true);
     }
@@ -689,14 +689,14 @@ function generateTaskListColumnFields() {
  */
 function getColumnValueByTaskID(task_id, column_name) {
 
-  var tasklist_rows = $(".tasklist-table table tbody tr");
-  var task_ids = $('.tasklist-task-id-col input[type="text"]');
-  var column_value;
+  const tasklist_rows = $(".tasklist-table table tbody tr");
+  const task_ids = $('.tasklist-task-id-col input[type="text"]');
+  let column_value;
 
   task_ids.each(function (index) {
-    let row_task_id = $(this).val();
-    if (row_task_id == task_id) {
-      let tasklist_row = tasklist_rows[index];
+    const row_task_id = $(this).val();
+    if (row_task_id === task_id) {
+      const tasklist_row = tasklist_rows[index];
       column_value = $(tasklist_row).find(column_name).val();
       return;
     }
@@ -709,7 +709,7 @@ function getColumnValueByTaskID(task_id, column_name) {
  * @returns {boolean}
  */
 function isMetrologyUser() {
-  if (($('.user-type-id input').val() == '1') && ($('.user-isactive input').val() == '1')) {
+  if (($('.user-type-id input').val() === '1') && ($('.user-isactive input').val() === '1')) {
     return true;
   }
   return false;
@@ -721,9 +721,9 @@ function isMetrologyUser() {
  */
 function loadAssigneeMap() {
 
-  if (assigneeMap.keys.length == 0) {
-    var assignee_rows = $('.assignee-lookup-table table tbody tr');
-    if (assignee_rows.length == 0) {
+  if (assigneeMap.keys.length === 0) {
+    const assignee_rows = $('.assignee-lookup-table table tbody tr');
+    if (assignee_rows.length === 0) {
       return;
     }
     assignee_rows.each(function (index) {
@@ -749,9 +749,9 @@ function loadiFrame(src) {
  * Builds the ME lookup maps from the lookup table (id<->name).
  */
 function loadMfgEngineerMap() {
-  if (mfgEngineerMap.keys.length == 0) {
-    var me_rows = $('.me-lookup-table table tbody tr');
-    if (me_rows.length == 0) {
+  if (mfgEngineerMap.keys.length === 0) {
+    const me_rows = $('.me-lookup-table table tbody tr');
+    if (me_rows.length === 0) {
       return;
     }
     me_rows.each(function (index) {
@@ -767,9 +767,9 @@ function loadMfgEngineerMap() {
  * Builds the QE lookup maps from the lookup table (id<->name).
  */
 function loadQualEngineerMap() {
-  if (qualEngineerMap.keys.length == 0) {
-    var qe_rows = $('.qe-lookup-table table tbody tr');
-    if (qe_rows.length == 0) {
+  if (qualEngineerMap.keys.length === 0) {
+    const qe_rows = $('.qe-lookup-table table tbody tr');
+    if (qe_rows.length === 0) {
       return;
     }
     qe_rows.each(function (index) {
@@ -785,9 +785,9 @@ function loadQualEngineerMap() {
  * Builds the Task Status lookup maps from the lookup table (id<->name).
  */
 function loadStatusMap() {
-  if (taskStatusMap.keys.length == 0) {
-    var status_rows = $('.status-lookup-table table tbody tr');
-    if (status_rows.length == 0) {
+  if (taskStatusMap.keys.length === 0) {
+    const status_rows = $('.status-lookup-table table tbody tr');
+    if (status_rows.length === 0) {
       return;
     }
     status_rows.each(function (index) {
@@ -804,9 +804,9 @@ function loadStatusMap() {
  */
 function loadTaskTypeMap() {
 
-  if (taskTypeMap.keys.length == 0) {
-    var tasktype_rows = $('.tasktype-lookup-table table tbody tr');
-    if (tasktype_rows.length == 0) {
+  if (taskTypeMap.keys.length === 0) {
+    const tasktype_rows = $('.tasktype-lookup-table table tbody tr');
+    if (tasktype_rows.length === 0) {
       return;
     }
     tasktype_rows.each(function (index) {
@@ -854,8 +854,8 @@ function popUpIframe(src, title, height, width) {
  */
 function printTicket() {
 
-  var taskID = $('.tid input').val();
-  var report_url = `http://rmslf/Forms/MPM-ProgrammingTicketPrint?tid=${taskID}`
+  const taskID = $('.tid input').val();
+  const report_url = `http://rmslf/Forms/MPM-ProgrammingTicketPrint?tid=${taskID}`
   loadiFrame(report_url);
 }
 
@@ -863,7 +863,7 @@ function printTicket() {
  * Reloads the current page.
  */
 function refreshForm() {
-  var current_url = window.location.href;
+  const current_url = window.location.href;
   window.location = current_url;
 }
 
@@ -887,7 +887,7 @@ function removeAppendedFields() {
  * because Laserfiche Workflow doesn't like empty strings in numeric fields.
  */
 function submitForm(e) {
-  if ($('.meid input').val() == '') {
+  if ($('.meid input').val() === '') {
     $('.meid input').val(0);
   }
 }
@@ -902,26 +902,26 @@ function sortTable(newSortOrdinal, selector) {
   removeAppendedFields();
   $('.sort-icon').remove();
 
-  var currentSortOrdinal = Number($('.sort-field-ordinal input').val());
-  var sortDirection = Number($('.sort-direction input').val());
+  const currentSortOrdinal = Number($('.sort-field-ordinal input').val());
+  let sortDirection = Number($('.sort-direction input').val());
 
-  if (newSortOrdinal == currentSortOrdinal) {
-    if (sortDirection == 0) {
+  if (newSortOrdinal === currentSortOrdinal) {
+    if (sortDirection === 0) {
       sortDirection = 1
-      $('.sort-direction input').val(1).change();
+      $('.sort-direction input').val(1).trigger("change");
     }
     else {
       sortDirection = 0;
-      $('.sort-direction input').val(0).change();
+      $('.sort-direction input').val(0).trigger("change");
     }
   }
   else {
     $('.sort-field-ordinal input').val(newSortOrdinal);
-    $('.sort-direction input').val(0).change();
+    $('.sort-direction input').val(0).trigger("change");
     sortDirection = 0;
   }
 
-    if (sortDirection == 0) {
+    if (sortDirection === 0) {
       $(`${selector} .cf-col-label`).append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
     }
     else {

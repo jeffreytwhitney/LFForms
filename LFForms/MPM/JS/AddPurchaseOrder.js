@@ -134,11 +134,11 @@ $(document).ready(function () {
    * Resolve Bootstrap `button` plugin conflicts to ensure modal close buttons render/function correctly.
    * Stores original Bootstrap button plugin under `$.fn.bootstrapBtn`.
    */
-  var bootstrapButton = $.fn.button.noConflict();
+  const bootstrapButton = $.fn.button.noConflict();
   $.fn.bootstrapBtn = bootstrapButton;
 
   // If the host has requested this dialog to close (flag value == 1), instruct parent to close and refresh.
-  if ($('.closeme input').val() == 1) {
+  if ($('.closeme input').val() === 1) {
     // The parent window is expected to handle the 'CloseDialogWithRefresh' message.
     window.parent.postMessage('CloseDialogWithRefresh', '*');
   }
@@ -156,8 +156,7 @@ $(document).ready(function () {
         .val()
         .toUpperCase()
         .substr($('.lf-user-name input').val().lastIndexOf('\\') + 1)
-    )
-    .change();
+    ).trigger("change");
 
   /**
    * Enforce quantity rule based on line item type.
@@ -171,7 +170,7 @@ $(document).ready(function () {
    * @param {jQuery.Event} e
    */
   $(document).on('change', '.line-item-type-id-col input', function (e) {
-    var row = $(this).closest('tr');
+    const row = $(this).closest('tr');
     if (Number($(this).val()) > 1) {
       row.find('.quantity-col input').val(1).prop('readonly', true);
     } else {
@@ -180,20 +179,20 @@ $(document).ready(function () {
   });
 
   $(document).on('change', '.quantity-col input', function (e) {
-    var row = $(this).closest('tr');
-    var quantity = Number($(this).val().replace(',', ''));
-    var perUnitCost = Number(row.find('.per-unit-cost-col input').val().replace(',', ''));
-    var totalCost = quantity * perUnitCost;
-    var formattedTotalCost = addThousandsSeparator(totalCost.toFixed(2));
+    const row = $(this).closest('tr');
+    const quantity = Number($(this).val().replace(',', ''));
+    const perUnitCost = Number(row.find('.per-unit-cost-col input').val().replace(',', ''));
+    const totalCost = quantity * perUnitCost;
+    const formattedTotalCost = addThousandsSeparator(totalCost.toFixed(2));
     row.find('.cost-col input').val(formattedTotalCost);
   });
 
   $(document).on('change', '.per-unit-cost-col input', function (e) {
-    var row = $(this).closest('tr');
-    var quantity = Number(row.find('.quantity-col input').val().replace(',', ''));
-    var perUnitCost = Number($(this).val().replace(',', ''));
-    var totalCost = quantity * perUnitCost;
-    var formattedTotalCost = addThousandsSeparator(totalCost.toFixed(2));
+    const row = $(this).closest('tr');
+    const quantity = Number(row.find('.quantity-col input').val().replace(',', ''));
+    const perUnitCost = Number($(this).val().replace(',', ''));
+    const totalCost = quantity * perUnitCost;
+    const formattedTotalCost = addThousandsSeparator(totalCost.toFixed(2));
     row.find('.cost-col input').val(formattedTotalCost);
   });
 
@@ -227,8 +226,8 @@ $(document).ready(function () {
     $('.closeme input').val(1);
     $('.network-user-name input').trigger('change');
 
-    var siteid = Number($('.site-id input').val());
-    if (siteid == 0) {
+    const siteid = Number($('.site-id input').val());
+    if (siteid === 0) {
       $('.Submit').hide();
     }
   });
@@ -240,9 +239,9 @@ function addThousandsSeparator(numStr) {
   numStr = numStr.replace(/[^0-9.]/g, '');
 
   // Split integer and decimal parts
-  let parts = numStr.split('.');
+  const parts = numStr.split('.');
   let integerPart = parts[0];
-  let decimalPart = parts.length > 1 ? '.' + parts[1] : '';
+  const decimalPart = parts.length > 1 ? '.' + parts[1] : '';
 
   // Add commas to integer part
   integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -260,7 +259,7 @@ function addThousandsSeparator(numStr) {
  * @returns {boolean} True when the current user is an admin user; otherwise false.
  */
 function isAdminUser() {
-  if ($('.user-isadmin input').val() == '1') {
+  if ($('.user-isadmin input').val() === '1') {
     return true;
   }
   return false;

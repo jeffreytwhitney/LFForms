@@ -1,31 +1,31 @@
-
+﻿
 $(document).ready(function () {
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js');
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-  var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
+  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
   $.fn.bootstrapBtn = bootstrapButton;
 
 
-  $('.Submit').click(function (e) { validateForm(e); });
+  $('.Submit').on("click", function (e) { validateForm(e); });
   $('.Submit').hide();
 
   $(document).prop('title', 'Bin Maintenance');
   $('#myElement').removeAttr('style');
   $('#q2').prepend("<fieldset id='Field999' class='radio-checkbox-fieldset filter-checkboxes'><span class='choice'><input name='Field999' id='Field999-0' type='checkbox' value='IncludeInactiveBins'><label class='form-option-label' for='Field999-0'>Include Inactive Bins</label></span></fieldset>");
 
-  $('.edit-bin-isactive-value input').change(function () {
+  $('.edit-bin-isactive-value input').on("change", function () {
     $('.edit-bin-isactive-combo select').val(Number($('.edit-bin-isactive-value input').val()));
   });
-  $('.edit-bin-isactive-combo select').change(function () {
+  $('.edit-bin-isactive-combo select').on("change", function () {
     $('.edit-bin-isactive-value input').val(Number($('.edit-bin-isactive-combo select').val()));
   });
-  $('.existing-bin-name-id input').change(function () {
+  $('.existing-bin-name-id input').on("change", function () {
     validateForm();
   });
-  $('.existing-ticket-id input').change(function () {
+  $('.existing-ticket-id input').on("change", function () {
     if ($('.existing-ticket-id input').val().length > 0) {
       $('.edit-bin-isactive-combo select').removeClass("ui-state-disabled").addClass("ui-state-disabled");
     }
@@ -41,11 +41,11 @@ $(document).ready(function () {
     //If it says "CloseDialogWithRefresh", it destroys the dialog and refreshes the form.
     //I don't refresh if you add a note, for example. But if you do anything that will show up on the page, (adding time, cloning a task, etc)
     //then I do a refresh.
-    if (event.data == "CloseDialog") {
+    if (event.data === "CloseDialog") {
       $("#popupIFrame").dialog("destroy");
       $("#popupIFrame").remove();
     }
-    if (event.data == "CloseDialogWithRefresh") {
+    if (event.data === "CloseDialogWithRefresh") {
       $("#popupIFrame").dialog("destroy");
       $("#popupIFrame").remove();
       refreshPage();
@@ -66,8 +66,8 @@ $(document).ready(function () {
   });
 
   $(document).on('lookupcomplete', function (e) {
-    if ($('.pg input').val() == '999') {
-      $('.pg input').val(1).change();
+    if ($('.pg input').val() === '999') {
+      $('.pg input').val(1).trigger("change");
     }
     generateEditButtons();
     changeNumericToYesNo();
@@ -81,33 +81,33 @@ $(document).ready(function () {
 
 function appendPagination() {
 
-  var current_page = Number($('.pg input').val());
-  if (current_page == 999) { return; }
+  const current_page = Number($('.pg input').val());
+  if (current_page === 999) { return; }
 
-  var row_count = getBinRowCount();
+  const row_count = getBinRowCount();
 
   if (row_count > 0) {
     $('#bin-table-pagination').remove();
-    if ((current_page == 1) && (row_count < 25)) {
-      $('.bin-table table').parent().append("<div id='bin-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>��</a></li><li><a class='page-link prev isDisabled'>�</a></li><li><a class='page-link next isDisabled'>�</a></li></ul></div>");
+    if ((current_page === 1) && (row_count < 25)) {
+      $('.bin-table table').parent().append("<div id='bin-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>ï¿½ï¿½</a></li><li><a class='page-link prev isDisabled'>ï¿½</a></li><li><a class='page-link next isDisabled'>ï¿½</a></li></ul></div>");
       return;
     }
-    if ((current_page == 1) && (row_count == 25)) {
-      $('.bin-table table').parent().append("<div id='bin-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>��</a></li><li><a class='page-link prev isDisabled'>�</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>�</a></li></ul></div>")
+    if ((current_page === 1) && (row_count === 25)) {
+      $('.bin-table table').parent().append("<div id='bin-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>ï¿½ï¿½</a></li><li><a class='page-link prev isDisabled'>ï¿½</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>ï¿½</a></li></ul></div>")
       return;
     }
-    if ((current_page > 1) && (row_count == 25)) {
-      $('.bin-table table').parent().append("<div id='bin-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);'>��</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);'>�</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>�</a></li></ul></div>")
+    if ((current_page > 1) && (row_count === 25)) {
+      $('.bin-table table').parent().append("<div id='bin-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);'>ï¿½ï¿½</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);'>ï¿½</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>ï¿½</a></li></ul></div>")
       return;
     }
     if ((current_page > 1) && (row_count < 25)) {
-      $('.bin-table table').parent().append("<div id='bin-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);'>��</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);'>�</a></li><li><a class='page-link next isDisabled'>�</a></li></ul></div>")
+      $('.bin-table table').parent().append("<div id='bin-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);'>ï¿½ï¿½</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);'>ï¿½</a></li><li><a class='page-link next isDisabled'>ï¿½</a></li></ul></div>")
       return;
     }
   }
   else {
     $('#bin-table-pagination').remove();
-    $('.bin-table table').parent().append("<div id='bin-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled' href='javascript:void(0);'>��</a></li><li><a class='page-link prev isDisabled' href='javascript:void(0);'>�</a></li><li><a class='page-link next isDisabled'>�</a></li></ul></div>")
+    $('.bin-table table').parent().append("<div id='bin-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled' href='javascript:void(0);'>ï¿½ï¿½</a></li><li><a class='page-link prev isDisabled' href='javascript:void(0);'>ï¿½</a></li><li><a class='page-link next isDisabled'>ï¿½</a></li></ul></div>")
     return;
   }
 }
@@ -115,16 +115,16 @@ function appendPagination() {
 
 function callAddBin() {
 
-  $("#Field9-1").prop("checked", true).change();
-  $(".add-bin-id input").val(1).change();
+  $("#Field9-1").prop("checked", true).trigger("change");
+  $(".add-bin-id input").val(1).trigger("change");
   $('.Submit').show();
 
 }
 
 
 function callEditBin(bin_id) {
-  $("#Field9-0").prop("checked", true).change();
-  $(".edit-bin-id input").val(bin_id).change();
+  $("#Field9-0").prop("checked", true).trigger("change");
+  $(".edit-bin-id input").val(bin_id).trigger("change");
   $('.Submit').show();
 }
 
@@ -133,10 +133,10 @@ function callPrevPage() {
   $('.bin-table').hide();
   removeAppendedFields();
   current_page = Number($('.pg input').val());
-  if (current_page == 1) {
+  if (current_page === 1) {
     return;
   }
-  $('.pg input').val(current_page - 1).change();
+  $('.pg input').val(current_page - 1).trigger("change");
 }
 
 
@@ -144,15 +144,15 @@ function callNextPage() {
   $('.bin-table').hide();
   removeAppendedFields();
   current_page = Number($('.pg input').val());
-  $('.pg input').val(current_page + 1).change();
+  $('.pg input').val(current_page + 1).trigger("change");
 }
 
 
 function changeNumericToYesNo() {
 
-  var isactive = $("[id^='Field14']");
+  const isactive = $("[id^='Field14']");
   isactive.each(function (index) {
-    var isactive_value = $(this).val();
+    const isactive_value = $(this).val();
     if ((isactive_value === '1') || (isactive_value === 'Yes')) {
       $(this).val('Yes');
     }
@@ -165,11 +165,11 @@ function changeNumericToYesNo() {
 
 function checkPermissions() {
 
-  var employee_number = $(".user-employee-number input").val();
-  var is_user_active = Number($(".user-isactive input").val());
-  var return_val = true;
+  const employee_number = $(".user-employee-number input").val();
+  const is_user_active = Number($(".user-isactive input").val());
+  let return_val = true;
 
-  if (is_user_active == 0) {
+  if (is_user_active === 0) {
     return_val = false;
   }
 
@@ -183,8 +183,8 @@ function checkPermissions() {
 
 function filterBinTable() {
 
-  var binNameFilterValue = $('#txtFilterBinName').val();
-  var noteFilterVal = $('#txtFilterNote').val();
+  const binNameFilterValue = $('#txtFilterBinName').val();
+  const noteFilterVal = $('#txtFilterNote').val();
 
   if ($("#Field999-0").is(":checked")) {
     $('.incinactive input').val(1);
@@ -197,14 +197,14 @@ function filterBinTable() {
   $('.fnote input').val(noteFilterVal);
 
   $('.bin-table').hide();
-  $('.pg input').val(1).change();
+  $('.pg input').val(1).trigger("change");
 
 }
 
 
 function generateAddButton() {
-  var add_buttons = $(".addbutton");
-  var is_admin = checkPermissions();
+  const add_buttons = $(".addbutton");
+  const is_admin = checkPermissions();
 
   add_buttons.each(function (index) {
     if (is_admin) {
@@ -219,11 +219,11 @@ function generateAddButton() {
 
 
 function generateEditButtons() {
-  var is_admin = checkPermissions();
+  const is_admin = checkPermissions();
   $('.table-button').remove();
-  var edit_buttons = $(".edit-button input[type=text]");
+  const edit_buttons = $(".edit-button input[type=text]");
   edit_buttons.each(function (index) {
-    var btn_value = $(this).val();
+    const btn_value = $(this).val();
     if (is_admin) {
       $(this).parent().append("<input class='table-button' type='button' value='Edit' onclick='callEditBin(" + btn_value + ")' />");
     }
@@ -234,21 +234,21 @@ function generateEditButtons() {
 
 function generateFilterRow() {
 
-  if ($('#filterRow').length == 0) {
+  if ($('#filterRow').length === 0) {
 
-    var filter_row = "<TR id='filterRow'><TH/><TH><input type='text' id='txtFilterBinName'></TH><TH/><TH/><TH><input type='text' id='txtFilterNote'></TH><TH/><TH/><TH/>"
+    const filter_row = "<TR id='filterRow'><TH/><TH><input type='text' id='txtFilterBinName'></TH><TH/><TH/><TH><input type='text' id='txtFilterNote'></TH><TH/><TH/><TH/>"
     $('.bin-table table thead').append(filter_row);
     $("#txtFilterBinName").on("change", function () { filterBinTable(); });
     $("#txtFilterNote").on("change", function () { filterBinTable(); });
 
-    $("#txtFilterBinName").dblclick(function () { $("#txtFilterBinName").val(null).change(); });
-    $("#txtFilterNote").dblclick(function () { $("#txtFilterNote").val(null).change(); });
+    $("#txtFilterBinName").on("dblclick", function () { $("#txtFilterBinName").val(null).trigger("change"); });
+    $("#txtFilterNote").on("dblclick", function () { $("#txtFilterNote").val(null).trigger("change"); });
   }
 }
 
 
 function generateGoBackButtons() {
-  var $goback_buttons = $(".gobackbutton");
+  const $goback_buttons = $(".gobackbutton");
   $goback_buttons.each(function (index) {
     $(this).replaceWith("<input class='return' type='button' value='Go Back' onclick='goBack()' />");
   });
@@ -259,17 +259,17 @@ function generateTicketDetailButtons() {
 
   $('.ticket-details-button').remove();
   
-  var current_statuses = $(".current-status input[type=text]");
-  var ticket_id_buttons = $(".bin-ticket-id-button input[type=text]");
-  var ticket_numbers = $(".ticket-number input[type=text]");
+  const current_statuses = $(".current-status input[type=text]");
+  const ticket_id_buttons = $(".bin-ticket-id-button input[type=text]");
+  const ticket_numbers = $(".ticket-number input[type=text]");
 
   current_statuses.each(function (index) {
-    let ticket_id_field = ticket_id_buttons[index];
-    let ticket_id_value = Number(ticket_id_buttons[index].value);
-    let ticket_number = ticket_numbers[index].value;
+    const ticket_id_field = ticket_id_buttons[index];
+    const ticket_id_value = Number(ticket_id_buttons[index].value);
+    const ticket_number = ticket_numbers[index].value;
 
     if (ticket_number.length > 0) {
-      var btn_html = `<div class='ui-button ticket-details-button' onclick='showDetails(${ticket_id_value})'><span title='Ticket Details' class='ui-button-icon ui-icon ui-icon-document'></span></div>`
+      const btn_html = `<div class='ui-button ticket-details-button' onclick='showDetails(${ticket_id_value})'><span title='Ticket Details' class='ui-button-icon ui-icon ui-icon-document'></span></div>`
       $(this).val(`Checked Out. Ticket Number: ${ticket_number}.`);
       $(ticket_id_field).parent().append(btn_html);
     }
@@ -281,14 +281,14 @@ function generateTicketDetailButtons() {
 
 
 function getBinRowCount() {
-  var row_count = $('.bin-table table tbody tr').length;
+  const row_count = $('.bin-table table tbody tr').length;
   return row_count;
 }
 
 
 function goBack() {
-  $(".edit-bin-id input").val("").change(); //edit
-  $(".add-bin-id input").val("").change(); //add
+  $(".edit-bin-id input").val("").trigger("change"); //edit
+  $(".add-bin-id input").val("").trigger("change"); //add
   $('.Submit').hide();
 }
 
@@ -317,26 +317,26 @@ function popUpIframe(src, title, height, width) {
 
 
 function reApplyFilterValues() {
-  if ($('#filterRow').length == 0) {
+  if ($('#filterRow').length === 0) {
     return;
   }
-  var includeInactive = $('.incinactive input').val();
-  var binNameFilterValue = $('.fbinname input').val();
-  var noteFilterVal = $('.fnote input').val();
+  const includeInactive = $('.incinactive input').val();
+  const binNameFilterValue = $('.fbinname input').val();
+  const noteFilterVal = $('.fnote input').val();
 
-  if (includeInactive == 1) {
-    $('#Field999-0').prop("checked", true).change();
+  if (includeInactive === 1) {
+    $('#Field999-0').prop("checked", true).trigger("change");
   }
   else {
-    $('#Field999-0').prop("checked", false).change();
+    $('#Field999-0').prop("checked", false).trigger("change");
   }
 
 
-  if ((binNameFilterValue != null) && (binNameFilterValue.length > 0)) {
+  if ((binNameFilterValue !== null) && (binNameFilterValue.length > 0)) {
     $('#txtFilterBinName').val(binNameFilterValue);
   }
 
-  if ((noteFilterVal != null) && (noteFilterVal.length > 0)) {
+  if ((noteFilterVal !== null) && (noteFilterVal.length > 0)) {
     $('#txtFilterNote').val(noteFilterVal);
   }
   
@@ -345,11 +345,11 @@ function reApplyFilterValues() {
 
 function refreshPage() {
 
-  var includeInactive = Number($('.incinactive input').val());
-  var binNameFilterValue = $('.fbinname input').val();
-  var noteFilterVal = $('.fnote input').val();
-  var page_number = Number($('.pg input').val());
-  var current_url = window.location.href;
+  const includeInactive = Number($('.incinactive input').val());
+  const binNameFilterValue = $('.fbinname input').val();
+  const noteFilterVal = $('.fnote input').val();
+  const page_number = Number($('.pg input').val());
+  let current_url = window.location.href;
 
   if (current_url.includes('?')) {
     indexOfQuestionMark = current_url.indexOf('?');
@@ -360,15 +360,15 @@ function refreshPage() {
     current_url = current_url + `?pg=${page_number}`;
   }
 
-  if ((binNameFilterValue != null) && (binNameFilterValue.length > 0)) {
+  if ((binNameFilterValue !== null) && (binNameFilterValue.length > 0)) {
     current_url = current_url + `&fbinname=${binNameFilterValue}`;
   }
 
-  if ((noteFilterVal != null) && (noteFilterVal.length > 0)) {
+  if ((noteFilterVal !== null) && (noteFilterVal.length > 0)) {
     current_url = current_url + `&fnote=${noteFilterVal}`;
   }
 
-  if (includeInactive == 1) {
+  if (includeInactive === 1) {
     current_url = current_url + `&incinactive=${includeInactive}`;
   }
 
@@ -385,7 +385,7 @@ function removeAppendedFields() {
 function resetPageNumber() {
   $('.bin-table').hide();
   removeAppendedFields();
-  $('.pg input').val(1).change();
+  $('.pg input').val(1).trigger("change");
 }
 
 
@@ -397,7 +397,7 @@ function resetValidationErrors() {
 
 
 function showDetails(ticket_id) {
-  var widowHeight = $(window).height();
+  let widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
   popUpIframe(`http://rmslf/Forms/RMS-GAGE-TicketDetails?tid=${ticket_id}`, 'Ticket Details', widowHeight, 1200);
 }
@@ -405,11 +405,11 @@ function showDetails(ticket_id) {
 
 function validateForm(e) {
 
-  var isValid = true;
+  let isValid = true;
   resetValidationErrors();
 
-  var existingBinNameID = $('.existing-bin-name-id input').val();
-  var binNameField = $('.add-bin-name input');
+  const existingBinNameID = $('.existing-bin-name-id input').val();
+  const binNameField = $('.add-bin-name input');
 
   if (existingBinNameID.length > 0) {
     binNameField.parent().find('#preexisting-bin-error').remove();
@@ -417,7 +417,7 @@ function validateForm(e) {
     binNameField.addClass('parsley-error');
     isValid = false;
   }
-  if (isValid == false) {
+  if (isValid === false) {
     if (arguments.length === 1) {
       e.preventDefault();
     }
@@ -427,3 +427,4 @@ function validateForm(e) {
   }
 
 }
+

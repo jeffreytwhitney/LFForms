@@ -1,5 +1,5 @@
-/**
-UpdateProgrammingTask.js � Documentation
+﻿/**
+UpdateProgrammingTask.js ï¿½ Documentation
  
   Author:   Jeffrey Whitney
             jtwhitney@machine.com
@@ -121,10 +121,10 @@ Validation rules (`validateForm()`)
 Status change flows (intercepted in `submitForm`)
 - Waiting: `callSetTaskToWaiting()`
   - Requires selecting a waiting reason radio option.
-  - If �Other� (value 3) is chosen, a free-text note is required.
+  - If ï¿½Otherï¿½ (value 3) is chosen, a free-text note is required.
   - Sets `.update-waiting-id` and optional `.submit-note` before submit.
 - Completed: `callCompleteTask()`
-  - Optional completion note; time addition: if �custom� (radio value `X`), amount must be > 1.
+  - Optional completion note; time addition: if ï¿½customï¿½ (radio value `X`), amount must be > 1.
   - Sets `.submit-note` then submits.
 - Cancelled: `callCancelTask()`
   - Cancellation reason is required; sets `.submit-note` before submit.
@@ -132,19 +132,19 @@ Status change flows (intercepted in `submitForm`)
 Dialogs, popups, and printing
 - Popup iframe host: `popupIFrame(src, title, height, width, cancelSubmit)` opens a jQuery UI dialog with an iframe.
   - Used by: Add Note, Pester QE/Assignee, View Notes.
-  - Parent window listens for postMessage �CloseDialog� and �CloseDialogWithRefresh�.
+  - Parent window listens for postMessage ï¿½CloseDialogï¿½ and ï¿½CloseDialogWithRefreshï¿½.
 - Printing:
   - `printTask()` loads `/Forms/MPM-ProgrammingTicketPrint?tid=...` into a hidden iframe via `loadiFrame`.
-  - A postMessage listener for �printme� triggers iframe printing with a slight delay.
+  - A postMessage listener for ï¿½printmeï¿½ triggers iframe printing with a slight delay.
 
 Cross-window messaging
 - Listeners:
-  - �printme� from child print iframe to trigger printing.
-  - �CloseDialog�/�CloseDialogWithRefresh� from note/view popups to close iframe dialog and optionally submit parent form.
+  - ï¿½printmeï¿½ from child print iframe to trigger printing.
+  - ï¿½CloseDialogï¿½/ï¿½CloseDialogWithRefreshï¿½ from note/view popups to close iframe dialog and optionally submit parent form.
 
 User experience notes
 - Title is updated as the task name changes.
-- �Manual Date� checkbox reflects and controls `.man-date input` values (0/1). Tasks with Manual Date set do not have their due dates updated
+- ï¿½Manual Dateï¿½ checkbox reflects and controls `.man-date input` values (0/1). Tasks with Manual Date set do not have their due dates updated
    by the Schedule Refresh process.
  */
 
@@ -179,25 +179,25 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
 
   // Resolve Bootstrap v jQuery UI button name collision.
-  var bootstrapButton = $.fn.button.noConflict();
+  const bootstrapButton = $.fn.button.noConflict();
   $.fn.bootstrapBtn = bootstrapButton;
 
   // Wire submit button and apply jQuery UI look.
   $('.Submit').addClass('ui-button ui-corner-all ui-widget');
-  $('.Submit').click(function (e) { submitForm(e); });
+  $('.Submit').on("click", function (e) { submitForm(e); });
 
   // Normalize and copy the network username (DOMAIN\user -> USER) if present.
-  var lfUserName = $('.lf-user-name input').val();
-  if (lfUserName != '') {
+  const lfUserName = $('.lf-user-name input').val();
+  if (lfUserName !== '') {
     let networkUserName = $('.lf-user-name input').val().toUpperCase();
     networkUserName = networkUserName.substr(networkUserName.lastIndexOf('\\') + 1);
-    $('.network-user-name input').val(networkUserName).change();
+    $('.network-user-name input').val(networkUserName).trigger("change");
   }
 
   // Cross-window listener to trigger printing from child iframe.
-  var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
-  var printEvent = window[eventMethod];
-  var messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
+  const eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
+  const printEvent = window[eventMethod];
+  const messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
   printEvent(messageEvent, function (e) {
 
     if (e.data === "printme" || e.message === "printme") {
@@ -210,7 +210,7 @@ $(document).ready(function () {
 
   // Keep page title in sync with task name.
   $(document).on('change', '.task-name input', function (e) {
-    var task_name = $(this).val();
+    const task_name = $(this).val();
     $(document).prop('title', `Edit Task ${task_name}`);
   });
 
@@ -219,7 +219,7 @@ $(document).ready(function () {
 
   // Quick view of long project description in a dialog on double-click.
   $(document).on('dblclick', '.project-description textarea', function (e) {
-    var ticketDetail = $(this).val();
+    const ticketDetail = $(this).val();
 
     $.dialog({
       escapeKey: true,
@@ -233,15 +233,15 @@ $(document).ready(function () {
   });
 
   // If server instructs close, hide form and request parent to refresh.
-  if ($('.closeme input').val() == 1) {
+  if ($('.closeme input').val() === 1) {
     $('.cf-formwrap').hide();
     window.parent.postMessage('CloseDialogWithRefresh', '*');
   }
 
   // Time addition radio group -> writes to hidden ".time-to-add".
-  $('.add-time fieldset').change(function () {
-    var time_to_add = $('.add-time fieldset input[type="radio"]:checked').val();
-    if (time_to_add != 'X') {
+  $('.add-time fieldset').on("change", function () {
+    const time_to_add = $('.add-time fieldset input[type="radio"]:checked').val();
+    if (time_to_add !== 'X') {
       $('.time-to-add input').val(time_to_add);
     }
     else {
@@ -250,20 +250,20 @@ $(document).ready(function () {
   });
 
   // Manual time amount controls ".time-to-add".
-  $('.amount-of-time input').change(function () {
+  $('.amount-of-time input').on("change", function () {
     $('.time-to-add input').val($('.amount-of-time input').val());
   });
 
   // Popup iframe lifecycle control via postMessage.
   window.onmessage = function (event) {
-    if (event.data == "CloseDialog") {
+    if (event.data === "CloseDialog") {
       $("#popupIFrame").dialog("destroy");
       $("#popupIFrame").remove();
     }
-    if (event.data == "CloseDialogWithRefresh") {
+    if (event.data === "CloseDialogWithRefresh") {
       $("#popupIFrame").dialog("destroy");
       $("#popupIFrame").remove();
-      $("#form1").submit();
+      $("#form1").trigger("submit");
     }
   };
 
@@ -293,14 +293,14 @@ $(document).ready(function () {
 
   // Form fully initialized (custom host event).
   $(document).on("onloadlookupfinished", function (e) {
-    let task_name = $('.task-name input').val();
+    const task_name = $('.task-name input').val();
     $('.closeme input').val(1);
     $('#q0').append("<div class='hidden-text' id='popUpDiv'></div>");
     $('.btn-wrapper').append("<div id='add-note' class='ui-button ui-corner-all ui-widget' onclick='callAddNote()'><span class='ui-button-icon ui-icon ui-icon-document'></span>Add Note</div>");
     $('.btn-wrapper').append("<div id='view-notes' class='ui-button ui-corner-all ui-widget' onclick='callViewNotes()'><span class='ui-button-icon ui-icon ui-icon-newwin'></span>View Notes</div>");
     $('.network-user-name input').trigger("change");
-    var taskID = $('.tid input').val();
-    if ((taskID != '') && (taskID != '0')) {
+    const taskID = $('.tid input').val();
+    if ((taskID !== '') && (taskID !== '0')) {
       $('#task-history').append(`<iframe id='task-history-iframe' name='task-history-iframe' src='http://rmslf/Forms/MPM-ProgamTaskHistory?tid=${taskID}' height='500' width='100%'/>`);
     }
     generateFilePathLinks();
@@ -314,8 +314,8 @@ $(document).ready(function () {
  * - Opens jQuery UI dialog with an iframe via popupIFrame.
  */
 function callAddNote() {
-  var task_id = $('.tid input').val();
-  var task_name = $('.task-name input').val();
+  const task_id = $('.tid input').val();
+  const task_name = $('.task-name input').val();
   popupIFrame(`http://rmslf/Forms/MPMAddNote?TaskID=${task_id}&nt=1`, `Add Note for task '${task_name}'`, 400, 650, false);
 }
 
@@ -328,7 +328,7 @@ function callAddNote() {
  * - Cancellation note must be non-empty.
  */
 function callCancelTask() {
-  var noteField = $('.section-cancellation-note');
+  const noteField = $('.section-cancellation-note');
   $(noteField).dialog({
     title: 'Add Cancellation Reason (Required)',
     modal: true,
@@ -339,13 +339,13 @@ function callCancelTask() {
     buttons: {
       'OK': function () {
 
-        if ($('.cancellation-note textarea').val().trim() == '') {
+        if ($('.cancellation-note textarea').val().trim() === '') {
           $.alert({ title: 'Must supply cancellation reason!', content: 'Sorry, you need to provide a reason for cancelling this ticket.' });
           return;
         }
         $('.submit-note input').val($('.cancellation-note textarea').val());
         $(this).dialog('close');
-        $('#form1').submit();
+        $('#form1').trigger("submit");
       }
     }
   });
@@ -361,7 +361,7 @@ function callCancelTask() {
  * - On OK: writes note to '.submit-note input' and submits the form.
  */
 function callCompleteTask() {
-  var noteField = $('.section-completion-time-note');
+  const noteField = $('.section-completion-time-note');
   $(noteField).dialog({
     title: 'Add Completion Note (Optional)',
     modal: true,
@@ -371,9 +371,9 @@ function callCompleteTask() {
     resizable: false,
     buttons: {
       'OK': function () {
-        let selectedTimeAmount = $('.add-time .radio-checkbox-fieldset input[type="radio"]:checked').val();
-        let timeAmount = Number($('.amount-of-time input').val());
-        if (selectedTimeAmount == 'X') {
+        const selectedTimeAmount = $('.add-time .radio-checkbox-fieldset input[type="radio"]:checked').val();
+        const timeAmount = Number($('.amount-of-time input').val());
+        if (selectedTimeAmount === 'X') {
           if (timeAmount <= 1) {
             $.alert({ title: 'Must supply amount of time to add!', content: 'Sorry, you need to provide a valid number of hours. (1 hour or greater).' });
             return;
@@ -381,7 +381,7 @@ function callCompleteTask() {
         }
         $('.submit-note input').val($('.completion-note textarea').val());
         $(this).dialog('close');
-        $('#form1').submit();
+        $('#form1').trigger("submit");
       }
     }
   });
@@ -392,7 +392,7 @@ function callCompleteTask() {
 
 function callOpenOneFactory() {
   
-  var task_name = $('.task-name input').val();
+  const task_name = $('.task-name input').val();
   window.open(`https://val.1factory.com/plans/list?f3=0&search=${task_name}`, "_blank");
 }
 
@@ -403,9 +403,9 @@ function callOpenOneFactory() {
  * - Opens jQuery UI dialog with an iframe via popupIFrame.
  */
 function callPesterAssignee() {
-  var task_id = $('.tid input').val();
-  var task_name = $('.task-name input').val();
-  var assignee_name = $('.assigned-to select').val();
+  const task_id = $('.tid input').val();
+  const task_name = $('.task-name input').val();
+  const assignee_name = $('.assigned-to select').val();
   popupIFrame(`http://rmslf/Forms/MPMAddNote?TaskID=${task_id}&nt=3`, `Pester '${assignee_name}' regarding task '${task_name}'`, 400, 650, false);
 }
 
@@ -416,9 +416,9 @@ function callPesterAssignee() {
  * - Opens jQuery UI dialog with an iframe via popupIFrame.
  */
 function callPesterQE() {
-  var task_id = $('.tid input').val();
-  var task_name = $('.task-name input').val();
-  var qe_name = $('.quality-engineer-name input').val();
+  const task_id = $('.tid input').val();
+  const task_name = $('.task-name input').val();
+  const qe_name = $('.quality-engineer-name input').val();
   popupIFrame(`http://rmslf/Forms/MPMAddNote?TaskID=${task_id}&nt=2`, `Pester '${qe_name}' regarding task '${task_name}'`, 400, 650, false);
 }
 
@@ -430,7 +430,7 @@ function callPesterQE() {
  * - Submits the form on success.
  */
 function callSetTaskToWaiting() {
-  var noteField = $('.section-waiting-note');
+  const noteField = $('.section-waiting-note');
   $(noteField).dialog({
     title: 'Add What you are waiting on (Required)',
     modal: true,
@@ -440,25 +440,25 @@ function callSetTaskToWaiting() {
     resizable: false,
     buttons: {
       'OK': function () {
-        var selectedLength = $('.waiting-reason .radio-checkbox-fieldset input[type="radio"]:checked').length;
+        const selectedLength = $('.waiting-reason .radio-checkbox-fieldset input[type="radio"]:checked').length;
 
-        if (selectedLength == 0) {
+        if (selectedLength === 0) {
           $.alert({ title: 'Must select waiting reason!', content: 'Sorry, you need to select what you are waiting on.' });
           return;
         }
 
-        let selectedWaitingValue = Number($('.waiting-reason .radio-checkbox-fieldset input[type="radio"]:checked').val());
-        if (selectedWaitingValue == 3) {
-          if ($('.waiting-note textarea').val().trim() == '') {
+        const selectedWaitingValue = Number($('.waiting-reason .radio-checkbox-fieldset input[type="radio"]:checked').val());
+        if (selectedWaitingValue === 3) {
+          if ($('.waiting-note textarea').val().trim() === '') {
             $.alert({ title: 'Must supply waiting reason!', content: 'Sorry, you need to provide what you are waiting on.' });
             return;
           }
           $('.submit-note input').val($('.waiting-note textarea').val());
         }
-        $('.update-waiting-id input').val(selectedWaitingValue).change();
+        $('.update-waiting-id input').val(selectedWaitingValue).trigger("change");
         $(this).dialog('close');
 
-        $('#form1').submit();
+        $('#form1').trigger("submit");
       }
     }
   });
@@ -473,8 +473,8 @@ function callSetTaskToWaiting() {
  * - Opens a jquery-confirm modal with a prefilled input containing the path.
  */
 function callShowScheduleFilePath(index) {
-  var schedule_name = $('.schedule-col input[type="text"]').eq(index).val();
-  var file_path = $('.file-path-col input[type="text"]').eq(index).val();
+  const schedule_name = $('.schedule-col input[type="text"]').eq(index).val();
+  const file_path = $('.file-path-col input[type="text"]').eq(index).val();
 
 
   $.confirm({
@@ -502,8 +502,8 @@ function callShowScheduleFilePath(index) {
  * - Opens jQuery UI dialog with an iframe via popupIFrame.
  */
 function callViewNotes() {
-  var task_id = $('.tid input').val();
-  var qe_name = $('.quality-engineer-name input').val();
+  const task_id = $('.tid input').val();
+  const qe_name = $('.quality-engineer-name input').val();
   popupIFrame(`http://rmslf/Forms/MPM-ViewTaskNotes?tid=${task_id}`, `Notes`, 800, 1000, false);
 }
 
@@ -516,7 +516,7 @@ function callViewNotes() {
  * - Updates the underlying hidden input value.
  */
 function changeManualDate() {
-  var manual_date_check = $('#manual-date-chk');
+  const manual_date_check = $('#manual-date-chk');
   if ($(manual_date_check).is(":checked")) {
     $('.man-date input[type="text"]').val(1);
   }
@@ -532,15 +532,15 @@ function changeManualDate() {
  * @returns {boolean} True if any different non-zero existing task id is found; otherwise false.
  */
 function checkExistingTaskIDs() {
-  var existing_task_ids = $('.existing-task-id select option');
-  var task_id = $('.tid input').val();
-  var returnVal = false;
+  const existing_task_ids = $('.existing-task-id select option');
+  const task_id = $('.tid input').val();
+  let returnVal = false;
   existing_task_ids.each(function (index) {
     option_value = Number($(this).val());
-    if (option_value == NaN) {
+    if (option_value === NaN) {
       return returnVal;
     }
-    if ((option_value != 0) && (option_value != task_id)) {
+    if ((option_value !== 0) && (option_value !== task_id)) {
       returnVal = true;
     }
   });
@@ -557,16 +557,16 @@ function checkExistingTaskIDs() {
  */
 function checkPermissions() {
 
-  var user_type_id = Number($(".user-type-id input").val());
-  var user_department_id = Number($(".user-department-id input").val());
-  var ticket_department_id = Number($(".ticket-department-id input").val());
+  const user_type_id = Number($(".user-type-id input").val());
+  const user_department_id = Number($(".user-department-id input").val());
+  const ticket_department_id = Number($(".ticket-department-id input").val());
 
-  if (user_type_id == 1) {
+  if (user_type_id === 1) {
     return true;
   }
 
-  if (user_type_id == 3) {
-    if (user_department_id == ticket_department_id) {
+  if (user_type_id === 3) {
+    if (user_department_id === ticket_department_id) {
       return true;
     }
   }
@@ -580,7 +580,7 @@ function checkPermissions() {
  * @returns {boolean} True if '.user-type-id' is 1; otherwise false.
  */
 function isMetrologyUser() {
-  if ($('.user-type-id input').val() == 1) {
+  if ($('.user-type-id input').val() === 1) {
     return true;
   }
   return false;
@@ -596,15 +596,15 @@ function isMetrologyUser() {
  * - Appends anchor elements next to schedule names and a hidden div to hold path values.
  */
 function generateFilePathLinks() {
-  var scheduleNames = $('.schedule-col input[type="text"]');
-  var filePaths = $('.file-path-col input[type="text"]');
+  const scheduleNames = $('.schedule-col input[type="text"]');
+  const filePaths = $('.file-path-col input[type="text"]');
 
   scheduleNames.each(function (index) {
 
-    let file_path = $(filePaths[index]);
-    let file_path_val = $(filePaths[index]).val();
-    let schedule_name = $(scheduleNames[index]).val();
-    let schedule_link = $("<a>", { text: schedule_name, class: 'schedule-link', href: `javascript:void(0);`, onclick: `callShowScheduleFilePath(${index})` });
+    const file_path = $(filePaths[index]);
+    const file_path_val = $(filePaths[index]).val();
+    const schedule_name = $(scheduleNames[index]).val();
+    const schedule_link = $("<a>", { text: schedule_name, class: 'schedule-link', href: `javascript:void(0);`, onclick: `callShowScheduleFilePath(${index})` });
 
     $(this).parent().append(schedule_link);
     $(file_path).parent().append(`<div id="filepath${index}" class="filepath${index}" value="${file_path_val}"/></div>`)
@@ -622,14 +622,14 @@ function generateFilePathLinks() {
 function generateManualCheckBox() {
   if ($('.man-date input').val().length) {
     if (!$('#manual-date-chk').length) {
-      var manual_date_field = $('.man-date input');
-      var manual_date_val = $('.man-date input').val();
-      if (manual_date_val == '1') {
-        var manual_chk_html = `<div id="man-date-div"><input id='manual-date-chk' type='checkbox' onchange='changeManualDate()' checked/></div>`;
+      const manual_date_field = $('.man-date input');
+      const manual_date_val = $('.man-date input').val();
+      if (manual_date_val === '1') {
+        const manual_chk_html = `<div id="man-date-div"><input id='manual-date-chk' type='checkbox' onchange='changeManualDate()' checked/></div>`;
         manual_date_field.parent().append(manual_chk_html);
       }
       else {
-        var manual_chk_html = `<div id="man-date-div"><input id='manual-date-chk' type='checkbox' onchange='changeManualDate()' /></div>`;
+        const manual_chk_html = `<div id="man-date-div"><input id='manual-date-chk' type='checkbox' onchange='changeManualDate()' /></div>`;
         manual_date_field.parent().append(manual_chk_html);
       }
     }
@@ -643,15 +643,15 @@ function generateManualCheckBox() {
  */
 function generateTotalTrackedHoursMessage() {
   $('#existing-time-msg').remove();
-  var totalHours = parseFloat($('.tracked-hours input').val());
-  var totalHoursMessage = "";
+  let totalHours = parseFloat($('.tracked-hours input').val());
+  let totalHoursMessage = "";
   if (isNaN(totalHours)) {
     totalHours = 0;
   }
-  if (totalHours == 0) {
+  if (totalHours === 0) {
     totalHoursMessage = "<span id='existing-time-msg'>You currently have no hours logged for this task.</span>";
   }
-  else if (totalHours == 1) {
+  else if (totalHours === 1) {
     totalHoursMessage = "<span id='existing-time-msg'>You currently have 1 hour logged for this task.</span>";
   }
   else {
@@ -762,8 +762,8 @@ function popupIFrame(src, title, height, width, cancelSubmit) {
  */
 function printTask() {
 
-  var taskID = $('.tid input').val();
-  var report_url = `http://rmslf/Forms/MPM-ProgrammingTaskPrint?tid=${taskID}`
+  const taskID = $('.tid input').val();
+  const report_url = `http://rmslf/Forms/MPM-ProgrammingTaskPrint?tid=${taskID}`
   loadiFrame(report_url);
 }
 
@@ -774,10 +774,10 @@ function printTask() {
  * - Removes error lists and 'parsley-error' classes from fields.
  */
 function resetErrorFields() {
-  var task_name = $('.task-name input');
-  var task_status = $('.status-combo select');
-  var task_operation = $('.op-number input');
-  var assignee = $('.assigned-to select');
+  const task_name = $('.task-name input');
+  const task_status = $('.status-combo select');
+  const task_operation = $('.op-number input');
+  const assignee = $('.assigned-to select');
 
   $('#operation-error').remove();
   $('#taskname-error').remove();
@@ -828,7 +828,7 @@ function resetEnabledState() {
 function setFormFieldEnableState() {
   resetEnabledState();
 
-  if ($('.tid input').val().length == 0) {
+  if ($('.tid input').val().length === 0) {
     lockFormNoPermissions();
     return;
   }
@@ -838,8 +838,8 @@ function setFormFieldEnableState() {
     return;
   }
 
-  var statusID = Number($('.sid input').val());
-  if ((statusID == status_Completed) || (statusID == status_Cancelled)) {
+  const statusID = Number($('.sid input').val());
+  if ((statusID === status_Completed) || (statusID === status_Cancelled)) {
     lockFormCompleteCancelled();
   }
 
@@ -848,10 +848,10 @@ function setFormFieldEnableState() {
     $('.assigned-to select').addClass('ui-state-disabled');
   }
   else {
-    if ($('.aid input').val() == '') {
+    if ($('.aid input').val() === '') {
       $('#pester-assignee').addClass("ui-state-disabled");
     }
-    if ($('.aid input').val() != $('.update-aid input').val()) {
+    if ($('.aid input').val() !== $('.update-aid input').val()) {
       $('#pester-assignee').addClass("ui-state-disabled");
     }
   }
@@ -865,10 +865,10 @@ function setFormFieldEnableState() {
  * - Syncs selects for assignee/status from name fields if needed.
  * - Renders manual date checkbox UI.
  * Side effects:
- * - May trigger '.site-id input' change, and update select values with .change() to fire downstream handlers.
+ * - May trigger '.site-id input' change, and update select values with .trigger("change") to fire downstream handlers.
  */
 function setFormFields() {
-  if ((Number($('.site-id input').val()) != 0) && ($('.metrology-email input').val() == '')) {
+  if ((Number($('.site-id input').val()) !== 0) && ($('.metrology-email input').val() === '')) {
     $('.site-id input').trigger("change");
   }
 
@@ -876,11 +876,11 @@ function setFormFields() {
   $('.note-date input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
   $('.date-started input').each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
 
-  if (($('.assignee-name input').val() != '') && ($('.assigned-to select').val() == '')) {
-    $('.assigned-to select').val($('.assignee-name input').val()).change();
+  if (($('.assignee-name input').val() !== '') && ($('.assigned-to select').val() === '')) {
+    $('.assigned-to select').val($('.assignee-name input').val()).trigger("change");
   }
-  if (($('.status-name input').val() != '') && ($('.status-combo select').val() == '')) {
-    $('.status-combo select').val($('.status-name input').val()).change();
+  if (($('.status-name input').val() !== '') && ($('.status-combo select').val() === '')) {
+    $('.status-combo select').val($('.status-name input').val()).trigger("change");
   }
   generateManualCheckBox();
 }
@@ -897,14 +897,14 @@ function setFormFields() {
  */
 function submitForm(e) {
 
-  var form_is_valid = validateForm();
-  if (form_is_valid == false) {
+  const form_is_valid = validateForm();
+  if (form_is_valid === false) {
     e.preventDefault();
     return;
   }
 
-  var statusID = Number($('.sid input').val());
-  var newStatusID = Number($('.update-sid input').val());
+  const statusID = Number($('.sid input').val());
+  const newStatusID = Number($('.update-sid input').val());
 
   if (!$('.aid input').val().length) {
     $('.aid input').val(0);
@@ -914,21 +914,21 @@ function submitForm(e) {
   }
   $('#man-date-div').remove();
 
-  if (statusID != newStatusID) {
+  if (statusID !== newStatusID) {
 
-    if (newStatusID == status_Waiting) {
+    if (newStatusID === status_Waiting) {
       e.preventDefault();
       callSetTaskToWaiting();
       return;
     }
 
-    if (newStatusID == status_Completed) {
+    if (newStatusID === status_Completed) {
       e.preventDefault();
       callCompleteTask();
       return;
     }
 
-    if (newStatusID == status_Cancelled) {
+    if (newStatusID === status_Cancelled) {
 
       e.preventDefault();
       callCancelTask();
@@ -951,40 +951,40 @@ function submitForm(e) {
  * - Adds error messages and 'parsley-error' classes to offending fields.
  */
 function validateForm() {
-  var task_name_field = $('.task-name input');
-  var status_field = $('.status-combo select');
-  var opnumber_field = $('.op-number input');
-  var assignee_field = $('.assigned-to select');
-  var manf_rev = $('.manf-rev input');
-  var due_date = $('.due-date input');
-  var schedule_duedate = $('.sched-due-date input');
+  const task_name_field = $('.task-name input');
+  const status_field = $('.status-combo select');
+  const opnumber_field = $('.op-number input');
+  const assignee_field = $('.assigned-to select');
+  const manf_rev = $('.manf-rev input');
+  const due_date = $('.due-date input');
+  const schedule_duedate = $('.sched-due-date input');
 
-  var new_status_val = Number($('.update-sid input').val());
-  var existing_assignee_val = $('.aid input').val();
-  var new_assignee_val = Number($('.update-aid input').val());
-  var tracked_hours_val = $('.tracked-hours input').val();
+  const new_status_val = Number($('.update-sid input').val());
+  const existing_assignee_val = $('.aid input').val();
+  const new_assignee_val = Number($('.update-aid input').val());
+  const tracked_hours_val = $('.tracked-hours input').val();
 
-  var return_val = true;
+  let return_val = true;
 
   resetErrorFields();
 
-  if (task_name_field.val() == "") {
+  if (task_name_field.val() === "") {
     $('.task-name input').trigger("blur");
     return_val = false;
   }
-  if (opnumber_field.val() == "") {
+  if (opnumber_field.val() === "") {
     $('.op-number input').trigger("blur");
     return_val = false;
   }
-  if (manf_rev.val() == "") {
+  if (manf_rev.val() === "") {
     $('.manf-rev input').trigger("blur");
     return_val = false;
   }
-  if (due_date.val() == "") {
+  if (due_date.val() === "") {
     $('.due-date input').trigger("blur");
     return_val = false;
   }
-  if (schedule_duedate.val() == "") {
+  if (schedule_duedate.val() === "") {
     $('.sched-due-date input').trigger("blur");
     return_val = false;
   }
@@ -997,19 +997,19 @@ function validateForm() {
     return_val = false;
   }
 
-  if ((new_status_val == status_NotStarted) && (tracked_hours_val > 0)) {
+  if ((new_status_val === status_NotStarted) && (tracked_hours_val > 0)) {
     status_field.addClass('parsley-error');
     status_field.parent().append("<ul id='status-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>You can't set a task to 'Not Started' if there are hours assigned to it.</li></ul>");
     return_val = false;
   }
 
-  if (((existing_assignee_val != null) && (existing_assignee_val.length > 0)) && ((new_assignee_val == null) || (new_assignee_val.length == 0))) {
+  if (((existing_assignee_val !== null) && (existing_assignee_val.length > 0)) && ((new_assignee_val === null) || (new_assignee_val.length === 0))) {
     assignee_field.addClass('parsley-error');
     assignee_field.parent().append("<ul id='status-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>You can't unassign a task once it's been assigned to someone.</li></ul>");
     return_val = false;
   }
 
-  if (((new_status_val != status_NotStarted) && (new_status_val != status_Cancelled) && (new_status_val != status_NotSched)) && ((new_assignee_val == null) || (new_assignee_val == 0))) {
+  if (((new_status_val !== status_NotStarted) && (new_status_val !== status_Cancelled) && (new_status_val !== status_NotSched)) && ((new_assignee_val === null) || (new_assignee_val === 0))) {
     assignee_field.addClass('parsley-error');
     assignee_field.parent().append("<ul id='status-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>You can't have a task status other than 'Not Started' if it's not assigned to someone.</li></ul>");
     return_val = false;
@@ -1018,3 +1018,4 @@ function validateForm() {
   return return_val;
 
 }
+

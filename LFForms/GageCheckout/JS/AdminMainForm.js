@@ -15,9 +15,9 @@ $(document).ready(function () {
 
 function checkPermissions() {
 
-  var employee_number = $(".user-id input").val();
-  var is_active_user = Number($(".user-isactive input").val());
-  var return_val = true;
+  const employee_number = $(".user-id input").val();
+  const is_active_user = Number($(".user-isactive input").val());
+  let return_val = true;
 
 
   if (typeof is_active_user === 'undefined') {
@@ -29,11 +29,11 @@ function checkPermissions() {
   }
 
 
-  if ((is_active_user == 0) || (is_active_user == null)) {
+  if ((is_active_user === 0) || (is_active_user === null)) {
     return_val = false;
   }
 
-  if ((employee_number == '') || (employee_number == null)) {
+  if ((employee_number === '') || (employee_number === null)) {
     return_val = false;
   }
 
@@ -51,9 +51,9 @@ function executeIFrameUpdate() {
 
 function generateAppliationLinks() {
 
-  var hasPermissions = checkPermissions();
-  var isAdmin = isUserAdmin();
-  var mainWindowHTML = '<div class="row"><div class="column"><ul>';
+  const hasPermissions = checkPermissions();
+  const isAdmin = isUserAdmin();
+  let mainWindowHTML = '<div class="row"><div class="column"><ul>';
 
   if (hasPermissions) {
     mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/GageTicketAdministration" title="Gage Administration" target="_self">Tickets</a></li>'
@@ -107,14 +107,14 @@ function generateAppliationLinks() {
 }
 
 function isUserAdmin() {
-  var return_val = true;
-  var is_admin_user = Number($(".user-isadmin input").val());
+  let return_val = true;
+  const is_admin_user = Number($(".user-isadmin input").val());
 
   if (typeof is_admin_user === 'undefined') {
     return false;
   }
 
-  if ((is_admin_user == 0) || (is_admin_user == null)) {
+  if ((is_admin_user === 0) || (is_admin_user === null)) {
     return_val = false;
   }
   return return_val;

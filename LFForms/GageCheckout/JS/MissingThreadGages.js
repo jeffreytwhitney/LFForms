@@ -14,17 +14,17 @@ $(document).ready(
 
     $(document).on("lookupcomplete", function (e) {
       $('.thread-nominal').remove();
-      var missingThreadDetailId = $('.missing-thread-detail-id input').val();
+      const missingThreadDetailId = $('.missing-thread-detail-id input').val();
       
       if (missingThreadDetailId.length > 0) {
-        let threadTypeID = $('.thread-type-id input').val();
-        let goDiameterField = $('.go-pitch-diameter input[type="text"]');
-        let noGoDiameterField = $('.nogo-pitch-diameter input[type="text"]');
-        let majorDiameterField = $('.major-pitch-diameter input[type="text"]');
+        const threadTypeID = $('.thread-type-id input').val();
+        const goDiameterField = $('.go-pitch-diameter input[type="text"]');
+        const noGoDiameterField = $('.nogo-pitch-diameter input[type="text"]');
+        const majorDiameterField = $('.major-pitch-diameter input[type="text"]');
 
-        let nominalGoDiameterVal = $('.nominal-go-pitch-diameter input[type="text"]').val();
-        let nominalNoGoDiameterVal = $('.nominal-nogo-pitch-diameter input[type="text"]').val();
-        let nominalMajorDiameterVal = $('.nominal-major-diameter input[type="text"]').val();
+        const nominalGoDiameterVal = $('.nominal-go-pitch-diameter input[type="text"]').val();
+        const nominalNoGoDiameterVal = $('.nominal-nogo-pitch-diameter input[type="text"]').val();
+        const nominalMajorDiameterVal = $('.nominal-major-diameter input[type="text"]').val();
 
         goDiameterField.parent().append(`<div class="thread-nominal">Nominal: ${nominalGoDiameterVal}</div>`);
         noGoDiameterField.parent().append(`<div class="thread-nominal">Nominal: ${nominalNoGoDiameterVal}</div>`);
@@ -41,9 +41,9 @@ $(document).ready(
 
 
 function generateRecallButtons() {
-  var $recall_buttons = $(".recall-button input[type=text]");
+  const $recall_buttons = $(".recall-button input[type=text]");
   $recall_buttons.each(function (index) {
-    var $btn_value = $(this).val();
+    const $btn_value = $(this).val();
     $(this).parent().append("<input class='return' type='button' value='Recall' onclick='callRecall(" + $btn_value + ")' />");
   });
 };
@@ -51,9 +51,9 @@ function generateRecallButtons() {
 
 function checkPermissions() {
 
-  var employee_number = $(".user-employee-number input").val();
-  var is_active_user = $(".user-isactive input").val();
-  var return_val = true;
+  const employee_number = $(".user-employee-number input").val();
+  const is_active_user = $(".user-isactive input").val();
+  let return_val = true;
 
   if (is_active_user !== '1') {
     return_val = false;
@@ -69,9 +69,9 @@ function checkPermissions() {
 
 
 function callRecall(ticket_id) {
-  var has_permissions = checkPermissions();
+  const has_permissions = checkPermissions();
   if (has_permissions) {
-    $(".missing-thread-detail-id input").val(ticket_id).change();
+    $(".missing-thread-detail-id input").val(ticket_id).trigger("change");
     $('.Submit').show();
   }
   else {
@@ -81,7 +81,7 @@ function callRecall(ticket_id) {
 
 
 function generateGoBackButtons() {
-  var $goback_buttons = $(".gobackbutton");
+  const $goback_buttons = $(".gobackbutton");
   $goback_buttons.each(function (index) {
     $(this).replaceWith("<input class='return' type='button' value='Go Back' onclick='goBack()' />");
   });
@@ -89,6 +89,6 @@ function generateGoBackButtons() {
 
 
 function goBack() {
-  $(".missing-thread-detail-id input").val("").change();
+  $(".missing-thread-detail-id input").val("").trigger("change");
   $('.Submit').hide();
 }

@@ -114,7 +114,7 @@
  - .existing-task-ids select option   Options representing conflicting existing tasks.
  - .user-type-id input                User type (1=Metrology, 3=Dept user).
  - .user-department-id input          Current user department.
- - .department-id input               Task’s department.
+ - .department-id input               Taskï¿½s department.
  - .department-email-address input    Department email (populated on lookup).
  - .new-assignee-id input             Optional new assignee; defaults to 0 on submit.
  - #error-message                     Container for permission error text.
@@ -134,13 +134,13 @@ $(document).ready(function () {
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-  var bootstrapButton = $.fn.button.noConflict();
+  const bootstrapButton = $.fn.button.noConflict();
   $.fn.bootstrapBtn = bootstrapButton;
   $('.Submit').addClass('ui-button ui-corner-all ui-widget');
-  $('.Submit').click(function (e) { submitForm(e); });
-  $('.network-user-name input').val($('.lf-user-name input').val().toUpperCase().substr($('.lf-user-name input').val().lastIndexOf('\\') + 1)).change();
+  $('.Submit').on("click", function (e) { submitForm(e); });
+  $('.network-user-name input').val($('.lf-user-name input').val().toUpperCase().substr($('.lf-user-name input').val().lastIndexOf('\\') + 1)).trigger("change");
 
-  if ($('.closeme input').val() == 1) {
+  if ($('.closeme input').val() === 1) {
     window.parent.postMessage('CloseDialogWithRefresh', '*');
   }
 
@@ -153,27 +153,27 @@ $(document).ready(function () {
 
   // Initialize new task fields from current values after lookups
   $(document).on("onloadlookupfinished", function (e) {
-    if ($('.tid input').val() == 0) {
+    if ($('.tid input').val() === 0) {
       $('.Submit').addClass("ui-state-disabled");
       return;
     } 
 
-    $('.new-task-type select').val($('.current-task-type-name input').val()).change();
-    $('.new-op input').val($('.current-op input').val()).change();
-    $('.new-task-name input').val($('.current-task-name input').val()).change();
+    $('.new-task-type select').val($('.current-task-type-name input').val()).trigger("change");
+    $('.new-op input').val($('.current-op input').val()).trigger("change");
+    $('.new-task-name input').val($('.current-task-name input').val()).trigger("change");
     
 
   });
 
   // Fill missing dependent values when available
   $(document).on('lookupcomplete', function (e) {
-    if (Number($('.user-id input').val()) == 0) {
+    if (Number($('.user-id input').val()) === 0) {
       $('.network-user-name input').trigger("change");
     }
-    if (Number($('.pid input').val()) == 0) {
+    if (Number($('.pid input').val()) === 0) {
       $('.tid input').trigger("change");
     }
-    if ((Number($('.department-id input').val()) != 0) && ($('.department-email-address input').val() == '')){
+    if ((Number($('.department-id input').val()) !== 0) && ($('.department-email-address input').val() === '')){
       $('.department-id input').trigger("change");
     }
   });
@@ -188,14 +188,14 @@ $(document).ready(function () {
  * @returns {boolean} True if at least one nonzero ID exists; otherwise false.
  */
 function checkExistingTaskIDs() {
-  var existing_task_ids = $('.existing-task-ids select option');
-  var returnVal = false;
+  const existing_task_ids = $('.existing-task-ids select option');
+  let returnVal = false;
   existing_task_ids.each(function (index) {
     option_value = Number($(this).val());
-    if (option_value == NaN) {
+    if (option_value === NaN) {
       return;
     }
-    if (option_value != 0) {
+    if (option_value !== 0) {
       returnVal = true;
     }
   });
@@ -208,7 +208,7 @@ function checkExistingTaskIDs() {
  * @returns {boolean}
  */
 function isMetrologyUser() {
-  if ($('.user-type-id input').val() == 1) {
+  if ($('.user-type-id input').val() === 1) {
     return true;
   }
   return false;
@@ -221,8 +221,8 @@ function isMetrologyUser() {
  */
 function setFormEnabledState() {
 
-  if ($('.user-type-id input').val() == 3) {
-    if ($('.user-department-id input').val() != $('.department-id input').val()) {
+  if ($('.user-type-id input').val() === 3) {
+    if ($('.user-department-id input').val() !== $('.department-id input').val()) {
       $('.Submit').addClass("ui-state-disabled");
       $('.new-task-type select').addClass("ui-state-disabled");
       $('.new-op input').addClass("ui-state-disabled");
@@ -230,7 +230,7 @@ function setFormEnabledState() {
       $('#error-message').html('<b><font size="5">You do not have permission to clone this task.</font></b>').show();
     }
   }
-  if (($('.user-type-id input').val() != 1) && ($('.user-type-id input').val() != 3)) {
+  if (($('.user-type-id input').val() !== 1) && ($('.user-type-id input').val() !== 3)) {
     $('.Submit').addClass("ui-state-disabled");
     $('.new-task-type select').addClass("ui-state-disabled");
     $('.new-op input').addClass("ui-state-disabled");
@@ -249,12 +249,12 @@ function setFormEnabledState() {
  * @param {Event} e Click/submit event.
  */
 function submitForm(e) {
-  if (validateForm() == false) {
+  if (validateForm() === false) {
     e.preventDefault();
     return;
   }
-  var newAssigneeID = $('.new-assignee-id input').val();
-  if (newAssigneeID == '') {
+  const newAssigneeID = $('.new-assignee-id input').val();
+  if (newAssigneeID === '') {
     $('.new-assignee-id input').val(0);
   }
 
@@ -270,11 +270,11 @@ function submitForm(e) {
  * @returns {boolean} True if valid; otherwise false.
  */
 function validateForm() {
-  var task_name_field = $('.new-task-name input');
-  var task_type_field = $('.new-task-type select');
-  var opnumber_field = $('.new-op input');
+  const task_name_field = $('.new-task-name input');
+  const task_type_field = $('.new-task-type select');
+  const opnumber_field = $('.new-op input');
 
-  var return_val = true;
+  let return_val = true;
 
   $('#taskname-error').remove();
   $('#tasktype-error').remove();
