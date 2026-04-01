@@ -1,6 +1,6 @@
 ﻿/**
-  Programming Tickets ï¿½ UI behaviors and helpers
- 
+  Programming Tickets - UI behaviors and helpers
+
   Author:   Jeffrey Whitney
             jtwhitney@machine.com
             651-391-7982
@@ -44,22 +44,22 @@
       can even access a particular form. For our purposes, this is not particularly useful for our needs because we we want
       all users to be able to view the forms. What we want instead is to limit their ability to do certain things
       inside the application. 
-      There are several user types which are defined in the database users table, (tblUsers) each with their own
+      There are several user types that are defined in the database users table, (tblUsers) each with their own
       level of permission. They are:
         - Cell Lead (user-type-id == 5). Cell Leads can only view tickets and tasks. They cannot make any changes.
-          In fact, cell leads are not logged in to LFF at all because they do no have LFF accounts.
-        - Manufacturing Engineer (user-type-id == 4). They do have LFF accounts, but still have read-only access. 
+          In fact, cell leads are not logged in to LFF at all because they do not have LFF accounts.
+        - Manufacturing Engineer (user-type-id == 4). They do have LFF accounts but still have read-only access.
         - Quality Engineers, (QE's) (user-type-id == 3). QE's can add tickets, add tasks to tickets, add notes. 
           They cannot, however, change tickets outside their department.
           They also cannot change task statuses or assign them to anyone.
-        - Metrology Calibration (user-type-id == 2). They have permissions to update Service Tickets, but not programming
+        - Metrology Calibration (user-type-id == 2). They have permissions to update Service Tickets but not programming
           tickets. (A service ticket is a non-programming type of ticket used for things like a machine being
           down or needing service.)_
         - Metrology users (user-type-id == 1). They have full permissions to change the status of tasks,
           assign tasks. They can also add tickets, add tasks to tickets, add notes, etc.
       
       There is also a special case Metrology user, the Admin. This is designated in the User's table by the Admin 
-      flag being set to 1. Admin's can access forms that are not available to the "regular" Metrology user, such 
+      flag being set to 1. Admins can access forms that are not available to the "regular" Metrology user, such
       as "Department", or "Task Types". Lookup values which are not likely to change very often, if ever. There are also a 
       few little things here and there that an Admin can do that a regular Metrology user cannot, such as 
       sending off an Assignee Pester Message. (Emailing the Assignee of a task asking what's going on with it.)
@@ -71,7 +71,7 @@
         When the user first loads the form, LFF fills in the .lf-user-name field with CRETEX\username. 
         (Predicated on the fact that the user has a LFF account and is logged in to LFF).
         Because of the expense, Cell Leads have not been given LFF accounts, so the .lf-user-name field will be set to "Anonymous User" for them.
-        In any case, if the user is logged in to LFF, it sets the .lf-user-name to CRETEX\username, but we only want the username portion 
+        In any case, if the user is logged in to LFF, it sets the .lf-user-name to CRETEX\username. However, we only want the username portion
         so we copy just the username portion (trimming off the "CRETEX/" part) into the .network-user-name field, 
         which is what gets posted back to the server.
         This will be matched against the user database table to determine the user's ID, user type, and department, etc.
@@ -83,18 +83,18 @@
                                   Examples of this would be Task Types and Task Statuses. These lookups do not depend on any other fields being set.
           - lookupcomplete: This event fires each time a lookup completes after the onloadlookupfinished event has been called. 
                             Laserfiche has lookup rules applied to certain fields, so that when a field is changed, it triggers a lookup to fill in other fields.
-                            The fields themselves can either be changed by the user directly, or indirectly. 
-                            An example of an direct change would be when the user chooses a Site from the dropdown. 
+                            The user can either change the fields themselves directly, or indirectly.
+                            An example of a direct change would be when the user chooses a Site from the dropdown.
           
     
-      Now this gets a bit tricky because the lookupcomplete event can fire multiple times, and we only want to do certain things once, so we need
+      Now this gets a bit tricky. The lookupcomplete event can fire multiple times, and we only want to do certain things once, so we need
       to put logic in there so that it's not doing expensive things again and again.
       There is a way of asking what the TriggerID of the lookup is. (A laserfiche function). But I found this to be kind of a pain to use because
-      you have to know the TriggerID of the lookup that you want to respond to and it's just an integer. Also, if you ever change anything 
+      you have to know the TriggerID of the lookup that you want to respond to, and it's just an integer. Also, if you ever change anything
       in the form, you don't know if the trigger id has changed or not. So I found it easier to just put logic in the function that I want to run
-      to make sure that it doesn't, say iterate through a table or something getting values again and again when we only need it to do it once.
+      to make sure that it doesn't, say, iterate through a table or something getting values again and again when we only need it to do it once.
     
-      For an example of what I'm talking about, we're setting the user name field in code and causing a lookup, (see 'User Permissions' above).
+      For an example of what I'm talking about, we're setting the username field in code and causing a lookup (see 'User Permissions' above).
       Because we're setting the field in code and causing a lookup, the onloadlookupfinished event has already fired. Therefore, any logic that 
       relies on user fields being populated won't work if you call them from the onloadlookupfinished event. Instead, we have to call them from 
       the lookupcomplete event. The unfortunate side effect of this is that the lookupcomplete event can fire multiple times, 
@@ -103,19 +103,18 @@
       but you want to minimize it as much as possible.
 
       Daisy-Chaining Lookups:
-        A side-effect of the way lookups work is how they sometimes daisy-chain. Let me explain with an example:
+        A side effect of the way lookups work is how they sometimes daisy-chain. Let me explain with an example:
         In our example, we have four fields: LFUserName, NetworkUserName, SiteID, DepartmentLookupTable.
-        At the beginning the only field which has anything in it is LFUserName, because LF has filled it in for us.
-        We take that value, keeping only the username portion an dput that in NetworkUserName. 
-        This causes a lookup for all the user related fields, including SiteID. Once the SiteID is set, this in turn
+        In the beginning the only field which has anything in it is LFUserName, because LF has filled it in for us.
+        We take that value, keeping only the username portion and put that in NetworkUserName.
+        This causes a lookup for all the user-related fields, including SiteID. Once the SiteID is set, this in turn
         causes another lookup to pull in all the departments related to that site. The Department Lookup cannot be loaded until 
         we know which site we're talking about. Sometimes this daisy-chaining can get 3 and sometimes even 4 levels deep because of all the relationships between
         various fields on a form. This causes the form to be slower than it otherwise would have been, but there's not a lot we can do about it.
         It sort of is what it is. This is what happens when you have to make an application with a non-application framework.
    
    Page Refresh Quirks:
-      There are two ways that the page can be programmatically refreshed. One is via the filter/sort/pagination mechanism described below, 
-      and the second is when our page receives a message from a popup that the information on the page has changed and should be refreshed, 
+      There are two ways that the page can be programmatically refreshed. One is via the filter/sort/pagination mechanism described below       . The second is when our page receives a message from a popup that the information on the page has changed and should be refreshed,
       such as when the user changes the state of a row that is being displayed. You'd think this would be a rather straight-forward affair, 
       but as I will explain to you, it's quite complex.
 
@@ -123,10 +122,10 @@
       it does so via ajax. It doesn't refresh the page, per se, it just refreshes the stuff inside the page. So, it doesn't refresh the web
       page, it just replaces the guts inside the table. 
       
-      This presents us with a problem, because we have muddled with the table quite a lot, adding links and buttons dynamically using jQuery.
+      This presents us with a problem because we have muddled with the table quite a lot, adding links and buttons dynamically using jQuery.
       For example, let's say we have a page of results that has a button in the first column. We put that button there. What was there
-      natively, (what was put there by LFF), is a hidden text box with the ID for the record. We can use that to create a button on the fly
-      and assign a javascript onclick to call a function sending the id of the record as an argument. But now LFF has just refreshed the data
+      natively, (what was put there by LFF) is a hidden text box with the ID for the record. We can use that to create a button on the fly
+      and assign a JavaScript onclick to call a function sending the id of the record as an argument. But now LFF has just refreshed the data
       in the table, so if the hidden text box used to have an ID of 1, the button we made would have called someFunctionToDoSomething(1). 
       But now, because of the page refreshing, the first row has a different record in it, with an ID of 2. 
       Unfortunately, we still have that button sitting there which will call someFunctionToDoSomething(1) with the wrong argument. 
@@ -158,11 +157,11 @@
             Then we navigate to that url. This way, when the page reloads, the filter/sort/pagination values are in the query string.
             What this does is it causes LFF to set the hidden fields that drive filtering and sorting back to the values that were there
             to begin with. This way, when the page reloads, the filters and sorting are still in place LFF will automatically apply 
-            them causing the page to have the same filtering and sorting as it had before the refresh. 
+             them, causing the page to have the same filtering and sorting as it had before the refresh.
       
       But this still leaves us with a problem, namely, that while the hidden filtering and sorting fields are all correct, 
       the filter DISPLAY fields are not set. (Keep in mind, this is after the page has refreshed. LFF has set all the hidden fields correctly, but 
-      the filter fields that the users sees have not been set back to their original value.)
+      the filter fields that the users see have not been set back to their original value.)
       
       Let's say you were filtering records by department. 
       You have a department dropdown filter set to "Ortho". But we're not using the value "Ortho" to filter the results. We're using the 
@@ -174,9 +173,9 @@
       How to handle that? 
         
         #2. Once the filter row has been added back, you need to set all the filter display values back to the appropriate value.
-            In the case of a text search, like 'Name', you just set the display field equal to the hidden field. 
+            In the case of a text search, like 'Name', you set the display field equal to the hidden field.
             In the case of a dropdown, like Department, you have to do a reverse lookup to find the Department Name associated with the
-            Department ID that is in the hidden field, and set the dropdown to that value.
+            Department ID that is in the hidden field and set the dropdown to that value.
             
             Normally, such as when you open the page for the first time, these hidden filter fields are all blank, or are set to 
             a default value. But in the case of a hard refresh, the hidden filter fields may have values in them. So, for 
@@ -191,7 +190,7 @@
       There is no way to filter or sort rows in LFF, so I had to build a custom filtering mechanism. This is done via a combination of hidden 
       fields which are arguments to a SQL Server stored procedure. The stored procedure returns a maximum of 25 rows at a time, 
       so we have to be able to filter and sort the rows on the server side.
-      There are also two buttons which allow the user to change which page of results they are viewing.
+      There are also two buttons that allow the user to change which page of results they are viewing.
       Here is a list of the hidden fields used for filtering and sorting:
 
         Filtering:
@@ -211,16 +210,16 @@
       This gets us part of the way there, but we also need to have a way for the user to set these fields.
       This is done via a filter row which is added to the task list table. The filter row contains a text box for the task name filter,
       and dropdowns for the task type, status, and assignee filters. There is also a checkbox to include completed tasks.
-      The change of any of these controls triggers the filterTable() function which reads the values from the controls and sets the 
+      The change of these controls triggers the filterTable() function which reads the values from the controls and sets the
       hidden fields accordingly. Values from select controls are mapped from name to ID using the lookup maps.
       Sorting is handled via clickable column headers. Clicking a header sets the sort field and toggles the sort direction.
       If you click on a sort field that is already the current sort field, it toggles the direction.  
             
    Pagination:
-     Pagination is related to filtering but serves a different pupose. (In actuality, it's really just another form of filtering, 
+     Pagination is related to filtering but serves a different purpose. (In actuality, it's really just another form of filtering,
      but instead of limiting rows by name or id, it's filtering which page of results to display.)
      
-     There are a couple things regarding pagination that you should know about.
+     There are a couple of things regarding pagination that you should know about.
      To begin with, pagination is necessary on this page because there might be hundreds or thousands of rows being returned from the database.
      This is a problem because the web page will time out formatting them all. 
      This was a pretty big hurdle to overcome at first. Luckily, LFF allows fields to be filled via stored procedure calls, which take 
@@ -230,29 +229,29 @@
      and then trigger a change event on it.
 
      Quirk with LFF Events:
-        Originally I had the table of results load as soon as the page loaded. It seemed obvious: other than the page, which should of
-        course be defaulted to 1, there are no filters as yet. The problem occured because of the fact that I'm adding the filtering in
-        by hand. The way filtering works, is that there are a bunch of hidden lookup tables for stuff like Department. I grab all the 
+        Originally I had the table of results load as soon as the page loaded. It seemed obvious: other than the page, which should, of
+        course, be defaulted to 1, there are no filters as yet. The problem occurred because I'm adding the filtering in
+        by hand. The way filtering works is that there are a bunch of hidden lookup tables for stuff like Department. I grab all the
         Department Name values out of the lookup table and put them into the filter value. But I can only add the filter row once the rows are all
         there. Therein lies the rub: LFF Lookups.
         
         There are two kinds of lookups that LF does to populate fields: the kind without any arguments, and the kind with arguments. 
         An example of a lookup without any arguments would be TaskType. I want the hidden TaskType lookup table to get filled 
-        immediatly--there's no other information that it relies on. 
+         immediately --there's no other information that it relies on.
         
         Now, Departments and the table rows both rely on one thing: Site. Which Site are we looking at, Coon Rapids or Anoka?
-        Ok so each of those things can only be looked up once we know which site we're talking about. Good enough. 
-        But now comes it issue of LFF Lookup Order. All the data lookups that LFF uses take place in the order you specify. 
-        So if you have Department first and the main table data second, that should mean than the department lookup data is there before 
+        Ok, so each of those things can only be looked up once we know which site we're talking about. Good enough.
+        But now comes its issue of LFF Lookup Order. All the data lookups that LFF uses take place in the order you specify.
+        So if you have Department first and the main table data second, that should mean that the department lookup data is there before
         we go get the main table data. And this is usually true, emphasis on usually. 
         
-        I ran into an issue, (and perhaps it's because the main table's data is being fed by a stored procedure instead of a simple query or table),
+        I ran into an issue (and perhaps it's because the main table's data is being fed by a stored procedure instead of a simple query or table),
         but the load order was acting inconsistently. So in this case, we'd have the table data loaded, so we'd go to load the 
         filter dropdowns, and sometimes the lookup data wouldn't be there yet. It only happened some of the time, but it continued to 
-        happen. It was absolutely maddening. The only way around this problem was to have the "pg" field, (which is the page of data
-        that is going to be returned), set to 999 by default. The sproc is looking for this value and if it finds it, it won't return anything.
+        happen. It was absolutely maddening. The only way around this problem was to have the "pg" field (which is the page of data
+        that is going to be returned), set to 999 by default. The sproc is looking for this value, and if it finds it, it won't return anything.
         Then, in the lookupcomplete() function, which fires AFTER all the initial lookups complete, then I ask if the page is set to 999 and 
-        if it is, set it to 1 and initiate a lookup. This way, everything works as intended. The lookup data is there so I can make the filter row
+        if it is, set it to 1 and initiate a lookup. This way, everything works as intended. The lookup data is there, so I can make the filter row,
         and the town rejoiced._
 
      Known bug: 
@@ -343,7 +342,7 @@ $(document).ready(function () {
     $.cookie('site_name', sitename, { expires: 365, path: '/' });
   });
 
-  // Show long ï¿½Detailsï¿½ text in a quick modal on double-click (Field56 appears to be details)
+  // Show long "Details" text in a quick modal on double-click (Field56 appears to be details)
   $(document).on('dblclick', '[id^="Field56"]', function (e) {
     const ticketDetail = $(this).val();
     const ticketNumber = $(this).closest('tr').find('.projectlist-ticket-number-col input[type="text"]').val();
@@ -427,22 +426,22 @@ function appendPagination() {
 
     // Page 1 with less than one page of rows: only disabled arrows
     if ((current_page === 1) && (row_count < 25)) {
-      $('.projectlist-table table').parent().append("<div id='projectlist-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>ï¿½ï¿½</a></li><li><a class='page-link prev isDisabled'>ï¿½</a></li><li><a class='page-link next isDisabled'>ï¿½</a></li></ul></div>");
+      $('.projectlist-table table').parent().append("<div id='projectlist-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>&laquo;</a></li><li><a class='page-link prev isDisabled'>&lsaquo;</a></li><li>\1&rsaquo;\2</li></ul></div>");
       return;
     }
     // Page 1 with exactly one page: can go next
     if ((current_page === 1) && (row_count === 25)) {
-      $('.projectlist-table table').parent().append("<div id='projectlist-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>ï¿½ï¿½</a></li><li><a class='page-link prev isDisabled'>ï¿½</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>ï¿½</a></li></ul></div>")
+      $('.projectlist-table table').parent().append("<div id='projectlist-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>&laquo;</a></li><li><a class='page-link prev isDisabled'>&lsaquo;</a></li><li>\1&rsaquo;\2</li></ul></div>")
       return;
     }
     // Middle pages: can go first, prev, next
     if ((current_page > 1) && (row_count === 25)) {
-      $('.projectlist-table table').parent().append("<div id='projectlist-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>ï¿½ï¿½</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>ï¿½</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>ï¿½</a></li></ul></div>")
+      $('.projectlist-table table').parent().append("<div id='projectlist-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);'>&laquo;</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);'>&lsaquo;</a></li><li>\1&rsaquo;\2</li></ul></div>")
       return;
     }
     // Last page: can go first, prev; next disabled
     if ((current_page > 1) && (row_count < 25)) {
-      $('.projectlist-table table').parent().append("<div id='projectlist-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>ï¿½ï¿½</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>ï¿½</a></li><li><a class='page-link next isDisabled'>ï¿½</a></li></ul></div>")
+      $('.projectlist-table table').parent().append("<div id='projectlist-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);'>&laquo;</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);'>&lsaquo;</a></li><li>\1&rsaquo;\2</li></ul></div>")
       return;
     }
   }

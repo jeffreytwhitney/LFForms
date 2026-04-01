@@ -83,19 +83,19 @@ function appendPagination() {
   if (row_count > 0) {
     $('#gage-request-table-pagination').remove();
     if ((current_page === 1) && (row_count < 25)) {
-      $('.gage-request-table table').parent().append("<div id='gage-request-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>ï¿½ï¿½</a></li><li><a class='page-link prev isDisabled'>ï¿½</a></li><li><a class='page-link next isDisabled'>ï¿½</a></li></ul></div>");
+      $('.gage-request-table table').parent().append("<div id='gage-request-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>&laquo;</a></li><li><a class='page-link prev isDisabled'>&lsaquo;</a></li><li>\1&rsaquo;\2</li></ul></div>");
       return;
     }
     if ((current_page === 1) && (row_count === 25)) {
-      $('.gage-request-table table').parent().append("<div id='gage-request-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>ï¿½ï¿½</a></li><li><a class='page-link prev isDisabled'>ï¿½</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>ï¿½</a></li></ul></div>")
+      $('.gage-request-table table').parent().append("<div id='gage-request-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>&laquo;</a></li><li><a class='page-link prev isDisabled'>&lsaquo;</a></li><li>\1&rsaquo;\2</li></ul></div>")
       return;
     }
     if ((current_page > 1) && (row_count === 25)) {
-      $('.gage-request-table table').parent().append("<div id='gage-request-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>ï¿½ï¿½</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>ï¿½</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>ï¿½</a></li></ul></div>")
+      $('.gage-request-table table').parent().append("<div id='gage-request-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);'>&laquo;</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);'>&lsaquo;</a></li><li>\1&rsaquo;\2</li></ul></div>")
       return;
     }
     if ((current_page > 1) && (row_count < 25)) {
-      $('.gage-request-table table').parent().append("<div id='gage-request-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>ï¿½ï¿½</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>ï¿½</a></li><li><a class='page-link next isDisabled'>ï¿½</a></li></ul></div>")
+      $('.gage-request-table table').parent().append("<div id='gage-request-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);'>&laquo;</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);'>&lsaquo;</a></li><li>\1&rsaquo;\2</li></ul></div>")
       return;
     }
   }

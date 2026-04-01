@@ -210,7 +210,7 @@ $(document).ready(function () {
   // Toggle submit availability after lookups complete.
   // Hide for non-admins or when PO has not been created (no POID).
   $(document).on('lookupcomplete', function () {
-    if ((!isAdminUser()) || ($('.poid input').val() === '')) {
+    if ((!isMetrologyUser()) || ($('.poid input').val() === '')) {
       $('.Submit').hide();
     } else {
       $('.Submit').show();
@@ -260,6 +260,17 @@ function isAdminUser() {
     return true;
   }
   return false;
+}
+
+
+/**
+ * Determines whether the current user is classified as a "Metrology" user.
+ * Business Rule: user-type-id == 1 => elevated privilege.
+ * @returns {boolean} True if metrology user; false otherwise.
+ */
+function isMetrologyUser() {
+  const userTypeId = Number($('.user-type-id input').val());
+  return userTypeId === 1 || userTypeId === 2;
 }
 
 

@@ -37,7 +37,7 @@ $(document).ready(function () {
     const poid = Number($('.poid input').val());
     let statusid = Number($('.current-status-id input').val());
 
-    if ((!isAdminUser()) || (poid === 0)) {
+    if ((!isMetrologyUser()) || (poid === 0)) {
       $('.Submit').hide();
       return;
     }
@@ -248,7 +248,16 @@ function generateLinkColumn(idSelector, titleSelector, linkSelector, functionToC
  */
 function isAdminUser() {
   return $('.user-isadmin input').val() === '1';
+}
 
+/**
+ * Determines whether the current user is classified as a "Metrology" user.
+ * Business Rule: user-type-id == 1 => elevated privilege.
+ * @returns {boolean} True if metrology user; false otherwise.
+ */
+function isMetrologyUser() {
+  const userTypeId = Number($('.user-type-id input').val());
+  return userTypeId === 1 || userTypeId === 2;
 }
 
 

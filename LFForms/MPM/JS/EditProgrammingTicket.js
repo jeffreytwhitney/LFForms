@@ -705,14 +705,13 @@ function getColumnValueByTaskID(task_id, column_name) {
 }
 
 /**
- * Returns true when the current user is active Metrology (type 1 and active).
- * @returns {boolean}
+ * Determines whether the current user is classified as a "Metrology" user.
+ * Business Rule: user-type-id == 1 => elevated privilege.
+ * @returns {boolean} True if metrology user; false otherwise.
  */
 function isMetrologyUser() {
-  if (($('.user-type-id input').val() === '1') && ($('.user-isactive input').val() === '1')) {
-    return true;
-  }
-  return false;
+  const userTypeId = Number($('.user-type-id input').val());
+  return userTypeId === 1 || userTypeId === 2;
 }
 
 /**

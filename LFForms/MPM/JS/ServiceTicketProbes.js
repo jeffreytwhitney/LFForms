@@ -102,9 +102,9 @@ Permissions: Metrology Admins only.
  On DOM ready this script:
   - Normalizes the current user name into a network-style account and assigns it to `.network-user-name`.
   - Hides the `.Submit` action until an add/edit flow is initiated (and user is admin for edit).
-  - Sets the document title to �Service Ticket Probes�.
-  - Loads required UI libraries (via CDN) and resolves Bootstrap�s `button` plugin conflict.
-  - Subscribes to application events to inject �Edit�/�Add�/�Go Back� buttons and restore previously selected site from a cookie.
+  - Sets the document title to "Service Ticket Probes".
+  - Loads required UI libraries (via CDN) and resolves Bootstrap's `button` plugin conflict.
+  - Subscribes to application events to inject "Edit"/"Add"/"Go Back" buttons and restore previously selected site from a cookie.
 
  External Dependencies (loaded/assumed):
   - jQuery (required)
@@ -112,7 +112,7 @@ Permissions: Metrology Admins only.
   - jquery-confirm (3.3.2) CSS/JS (loaded dynamically)
   - jQuery UI CSS (theme: smoothness) (loaded dynamically)
   - simplePagination (1.6) CSS (loaded dynamically)
-  - Bootstrap�s jQuery `button` plugin (assumed present; `$.fn.button.noConflict()` is called)
+  - Bootstrap's jQuery `button` plugin (assumed present; `$.fn.button.noConflict()` is called)
 
  Custom Events Consumed:
   - document#lookupcomplete: renders row Edit buttons, Go Back buttons, and admin-only Add button.
@@ -131,9 +131,9 @@ Permissions: Metrology Admins only.
   - `.edit-probe-is-active input[type=radio]`
   - `.edit-is-bns-value input`       : mirrored to `.edit-is-bns` radio group
   - `.edit-is-bns input[type=radio]`
-  - `.probe-table table`             : insertion point for �Add Probe� button
+  - `.probe-table table`             : insertion point for "Add Probe" button
   - `.edit-button-col input[type=text]` : value used as Probe ID to render per-row Edit button
-  - `.gobackbutton`                  : placeholder(s) replaced with a �Go Back� button
+  - `.gobackbutton`                  : placeholder(s) replaced with a "Go Back" button
 
  */
 const machineTypeMap = new Map();

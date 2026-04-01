@@ -491,19 +491,19 @@ function appendPagination() {
   if (row_count > 0) {
     $('#po-pagination').remove();
     if ((current_page === 1) && (row_count < 25)) {
-      $('.purchase-order-table table').parent().append("<div id='po-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>��</a></li><li><a class='page-link prev isDisabled'>�</a></li><li><a class='page-link next isDisabled'>�</a></li></ul></div>");
+      $('.purchase-order-table table').parent().append("<div id='po-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>&laquo;</a></li><li><a class='page-link prev isDisabled'>&lsaquo;</a></li><li><a class='page-link next isDisabled'>&rsaquo;</a></li></ul></div>");
       return;
     }
     if ((current_page === 1) && (row_count === 25)) {
-      $('.purchase-order-table table').parent().append("<div id='po-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>��</a></li><li><a class='page-link prev isDisabled'>�</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>�</a></li></ul></div>")
+      $('.purchase-order-table table').parent().append("<div id='po-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>&laquo;</a></li><li><a class='page-link prev isDisabled'>&lsaquo;</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>&rsaquo;</a></li></ul></div>")
       return;
     }
     if ((current_page > 1) && (row_count === 25)) {
-      $('.purchase-order-table table').parent().append("<div id='po-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>��</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>�</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>�</a></li></ul></div>")
+      $('.purchase-order-table table').parent().append("<div id='po-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);'>&laquo;</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);'>&lsaquo;</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>&rsaquo;</a></li></ul></div>")
       return;
     }
     if ((current_page > 1) && (row_count < 25)) {
-      $('.purchase-order-table table').parent().append("<div id='po-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>��</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>�</a></li><li><a class='page-link next isDisabled'>�</a></li></ul></div>")
+      $('.purchase-order-table table').parent().append("<div id='po-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);'>&laquo;</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);'>&lsaquo;</a></li><li><a class='page-link next isDisabled'>&rsaquo;</a></li></ul></div>")
 
     }
   }
@@ -700,7 +700,7 @@ function generateFilterRow() {
     $(printButton).insertAfter('#divIncludeInactive');
   }
 
-  if (isAdminUser()) {
+  if (isMetrologyUser()) {
     if ($('.add-button').length === 0) {
       const add_button = '<div class="ui-button add-button" id="add-purchase-order" onclick="callAddPurchaseOrder()"><span title="Add Purchase Order" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Purchase Order</div>'
       $(add_button).insertBefore('.purchase-order-table table');
@@ -787,6 +787,15 @@ function isAdminUser() {
 
 }
 
+/**
+ * Determines whether the current user is classified as a "Metrology" user.
+ * Business Rule: user-type-id == 1 => elevated privilege.
+ * @returns {boolean} True if metrology user; false otherwise.
+ */
+function isMetrologyUser() {
+  const userTypeId = Number($('.user-type-id input').val());
+  return userTypeId === 1 || userTypeId === 2;
+}
 
 /**
  * Populate requester lookup maps (id->name and name->id) from a hidden lookup table.

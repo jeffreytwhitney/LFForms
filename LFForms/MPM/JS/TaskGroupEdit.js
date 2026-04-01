@@ -1,5 +1,5 @@
 ﻿/*!
-# TaskGroupEdit.js ï¿½ Documentation
+# TaskGroupEdit.js - Documentation
 
   Author:   Jeffrey Whitney
             jtwhitney@machine.com
@@ -158,9 +158,9 @@ KEY CONCEPTS:
 - simplePagination.css (styles only)
 
 Dialogs
-- `popupCancelNote(e)` ï¿½ requires non-empty note; writes to `#Field90`, submits.
-- `popupCompletionNote(e)` ï¿½ optional note; writes to `#Field90`, submits.
-- `popupWaitingNote(e)` ï¿½ requires non-empty note; writes to `#Field90`, submits.
+- `popupCancelNote(e)` - requires non-empty note; writes to `#Field90`, submits.
+- `popupCompletionNote(e)` - optional note; writes to `#Field90`, submits.
+- `popupWaitingNote(e)` - requires non-empty note; writes to `#Field90`, submits.
 
 ## Validation rules
 

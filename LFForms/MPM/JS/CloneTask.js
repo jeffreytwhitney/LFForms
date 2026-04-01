@@ -114,13 +114,13 @@
  - .existing-task-ids select option   Options representing conflicting existing tasks.
  - .user-type-id input                User type (1=Metrology, 3=Dept user).
  - .user-department-id input          Current user department.
- - .department-id input               Task�s department.
+ - .department-id input               Task's department.
  - .department-email-address input    Department email (populated on lookup).
- - .new-assignee-id input             Optional new assignee; defaults to 0 on submit.
+ - .new-assignee-id input             Optional new assignee; defaults to 0 on submitting.
  - #error-message                     Container for permission error text.
- - .closeme input                     When set to 1, closes parent dialog with refresh.
+ - .closeme input                     When set to 1, closes the parent dialog with refresh.
 
- Custom events observed:
+Custom events are  observed:
  - onloadlookupfinished               Initializes form values and submit state.
  - lookupcomplete                     Triggers dependent field population if missing.
 
@@ -204,14 +204,13 @@ function checkExistingTaskIDs() {
 
 
 /**
- * Returns true when the current user is a Metrology user (user-type-id == 1).
- * @returns {boolean}
+ * Determines whether the current user is classified as a "Metrology" user.
+ * Business Rule: user-type-id == 1 => elevated privilege.
+ * @returns {boolean} True if metrology user; false otherwise.
  */
 function isMetrologyUser() {
-  if ($('.user-type-id input').val() === 1) {
-    return true;
-  }
-  return false;
+  const userTypeId = Number($('.user-type-id input').val());
+  return userTypeId === 1 || userTypeId === 2;
 }
 
 /**

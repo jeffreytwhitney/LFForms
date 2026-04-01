@@ -1,6 +1,6 @@
 ﻿/**
-UpdateProgrammingTask.js ï¿½ Documentation
- 
+UpdateProgrammingTask.js - Documentation
+
   Author:   Jeffrey Whitney
             jtwhitney@machine.com
             651-391-7982
@@ -28,7 +28,7 @@ Overview - Form for viewing/editing a programming task.
      This loop is essential to understand because it's a common pattern that you will see again and again in any form which is being used as a popup. 
      This form is one of those. The way it works is when this page loads initially, the $('.closeme input') is not provided from the query string, 
      and so is set to the default value of 0.
-     Submitting the form sets that value to 1. In LFF, when that the form is submitted it executes the workflow and then, 
+     Submitting the form sets that value to 1. In LFF, when that the form is submitted, it executes the workflow, and then,
      the On Event Completion event redirects back to this same page, but this time with the closeme value set to 1 in the query string. 
      This tells the page that it should close the dialog and refresh the parent page, so it sends off a message to the parent window to do that.
 
@@ -37,15 +37,15 @@ Overview - Form for viewing/editing a programming task.
       This is separate from LFF security, which can, (but in practice usually does not), limit who 
       can even access a particular form. For our purposes, the LFF security model is not particularly useful for our needs because we we want
       all users to be able to view the forms. What we want instead is to limit their ability to do certain things inside the application. 
-      There are several user types which are defined in the database users table, (tblUsers) each with their own
+      There are several user types that are defined in the database users table, (tblUsers) each with their own
       level of permission. They are:
         - Cell Lead (user-type-id == 5). Cell Leads can only view tickets and tasks. They cannot make any changes.
-          In fact, cell leads are not logged in to LFF at all because they do no have LFF accounts.
-        - Manufacturing Engineer (user-type-id == 4). They do have LFF accounts, but still have read-only access. 
+          In fact, cell leads are not logged in to LFF at all because they do not have LFF accounts.
+        - Manufacturing Engineer (user-type-id == 4). They do have LFF accounts but still have read-only access.
         - Quality Engineers, (QE's) (user-type-id == 3). QE's can add tickets, add tasks to tickets, add notes. 
           They cannot, however, change tickets outside their department.
           They also cannot change task statuses or assign them to anyone.
-        - Metrology Calibration (user-type-id == 2). They have permissions to update Service Tickets, but not programming
+        - Metrology Calibration (user-type-id == 2). They have permissions to update Service Tickets but not programming
           tickets. (A service ticket is a non-programming type of ticket used for things like a machine being
           down or needing service, gaging, etc.)
         - Metrology users (user-type-id == 1). They have full permissions to change the status of tasks,
@@ -53,7 +53,7 @@ Overview - Form for viewing/editing a programming task.
       
           There is also a special case Metrology user, the Admin. This is designated in the Users table by the Admin 
           flag being set to 1. Admins can access forms that are not available to the "regular" Metrology user, such 
-          as "Department", or "Task Types". (Lookup values which are not likely to change very often, if ever.) There are also a 
+          as "Department", or "Task Types". (Lookup values that are not likely to change very often, if ever.) There are also a
           few little things here and there that an Admin can do that a regular Metrology user cannot, such as 
           sending off an Assignee Pester Message. (Emailing the Assignee of a task, asking what's going on with it.)
       
@@ -64,7 +64,7 @@ Overview - Form for viewing/editing a programming task.
         When the form first loads, LFF fills in the .lf-user-name field with CRETEX\username. 
         (Predicated on the fact that the user has a LFF account and is logged in to LFF).
         Because of the expense, Cell Leads have not been given LFF accounts, so the .lf-user-name field will be set to "Anonymous User" for them.
-        In any case, if the user is logged in to LFF, it sets the .lf-user-name to CRETEX\username, but we only want the username portion 
+        In any case, if the user is logged in to LFF, it sets the .lf-user-name to CRETEX\username. However, we only want the username portion
         so we copy just the username portion (trimming off the "CRETEX\" part) into the .network-user-name field, 
         which is what gets posted back to the server.
         This will be matched against the user database table to determine the user's ID, user type, and department, etc.
@@ -121,10 +121,10 @@ Validation rules (`validateForm()`)
 Status change flows (intercepted in `submitForm`)
 - Waiting: `callSetTaskToWaiting()`
   - Requires selecting a waiting reason radio option.
-  - If ï¿½Otherï¿½ (value 3) is chosen, a free-text note is required.
+  - If "Other" (value 3) is chosen, a free-text note is required.
   - Sets `.update-waiting-id` and optional `.submit-note` before submit.
 - Completed: `callCompleteTask()`
-  - Optional completion note; time addition: if ï¿½customï¿½ (radio value `X`), amount must be > 1.
+  - Optional completion note; time addition: if "custom" (radio value `X`), amount must be > 1.
   - Sets `.submit-note` then submits.
 - Cancelled: `callCancelTask()`
   - Cancellation reason is required; sets `.submit-note` before submit.
@@ -132,19 +132,19 @@ Status change flows (intercepted in `submitForm`)
 Dialogs, popups, and printing
 - Popup iframe host: `popupIFrame(src, title, height, width, cancelSubmit)` opens a jQuery UI dialog with an iframe.
   - Used by: Add Note, Pester QE/Assignee, View Notes.
-  - Parent window listens for postMessage ï¿½CloseDialogï¿½ and ï¿½CloseDialogWithRefreshï¿½.
+  - Parent window listens for postMessage "CloseDialog" and "CloseDialogWithRefresh".
 - Printing:
   - `printTask()` loads `/Forms/MPM-ProgrammingTicketPrint?tid=...` into a hidden iframe via `loadiFrame`.
-  - A postMessage listener for ï¿½printmeï¿½ triggers iframe printing with a slight delay.
+  - A postMessage listener for "printme" triggers iframe printing with a slight delay.
 
 Cross-window messaging
 - Listeners:
-  - ï¿½printmeï¿½ from child print iframe to trigger printing.
-  - ï¿½CloseDialogï¿½/ï¿½CloseDialogWithRefreshï¿½ from note/view popups to close iframe dialog and optionally submit parent form.
+  - "printme" from child print iframe to trigger printing.
+  - "CloseDialog"/"CloseDialogWithRefresh" from note/view popups to close iframe dialog and optionally submit parent form.
 
 User experience notes
 - Title is updated as the task name changes.
-- ï¿½Manual Dateï¿½ checkbox reflects and controls `.man-date input` values (0/1). Tasks with Manual Date set do not have their due dates updated
+- "Manual Date" checkbox reflects and controls `.man-date input` values (0/1). Tasks with Manual Date set do not have their due dates updated
    by the Schedule Refresh process.
  */
 
@@ -576,14 +576,13 @@ function checkPermissions() {
 
 
 /**
- * Indicates whether the current user is a Metrology user.
- * @returns {boolean} True if '.user-type-id' is 1; otherwise false.
+ * Determines whether the current user is classified as a "Metrology" user.
+ * Business Rule: user-type-id == 1 => elevated privilege.
+ * @returns {boolean} True if metrology user; false otherwise.
  */
 function isMetrologyUser() {
-  if ($('.user-type-id input').val() === 1) {
-    return true;
-  }
-  return false;
+  const userTypeId = Number($('.user-type-id input').val());
+  return userTypeId === 1 || userTypeId === 2;
 }
 
 

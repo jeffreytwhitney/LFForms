@@ -223,16 +223,13 @@ function isAdmin() {
 }
 
 /**
- * Returns whether the current user is a Metrology user.
- * Reads `.user-type-id input` and treats 1 as Metrology user.
- * @returns {boolean} True if user type is Metrology; otherwise false.
+ * Determines whether the current user is classified as a "Metrology" user.
+ * Business Rule: user-type-id == 1 => elevated privilege.
+ * @returns {boolean} True if metrology user; false otherwise.
  */
 function isMetrologyUser() {
-  userTypeID = Number($('.user-type-id input').val());
-  if ((userTypeID === 1) || (userTypeID === 2)) {
-    return true;
-  }
-  return false;
+  const userTypeId = Number($('.user-type-id input').val());
+  return userTypeId === 1 || userTypeId === 2;
 }
 
 /**

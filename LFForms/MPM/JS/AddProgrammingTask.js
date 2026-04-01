@@ -135,7 +135,7 @@ Permissions:
 
  Accessibility / UI Notes:
   - Uses class 'parsley-error' to style invalid fields.
-  - Disables submitting by adding 'ui-state-disabled' (maintains original approach�no structural change).
+  - Disables submitting by adding 'ui-state-disabled' (maintains original approach-no structural change).
 
  Potential Improvements (not implemented, informational only):
   - Replace class-based disabling with .prop('disabled', true) for semantic clarity.
@@ -228,8 +228,8 @@ function checkPermissions() {
  * @returns {boolean} True if metrology user; false otherwise.
  */
 function isMetrologyUser() {
-  return Number($('.user-type-id input').val()) === 1;
-
+  const userTypeId = Number($('.user-type-id input').val());
+  return userTypeId === 1 || userTypeId === 2;
 }
 
 

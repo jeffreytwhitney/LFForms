@@ -155,7 +155,7 @@ $(document).ready(function () {
       $('.lf-user-name input')
         .val()
         .toUpperCase()
-        .substr($('.lf-user-name input').val().lastIndexOf('\\') + 1)
+        .substring($('.lf-user-name input').val().lastIndexOf('\\') + 1)
     ).trigger("change");
 
   /**
@@ -205,7 +205,7 @@ $(document).ready(function () {
    * @param {jQuery.Event} e
    */
   $(document).on('lookupcomplete', function (e) {
-    if (!isAdminUser()) {
+    if (!isMetrologyUser()) {
       $('.Submit').hide();
     }
     else {
@@ -259,8 +259,16 @@ function addThousandsSeparator(numStr) {
  * @returns {boolean} True when the current user is an admin user; otherwise false.
  */
 function isAdminUser() {
-  if ($('.user-isadmin input').val() === '1') {
-    return true;
-  }
-  return false;
+  return $('.user-isadmin input').val() === '1';
+}
+
+
+/**
+ * Determines whether the current user is classified as a "Metrology" user.
+ * Business Rule: user-type-id == 1 => elevated privilege.
+ * @returns {boolean} True if metrology user; false otherwise.
+ */
+function isMetrologyUser() {
+  const userTypeId = Number($('.user-type-id input').val());
+  return userTypeId === 1 || userTypeId === 2;
 }

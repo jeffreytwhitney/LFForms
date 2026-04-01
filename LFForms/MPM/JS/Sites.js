@@ -1,6 +1,6 @@
 ﻿/**
- Sites.js � UI behaviors for Site Maintenance.
- 
+' Sites.js - UI behaviors for Site Maintenance.
+
   Author:   Jeffrey Whitney
             jtwhitney@machine.com
             651-391-7982
@@ -12,7 +12,7 @@
  - This is an Admin form, (see "User Permissions" below).
  - Initializes the Site Maintenance view, normalizes the current user display, and wires up
    dynamic action buttons for adding/editing sites.
- - Coordinates visibility of the submit control based on user actions and admin status.
+ - Coordinates visibility of the submitted control based on user actions and admin status.
 
  KEY CONCEPTS:
    User Permissions:
@@ -21,22 +21,22 @@
       can even access a particular form. For our purposes, this is not particularly useful for our needs because we we want
       all users to be able to view the forms. What we want instead is to limit their ability to do certain things
       inside the application. 
-      There are several user types which are defined in the database users table, (tblUsers) each with their own
+      There are several user types that are defined in the database users table, (tblUsers) each with their own
       level of permission. They are:
         - Cell Lead (user-type-id == 5). Cell Leads can only view tickets and tasks. They cannot make any changes.
-          In fact, cell leads are not logged in to LFF at all because they do no have LFF accounts.
-        - Manufacturing Engineer (user-type-id == 4). They do have LFF accounts, but still have read-only access. 
+          In fact, cell leads are not logged in to LFF at all because they do not have LFF accounts.
+        - Manufacturing Engineer (user-type-id == 4). They do have LFF accounts but still have read-only access.
         - Quality Engineers, (QE's) (user-type-id == 3). QE's can add tickets, add tasks to tickets, add notes. 
           They cannot, however, change tickets outside their department.
           They also cannot change task statuses or assign them to anyone.
-        - Metrology Calibration (user-type-id == 2). They have permissions to update Service Tickets, but not programming
+        - Metrology Calibration (user-type-id == 2). They have permissions to update Service Tickets but not programming
           tickets. (A service ticket is a non-programming type of ticket used for things like a machine being
           down or needing service.)_
         - Metrology users (user-type-id == 1). They have full permissions to change the status of tasks,
           assign tasks. They can also add tickets, add tasks to tickets, add notes, etc.
       
       There is also a special case Metrology user, the Admin. This is designated in the User's table by the Admin 
-      flag being set to 1. Admin's can access forms that are not available to the "regular" Metrology user, such 
+      flag being set to 1. Admins can access forms that are not available to the "regular" Metrology user, such
       as "Department", or "Task Types". Lookup values which are not likely to change very often, if ever. There are also a 
       few little things here and there that an Admin can do that a regular Metrology user cannot, such as 
       sending off an Assignee Pester Message. (Emailing the Assignee of a task asking what's going on with it.)

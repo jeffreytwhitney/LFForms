@@ -82,8 +82,8 @@ $(document).ready(function () {
  *   - Reads its current value.
  *   - Replaces the parent element's entire inner HTML with a single div holding that value.
  *
- * Caveats
- * - Replacing the parent element�s HTML removes the original textarea and any siblings inside the same parent.
+ * Warnings
+  * - Replacing the parent element's HTML removes the original textarea and any siblings inside the same parent.
  * - The value is injected as HTML (via .html()). If the value contains HTML, it will be interpreted.
  *   Escape content if raw text rendering is desired.
  */

@@ -210,7 +210,7 @@ $(document).ready(function () {
     const lineItemId = Number($('.liid input').val());
     const statusid = Number($('.current-status-id input').val());
 
-    if ((!isAdminUser()) || (lineItemId === LineItemType.None)) {
+    if ((!isMetrologyUser()) || (lineItemId === LineItemType.None)) {
       $('.Submit').hide();
       return;
     }
@@ -335,11 +335,20 @@ function cancelLineItem() {
  * @returns {boolean} True when the current user is an admin user.
  */
 function isAdminUser() {
-  if ($('.user-isadmin input').val() === '1') {
-    return true;
-  }
-  return false;
+  return $('.user-isadmin input').val() === '1';
+
 }
+
+/**
+ * Determines whether the current user is classified as a "Metrology" user.
+ * Business Rule: user-type-id == 1 => elevated privilege.
+ * @returns {boolean} True if metrology user; false otherwise.
+ */
+function isMetrologyUser() {
+  const userTypeId = Number($('.user-type-id input').val());
+  return userTypeId === 1 || userTypeId === 2;
+}
+
 
 /**
  * Populate task status lookup maps (id<->name) from the hidden table on the page.

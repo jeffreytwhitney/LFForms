@@ -1,4 +1,4 @@
-﻿/*# AddProgrammingTicket.js � Documentation
+﻿/*# AddProgrammingTicket.js - Documentation
 
  Author:  Jeffrey Whitney
           jtwhitney@machine.com
@@ -7,7 +7,7 @@
 
 
 Purpose
-  Implements client-side behavior for the �Add Programming Ticket� form in LFForms/MPM-ProgrammingTickets.
+  Implements client-side behavior for the "Add Programming Ticket" form in LFForms/MPM-ProgrammingTickets.
   Handles UI initialization, dynamic task row operations, validation, bulk task generation, and form submission.
   The intent is to allow users to add multiple programming tasks efficiently, with validation to prevent duplicates and 
   ensure required fields are filled.
@@ -97,7 +97,7 @@ Key Concepts:
         In our example, we have four fields: LFUserName, NetworkUserName, SiteID, DepartmentLookupTable.
         In the beginning the only field which has anything in it is LFUserName, because LF has filled it in for us.
         We take that value, keeping only the username portion and put that in NetworkUserName.
-        This causes a lookup for all the user related fields, including SiteID. Once the SiteID is set, this in turn
+        This causes a lookup for all the user-related fields, including SiteID. Once the SiteID is set, this in turn
         causes another lookup to pull in all the departments related to that site. The Department Lookup cannot be loaded until 
         we know which site we're talking about. Sometimes this daisy-chaining can get 3 and sometimes even 4 levels deep because of all the relationships between
         various fields on a form. This causes the form to be slower than it otherwise would have been, but there's not a lot we can do about it.
@@ -183,7 +183,7 @@ Key DOM Structure (expected selectors)
   On onloadlookupfinished:
     Set .closeme input to 1, add hidden #popUpDiv.
     Trigger network user name change.
-    Add �Go Back� and �GenerateTasks� buttons, wire up due date error clearing.
+    Add "Go Back" and "GenerateTasks" buttons, wire up due date error clearing.
   On #q28 click: refresh row numbers and buttons (helps after dynamic table refreshes).
 
 */
@@ -197,10 +197,10 @@ const taskTypeByNameMap = new Map();
     Sets document title.
     Loads jquery-confirm JS and relevant CSS files (jQuery UI theme, pagination CSS, confirm CSS).
     Resolves Bootstrap/jQuery UI button conflict with $.fn.button.noConflict().
-    If .closeme input equals 1, posts CloseDialogWithRefresh to parent window.
+    If .closeme input equals 1, posts CloseDialogWithRefresh to the parent window.
     Binds .Submit click ? submitForm.
     Uppercases user-related inputs:
-      Copies network username from .lf-username to .network-user-name uppercased, without domain.
+      Copies network username from .lf-username to .network-user-name uppercased, without a domain.
       Uppercases .task-name-col input on keyup.
       Uppercases .manf-rev input on change.
 */
@@ -297,7 +297,7 @@ $(document).ready(function () {
 
 
 /**
-   - Description: Replaces any `.execute-task-generation` placeholder with an `<input type="button">` labeled �GenerateTasks� that calls `generateTasks()`.
+   - Description: Replaces any `.execute-task-generation` placeholder with an `<input type="button">` labeled "GenerateTasks" that calls `generateTasks()`.
      LFF doesn't provide buttons, so we have to create our own.
    - Side effects: DOM replacement.
  */
@@ -395,7 +395,7 @@ function cloneRow(cloneRowID) {
 
 
 /**
- * Description: Replaces   #show-generate-tasks   placeholder with a �GenerateTasks� button that calls callShowGenerateTasks()  .
+  * Description: Replaces   #show-generate-tasks   placeholder with a "GenerateTasks" button that calls callShowGenerateTasks()  .
    Side effects: DOM replacement.
  */
 function createShowGenerateButton() {
@@ -414,8 +414,8 @@ function createShowGenerateButton() {
   Behavior:
     Clears previous parsley error classes and .error-message contents.
     For each pair of rows considered valid by isRowValid, flags duplicates by:
-      Writing �Duplicate Row� into both rows�   .error-message input  .
-      Adding   parsley-error   to both rows� relevant inputs.
+            Writing "Duplicate Row" into both rows'   .error-message input  .
+            Adding   parsley-error   to both rows' relevant inputs.
  */
 function checkForDuplicateRows() {
   $('.task-name-col input').removeClass('parsley-error');
@@ -495,11 +495,11 @@ function fillCCList() {
 
 
 /**
- * Description: Converts placeholder with class .gobackbutton into a styled �Go Back� UI button that calls callGoBack() and removes the placeholder.
+  * Description: Converts placeholder with class .gobackbutton into a styled "Go Back" UI button that calls callGoBack() and removes the placeholder.
  */
 function generateGoBackButtons() {
   const goback_buttons = $(".gobackbutton");
-  goback_buttons.each(function (index) {
+  goback_buttons.each(function () {
     $(this).parent().append("<div id='go-back' class='ui-button ui-corner-all ui-widget' onclick='callGoBack()'><span class='ui-icon ui-icon-arrowreturnthick-1-w'></span>Go Back</div>");
   });
   $(".gobackbutton").remove();
@@ -702,7 +702,7 @@ function loadTaskTypeMap() {
     if (tasktype_rows.length === 0) {
       return;
     }
-    tasktype_rows.each(function (index) {
+    tasktype_rows.each(function () {
       let tasktypeID = Number($(this).find('.task-type-lookup-table-id input').val());
       let tasktypeName = $(this).find('.task-type-lookup-table-name input').val();
       taskTypeMap.set(tasktypeID, tasktypeName);

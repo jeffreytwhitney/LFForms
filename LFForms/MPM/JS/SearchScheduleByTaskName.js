@@ -104,8 +104,8 @@ $(document).ready(function () {
  *
  * Markup notes:
  *  - Inserts a container with id `user-pagination`.
- *  - Adds Prev (�, ��) and Next (�) anchors with enabled/disabled states and click handlers.
- *  - Removes an existing `#user-pagination` prior to rendering a new one.
+  *  - Adds Prev (&lsaquo;, &laquo;) and Next (&rsaquo;) anchors with enabled/disabled states and click handlers.
+ *  - Removes an existing `#user-pagination` before rendering a new one.
  */
 function appendPagination() {
 
@@ -120,25 +120,25 @@ function appendPagination() {
 
     // Case: first page and fewer than a full page of rows -> no next page.
     if ((current_page === 1) && (row_count < 25)) {
-      $('.task-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>��</a></li><li><a class='page-link prev isDisabled'>�</a></li><li><a class='page-link next isDisabled'>�</a></li></ul></div>");
+      $('.task-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>&laquo;</a></li><li><a class='page-link prev isDisabled'>&lsaquo;</a></li><li><a class='page-link next isDisabled'>&rsaquo;</a></li></ul></div>");
       return;
     }
 
     // Case: first page and exactly a full page of rows -> next page enabled.
     if ((current_page === 1) && (row_count === 25)) {
-      $('.task-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>��</a></li><li><a class='page-link prev isDisabled'>�</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>�</a></li></ul></div>")
+      $('.task-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>&laquo;</a></li><li><a class='page-link prev isDisabled'>&lsaquo;</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>&rsaquo;</a></li></ul></div>")
       return;
     }
 
     // Case: middle pages and full page of rows -> next and prev enabled.
     if ((current_page > 1) && (row_count === 25)) {
-      $('.task-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>��</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>�</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>�</a></li></ul></div>")
+      $('.task-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);'>&laquo;</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);'>&lsaquo;</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>&rsaquo;</a></li></ul></div>")
       return;
     }
 
     // Case: last page (fewer than a full page of rows) -> prev enabled, next disabled.
     if ((current_page > 1) && (row_count < 25)) {
-      $('.task-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);''>��</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);''>�</a></li><li><a class='page-link next isDisabled'>�</a></li></ul></div>")
+      $('.task-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);'>&laquo;</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);'>&lsaquo;</a></li><li><a class='page-link next isDisabled'>&rsaquo;</a></li></ul></div>")
       return;
     }
   }
