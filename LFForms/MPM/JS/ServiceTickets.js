@@ -585,7 +585,7 @@ function generateFilterRow() {
     $(excludeGagingCheckbox).insertAfter('.add-button');
 
 
-    const filter_row = "<TR id='filterRow'><TH><input id='txtFilter_TicketNumber'/></TH><TH><input id='txtFilter_TicketName'/></TH><TH><select id='cboFilter_Initiator'/></TH><TH><select id='cboFilter_TicketType'/></TH><TH><select id='cboFilter_Department'/></TH><TH><select id='cboFilter_Assignee'/></TH><TH></TH><TH></TH><TH></TH><TH></TH><TH></TH><TH></TH></TR>"
+    const filter_row = "<TR id='filterRow'><TH><input id='txtFilter_TicketNumber'/></TH><TH><input id='txtFilter_TicketName'/></TH><TH><select id='cboFilter_Initiator'/></TH><TH><select id='cboFilter_TicketType'/></TH><TH><select id='cboFilter_Department'/></TH><TH></TH><TH><select id='cboFilter_Assignee'/></TH><TH></TH><TH></TH><TH></TH><TH></TH><TH></TH><TH></TH></TR>"
 
 
     $('.service-ticket-table table thead').append(filter_row);
