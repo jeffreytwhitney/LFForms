@@ -5,8 +5,8 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
-  $.fn.bootstrapBtn = bootstrapButton;
+   // return $.fn.button to previously assigned value
+  $.fn.bootstrapBtn = $.fn.button.noConflict();
 
 
   $('.Submit').on("click", function (e) { validateForm(e); });
@@ -14,7 +14,7 @@ $(document).ready(function () {
 
   $(document).prop('title', 'Thread Maintenance');
   $('#myElement').removeAttr('style');
-  $('#q10').prepend("<fieldset id='Field999' class='radio-checkbox-fieldset filter-checkboxes'><span class='choice'><input name='Field999' id='Field999-0' type='checkbox' value='IncludeInactivethreads'><label class='form-option-label' for='Field999-0'>Include InActive threads</label></span></fieldset>");
+  $('#q10').prepend("<fieldset id='Field999' class='radio-checkbox-fieldset filter-checkboxes'><span class='choice'><input name='Field999' id='Field999-0' type='checkbox' value='IncludeInactivethreads'><label class='form-option-label' for='Field999-0'>Show InActive threads</label></span></fieldset>");
 
   //This is in the Edit Thread section. If the user changes the value in the text box, it updates the combo box.
   $('.edit-thread-isactive-value input').on("change", function () {
@@ -49,7 +49,7 @@ $(document).ready(function () {
     $('.add-thread-type-id input').val(Number($('.add-thread-type-combo select').val()));
   });
 
-  //This is in the Add Thread section. If there is a thread with the same name, disable the submit button.
+  //This is in the Add Thread section. If there is a thread with the same name, disable the Submit button.
   $('.existing-thread-name-id input').on("change", function () {
     validateForm();
   });
@@ -77,15 +77,15 @@ $(document).ready(function () {
     $('#q0').append("<div class='hidden-text' id='popUpDiv'></div>");
     $(".filter-checkboxes input[type='checkbox']").on("change", function () { filterThreadTable(); });
     generateFilterRow();
-    $('#txtFilterThreadName').keyup(function () { this.value = this.value.toLocaleUpperCase(); });
-    $('#txtFilterDesc').keyup(function () { this.value = this.value.toLocaleUpperCase(); });
-    $('.add-thread-name input').keyup(function () { this.value = this.value.toLocaleUpperCase(); });
+    $('#txtFilterThreadName').on( "keyup", function() { this.value = this.value.toLocaleUpperCase(); });
+    $('#txtFilterDesc').on("keyup", function () { this.value = this.value.toLocaleUpperCase(); });
+    $('.add-thread-name input').on("keyup", function () { this.value = this.value.toLocaleUpperCase(); });
     $('.thread-table').show();
     reApplyFilterValues();
     filterThreadTable();
   });
 
-  $(document).on('lookupcomplete', function (e) {
+  $(document).on('lookupcomplete', function () {
     if ($('.pg input').val() === '999') {
       $('.pg input').val(1).trigger("change");
     }
@@ -122,24 +122,20 @@ function appendPagination() {
     }
     if ((current_page > 1) && (row_count < 25)) {
       $('.thread-table table').parent().append("<div id='thread-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);'>&laquo;</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);'>&lsaquo;</a></li><li><a class='page-link next isDisabled'>&rsaquo;</a></li></ul></div>")
-      return;
     }
   }
   else {
     $('#thread-table-pagination').remove();
     $('.thread-table table').parent().append("<div id='thread-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled' href='javascript:void(0);'>&laquo;</a></li><li><a class='page-link prev isDisabled' href='javascript:void(0);'>&lsaquo;</a></li><li><a class='page-link next isDisabled'>&rsaquo;</a></li></ul></div>")
-    return;
   }
 
 }
 
 
 function callAddThread() {
-
   $("#Field7-1").prop("checked", true).trigger("change");
   $(".add-threadgage-id input").val(1).trigger("change");
   $('.Submit').show();
-
 }
 
 
@@ -153,7 +149,7 @@ function callEditThread(thread_id) {
 function callPrevPage() {
   $('.thread-table').hide();
   removeAppendedFields();
-  current_page = Number($('.pg input').val());
+  let current_page = Number($('.pg input').val());
   if (current_page === 1) {
     return;
   }
@@ -164,7 +160,7 @@ function callPrevPage() {
 function callNextPage() {
   $('.thread-table').hide();
   removeAppendedFields();
-  current_page = Number($('.pg input').val());
+  let current_page = Number($('.pg input').val());
   $('.pg input').val(current_page + 1).trigger("change");
 }
 
@@ -172,7 +168,7 @@ function callNextPage() {
 function changeNumericToYesNo() {
 
   const isactive = $("[id^='Field16']");
-  isactive.each(function (index) {
+  isactive.each(function () {
     const isactive_value = $(this).val();
     if ((isactive_value === '1') || (isactive_value === 'Yes')) {
       $(this).val('Yes');
@@ -227,9 +223,9 @@ function generateAddButton() {
   const add_buttons = $(".addbutton");
   const is_admin = checkPermissions();
 
-  add_buttons.each(function (index) {
+  add_buttons.each(function () {
     if (is_admin) {
-      $(this).replaceWith("<input class='return' style='visibilty:visible' type='button' value='Add Thread' onclick='callAddThread()' />");
+      $(this).replaceWith("<input class='return' style='visibility:visible' type='button' value='Add Thread' onclick='callAddThread()' />");
     }
     else {
       $(this).replaceWith("");
@@ -243,7 +239,7 @@ function generateEditButtons() {
   const is_admin = checkPermissions();
   $('.table-button').remove();
   const edit_buttons = $(".edit-button input[type=text]");
-  edit_buttons.each(function (index) {
+  edit_buttons.each(function () {
     const btn_value = $(this).val();
     if (is_admin) {
       $(this).parent().append("<input class='table-button' type='button' value='Edit' onclick='callEditThread(" + btn_value + ")' />");
@@ -257,7 +253,7 @@ function generateFilterRow() {
 
   if ($('#filterRow').length === 0) {
 
-    const filter_row = "<TR id='filterRow'><TH/><TH/><TH><input type='text' id='txtFilterThreadName'></TH><TH><input type='text' id='txtFilterDesc'></TH><TH/><TH/><TH/><TH/><TH/><TH/><TH/>"
+    const filter_row = "<TR id='filterRow'><TH/><TH><input type='text' id='txtFilterThreadName'></TH><TH/>"
     $('.thread-table table thead').append(filter_row);
     $("#txtFilterThreadName").on("change", function () { filterThreadTable(); });
     $("#txtFilterDesc").on("change", function () { filterThreadTable(); });
@@ -270,7 +266,7 @@ function generateFilterRow() {
 
 function generateGoBackButtons() {
   const $goback_buttons = $(".gobackbutton");
-  $goback_buttons.each(function (index) {
+  $goback_buttons.each(function () {
     $(this).replaceWith("<input class='return' type='button' value='Go Back' onclick='goBack()' />");
   });
 }
@@ -302,8 +298,7 @@ function generateTicketDetailButtons() {
 
 
 function getTableRowCount() {
-  const row_count = $('.thread-table table tbody tr').length;
-  return row_count;
+  return $('.thread-table table tbody tr').length;
 }
 
 

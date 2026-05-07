@@ -5,8 +5,8 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
-  $.fn.bootstrapBtn = bootstrapButton;
+   // return $.fn.button to previously assigned value
+  $.fn.bootstrapBtn = $.fn.button.noConflict();
 
 
   $('.Submit').on("click", function (e) { validateForm(e); });
@@ -58,14 +58,14 @@ $(document).ready(function () {
     $('#q0').append("<div class='hidden-text' id='popUpDiv'></div>");
     $(".filter-checkboxes input[type='checkbox']").on("change", function () { filterBinTable(); });
     generateFilterRow();
-    $('#txtFilterBinName').keyup(function () { this.value = this.value.toLocaleUpperCase(); });
-    $('.add-bin-name input').keyup(function () { this.value = this.value.toLocaleUpperCase(); });
+    $('#txtFilterBinName').on("keyup", function () { this.value = this.value.toLocaleUpperCase(); });
+    $('.add-bin-name input').on("keyup", function () { this.value = this.value.toLocaleUpperCase(); });
     $('.bin-table').show();
     reApplyFilterValues();
     filterBinTable();
   });
 
-  $(document).on('lookupcomplete', function (e) {
+  $(document).on('lookupcomplete', function () {
     if ($('.pg input').val() === '999') {
       $('.pg input').val(1).trigger("change");
     }
@@ -107,17 +107,14 @@ function appendPagination() {
   else {
     $('#bin-table-pagination').remove();
     $('.bin-table table').parent().append("<div id='bin-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled' href='javascript:void(0);'>&laquo;</a></li><li><a class='page-link prev isDisabled' href='javascript:void(0);'>&lsaquo;</a></li><li><a class='page-link next isDisabled'>&rsaquo;</a></li></ul></div>")
-    return;
   }
 }
 
 
 function callAddBin() {
-
   $("#Field9-1").prop("checked", true).trigger("change");
   $(".add-bin-id input").val(1).trigger("change");
   $('.Submit').show();
-
 }
 
 
@@ -131,7 +128,7 @@ function callEditBin(bin_id) {
 function callPrevPage() {
   $('.bin-table').hide();
   removeAppendedFields();
-  current_page = Number($('.pg input').val());
+  let current_page = Number($('.pg input').val());
   if (current_page === 1) {
     return;
   }
@@ -142,7 +139,7 @@ function callPrevPage() {
 function callNextPage() {
   $('.bin-table').hide();
   removeAppendedFields();
-  current_page = Number($('.pg input').val());
+  let current_page = Number($('.pg input').val());
   $('.pg input').val(current_page + 1).trigger("change");
 }
 
@@ -280,8 +277,7 @@ function generateTicketDetailButtons() {
 
 
 function getBinRowCount() {
-  const row_count = $('.bin-table table tbody tr').length;
-  return row_count;
+  return $('.bin-table table tbody tr').length;
 }
 
 
@@ -350,6 +346,7 @@ function refreshPage() {
   const page_number = Number($('.pg input').val());
   let current_url = window.location.href;
 
+  let indexOfQuestionMark;
   if (current_url.includes('?')) {
     indexOfQuestionMark = current_url.indexOf('?');
     current_url = current_url.substring(0, indexOfQuestionMark);
