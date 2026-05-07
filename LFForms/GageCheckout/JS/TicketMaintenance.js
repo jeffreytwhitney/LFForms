@@ -5,19 +5,21 @@ const machineGroupNameMap = new Map();
 const cellLeaderMap = new Map();
 const cellLeaderNameMap = new Map();
 
-let should_print_receipt = true;
+var should_print_receipt = true;
 
 $(document).ready(function () {
 
   $('.Submit').hide();
-  $('.Submit').on("click", function (e) { submitForm(e); });
+  $('.Submit').on("click", function (e) {
+    submitForm(e);
+  });
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js');
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
-  $.fn.bootstrapBtn = bootstrapButton;
+  // return $.fn.button to previously assigned value
+  $.fn.bootstrapBtn = $.fn.button.noConflict();
 
   $(document).prop('title', 'Gage Maintenance');
   $('#q0').append("<div class='hidden' id='popUpDiv'></div>");
@@ -55,8 +57,7 @@ $(document).ready(function () {
         executeIFrameUpdate(returnTicketID);
         removeRow(returnTicketID);
         $('.return-ticket-id input').val(0);
-      }
-      else {
+      } else {
         refreshPage();
       }
     }
@@ -111,14 +112,14 @@ $(document).ready(function () {
 
   $(document).on('change', '.site-name select', function () {
     const sitename = $('.site-name select').val();
-    $.cookie('site_name', sitename, { expires: 365, path: '/' });
+    $.cookie('site_name', sitename, {expires: 365, path: '/'});
   });
 
-  $(document).on('change', '[id^="Field269"]', function (e) {
+  $(document).on('change', '[id^="Field269"]', function () {
     generateMachineList();
   });
 
-  $(document).on('click', '.cf-collection-delete', function (e) {
+  $(document).on('click', '.cf-collection-delete', function () {
     generateMachineList();
   });
 });
@@ -127,7 +128,9 @@ $(document).ready(function () {
 function appendPagination() {
 
   const current_page = Number($('.pg input').val());
-  if (current_page === 999) { return; }
+  if (current_page === 999) {
+    return;
+  }
 
   const row_count = getTicketRowCount();
 
@@ -147,13 +150,10 @@ function appendPagination() {
     }
     if ((current_page > 1) && (row_count < 25)) {
       $('.ticket-table table').parent().append("<div id='ticket-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);'>&laquo;</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);'>&lsaquo;</a></li><li><a class='page-link next isDisabled'>&rsaquo;</a></li></ul></div>")
-      return;
     }
-  }
-  else {
+  } else {
     $('#ticket-table-pagination').remove();
     $('.ticket-table table').parent().append("<div id='ticket-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled' href='javascript:void(0);'>&laquo;</a></li><li><a class='page-link prev isDisabled' href='javascript:void(0);'>&lsaquo;</a></li><li><a class='page-link next isDisabled'>&rsaquo;</a></li></ul></div>")
-    return;
   }
 }
 
@@ -164,19 +164,17 @@ function callActivate(ticket_id) {
 }
 
 
-function callCalibrate(ticket_id, calForReturn=0) {
+function callCalibrate(ticket_id, calForReturn = 0) {
   const has_permissions = checkPermissions();
   if (has_permissions) {
     let widowHeight = $(window).height();
     widowHeight = widowHeight - 50;
     if (calForReturn === 0) {
       popUpIframe(`http://rmslf/Forms/GageCalibration?tid=${ticket_id}`, 'Calibrate Ticket', widowHeight, 1200);
-    }
-    else {
+    } else {
       popUpIframe(`http://rmslf/Forms/GageCalibration?tid=${ticket_id}&CalForReturn=1`, 'Calibrate Ticket', widowHeight, 1200);
     }
-  }
-  else {
+  } else {
     alert("Sorry, you do not have permissions to do this.");
   }
 }
@@ -191,7 +189,7 @@ function callGoBack() {
 function callNextPage() {
   $('.pg').hide();
   removeAppendedFields();
-  current_page = Number($('.pg input').val());
+  let current_page = Number($('.pg input').val());
   $('.pg input').val(current_page + 1).trigger("change");
 }
 
@@ -199,7 +197,7 @@ function callNextPage() {
 function callPrevPage() {
   $('.pg').hide();
   removeAppendedFields();
-  current_page = Number($('.pg input').val());
+  let current_page = Number($('.pg input').val());
   if (current_page === 1) {
     return;
   }
@@ -219,9 +217,7 @@ function callPrint(ticket_id) {
 
 
 function callReturn(ticket_id) {
-
   callCalibrate(ticket_id, 1);
-
 }
 
 
@@ -240,7 +236,6 @@ function checkPermissions() {
   }
 
   return return_val
-
 }
 
 
@@ -288,7 +283,9 @@ function filterTicketTable() {
 
 
   const ticketNumberFilterValue = $('#txtFilter_TicketNumber').val();
-  //var ticketTypeFilterVal = $('#cboFilter_TicketType').val();
+  const partNumberFilterValue = $('#txtFilter_PartNumber').val();
+  const jobNameFilterValue = $('#txtFilter_JobNumber').val();
+
   const departmentFilterVal = $('#cboFilter_Department').val();
   const machineGroupFilterVal = $('#cboFilter_MachineGroup').val();
   const operatorFilterVal = $('#cboFilter_Operator').val();
@@ -296,57 +293,40 @@ function filterTicketTable() {
   const statusFilterVal = $('#cboFilter_Status').val();
 
   $('.ftname input').val(ticketNumberFilterValue);
-
-  $('.fsid input').val(statusFilterVal); 
-
-  //if (ticketTypeFilterVal != null) {
-  //  $('.fttid input').val(ticketTypeFilterVal);
-  //}
-  //else {
-  //  $('.fttid input').val(0);
-  //}
+  $('.fjnbr input').val(jobNameFilterValue);
+  $('.fpnum input').val(partNumberFilterValue);
+  $('.fsid input').val(statusFilterVal);
 
   if ((departmentFilterVal !== 0) && (departmentFilterVal.length > 0)) {
     const taskDepartmentID = departmentNameMap.get(departmentFilterVal);
     $('.fdid input').val(taskDepartmentID);
-  }
-  else {
+  } else {
     $('.fdid input').val(0);
   }
 
   if ((machineGroupFilterVal !== 0) && (machineGroupFilterVal.length > 0)) {
     const machineGroupID = machineGroupNameMap.get(machineGroupFilterVal);
     $('.fmgid input').val(machineGroupID);
-  }
-  else {
+  } else {
     $('.fmgid input').val(null);
   }
 
   if ((operatorFilterVal !== null) && (operatorFilterVal.length > 0)) {
     $('.fopname input').val(operatorFilterVal);
-  }
-  else {
+  } else {
     $('.fopname input').val(null);
   }
 
   if ((cellLeaderFilterVal !== 0) && (cellLeaderFilterVal.length > 0)) {
     const cellLeaderID = cellLeaderNameMap.get(cellLeaderFilterVal);
     $('.fclid input').val(cellLeaderID);
-  }
-  else {
+  } else {
     $('.fclid input').val(0);
   }
 
   $('.ticket-table').hide();
   $('.ticket-detail-link').remove();
   $('.pg input').val(1).trigger("change");
-
-}
-
-
-function formatDateFields(selector) {
-
-  $(`[id^='${selector}']`).each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
 
 }
 
@@ -371,7 +351,7 @@ function generateActivateButtons() {
 
 function generateGoBackButtons() {
   const gobackactivate_buttons = $(".goback_activate");
-  gobackactivate_buttons.each(function (index) {
+  gobackactivate_buttons.each(function () {
     $(this).parent().append("<div id='go-back' class='ui-button ui-corner-all ui-widget' onclick='callGoBack()'><span class='ui-icon ui-icon-arrowreturnthick-1-w'></span>Go Back</div>");
   });
   $(".goback_activate").remove();
@@ -382,49 +362,82 @@ function generateFilterRow() {
 
   if ($('#filterRow').length === 0) {
 
-    const filter_row = "<TR id='filterRow'><TH/><TH/><TH/><TH/><TH><input type='text' id='txtFilter_TicketNumber'></TH><TH><select id='cboFilter_Status'/></TH><TH><select id='cboFilter_Department'/></TH><TH/><TH><select id='cboFilter_MachineGroup'/></TH><TH><select id='cboFilter_Operator'/></TH><TH><select id='cboFilter_CellLeader'/></TH><TH/><TH/><TH/><TH/><TH/><TH/><TH/>"
+    const filter_row = "<TR id='filterRow'><TH/><TH/><TH/><TH/><TH><input type='text' id='txtFilter_TicketNumber'></TH><TH><select id='cboFilter_Status'/></TH><TH><select id='cboFilter_Department'/></TH><TH/><TH><select id='cboFilter_MachineGroup'/></TH><TH><select id='cboFilter_Operator'/></TH><TH><select id='cboFilter_CellLeader'/></TH><TH><input type='text' id='txtFilter_PartNumber'></TH><TH><input type='text' id='txtFilter_JobNumber'></TH><TH/><TH/><TH/><TH/><TH/>"
     $('.ticket-table table thead').append(filter_row);
-    $("#txtFilter_TicketNumber").on("change", function () { filterTicketTable(); });
-    //$("#cboFilter_TicketType").on("change", function () { filterTicketTable(); });
-    $("#cboFilter_Department").on("change", function () { filterTicketTable(); });
-    $("#cboFilter_MachineGroup").on("change", function () { filterTicketTable(); });
-    $("#cboFilter_Operator").on("change", function () { filterTicketTable(); });
-    $("#cboFilter_CellLeader").on("change", function () { filterTicketTable(); });
-    $("#cboFilter_Status").on("change", function () { filterTicketTable(); });
+    $("#txtFilter_TicketNumber").on("change", function () {
+      filterTicketTable();
+    });
+    $("#txtFilter_PartNumber").on("change", function () {
+      filterTicketTable();
+    });
+    $("#txtFilter_JobNumber").on("change", function () {
+      filterTicketTable();
+    });
 
 
-    $("#txtFilter_TicketNumber").on("dblclick", function () { $("#txtFilter_TicketNumber").val(null).trigger("change"); });
-    //$("#cboFilter_TicketType").on("dblclick", function () { $("#cboFilter_TicketType").val(null).trigger("change"); });
-    $("#cboFilter_Department").on("dblclick", function () { $("#cboFilter_Department").val(null).trigger("change"); });
-    $("#cboFilter_MachineGroup").on("dblclick", function () { $("#cboFilter_MachineGroup").val(null).trigger("change"); });
-    $("#cboFilter_Operator").on("dblclick", function () { $("#cboFilter_Operator").val(null).trigger("change"); });
-    $("#cboFilter_CellLeader").on("dblclick", function () { $("#cboFilter_CellLeader").val(null).trigger("change"); });
-    $("#cboFilter_Status").on("dblclick", function () { $("#cboFilter_Status").val(null).trigger("change"); });
+    $("#cboFilter_Department").on("change", function () {
+      filterTicketTable();
+    });
+    $("#cboFilter_MachineGroup").on("change", function () {
+      filterTicketTable();
+    });
+    $("#cboFilter_Operator").on("change", function () {
+      filterTicketTable();
+    });
+    $("#cboFilter_CellLeader").on("change", function () {
+      filterTicketTable();
+    });
+    $("#cboFilter_Status").on("change", function () {
+      filterTicketTable();
+    });
+
+
+    $("#txtFilter_TicketNumber").on("dblclick", function () {
+      $("#txtFilter_TicketNumber").val(null).trigger("change");
+    });
+    $("#txtFilter_PartNumber").on("dblclick", function () {
+      $("#txtFilter_PartNumber").val(null).trigger("change");
+    });
+    $("#txtFilter_JobNumber").on("dblclick", function () {
+      $("#txtFilter_JobNumber").val(null).trigger("change");
+    });
+
+    $("#cboFilter_Department").on("dblclick", function () {
+      $("#cboFilter_Department").val(null).trigger("change");
+    });
+    $("#cboFilter_MachineGroup").on("dblclick", function () {
+      $("#cboFilter_MachineGroup").val(null).trigger("change");
+    });
+    $("#cboFilter_Operator").on("dblclick", function () {
+      $("#cboFilter_Operator").val(null).trigger("change");
+    });
+    $("#cboFilter_CellLeader").on("dblclick", function () {
+      $("#cboFilter_CellLeader").val(null).trigger("change");
+    });
+    $("#cboFilter_Status").on("dblclick", function () {
+      $("#cboFilter_Status").val(null).trigger("change");
+    });
     wireUpSortFields();
   }
 
-  //if (($(".ticket-type-lookup-cbo select option").length > 0) && ($('#cboFilter_TicketType option' == 0))) {
-  //  $("#cboFilter_TicketType").html($(".ticket-type-lookup-cbo select").html());
-  //}
-
-  if (($(".department-lookup-cbo select option").length > 0) && ($('#cboFilter_Department option' === 0))) {
+  if (($(".department-lookup-cbo select option").length > 0) && ($('#cboFilter_Department option').length < 2)) {
     $("#cboFilter_Department").html($(".department-lookup-cbo select").html());
   }
 
-  if (($(".status-lookup-cbo select option").length > 0) && ($('#cboFilter_Status option' === 0))) {
+  if (($(".status-lookup-cbo select option").length > 0) && ($('#cboFilter_Status option').length < 2)) {
     $("#cboFilter_Status").html($(".status-lookup-cbo select").html());
   }
 
-  if (($(".machine-group-lookup-cbo select option").length > 0) && ($('#cboFilter_MachineGroup option' === 0))) {
+  if (($(".machine-group-lookup-cbo select option").length > 0) && ($('#cboFilter_MachineGroup option').length < 2 )) {
     $("#cboFilter_MachineGroup").html($(".machine-group-lookup-cbo select").html());
   }
 
-  if (($(".operator-lookup-cbo select option").length > 0) && ($('#cboFilter_Operator option' === 0))) {
+  if (($(".operator-lookup-cbo select option").length > 0) && ($('#cboFilter_Operator option').length < 2)) {
     $("#cboFilter_Operator").html($(".operator-lookup-cbo select").html());
     $("#cboFilter_Operator").find('option:eq(0)').prop('selected', true);
   }
 
-  if (($(".cell-leader-lookup-cbo select option").length > 0) && ($('#cboFilter_CellLeader option' === 0))) {
+  if (($(".cell-leader-lookup-cbo select option").length > 0) && ($('#cboFilter_CellLeader option').length < 2)) {
     $("#cboFilter_CellLeader").html($(".cell-leader-lookup-cbo select").html());
     $("#cboFilter_CellLeader").find('option:eq(0)').prop('selected', true);
   }
@@ -445,21 +458,17 @@ function generateMachineList() {
   const activateTicketID = $('.activate-ticket-id input').val();
   let machineList = '';
 
-
   if (activateTicketID !== '') {
-
     $('[id^="Field269"]').each(function (index, element) {
       machineName = $(element).val();
       if (machineName !== '') {
         if (machineList.length > 0) {
           machineList += ', ' + machineName;
-        }
-        else {
+        } else {
           machineList = machineName;
         }
       }
     });
-
     $('.activate-machine-list input').val(machineList);
   }
 }
@@ -501,7 +510,12 @@ function generateTicketNumberColumn() {
   ticket_numbers.each(function (index) {
     const ticket_id = $(ticket_ids[index]).val();
     const ticket_number = $(this).val();
-    const ticket_number_link = $("<a>", { text: ticket_number, class: 'ticket-link', href: 'javascript:void(0);', onclick: `showDetails(${ticket_id})` });
+    const ticket_number_link = $("<a>", {
+      text: ticket_number,
+      class: 'ticket-link',
+      href: 'javascript:void(0);',
+      onclick: `showDetails(${ticket_id})`
+    });
     const has_link = $(this).parent().find('.ticket-link').length;
     if (has_link === 0) {
       $(this).parent().append(ticket_number_link);
@@ -535,7 +549,6 @@ function getTicketGuidByTicketID(ticket_id) {
     const row_ticket_guid = ticket_guids[index].value;
     if (row_ticket_id === ticket_id) {
       ticket_guid = row_ticket_guid;
-      return;
     }
   });
   return ticket_guid;
@@ -543,8 +556,7 @@ function getTicketGuidByTicketID(ticket_id) {
 
 
 function getTicketRowCount() {
-  const row_count = $('.ticket-table table tbody tr').length;
-  return row_count;
+  return $('.ticket-table table tbody tr').length;
 }
 
 
@@ -558,7 +570,6 @@ function getTicketTypeIDByTicketID(ticket_id) {
     const row_ticket_type_id = ticket_type_ids[index].value;
     if (row_ticket_id === ticket_id) {
       ticket_type_id = row_ticket_type_id;
-      return;
     }
   });
   return ticket_type_id;
@@ -576,9 +587,9 @@ function loadCellLeaderMap() {
     if (cellLeader_rows.length === 0) {
       return;
     }
-    cellLeader_rows.each(function (index) {
-      cellLeaderID = Number($(this).find('.cellleader-lookup-table-id input').val());
-      cellLeaderName = $(this).find('.cellleader-lookup-table-name input').val();
+    cellLeader_rows.each(function () {
+      let cellLeaderID = Number($(this).find('.cellleader-lookup-table-id input').val());
+      let cellLeaderName = $(this).find('.cellleader-lookup-table-name input').val();
       cellLeaderMap.set(cellLeaderID, cellLeaderName);
       cellLeaderNameMap.set(cellLeaderName, cellLeaderID);
     });
@@ -592,9 +603,9 @@ function loadDepartmentMap() {
     if (department_rows.length === 0) {
       return;
     }
-    department_rows.each(function (index) {
-      departmentID = Number($(this).find('.department-lookup-table-id input').val());
-      departmentName = $(this).find('.department-lookup-table-name input').val();
+    department_rows.each(function () {
+      let departmentID = Number($(this).find('.department-lookup-table-id input').val());
+      let departmentName = $(this).find('.department-lookup-table-name input').val();
       departmentMap.set(departmentID, departmentName);
       departmentNameMap.set(departmentName, departmentID);
     });
@@ -608,9 +619,9 @@ function loadMachineGroupMap() {
     if (machine_group_rows.length === 0) {
       return;
     }
-    machine_group_rows.each(function (index) {
-      machineGroupID = Number($(this).find('.machine-group-lookup-table-id input').val());
-      machineGroupName = $(this).find('.machine-group-lookup-table-name input').val();
+    machine_group_rows.each(function () {
+      let machineGroupID = Number($(this).find('.machine-group-lookup-table-id input').val());
+      let machineGroupName = $(this).find('.machine-group-lookup-table-name input').val();
       machineGroupMap.set(machineGroupID, machineGroupName);
       machineGroupNameMap.set(machineGroupName, machineGroupID);
     });
@@ -631,7 +642,7 @@ function popUpIframe(src, title, height, width) {
     autoOpen: false,
     resizable: true,
     modal: true,
-    position: { my: "left top", at: "left top", of: window },
+    position: {my: "left top", at: "left top", of: window},
     close: function (event, ui) {
     }
   });
@@ -647,8 +658,6 @@ function print_receipt() {
   if (Number($('.return-ticket-id input').val()) !== 0) {
     return;
   }
-
-
   const domain = document.location.hostname;
   const receipt_url_root = "http://" + domain + "/Forms/";
   let receipt_url = "";
@@ -663,7 +672,7 @@ function print_receipt() {
   if (should_print_receipt === true) {
     if (receipt_url !== "") {
       loadiFrame(receipt_url);
-      should_print_receipt === false;
+      should_print_receipt = false;
       $('.print-ticket-id input').val(null).trigger("change");
     }
   }
@@ -676,6 +685,8 @@ function reApplyFilterValues() {
   }
 
   const ticketNumberFilterValue = $('.ftname input').val();
+  const jobNumberFilterValue = $('.fjnbr input').val();
+  const partNumberFilterValue = $('.fpnum input').val();
   const ticketTypeFilterVal = $('.fttid input').val();
   const departmentFilterVal = Number($('.fdid input').val());
   const machineGroupFilterVal = Number($('.fmgid input').val());
@@ -687,6 +698,14 @@ function reApplyFilterValues() {
 
   if ((ticketNumberFilterValue !== null) && (ticketNumberFilterValue.length > 0)) {
     $('#txtFilter_TicketNumber').val(ticketNumberFilterValue);
+  }
+
+  if ((jobNumberFilterValue !== null) && (jobNumberFilterValue.length > 0)) {
+    $('#txtFilter_JobNumber').val(jobNumberFilterValue);
+  }
+
+  if ((partNumberFilterValue !== null) && (partNumberFilterValue.length > 0)) {
+    $('#txtFilter_PartNumber').val(partNumberFilterValue);
   }
 
   if (ticketTypeFilterVal !== 0) {
@@ -717,15 +736,18 @@ function reApplyFilterValues() {
 function refreshPage() {
 
   const ticketNumberFilterValue = $('.ftname input').val();
+  const jobNumberFilterValue = $('.fjnbr input').val();
+  const partNumberFilterValue = $('.fpnum input').val();
   const ticketTypeFilterVal = $('.fttid input').val();
   const departmentFilterVal = Number($('.fdid input').val());
   const machineGroupFilterVal = Number($('.fmgid input').val());
   const operatorFilterVal = $('.fopname input').val();
   const cellLeaderFilterVal = Number($('.fclid input').val());
   const page_number = Number($('.pg input').val());
-  
+
 
   let current_url = window.location.href;
+  let indexOfQuestionMark;
   if (current_url.includes('?')) {
     indexOfQuestionMark = current_url.indexOf('?');
     current_url = current_url.substring(0, indexOfQuestionMark);
@@ -737,6 +759,14 @@ function refreshPage() {
 
   if ((ticketNumberFilterValue !== null) && (ticketNumberFilterValue.length > 0)) {
     current_url = current_url + `&ftname=${ticketNumberFilterValue}`;
+  }
+
+  if ((jobNumberFilterValue !== null) && (jobNumberFilterValue.length > 0)) {
+    current_url = current_url + `&fjnbr=${jobNumberFilterValue}`;
+  }
+
+  if ((partNumberFilterValue !== null) && (partNumberFilterValue.length > 0)) {
+    current_url = current_url + `&fpnum=${partNumberFilterValue}`;
   }
 
   if ((departmentFilterVal !== null) && (departmentFilterVal > 0)) {
@@ -763,16 +793,15 @@ function removeAppendedFields() {
   $('#tasklist-pagination').remove();
   $('.table-button').remove();
   $('.ticket-link').remove();
-  }
+}
 
 
 function removeRow(ticket_id) {
   const ticket_ids = $(".ticket-id-col input[type=text]");
-  ticket_ids.each(function (index) {
+  ticket_ids.each(function () {
     const row_ticket_id = $(this).val();
     if (row_ticket_id === ticket_id) {
       $(this).closest('tr').remove();
-      return;
     }
   });
 }
@@ -804,13 +833,11 @@ function sortTable(newSortOrdinal, selector) {
     if (sortDirection === 0) {
       sortDirection = 1
       $('.sort-direction input').val(1).trigger("change");
-    }
-    else {
+    } else {
       sortDirection = 0;
       $('.sort-direction input').val(0).trigger("change");
     }
-  }
-  else {
+  } else {
     $('.sort-field-ordinal input').val(newSortOrdinal);
     $('.sort-direction input').val(0).trigger("change");
     sortDirection = 0;
@@ -818,16 +845,13 @@ function sortTable(newSortOrdinal, selector) {
 
   if (sortDirection === 0) {
     $(`${selector} .cf-col-label`).append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
-  }
-  else {
+  } else {
     $(`${selector} .cf-col-label`).append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
   }
-
-
 }
 
 
-function submitForm(e) {
+function submitForm() {
 
   const siteID = Number($('.site-id input').val());
   const activateSubmitEmployeeNumber = $('.activate-employee-number input');
@@ -854,17 +878,43 @@ function submitForm(e) {
 function wireUpSortFields() {
 
   $('#q124 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
-  $('#q124').on('click', function () { sortTable(0, '#q124'); });
-  $('#q115').on('click', function () { sortTable(1, '#q115'); });
-  $('#q116').on('click', function () { sortTable(2, '#q116'); });
-  $('#q119').on('click', function () { sortTable(3, '#q119'); });
-  $('#q117').on('click', function () { sortTable(4, '#q117'); });
-  $('#q120').on('click', function () { sortTable(5, '#q120'); });
-  $('#q121').on('click', function () { sortTable(6, '#q121'); });
-  $('#q122').on('click', function () { sortTable(7, '#q122'); });
-  $('#q162').on('click', function () { sortTable(8, '#q162'); });
-  $('#q163').on('click', function () { sortTable(9, '#q163'); });
-  $('#q166').on('click', function () { sortTable(10, '#q166'); });
-  $('#q123').on('click', function () { sortTable(11, '#q123'); });
-  $('#q125').on('click', function () { sortTable(12, '#q125'); });
+  $('#q124').on('click', function () {
+    sortTable(0, '#q124');
+  });
+  $('#q115').on('click', function () {
+    sortTable(1, '#q115');
+  });
+  $('#q116').on('click', function () {
+    sortTable(2, '#q116');
+  });
+  $('#q119').on('click', function () {
+    sortTable(3, '#q119');
+  });
+  $('#q117').on('click', function () {
+    sortTable(4, '#q117');
+  });
+  $('#q120').on('click', function () {
+    sortTable(5, '#q120');
+  });
+  $('#q121').on('click', function () {
+    sortTable(6, '#q121');
+  });
+  $('#q122').on('click', function () {
+    sortTable(7, '#q122');
+  });
+  $('#q162').on('click', function () {
+    sortTable(8, '#q162');
+  });
+  $('#q163').on('click', function () {
+    sortTable(9, '#q163');
+  });
+  $('#q166').on('click', function () {
+    sortTable(10, '#q166');
+  });
+  $('#q123').on('click', function () {
+    sortTable(11, '#q123');
+  });
+  $('#q125').on('click', function () {
+    sortTable(12, '#q125');
+  });
 }
