@@ -5,7 +5,6 @@ const machineGroupNameMap = new Map();
 const cellLeaderMap = new Map();
 const cellLeaderNameMap = new Map();
 
-const should_print_receipt = true;
 
 $(document).ready(function () {
 
@@ -16,8 +15,8 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
-  $.fn.bootstrapBtn = bootstrapButton;
+   // return $.fn.button to previously assigned value
+  $.fn.bootstrapBtn = $.fn.button.noConflict();
 
   $(document).prop('title', 'Ticket History');
   $('#q0').append("<div class='hidden' id='popUpDiv'></div>");
@@ -38,7 +37,7 @@ $(document).ready(function () {
   });
 
 
-  $(document).on('lookupcomplete', function (e) {
+  $(document).on('lookupcomplete', function () {
 
     if ($('.pg input').val() === '999') {
       $('.pg input').val(1).trigger("change");
@@ -95,19 +94,19 @@ function appendPagination() {
 function callNextPage() {
   $('.tasklist-table').hide();
   removeAppendedFields();
-  current_page = Number($('.pg input').val());
-  $('.tasklist-page input').val(current_page + 1).trigger("change");
+  let current_page = Number($('.pg input').val());
+  $('.pg input').val(current_page + 1).trigger("change");
 }
 
 
 function callPrevPage() {
   $('.tasklist-table').hide();
   removeAppendedFields();
-  current_page = Number($('.pg input').val());
+  let current_page = Number($('.pg input').val());
   if (current_page === 1) {
     return;
   }
-  $('.tasklist-page input').val(current_page - 1).trigger("change");
+  $('.pg input').val(current_page - 1).trigger("change");
 }
 
 
@@ -200,13 +199,6 @@ function filterTicketTable() {
 }
 
 
-function formatDateFields(selector) {
-
-  $(`[id^='${selector}']`).each((i, dateField) => $(dateField).val($(dateField).val().split(" ")[0]));
-
-}
-
-
 function generateFilterRow() {
 
   if ($('#filterRow').length === 0) {
@@ -229,24 +221,24 @@ function generateFilterRow() {
     $("#cboFilter_CellLeader").on("dblclick", function () { $("#cboFilter_CellLeader").val(null).trigger("change"); });
   }
 
-  if (($(".ticket-type-lookup-cbo select option").length > 0) && ($('#cboFilter_TicketType option' === 0))) {
+  if (($(".ticket-type-lookup-cbo select option").length > 0) && ($('#cboFilter_TicketType option') === 0)) {
     $("#cboFilter_TicketType").html($(".ticket-type-lookup-cbo select").html());
   }
 
-  if (($(".department-lookup-cbo select option").length > 0) && ($('#cboFilter_Department option' === 0))) {
+  if (($(".department-lookup-cbo select option").length > 0) && ($('#cboFilter_Department option') === 0)) {
     $("#cboFilter_Department").html($(".department-lookup-cbo select").html());
   }
 
-  if (($(".machine-group-lookup-cbo select option").length > 0) && ($('#cboFilter_MachineGroup option' === 0))) {
+  if (($(".machine-group-lookup-cbo select option").length > 0) && ($('#cboFilter_MachineGroup option') === 0)) {
     $("#cboFilter_MachineGroup").html($(".machine-group-lookup-cbo select").html());
   }
 
-  if (($(".operator-lookup-cbo select option").length > 0) && ($('#cboFilter_Operator option' === 0))) {
+  if (($(".operator-lookup-cbo select option").length > 0) && ($('#cboFilter_Operator option') === 0)) {
     $("#cboFilter_Operator").html($(".operator-lookup-cbo select").html());
     $("#cboFilter_Operator").find('option:eq(0)').prop('selected', true);
   }
 
-  if (($(".cell-leader-lookup-cbo select option").length > 0) && ($('#cboFilter_CellLeader option' === 0))) {
+  if (($(".cell-leader-lookup-cbo select option").length > 0) && ($('#cboFilter_CellLeader option') === 0)) {
     $("#cboFilter_CellLeader").html($(".cell-leader-lookup-cbo select").html());
     $("#cboFilter_CellLeader").find('option:eq(0)').prop('selected', true);
   }
@@ -271,25 +263,7 @@ function generateTicketNumberColumn() {
 
 
 function getTicketRowCount() {
-  const row_count = $('.ticket-table table tbody tr').length;
-  return row_count;
-}
-
-
-function getTicketTypeIDByTicketID(ticket_id) {
-  let ticket_type_id;
-  const ticket_ids = $(".ticket-id-col input[type=text]");
-  const ticket_type_ids = $(".ticket-type-id-col input[type=text]");
-
-  ticket_ids.each(function (index) {
-    const row_ticket_id = $(this).val();
-    const row_ticket_type_id = ticket_type_ids[index].value;
-    if (row_ticket_id === ticket_id) {
-      ticket_type_id = row_ticket_type_id;
-      return;
-    }
-  });
-  return ticket_type_id;
+  return $('.ticket-table table tbody tr').length;
 }
 
 
@@ -304,9 +278,9 @@ function loadCellLeaderMap() {
     if (cellLeader_rows.length === 0) {
       return;
     }
-    cellLeader_rows.each(function (index) {
-      cellLeaderID = Number($(this).find('.cellleader-lookup-table-id input').val());
-      cellLeaderName = $(this).find('.cellleader-lookup-table-name input').val();
+    cellLeader_rows.each(function () {
+      let cellLeaderID = Number($(this).find('.cellleader-lookup-table-id input').val());
+      let cellLeaderName = $(this).find('.cellleader-lookup-table-name input').val();
       cellLeaderMap.set(cellLeaderID, cellLeaderName);
       cellLeaderNameMap.set(cellLeaderName, cellLeaderID);
     });
@@ -320,9 +294,9 @@ function loadDepartmentMap() {
     if (department_rows.length === 0) {
       return;
     }
-    department_rows.each(function (index) {
-      departmentID = Number($(this).find('.department-lookup-table-id input').val());
-      departmentName = $(this).find('.department-lookup-table-name input').val();
+    department_rows.each(function () {
+      let departmentID = Number($(this).find('.department-lookup-table-id input').val());
+      let departmentName = $(this).find('.department-lookup-table-name input').val();
       departmentMap.set(departmentID, departmentName);
       departmentNameMap.set(departmentName, departmentID);
     });
@@ -336,9 +310,9 @@ function loadMachineGroupMap() {
     if (machine_group_rows.length === 0) {
       return;
     }
-    machine_group_rows.each(function (index) {
-      machineGroupID = Number($(this).find('.machine-group-lookup-table-id input').val());
-      machineGroupName = $(this).find('.machine-group-lookup-table-name input').val();
+    machine_group_rows.each(function () {
+      let machineGroupID = Number($(this).find('.machine-group-lookup-table-id input').val());
+      let machineGroupName = $(this).find('.machine-group-lookup-table-name input').val();
       machineGroupMap.set(machineGroupID, machineGroupName);
       machineGroupNameMap.set(machineGroupName, machineGroupID);
     });
@@ -421,66 +395,9 @@ function reApplyFilterValues() {
 }
 
 
-function refreshPage() {
-
-  const ticketNumberFilterValue = $('.ftname input').val();
-  const ticketTypeFilterVal = $('.fttid input').val();
-  const departmentFilterVal = Number($('.fdid input').val());
-  const machineGroupFilterVal = Number($('.fmgid input').val());
-  const operatorFilterVal = $('.fopname input').val();
-  const cellLeaderFilterVal = Number($('.fclid input').val());
-  const page_number = Number($('.pg input').val());
-
-
-  let current_url = window.location.href;
-  if (current_url.includes('?')) {
-    indexOfQuestionMark = current_url.indexOf('?');
-    current_url = current_url.substring(0, indexOfQuestionMark);
-  }
-
-  if (page_number > 0) {
-    current_url = current_url + `?pg=${page_number}`;
-  }
-
-  if ((ticketNumberFilterValue !== null) && (ticketNumberFilterValue.length > 0)) {
-    current_url = current_url + `&ftname=${ticketNumberFilterValue}`;
-  }
-
-  if ((departmentFilterVal !== null) && (departmentFilterVal > 0)) {
-    current_url = current_url + `&fdid=${departmentFilterVal}`;
-  }
-  if ((ticketTypeFilterVal !== null) && (ticketTypeFilterVal > 0)) {
-    current_url = current_url + `&fttid=${ticketTypeFilterVal}`;
-  }
-  if ((machineGroupFilterVal !== null) && (machineGroupFilterVal > 0)) {
-    current_url = current_url + `&fmgid=${machineGroupFilterVal}`;
-  }
-  if ((operatorFilterVal !== null) && (operatorFilterVal !== '')) {
-    current_url = current_url + `&fopname=${operatorFilterVal}`;
-  }
-  if ((cellLeaderFilterVal !== null) && (cellLeaderFilterVal > 0)) {
-    current_url = current_url + `&fclid=${cellLeaderFilterVal}`;
-  }
-
-  window.location = current_url;
-}
-
-
 function removeAppendedFields() {
   $('#tasklist-pagination').remove();
   $('.ticket-link').remove();
-}
-
-
-function removeRow(ticket_id) {
-  const ticket_ids = $(".ticket-id-col input[type=text]");
-  ticket_ids.each(function (index) {
-    const row_ticket_id = $(this).val();
-    if (row_ticket_id === ticket_id) {
-      $(this).closest('tr').remove();
-      return;
-    }
-  });
 }
 
 

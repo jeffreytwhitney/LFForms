@@ -13,6 +13,15 @@ $(document).ready(function () {
 });
 
 
+function buildLinkItem(link, isEnabled) {
+  if (isEnabled) {
+    return `<li><a href="${link.href}" title="${link.title}" target="_self">${link.label}</a></li>`;
+  }
+
+  return `<li><a href="javascript:void(0);" title="${link.title}" onclick="showPermissionAlert()">${link.label}</a></li>`;
+}
+
+
 function checkPermissions() {
 
   const employee_number = $(".user-id input").val();
@@ -42,65 +51,47 @@ function checkPermissions() {
 }
 
 
-function executeIFrameUpdate() {
-
-  $("#popupIFrame").remove();
-  $("#popUpDiv").html(`<iframe id='popupIFrame' name='myname' src='${execute_url}'/>`);
-}
-
-
 function generateAppliationLinks() {
 
   const hasPermissions = checkPermissions();
   const isAdmin = isUserAdmin();
-  let mainWindowHTML = '<div class="row"><div class="column"><ul>';
+  const firstColumnLinks = [
+    { label: 'Tickets', title: 'Gage Administration', href: 'http://rmslf/Forms/GageTicketAdministration' },
+    { label: 'Calibration', title: 'Gage Calibration', href: 'http://rmslf/Forms/GageCalibration' },
+    { label: 'Gage Request Maintenance', title: 'Gage Request Maintenance', href: 'http://rmslf/Forms/GageRequestMaintenance' },
+    { label: 'Gage Checkout', title: 'Gage Checkout', href: 'http://rmslf/Forms/RMS-GAGE-CheckoutMainform' },
+    { label: 'Ticket History', title: 'Ticket History', href: 'http://rmslf/Forms/RMS-GAGE-TicketHistory' },
+    { label: 'Bin History', title: 'Ticket History', href: 'http://rmslf/Forms/RMS-GAGE-BinHistory' },
+    { label: 'Thread Gages', title: 'Thread Gages', href: 'http://rmslf/Forms/RMS-GAGE-ThreadGages' },
+  ];
 
-  if (hasPermissions) {
-    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/GageTicketAdministration" title="Gage Administration" target="_self">Tickets</a></li>'
-    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/GageCalibration" title="Gage Calibration" target="_self">Calibration</a></li>'
-    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/GageRequestMaintenance" title="Gage Request Maintenance" target="_self">Gage Request Maintenance</a></li>'
-    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-CheckoutMainform" title="Gage Checkout" target="_self">Gage Checkout</a></li>'
-    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-TicketHistory" title="Ticket History" target="_self">Ticket History</a></li>'
-    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-BinHistory" title="Ticket History" target="_self">Bin History</a></li>'
-    mainWindowHTML = mainWindowHTML + '<li></li>'
-    mainWindowHTML = mainWindowHTML + '</ul></div><div class="column"><ul>'
-
-    if (isAdmin) {
-      mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/GageUserMaintenance" title="Users" target="_self">Users</a></li>'
-    }
-    else {
-      mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Users" onclick="showPermissionAlert()">Users</a></li>';
-    }
-    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-CellLeaders" title="Cell Leaders" target="_self">Cell Leaders</a></li>'
-    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-MachineGroups" title="Machine Groups" target="_self">Machine Groups</a></li>'
-    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-Departments" title="Departments" target="_self">Departments</a></li>'
-    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-Bins" title="Pin Bins" target="_self">Pin Bins</a></li>'
-    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-PinTypes" title="Pin Types" target="_self">Pin Types</a></li>'
-    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-ProductionMachines" title="Production Machines" target="_self">Production Machines</a></li>'
-    mainWindowHTML = mainWindowHTML + '<li><a href="http://rmslf/Forms/RMS-GAGE-Sites" title="Sites" target="_self">Sites</a></li>'
-    mainWindowHTML = mainWindowHTML + '</ul></div></div>'
-
-  }
-  else {
-    mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Gage Administration" onclick="showPermissionAlert()">Tickets</a></li>';
-    mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Gage Calibration" onclick="showPermissionAlert()">Calibration</a></li>';
-    mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Gage Request Maintenance" onclick="showPermissionAlert()">Gage Request Maintenance</a></li>';
-    mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Gage Checkout" onclick="showPermissionAlert()">Gage Checkout</a></li>';
-    mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Ticket History" onclick="showPermissionAlert()>Ticket History</a></li>'
-    mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Bin History" onclick="showPermissionAlert()>Bin History</a></li>'
-    mainWindowHTML = mainWindowHTML + '<li></li>'
-    mainWindowHTML = mainWindowHTML + '</ul></div><div class="column"><ul>';
-    mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Users" onclick="showPermissionAlert()">Users</a></li>';
-    mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Cell Leaders" onclick="showPermissionAlert()">Cell Leaders</a></li>';
-    mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Machine Groups" onclick="showPermissionAlert()">Machine Groups</a></li>';
-    mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Departments" onclick="showPermissionAlert()">Departments</a></li>';
-    mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Pin Bins" onclick="showPermissionAlert()">Pin Bins</a></li>';
-    mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Pin Types" onclick="showPermissionAlert()">Pin Types</a></li>';
-    mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Production Machines" onclick="showPermissionAlert()">Production Machines</a></li>';
-    mainWindowHTML = mainWindowHTML + '<li><a href="javascript:void(0);" title="Sites" onclick="showPermissionAlert()">Sites</a></li>';
-  }
+  const secondColumnLinks = [
+    { label: 'Users', title: 'Users', href: 'http://rmslf/Forms/GageUserMaintenance', adminOnly: true },
+    { label: 'Cell Leaders', title: 'Cell Leaders', href: 'http://rmslf/Forms/RMS-GAGE-CellLeaders' },
+    { label: 'Machine Groups', title: 'Machine Groups', href: 'http://rmslf/Forms/RMS-GAGE-MachineGroups' },
+    { label: 'Departments', title: 'Departments', href: 'http://rmslf/Forms/RMS-GAGE-Departments' },
+    { label: 'Pin Bins', title: 'Pin Bins', href: 'http://rmslf/Forms/RMS-GAGE-Bins' },
+    { label: 'Pin Types', title: 'Pin Types', href: 'http://rmslf/Forms/RMS-GAGE-PinTypes' },
+    { label: 'Production Machines', title: 'Production Machines', href: 'http://rmslf/Forms/RMS-GAGE-ProductionMachines' },
+    { label: 'Sites', title: 'Sites', href: 'http://rmslf/Forms/RMS-GAGE-Sites' },
+  ];
 
 
+
+  const firstColumnHtml = firstColumnLinks
+    .map(function (link) {
+      return buildLinkItem(link, hasPermissions);
+    })
+    .join('') + '<li></li>';
+
+  const secondColumnHtml = secondColumnLinks
+    .map(function (link) {
+      const canAccessLink = hasPermissions && (!link.adminOnly || isAdmin);
+      return buildLinkItem(link, canAccessLink);
+    })
+    .join('');
+
+  const mainWindowHTML = `<div class="row"><div class="column"><ul>${firstColumnHtml}</ul></div><div class="column"><ul>${secondColumnHtml}</ul></div></div>`;
 
   $('.main-window').html(mainWindowHTML);
 
