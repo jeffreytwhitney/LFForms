@@ -16,7 +16,7 @@
 
   //This code runs when the form is reloaded after being submitted. If the closeme value is set to 1, it tells the parent page to close the dialog.
   //See 'Dialog Looping Mechanism' in the documentation above for an explanation of this.
-  if ($('.closeme input').val() === 1) {
+  if ($('.closeme input').val() === '1') {
     window.parent.postMessage('CloseDialog', '*');
   }
 

@@ -10,7 +10,8 @@ $(document).ready(function () {
    // return $.fn.button to previously assigned value so that popup close button displays correctly.
   $.fn.bootstrapBtn = $.fn.button.noConflict();
 
-  if ($('.closeme input').val() === 1) {
+  if ($('.closeme input').val() === '1') {
+    console.log("EditPurchaseOrder - Form submitted, closing dialog and refreshing parent.");
     window.parent.postMessage('CloseDialogWithRefresh', '*');
     $('.Submit').hide();
     return;
@@ -70,9 +71,6 @@ $(document).ready(function () {
     if ($('.purchase-order-status select').val() === ''){
       $('.purchase-order-status select').val(statusName).trigger("change");
     }
-
-    
-
   });
 
   $(document).on("onloadlookupfinished", function (e) {
@@ -90,11 +88,7 @@ $(document).ready(function () {
         $('#notes-history').append(`<iframe id='notes-history-iframe' name='notes-history-iframe' src='http://rmslf/Forms/MPM-PurchaseOrderNotes?poid=${poid}' height='400' width='100%'/>`);
       }
     }
-
-
-
   });
-
 });
 
 

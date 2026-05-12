@@ -241,7 +241,7 @@ $(document).ready(function () {
 
   //This code runs when the form is reloaded after being submitted. If the close value is set to 1, it tells the parent page to close the dialog.
   //See 'Dialog Looping Mechanism' in the documentation above for an explanation of this.
-  if ($('.closeme input').val() === 1) {
+  if ($('.closeme input').val() === '1') {
     if ($('.nt input').val() > 3) {
       window.parent.postMessage('CloseDialogWithRefresh', '*');
     }

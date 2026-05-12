@@ -135,7 +135,7 @@ $(document).ready(function () {
 	$.fn.bootstrapBtn = bootstrapButton;
 
 
-	if ($('.closeme input').val() === 1) {
+	if ($('.closeme input').val() === '1') {
 		window.parent.postMessage('CloseDialog', '*');
 	}
 

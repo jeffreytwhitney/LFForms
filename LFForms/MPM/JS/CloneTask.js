@@ -140,7 +140,7 @@ $(document).ready(function () {
   $('.Submit').on("click", function (e) { submitForm(e); });
   $('.network-user-name input').val($('.lf-user-name input').val().toUpperCase().substr($('.lf-user-name input').val().lastIndexOf('\\') + 1)).trigger("change");
 
-  if ($('.closeme input').val() === 1) {
+  if ($('.closeme input').val() === '1') {
     window.parent.postMessage('CloseDialogWithRefresh', '*');
   }
 

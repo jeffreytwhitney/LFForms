@@ -211,7 +211,7 @@ $(document).ready(function () {
   $('.network-user-name input').val($('.lf-username input').val().toUpperCase().substr($('.lf-username input').val().lastIndexOf('\\') + 1)).trigger("change");
 
   /* If host requests dialog close, notify parent See 'Dialog Looping Mechanism' above */
-  if ($('.closeme input').val() === 1) {
+  if ($('.closeme input').val() === '1') {
     window.parent.postMessage('CloseDialogWithRefresh', '*');
   }
 

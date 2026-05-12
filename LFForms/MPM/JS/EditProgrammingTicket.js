@@ -230,7 +230,7 @@ $(document).ready(function () {
   });
 
   // Close/refresh integration for dialog hosting
-  if ($('.closeme input').val() === 1) {
+  if ($('.closeme input').val() === '1') {
     $('#form1').hide();
     window.parent.postMessage('CloseDialogWithRefresh', '*');
   }

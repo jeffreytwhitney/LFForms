@@ -157,7 +157,7 @@ $(document).ready(function () {
   });
 
   // Close dialog if flagged
-  if ($('.closeme input').val() === 1) {
+  if ($('.closeme input').val() === '1') {
     window.parent.postMessage('CloseDialogWithRefresh', '*');
   }
 

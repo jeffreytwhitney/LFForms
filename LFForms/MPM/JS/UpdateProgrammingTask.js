@@ -233,7 +233,7 @@ $(document).ready(function () {
   });
 
   // If server instructs close, hide form and request parent to refresh.
-  if ($('.closeme input').val() === 1) {
+  if ($('.closeme input').val() === '1') {
     $('.cf-formwrap').hide();
     window.parent.postMessage('CloseDialogWithRefresh', '*');
   }

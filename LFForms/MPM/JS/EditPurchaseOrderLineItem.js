@@ -161,7 +161,7 @@ $(document).ready(function () {
   $.fn.bootstrapBtn = bootstrapButton;
 
   // If upstream logic requests the dialog to close, notify parent and stop initialization.
-  if ($('.closeme input').val() === 1) {
+  if ($('.closeme input').val() === '1') {
     window.parent.postMessage('CloseDialogWithRefresh', '*');
     $('.Submit').hide();
     return;

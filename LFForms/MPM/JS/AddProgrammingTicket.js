@@ -214,7 +214,7 @@ $(document).ready(function () {
    // return $.fn.button to previously assigned value so that popup close button displays correctly.
   $.fn.bootstrapBtn = $.fn.button.noConflict();
 
-  if ($('.closeme input').val() === 1) {
+  if ($('.closeme input').val() === '1') {
     window.parent.postMessage('CloseDialogWithRefresh', '*');
   }
 

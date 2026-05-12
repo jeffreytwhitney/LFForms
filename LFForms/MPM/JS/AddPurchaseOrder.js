@@ -138,8 +138,9 @@ $(document).ready(function () {
   $.fn.bootstrapBtn = bootstrapButton;
 
   // If the host has requested this dialog to close (flag value == 1), instruct parent to close and refresh.
-  if ($('.closeme input').val() === 1) {
+  if ($('.closeme input').val() === '1') {
     // The parent window is expected to handle the 'CloseDialogWithRefresh' message.
+
     window.parent.postMessage('CloseDialogWithRefresh', '*');
   }
 

@@ -146,7 +146,7 @@ $(document).ready(function () {
     $.fn.bootstrapBtn = $.fn.button.noConflict();
   
   // If flagged, instruct the parent to close the dialog and refresh. (See Dialog Looping Mechanism above.)
-  if (Number($('.closeme input').val()) === 1) {
+  if ($('.closeme input').val() === '1') {
     window.parent.postMessage('CloseDialogWithRefresh', '*');
   }
 

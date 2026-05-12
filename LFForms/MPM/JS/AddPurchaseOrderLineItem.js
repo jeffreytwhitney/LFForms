@@ -177,7 +177,7 @@ $(document).ready(function () {
   $('.Submit').on("click", function (e) { submitForm(e); });
 
   // If instructed by the host, close the dialog (with refresh) immediately.
-  if ($('.closeme input').val() === 1) {
+  if ($('.closeme input').val() === '1') {
     window.parent.postMessage('CloseDialogWithRefresh', '*');
   }
 

@@ -196,7 +196,7 @@ $(document).ready(function () {
     });
 
     //See Dialog Looping Mechanism section in documentation above for explanation 
-    if ($('.closeme input').val() === 1) {
+    if ($('.closeme input').val() === '1') {
         if (window.parent && window.parent !== window) {
             window.parent.postMessage('CloseDialogWithRefresh', '*');
         }
@@ -271,7 +271,7 @@ $(document).ready(function () {
         }
 
         //Triggers the network user name change if we're not closing the dialog
-        if ($('.closeme input').val() !== 1) {
+        if ($('.closeme input').val() !== '1') {
             $('.network-user-name input').trigger("change");
         }
 
