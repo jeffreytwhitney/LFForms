@@ -1,4 +1,4 @@
-﻿/**
+/**
  UserMaintenance.js
  
   Author:   Jeffrey Whitney
@@ -239,7 +239,7 @@ const userTypeNameMap = new Map();
 $(document).ready(function () {
   // Normalize Network User Name based on LF user name. Store uppercase simple username portion.
   const lfUserName = $('.lf-user-name input').val();
-  $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
+  $('.network-user-name input').val(lfUserName.toUpperCase().slice(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
 
   // Initial UI setup.
   $('.Submit').hide();

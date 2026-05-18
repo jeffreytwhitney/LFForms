@@ -1,4 +1,4 @@
-﻿/**
+/**
   Programming Tickets - UI behaviors and helpers
 
   Author:   Jeffrey Whitney
@@ -320,7 +320,7 @@ $(document).ready(function () {
   // Sync the LF Forms username into the network username field
   const lfUserName = $('.lf-user-name input').val();
   if (lfUserName !== 'Anonymous User') {
-    $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
+    $('.network-user-name input').val(lfUserName.toUpperCase().slice(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
   }
 
   // Listen for messages from child iframes to close dialogs and optionally refresh

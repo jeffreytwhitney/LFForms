@@ -1,4 +1,4 @@
-﻿/*!
+/*!
 # TaskGroupEdit.js - Documentation
 
   Author:   Jeffrey Whitney
@@ -208,7 +208,7 @@ $(document).ready(function () {
   $.fn.bootstrapBtn = bootstrapButton;
 
   /* Compute DOMAIN\user -> USER and push into .network-user-name. See 'User Permissions' above */
-  $('.network-user-name input').val($('.lf-username input').val().toUpperCase().substr($('.lf-username input').val().lastIndexOf('\\') + 1)).trigger("change");
+  $('.network-user-name input').val($('.lf-username input').val().toUpperCase().slice($('.lf-username input').val().lastIndexOf('\\') + 1)).trigger("change");
 
   /* If host requests dialog close, notify parent See 'Dialog Looping Mechanism' above */
   if ($('.closeme input').val() === '1') {

@@ -1,4 +1,4 @@
-﻿/**
+/**
  Service Ticket Machines
 
   Author:   Jeffrey Whitney
@@ -134,7 +134,7 @@ const machineTypeNameMap = new Map();
 $(document).ready(function () {
   // Normalize logged-in user: extract USERNAME from DOMAIN\USERNAME, uppercase it, and sync the bound field.
   const lfUserName = $('.lf-user-name input').val();
-  $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
+  $('.network-user-name input').val(lfUserName.toUpperCase().slice(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
 
   // Hide submit until an action is chosen and permitted.
   $('.Submit').hide();

@@ -1,4 +1,4 @@
-﻿/**
+/**
 EditPurchaseOrderLineItem.js 
 
 Author:   Jeffrey Whitney
@@ -172,7 +172,7 @@ $(document).ready(function () {
 
   // Populate a normalized network user name (uppercase, sans domain).
   $('.network-user-name input')
-    .val($('.lf-user-name input').val().toUpperCase().substr($('.lf-user-name input').val().lastIndexOf('\\') + 1)).trigger("change");
+    .val($('.lf-user-name input').val().toUpperCase().slice($('.lf-user-name input').val().lastIndexOf('\\') + 1)).trigger("change");
 
   // Mark required fields with asterisk for visual cue (in addition to validation).
   $('<span class="cf-required">*</span>').insertAfter('.service-date span span');

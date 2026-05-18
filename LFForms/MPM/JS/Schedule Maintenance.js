@@ -1,4 +1,4 @@
-﻿/*
+/*
 File: Schedule Maintenance.js
 
   Author:   Jeffrey Whitney
@@ -132,7 +132,7 @@ const cellLeadNameMap = new Map();  // Maps OwnerName -> OwnerID
 $(document).ready(function () {
   // Normalize and copy LF username into the network user field (USER portion of DOMAIN\USER).
   const lfUserName = $('.lf-user-name input').val();
-  $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
+  $('.network-user-name input').val(lfUserName.toUpperCase().slice(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
 
   // Initial page setup.
   $('.Submit').hide();

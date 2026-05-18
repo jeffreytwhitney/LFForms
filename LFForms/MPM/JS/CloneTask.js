@@ -1,4 +1,4 @@
-﻿/**
+/**
   CloneTask.js
  
  Author:  Jeffrey Whitney
@@ -138,7 +138,7 @@ $(document).ready(function () {
   $.fn.bootstrapBtn = bootstrapButton;
   $('.Submit').addClass('ui-button ui-corner-all ui-widget');
   $('.Submit').on("click", function (e) { submitForm(e); });
-  $('.network-user-name input').val($('.lf-user-name input').val().toUpperCase().substr($('.lf-user-name input').val().lastIndexOf('\\') + 1)).trigger("change");
+  $('.network-user-name input').val($('.lf-user-name input').val().toUpperCase().slice($('.lf-user-name input').val().lastIndexOf('\\') + 1)).trigger("change");
 
   if ($('.closeme input').val() === '1') {
     window.parent.postMessage('CloseDialogWithRefresh', '*');

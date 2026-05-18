@@ -1,4 +1,4 @@
-﻿/**
+/**
  Service Ticket Types page.
 
   Author:   Jeffrey Whitney
@@ -125,7 +125,7 @@
 $(document).ready(function () {
   // Derive and populate the network user name from the LF user name (portion after '\', uppercased).
   const lfUserName = $('.lf-user-name input').val();
-  $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
+  $('.network-user-name input').val(lfUserName.toUpperCase().slice(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
 
   // Hide submit section until an actionable state (add/edit) is chosen.
   $('.Submit').hide();

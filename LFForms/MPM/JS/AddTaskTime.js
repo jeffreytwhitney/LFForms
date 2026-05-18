@@ -1,4 +1,4 @@
-﻿/**
+/**
 AddTaskTime.js
 
  Author:  Jeffrey Whitney
@@ -162,7 +162,7 @@ $(document).ready(function () {
   }
 
   // Derive network username from domain\user and uppercase it
-  $('.network-user-name input').val($('.lf-user-name input').val().toUpperCase().substr($('.lf-user-name input').val().lastIndexOf('\\') + 1)).trigger("change");
+  $('.network-user-name input').val($('.lf-user-name input').val().toUpperCase().slice($('.lf-user-name input').val().lastIndexOf('\\') + 1)).trigger("change");
 
   // After lookups, set today's date (locale format) in `.date-to-add`
   $(document).on("onloadlookupfinished", function (e) {

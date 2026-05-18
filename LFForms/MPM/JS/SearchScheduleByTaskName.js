@@ -67,7 +67,7 @@ $(document).ready(function () {
   // Normalize and populate the network username (strip domain, uppercase).
   const lfUserName = $('.lf-user-name input').val();
   if (lfUserName !== 'Anonymous User') {
-    $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
+    $('.network-user-name input').val(lfUserName.toUpperCase().slice(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
   }
 
   // Handle post-lookup UI work: pagination, page normalization, cookie-based site restore, reveal table.

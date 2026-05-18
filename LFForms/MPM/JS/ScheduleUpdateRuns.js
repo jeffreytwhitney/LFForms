@@ -139,14 +139,27 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
 
   // Avoid Bootstrap/jQuery UI button plugin conflicts by renaming Bootstrap's .button to .bootstrapBtn.
-  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
-  $.fn.bootstrapBtn = bootstrapButton;
+   // return $.fn.button to previously assigned value
+  $.fn.bootstrapBtn = $.fn.button.noConflict();
 
   // Populate ".network-user-name" from LF username when available (maps DOMAIN\user -> USER).
   const lfUserName = $('.lf-user-name input').val();
   if (lfUserName !== 'Anonymous User') {
-    $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
+    $('.network-user-name input').val(lfUserName.toUpperCase().slice(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
   }
+
+  //See Dialog Looping Mechanism above for explanation
+  window.onmessage = function (event) {
+    if (event.data === "CloseDialog") {
+      $("#popupIFrame").dialog("destroy");
+      $("#popupIFrame").remove();
+    }
+    if (event.data === "CloseDialogWithRefresh") {
+      $("#popupIFrame").dialog("destroy");
+      $("#popupIFrame").remove();
+      window.location = window.location.href
+    }
+  };
 
   // Persist selected site to a cookie so it is restored on next visit.
   $(document).on('change', '.site-name select', function () {
@@ -164,6 +177,11 @@ $(document).ready(function () {
         const add_button = '<div class="ui-button add-button" onclick="callStartRun()"><span title="Refresh Dates" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Refresh Dates</div>';
         $(add_button).insertBefore('.schedule-runs-table table');
       }
+    }
+
+    $('.force-complete-button').remove();
+    if(shouldAddForceCompleteButton()){
+      $('#go-back').after('<div class="ui-button force-complete-button" onclick="callForceComplete()"><span title="Force Complete" class="ui-button-icon ui-icon ui-icon-close"></span>Force Complete</div>');
     }
 
     $('.schedule-runs-table').show();
@@ -232,7 +250,6 @@ function appendPagination() {
     }
     if ((current_page > 1) && (row_count < 25)) {
       $('.schedule-runs-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);'>&laquo;</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);'>&lsaquo;</a></li><li><a class='page-link next isDisabled'>&rsaquo;</a></li></ul></div>")
-      return;
     }
   }
 }
@@ -252,8 +269,15 @@ function callStartRun() {
  */
 function callShowDetails(runID) {
   $('.rid input').val(runID).trigger("change");
-  
 }
+
+function callForceComplete(){
+  let run_id = $('.rid input').val();
+  let employee_number = $('.employee-number input').val();
+  let src = `http://rmslf/Forms/RMS-MPM-ForceCompleteScheduleRun?rid=${run_id}&enbr=${employee_number}`;
+  $("#popUpDiv").html("<iframe id='print-iframe' name='print-iframe' src='" + src + "' />");
+}
+
 
 /**
  * Returns from a details view to the list by clearing the current run ID and triggering change.
@@ -298,7 +322,7 @@ function callPrevPage() {
 function generateGoBackButtons() {
   const $goback_buttons = $(".gobackbutton");
   $goback_buttons.each(function (index) {
-    $(this).parent().append("<div id='go-back' class='ui-button ui-corner-all ui-widget' onclick='callGoBack()'><span class='ui-icon ui-icon-arrowreturnthick-1-w'></span>Go Back</div>");
+    $(this).parent().append("<div id='go-back' class='ui-button' onclick='callGoBack()'><span class='ui-icon ui-icon-arrowreturnthick-1-w'></span>Go Back</div>");
   });
   $(".gobackbutton").remove();
 }
@@ -335,8 +359,7 @@ function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFu
  * @returns {number} Count of tbody rows within ".schedule-runs-table".
  */
 function getTableRowCount() {
-  const row_count = $('.schedule-runs-table tbody tr').length;
-  return row_count;
+  return $('.schedule-runs-table tbody tr').length;
 }
 
 /**
@@ -348,6 +371,21 @@ function isMetrologyUser() {
   const userTypeId = Number($('.user-type-id input').val());
   return userTypeId === 1 || userTypeId === 2;
 }
+
+function shouldAddForceCompleteButton() {
+
+  if (!isMetrologyUser()){
+    return false;
+  }
+
+  if ($('.rid input').val().length === 0) {
+    return false;
+  }
+
+  return $('.is-complete input').val() === 'No' && $('.start-datetime input').val() !== '';
+}
+
+
 
 /**
  * Resets paging back to the first page and hides the table to allow rebind.

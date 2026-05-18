@@ -18,7 +18,7 @@ $(document).ready(function () {
   }
 
   $('.Submit').on('click', function (e) { submitForm(e); });
-  $('.network-user-name input').val($('.lf-user-name input').val().toUpperCase().substr($('.lf-user-name input').val().lastIndexOf('\\') + 1)).trigger("change");
+  $('.network-user-name input').val($('.lf-user-name input').val().toUpperCase().slice($('.lf-user-name input').val().lastIndexOf('\\') + 1)).trigger("change");
 
   // Listen for messages from child iframes to close dialogs and optionally refresh
   window.onmessage = function (event) {

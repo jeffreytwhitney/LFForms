@@ -1,4 +1,4 @@
-﻿/**
+/**
 PesterServiceTicketAssignee.js
 
  Author:  Jeffrey Whitney
@@ -142,7 +142,7 @@ $(document).ready(function () {
 	const lfUserName = $('.lf-user-name input').val();
 	const networkUserName = $('.network-user-name input').val();
 	if (lfUserName !== 'Anonymous User' && networkUserName === '') {
-		$('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
+		$('.network-user-name input').val(lfUserName.toUpperCase().slice(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
 	}
 
 	// Finalize initial state once all lookups are finished.

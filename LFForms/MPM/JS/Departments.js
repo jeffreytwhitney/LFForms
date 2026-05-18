@@ -123,7 +123,7 @@ Key Concepts:
 $(document).ready(function () {
   // Derive and set the network username (uppercase sans domain) See 'User Permissions' above
   const lfUserName = $('.lf-user-name input').val();
-  $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
+  $('.network-user-name input').val(lfUserName.toUpperCase().slice(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
 
   // Hide submit button by default; shown only for allowed actions/roles
   $('.Submit').hide();

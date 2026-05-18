@@ -1,4 +1,4 @@
-﻿/**
+/**
  AddPurchaseOrderLineItem.js
  
 Author:   Jeffrey Whitney
@@ -183,7 +183,7 @@ $(document).ready(function () {
 
   // Populate the "network user name" as the uppercase username (strip DOMAIN\).
   $('.network-user-name input')
-    .val($('.lf-user-name input').val().toUpperCase().substr($('.lf-user-name input').val().lastIndexOf('\\') + 1)).trigger("change");
+    .val($('.lf-user-name input').val().toUpperCase().slice($('.lf-user-name input').val().lastIndexOf('\\') + 1)).trigger("change");
 
   // Add required asterisks to key labels (visual only).
   $('<span class="cf-required">*</span>').insertAfter('.quantity span span');

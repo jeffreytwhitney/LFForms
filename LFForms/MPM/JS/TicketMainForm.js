@@ -1,4 +1,4 @@
-﻿/**
+/**
 TicketMainForm.js -   This form houses the four main tabs for managing tickets and tasks.
                       It also shows the last schedule update information, a link to see the 1Factory logs, 
                       and a search helper for looking through the production schedules by task name.
@@ -145,7 +145,7 @@ $(document).ready(function () {
   // Normalize/display the current user and load iframes for anonymous users.
   const lfUserName = $('.lf-user-name input').val();
   if (lfUserName !== 'Anonymous User') {
-    $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
+    $('.network-user-name input').val(lfUserName.toUpperCase().slice(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
   }
   else {
     loadIFrames();

@@ -1,4 +1,4 @@
-﻿/**
+/**
 ProgrammingTasks.js
 
   Author:   Jeffrey Whitney
@@ -381,7 +381,7 @@ $(document).ready(function () {
   // Normalize and capture the current user into a hidden field.
   const lfUserName = $('.lf-username input').val();
   if (lfUserName !== 'Anonymous User') {
-    $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
+    $('.network-user-name input').val(lfUserName.toUpperCase().slice(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
   }
 
   // Support closing or closing-with-refresh from child iframes via postMessage. See "Dialog/Popup Mechanism" above.
@@ -818,7 +818,7 @@ function generateProjectColumn() {
     const ticket_number = $(ticket_numbers[index]);
     const ticket_number_value = $(ticket_numbers[index]).val();
     const project_name = $(this).val();
-    let project_link = $("<a>", { text: project_name.substr(0, 30), class: 'project-link', href: `javascript:void(0);`, onclick: `showProjectDetails(${project_id})` });
+    let project_link = $("<a>", { text: project_name.slice(0, 30), class: 'project-link', href: `javascript:void(0);`, onclick: `showProjectDetails(${project_id})` });
     $(this).parent().append(project_link);
     project_link = $("<a>", { text: ticket_number_value, class: 'project-link', href: `javascript:void(0);`, onclick: `showProjectDetails(${project_id})` });
     $(ticket_number).parent().append(project_link);
@@ -896,7 +896,7 @@ function generateTaskColumn() {
   task_names.each(function (index) {
     const task_id = $(task_ids[index]).val();
     const task_name = $(this).val();
-    const task_link = $("<a>", { text: task_name.substr(0, 30), class: 'task-link', href: `javascript:void(0);`, onclick: `showTaskDetails(${task_id})` });
+    const task_link = $("<a>", { text: task_name.slice(0, 30), class: 'task-link', href: `javascript:void(0);`, onclick: `showTaskDetails(${task_id})` });
     $(this).parent().append(task_link);
   });
 }

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * ProductionMachines.js
  * ---------------------
  * UI behavior and client-side interaction logic for the Production Machines maintenance screen.
@@ -46,7 +46,7 @@ $(document).ready(function () {
   // Normalize and capture the current user into a hidden field.
   const lfUserName = $('.lf-user-name input').val();
   if (lfUserName !== 'Anonymous User') {
-    $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
+    $('.network-user-name input').val(lfUserName.toUpperCase().slice(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
   }
 
   // Persist selected site name in a cookie for 1 year.

@@ -1,4 +1,4 @@
-﻿/**
+/**
 ServiceTickets.js
 
   Author:   Jeffrey Whitney
@@ -338,13 +338,13 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
-  $.fn.bootstrapBtn = bootstrapButton;
+   // return $.fn.button to previously assigned value
+  $.fn.bootstrapBtn = $.fn.button.noConflict();
   $('#q0').append("<div class='hidden' id='popUpDiv'></div>");
 
   const lfUserName = $('.lf-user-name input').val();
   if (lfUserName !== 'Anonymous User') {
-    $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
+    $('.network-user-name input').val(lfUserName.toUpperCase().slice(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
   }
 
   window.onmessage = function (event) {
@@ -436,7 +436,7 @@ function appendPagination() {
     }
     if ((current_page > 1) && (row_count < 25)) {
       $('.service-ticket-table table').parent().append("<div id='table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);'>&laquo;</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);'>&lsaquo;</a></li><li><a class='page-link next isDisabled'>&rsaquo;</a></li></ul></div>")
-      return;
+
     }
   }
 }
@@ -479,7 +479,7 @@ function callPrevPage() {
 function editTicket(ticketID) {
   let widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
-  popUpIframe(`http://rmslf/Forms/MPM-EditServiceTicket?tid=${ticketID}`, 'Edit Service Ticket', widowHeight, 1200);
+  popUpIframe(`http://rmslf/Forms/MPM-EditServiceTicket?tid=${ticketID}`, 'Edit Service Ticket', widowHeight, 1500);
 }
 
 
@@ -653,7 +653,7 @@ function generateTicketNumberColumn() {
   ticket_numbers.each(function (index) {
     const ticket_id = $(ticket_ids[index]).val();
     const ticket_number = $(this).val();
-    const ticket_link = $("<a>", { text: ticket_number.substr(0, 30), class: 'ticket-link', href: `javascript:void(0);`, onclick: `editTicket(${ticket_id})` });
+    const ticket_link = $("<a>", { text: ticket_number.slice(0, 30), class: 'ticket-link', href: `javascript:void(0);`, onclick: `editTicket(${ticket_id})` });
     if ($(this).parent().find('.ticket-link').length === 0) {
       $(this).parent().append(ticket_link);
     }
@@ -666,8 +666,7 @@ function generateTicketNumberColumn() {
  * @returns {number} Count of rows.
  */
 function getTableRowCount() {
-  const row_count = $('.service-ticket-table tbody tr').length;
-  return row_count;
+  return $('.service-ticket-table tbody tr').length;
 }
 
 
@@ -729,9 +728,9 @@ function loadInitiatorMap() {
     if (initiator_rows.length === 0) {
       return;
     }
-    initiator_rows.each(function (index) {
-      initiatorID = Number($(this).find('.initiator-lookup-table-id input').val());
-      initiatorName = $(this).find('.initiator-lookup-table-name input').val();
+    initiator_rows.each(function () {
+      let initiatorID = Number($(this).find('.initiator-lookup-table-id input').val());
+      let initiatorName = $(this).find('.initiator-lookup-table-name input').val();
       initiatorMap.set(initiatorID, initiatorName);
       initiatorNameMap.set(initiatorName, initiatorID);
     });
@@ -752,8 +751,8 @@ function loadTicketTypeMap() {
       return;
     }
     ticketType_rows.each(function (index) {
-      ticketTypeID = Number($(this).find('.ticket-type-lookup-table-id input').val());
-      ticketTypeName = $(this).find('.ticket-type-lookup-table-name input').val();
+      let ticketTypeID = Number($(this).find('.ticket-type-lookup-table-id input').val());
+      let ticketTypeName = $(this).find('.ticket-type-lookup-table-name input').val();
       ticketTypeMap.set(ticketTypeID, ticketTypeName);
       ticketTypeNameMap.set(ticketTypeName, ticketTypeID);
     });
@@ -881,12 +880,13 @@ function refreshPage() {
   const pageNumber = Number($('.pg input').val());
 
   let current_url = window.location.href;
+  let indexOfQuestionMark;
   if (current_url.includes('?')) {
     indexOfQuestionMark = current_url.indexOf('?');
     current_url = current_url.substring(0, indexOfQuestionMark);
   }
 
-  if ((pageNumber !== null) && (pageNumber !== NaN) && (pageNumber > 0)) {
+  if ((pageNumber !== null) && (!isNaN(pageNumber)) && (pageNumber > 0)) {
     current_url = current_url + `?pg=${pageNumber}`;
   }
 
@@ -898,7 +898,7 @@ function refreshPage() {
     current_url = current_url + `&ftnum=${ticketNumberFilter}`;
   }
 
-  if ((ticketTypeIDFilter !== null) && (ticketTypeIDFilter !== NaN) && (ticketTypeIDFilter > 0)) {
+  if ((ticketTypeIDFilter !== null) && (!isNaN(ticketTypeIDFilter)) && (ticketTypeIDFilter > 0)) {
     current_url = current_url + `&fttid=${ticketTypeIDFilter}`;
   }
 
@@ -906,11 +906,11 @@ function refreshPage() {
     current_url = current_url + `&fiid=${initiatorIDFilter}`;
   }
 
-  if ((include_Complete !== null) && (include_Complete !== NaN) && (include_Complete > 0)) {
+  if ((include_Complete !== null) && (!isNaN(include_Complete)) && (include_Complete > 0)) {
     current_url = current_url + `&finccomp=${include_Complete}`;
   }
 
-  if ((departmentIDFilter !== null) && (departmentIDFilter !== NaN) && (departmentIDFilter > 0)) {
+  if ((departmentIDFilter !== null) && (!isNaN(departmentIDFilter)) && (departmentIDFilter > 0)) {
     current_url = current_url + `&fdid=${departmentIDFilter}`;
   }
   window.location = current_url;

@@ -1,4 +1,4 @@
-﻿/**
+/**
 ' Sites.js - UI behaviors for Site Maintenance.
 
   Author:   Jeffrey Whitney
@@ -121,7 +121,7 @@
 $(document).ready(function () {
   // Normalize and display the current user's network/SAM account (uppercase, post-back safe).
   const lfUserName = $('.lf-user-name input').val();
-  $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
+  $('.network-user-name input').val(lfUserName.toUpperCase().slice(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
 
   // Hide the submit control by default; it will be shown on actionable states.
   $('.Submit').hide();

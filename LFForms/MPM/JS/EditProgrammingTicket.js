@@ -1,4 +1,4 @@
-﻿/**
+/**
  EditProgrammingTicket.js
  
  Author:  Jeffrey Whitney
@@ -219,7 +219,7 @@ $(document).ready(function () {
   const lfUserName = $('.lf-user-name input').val();
   if (lfUserName !== "") {
     let networkUserName = lfUserName.toUpperCase();
-    networkUserName = networkUserName.substr(networkUserName.lastIndexOf('\\') + 1);
+    networkUserName = networkUserName.slice(networkUserName.lastIndexOf('\\') + 1);
     $('.network-user-name input').val(networkUserName).trigger("change");
   }
 
@@ -647,7 +647,7 @@ function generateTaskColumn() {
     if (!has_link) {
       const task_id = $(task_ids[index]).val();
       const task_name = $(this).val();
-      const task_link = $("<a>", { text: task_name.substr(0, 30), class: 'task-link', href: `javascript:void(0);`, onclick: `callShowDetails(${task_id})` });
+      const task_link = $("<a>", { text: task_name.slice(0, 30), class: 'task-link', href: `javascript:void(0);`, onclick: `callShowDetails(${task_id})` });
       $(this).parent().append(task_link);
     }
   });

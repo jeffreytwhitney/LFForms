@@ -1,4 +1,4 @@
-﻿/**
+/**
 UpdateProgrammingTask.js - Documentation
 
   Author:   Jeffrey Whitney
@@ -190,7 +190,7 @@ $(document).ready(function () {
   const lfUserName = $('.lf-user-name input').val();
   if (lfUserName !== '') {
     let networkUserName = $('.lf-user-name input').val().toUpperCase();
-    networkUserName = networkUserName.substr(networkUserName.lastIndexOf('\\') + 1);
+    networkUserName = networkUserName.slice(networkUserName.lastIndexOf('\\') + 1);
     $('.network-user-name input').val(networkUserName).trigger("change");
   }
 

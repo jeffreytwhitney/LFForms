@@ -1,4 +1,4 @@
-﻿/**
+/**
 ServiceTicketProbes.js
 
   Author:   Jeffrey Whitney
@@ -141,7 +141,7 @@ const  machineTypeNameMap = new Map();
 $(document).ready(function () {
   // Normalize the current user name into a network-style account (substring after the last '\', uppercased)
   const lfUserName = $('.lf-user-name input').val();
-  $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
+  $('.network-user-name input').val(lfUserName.toUpperCase().slice(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
 
   // Hide submit until an action (add/edit) is initiated
   $('.Submit').hide();

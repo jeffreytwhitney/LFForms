@@ -121,7 +121,9 @@ $(document).ready(function () {
 
   // Set browser tab title for clarity.
   $(document).prop('title', 'Add Purchase Order');
-
+  $('.Submit').on("click", function (e) {
+    submitForm();
+  });
   // Load third-party assets required by the page.
   // jquery-confirm provides lightweight modal dialogs.
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
@@ -272,4 +274,11 @@ function isAdminUser() {
 function isMetrologyUser() {
   const userTypeId = Number($('.user-type-id input').val());
   return userTypeId === 1 || userTypeId === 2;
+}
+
+
+function submitForm() {
+  if ($('.sid input').val() === '') {
+    $('.sid input').val(0)
+  }
 }

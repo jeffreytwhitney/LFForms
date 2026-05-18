@@ -1,4 +1,4 @@
-﻿/*!
+/*!
 TaskTypes.js UI behavior and helpers for the "Task Type Maintenance" page.
 
  Author:   Jeffrey Whitney
@@ -124,7 +124,7 @@ Expected Markup (selected elements/classes):
 $(document).ready(function () {
   // Normalize the displayed network user name to a SAM-style uppercase username (portion after '\').
   const lfUserName = $('.lf-user-name input').val();
-  $('.network-user-name input').val(lfUserName.toUpperCase().substr(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
+  $('.network-user-name input').val(lfUserName.toUpperCase().slice(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
 
   // Initial page state.
   $('.Submit').hide();
