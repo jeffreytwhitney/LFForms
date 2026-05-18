@@ -127,7 +127,7 @@ Key Concepts:
 $(document).ready(function () {
   // Hide default Submit button on load and set the page title.
   $('.Submit').hide();
-  $(document).prop('title', 'Task Maintenance');
+  $(document).prop('title', 'Schedule Update');
 
   // Load optional libraries used by this and related pages.
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js');
@@ -153,11 +153,6 @@ $(document).ready(function () {
     if (event.data === "CloseDialog") {
       $("#popupIFrame").dialog("destroy");
       $("#popupIFrame").remove();
-    }
-    if (event.data === "CloseDialogWithRefresh") {
-      $("#popupIFrame").dialog("destroy");
-      $("#popupIFrame").remove();
-      window.location = window.location.href
     }
   };
 
