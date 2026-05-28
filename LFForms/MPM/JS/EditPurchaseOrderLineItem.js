@@ -8,7 +8,7 @@ Author:   Jeffrey Whitney
 Overview:
   UI logic for editing a Purchase Order Line Item in LFForms MPM.
   - Manages status transitions and keeps hidden fields in sync with UI.
-  - Validates quantity, cost, and service date based on line item type and status.
+  - Validates quantity, cost, and service date based online item type and status.
   - Locks the form when the line item has progressed beyond editable states.
   - Handles cancellation with a required reason using a modal dialog.
 
@@ -26,7 +26,7 @@ KEY CONCEPTS:
    USER PERMISSIONS:
       There is a user permission model in place to restrict which updates a user can make.
       This is separate from LFF security, which can, (but in practice usually does not), limit who 
-      can even access a particular form. For our purposes, this is not particularly useful for our needs because we we want
+      can even access a particular form. For our purposes, this is not particularly useful for our needs because we want
       all users to be able to view the forms. What we want instead is to limit their ability to do certain things
       inside the application. 
       There are several user types which are defined in the database users table, (tblUsers) each with their own
@@ -69,17 +69,17 @@ KEY CONCEPTS:
         - lookupcomplete: This event fires each time a lookup completes after the onloadlookupfinished event has been called. 
                           Laserfiche has lookup rules applied to certain fields, so that when a field is changed, it triggers a lookup to fill in other fields.
                           The fields themselves can either be changed by the user directly, or indirectly. 
-                          An example of an direct change would be when the user chooses a Site from the dropdown. 
+                          An example of a direct change would be when the user chooses a Site from the dropdown.
           
     
       Now this gets a bit tricky because the lookupcomplete event can fire multiple times, and we only want to do certain things once, so we need
       to put logic in there so that it's not doing expensive things again and again.
       There is a way of asking what the TriggerID of the lookup is. (A laserfiche function). But I found this to be kind of a pain to use because
-      you have to know the TriggerID of the lookup that you want to respond to and it's just an integer. Also, if you ever change anything 
+      you have to know the TriggerID of the lookup that you want to respond to, and it's just an integer. Also, if you ever change anything
       in the form, you don't know if the trigger id has changed or not. So I found it easier to just put logic in the function that I want to run
       to make sure that it doesn't, say iterate through a table or something getting values again and again when we only need it to do it once.
     
-      For an example of what I'm talking about, we're setting the user name field in code and causing a lookup, (see 'User Permissions' above).
+      For an example of what I'm talking about, we're setting the username field in code and causing a lookup, (see 'User Permissions' above).
       Because we're setting the field in code and causing a lookup, the onloadlookupfinished event has already fired. Therefore, any logic that 
       relies on user fields being populated won't work if you call them from the onloadlookupfinished event. Instead, we have to call them from 
       the lookupcomplete event. The unfortunate side effect of this is that the lookupcomplete event can fire multiple times, 
@@ -88,10 +88,10 @@ KEY CONCEPTS:
       but you want to minimize it as much as possible.
 
       Daisy-Chaining Lookups:
-        A side-effect of the way lookups work is how they sometimes daisy-chain. Let me explain with an example:
+        A side effect of the way lookups work is how they sometimes daisy-chain. Let me explain with an example:
         In our example, we have four fields: LFUserName, NetworkUserName, SiteID, DepartmentLookupTable.
         At the beginning the only field which has anything in it is LFUserName, because LF has filled it in for us.
-        We take that value, keeping only the username portion an dput that in NetworkUserName. 
+        We take that value, keeping only the username portion and put that in NetworkUserName.
         This causes a lookup for all the user related fields, including SiteID. Once the SiteID is set, this in turn
         causes another lookup to pull in all the departments related to that site. The Department Lookup cannot be loaded until 
         we know which site we're talking about. Sometimes this daisy-chaining can get 3 and sometimes even 4 levels deep because of all the relationships between
@@ -153,12 +153,9 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
 
-  /**
-   * Restore Bootstrap button plugin if a conflict exists so jQuery UI dialog
-   * close buttons render and behave correctly.
-   */
-  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value so that popup close button displays correctly.
-  $.fn.bootstrapBtn = bootstrapButton;
+
+ // return $.fn.button to previously assigned value so that popup close button displays correctly.
+  $.fn.bootstrapBtn = $.fn.button.noConflict();
 
   // If upstream logic requests the dialog to close, notify parent and stop initialization.
   if ($('.closeme input').val() === '1') {
@@ -170,7 +167,7 @@ $(document).ready(function () {
   // Wire up submit button to centralized submit handler.
   $('.Submit').on("click", function (e) { submitForm(e); });
 
-  // Populate a normalized network user name (uppercase, sans domain).
+  // Populate a normalized network username (uppercase, sans domain).
   $('.network-user-name input')
     .val($('.lf-user-name input').val().toUpperCase().slice($('.lf-user-name input').val().lastIndexOf('\\') + 1)).trigger("change");
 
@@ -180,7 +177,7 @@ $(document).ready(function () {
   $('<span class="cf-required">*</span>').insertAfter('.per-unit-cost span span');
   $('<span class="cf-required">*</span>').insertAfter('.received-quantity span span');
 
-  $(document).on('change', '.quantity input', function (e) {
+  $(document).on('change', '.quantity input', function () {
 
     const quantity = Number($(this).val().replace(',', ''));
     const perUnitCost = Number($('.per-unit-cost input').val().replace(',', ''));
@@ -189,7 +186,7 @@ $(document).ready(function () {
     $('.cost-amount input').val(formattedTotalCost);
   });
 
-  $(document).on('change', '.per-unit-cost input', function (e) {
+  $(document).on('change', '.per-unit-cost input', function () {
     const quantity = Number($('.quantity input').val().replace(',', ''));
     const perUnitCost = Number($(this).val().replace(',', ''));
     const totalCost = quantity * perUnitCost;
@@ -206,7 +203,7 @@ $(document).ready(function () {
    * - Otherwise, loads status lookup maps and syncs the status combo.
    * - Injects the line item history iframe when an item exists.
    */
-  $(document).on('lookupcomplete', function (e) {
+  $(document).on('lookupcomplete', function () {
     const lineItemId = Number($('.liid input').val());
     const statusid = Number($('.current-status-id input').val());
 
@@ -218,7 +215,7 @@ $(document).ready(function () {
       $('.Submit').show();
     }
 
-    if (statusid > Status.Received) {
+    if (statusid === Status.Completed || statusid === Status.Cancelled) {
       // Once a line item is beyond 'Received', editing is disabled.
       lockForm();
     }
@@ -244,7 +241,7 @@ $(document).ready(function () {
    * - Finalizes network user name normalization.
    * - Backfills PO number when none has been assigned.
    */
-  $(document).on("onloadlookupfinished", function (e) {
+  $(document).on("onloadlookupfinished", function () {
     $('.closeme input').val(1);
     $('#q0').append("<div class='hidden-text' id='popUpDiv'></div>");
     $('.network-user-name input').trigger("change");
@@ -475,7 +472,6 @@ function submitForm(e) {
   if (statusID === Status.Cancelled) {
     e.preventDefault();
     cancelLineItem();
-    return;
   }
 }
 
@@ -499,9 +495,9 @@ function validateForm() {
   const serviceDateValue = serviceDateField.val().trim();
   const quantityField = $('.quantity input');
   const costAmountField = $('.cost-amount input');
-  const quantityValue = Number(quantityField.val().trim());
-  const costAmountValue = Number(costAmountField.val().trim());
-  const receivedQuantityValue = Number($('.received-quantity input').val().trim());
+  const quantityValue = Number(quantityField.val());
+  const costAmountValue = Number(costAmountField.val());
+  const receivedQuantityValue = Number($('.received-quantity input').val());
   const receivedQuantityField = $('.received-quantity input');
 
   resetErrorFields();
