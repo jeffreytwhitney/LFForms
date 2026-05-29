@@ -242,11 +242,14 @@ $(document).ready(function () {
     loadTaskTypeMap();
 
     const userTypeID = Number($('.user-type-id input').val());
+    const userIsAdmin = Number($('.is-admin input').val());
     if ((userTypeID === 3) && ($('.department select option').length > 1)) {
-      if ($('.department select').val() === '') {
-        const userDepartmentName = $('.user-department-name input').val();
-        $('.department select').val(userDepartmentName).trigger("change");
-        $('.department select').addClass('ui-state-disabled');
+      if (!userIsAdmin) {
+        if ($('.department select').val() === '') {
+          const userDepartmentName = $('.user-department-name input').val();
+          $('.department select').val(userDepartmentName).trigger("change");
+          $('.department select').addClass('ui-state-disabled');
+        }
       }
     }
 
