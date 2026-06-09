@@ -1,52 +1,46 @@
-<p>There are [OVERDUE_TICKET_COUNT] tickets that are currently overdue for calibration.</p>
-
-<br />
+<p>There are gages in your area that are overdue for calibration.</p>
+<p>Please have your people locate these gages and bring them in to be calibrated.</p>
+<br/>
+<div><h2>Tickets</h2></div>
 <div>
-    <h2>Overdue Tickets</h2>
-</div>
-<div>
-    <style>
-        td, th {
-            border: 1px solid;
-            border-collapse: collapse;
-            text-align: left;
-            border-spacing: 0px;
-            padding: 0px;
-            font-family: Tahoma;
-        }
-    </style>
-    <table style="width: 1500px; border-spacing: 0px; padding-top: 10px;">
-        <thead>
-            <tr>
-                <th>Ticket Number</th>
-                <th>Department</th>
-                <th>Machine Group:</th>
-                <th>Machine</th>
-                <th>Cell Leader</th>
-                <th>Operator</th>
-                <th>Part Number</th>
-                <th>Job Number</th>
-                <th>Last Calibration Date</th>
-                <th>Calibration Due Date</th>
-            </tr>
-        </thead>
-        <tbody>
-            [OVERDUE_ROWS]       
-        </tbody>
-    </table>
+  <style>td, th {
+    border: 1px solid;
+    border-collapse: collapse;
+    text-align: left;
+    border-spacing: 0px;
+    padding: 0px;
+    font-family: Tahoma;
+  }</style>
+  [TicketTables]
 </div>
 
 
+<p>
+  <table style="width: 800px; border-spacing: 0px; padding-top: 10px;">
+    <thead>
+    <tr>
+      <th>Ticket Number</th>
+      <th>Ticket Type</th>
+      <th>Operator</th>
+      <th>Part Number</th>
+      <th>Machine</th>
+      <th>Calibration Due Date</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>[TicketNumber]</td>
+      <td>[TicketType]</td>
+      <td>[TicketOperator]</td>
+      <td>[TicketPartNumber]</td>
+      <td>[TicketMachine]</td>
+      <td>[TicketCalDueDate]</td>
+    </tr>
+    <tr>
+      <td colspan="6">[GageDetailTable]<br/></td>
+    </tr>
+    </tbody>
+  </table>
+</p>
+<br/>
 
-<tr>
-    <td>[TICKET_NUMBER]</td>
-    <td>[DEPARTMENT]</td>
-    <td>[CELL_LEADER]</td>
-    <td>[MACHINE_GROUP]</td>
-    <td>[MACHINE]</td>
-    <td>[OPERATOR]</td>
-    <td>[PART_NUMBER]</td>
-    <td>[JOB_NUMBER]</td>
-    <td>[LAST_CALIBRATION_DATE]</td>
-    <td>[CALIBRATION_DUE_DATE]</td>
-</tr>
