@@ -147,7 +147,7 @@ function callNextPage() {
 function changeNumericToYesNo() {
 
   const isactive = $("[id^='Field14']");
-  isactive.each(function (index) {
+  isactive.each(function () {
     const isactive_value = $(this).val();
     if ((isactive_value === '1') || (isactive_value === 'Yes')) {
       $(this).val('Yes');
@@ -204,7 +204,7 @@ function generateAddButton() {
   const add_buttons = $(".addbutton");
   const is_admin = checkPermissions();
 
-  add_buttons.each(function (index) {
+  add_buttons.each(function () {
     if (is_admin) {
       $(this).replaceWith("<input class='return' style='visibilty:visible' type='button' value='Add Bin' onclick='callAddBin()' />");
     }
@@ -220,7 +220,7 @@ function generateEditButtons() {
   const is_admin = checkPermissions();
   $('.table-button').remove();
   const edit_buttons = $(".edit-button input[type=text]");
-  edit_buttons.each(function (index) {
+  edit_buttons.each(function () {
     const btn_value = $(this).val();
     if (is_admin) {
       $(this).parent().append("<input class='table-button' type='button' value='Edit' onclick='callEditBin(" + btn_value + ")' />");
@@ -243,13 +243,14 @@ function generateFilterRow() {
     $("#txtFilterBinName").on("dblclick", function () { $("#txtFilterBinName").val(null).trigger("change"); });
     $("#txtFilterPartNumber").on("dblclick", function () { $("#txtFilterPartNumber").val(null).trigger("change"); });
     $("#txtFilterNote").on("dblclick", function () { $("#txtFilterNote").val(null).trigger("change"); });
+    wireUpSortFields();
   }
 }
 
 
 function generateGoBackButtons() {
   const $goback_buttons = $(".gobackbutton");
-  $goback_buttons.each(function (index) {
+  $goback_buttons.each(function () {
     $(this).replaceWith("<input class='return' type='button' value='Go Back' onclick='goBack()' />");
   });
 }
@@ -408,24 +409,29 @@ function showDetails(ticket_id) {
 
 
 function sortTable(newSortOrdinal, selector) {
-  $('.bin-table').hide();
+  //$('.bin-table').hide();
+
   removeAppendedFields();
   $('.sort-icon').remove();
 
-  const currentSortOrdinal = Number($('.sort-field-ordinal input').val());
-  let sortDirection = Number($('.sort-direction input').val());
+  const currentSortOrdinal = Number($('.sfo input').val());
+  let sortDirection = Number($('.sd input').val());
+
+  console.log('newSortOrdinal:', newSortOrdinal);
+  console.log('currentSortOrdinal:', currentSortOrdinal);
+  console.log('sortDirection:', sortDirection);
 
   if (newSortOrdinal === currentSortOrdinal) {
     if (sortDirection === 0) {
       sortDirection = 1
-      $('.sort-direction input').val(1).trigger("change");
+      $('.sd input').val(1).trigger("change");
     } else {
       sortDirection = 0;
-      $('.sort-direction input').val(0).trigger("change");
+      $('.sd input').val(0).trigger("change");
     }
   } else {
-    $('.sort-field-ordinal input').val(newSortOrdinal);
-    $('.sort-direction input').val(0).trigger("change");
+    $('.sfo input').val(newSortOrdinal).trigger("change");
+    $('.sd input').val(0).trigger("change");
     sortDirection = 0;
   }
 
@@ -465,44 +471,15 @@ function validateForm(e) {
 
 function wireUpSortFields() {
 
-  $('#q124 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
-  $('#q124').on('click', function () {
-    sortTable(0, '#q124');
+  $('#q11 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
+  $('#q11').on('click', function () {
+    sortTable(0, '#q11');
   });
-  $('#q115').on('click', function () {
-    sortTable(1, '#q115');
+  $('#q15').on('click', function () {
+    sortTable(1, '#q15');
   });
-  $('#q116').on('click', function () {
-    sortTable(2, '#q116');
+  $('#q36').on('click', function () {
+    sortTable(2, '#q36');
   });
-  $('#q119').on('click', function () {
-    sortTable(3, '#q119');
-  });
-  $('#q117').on('click', function () {
-    sortTable(4, '#q117');
-  });
-  $('#q120').on('click', function () {
-    sortTable(5, '#q120');
-  });
-  $('#q121').on('click', function () {
-    sortTable(6, '#q121');
-  });
-  $('#q122').on('click', function () {
-    sortTable(7, '#q122');
-  });
-  $('#q162').on('click', function () {
-    sortTable(8, '#q162');
-  });
-  $('#q163').on('click', function () {
-    sortTable(9, '#q163');
-  });
-  $('#q166').on('click', function () {
-    sortTable(10, '#q166');
-  });
-  $('#q123').on('click', function () {
-    sortTable(11, '#q123');
-  });
-  $('#q125').on('click', function () {
-    sortTable(12, '#q125');
-  });
+
 }
