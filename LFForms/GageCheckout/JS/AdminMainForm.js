@@ -6,6 +6,7 @@ $(document).ready(function () {
   $('#q0').append("<div class='hidden' id='popUpDiv'></div>");
 
   $(document).on("onloadlookupfinished", function () {
+    console.log('Is Anonymous', isUserAnonymous());
     generateAppliationLinks();
   });
 
@@ -51,38 +52,62 @@ function checkPermissions() {
 }
 
 
+function isUserAnonymous() {
+  const networkUserName = $(".network-user-name input").val();
+  return networkUserName === "Anonymous User";
+}
+
+
 function generateAppliationLinks() {
 
   const hasPermissions = checkPermissions();
   const isAdmin = isUserAdmin();
+  const isAnonymous = isUserAnonymous();
   const firstColumnLinks = [
-    { label: 'Tickets', title: 'Gage Administration', href: 'http://rmslf/Forms/GageTicketAdministration' },
-    { label: 'Calibration', title: 'Gage Calibration', href: 'http://rmslf/Forms/GageCalibration' },
-    { label: 'Gage Request Maintenance', title: 'Gage Request Maintenance', href: 'http://rmslf/Forms/GageRequestMaintenance' },
-    { label: 'Gage Checkout', title: 'Gage Checkout', href: 'http://rmslf/Forms/RMS-GAGE-CheckoutMainform' },
-    { label: 'Ticket History', title: 'Ticket History', href: 'http://rmslf/Forms/RMS-GAGE-TicketHistory' },
-    { label: 'Bin History', title: 'Ticket History', href: 'http://rmslf/Forms/RMS-GAGE-BinHistory' },
-    { label: 'Thread Gages', title: 'Thread Gages', href: 'http://rmslf/Forms/RMS-GAGE-ThreadGages' },
+    {
+      label: 'Login',
+      title: 'Login',
+      href: 'http://rmslf/Forms/account/login?returnUrl=%2fForms%2fGAGE-AdminMainForm',
+      anonymousOnly: true
+    },
+    {label: 'Tickets', title: 'Gage Administration', href: 'http://rmslf/Forms/GageTicketAdministration'},
+    {label: 'Calibration', title: 'Gage Calibration', href: 'http://rmslf/Forms/GageCalibration'},
+    {
+      label: 'Gage Request Maintenance',
+      title: 'Gage Request Maintenance',
+      href: 'http://rmslf/Forms/GageRequestMaintenance'
+    },
+    {label: 'Gage Checkout', title: 'Gage Checkout', href: 'http://rmslf/Forms/RMS-GAGE-CheckoutMainform'},
+    {label: 'Ticket History', title: 'Ticket History', href: 'http://rmslf/Forms/RMS-GAGE-TicketHistory'},
+    {label: 'Bin History', title: 'Ticket History', href: 'http://rmslf/Forms/RMS-GAGE-BinHistory'},
+    {label: 'Thread Gages', title: 'Thread Gages', href: 'http://rmslf/Forms/RMS-GAGE-ThreadGages'},
   ];
 
   const secondColumnLinks = [
-    { label: 'Users', title: 'Users', href: 'http://rmslf/Forms/GageUserMaintenance', adminOnly: true },
-    { label: 'Cell Leaders', title: 'Cell Leaders', href: 'http://rmslf/Forms/RMS-GAGE-CellLeaders' },
-    { label: 'Machine Groups', title: 'Machine Groups', href: 'http://rmslf/Forms/RMS-GAGE-MachineGroups' },
-    { label: 'Departments', title: 'Departments', href: 'http://rmslf/Forms/RMS-GAGE-Departments' },
-    { label: 'Pin Bins', title: 'Pin Bins', href: 'http://rmslf/Forms/RMS-GAGE-Bins' },
-    { label: 'Pin Types', title: 'Pin Types', href: 'http://rmslf/Forms/RMS-GAGE-PinTypes' },
-    { label: 'Production Machines', title: 'Production Machines', href: 'http://rmslf/Forms/RMS-GAGE-ProductionMachines' },
-    { label: 'Sites', title: 'Sites', href: 'http://rmslf/Forms/RMS-GAGE-Sites' },
+    {label: 'Users', title: 'Users', href: 'http://rmslf/Forms/GageUserMaintenance', adminOnly: true},
+    {label: 'Cell Leaders', title: 'Cell Leaders', href: 'http://rmslf/Forms/RMS-GAGE-CellLeaders'},
+    {label: 'Machine Groups', title: 'Machine Groups', href: 'http://rmslf/Forms/RMS-GAGE-MachineGroups'},
+    {label: 'Departments', title: 'Departments', href: 'http://rmslf/Forms/RMS-GAGE-Departments'},
+    {label: 'Pin Bins', title: 'Pin Bins', href: 'http://rmslf/Forms/RMS-GAGE-Bins'},
+    {label: 'Pin Types', title: 'Pin Types', href: 'http://rmslf/Forms/RMS-GAGE-PinTypes'},
+    {
+      label: 'Production Machines',
+      title: 'Production Machines',
+      href: 'http://rmslf/Forms/RMS-GAGE-ProductionMachines'
+    },
+    {label: 'Sites', title: 'Sites', href: 'http://rmslf/Forms/RMS-GAGE-Sites'},
   ];
 
 
-
   const firstColumnHtml = firstColumnLinks
-    .map(function (link) {
-      return buildLinkItem(link, hasPermissions);
+    .filter(function (link) {
+      return !link.anonymousOnly || isAnonymous;
     })
-    .join('') + '<li></li>';
+    .map(function (link) {
+      const canAccessLink = link.anonymousOnly ? true : hasPermissions;
+      return buildLinkItem(link, canAccessLink);
+    })
+    .join('');
 
   const secondColumnHtml = secondColumnLinks
     .map(function (link) {
@@ -91,7 +116,17 @@ function generateAppliationLinks() {
     })
     .join('');
 
+
+  let userName = $('.user-name input').val();
+  if (userName === 'Anonymous User' || userName === '') {
+    userName = 'Anonymous User';
+  }
+
+  const userNameHTML = `<span class="user-name-display">User: ${userName}</span>`;
+  $('#form-title-wrap').append(userNameHTML);
+
   const mainWindowHTML = `<div class="row"><div class="column"><ul>${firstColumnHtml}</ul></div><div class="column"><ul>${secondColumnHtml}</ul></div></div>`;
+
 
   $('.main-window').html(mainWindowHTML);
 

@@ -7,6 +7,8 @@ const cellLeaderNameMap = new Map();
 
 var should_print_receipt = true;
 
+
+
 $(document).ready(function () {
 
   $('.Submit').hide();
@@ -106,6 +108,8 @@ $(document).ready(function () {
     generateFormButtons();
     appendPagination();
     colorCodeRows();
+    generateTitleInfo();
+
     $('.ticket-table').show();
 
   });
@@ -586,6 +590,26 @@ function getTicketTypeIDByTicketID(ticket_id) {
     }
   });
   return ticket_type_id;
+}
+
+
+function generateTitleInfo() {
+
+  if ($('.user-name-display input').val() === '') {
+    const lfUserName = $('.user-name input').val();
+    if (lfUserName === 'Anonymous User') {
+      $('.user-name-display input').val('User :Anonymous');
+      const login_link = $("<a>", { text: 'Log In', class: 'login-link', href: 'http://rmslf/Forms/account/login?returnUrl=%2fForms%2fGageTicketAdministration' });
+      $('.user-name-display').append(login_link);
+    }
+    else {
+      const userName = $('.user-name-hidden input').val()
+      if (userName !== '') {
+        const userText = `User: ${userName}`
+        $('.user-name-display input').val(userText);
+      }
+    }
+  }
 }
 
 
