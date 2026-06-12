@@ -161,7 +161,7 @@ function filterTicketTable() {
     $('.fttid input').val(0);
   }
 
-  if ((departmentFilterVal !== 0) && (departmentFilterVal.length > 0)) {
+  if (departmentFilterVal !== null)  {
     const taskDepartmentID = departmentNameMap.get(departmentFilterVal);
     $('.fdid input').val(taskDepartmentID);
   }
@@ -169,7 +169,7 @@ function filterTicketTable() {
     $('.fdid input').val(0);
   }
 
-  if ((machineGroupFilterVal !== 0) && (machineGroupFilterVal.length > 0)) {
+  if (machineGroupFilterVal !== null) {
     const machineGroupID = machineGroupNameMap.get(machineGroupFilterVal);
     $('.fmgid input').val(machineGroupID);
   }
@@ -177,14 +177,14 @@ function filterTicketTable() {
     $('.fmgid input').val(null);
   }
 
-  if ((operatorFilterVal !== null) && (operatorFilterVal.length > 0)) {
+  if (operatorFilterVal !== null) {
     $('.fopname input').val(operatorFilterVal);
   }
   else {
     $('.fopname input').val(null);
   }
 
-  if ((cellLeaderFilterVal !== 0) && (cellLeaderFilterVal.length > 0)) {
+  if (cellLeaderFilterVal !== null) {
     const cellLeaderID = cellLeaderNameMap.get(cellLeaderFilterVal);
     $('.fclid input').val(cellLeaderID);
   }

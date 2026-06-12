@@ -298,11 +298,13 @@ function generateLastRunMessage() {
 
     const schedule_page_link = `<a href='http://rmslf/Forms/MPM-ScheduleUpdate' target='_blank' class='schedule-page-link'>Schedules</a>`
     const schedule_link = `<a href='http://rmslf/Forms/MPM-ScheduleUpdate?rid=${lastRunID}' target='_blank' class='schedule-run-link'>${lastRunDate}</a>`
+    const isOld = lastRunDate !== '' && new Date(new Date(lastRunDate).toDateString()) < new Date(new Date().toDateString());
+    const blinkClass = isOld ? 'slow-blink' : '';
     if (isAutomated === 1) {
-      lastRunMessage = `<div id="last-run-div">${schedule_page_link} Updated: ${schedule_link} (Automated)</div>`;
+      lastRunMessage = `<div id="last-run-div" class="${blinkClass.trim()}">${schedule_page_link} Updated: ${schedule_link} (Automated)</div>`;
     }
     else {
-      lastRunMessage = `<div id="last-run-div">${schedule_page_link} Updated: ${schedule_link} by ${lastRunBy}</div>`;
+      lastRunMessage = `<div id="last-run-div" class="${blinkClass.trim()}">${schedule_page_link} Updated: ${schedule_link} by ${lastRunBy}</div>`;
     }
 
     $('.schedule-update-message').append(lastRunMessage);
