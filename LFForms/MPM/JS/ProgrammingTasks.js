@@ -752,8 +752,8 @@ function generateFilterRow() {
     $('#txtFilter_TaskName').val($('.ftname input').val());
   }
 
-  if ((($('.fpname input').val() !== null) && ($('.fpname input').val().length > 0)) && (($('#txtFilter_TaskName').val() === null) || ($('#txtFilter_TaskName').val() === ''))) {
-    $('#txtFilter_TaskName').val($('.fpname input').val());
+  if ((($('.fpname input').val() !== null) && ($('.fpname input').val().length > 0)) && (($('#txtFilter_ProjectName').val() === null) || ($('#txtFilter_ProjectName').val() === ''))) {
+    $('#txtFilter_ProjectName').val($('.fpname input').val());
   }
 
   if ((($('.fpid input').val() !== null) && ($('.fpid input').val().length > 0)) && (($('#txtFilter_TicketNumber').val() === null) || ($('#txtFilter_TicketNumber').val() === ''))) {
