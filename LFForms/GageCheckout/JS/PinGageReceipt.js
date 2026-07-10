@@ -11,6 +11,11 @@ $(document).ready(function () {
     $('.last-cal-date input').val($('.last-cal-date input').val().split(" ")[0]);
     $('.cal-due-date input').val($('.cal-due-date input').val().split(" ")[0]);
     $('.print-date input').val(new Date().toLocaleString());
+
+    const totalPins = $('.pin-table table tbody tr').length
+    $('#Field21').prepend(`<div class='pin-count'>Number of Pins/Bins: ${totalPins}</div>`);
+
+
     parent.postMessage("printme", "*");
 
   });

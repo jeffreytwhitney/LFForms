@@ -210,7 +210,6 @@ function callPrevPage() {
 
 
 function callPrint(ticket_id) {
-
   should_print_receipt = true;
   const ticketTypeID = getTicketTypeIDByTicketID(ticket_id);
   const ticketGuid = getTicketGuidByTicketID(ticket_id);
@@ -562,9 +561,9 @@ function getTicketGuidByTicketID(ticket_id) {
   const ticket_guids = $(".ticket-table-print-button input[type=text]");
 
   ticket_ids.each(function (index) {
-    const row_ticket_id = $(this).val();
+    const row_ticket_id = Number($(this).val());
     const row_ticket_guid = ticket_guids[index].value;
-    if (row_ticket_id === ticket_id) {
+    if (row_ticket_id === Number(ticket_id)) {
       ticket_guid = row_ticket_guid;
     }
   });
@@ -583,9 +582,9 @@ function getTicketTypeIDByTicketID(ticket_id) {
   const ticket_type_ids = $(".ticket-type-id-col input[type=text]");
 
   ticket_ids.each(function (index) {
-    const row_ticket_id = $(this).val();
+    const row_ticket_id = Number($(this).val());
     const row_ticket_type_id = ticket_type_ids[index].value;
-    if (row_ticket_id === ticket_id) {
+    if (row_ticket_id === Number(ticket_id)) {
       ticket_type_id = row_ticket_type_id;
     }
   });
@@ -699,12 +698,9 @@ function print_receipt() {
   const receipt_url_root = "http://" + domain + "/Forms/";
   let receipt_url = "";
 
-  if ($('.print-ticket-type-id input').val() === 1) {
-    receipt_url = receipt_url_root + "PinGageReceipt?guid=" + $('.print-ticket-id input').val();
-  }
-  if ($('.print-ticket-type-id input').val() === 2) {
-    receipt_url = receipt_url_root + "ThreadReceipt?guid=" + $('.print-ticket-id input').val();
-  }
+  const ticketTypeID = Number($('.print-ticket-type-id input').val());
+
+  receipt_url = receipt_url_root + "PinGageReceipt?guid=" + $('.print-ticket-id input').val();
 
   if (should_print_receipt === true) {
     if (receipt_url !== "") {
@@ -844,8 +840,8 @@ function removeAppendedFields() {
 function removeRow(ticket_id) {
   const ticket_ids = $(".ticket-id-col input[type=text]");
   ticket_ids.each(function () {
-    const row_ticket_id = $(this).val();
-    if (row_ticket_id === ticket_id) {
+    const row_ticket_id = Number($(this).val());
+    if (row_ticket_id === Number(ticket_id)) {
       $(this).closest('tr').remove();
     }
   });
