@@ -1,0 +1,44 @@
+<p><strong>Bad CMM Calibration Results</strong></p>
+<p>There were [CountOfBadCals] calibration reports created within the past 24 hours that have bad readings.</p>
+<br>
+<style>
+  table, th, tr td {
+    border: 1px solid black;
+    text-align: left;
+    font-size: 14px;
+  }
+</style>
+<table>
+  <thead>
+  <tr>
+    <th style="width:300px;">File Name</th>
+    <th style="width:150px;">Create Date</th>
+    <th style="width:100px;">*Is Latest</th>
+    <th style="width:100px;">**Latest Cal Good</th>
+    <th style="width:150px;">Probe Name</th>
+    <th style="width:80px;">Prb Rnd</th>
+    <th style="width:80px;">Std Dev</th>
+  </tr>
+  </thead>
+  <tbody>[CalRows]</tbody>
+</table>
+<br>
+<br>
+<span style="font-size:10px;">* = Is this the latest cal report for that machine</span>
+<br>
+<span style="font-size:10px;">** = The latest calibration is good. (You can safely ignore this record.)</span>
+
+<BR><span style="font-size:6px;">EID:{{CMMBADCAL}} SITE:{{[SITECODE]}}</span>
+
+
+------This is the row--------------
+<tr>
+  <td>[FileName]</td>
+  <td>[CreateDate]</td>
+  <td>[IsLatest]</td>
+  <td>[IsLatestGood]</td>
+  <td>[ProbeName]</td>
+  <td>[PrbRnd]</td>
+  <td>[StdDev]</td>
+</tr>
+------------------------------------
