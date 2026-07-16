@@ -18,8 +18,8 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
-  $.fn.bootstrapBtn = bootstrapButton;
+   // return $.fn.button to previously assigned value
+  $.fn.bootstrapBtn = $.fn.button.noConflict();
 
   $('#q0').append("<div class='hidden' id='popUpDiv'></div>");
 
@@ -102,24 +102,24 @@ $(document).ready(function () {
     this.value = this.value.toLocaleUpperCase();
   });
 
-  $(document).on('change', '[id^="Field152"]', function (e) {
+  $(document).on('change', '[id^="Field152"]', function () {
     generateMachineList();
   });
 
-  $(document).on('change', '[id^="Field170"]', function (e) {
+  $(document).on('change', '[id^="Field170"]', function () {
     generateMachineList();
   });
 
-  $(document).on('change', '[id^="Field131"]', function (e) {
+  $(document).on('change', '[id^="Field131"]', function () {
     generateMachineList();
   });
 
-  $(document).on('click', '.cf-collection-delete', function (e) {
+  $(document).on('click', '.cf-collection-delete', function () {
     generateMachineList();
   });
 
 
-  $(document).on('change', '.cr-activate-employee-name input', function (e) {
+  $(document).on('change', '.cr-activate-employee-name input', function () {
     const crActivateEmployeeNumberValue = $('.cr-activate-employee-number input').val();
     const crActivateEmployeeNameValue = $('.cr-activate-employee-name input').val();
 
@@ -127,7 +127,7 @@ $(document).ready(function () {
     $('.activate-employee-name input').val(crActivateEmployeeNameValue);
   });
 
-  $(document).on('change', '.anoka-activate-employee-name input', function (e) {
+  $(document).on('change', '.anoka-activate-employee-name input', function () {
     const anokaActivateEmployeeNumberValue = $('.anoka-activate-employee-number input').val();
     const anokaActivateEmployeeNameValue = $('.anoka-activate-employee-name input').val();
 
@@ -161,7 +161,6 @@ function appendPagination() {
     }
     if ((current_page > 1) && (row_count < 25)) {
       $('.ticket-table table').parent().append("<div id='ticket-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);'>&laquo;</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);'>&lsaquo;</a></li><li><a class='page-link next isDisabled'>&rsaquo;</a></li></ul></div>")
-      return;
     }
   }
 }
@@ -202,7 +201,7 @@ function callNextPage() {
   $('.ticket-table').hide();
   $('.ticket-detail-link').remove();
   $('.table-button').remove();
-  current_page = Number($('.pg input').val());
+  const current_page = Number($('.pg input').val());
   $('.pg input').val(current_page + 1).trigger("change");
 }
 
@@ -211,7 +210,7 @@ function callPrevPage() {
   $('.ticket-table').hide();
   $('.ticket-detail-link').remove();
   $('.table-button').remove();
-  current_page = Number($('.pg input').val());
+  const current_page = Number($('.pg input').val());
   if (current_page === 1) {
     return;
   }
@@ -232,8 +231,10 @@ function callPrint(ticket_id) {
 function callReturnTicket() {
 
   const siteID = Number($('.site-id input').val());
+  const crEmployeeName = String($('.cr-employee-name input').val() || '');
+  const anokaEmployeeName = String($('.anoka-employee-name input').val() || '');
   if (siteID === 1) {
-    if ($('.cr-employee-name input').val().length === 0) {
+    if (crEmployeeName.length === 0) {
       $.alert({
         title: 'Enter Your Employee Number!',
         content: 'You have to enter your employee number before you can return this ticket.',
@@ -242,7 +243,7 @@ function callReturnTicket() {
     }
   }
   if (siteID === 2) {
-    if ($('.anoka-employee-name input').val().length === 0) {
+    if (anokaEmployeeName.length === 0) {
       $.alert({
         title: 'Enter Your Employee Number!',
         content: 'You have to enter your employee number before you can return this ticket.',
@@ -250,9 +251,6 @@ function callReturnTicket() {
       return;
     }
   }
-
-
-
 
   $.confirm({
     title: 'Are you sure?',
@@ -268,9 +266,6 @@ function callReturnTicket() {
           $('#form1').trigger("submit");
         }
       },
-      cancel: function () {
-
-      }
     }
   });
 }
@@ -301,10 +296,10 @@ function filterTicketTable() {
 
 
   const ticketNumberFilterValue = $('#txtFilter_TicketNumber').val();
-  const departmentFilterVal = $('#cboFilter_Department').val();
-  const machineGroupFilterVal = $('#cboFilter_MachineGroup').val();
-  const operatorFilterVal = $('#cboFilter_Operator').val();
-  const cellLeaderFilterVal = $('#cboFilter_CellLeader').val();
+  const departmentFilterVal = String($('#cboFilter_Department').val() || '');
+  const machineGroupFilterVal = String($('#cboFilter_MachineGroup').val() || '');
+  const operatorFilterVal = String($('#cboFilter_Operator').val() || '');
+  const cellLeaderFilterVal = String($('#cboFilter_CellLeader').val() || '');
   const statusFilterVal = $('#cboFilter_Status').val();
   const partNumberFilterValue = $('#txtFilter_PartNumber').val();
   const jobNumberFilterValue = $('#txtFilter_JobNumber').val();
@@ -318,7 +313,7 @@ function filterTicketTable() {
 
 
 
-  if ((departmentFilterVal !== 0) && (departmentFilterVal.length > 0)) {
+  if (departmentFilterVal.length > 0) {
     const taskDepartmentID = departmentNameMap.get(departmentFilterVal);
     $('.fdid input').val(taskDepartmentID);
   }
@@ -326,7 +321,7 @@ function filterTicketTable() {
     $('.fdid input').val(0);
   }
 
-  if ((machineGroupFilterVal !== 0) && (machineGroupFilterVal.length > 0)) {
+  if (machineGroupFilterVal.length > 0) {
     const machineGroupID = machineGroupNameMap.get(machineGroupFilterVal);
     $('.fmgid input').val(machineGroupID);
   }
@@ -334,14 +329,14 @@ function filterTicketTable() {
     $('.fmgid input').val(null);
   }
 
-  if ((operatorFilterVal !== null) && (operatorFilterVal.length > 0)) {
+  if (operatorFilterVal.length > 0) {
     $('.fopname input').val(operatorFilterVal);
   }
   else {
     $('.fopname input').val(null);
   }
 
-  if ((cellLeaderFilterVal !== 0) && (cellLeaderFilterVal.length > 0)) {
+  if (cellLeaderFilterVal.length > 0) {
     const cellLeaderID = cellLeaderNameMap.get(cellLeaderFilterVal);
 
     $('.fclid input').val(cellLeaderID);
@@ -410,24 +405,24 @@ function generateFilterRow() {
 
 
 
-  if (($(".status-lookup-cbo select option").length > 0) && ($('#cboFilter_Status option' === 0))) {
+  if (($(".status-lookup-cbo select option").length > 0) && ($('#cboFilter_Status option').length === 0)) {
     $("#cboFilter_Status").html($(".status-lookup-cbo select").html());
   }
 
-  if (($(".department-lookup-cbo select option").length > 0) && ($('#cboFilter_Department option' === 0))) {
+  if (($(".department-lookup-cbo select option").length > 0) && ($('#cboFilter_Department option').length === 0)) {
     $("#cboFilter_Department").html($(".department-lookup-cbo select").html());
   }
 
-  if (($(".machine-group-lookup-cbo select option").length > 0) && ($('#cboFilter_MachineGroup option' === 0))) {
+  if (($(".machine-group-lookup-cbo select option").length > 0) && ($('#cboFilter_MachineGroup option').length === 0)) {
     $("#cboFilter_MachineGroup").html($(".machine-group-lookup-cbo select").html());
   }
 
-  if (($(".operator-lookup-cbo select option").length > 0) && ($('#cboFilter_Operator option' === 0))) {
+  if (($(".operator-lookup-cbo select option").length > 0) && ($('#cboFilter_Operator option').length === 0)) {
     $("#cboFilter_Operator").html($(".operator-lookup-cbo select").html());
     $("#cboFilter_Operator").find('option:eq(0)').prop('selected', true);
   }
 
-  if (($(".cell-leader-lookup-cbo select option").length > 0) && ($('#cboFilter_CellLeader option' === 0))) {
+  if (($(".cell-leader-lookup-cbo select option").length > 0) && ($('#cboFilter_CellLeader option').length === 0)) {
     $("#cboFilter_CellLeader").html($(".cell-leader-lookup-cbo select").html());
     $("#cboFilter_CellLeader").find('option:eq(0)').prop('selected', true);
   }
@@ -438,13 +433,13 @@ function generateFilterRow() {
 
 function generateGoBackButtons() {
   const $goback_buttons = $(".gobackbutton");
-  $goback_buttons.each(function (index) {
+  $goback_buttons.each(function () {
     $(this).parent().append("<div id='go-back' class='ui-button ui-corner-all ui-widget' onclick='callGoBack()'><span class='ui-icon ui-icon-arrowreturnthick-1-w'></span>Go Back</div><div id='return-ticket' class='ui-button ui-corner-all ui-widget' onclick='callReturnTicket()'><span class='ui-icon ui-icon-check'></span>Return Ticket</div>");
   });
   $(".gobackbutton").remove();
 
   const $gobackactivate_buttons = $(".goback_activate");
-  $gobackactivate_buttons.each(function (index) {
+  $gobackactivate_buttons.each(function () {
     $(this).parent().append("<div id='go-back' class='ui-button ui-corner-all ui-widget' onclick='callGoBack()'><span class='ui-icon ui-icon-arrowreturnthick-1-w'></span>Go Back</div>");
   });
   $(".goback_activate").remove();
@@ -460,7 +455,7 @@ function generateMachineList() {
   if (detailTicketID !== '') {
 
     $('[id^="Field152"]').each(function (index, element) {
-      machineName = $(element).val();
+      const machineName = String($(element).val() || '');
       if (machineName !== '') {
         if (machineList.length > 0) {
           machineList += ', ' + machineName;
@@ -477,7 +472,7 @@ function generateMachineList() {
   if (activateTicketID !== '') {
 
     $('[id^="Field131"]').each(function (index, element) {
-      machineName = $(element).val();
+      const machineName = String($(element).val() || '');
       if (machineName !== '') {
         if (machineList.length > 0) {
           machineList += ', ' + machineName;
@@ -494,7 +489,7 @@ function generateMachineList() {
   if (cloneTicketID !== '') {
 
     $('[id^="Field170"]').each(function (index, element) {
-      machineName = $(element).val();
+      const machineName = String($(element).val() || '');
       if (machineName !== '') {
         if (machineList.length > 0) {
           machineList += ', ' + machineName;
@@ -576,15 +571,15 @@ function generateTicketNumberColumn() {
 
 function getTicketGuidByTicketID(ticket_id) {
   let ticket_guid;
+  const normalizedTicketID = String(ticket_id);
   const ticket_ids = $(".ticket-table-id input[type=text]");
   const ticket_guids = $(".ticket-table-print-button input[type=text]");
 
   ticket_ids.each(function (index) {
-    const row_ticket_id = $(this).val();
+    const row_ticket_id = String($(this).val());
     const row_ticket_guid = ticket_guids[index].value;
-    if (row_ticket_id === ticket_id) {
+    if (row_ticket_id === normalizedTicketID) {
       ticket_guid = row_ticket_guid;
-      return;
     }
   });
   return ticket_guid;
@@ -592,22 +587,21 @@ function getTicketGuidByTicketID(ticket_id) {
 
 
 function getTicketRowCount() {
-  const row_count = $('.ticket-table table tbody tr').length;
-  return row_count;
+  return $('.ticket-table table tbody tr').length;
 }
 
 
 function getTicketTypeIDByTicketID(ticket_id) {
   let ticket_type_id;
+  const normalizedTicketID = String(ticket_id);
   const ticket_ids = $(".ticket-table-id input[type=text]");
   const ticket_type_ids = $(".ticket-table-ticket-type-id input[type=text]");
 
   ticket_ids.each(function (index) {
-    const row_ticket_id = $(this).val();
+    const row_ticket_id = String($(this).val());
     const row_ticket_type_id = ticket_type_ids[index].value;
-    if (row_ticket_id === ticket_id) {
+    if (row_ticket_id === normalizedTicketID) {
       ticket_type_id = row_ticket_type_id;
-      return;
     }
   });
 
@@ -617,14 +611,14 @@ function getTicketTypeIDByTicketID(ticket_id) {
 
 
 function loadCellLeaderMap() {
-  if (cellLeaderMap.keys.length === 0) {
+  if (cellLeaderMap.size === 0) {
     const cellLeader_rows = $('.cellleader-lookup-table table tbody tr');
     if (cellLeader_rows.length === 0) {
       return;
     }
-    cellLeader_rows.each(function (index) {
-      cellLeaderID = Number($(this).find('.cellleader-lookup-table-id input').val());
-      cellLeaderName = $(this).find('.cellleader-lookup-table-name input').val();
+    cellLeader_rows.each(function () {
+      const cellLeaderID = Number($(this).find('.cellleader-lookup-table-id input').val());
+      const cellLeaderName = $(this).find('.cellleader-lookup-table-name input').val();
       cellLeaderMap.set(cellLeaderID, cellLeaderName);
       cellLeaderNameMap.set(cellLeaderName, cellLeaderID);
     });
@@ -633,14 +627,14 @@ function loadCellLeaderMap() {
 
 
 function loadDepartmentMap() {
-  if (departmentMap.keys.length === 0) {
+  if (departmentMap.size === 0) {
     const department_rows = $('.department-lookup-table table tbody tr');
     if (department_rows.length === 0) {
       return;
     }
-    department_rows.each(function (index) {
-      departmentID = Number($(this).find('.department-lookup-table-id input').val());
-      departmentName = $(this).find('.department-lookup-table-name input').val();
+    department_rows.each(function () {
+      const departmentID = Number($(this).find('.department-lookup-table-id input').val());
+      const departmentName = $(this).find('.department-lookup-table-name input').val();
       departmentMap.set(departmentID, departmentName);
       departmentNameMap.set(departmentName, departmentID);
     });
@@ -654,14 +648,14 @@ function loadiFrame(src) {
 
 
 function loadMachineGroupMap() {
-  if (machineGroupMap.keys.length === 0) {
+  if (machineGroupMap.size === 0) {
     const machine_group_rows = $('.machine-group-lookup-table table tbody tr');
     if (machine_group_rows.length === 0) {
       return;
     }
-    machine_group_rows.each(function (index) {
-      machineGroupID = Number($(this).find('.machine-group-lookup-table-id input').val());
-      machineGroupName = $(this).find('.machine-group-lookup-table-name input').val();
+    machine_group_rows.each(function () {
+      const machineGroupID = Number($(this).find('.machine-group-lookup-table-id input').val());
+      const machineGroupName = $(this).find('.machine-group-lookup-table-name input').val();
       machineGroupMap.set(machineGroupID, machineGroupName);
       machineGroupNameMap.set(machineGroupName, machineGroupID);
     });
@@ -677,20 +671,14 @@ function print_receipt() {
   let receipt_url = "";
 
 
-
-  if ($('.print-ticket-type-id input').val() === 1) {
-    receipt_url = receipt_url_root + "PinGageReceipt?guid=" + $('.print-ticket-id input').val();
-  }
-  if ($('.print-ticket-type-id input').val() === 2) {
-    receipt_url = receipt_url_root + "ThreadReceipt?guid=" + $('.print-ticket-id input').val();
-  }
-
+  receipt_url = receipt_url_root + "PinGageReceipt?guid=" + $('.print-ticket-id input').val();
+  console.log(`Receipt URL: ${receipt_url}`);
   if (should_print_receipt === true) {
     if (receipt_url !== "") {
 
       setTimeout(function() {
         loadiFrame(receipt_url);
-        should_print_receipt === false;
+        should_print_receipt = false;
         $('.print-ticket-id input').val(null).trigger("change");
       }, 2000);
     }
@@ -761,6 +749,7 @@ function resetPageNumber() {
 
 
 function resetValidationErrors() {
+  $('.clone-part-number input').removeClass('parsley-error');
   $('.add-pins-bins-table-new-bin-number input').removeClass('parsley-error');
   $('.add-thread-gages-new-thread-gage-name input').removeClass('parsley-error');
 
@@ -770,7 +759,7 @@ function resetValidationErrors() {
   $('#bad-thread-gage-error').remove();
   $('#preexisting-thread-gage-error').remove();
   $('#missing-thread-gage-error').remove();
-
+  $('#bad-clone-part-number').remove();
 }
 
 
@@ -782,7 +771,7 @@ function setDailyCalValues() {
     const dailyCalValue = $(this).val();
     const dailyCalDisplayField = dailyCalDisplay[i];
     const dailyDisplayInputs = $(dailyCalDisplayField).find('input');
-    dailyDisplayInputs.each(function (ii) {
+    dailyDisplayInputs.each(function () {
       const inputValue = $(this).val();
       if (dailyCalValue === inputValue) {
         $(this).attr('checked', 'checked');
@@ -947,6 +936,17 @@ function validateForm(e) {
   }
 
   if (actionType === 4) {
+    resetValidationErrors();
+    const originalPartNumber = String($('.clone-original-part-number input').val() || '').trim().toUpperCase();
+    const newPartNumber = String($('.clone-part-number input').val() || '').trim().toUpperCase();
+
+    if (newPartNumber === originalPartNumber) {
+      $('.clone-part-number input').addClass('parsley-error');
+      $('.clone-part-number input').parent().append('<ul class="parsley-errors-list filled" id="bad-clone-part-number"><li class="parsley-required">Cannot clone a ticket with the same part number. If just changing job number, edit the ticket instead.</li></ul>');
+      e.preventDefault();
+      return;
+    }
+
     $('.print-ticket-id input').val($('.clone-guid input').val());
     return;
   }
@@ -965,31 +965,33 @@ function validateForm(e) {
       submitEmployeeNumber.val(anokaEmployeeNumber.val());
     }
 
-    const ticketType = $('.details-ticket-type-id input').val();
+
     const pinRows = $('.add-pins-bins-table table tbody tr');
 
-    if (ticketType === 1) {
-      pinRows.each(function (index) {
+    pinRows.each(function () {
 
-        const pinTypeValue = Number($(this).find('.add-pins-bins-table-pin-type-id input').val());
-        const binName = $(this).find('.add-pins-bins-table-new-bin-number input');
-        const existingBinTicketNumber = $(this).find('.add-pins-bins-table-existing-bin-id input');
-        const binID = $(this).find('.add-pins-bins-table-new-bin-id input');
-        if ((pinTypeValue === 5) && ((binName.val().length > 0) && binID.val().length === 0)) {
-          binName.parent().find('#bad-pin-name-error').remove();
-          binName.parent().append("<ul id='bad-pin-name-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Invalid Pin Name.</li></ul>");
-          binName.addClass('parsley-error');
-          isValid = false;
-        }
-        if (existingBinTicketNumber.val().length > 0) {
-          binName.parent().find('#preexisting-bin-error').remove();
-          binName.parent().append("<ul id='preexisting-bin-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Bin already marked as 'Checked Out'. See Metrology Calibration.</li></ul>");
-          binName.addClass('parsley-error');
-          isValid = false;
-        }
-      });
-  
-    }
+      const pinTypeValue = Number($(this).find('.add-pins-bins-table-pin-type-id input').val());
+      const binName = $(this).find('.add-pins-bins-table-new-bin-number input');
+      const existingBinTicketNumber = $(this).find('.add-pins-bins-table-existing-bin-id input');
+      const binID = $(this).find('.add-pins-bins-table-new-bin-id input');
+      const binNameValue = String(binName.val() || '');
+      const existingBinTicketNumberValue = String(existingBinTicketNumber.val() || '');
+      const binIDValue = String(binID.val() || '');
+      if ((pinTypeValue === 5) && ((binNameValue.length > 0) && binIDValue.length === 0)) {
+        binName.parent().find('#bad-pin-name-error').remove();
+        binName.parent().append("<ul id='bad-pin-name-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Invalid Pin Name.</li></ul>");
+        binName.addClass('parsley-error');
+        isValid = false;
+      }
+      if (existingBinTicketNumberValue.length > 0) {
+        binName.parent().find('#preexisting-bin-error').remove();
+        binName.parent().append("<ul id='preexisting-bin-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Bin already marked as 'Checked Out'. See Metrology Calibration.</li></ul>");
+        binName.addClass('parsley-error');
+        isValid = false;
+      }
+    });
+
+
 
     if (isValid === true) {
       $('.print-ticket-id input').val($('.details-guid input').val());
