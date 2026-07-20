@@ -31,7 +31,7 @@ $(document).ready(function () {
   const printEvent = window[eventMethod];
   const messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
   printEvent(messageEvent, function (e) {
-    returnTicketID = Number($('.return-ticket-id input').val());
+    const returnTicketID = Number($('.return-ticket-id input').val());
     if (returnTicketID === 0) {
       if (e.data === "printme" || e.message === "printme") {
         $("#print-iframe").get(0).contentWindow.print();
@@ -54,7 +54,7 @@ $(document).ready(function () {
       $("#popupIFrame").dialog("destroy");
       $("#popupIFrame").remove();
 
-      returnTicketID = Number($('.return-ticket-id input').val());
+      const returnTicketID = Number($('.return-ticket-id input').val());
       if (returnTicketID > 0) {
         executeIFrameUpdate(returnTicketID);
         removeRow(returnTicketID);
@@ -281,7 +281,7 @@ function filterTicketTable() {
     return;
   }
 
-  $('.projectlist-table').hide();
+  $('.ticket-table').hide();
   removeAppendedFields();
 
 
@@ -476,7 +476,7 @@ function generateMachineList() {
 
   if (activateTicketID !== '') {
     $('[id^="Field269"]').each(function (index, element) {
-      machineName = $(element).val();
+      const machineName = $(element).val();
       if (machineName !== '') {
         if (machineList.length > 0) {
           machineList += ', ' + machineName;
@@ -618,7 +618,7 @@ function loadiFrame(src) {
 
 
 function loadCellLeaderMap() {
-  if (cellLeaderMap.keys.length === 0) {
+  if (cellLeaderMap.size === 0) {
     const cellLeader_rows = $('.cellleader-lookup-table table tbody tr');
     if (cellLeader_rows.length === 0) {
       return;
@@ -634,7 +634,7 @@ function loadCellLeaderMap() {
 
 
 function loadDepartmentMap() {
-  if (departmentMap.keys.length === 0) {
+  if (departmentMap.size === 0) {
     const department_rows = $('.department-lookup-table table tbody tr');
     if (department_rows.length === 0) {
       return;
@@ -650,7 +650,7 @@ function loadDepartmentMap() {
 
 
 function loadMachineGroupMap() {
-  if (machineGroupMap.keys.length === 0) {
+  if (machineGroupMap.size === 0) {
     const machine_group_rows = $('.machine-group-lookup-table table tbody tr');
     if (machine_group_rows.length === 0) {
       return;
@@ -670,7 +670,7 @@ function popUpIframe(src, title, height, width) {
   //var iframe_height = height - 100;
 
   $("#popupIFrame").remove();
-  $("#popUpDiv").html(`<div height='${height}' width='${width}'><iframe id='popupIFrame' name='myname' src='${src}' height='${height}' width='${width}'/></div>`);
+  $("#popUpDiv").html(`<div style='height:${height}px; width:${width}px;'><iframe id='popupIFrame' name='myname' src='${src}' height='${height}' width='${width}'/></div>`);
   $("#popupIFrame").dialog({
     title: title,
     height: height,
@@ -694,13 +694,24 @@ function print_receipt() {
   if (Number($('.return-ticket-id input').val()) !== 0) {
     return;
   }
+  const ticketGuid = String($('.print-ticket-id input').val() || '').trim();
+  if (ticketGuid.length === 0) {
+    return;
+  }
+
   const domain = document.location.hostname;
-  const receipt_url_root = "http://" + domain + "/Forms/";
-  let receipt_url = "";
+  const receipt_url_root = document.location.protocol + "//" + domain + "/Forms/";
+  let receipt_url = '';
 
   const ticketTypeID = Number($('.print-ticket-type-id input').val());
 
-  receipt_url = receipt_url_root + "PinGageReceipt?guid=" + $('.print-ticket-id input').val();
+  if (ticketTypeID === 1) {
+    receipt_url = receipt_url_root + "PinGageReceipt?guid=" + ticketGuid;
+  }
+
+  if (ticketTypeID === 2) {
+    receipt_url = receipt_url_root + "ThreadReceipt?guid=" + ticketGuid;
+  }
 
   if (should_print_receipt === true) {
     if (receipt_url !== "") {
@@ -720,12 +731,13 @@ function reApplyFilterValues() {
   const ticketNumberFilterValue = $('.ftname input').val();
   const jobNumberFilterValue = $('.fjnbr input').val();
   const partNumberFilterValue = $('.fpnum input').val();
-  const ticketTypeFilterVal = $('.fttid input').val();
+  const ticketTypeFilterVal = Number($('.fttid input').val());
   const departmentFilterVal = Number($('.fdid input').val());
   const machineGroupFilterVal = Number($('.fmgid input').val());
   const operatorFilterVal = $('.fopname input').val();
   const cellLeaderFilterVal = Number($('.fclid input').val());
   const statusFilterVal = $('.fsid input').val();
+  const gageDiameterFilterVal = Number($('.fpdia input').val());
 
   $('#cboFilter_Status').val(statusFilterVal);
 
@@ -739,6 +751,10 @@ function reApplyFilterValues() {
 
   if ((partNumberFilterValue !== null) && (partNumberFilterValue.length > 0)) {
     $('#txtFilter_PartNumber').val(partNumberFilterValue);
+  }
+
+  if (!isNaN(gageDiameterFilterVal) && (gageDiameterFilterVal > 0)) {
+    $('#txtFilter_GageDiameter').val(gageDiameterFilterVal);
   }
 
   if (ticketTypeFilterVal !== 0) {
@@ -771,67 +787,87 @@ function refreshPage() {
   const ticketNumberFilterValue = $('.ftname input').val();
   const jobNumberFilterValue = $('.fjnbr input').val();
   const partNumberFilterValue = $('.fpnum input').val();
-  const ticketTypeFilterVal = $('.fttid input').val();
+  const ticketTypeFilterVal = Number($('.fttid input').val());
   const departmentFilterVal = Number($('.fdid input').val());
   const machineGroupFilterVal = Number($('.fmgid input').val());
   const operatorFilterVal = $('.fopname input').val();
   const cellLeaderFilterVal = Number($('.fclid input').val());
   const gageDiameterFilterVal = Number($('.fpdia input').val());
+  const statusFilterVal = Number($('.fsid input').val());
+  const sortFieldOrdinal = Number($('.sort-field-ordinal input').val());
+  const sortDirection = Number($('.sort-direction input').val());
 
 
   const page_number = Number($('.pg input').val());
 
 
   let current_url = window.location.href;
-  let indexOfQuestionMark;
   if (current_url.includes('?')) {
-    indexOfQuestionMark = current_url.indexOf('?');
+    const indexOfQuestionMark = current_url.indexOf('?');
     current_url = current_url.substring(0, indexOfQuestionMark);
   }
 
-  if (page_number > 0) {
-    current_url = current_url + `?pg=${page_number}`;
+  const queryParams = new URLSearchParams();
+
+  if (Number.isInteger(page_number) && (page_number > 0)) {
+    queryParams.set('pg', page_number.toString());
   }
 
   if ((ticketNumberFilterValue !== null) && (ticketNumberFilterValue.length > 0)) {
-    current_url = current_url + `&ftname=${ticketNumberFilterValue}`;
+    queryParams.set('ftname', ticketNumberFilterValue);
   }
 
   if ((jobNumberFilterValue !== null) && (jobNumberFilterValue.length > 0)) {
-    current_url = current_url + `&fjnbr=${jobNumberFilterValue}`;
+    queryParams.set('fjnbr', jobNumberFilterValue);
   }
 
   if ((partNumberFilterValue !== null) && (partNumberFilterValue.length > 0)) {
-    current_url = current_url + `&fpnum=${partNumberFilterValue}`;
+    queryParams.set('fpnum', partNumberFilterValue);
   }
 
-  if ((departmentFilterVal !== null) && (departmentFilterVal > 0)) {
-    current_url = current_url + `&fdid=${departmentFilterVal}`;
+  if (!isNaN(departmentFilterVal) && (departmentFilterVal > 0)) {
+    queryParams.set('fdid', departmentFilterVal.toString());
   }
 
-  if ((gageDiameterFilterVal !== null) && (gageDiameterFilterVal > 0)) {
-    current_url = current_url + `&fpdia=${gageDiameterFilterVal}`;
+  if (!isNaN(gageDiameterFilterVal) && (gageDiameterFilterVal > 0)) {
+    queryParams.set('fpdia', gageDiameterFilterVal.toString());
   }
 
-  if ((ticketTypeFilterVal !== null) && (ticketTypeFilterVal > 0)) {
-    current_url = current_url + `&fttid=${ticketTypeFilterVal}`;
+  if (!isNaN(ticketTypeFilterVal) && (ticketTypeFilterVal > 0)) {
+    queryParams.set('fttid', ticketTypeFilterVal.toString());
   }
-  if ((machineGroupFilterVal !== null) && (machineGroupFilterVal > 0)) {
-    current_url = current_url + `&fmgid=${machineGroupFilterVal}`;
+
+  if (!isNaN(machineGroupFilterVal) && (machineGroupFilterVal > 0)) {
+    queryParams.set('fmgid', machineGroupFilterVal.toString());
   }
+
   if ((operatorFilterVal !== null) && (operatorFilterVal !== '')) {
-    current_url = current_url + `&fopname=${operatorFilterVal}`;
-  }
-  if ((cellLeaderFilterVal !== null) && (cellLeaderFilterVal > 0)) {
-    current_url = current_url + `&fclid=${cellLeaderFilterVal}`;
+    queryParams.set('fopname', operatorFilterVal);
   }
 
-  window.location = current_url;
+  if (!isNaN(cellLeaderFilterVal) && (cellLeaderFilterVal > 0)) {
+    queryParams.set('fclid', cellLeaderFilterVal.toString());
+  }
+
+  if (!isNaN(statusFilterVal) && (statusFilterVal > 0)) {
+    queryParams.set('fsid', statusFilterVal.toString());
+  }
+
+  if (Number.isInteger(sortFieldOrdinal) && (sortFieldOrdinal >= 0)) {
+    queryParams.set('sortfield', sortFieldOrdinal.toString());
+  }
+
+  if (Number.isInteger(sortDirection) && (sortDirection >= 0)) {
+    queryParams.set('sortdirection', sortDirection.toString());
+  }
+
+  const queryString = queryParams.toString();
+  window.location = (queryString.length > 0) ? `${current_url}?${queryString}` : current_url;
 }
 
 
 function removeAppendedFields() {
-  $('#tasklist-pagination').remove();
+  $('#ticket-table-pagination').remove();
   $('.table-button').remove();
   $('.ticket-link').remove();
 }
@@ -863,9 +899,8 @@ function showDetails(ticket_id) {
 
 
 function sortTable(newSortOrdinal, selector) {
-  $('.projectlist-table').hide();
+  $('.ticket-table').hide();
   removeAppendedFields();
-  $('.sort-icon').remove();
 
   const currentSortOrdinal = Number($('.sort-field-ordinal input').val());
   let sortDirection = Number($('.sort-direction input').val());
@@ -884,11 +919,32 @@ function sortTable(newSortOrdinal, selector) {
     sortDirection = 0;
   }
 
-  if (sortDirection === 0) {
-    $(`${selector} .cf-col-label`).append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
-  } else {
-    $(`${selector} .cf-col-label`).append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
-  }
+  setSortIcon(newSortOrdinal, sortDirection, selector);
+}
+
+
+function setSortIcon(sortOrdinal, sortDirection, selector) {
+  const sortSelectors = {
+    0: '#q124',
+    1: '#q115',
+    2: '#q116',
+    3: '#q119',
+    4: '#q117',
+    5: '#q120',
+    6: '#q121',
+    7: '#q122',
+    8: '#q162',
+    9: '#q163',
+    10: '#q166',
+    11: '#q123',
+    12: '#q125'
+  };
+
+  $('.sort-icon').remove();
+
+  const selectorToUse = selector || sortSelectors[sortOrdinal] || '#q124';
+  const iconClass = (sortDirection === 1) ? 'ui-icon-triangle-1-s' : 'ui-icon-triangle-1-n';
+  $(`${selectorToUse} .cf-col-label`).append(`<span class="ui-icon ${iconClass} sort-icon"></span>`);
 }
 
 
@@ -918,44 +974,45 @@ function submitForm() {
 
 function wireUpSortFields() {
 
-  $('#q124 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
-  $('#q124').on('click', function () {
+  $('#q124').off('click').on('click', function () {
     sortTable(0, '#q124');
   });
-  $('#q115').on('click', function () {
+  $('#q115').off('click').on('click', function () {
     sortTable(1, '#q115');
   });
-  $('#q116').on('click', function () {
+  $('#q116').off('click').on('click', function () {
     sortTable(2, '#q116');
   });
-  $('#q119').on('click', function () {
+  $('#q119').off('click').on('click', function () {
     sortTable(3, '#q119');
   });
-  $('#q117').on('click', function () {
+  $('#q117').off('click').on('click', function () {
     sortTable(4, '#q117');
   });
-  $('#q120').on('click', function () {
+  $('#q120').off('click').on('click', function () {
     sortTable(5, '#q120');
   });
-  $('#q121').on('click', function () {
+  $('#q121').off('click').on('click', function () {
     sortTable(6, '#q121');
   });
-  $('#q122').on('click', function () {
+  $('#q122').off('click').on('click', function () {
     sortTable(7, '#q122');
   });
-  $('#q162').on('click', function () {
+  $('#q162').off('click').on('click', function () {
     sortTable(8, '#q162');
   });
-  $('#q163').on('click', function () {
+  $('#q163').off('click').on('click', function () {
     sortTable(9, '#q163');
   });
-  $('#q166').on('click', function () {
+  $('#q166').off('click').on('click', function () {
     sortTable(10, '#q166');
   });
-  $('#q123').on('click', function () {
+  $('#q123').off('click').on('click', function () {
     sortTable(11, '#q123');
   });
-  $('#q125').on('click', function () {
+  $('#q125').off('click').on('click', function () {
     sortTable(12, '#q125');
   });
+
+  setSortIcon(Number($('.sort-field-ordinal input').val()), Number($('.sort-direction input').val()));
 }

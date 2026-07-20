@@ -71,9 +71,6 @@ $(document).ready(function () {
     reApplyFilterValues();
     appendPagination();
     fillMachineNameCombos();
-    if ($('.details-ticket-type-id input').val() === '2') {
-      setDailyCalValues();
-    }
     $('.ticket-table').show();
 
   });
@@ -183,6 +180,7 @@ function callClone(ticket_id) {
 
 
 function callGoBack() {
+
   $(".details-ticket-id input").val(null).trigger("change");
   $(".details-ticket-type-id input").val(null).trigger("change");
   $('.details-modifier-employee-number input').val(null).trigger("change");
@@ -220,10 +218,8 @@ function callPrevPage() {
 
 function callPrint(ticket_id) {
   should_print_receipt = true;
-  const ticketTypeID = getTicketTypeIDByTicketID(ticket_id);
   const ticketGuid = getTicketGuidByTicketID(ticket_id);
   $('.print-ticket-id input').val(ticketGuid);
-  $('.print-ticket-type-id input').val(ticketTypeID);
   print_receipt();
 }
 
@@ -231,10 +227,10 @@ function callPrint(ticket_id) {
 function callReturnTicket() {
 
   const siteID = Number($('.site-id input').val());
-  const crEmployeeName = String($('.cr-employee-name input').val() || '');
-  const anokaEmployeeName = String($('.anoka-employee-name input').val() || '');
+  const crEmployeeNumber = String($('.cr-employee-number input').val() || '').trim();
+  const anokaEmployeeNumber = String($('.anoka-employee-number input').val() || '').trim();
   if (siteID === 1) {
-    if (crEmployeeName.length === 0) {
+    if (crEmployeeNumber.length === 0) {
       $.alert({
         title: 'Enter Your Employee Number!',
         content: 'You have to enter your employee number before you can return this ticket.',
@@ -243,7 +239,7 @@ function callReturnTicket() {
     }
   }
   if (siteID === 2) {
-    if (anokaEmployeeName.length === 0) {
+    if (anokaEmployeeNumber.length === 0) {
       $.alert({
         title: 'Enter Your Employee Number!',
         content: 'You have to enter your employee number before you can return this ticket.',
@@ -268,6 +264,20 @@ function callReturnTicket() {
       },
     }
   });
+}
+
+
+function buildMachineList(selector) {
+  const machineNames = [];
+
+  $(selector).each(function (index, element) {
+    const machineName = String($(element).val() || '').trim();
+    if (machineName.length > 0) {
+      machineNames.push(machineName);
+    }
+  });
+
+  return machineNames.join(', ');
 }
 
 
@@ -434,13 +444,13 @@ function generateFilterRow() {
 function generateGoBackButtons() {
   const $goback_buttons = $(".gobackbutton");
   $goback_buttons.each(function () {
-    $(this).parent().append("<div id='go-back' class='ui-button ui-corner-all ui-widget' onclick='callGoBack()'><span class='ui-icon ui-icon-arrowreturnthick-1-w'></span>Go Back</div><div id='return-ticket' class='ui-button ui-corner-all ui-widget' onclick='callReturnTicket()'><span class='ui-icon ui-icon-check'></span>Return Ticket</div>");
+    $(this).parent().append("<div class='go-back-button ui-button ui-corner-all ui-widget' onclick='callGoBack()'><span class='ui-icon ui-icon-arrowreturnthick-1-w'></span>Go Back</div><div class='return-ticket-button ui-button ui-corner-all ui-widget' onclick='callReturnTicket()'><span class='ui-icon ui-icon-check'></span>Return Ticket</div>");
   });
   $(".gobackbutton").remove();
 
   const $gobackactivate_buttons = $(".goback_activate");
   $gobackactivate_buttons.each(function () {
-    $(this).parent().append("<div id='go-back' class='ui-button ui-corner-all ui-widget' onclick='callGoBack()'><span class='ui-icon ui-icon-arrowreturnthick-1-w'></span>Go Back</div>");
+    $(this).parent().append("<div class='go-back-button ui-button ui-corner-all ui-widget' onclick='callGoBack()'><span class='ui-icon ui-icon-arrowreturnthick-1-w'></span>Go Back</div>");
   });
   $(".goback_activate").remove();
 }
@@ -450,57 +460,20 @@ function generateMachineList() {
   const detailTicketID = $('.details-ticket-id input').val();
   const activateTicketID = $('.activate-ticket-id input').val();
   const cloneTicketID = $('.clone-ticket-id input').val();
-  let machineList = '';
 
   if (detailTicketID !== '') {
-
-    $('[id^="Field152"]').each(function (index, element) {
-      const machineName = String($(element).val() || '');
-      if (machineName !== '') {
-        if (machineList.length > 0) {
-          machineList += ', ' + machineName;
-        }
-        else {
-          machineList = machineName;
-        }
-      }
-    });
-
-    $('.machine-name-list input').val(machineList);
+    const detailMachineList = buildMachineList('[id^="Field152"]');
+    $('.machine-name-list input').val(detailMachineList);
   }
 
   if (activateTicketID !== '') {
-
-    $('[id^="Field131"]').each(function (index, element) {
-      const machineName = String($(element).val() || '');
-      if (machineName !== '') {
-        if (machineList.length > 0) {
-          machineList += ', ' + machineName;
-        }
-        else {
-          machineList = machineName;
-        }
-      }
-    });
-
-    $('.activate-machine-list input').val(machineList);
+    const activateMachineList = buildMachineList('[id^="Field131"]');
+    $('.activate-machine-list input').val(activateMachineList);
   }
 
   if (cloneTicketID !== '') {
-
-    $('[id^="Field170"]').each(function (index, element) {
-      const machineName = String($(element).val() || '');
-      if (machineName !== '') {
-        if (machineList.length > 0) {
-          machineList += ', ' + machineName;
-        }
-        else {
-          machineList = machineName;
-        }
-      }
-    });
-
-    $('.clone-machine-list input').val(machineList);
+    const cloneMachineList = buildMachineList('[id^="Field170"]');
+    $('.clone-machine-list input').val(cloneMachineList);
   }
 }
 
@@ -591,25 +564,6 @@ function getTicketRowCount() {
 }
 
 
-function getTicketTypeIDByTicketID(ticket_id) {
-  let ticket_type_id;
-  const normalizedTicketID = String(ticket_id);
-  const ticket_ids = $(".ticket-table-id input[type=text]");
-  const ticket_type_ids = $(".ticket-table-ticket-type-id input[type=text]");
-
-  ticket_ids.each(function (index) {
-    const row_ticket_id = String($(this).val());
-    const row_ticket_type_id = ticket_type_ids[index].value;
-    if (row_ticket_id === normalizedTicketID) {
-      ticket_type_id = row_ticket_type_id;
-    }
-  });
-
-
-  return ticket_type_id;
-}
-
-
 function loadCellLeaderMap() {
   if (cellLeaderMap.size === 0) {
     const cellLeader_rows = $('.cellleader-lookup-table table tbody tr');
@@ -665,14 +619,15 @@ function loadMachineGroupMap() {
 
 
 function print_receipt() {
+  const ticketGuid = String($('.print-ticket-id input').val() || '').trim();
+  if (ticketGuid.length === 0) {
+    return;
+  }
 
   const domain = document.location.hostname;
-  const receipt_url_root = "http://" + domain + "/Forms/";
-  let receipt_url = "";
+  const receipt_url_root = document.location.protocol + "//" + domain + "/Forms/";
+  const receipt_url = receipt_url_root + "PinGageReceipt?guid=" + ticketGuid;
 
-
-  receipt_url = receipt_url_root + "PinGageReceipt?guid=" + $('.print-ticket-id input').val();
-  console.log(`Receipt URL: ${receipt_url}`);
   if (should_print_receipt === true) {
     if (receipt_url !== "") {
 
@@ -751,34 +706,12 @@ function resetPageNumber() {
 function resetValidationErrors() {
   $('.clone-part-number input').removeClass('parsley-error');
   $('.add-pins-bins-table-new-bin-number input').removeClass('parsley-error');
-  $('.add-thread-gages-new-thread-gage-name input').removeClass('parsley-error');
 
-  $('#bad-pin-name-error').remove();
-  $('#preexisting-bin-error').remove();
-
-  $('#bad-thread-gage-error').remove();
-  $('#preexisting-thread-gage-error').remove();
-  $('#missing-thread-gage-error').remove();
-  $('#bad-clone-part-number').remove();
+  $('.bad-pin-name-error').remove();
+  $('.preexisting-bin-error').remove();
+  $('.bad-clone-part-number').remove();
 }
 
-
-function setDailyCalValues() {
-  const dailyCalValues = $('.existing-thread-gages-daily-cal-value input');
-  const dailyCalDisplay = $('.existing-thread-gages-daily-cal fieldset');
-
-  dailyCalValues.each(function (i) {
-    const dailyCalValue = $(this).val();
-    const dailyCalDisplayField = dailyCalDisplay[i];
-    const dailyDisplayInputs = $(dailyCalDisplayField).find('input');
-    dailyDisplayInputs.each(function () {
-      const inputValue = $(this).val();
-      if (dailyCalValue === inputValue) {
-        $(this).attr('checked', 'checked');
-      }
-    });
-  });
-}
 
 
 function showDetails(ticket_id) {
@@ -931,6 +864,7 @@ function validateForm(e) {
   }
 
   if (actionType === 3) {
+    should_print_receipt = true;
     $('.print-ticket-id input').val($('.activate-guid input').val());
     return;
   }
@@ -942,11 +876,12 @@ function validateForm(e) {
 
     if (newPartNumber === originalPartNumber) {
       $('.clone-part-number input').addClass('parsley-error');
-      $('.clone-part-number input').parent().append('<ul class="parsley-errors-list filled" id="bad-clone-part-number"><li class="parsley-required">Cannot clone a ticket with the same part number. If just changing job number, edit the ticket instead.</li></ul>');
+      $('.clone-part-number input').parent().append('<ul class="parsley-errors-list filled bad-clone-part-number"><li class="parsley-required">Cannot clone a ticket with the same part number. If just changing job number, edit the ticket instead.</li></ul>');
       e.preventDefault();
       return;
     }
 
+    should_print_receipt = true;
     $('.print-ticket-id input').val($('.clone-guid input').val());
     return;
   }
@@ -978,14 +913,14 @@ function validateForm(e) {
       const existingBinTicketNumberValue = String(existingBinTicketNumber.val() || '');
       const binIDValue = String(binID.val() || '');
       if ((pinTypeValue === 5) && ((binNameValue.length > 0) && binIDValue.length === 0)) {
-        binName.parent().find('#bad-pin-name-error').remove();
-        binName.parent().append("<ul id='bad-pin-name-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Invalid Pin Name.</li></ul>");
+        binName.parent().find('.bad-pin-name-error').remove();
+        binName.parent().append('<ul class="parsley-errors-list filled bad-pin-name-error"><li class="parsley-required">Invalid Pin Name.</li></ul>');
         binName.addClass('parsley-error');
         isValid = false;
       }
       if (existingBinTicketNumberValue.length > 0) {
-        binName.parent().find('#preexisting-bin-error').remove();
-        binName.parent().append("<ul id='preexisting-bin-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Bin already marked as 'Checked Out'. See Metrology Calibration.</li></ul>");
+        binName.parent().find('.preexisting-bin-error').remove();
+        binName.parent().append('<ul class="parsley-errors-list filled preexisting-bin-error"><li class="parsley-required">Bin already marked as &quot;Checked Out&quot;. See Metrology Calibration.</li></ul>');
         binName.addClass('parsley-error');
         isValid = false;
       }
@@ -994,6 +929,7 @@ function validateForm(e) {
 
 
     if (isValid === true) {
+      should_print_receipt = true;
       $('.print-ticket-id input').val($('.details-guid input').val());
     }
     else {

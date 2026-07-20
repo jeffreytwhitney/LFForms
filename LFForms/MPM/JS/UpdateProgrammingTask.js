@@ -575,6 +575,16 @@ function checkPermissions() {
 }
 
 
+async function copyToClipboard(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    console.log('Text copied to clipboard');
+  } catch (err) {
+    console.error('Failed to copy:', err);
+  }
+}
+
+
 /**
  * Determines whether the current user is classified as a "Metrology" user.
  * Business Rule: user-type-id == 1 => elevated privilege.
