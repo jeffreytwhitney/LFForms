@@ -35,6 +35,12 @@
         $('#q11').append('<p class="error"><b><font-size="4">You do not have permission to add notes to Purchase Orders.</font></b></p>');
       }
     }
+    else{
+      $('.note-text textarea').removeAttr('disabled');
+      $('.Submit').removeAttr('disabled');
+      $('.error').remove();
+    }
+
 
     //If there is no purchase order ID, disable the Submit button.
     if (($('.poid input').val() === null) || ($('.poid input').val().length === 0)) {
@@ -50,7 +56,7 @@
 * @returns {boolean} True when the current user is an admin user.
 */
 function isAdminUser() {
-  return $('.user-isadmin input').val() !== '0';
+  return $('.user-isadmin input').val() === '1';
 }
 
 
