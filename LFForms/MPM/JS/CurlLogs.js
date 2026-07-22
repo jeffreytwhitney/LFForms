@@ -200,20 +200,20 @@ $(document).ready(function () {
   });
 
   // When lookup tables are available, finish wiring the grid (filter row + pagination).
-  $(document).on('lookupcomplete', function (e) {
+  $(document).on('lookupcomplete', function () {
     appendPagination(); //See 'Pagination' section above.
     generateFilterRow(); //See 'Filtering and Sorting' section above.
   });
 
   // Final page activation after load / lookup completion.
-  $(document).on("onloadlookupfinished", function (e) {
+  $(document).on("onloadlookupfinished", function () {
     
     if ($('.pg input').val() === '999') {
       $('.pg input').val(1).trigger("change");
     }
 
     // Quick view of long error in a dialog on double-click.
-    $(document).on('dblclick', '.error-detail-col div', function (e) {
+    $(document).on('dblclick', '.error-detail-col div', function () {
       const errorDetail = $(this).find('input').val();
 
       $.dialog({
@@ -269,7 +269,6 @@ function appendPagination() {
     }
     if ((current_page > 1) && (row_count < 25)) {
       $('.log-table table').parent().append("<div id='log-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);'>‹‹</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);'>‹</a></li><li><a class='page-link next isDisabled'>›</a></li></ul></div>")
-      return;
     }
   }
 }
@@ -280,7 +279,7 @@ function appendPagination() {
  * Increments the hidden page (.pg input) then fires its change handler.
  */
 function callNextPage() {
-  current_page = Number($('.pg input').val());
+  let current_page = Number($('.pg input').val());
   $('.pg input').val(current_page + 1).trigger("change");
 }
 
@@ -289,7 +288,7 @@ function callNextPage() {
  * Go to previous page (if not already page 1) and trigger data refresh.
  */
 function callPrevPage() {
-  current_page = Number($('.pg input').val());
+  let current_page = Number($('.pg input').val());
   if (current_page === 1) {
     return;
   }
@@ -378,8 +377,7 @@ function generateFilterRow() {
  * @returns {number} Row count
  */
 function getTableRowCount() {
-  const row_count = $('.log-table table tbody tr').length;
-  return row_count;
+  return $('.log-table table tbody tr').length;
 }
 
 

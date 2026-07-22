@@ -33,7 +33,7 @@ $(document).ready(function () {
 
   });
 
-  $(document).on('lookupcomplete', function (e) {
+  $(document).on('lookupcomplete', function () {
     loadDepartmentMap();
     $('.assign-to-id input').off('change');
     $('.assign-to-id input').on("change", function () {
@@ -48,7 +48,7 @@ $(document).ready(function () {
 function changeNumericToYesNo() {
 
   const isactive = $("[id^='Field26']");
-  isactive.each(function (index) {
+  isactive.each(function () {
     const isactive_value = $(this).val();
     if (isactive_value === '1') {
       $(this).val('Yes');
@@ -80,7 +80,6 @@ function checkPermissions() {
 
   const employee_number = $(".user-employee-number input").val();
   const is_user_active = Number($(".user-isactive input").val());
-  const is_user_admin = Number($(".user-isadmin input").val());
   let return_val = true;
 
   if (is_user_active === 0) {
@@ -99,7 +98,7 @@ function generateAddButton() {
   const add_buttons = $(".addbutton");
   const is_admin = checkPermissions();
 
-  add_buttons.each(function (index) {
+  add_buttons.each(function () {
     if (is_admin) {
       $(this).replaceWith("<input class='return' style='visibilty:visible' type='button' value='Add Cell Leader' onclick='callAddUser()' />");
     }
@@ -114,7 +113,7 @@ function generateAddButton() {
 function generateEditButtons() {
   const is_admin = checkPermissions();
   const edit_buttons = $(".edit-button input[type=text]");
-  edit_buttons.each(function (index) {
+  edit_buttons.each(function () {
     const btn_value = $(this).val();
     if (is_admin) {
       $(this).parent().append("<input class='edit' type='button' value='Edit' onclick='callEditCellLeader(" + btn_value + ")' />");
@@ -126,7 +125,7 @@ function generateEditButtons() {
 
 function generateGoBackButtons() {
   const $goback_buttons = $(".gobackbutton");
-  $goback_buttons.each(function (index) {
+  $goback_buttons.each(function () {
     $(this).replaceWith("<input class='return' type='button' value='Go Back' onclick='goBack()' />");
   });
 }
@@ -145,9 +144,9 @@ function loadDepartmentMap() {
     if (department_rows.length === 0) {
       return;
     }
-    department_rows.each(function (index) {
-      departmentID = Number($(this).find('.department-lookup-table-id input').val());
-      departmentName = $(this).find('.department-lookup-table-name input').val();
+      department_rows.each(function () {
+      let departmentID = Number($(this).find('.department-lookup-table-id input').val());
+      let departmentName = $(this).find('.department-lookup-table-name input').val();
       departmentMap.set(departmentID, departmentName);
       departmentNameMap.set(departmentName, departmentID);
     });
@@ -169,12 +168,12 @@ function validateForm(e) {
   }
   const ticketRows = $('.cell-leader-ticket-table table tbody tr');
 
-  ticketRows.each(function (index) {
+  ticketRows.each(function () {
     const cellLeaderAssigneeID = Number($(this).find('.assign-to-id input').val());
     const cellLeaderAssigneeName = $(this).find('.assign-to-cell-leader-combo-col select');
 
     if (cellLeaderAssigneeID === editedCellLeaderID) {
-      cellLeaderAssigneeName.parent().append("<ul id='bad-cell-leader-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Cannot assign ticket to Cell Leader you're trying to make inactive.</li></ul>");
+      cellLeaderAssigneeName.parent().append("<ul id='bad-cell-leader-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>Cannot assign ticket to Cell Leader you're trying to make inactive.</li></ul>");
       cellLeaderAssigneeName.addClass('parsley-error');
       isValid = false;
     }

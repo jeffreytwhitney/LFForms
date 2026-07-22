@@ -163,7 +163,7 @@ $(document).ready(function () {
   });
 
   // After lookup completes, finalize UI: action buttons, pagination, add Metrology-only actions, reveal table.
-  $(document).on('lookupcomplete', function (e) {
+  $(document).on('lookupcomplete', function () {
     generateTableButtons(".edit-button-col", "ui-icon-pencil", "Edit User", "callShowDetails");
     appendPagination();
     if (isMetrologyUser()) {
@@ -184,7 +184,7 @@ $(document).ready(function () {
   });
 
   // On initial load completion, restore UI state (cookie, paging), wire "Go Back" buttons, ensure defaults.
-  $(document).on("onloadlookupfinished", function (e) {
+  $(document).on("onloadlookupfinished", function () {
 
     // Hidden popup div placeholder used by other flows.
     $('#q0').append("<div class='hidden-text' id='popUpDiv'></div>");
@@ -290,7 +290,7 @@ function callNextPage() {
   $('.schedule-runs-table').hide();
   $('.table-button').remove();
 
-  current_page = Number($('.pg input').val());
+  let current_page = Number($('.pg input').val());
   $('.pg input').val(current_page + 1).trigger("change");
 }
 
@@ -303,7 +303,7 @@ function callPrevPage() {
   $('.schedule-runs-table').hide();
   $('.table-button').remove();
 
-  current_page = Number($('.pg input').val());
+  let current_page = Number($('.pg input').val());
   if (current_page === 1) {
     return;
   }
@@ -316,7 +316,7 @@ function callPrevPage() {
  */
 function generateGoBackButtons() {
   const $goback_buttons = $(".gobackbutton");
-  $goback_buttons.each(function (index) {
+  $goback_buttons.each(function () {
     $(this).parent().append("<div id='go-back' class='ui-button' onclick='callGoBack()'><span class='ui-icon ui-icon-arrowreturnthick-1-w'></span>Go Back</div>");
   });
   $(".gobackbutton").remove();

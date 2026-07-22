@@ -325,7 +325,7 @@ function popUpIframe(src, title, height, width) {
   //var iframe_height = height - 100;
 
   $("#popupIFrame").remove();
-  $("#popUpDiv").html(`<div height='${height}' width='${width}'><iframe id='popupIFrame' name='myname' src='${src}' height='${height}' width='${width}'/></div>`);
+  $("#popUpDiv").html(`<div style='height:${height}px; width:${width}px;'><iframe id='popupIFrame' name='myname' src='${src}' height='${height}' width='${width}'/></div>`);
   $("#popupIFrame").dialog({
     title: title,
     height: height,

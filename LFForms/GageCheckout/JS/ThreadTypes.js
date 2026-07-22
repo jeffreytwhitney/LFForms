@@ -5,8 +5,7 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
-  $.fn.bootstrapBtn = bootstrapButton;
+  $.fn.bootstrapBtn = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
 
 
   $('.Submit').on("click", function (e) { validateForm(e); });
@@ -24,7 +23,7 @@ $(document).ready(function () {
     $('.threadtype-table').show();
   });
 
-  $(document).on('lookupcomplete', function (e) {
+  $(document).on('lookupcomplete', function () {
 
     $('.threadtype-table').show();
   });
@@ -70,7 +69,7 @@ function generateAddButton() {
   const add_buttons = $(".addbutton");
   const is_admin = checkPermissions();
 
-  add_buttons.each(function (index) {
+  add_buttons.each(function () {
     if (is_admin) {
       $(this).replaceWith("<input class='return' style='visibilty:visible' type='button' value='Add Thread Type' onclick='callAddPinType()' />");
     }
@@ -86,7 +85,7 @@ function generateEditButtons() {
   const is_admin = checkPermissions();
   $('.table-button').remove();
   const edit_buttons = $(".edit-button input[type=text]");
-  edit_buttons.each(function (index) {
+  edit_buttons.each(function () {
     const btn_value = $(this).val();
     if (is_admin) {
       $(this).parent().append("<input class='table-button' type='button' value='Edit' onclick='callEditPinType(" + btn_value + ")' />");
@@ -98,7 +97,7 @@ function generateEditButtons() {
 
 function generateGoBackButtons() {
   const $goback_buttons = $(".gobackbutton");
-  $goback_buttons.each(function (index) {
+  $goback_buttons.each(function () {
     $(this).replaceWith("<input class='return' type='button' value='Go Back' onclick='goBack()' />");
   });
 }

@@ -99,7 +99,7 @@
       This gets us part of the way there, but we also need to have a way for the user to set these fields.
       This is done via a filter row which is added to the task list table. The filter row contains a text box for the task name filter,
       and dropdowns for the task type, status, and assignee filters. There is also a checkbox to include completed tasks.
-      The change of any of these controls triggers the filterTable() function which reads the values from the controls and sets the hidden fields 
+      The change of any these controls triggers the filterTable() function which reads the values from the controls and sets the hidden fields
       ccordingly. Values from select controls are mapped from name to ID using the lookup maps.
       Sorting is handled via clickable column headers. Clicking a header sets the sort field and toggles the sort direction.
       If you click on a sort field that is already the current sort field, it toggles the direction.
@@ -107,7 +107,7 @@
     Mapping:
      There are several differnent lookup tables on the form which are used to populate dropdowns, nearly all of which are for filtering.
      Task types are stored both as ID?Name and Name?ID because LFF only stores the display value in the select, for example, the TaskType
-     select shows the names of the task types, but we are storing the TaskTypeID in a the database, so we need to have a way to 
+     select shows the names of the task types, but we are storing the TaskTypeID in the database, so we need to have a way to
      figure out what the TaskTypeID is so that we can set the value of the hidden field that the workflow is going to use to 
      set the value in the task table. So we need to be able to look up the ID by name when the user selects a task type.
      The only way I've been able to figure out how to do this is to have a hidden lookup table on the page which contains all the 
@@ -122,17 +122,17 @@
           - lookupcomplete: This event fires each time a lookup completes after the onloadlookupfinished event has been called. 
                             Laserfiche has lookup rules applied to certain fields, so that when a field is changed, it triggers a lookup to fill in other fields.
                             The fields themselves can either be changed by the user directly, or indirectly. 
-                            An example of an direct change would be when the user chooses a Site from the dropdown. 
+                            An example of a direct change would be when the user chooses a Site from the dropdown.
           
     
       Now this gets a bit tricky because the lookupcomplete event can fire multiple times, and we only want to do certain things once, so we need
       to put logic in there so that it's not doing expensive things again and again.
       There is a way of asking what the TriggerID of the lookup is. (A laserfiche function). But I found this to be kind of a pain to use because
-      you have to know the TriggerID of the lookup that you want to respond to and it's just an integer. Also, if you ever change anything 
+      you have to know the TriggerID of the lookup that you want to respond to, and it's just an integer. Also, if you ever change anything
       in the form, you don't know if the trigger id has changed or not. So I found it easier to just put logic in the function that I want to run
       to make sure that it doesn't, say iterate through a table or something getting values again and again when we only need it to do it once.
     
-      For an example of what I'm talking about, we're setting the user name field in code and causing a lookup, (see 'User Permissions' above).
+      For an example of what I'm talking about, we're setting the username field in code and causing a lookup, (see 'User Permissions' above).
       Because we're setting the field in code and causing a lookup, the onloadlookupfinished event has already fired. Therefore, any logic that 
       relies on user fields being populated won't work if you call them from the onloadlookupfinished event. Instead, we have to call them from 
       the lookupcomplete event. The unfortunate side effect of this is that the lookupcomplete event can fire multiple times, 
@@ -141,10 +141,10 @@
       but you want to minimize it as much as possible.
 
       Daisy-Chaining Lookups:
-        A side-effect of the way lookups work is how they sometimes daisy-chain. Let me explain with an example:
+        A side effect of the way lookups work is how they sometimes daisy-chain. Let me explain with an example:
         In our example, we have four fields: LFUserName, NetworkUserName, SiteID, DepartmentLookupTable.
         At the beginning the only field which has anything in it is LFUserName, because LF has filled it in for us.
-        We take that value, keeping only the username portion an dput that in NetworkUserName. 
+        We take that value, keeping only the username portion and put that in NetworkUserName.
         This causes a lookup for all the user related fields, including SiteID. Once the SiteID is set, this in turn
         causes another lookup to pull in all the departments related to that site. The Department Lookup cannot be loaded until 
         we know which site we're talking about. Sometimes this daisy-chaining can get 3 and sometimes even 4 levels deep because of all the relationships between
@@ -157,7 +157,7 @@
  - ME/QE controls: `.manufacturing-engineer-combo select`, `.quality-engineer-combo select`, `.meid input`, `.qeid input`, `.mename input`, `.qename input`
  - Lookup sources (tables): `.me-lookup-table`, `.qe-lookup-table`, `.assignee-lookup-table`, `.tasktype-lookup-table`, `.status-lookup-table`
  - Filtering state: `.ftname input`, `.fttid input`, `.fsid input`, `.faid input`, `.fincomp input`, `#chkIncludeComplete`
- - Sorting state: `.sort-field-ordinal input`, `.sort-direction input`, headers `#q47..#q55`
+ - Sorting state: `.sort-field-ordinal input`, `.sort-direction input`, headers `#q47-#q55`
  - Task list columns: `.tasklist-task-id-col`, `.tasklist-task-name-col`, `.tasklist-time-col`, `.task-list-clone-col`, `.tasklist-mandate-col`
  - Misc: `.add-button`, `.print-button`, `#popUpDiv`, `#print-iframe`, `#ticket-history`, `.tasklist-table`
  
@@ -195,8 +195,7 @@ $(document).ready(function () {
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-  const bootstrapButton = $.fn.button.noConflict();
-  $.fn.bootstrapBtn = bootstrapButton;
+  $.fn.bootstrapBtn = $.fn.button.noConflict();
 
   // Window message print hook
   const eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
@@ -207,7 +206,7 @@ $(document).ready(function () {
     if (e.data === "printme" || e.message === "printme") {
       function show_print() {
         $("#print-iframe").get(0).contentWindow.print();
-      };
+      }
       window.setTimeout(show_print, 800); // 2 seconds
     }
   });
@@ -224,7 +223,7 @@ $(document).ready(function () {
   }
 
   // Reflect ticket number in document title
-  $(document).on('change', '.ticket-number input', function (e) {
+  $(document).on('change', '.ticket-number input', function () {
     const ticket_name = $(this).val();
     $(document).prop('title', `Edit Ticket ${ticket_name}`);
   });
@@ -279,7 +278,7 @@ $(document).ready(function () {
   };
 
   // After lookups populate, load maps, set default selections, and build UI
-  $(document).on('lookupcomplete', function (e) {
+  $(document).on('lookupcomplete', function () {
     loadMfgEngineerMap();
     loadQualEngineerMap();
     loadAssigneeMap();
@@ -347,10 +346,10 @@ $(document).ready(function () {
   });
 
   // Finalize initial UI once all lookups are done
-  $(document).on("onloadlookupfinished", function (e) {
+  $(document).on("onloadlookupfinished", function () {
     $('.closeme input').val(1);
     $('#q0').append("<div class='hidden-text' id='popUpDiv'></div>");
-    $('.detail-input div').on("dblclick", function (e) {
+    $('.detail-input div').on("dblclick", function () {
       const notes = $(this).find('textarea').val();
       $.dialog({
         escapeKey: true,
@@ -400,7 +399,7 @@ function addTask() {
 function callAddTime(task_id) {
   if (checkPermissions() === true) {
     const task_name = getColumnValueByTaskID(task_id, '.tasklist-task-name-col input[type="text"]');
-    popUpIframe(`http://rmslf/Forms/MPMAddTaskTime?tid=${task_id}`, `Add Time to task '${task_name}'`, 300, 800, false, task_id);
+    popUpIframe(`http://rmslf/Forms/MPMAddTaskTime?tid=${task_id}`, `Add Time to task '${task_name}'`, 300, 800);
   }
 }
 
@@ -426,7 +425,7 @@ function callCloneTask(task_id) {
   }
 
   const task_name = getColumnValueByTaskID(task_id, '.tasklist-task-name-col input[type="text"]');
-  popUpIframe(`http://rmslf/Forms/MPMCloneTask?tid=${task_id}`, `Clone task '${task_name}'`, 300, 750, false, task_id);
+  popUpIframe(`http://rmslf/Forms/MPMCloneTask?tid=${task_id}`, `Clone task '${task_name}'`, 300, 750);
 }
 
 /**
@@ -698,7 +697,6 @@ function getColumnValueByTaskID(task_id, column_name) {
     if (row_task_id === task_id) {
       const tasklist_row = tasklist_rows[index];
       column_value = $(tasklist_row).find(column_name).val();
-      return;
     }
   });
   return column_value;
@@ -725,9 +723,9 @@ function loadAssigneeMap() {
     if (assignee_rows.length === 0) {
       return;
     }
-    assignee_rows.each(function (index) {
-      assigneeID = Number($(this).find('.assignee-lookup-table-id input').val());
-      assigneeName = $(this).find('.assignee-lookup-table-name input').val();
+    assignee_rows.each(function () {
+      let assigneeID = Number($(this).find('.assignee-lookup-table-id input').val());
+      let assigneeName = $(this).find('.assignee-lookup-table-name input').val();
       assigneeMap.set(assigneeID, assigneeName);
       assigneeNameMap.set(assigneeName, assigneeID);
     });
@@ -753,9 +751,9 @@ function loadMfgEngineerMap() {
     if (me_rows.length === 0) {
       return;
     }
-    me_rows.each(function (index) {
-      meID = Number($(this).find('.me-lookup-table-id input').val());
-      meName = $(this).find('.me-lookup-table-name input').val();
+    me_rows.each(function () {
+      let meID = Number($(this).find('.me-lookup-table-id input').val());
+      let meName = $(this).find('.me-lookup-table-name input').val();
       mfgEngineerMap.set(meID, meName);
       mfgEngineerNameMap.set(meName, meID);
     });
@@ -771,9 +769,9 @@ function loadQualEngineerMap() {
     if (qe_rows.length === 0) {
       return;
     }
-    qe_rows.each(function (index) {
-      qeID = Number($(this).find('.qe-lookup-table-id input').val());
-      qeName = $(this).find('.qe-lookup-table-name input').val();
+    qe_rows.each(function () {
+      let qeID = Number($(this).find('.qe-lookup-table-id input').val());
+      let qeName = $(this).find('.qe-lookup-table-name input').val();
       qualEngineerMap.set(qeID, qeName);
       qualEngineerNameMap.set(qeName, qeID);
     });
@@ -789,9 +787,9 @@ function loadStatusMap() {
     if (status_rows.length === 0) {
       return;
     }
-    status_rows.each(function (index) {
-      statusID = Number($(this).find('.status-lookup-table-id input').val());
-      statusName = $(this).find('.status-lookup-table-name input').val();
+    status_rows.each(function () {
+      let statusID = Number($(this).find('.status-lookup-table-id input').val());
+      let statusName = $(this).find('.status-lookup-table-name input').val();
       taskStatusMap.set(statusID, statusName);
       taskStatusNameMap.set(statusName, statusID);
     });
@@ -808,9 +806,9 @@ function loadTaskTypeMap() {
     if (tasktype_rows.length === 0) {
       return;
     }
-    tasktype_rows.each(function (index) {
-      tasktypeID = Number($(this).find('.tasktype-lookup-table-id input').val());
-      tasktypeName = $(this).find('.tasktype-lookup-table-name input').val();
+    tasktype_rows.each(function () {
+      let tasktypeID = Number($(this).find('.tasktype-lookup-table-id input').val());
+      let tasktypeName = $(this).find('.tasktype-lookup-table-name input').val();
       taskTypeMap.set(tasktypeID, tasktypeName);
       taskTypeByNameMap.set(tasktypeName, tasktypeID);
     });
@@ -827,7 +825,7 @@ function loadTaskTypeMap() {
 function popUpIframe(src, title, height, width) {
 
   $("#popupIFrame").remove();
-  $("#popUpDiv").html(`<div height='${height}' width='${width}'><iframe id='popupIFrame' name='myname' src='${src}' height='${height}' width='${width}'/></div>`);
+  $("#popUpDiv").html(`<div style='height:${height}px; width:${width}px;'><iframe id='popupIFrame' name='myname' src='${src}' height='${height}' width='${width}'/></div>`);
   $("#popupIFrame").dialog({
     title: title,
     height: height,
@@ -848,7 +846,7 @@ function popUpIframe(src, title, height, width) {
 
 /**
  * Loads the ticket print report into an iframe for printing.
- * There is a print version of the ticket detail form that tells it self to print as soon as it loads.
+ * There is a print version of the ticket detail form that tells itself to print as soon as it loads.
  * This is necessary because LFF of course doesn't have reports or anyway of making one, so I had to roll my own.
  */
 function printTicket() {
@@ -862,8 +860,7 @@ function printTicket() {
  * Reloads the current page.
  */
 function refreshForm() {
-  const current_url = window.location.href;
-  window.location = current_url;
+  window.location = window.location.href;
 }
 
 /**
@@ -881,11 +878,10 @@ function removeAppendedFields() {
 
 /**
  * Normalizes ME ID on submit when empty.
- * @param {Event} e
  * This is done because the Manufacturing Engineer field is optional, so if it's left blank we want to submit a 0 instead of an empty string
  * because Laserfiche Workflow doesn't like empty strings in numeric fields.
  */
-function submitForm(e) {
+function submitForm() {
   if ($('.meid input').val() === '') {
     $('.meid input').val(0);
   }

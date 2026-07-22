@@ -10,21 +10,21 @@ $(document).ready(function () {
     if (tabID === 'ui-id-1') {
       const iframeGageCheckout = $('#frm-gage-checkout');
       if (iframeGageCheckout.length) {
-        gageCheckoutSource = trimQueryString(iframeGageCheckout.attr('src'));
+        let gageCheckoutSource = trimQueryString(iframeGageCheckout.attr('src'));
         iframeGageCheckout.attr('src', gageCheckoutSource);
       }
     }
     if (tabID === 'ui-id-2') {
       const iframeModifyTicket = $('#frm-modify-ticket');
       if (iframeModifyTicket.length) {
-        modifyTicketSource = trimQueryString(iframeModifyTicket.attr('src'));
+        let modifyTicketSource = trimQueryString(iframeModifyTicket.attr('src'));
         iframeModifyTicket.attr('src', modifyTicketSource);
       }
     }
     if (tabID === 'ui-id-3') {
       const iframeGageRequest = $('#frm-gage-request');
       if (iframeGageRequest.length) {
-        gageRequestSource = trimQueryString(iframeGageRequest.attr('src'));
+        let gageRequestSource = trimQueryString(iframeGageRequest.attr('src'));
         iframeGageRequest.attr('src', gageRequestSource);
       }
     }
@@ -61,21 +61,21 @@ function tabifyFormSections() {
     if (tab === 0) {
       const iframeGageCheckout = $('#frm-gage-checkout');
       if (iframeGageCheckout.length) {
-        gageCheckoutSource = trimQueryString(iframeGageCheckout.attr('src'));
+        let gageCheckoutSource = trimQueryString(iframeGageCheckout.attr('src'));
         iframeGageCheckout.attr('src', gageCheckoutSource);
       }
     }
     else if (tab === 1) {
       const iframeModifyTicket = $('#frm-modify-ticket');
       if (iframeModifyTicket.length) {
-        modifyTicketSource = trimQueryString(iframeModifyTicket.attr('src'));
+        let modifyTicketSource = trimQueryString(iframeModifyTicket.attr('src'));
         iframeModifyTicket.attr('src', modifyTicketSource);
       }
     }
     else if (tab === 2) {
       const iframeGageRequest = $('#frm-gage-request');
       if (iframeGageRequest.length) {
-        gageRequestSource = trimQueryString(iframeGageRequest.attr('src'));
+        let gageRequestSource = trimQueryString(iframeGageRequest.attr('src'));
         iframeGageRequest.attr('src', gageRequestSource );
       }
     }

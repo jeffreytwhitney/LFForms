@@ -21,7 +21,7 @@
   $('.bin-number input[type="text"]').on("dblclick", function () { $('.bin-number input[type="text"]').val(null).trigger("change"); });
 
 
-  $(document).on('lookupcomplete', function (e) {
+  $(document).on('lookupcomplete', function () {
     fillIFrames();
   });
 

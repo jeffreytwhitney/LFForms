@@ -199,7 +199,7 @@ $(document).ready(function () {
   // It would show sometimes, and not other. Seemingly at random. Putting it in the lookupcomplete event
   // seems to have fixed it, though I also have the genereateTitleInfo call whenever you switch tabs or 
   // double-click on a tab to reload it. Between these three, it seems like the issue has been resolved. 
-  $(document).on('lookupcomplete', function (e) {
+  $(document).on('lookupcomplete', function () {
 
     generateTitleInfo();
     loadIFrames();
@@ -214,12 +214,7 @@ $(document).ready(function () {
  */
 function isAdmin() {
   const isAdmin = Number($('.user-isadmin input').val());
-  if (isAdmin === 1) {
-    return true;
-  }
-  else {
-    return false;
-  }
+  return isAdmin === 1;
 }
 
 /**

@@ -308,11 +308,11 @@ function validateForm() {
   if (existingTaskID !== '') {
     
     task_name_field.addClass('parsley-error');
-    task_name_field.parent().append("<ul id='taskname-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>A task with this Name, Type, and Op already exists in this project.</li></ul>");
+    task_name_field.parent().append("<ul id='taskname-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>A task with this Name, Type, and Op already exists in this project.</li></ul>");
     task_type_field.addClass('parsley-error');
-    task_type_field.parent().append("<ul id='tasktype-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>A task with this Name, Type, and Op already exists in this project.</li></ul>");
+    task_type_field.parent().append("<ul id='tasktype-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>A task with this Name, Type, and Op already exists in this project.</li></ul>");
     opnumber_field.addClass('parsley-error');
-    opnumber_field.parent().append("<ul id='operation-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>A task with this Name, Type, and Op already exists in this project.</li></ul>");
+    opnumber_field.parent().append("<ul id='operation-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>A task with this Name, Type, and Op already exists in this project.</li></ul>");
     $('.Submit').addClass("ui-state-disabled");
     return_val = false;
   }

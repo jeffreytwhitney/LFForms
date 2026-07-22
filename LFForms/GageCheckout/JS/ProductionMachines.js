@@ -40,8 +40,7 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
-  $.fn.bootstrapBtn = bootstrapButton;
+  $.fn.bootstrapBtn = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
 
   // Normalize and capture the current user into a hidden field.
   const lfUserName = $('.lf-user-name input').val();
@@ -84,7 +83,7 @@ $(document).ready(function () {
     $('.machine-table').show();
   });
 
-  $(document).on('lookupcomplete', function (e) {
+  $(document).on('lookupcomplete', function () {
     appendPagination();
     generateFilterRow();
     generateTableButtons(".edit-button-col", "ui-icon-pencil", "Edit User", "callEditProductionMachine");
@@ -122,7 +121,7 @@ function appendPagination() {
     }
     if ((current_page > 1) && (row_count < 25)) {
       $('.machine-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);'>&laquo;</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);'>&lsaquo;</a></li><li><a class='page-link next isDisabled'>&rsaquo;</a></li></ul></div>")
-      return;
+
     }
   }
 }
@@ -180,7 +179,7 @@ function callGoBack() {
 function callNextPage() {
   $('.machine-table').hide();
   $('.table-button').remove();
-  current_page = Number($('.pg input').val());
+  let current_page = Number($('.pg input').val());
   $('.pg input').val(current_page + 1).trigger("change");
 }
 
@@ -194,7 +193,7 @@ function callNextPage() {
 function callPrevPage() {
   $('.machine-table').hide();
   $('.table-button').remove();
-  current_page = Number($('.pg input').val());
+  let current_page = Number($('.pg input').val());
   if (current_page === 1) {
     return;
   }
@@ -254,7 +253,7 @@ function generateFilterRow() {
 function generateEditButtons() {
   $('.table-button').remove();
   const edit_buttons = $(".edit-button input[type=text]");
-  edit_buttons.each(function (index) {
+  edit_buttons.each(function () {
     const btn_value = $(this).val();
     if (isAdminUser()) {
       $(this).parent().append("<input class='table-button' type='button' value='Edit' onclick='callEditMachine(" + btn_value + ")' />");
@@ -269,7 +268,7 @@ function generateEditButtons() {
  */
 function generateGoBackButtons() {
   const $goback_buttons = $(".gobackbutton");
-  $goback_buttons.each(function (index) {
+  $goback_buttons.each(function () {
     $(this).replaceWith("<input class='return' type='button' value='Go Back' onclick='callGoBack()' />");
   });
 }
@@ -311,8 +310,7 @@ function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFu
  * @returns {number} Count of <tr> elements under .machine-table tbody.
  */
 function getTableRowCount() {
-  const row_count = $('.machine-table table tbody tr').length;
-  return row_count;
+  return $('.machine-table table tbody tr').length;
 }
 
 
@@ -321,10 +319,8 @@ function getTableRowCount() {
  * @returns {boolean} True when the hidden .user-isadmin input has value '1'.
  */
 function isAdminUser() {
-  if ($('.user-isadmin input').val() === '1') {
-    return true;
-  }
-  return false;
+  return $('.user-isadmin input').val() === '1';
+
 }
 
 
@@ -351,7 +347,7 @@ function submitForm(e) {
   if (actionID === 2) {
     if (validateEdit() !== true) {
       e.preventDefault();
-      return;
+
     }
   }
 
@@ -369,7 +365,7 @@ function validateAdd() {
   const addMachineCount = $('.add-existing-machine-names select option').length;
   const addMachineNameField = $('.add-machine-name input');
   if (addMachineCount > 1) {
-    addMachineNameField.parent().append("<ul id='existing-machine-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>There is another production machine with this name.</li></ul>");
+    addMachineNameField.parent().append("<ul id='existing-machine-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>There is another production machine with this name.</li></ul>");
     return false;
   }
   else {
@@ -391,13 +387,13 @@ function validateEdit() {
   const editMachineID = Number($('.edit-machine-id input').val());
   const existingMachineIDs = $('.edit-existing-machine-names select option');
 
-  $(existingMachineIDs).each(function (index) {
+  $(existingMachineIDs).each(function () {
     const existingMachineID = Number($(this).val());
     if (existingMachineID === 0) {
       return;
     }
     if (existingMachineID !== editMachineID) {
-      editMachineNameField.parent().append("<ul id='existing-machine-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>There is another production machine with this name.</li></ul>");
+      editMachineNameField.parent().append("<ul id='existing-machine-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>There is another production machine with this name.</li></ul>");
       returnValue = false;
     }
   });

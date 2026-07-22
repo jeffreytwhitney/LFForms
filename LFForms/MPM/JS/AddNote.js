@@ -214,7 +214,7 @@ $(document).ready(function () {
     $('.Submit').addClass("ui-state-disabled");
   }
 
-  $('.date-to-add input').val(moment().format("l"));
+  $('.date-to-add input').val(moment(fdmax).format("l"));
 
   //When the user clicks the Submit button, we want to set the 'close' field to 1 so that when the form submits and comes
   //back to the same page, it will know to call the parent page to close the dialog.

@@ -205,12 +205,12 @@ $(document).ready(function () {
   }
 
   //Changes the title when LFF sets the ticket number
-  $(document).on('change', '.ticket-number input', function (e) {
+  $(document).on('change', '.ticket-number input', function () {
     let ticket_name = $(this).val();
     $(document).prop('title', `Edit Ticket ${ticket_name}`);
   });
 
-  $(document).on('change', '.user-id input', function (e) {
+  $(document).on('change', '.user-id input', function () {
     enabledStateSet = false;
     setFormEnabledState();
   });
@@ -551,7 +551,7 @@ function loadiFrame(src) {
 function popupIFrame(src, title, height, width) {
 
   $("#popupIFrame").remove();
-  $("#popUpDiv").html(`<div height='${height}' width='${width}'><iframe id='popupIFrame' name='myname' src='${src}' height='${height}' width='${width}'/></div>`);
+  $("#popUpDiv").html(`<div style='height:${height}px; width:${width}px;'><iframe id='popupIFrame' name='myname' src='${src}' height='${height}' width='${width}'/></div>`);
   $("#popupIFrame").dialog({
     title: title,
     height: height,
@@ -836,25 +836,25 @@ function validateForm() {
 
   if ((oldAssigneeID > 0) && (newAssigneeID === 0)) {
     assigneeField.addClass('parsley-error');
-    assigneeField.parent().append("<ul id='assigned-cannot-unassign-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>You cannot unassign a ticket once it has been assigned.</li></ul>");
+    assigneeField.parent().append("<ul id='assigned-cannot-unassign-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>You cannot unassign a ticket once it has been assigned.</li></ul>");
     isValid = false;
   }
 
   if ((newTicketStatusID > 1) && (newAssigneeID === 0)) {
     assigneeField.addClass('parsley-error');
-    assigneeField.parent().append("<ul id='active-ticket-requires-assignee-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>An active ticket requires an assignee.</li></ul>");
+    assigneeField.parent().append("<ul id='active-ticket-requires-assignee-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>An active ticket requires an assignee.</li></ul>");
     isValid = false;
   }
 
   if ((newTicketStatusID === 1) && (newAssigneeID > 0)) {
     assigneeField.addClass('parsley-error');
-    assigneeField.parent().append("<ul id='assigned-needs-active-status-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>An assigned ticket must have an active status.</li></ul>");
+    assigneeField.parent().append("<ul id='assigned-needs-active-status-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>An assigned ticket must have an active status.</li></ul>");
     isValid = false;
   }
 
   if ((newTicketStatusID === 1) && (oldTicketStatusID > 1)) {
     ticketStatusField.addClass('parsley-error');
-    ticketStatusField.parent().append("<ul id='active-ticket-cannot-inactivate-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>You cannot set status back to Awaiting Dispatch once it has been set to Work In Progress or Waiting on User.</li></ul>");
+    ticketStatusField.parent().append("<ul id='active-ticket-cannot-inactivate-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>You cannot set status back to Awaiting Dispatch once it has been set to Work In Progress or Waiting on User.</li></ul>");
     isValid = false;
   }
 

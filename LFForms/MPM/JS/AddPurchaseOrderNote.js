@@ -25,7 +25,7 @@
 * onloadlookupfinished Event Handler
 * Checks user permissions and disables form elements if the user lacks the necessary rights to add notes.
 */
-  $(document).on('lookupcomplete', function (e) {
+  $(document).on('lookupcomplete', function () {
 
     //If the user is not an admin user, disable the Submit button.
     if (!isMetrologyUser()) {

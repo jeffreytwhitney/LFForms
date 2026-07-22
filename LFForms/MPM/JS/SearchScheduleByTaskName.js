@@ -61,8 +61,7 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
 
   // Avoid Bootstrap/jQuery UI plugin conflicts; re-alias Bootstrap's button plugin.
-  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
-  $.fn.bootstrapBtn = bootstrapButton;
+  $.fn.bootstrapBtn = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
 
   // Normalize and populate the network username (strip domain, uppercase).
   const lfUserName = $('.lf-user-name input').val();
@@ -71,8 +70,8 @@ $(document).ready(function () {
   }
 
   // Handle post-lookup UI work: pagination, page normalization, cookie-based site restore, reveal table.
-  $(document).on('lookupcomplete', function (e) {
-    
+  $(document).on('lookupcomplete', function () {
+
     appendPagination();
 
     // If "no paging" sentinel (999) slipped through, normalize to page 1 for subsequent paging.
@@ -139,7 +138,6 @@ function appendPagination() {
     // Case: last page (fewer than a full page of rows) -> prev enabled, next disabled.
     if ((current_page > 1) && (row_count < 25)) {
       $('.task-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);'>&laquo;</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);'>&lsaquo;</a></li><li><a class='page-link next isDisabled'>&rsaquo;</a></li></ul></div>")
-      return;
     }
   }
 }
@@ -153,7 +151,7 @@ function appendPagination() {
 function callNextPage() {
   $('.task-table').hide();
 
-  current_page = Number($('.pg input').val());
+  let current_page = Number($('.pg input').val());
   $('.pg input').val(current_page + 1).trigger("change");
 }
 
@@ -165,7 +163,7 @@ function callNextPage() {
 function callPrevPage() {
   $('.task-table').hide();
 
-  current_page = Number($('.pg input').val());
+  let current_page = Number($('.pg input').val());
   if (current_page === 1) {
     return;
   }
@@ -188,6 +186,5 @@ function resetPageNumber() {
  * @returns {number} The count of `<tr>` elements within `.task-table tbody`.
  */
 function getTableRowCount() {
-  const row_count = $('.task-table tbody tr').length;
-  return row_count;
+  return $('.task-table tbody tr').length;
 }

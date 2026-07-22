@@ -170,8 +170,7 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
 
   // Resolve Bootstrap's $.fn.button conflict so jQuery Confirm dialog buttons render and close correctly.
-  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value so that popup close button displays correctly.
-  $.fn.bootstrapBtn = bootstrapButton;
+  $.fn.bootstrapBtn = $.fn.button.noConflict(); // return $.fn.button to previously assigned value so that popup close button displays correctly.
 
   // Wire up Submit button.
   $('.Submit').on("click", function (e) { submitForm(e); });
@@ -181,15 +180,15 @@ $(document).ready(function () {
     window.parent.postMessage('CloseDialogWithRefresh', '*');
   }
 
-  // Populate the "network user name" as the uppercase username (strip DOMAIN\).
+  // Populate the "network username" as the uppercase username (strip DOMAIN\).
   $('.network-user-name input')
     .val($('.lf-user-name input').val().toUpperCase().slice($('.lf-user-name input').val().lastIndexOf('\\') + 1)).trigger("change");
 
   // Add required asterisks to key labels (visual only).
   $('<span class="cf-required">*</span>').insertAfter('.quantity span span');
 
-  $(document).on('change', '.quantity input', function (e) {
-    
+  $(document).on('change', '.quantity input', function () {
+
     const quantity = Number($(this).val().replace(',', ''));
     const perUnitCost = Number($('.per-unit-cost input').val().replace(',', ''));
     const totalCost = quantity * perUnitCost;
@@ -197,7 +196,7 @@ $(document).ready(function () {
     $('.cost-amount input').val(formattedTotalCost);
   });
 
-  $(document).on('change', '.per-unit-cost input', function (e) {
+  $(document).on('change', '.per-unit-cost input', function () {
     const quantity = Number($('.quantity input').val().replace(',', ''));
     const perUnitCost = Number($(this).val().replace(',', ''));
     const totalCost = quantity * perUnitCost;
@@ -338,7 +337,7 @@ function validateForm() {
     quantityField.addClass('parsley-error');
     quantityField
       .parent()
-      .append("<ul id='quantity-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Must Enter a valid quantity.</li></ul>");
+      .append("<ul id='quantity-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>Must Enter a valid quantity.</li></ul>");
     is_valid = false;
   }
 
@@ -346,7 +345,7 @@ function validateForm() {
     costAmountField.addClass('parsley-error');
     costAmountField
       .parent()
-      .append("<ul id='cost-amount-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Must Enter a valid cost amount. ($0.00 is invalid).</li></ul>");
+      .append("<ul id='cost-amount-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>Must Enter a valid cost amount. ($0.00 is invalid).</li></ul>");
     is_valid = false;
   }
 

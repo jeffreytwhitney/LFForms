@@ -7,8 +7,7 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
-  $.fn.bootstrapBtn = bootstrapButton;
+  $.fn.bootstrapBtn = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
 
 
   $(document).on("onloadlookupfinished", function () {
@@ -34,7 +33,7 @@ $(document).ready(function () {
     $.cookie('site_name', sitename, { expires: 365, path: '/' });
   });
 
-  $(document).on('change', '.cr-employee-name input', function (e) {
+  $(document).on('change', '.cr-employee-name input', function () {
     const crEmployeeNumberValue = $('.cr-employee-number input').val();
     const crEmployeeNameValue = $('.cr-employee-name input').val();
 
@@ -42,12 +41,12 @@ $(document).ready(function () {
     $('.submit-employee-name input').val(crEmployeeNameValue);
   });
 
-  $(document).on('change', '.anoka-employee-name input', function (e) {
+  $(document).on('change', '.anoka-employee-name input', function () {
     const anokaEmployeeNumberValue = $('.anoka-employee-number input').val();
     const anokaEmployeeNameValue = $('.anoka-employee-name input').val();
 
-    $('.submit-employee-number input').val(anokaActivateEmployeeNumberValue);
-    $('.submit-employee-name input').val(anokaActivateEmployeeNameValue);
+    $('.submit-employee-number input').val(anokaEmployeeNumberValue);
+    $('.submit-employee-name input').val(anokaEmployeeNameValue);
   });
 
 });
@@ -69,7 +68,7 @@ function callGoBack() {
 
 function generateGoBackButtons() {
   const $goback_buttons = $(".gobackbutton");
-  $goback_buttons.each(function (index) {
+  $goback_buttons.each(function () {
     $(this).parent().append("<div id='go-back' class='ui-button ui-corner-all ui-widget' onclick='callGoBack()'><span class='ui-icon ui-icon-arrowreturnthick-1-w'></span>Go Back</div>");
   });
   $(".gobackbutton").remove();
@@ -89,7 +88,7 @@ function generateTicketNumberColumn() {
 
 }
 
-function submitForm(e) {
+function submitForm() {
   const siteID = $('.site-id input').val();
   const crEmployeeNumber = $('.cr-employee-number input').val();
   const anokaEmployeeNumber = $('.anoka-employee-number input').val();

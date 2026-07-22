@@ -1,4 +1,4 @@
-const should_print_receipt = true;
+let should_print_receipt = true;
 $(document).ready(function () {
   $(document).prop('title', 'Gage Checkout');
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js');
@@ -36,11 +36,11 @@ $(document).ready(function () {
     }
   });
 
-  $(document).on('change', '[id^="Field176"]', function (e) {
+  $(document).on('change', '[id^="Field176"]', function () {
     generateMachineList();
   });
 
-  $(document).on('click', '.cf-collection-delete', function (e) {
+  $(document).on('click', '.cf-collection-delete', function () {
     generateMachineList();
   });
 
@@ -57,7 +57,7 @@ $(document).ready(function () {
     }
   });
 
-  $('.ticket-type-radio fieldset input[type="radio"]').on("change", function (e) {
+  $('.ticket-type-radio fieldset input[type="radio"]').on("change", function () {
     $('.pin-table-bin-number input').removeClass('parsley-error');
     $('.thread-gage-name input').removeClass('parsley-error');
     $('#bad-pin-name-error').remove();
@@ -70,11 +70,11 @@ $(document).ready(function () {
     $('.existing-missing-thread-ticket-number input').val('');
   });
 
-  $('.existing-missing-thread-ticket-number input').on("change", function (e) {
+  $('.existing-missing-thread-ticket-number input').on("change", function () {
     validateForm();
   });
 
-  $('.thread-gage-table-existing-ticket-id input').on("change", function (e) {
+  $('.thread-gage-table-existing-ticket-id input').on("change", function () {
     validateForm();
   });
 
@@ -90,7 +90,7 @@ $(document).ready(function () {
 function generateMachineList() {
   let machineList = '';
   $('[id^="Field176"]').each(function (index, element) {
-    machineName = $(element).val();
+    let machineName = $(element).val();
     if (machineName !== '') {
       if (machineList.length > 0) {
         machineList += ', ' + machineName;
@@ -128,7 +128,7 @@ function print_receipt() {
   if (should_print_receipt === true) {
     if (receipt_url !== "") {
       loadiFrame(receipt_url);
-      should_print_receipt === false;
+      should_print_receipt = false;
       $('.print-ticket-id input').val(null).trigger("change");
     }
   }
@@ -181,8 +181,8 @@ function validateForm(e) {
   }
   
 
-  if ((cellLeaderName.val().length > 0) && (cellLeaderID.val().length === 0)) {
-    cellLeaderName.parent().append("<ul id='cell-leader-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>You must select a valid Cell Leader.</li></ul>");
+  if ((cellLeaderName.val()) && (!cellLeaderID.val())) {
+    cellLeaderName.parent().append("<ul id='cell-leader-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>You must select a valid Cell Leader.</li></ul>");
     cellLeaderName.addClass('parsley-error');
     $('.Submit').prop("disabled", true);
     if (arguments.length === 1) {
@@ -196,18 +196,18 @@ function validateForm(e) {
       const binName = $(this).find('.pin-table-bin-number input');
       const existingBinTicketNumber = $(this).find('.pin-table-existing-bin-ticket-id input');
       const binID = $(this).find('.pin-table-bin-id input');
-      if ((pinTypeValue === 5) && ((binName.val().length > 0) && binID.val().length === 0)) {
+      if ((pinTypeValue === 5) && ((binName.val()) && !binID.val())) {
         binName.parent().find('#bad-pin-name-error').remove();
-        binName.parent().append("<ul id='bad-pin-name-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Invalid Bin Name.</li></ul>");
+        binName.parent().append("<ul id='bad-pin-name-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>Invalid Bin Name.</li></ul>");
         binName.addClass('parsley-error');
         $('.Submit').prop("disabled", true);
         if (arguments.length === 1) {
           e.preventDefault();
         }
       }
-      if (existingBinTicketNumber.val().length > 0) {
+      if (existingBinTicketNumber.val()) {
         binName.parent().find('#preexisting-bin-error').remove();
-        binName.parent().append("<ul id='preexisting-bin-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Bin already is already checked out. See Metrology Calibration.</li></ul>");
+        binName.parent().append("<ul id='preexisting-bin-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>Bin is already checked out. See Metrology Calibration.</li></ul>");
         binName.addClass('parsley-error');
         $('.Submit').prop("disabled", true);
         if (arguments.length === 1) {
@@ -223,27 +223,27 @@ function validateForm(e) {
       const missingThreadGageTicketNumber = $(this).find('.existing-missing-thread-ticket-number input');
       const existingThreadGageTicketNumber = $(this).find('.thread-gage-table-existing-ticket-id input');
 
-      if ((threadGageID.val().length === 0) && (threadGageName.val().length > 0)) {
+      if ((!threadGageID.val()) && (threadGageName.val())) {
         threadGageName.parent().find('#bad-thread-gage-error').remove();
-        threadGageName.parent().append("<ul id='bad-thread-gage-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Invalid Thread Gage Name.</li></ul>");
+        threadGageName.parent().append("<ul id='bad-thread-gage-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>Invalid Thread Gage Name.</li></ul>");
         threadGageName.addClass('parsley-error');
         $('.Submit').prop("disabled", true);
         if (arguments.length === 1) {
           e.preventDefault();
         }
       }
-      if (existingThreadGageTicketNumber.val().length > 0) {
+      if (existingThreadGageTicketNumber.val()) {
         threadGageName.parent().find('#preexisting-thread-gage-error').remove();
-        threadGageName.parent().append("<ul id='preexisting-thread-gage-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Thread Gage is already checked out. See Metrology Calibration.</li></ul>");
+        threadGageName.parent().append("<ul id='preexisting-thread-gage-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>Thread Gage is already checked out. See Metrology Calibration.</li></ul>");
         threadGageName.addClass('parsley-error');
         $('.Submit').prop("disabled", true);
         if (arguments.length === 1) {
           e.preventDefault();
         }
       }
-      if (missingThreadGageTicketNumber.val().length > 0) {
+      if (missingThreadGageTicketNumber.val()) {
         threadGageName.parent().find('#missing-thread-gage-error').remove();
-        threadGageName.parent().append("<ul id='missing-thread-gage-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Thread Gage marked as 'Missing' on another ticket. Bring gage to Metrology Calibration.</li></ul>");
+        threadGageName.parent().append("<ul id='missing-thread-gage-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>Thread Gage marked as 'Missing' on another ticket. Bring gage to Metrology Calibration.</li></ul>");
         threadGageName.addClass('parsley-error');
         $('.Submit').prop("disabled", true);
         if (arguments.length === 1) {

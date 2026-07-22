@@ -129,8 +129,7 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
 
   // Resolve Bootstrap/jQuery UI button conflicts and style the submit button
-  const bootstrapButton = $.fn.button.noConflict();
-  $.fn.bootstrapBtn = bootstrapButton;
+  $.fn.bootstrapBtn = $.fn.button.noConflict();
   $('.Submit').addClass('ui-button ui-corner-all ui-widget');
 
   // Submit: mark close flag and submit underlying form
@@ -165,12 +164,12 @@ $(document).ready(function () {
   $('.network-user-name input').val($('.lf-user-name input').val().toUpperCase().slice($('.lf-user-name input').val().lastIndexOf('\\') + 1)).trigger("change");
 
   // After lookups, set today's date (locale format) in `.date-to-add`
-  $(document).on("onloadlookupfinished", function (e) {
-    $('.date-to-add input').val(moment().format("l"));
+  $(document).on("onloadlookupfinished", function () {
+    $('.date-to-add input').val(moment(fdmax).format("l"));
   });
 
   // Disable controls when no Task ID is available
-  $(document).on('lookupcomplete', function (e) {
+  $(document).on('lookupcomplete', function () {
     if (($('.tid input').val() === null) || ($('.tid input').val().length === 0)) {
       $('.Submit').addClass("ui-state-disabled");
       $('.add-time-radio fieldset').addClass("ui-state-disabled");
@@ -186,7 +185,7 @@ $(document).ready(function () {
 function generateTotalTrackedHoursMessage() {
   $('#existing-time-msg').remove();
   let totalHours = parseFloat($('.total-task-hours input').val());
-  let totalHoursMessage = "";
+  let totalHoursMessage;
   if (isNaN(totalHours)) {
     totalHours = 0;
   }

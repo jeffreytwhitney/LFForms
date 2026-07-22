@@ -204,8 +204,7 @@ $(document).ready(function () {
   $('.Submit').on("click", function (e) { submitForm(e); });
 
   /* Avoid Bootstrap/jQuery UI plugin name conflicts */
-  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
-  $.fn.bootstrapBtn = bootstrapButton;
+  $.fn.bootstrapBtn = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
 
   /* Compute DOMAIN\user -> USER and push into .network-user-name. See 'User Permissions' above */
   $('.network-user-name input').val($('.lf-username input').val().toUpperCase().slice($('.lf-username input').val().lastIndexOf('\\') + 1)).trigger("change");
@@ -216,7 +215,7 @@ $(document).ready(function () {
   }
 
   /* After lookup tables load, build maps and prepare UI */
-  $(document).on('lookupcomplete', function (e) {
+  $(document).on('lookupcomplete', function () {
     loadAssigneeMap();
     loadTaskTypeMap();
 
@@ -235,7 +234,7 @@ $(document).ready(function () {
   });
 
   /* Finalize UI after on-load lookup work finishes */
-  $(document).on("onloadlookupfinished", function (e) {
+  $(document).on("onloadlookupfinished", function () {
     $('.closeme input').val(1);
     $('#q0').append("<div class='hidden-text' id='popUpDiv'></div>");
 
@@ -338,7 +337,7 @@ function hasPreexistingTask(taskName, taskID, opNumber) {
 
   let return_val = false;
   const preexisting_rows = $('.preexisting-task-lookup-table table tbody tr');
-  preexisting_rows.each(function (index) {
+  preexisting_rows.each(function () {
     const preexistingTaskName = $(this).find('.preexisting-task-lookup-table-name input').val();
     const preexistingTaskID = Number($(this).find('.preexisting-task-lookup-table-id input').val());
     const preexistingOpNumber = $(this).find('.preexisting-task-lookup-table-op input').val();
@@ -520,7 +519,7 @@ function loadAssigneeMap() {
     if (assignee_rows.length === 0) {
       return;
     }
-    assignee_rows.each(function (index) {
+      assignee_rows.each(function () {
       assigneeID = Number($(this).find('.assignee-lookup-table-id input').val());
       assigneeName = $(this).find('.assignee-lookup-table-name input').val();
       assigneeMap.set(assigneeID, assigneeName);
@@ -540,7 +539,7 @@ function loadTaskTypeMap() {
     if (tasktype_rows.length === 0) {
       return;
     }
-    tasktype_rows.each(function (index) {
+      tasktype_rows.each(function () {
       tasktypeID = Number($(this).find('.tasktype-lookup-table-id input').val());
       tasktypeName = $(this).find('.tasktype-lookup-table-name input').val();
       taskTypeMap.set(tasktypeID, tasktypeName);
@@ -554,7 +553,7 @@ function loadTaskTypeMap() {
  * - Trims `#Field80`, validates non-empty, writes to `#Field90`, submits form.
  * @param {Event} e - Submit event (default prevented by caller).
  */
-function popupCancelNote(e) {
+function popupCancelNote() {
   $("#q80").dialog({
     title: "Please explain your reason for cancelling these tasks.",
     height: 350,
@@ -598,7 +597,7 @@ function popupCancelNote(e) {
  * - Writes content (possibly empty) to `#Field90`, submits form.
  * @param {Event} e - Submit event (unused).
  */
-function popupCompletionNote(e) {
+function popupCompletionNote() {
   $("#q80").dialog({
     title: "Enter completion notes. (Not required.)",
     height: 350,
@@ -627,7 +626,7 @@ function popupCompletionNote(e) {
  * - Trims `#Field80`, validates non-empty, writes to `#Field90`, submits form.
  * @param {Event} e - Submit event (unused).
  */
-function popupWaitingNote(e) {
+function popupWaitingNote() {
   $("#q80").dialog({
     title: "Please explain what you are waiting on.",
     height: 350,
@@ -836,7 +835,7 @@ function validateForm() {
   const updateOpNumber = $('.update-op-number input').val();
   const checked_rows = $("input[id^='Field21']").filter(':checked').closest('tr');
 
-  checked_rows.each(function (index) {
+  checked_rows.each(function () {
     const taskID = Number($(this).find('.task-id-col input').val());
     const totalHours = Number($(this).find('.total-hours-col input').val());
     const taskName = $(this).find('.task-name-col input').val();

@@ -41,7 +41,7 @@
     User Permissions:
       There is a user permission model in place to restrict which updates a user can make.
       This is separate from LFF security, which can, (but in practice usually does not), limit who 
-      can even access a particular form. For our purposes, this is not particularly useful for our needs because we we want
+      can even access a particular form. For our purposes, this is not particularly useful for our needs because we want
       all users to be able to view the forms. What we want instead is to limit their ability to do certain things
       inside the application. 
       There are several user types that are defined in the database users table, (tblUsers) each with their own
@@ -278,7 +278,7 @@
      Mapping:
      There are several differnent lookup tables on the form which are used to populate dropdowns, nearly all of which are for filtering.
      Task types are stored both as ID?Name and Name?ID because LFF only stores the display value in the select, for example, the TaskType
-     select shows the names of the task types, but we are storing the TaskTypeID in a the database, so we need to have a way to 
+     select shows the names of the task types, but we are storing the TaskTypeID in the database, so we need to have a way to
      figure out what the TaskTypeID is so that we can set the value of the hidden field that the workflow is going to use to 
      set the value in the task table. So we need to be able to look up the ID by name when the user selects a task type.
      The only way I've been able to figure out how to do this is to have a hidden lookup table on the page which contains all the 
@@ -314,8 +314,7 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
 
   // Prevent Bootstrap/jQuery UI naming conflicts if Bootstrap is present
-  const bootstrapButton = $.fn.button.noConflict();
-  $.fn.bootstrapBtn = bootstrapButton;
+  $.fn.bootstrapBtn = $.fn.button.noConflict();
 
   // Sync the LF Forms username into the network username field
   const lfUserName = $('.lf-user-name input').val();
@@ -343,7 +342,7 @@ $(document).ready(function () {
   });
 
   // Show long "Details" text in a quick modal on double-click (Field56 appears to be details)
-  $(document).on('dblclick', '[id^="Field56"]', function (e) {
+  $(document).on('dblclick', '[id^="Field56"]', function () {
     const ticketDetail = $(this).val();
     const ticketNumber = $(this).closest('tr').find('.projectlist-ticket-number-col input[type="text"]').val();
     $.dialog({
@@ -355,7 +354,7 @@ $(document).ready(function () {
   });
 
   // Fired after server-driven lookup completes and the grid is ready
-  $(document).on('lookupcomplete', function (e) {
+  $(document).on('lookupcomplete', function () {
     $('.projectlist-table').hide();
 
     // Initialize paging on first load (pg=999 indicates "uninitialized")
@@ -401,7 +400,7 @@ $(document).ready(function () {
   });
 
   // Restore previously selected site (from cookie) once all onload lookups have completed
-  $(document).on("onloadlookupfinished", function (e) {
+  $(document).on("onloadlookupfinished", function () {
     const sitename = $.cookie('site_name');
     if (sitename !== null) {
       $('.site-name select').val(sitename).trigger("change");
@@ -442,7 +441,6 @@ function appendPagination() {
     // Last page: can go first, prev; next disabled
     if ((current_page > 1) && (row_count < 25)) {
       $('.projectlist-table table').parent().append("<div id='projectlist-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);'>&laquo;</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);'>&lsaquo;</a></li><li><a class='page-link next isDisabled'>&rsaquo;</a></li></ul></div>")
-      return;
     }
   }
 }
@@ -463,7 +461,7 @@ function addTicket() {
 function callNextPage() {
   $('.projectlist-table').hide();
   removeAppendedFields();
-  current_page = Number($('.pg input').val());
+  let current_page = Number($('.pg input').val());
   $('.pg input').val(current_page + 1).trigger("change");
 }
 
@@ -473,7 +471,7 @@ function callNextPage() {
 function callPrevPage() {
   $('.projectlist-table').hide();
   removeAppendedFields();
-  current_page = Number($('.pg input').val());
+  let current_page = Number($('.pg input').val());
   if (current_page === 1) {
     return;
   }
@@ -651,9 +649,9 @@ function loadDepartmentMap() {
     if (department_rows.length === 0) {
       return;
     }
-    department_rows.each(function (index) {
-      departmentID = Number($(this).find('.department-lookup-table-id input').val());
-      departmentName = $(this).find('.department-lookup-table-name input').val();
+    department_rows.each(function () {
+      let departmentID = Number($(this).find('.department-lookup-table-id input').val());
+      let departmentName = $(this).find('.department-lookup-table-name input').val();
       departmentMap.set(departmentID, departmentName);
       departmentNameMap.set(departmentName, departmentID);
     });
@@ -670,9 +668,9 @@ function loadQualityEngineerMap() {
     if (qe_rows.length === 0) {
       return;
     }
-    qe_rows.each(function (index) {
-      qeID = Number($(this).find('.qe-lookup-table-id input').val());
-      qeName = $(this).find('.qe-lookup-table-name input').val();
+    qe_rows.each(function () {
+      let qeID = Number($(this).find('.qe-lookup-table-id input').val());
+      let qeName = $(this).find('.qe-lookup-table-name input').val();
       qualityEngineerMap.set(qeID, qeName);
       qualityEngineerNameMap.set(qeName, qeID);
     });
@@ -689,9 +687,9 @@ function loadInitiatorMap() {
     if (initiator_rows.length === 0) {
       return;
     }
-    initiator_rows.each(function (index) {
-      initiatorID = $(this).find('.initiator-lookup-table-id input').val();
-      initiatorName = $(this).find('.initiator-lookup-table-name input').val();
+    initiator_rows.each(function () {
+      let initiatorID = $(this).find('.initiator-lookup-table-id input').val();
+      let initiatorName = $(this).find('.initiator-lookup-table-name input').val();
       initiatorMap.set(initiatorID, initiatorName);
       initiatorNameMap.set(initiatorName, initiatorID);
     });
@@ -708,7 +706,7 @@ function loadInitiatorMap() {
  */
 function popUpIframe(src, title, height, width) {
   $("#popupIFrame").remove();
-  $("#popUpDiv").html(`<div height='${height}' width='${width}'><iframe id='popupIFrame' name='myname' src='${src}' height='${height}' width='${width}'/></div>`);
+  $("#popUpDiv").html(`<div style='height:${height}px; width:${width}px;'><iframe id='popupIFrame' name='myname' src='${src}' height='${height}' width='${width}'/></div>`);
   $("#popupIFrame").dialog({
     title: title,
     height: height,
@@ -732,7 +730,6 @@ function popUpIframe(src, title, height, width) {
 
 /**
  * Placeholder for restoring filter UI from hidden fields.
- * Currently commented code retained for reference and potential reactivation.
  */
 function reApplyFilterValues() {
   //if ($('#filterRow').length == 0) {
@@ -818,11 +815,11 @@ function refreshPage() {
 
   let current_url = window.location.href;
   if (current_url.includes('?')) {
-    indexOfQuestionMark = current_url.indexOf('?');
+    let indexOfQuestionMark = current_url.indexOf('?');
     current_url = current_url.substring(0, indexOfQuestionMark);
   }
 
-  if ((taskListPage !== null) && (taskListPage !== NaN) && (taskListPage > 0)) {
+  if ((taskListPage !== null) && (!isNaN(taskListPage)) && (taskListPage > 0)) {
     current_url = current_url + `?pg=${taskListPage}`;
   }
 
@@ -830,15 +827,15 @@ function refreshPage() {
     current_url = current_url + `&ftname=${taskNameFilter}`;
   }
 
-  if ((include_Complete !== null) && (include_Complete !== NaN) && (include_Complete > 0)) {
+  if ((include_Complete !== null) && (!isNaN(include_Complete)) && (include_Complete > 0)) {
     current_url = current_url + `&inccom=${include_Complete}`;
   }
 
-  if ((projectIDFilter !== null) && (projectIDFilter !== NaN) && (projectIDFilter > 0)) {
+  if ((projectIDFilter !== null) && (!isNaN(projectIDFilter)) && (projectIDFilter > 0)) {
     current_url = current_url + `&fpid=${projectIDFilter}`;
   }
 
-  if ((departmentIDFilter !== null) && (departmentIDFilter !== NaN) && (departmentIDFilter > 0)) {
+  if ((departmentIDFilter !== null) && (!isNaN(departmentIDFilter)) && (departmentIDFilter > 0)) {
     current_url = current_url + `&fdid=${departmentIDFilter}`;
   }
   window.location = current_url;

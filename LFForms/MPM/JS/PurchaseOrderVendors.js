@@ -15,8 +15,7 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
 
   // Avoid Bootstrap/jQuery UI .button() conflicts.
-  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
-  $.fn.bootstrapBtn = bootstrapButton;
+  $.fn.bootstrapBtn = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
 
   // Submit gate: defer to validateAdd/validateEdit based on action.
   $('.Submit').on("click", function (e) { submitForm(e); });
@@ -24,7 +23,7 @@ $(document).ready(function () {
 
 
   // Hook when lookup data (departments/user types) is available.
-  $(document).on('lookupcomplete', function (e) {
+  $(document).on('lookupcomplete', function () {
     generateTableButtons(".edit-vendor-col", "ui-icon-pencil", "Edit Vendor", "callEditVendor");
     if (isAdminUser()) {
       if ($('.add-button').length === 0) {
@@ -35,7 +34,7 @@ $(document).ready(function () {
   });
 
   // Post-initialization after lookup load completes.
-  $(document).on("onloadlookupfinished", function (e) {
+  $(document).on("onloadlookupfinished", function () {
 
     generateGoBackButtons();
     // Normalize network user name on load.
@@ -67,7 +66,7 @@ function callAddVendor() {
  * - Selects the "Edit" action radio
  * - Sets .edit-user-id to the passed userID
  * - Reveals the Submit button only if current user is admin
- * @param {number} userID - The user ID to edit.
+ * @param vendorID
  */
 function callEditVendor(vendorID) {
   $(`.action-choice input[type='radio'][value='2']`).prop("checked", true);
@@ -95,7 +94,7 @@ function callGoBack() {
  */
 function generateGoBackButtons() {
   const $goback_buttons = $(".gobackbutton");
-  $goback_buttons.each(function (index) {
+  $goback_buttons.each(function () {
     $(this).parent().append("<div id='go-back' class='ui-button ui-corner-all ui-widget' onclick='callGoBack()'><span class='ui-icon ui-icon-arrowreturnthick-1-w'></span>Go Back</div>");
   });
   $(".gobackbutton").remove();

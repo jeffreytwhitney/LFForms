@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  $(document).on("onloadlookupfinished", function (e) {
+  $(document).on("onloadlookupfinished", function () {
 
     const ticket_id = $(".tid input").val();
     const ticket_type_id = $(".ttid input").val();

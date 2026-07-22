@@ -506,12 +506,12 @@ function validateForm() {
   if ((currentStatusID > Status.None) && (newStatusID === Status.None)) {
     if (typeID === LineItemType.Purchase) {
       purchaseStatusField.addClass('parsley-error');
-      purchaseStatusField.parent().append("<ul id='status-unset-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Once a status is set, it cannot be undone.</li></ul>");
+      purchaseStatusField.parent().append("<ul id='status-unset-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>Once a status is set, it cannot be undone.</li></ul>");
       is_valid = false;
     }
     else {
       serviceStatusField.addClass('parsley-error');
-      serviceStatusField.parent().append("<ul id='status-unset-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Once a status is set, it cannot be undone.</li></ul>");
+      serviceStatusField.parent().append("<ul id='status-unset-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>Once a status is set, it cannot be undone.</li></ul>");
       is_valid = false;
     }
   }
@@ -520,7 +520,7 @@ function validateForm() {
   if ((typeID > LineItemType.Purchase) && (newStatusID === Status.Scheduled)) {
     if (serviceDateValue === '') {
       serviceDateField.addClass('parsley-error');
-      serviceDateField.parent().append("<ul id='service-date-required-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Service Date is required when Status is Scheduled.</li></ul>");
+      serviceDateField.parent().append("<ul id='service-date-required-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>Service Date is required when Status is Scheduled.</li></ul>");
       is_valid = false;
     }
   }
@@ -528,21 +528,21 @@ function validateForm() {
   // Purchase items must have quantity > 0.
   if ((typeID === LineItemType.Purchase) && (quantityValue === 0)) {
     quantityField.addClass('parsley-error');
-    quantityField.parent().append("<ul id='quantity-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Must Enter a valid quantity.</li></ul>");
+    quantityField.parent().append("<ul id='quantity-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>Must Enter a valid quantity.</li></ul>");
     is_valid = false;
   }
 
   // Cost amount must be > 0 for all item types.
   if (costAmountValue === 0 ) {
     costAmountField.addClass('parsley-error');
-    costAmountField.parent().append("<ul id='cost-amount-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Must Enter a valid cost amount. ($0.00 is invalid).</li></ul>");
+    costAmountField.parent().append("<ul id='cost-amount-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>Must Enter a valid cost amount. ($0.00 is invalid).</li></ul>");
     is_valid = false;
   }
 
   if (newStatusID === Status.Received) {
     if (receivedQuantityValue < quantityValue) {
       receivedQuantityField.addClass('parsley-error');
-      receivedQuantityField.parent().append("<ul id='quantity-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>If Status = Received, Quantity must equal Order Quantity.</li></ul>");
+      receivedQuantityField.parent().append("<ul id='quantity-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>If Status = Received, Quantity must equal Order Quantity.</li></ul>");
       is_valid = false;
     }
   }
@@ -550,7 +550,7 @@ function validateForm() {
   if (newStatusID === Status.PartialReceived) {
     if (receivedQuantityValue >= quantityValue || receivedQuantityValue === 0) {
       receivedQuantityField.addClass('parsley-error');
-      receivedQuantityField.parent().append("<ul id='quantity-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>If Status = Partial Received, Received Quantity must be greater than 0 and less than Order Quantity.</li></ul>");
+      receivedQuantityField.parent().append("<ul id='quantity-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>If Status = Partial Received, Received Quantity must be greater than 0 and less than Order Quantity.</li></ul>");
       is_valid = false;
     }
   }
@@ -558,7 +558,7 @@ function validateForm() {
   if ((newStatusID === Status.None) && (receivedQuantityValue > 0)) {
     receivedQuantityField.addClass('parsley-error');
     serviceStatusField.addClass('parsley-error');
-    receivedQuantityField.parent().append("<ul id='quantity-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>If Status is not set to Received or Partially Received, Received Quantity must be 0.</li></ul>");
+    receivedQuantityField.parent().append("<ul id='quantity-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>If Status is not set to Received or Partially Received, Received Quantity must be 0.</li></ul>");
     is_valid = false;
   }
 

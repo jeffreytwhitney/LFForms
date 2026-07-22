@@ -366,7 +366,7 @@ $(document).ready(function () {
     }
   });
 
-  $(document).on('lookupcomplete', function (e) {
+  $(document).on('lookupcomplete', function () {
     $('.projectlist-table').hide();
     if ($('.pg input').val() === '999') {
       $('.pg input').val(1).trigger("change");
@@ -450,7 +450,7 @@ function appendPagination() {
 function callNextPage() {
   $('.service-ticket-table').hide();
   removeAppendedFields();
-  current_page = Number($('.pg input').val());
+  let current_page = Number($('.pg input').val());
   $('.pg input').val(current_page + 1).trigger("change");
 }
 
@@ -463,7 +463,7 @@ function callNextPage() {
 function callPrevPage() {
   $('.service-ticket-table').hide();
   removeAppendedFields();
-  current_page = Number($('.pg input').val());
+  let current_page = Number($('.pg input').val());
   if (current_page === 1) {
     return;
   }
@@ -682,9 +682,9 @@ function loadAssigneeMap() {
     if (assignee_rows.length === 0) {
       return;
     }
-    assignee_rows.each(function (index) {
-      assigneeID = Number($(this).find('.assignee-lookup-table-id input').val());
-      assigneeName = $(this).find('.assignee-lookup-table-name input').val();
+      assignee_rows.each(function () {
+        let assigneeID = Number($(this).find('.assignee-lookup-table-id input').val());
+        let assigneeName = $(this).find('.assignee-lookup-table-name input').val();
       assigneeMap.set(assigneeID, assigneeName);
       assigneeNameMap.set(assigneeName, assigneeID);
     });
@@ -706,9 +706,9 @@ function loadDepartmentMap() {
     if (department_rows.length === 0) {
       return;
     }
-    department_rows.each(function (index) {
-      departmentID = Number($(this).find('.department-lookup-table-id input').val());
-      departmentName = $(this).find('.department-lookup-table-name input').val();
+      department_rows.each(function () {
+        let departmentID = Number($(this).find('.department-lookup-table-id input').val());
+        let departmentName = $(this).find('.department-lookup-table-name input').val();
       departmentMap.set(departmentID, departmentName);
       departmentNameMap.set(departmentName, departmentID);
     });
@@ -750,7 +750,7 @@ function loadTicketTypeMap() {
     if (ticketType_rows.length === 0) {
       return;
     }
-    ticketType_rows.each(function (index) {
+      ticketType_rows.each(function () {
       let ticketTypeID = Number($(this).find('.ticket-type-lookup-table-id input').val());
       let ticketTypeName = $(this).find('.ticket-type-lookup-table-name input').val();
       ticketTypeMap.set(ticketTypeID, ticketTypeName);
@@ -772,7 +772,7 @@ function loadTicketTypeMap() {
  */
 function popUpIframe(src, title, height, width) {
   $("#popupIFrame").remove();
-  $("#popUpDiv").html(`<div height='${height}' width='${width}'><iframe id='popupIFrame' name='myname' src='${src}' height='${height}' width='${width}'/></div>`);
+  $("#popUpDiv").html(`<div style='height:${height}px; width:${width}px;'><iframe id='popupIFrame' name='myname' src='${src}' height='${height}' width='${width}'/></div>`);
   $("#popupIFrame").dialog({
     title: title,
     height: height,

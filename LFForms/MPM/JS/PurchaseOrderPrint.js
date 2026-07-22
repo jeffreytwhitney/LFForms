@@ -159,7 +159,7 @@ $(document).ready(function () {
    * - Normalizes date fields to show only the date portion.
    * - Ensures a grand total row is appended once results are available.
    */
-  $(document).on('lookupcomplete', function (e) {
+  $(document).on('lookupcomplete', function () {
     // Trim time portion from "Create Date" if present.
     if (($('.create-date-col input').val() !== '') && ($('.create-date-col input').val() !== undefined)) {
       $('.create-date-col input').val($('.create-date-col input').val().split(" ")[0]);
@@ -232,7 +232,7 @@ function generateFilterText() {
 
   // Create Date range
   if ((fdmin !== '') && (fdmax === '')) {
-    filterText += ", Create Date >=: '" + moment(fdmin).format('MM/DD/YYYY') + "'";
+    filterText += ", Create Date >=: '" + moment(fdmax).format('MM/DD/YYYY') + "'";
   }
 
   if ((fdmin === '') && (fdmax !== '')) {
@@ -240,7 +240,7 @@ function generateFilterText() {
   }
 
   if ((fdmin !== '') && (fdmax !== '')) {
-    filterText += ", Create Date Between: '" + moment(fdmin).format('MM/DD/YYYY') + "' and '" + moment(fdmax).format('MM/DD/YYYY') + "'";
+    filterText += ", Create Date Between: '" + moment(fdmax).format('MM/DD/YYYY') + "' and '" + moment(fdmax).format('MM/DD/YYYY') + "'";
   }
 
   // Status scope
@@ -280,11 +280,10 @@ function generateGrandTotalLine() {
 
   // Format to two decimals and add thousands separators for display.
   grandTotal = grandTotal.toFixed(2);
-  grandTotalDisplay = grandTotal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  let grandTotalDisplay = grandTotal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
   // Construct a single-row grand total footer.
-  const grandTotalLine = '<tr class="grand-total"><td/><td/><td/><td/><td style="text-align:center;font-weight:bold;font-size:16px;">Grand Total: </td><td style="font-weight:bold;font-size:16px;">$ ' + grandTotalDisplay + '</td><td/><td/><td/><td/></tr>'; 
-  return grandTotalLine;
+  return '<tr class="grand-total"><td/><td/><td/><td/><td style="text-align:center;font-weight:bold;font-size:16px;">Grand Total: </td><td style="font-weight:bold;font-size:16px;">$ ' + grandTotalDisplay + '</td><td/><td/><td/><td/></tr>';
 }
 
 

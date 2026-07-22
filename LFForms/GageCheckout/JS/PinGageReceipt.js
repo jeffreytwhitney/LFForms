@@ -20,7 +20,7 @@ $(document).ready(function () {
 
   });
 
-  $(document).on("lookupcomplete", function (e) {
+  $(document).on("lookupcomplete", function () {
 
     $('#ticket-title').val($('.ticket-number input').val());
     const barcode_value = "*" + $('.ticket-number input').val() + "*";

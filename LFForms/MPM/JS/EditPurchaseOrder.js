@@ -34,7 +34,7 @@ $(document).ready(function () {
   };
 
 
-  $(document).on('lookupcomplete', function (e) {
+  $(document).on('lookupcomplete', function () {
     const poid = Number($('.poid input').val());
     let statusid = Number($('.current-status-id input').val());
 
@@ -73,7 +73,7 @@ $(document).ready(function () {
     }
   });
 
-  $(document).on("onloadlookupfinished", function (e) {
+  $(document).on("onloadlookupfinished", function () {
     $('.closeme input').val(1);
     $('#q0').append("<div class='hidden-text' id='popUpDiv'></div>");
     $('.network-user-name input').trigger("change");
@@ -83,7 +83,7 @@ $(document).ready(function () {
       $('#purchase-order-iframe').remove();
       $('#notes-history-iframe').remove();
 
-      if ((poid !== '') && (poid !== '0')) {
+      if (poid !== 0) {
         $('#purchase-order-history').append(`<iframe id='purchase-order-iframe' name='purchase-order-iframe' src='http://rmslf/Forms/MPM-PurchaseOrderHistory?poid=${poid}' height='400' width='100%'/>`);
         $('#notes-history').append(`<iframe id='notes-history-iframe' name='notes-history-iframe' src='http://rmslf/Forms/MPM-PurchaseOrderNotes?poid=${poid}' height='400' width='100%'/>`);
       }
@@ -101,7 +101,7 @@ function callAddNote() {
   const po_id = $('.poid input').val();
   const po_number = $('.po-number input').val();
   const po_description = $('.description textarea').val();
-  let popupTitle = '';
+  let popupTitle;
 
   if (po_number.length > 0) {
     popupTitle = `Add Note for Purchase Order ${po_number}`;
@@ -262,7 +262,7 @@ function loadStatusMap() {
     if (status_rows.length === 0) {
       return;
     }
-    status_rows.each(function (index) {
+      status_rows.each(function () {
       let statusID = Number($(this).find('.id input').val());
       let statusName = $(this).find('.name input').val();
       statusMap.set(statusID, statusName);
@@ -288,10 +288,11 @@ function lockForm() {
  * @param {string} title - Dialog title
  * @param {number} height - Dialog height in pixels
  * @param {number} width - Dialog width in pixels
+ * @param center
  */
 function popupIFrame(src, title, height, width, center) {
   $("#popupIFrame").remove();
-  $("#popUpDiv").html(`<div height='${height}' width='${width}'><iframe id='popupIFrame' name='myname' src='${src}' height='${height}' width='${width}'/></div>`);
+  $("#popUpDiv").html(`<div style='height:${height}px; width:${width}px;'><iframe id='popupIFrame' name='myname' src='${src}' height='${height}' width='${width}'/></div>`);
 
   if (center === undefined || center === true) {
 
@@ -373,7 +374,6 @@ function submitForm(e) {
   if (statusID === 4) {
     e.preventDefault();
     cancelPurchaseOrder();
-    return;
   }
 }
 
@@ -392,19 +392,19 @@ function validateForm() {
 
   if ((statusID === 2) && (po_number === '')) {
     po_numberField.addClass('parsley-error');
-    po_numberField.parent().append("<ul id='po-number-required-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Purchase Order Number is required when Status = 'Issued'.</li></ul>");
+    po_numberField.parent().append("<ul id='po-number-required-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>Purchase Order Number is required when Status = 'Issued'.</li></ul>");
     is_valid = false;
   }
 
   if ((statusID === 3) && (po_number === '')) {
     po_numberField.addClass('parsley-error');
-    po_numberField.parent().append("<ul id='po-number-required-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Purchase Order Number is required when Status = 'Completed'.</li></ul>");
+    po_numberField.parent().append("<ul id='po-number-required-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>Purchase Order Number is required when Status = 'Completed'.</li></ul>");
     is_valid = false;
   }
  
   if ((statusID === 1) && (po_number !== '')) {
     statusField.addClass('parsley-error');
-    statusField.parent().append("<ul id='wrong-status-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>If you enter a Purchase Order Number, you must set Status to 'Issued'.</li></ul>");
+    statusField.parent().append("<ul id='wrong-status-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>If you enter a Purchase Order Number, you must set Status to 'Issued'.</li></ul>");
     is_valid = false;
   }
 

@@ -1,4 +1,4 @@
-const should_print_receipt = true;
+let should_print_receipt = true;
 
 
 $(document).ready(function () {
@@ -12,8 +12,8 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
-  $.fn.bootstrapBtn = bootstrapButton;
+  $.fn.bootstrapBtn = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
+
 
   $('#q0').append("<div class='hidden' id='popUpDiv'></div>");
 
@@ -90,11 +90,11 @@ $(document).ready(function () {
     this.value = this.value.toLocaleUpperCase();
   });
 
-  $(document).on('change', '[id^="Field109"]', function (e) {
+  $(document).on('change', '[id^="Field109"]', function () {
     generateMachineList();
   });
 
-  $(document).on('click', '.cf-collection-delete', function (e) {
+  $(document).on('click', '.cf-collection-delete', function () {
     generateMachineList();
   });
 
@@ -167,7 +167,7 @@ function generateMachineList() {
   let machineList = '';
 
   $('[id^="Field109"]').each(function (index, element) {
-    machineName = $(element).val();
+    const machineName = $(element).val();
     if (machineName !== '') {
       if (machineList.length > 0) {
         machineList += ', ' + machineName;
@@ -245,7 +245,7 @@ function popUpIframe(src, title, height, width) {
   //var iframe_height = height - 100;
 
   $("#popupIFrame").remove();
-  $("#popUpDiv").html(`<div height='${height}' width='${width}'><iframe id='popupIFrame' name='myname' src='${src}' height='${height}' width='${width}'/></div>`);
+  $("#popUpDiv").html(`<div style='height:${height}px; width:${width}px;'><iframe id='popupIFrame' name='myname' src='${src}' height='${height}' width='${width}'/></div>`);
   $("#popupIFrame").dialog({
     title: title,
     height: height,
@@ -281,7 +281,7 @@ function print_receipt() {
   if (should_print_receipt === true) {
     if (receipt_url !== "") {
       loadiFrame(receipt_url);
-      should_print_receipt === false;
+      should_print_receipt = false;
       $('.print-ticket-id input').val(null).trigger("change");
     }
   }
@@ -310,7 +310,7 @@ function setDailyCalValues() {
     const dailyCalValue = $(this).val();
     const dailyCalDisplayField = dailyCalDisplay[i];
     const dailyDisplayInputs = $(dailyCalDisplayField).find('input');
-    dailyDisplayInputs.each(function (ii) {
+    dailyDisplayInputs.each(function () {
       const inputValue = $(this).val();
       if (dailyCalValue === inputValue) {
         $(this).attr('checked', 'checked');
@@ -359,7 +359,7 @@ function submitForm(e) {
 
   if (ticketType === 1) {
     if (pinRows.length > 0) {
-      pinRows.each(function (index) {
+      pinRows.each(function () {
         
         const pinTypeValue = Number($(this).find('.add-pins-bins-table-pin-type-id input').val());
         const newBinID = $(this).find('.add-pins-bins-table-new-bin-id input');
@@ -386,58 +386,28 @@ function validateForm(e) {
   resetValidationErrors();
   
 
-  const ticketType = Number($('.ticket-type-id input').val());
   const pinRows = $('.add-pins-bins-table table tbody tr');
-  const threadRows = $('.add-thread-gages-table table tbody tr');
 
-  if (ticketType === 1) {
-    pinRows.each(function (index) {
+  pinRows.each(function () {
 
-      const pinTypeValue = Number($(this).find('.add-pins-bins-table-pin-type-id input').val());
-      const binName = $(this).find('.add-pins-bins-table-new-bin-number input');
-      const existingBinTicketNumber = $(this).find('.add-pins-bins-table-existing-bin-id input');
-      const binID = $(this).find('.add-pins-bins-table-new-bin-id input');
-      if ((pinTypeValue === 5) && ((binName.val().length > 0) && binID.val().length === 0)) {
-        binName.parent().find('#bad-pin-name-error').remove();
-        binName.parent().append("<ul id='bad-pin-name-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Invalid Pin Name.</li></ul>");
-        binName.addClass('parsley-error');
-        isValid = false;
-      }
-      if (existingBinTicketNumber.val().length > 0) {
-        binName.parent().find('#preexisting-bin-error').remove();
-        binName.parent().append("<ul id='preexisting-bin-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Bin already marked as 'Checked Out'. See Metrology Calibration.</li></ul>");
-        binName.addClass('parsley-error');
-        isValid = false;
-      }
-    });
-  }
-  else if (ticketType === 2) {
-    threadRows.each(function (index) {
-      const threadGageName = $(this).find('.add-thread-gages-table-thread-gage-name input');
-      const threadGageID = $(this).find('.add-thread-gages-table-new-thread-gage-id input');
-      const existingThreadGageTicketNumber = $(this).find('.add-thread-gages-table-existing-thread-gage-id input');
-      const missingThreadGageTicketNumber = $(this).find('.existing-missing-thread-ticket-number input');
+    const pinTypeValue = Number($(this).find('.add-pins-bins-table-pin-type-id input').val());
+    const binName = $(this).find('.add-pins-bins-table-new-bin-number input');
+    const existingBinTicketNumber = $(this).find('.add-pins-bins-table-existing-bin-id input');
+    const binID = $(this).find('.add-pins-bins-table-new-bin-id input');
+    if ((pinTypeValue === 5) && (binName.val() && !binID.val())) {
+      binName.parent().find('#bad-pin-name-error').remove();
+      binName.parent().append("<ul id='bad-pin-name-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>Invalid Pin Name.</li></ul>");
+      binName.addClass('parsley-error');
+      isValid = false;
+    }
+    if (existingBinTicketNumber.val()) {
+      binName.parent().find('#preexisting-bin-error').remove();
+      binName.parent().append("<ul id='preexisting-bin-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>Bin already marked as 'Checked Out'. See Metrology Calibration.</li></ul>");
+      binName.addClass('parsley-error');
+      isValid = false;
+    }
+  });
 
-      if ((threadGageID.val().length === 0) && (threadGageName.val().length > 0)) {
-        threadGageName.parent().find('#bad-thread-gage-error').remove();
-        threadGageName.parent().append("<ul id='bad-thread-gage-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Invalid Thread Gage Name.</li></ul>");
-        threadGageName.addClass('parsley-error');
-        isValid = false;
-      }
-      if (existingThreadGageTicketNumber.val().length > 0) {
-        threadGageName.parent().find('#preexisting-thread-gage-error').remove();
-        threadGageName.parent().append("<ul id='preexisting-thread-gage-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Thread Gage already marked as 'Checked Out'. See Metrology Calibration.</li></ul>");
-        threadGageName.addClass('parsley-error');
-        isValid = false;
-      }
-      if (missingThreadGageTicketNumber.val().length > 0) {
-        threadGageName.parent().find('#missing-thread-gage-error').remove();
-        threadGageName.parent().append("<ul id='missing-thread-gage-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Thread Gage marked as 'Missing' on another ticket. Bring gage to Metrology Calibration.</li></ul>");
-        threadGageName.addClass('parsley-error');
-        isValid = false;
-      }
-    });
-  }
 
   if (isValid === true) {
     $('.closeme input').val(1);
@@ -446,6 +416,8 @@ function validateForm(e) {
   else {
     e.preventDefault();
   }
+
+  return isValid;
 
 
 }

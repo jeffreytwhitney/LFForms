@@ -140,8 +140,7 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
 
   // Resolve Bootstrap $.fn.button conflicts (retain original via alias).
-  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
-  $.fn.bootstrapBtn = bootstrapButton;
+  $.fn.bootstrapBtn = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
 
   // Keep radio group "Is Active" in sync with hidden value.
   $(document).on('change', '.edit-is-active-value input', function () {
@@ -189,7 +188,7 @@ $(document).ready(function () {
   });
 
   // After lookup populates the grid, attach per-row Edit buttons, Go Back buttons, and Add button for admins.
-  $(document).on('lookupcomplete', function (e) {
+  $(document).on('lookupcomplete', function () {
     generateTableButtons(".edit-button-col", "ui-icon-pencil", "Edit TaskType", "callEditTaskType");
     generateGoBackButtons();
     if (isAdminUser()) {
@@ -201,7 +200,7 @@ $(document).ready(function () {
   });
 
   // Normalize the displayed user name once initial data load completes.
-  $(document).on("onloadlookupfinished", function (e) {
+  $(document).on("onloadlookupfinished", function () {
     $('.network-user-name input').trigger("change");
   });
 
@@ -257,7 +256,7 @@ function callGoBack() {
  */
 function generateGoBackButtons() {
   const $goback_buttons = $(".gobackbutton");
-  $goback_buttons.each(function (index) {
+  $goback_buttons.each(function () {
     $(this).parent().append("<div id='go-back' class='ui-button ui-corner-all ui-widget' onclick='callGoBack()'><span class='ui-icon ui-icon-arrowreturnthick-1-w'></span>Go Back</div>");
   });
   $(".gobackbutton").remove();

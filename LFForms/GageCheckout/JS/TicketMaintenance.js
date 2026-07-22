@@ -5,7 +5,7 @@ const machineGroupNameMap = new Map();
 const cellLeaderMap = new Map();
 const cellLeaderNameMap = new Map();
 
-var should_print_receipt = true;
+let should_print_receipt = true;
 
 
 

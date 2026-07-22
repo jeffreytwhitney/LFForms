@@ -23,7 +23,7 @@ $(document).ready(function () {
   });
 
 
-  $(document).on('lookupcomplete', function (e) {
+  $(document).on('lookupcomplete', function () {
 
     if ($('.pg input').val() === '999') {
       $('.pg input').val(1).trigger("change");
@@ -79,7 +79,7 @@ function appendPagination() {
 function callNextPage() {
   $('.tasklist-table').hide();
   removeAppendedFields();
-  current_page = Number($('.pg input').val());
+  let current_page = Number($('.pg input').val());
   $('.tasklist-page input').val(current_page + 1).trigger("change");
 }
 
@@ -87,7 +87,7 @@ function callNextPage() {
 function callPrevPage() {
   $('.tasklist-table').hide();
   removeAppendedFields();
-  current_page = Number($('.pg input').val());
+  let current_page = Number($('.pg input').val());
   if (current_page === 1) {
     return;
   }
@@ -126,7 +126,7 @@ function popUpIframe(src, title, height, width) {
   //var iframe_height = height - 100;
 
   $("#popupIFrame").remove();
-  $("#popUpDiv").html(`<div height='${height}' width='${width}'><iframe id='popupIFrame' name='myname' src='${src}' height='${height}' width='${width}'/></div>`);
+  $("#popUpDiv").html(`<div style='height:${height}px; width:${width}px;'><iframe id='popupIFrame' name='myname' src='${src}' height='${height}' width='${width}'/></div>`);
   $("#popupIFrame").dialog({
     title: title,
     height: height,

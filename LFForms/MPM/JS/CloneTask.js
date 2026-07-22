@@ -134,8 +134,7 @@ $(document).ready(function () {
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-  const bootstrapButton = $.fn.button.noConflict();
-  $.fn.bootstrapBtn = bootstrapButton;
+  $.fn.bootstrapBtn = $.fn.button.noConflict();
   $('.Submit').addClass('ui-button ui-corner-all ui-widget');
   $('.Submit').on("click", function (e) { submitForm(e); });
   $('.network-user-name input').val($('.lf-user-name input').val().toUpperCase().slice($('.lf-user-name input').val().lastIndexOf('\\') + 1)).trigger("change");
@@ -152,7 +151,7 @@ $(document).ready(function () {
   });
 
   // Initialize new task fields from current values after lookups
-  $(document).on("onloadlookupfinished", function (e) {
+  $(document).on("onloadlookupfinished", function () {
     if ($('.tid input').val() === 0) {
       $('.Submit').addClass("ui-state-disabled");
       return;
@@ -166,7 +165,7 @@ $(document).ready(function () {
   });
 
   // Fill missing dependent values when available
-  $(document).on('lookupcomplete', function (e) {
+  $(document).on('lookupcomplete', function () {
     if (Number($('.user-id input').val()) === 0) {
       $('.network-user-name input').trigger("change");
     }
@@ -190,9 +189,9 @@ $(document).ready(function () {
 function checkExistingTaskIDs() {
   const existing_task_ids = $('.existing-task-ids select option');
   let returnVal = false;
-  existing_task_ids.each(function (index) {
-    option_value = Number($(this).val());
-    if (option_value === NaN) {
+  existing_task_ids.each(function () {
+    let option_value = Number($(this).val());
+    if (isNaN(option_value)) {
       return;
     }
     if (option_value !== 0) {
@@ -226,7 +225,7 @@ function setFormEnabledState() {
       $('.new-task-type select').addClass("ui-state-disabled");
       $('.new-op input').addClass("ui-state-disabled");
       $('.new-task-name input').addClass("ui-state-disabled");
-      $('#error-message').html('<b><font size="5">You do not have permission to clone this task.</font></b>').show();
+      $('#error-message').html('<b><span style="font-size: large; ">You do not have permission to clone this task.</span></b>').show();
     }
   }
   if (($('.user-type-id input').val() !== 1) && ($('.user-type-id input').val() !== 3)) {
@@ -234,7 +233,7 @@ function setFormEnabledState() {
     $('.new-task-type select').addClass("ui-state-disabled");
     $('.new-op input').addClass("ui-state-disabled");
     $('.new-task-name input').addClass("ui-state-disabled");
-    $('#error-message').html('<b><font size="5">You do not have permission to clone this task.</font></b>').show();
+    $('#error-message').html('<b><span style="font-size: large; ">You do not have permission to clone this task.</span></b>').show();
   }
 
 }
@@ -285,11 +284,11 @@ function validateForm() {
 
   if (checkExistingTaskIDs()) {
     task_name_field.addClass('parsley-error');
-    task_name_field.parent().append("<ul id='taskname-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>A task with this Name, Type, and Op already exist in this project.</li></ul>");
+    task_name_field.parent().append("<ul id='taskname-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>A task with this Name, Type, and Op already exist in this project.</li></ul>");
     task_type_field.addClass('parsley-error');
-    task_type_field.parent().append("<ul id='tasktype-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>A task with this Name, Type, and Op already exist in this project.</li></ul>");
+    task_type_field.parent().append("<ul id='tasktype-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>A task with this Name, Type, and Op already exist in this project.</li></ul>");
     opnumber_field.addClass('parsley-error');
-    opnumber_field.parent().append("<ul id='operation-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>A task with this Name, Type, and Op already exist in this project.</li></ul>");
+    opnumber_field.parent().append("<ul id='operation-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>A task with this Name, Type, and Op already exist in this project.</li></ul>");
     return_val = false;
   }
 

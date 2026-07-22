@@ -105,8 +105,8 @@ Key Concepts:
 
     Mapping:
      Task types are stored both as ID?Name and Name?ID because LFF only stores the display value in the select, for example, the TaskType
-     select shows the names of the task types, but we are storing the TaskTypeID in a the database, so we need to have a way to 
-     figure out what the TaskTypeID is so that we can set the value of the hidden field that the workflow is going to use to 
+     select shows the names of the task types, but we are storing the TaskTypeID in a the database, so we need to have a way to
+     figure out what the TaskTypeID is so that we can set the value of the hidden field that the workflow is going to use to
      set the value in the task table. So we need to be able to look up the ID by name when the user selects a task type.
      The only way I've been able to figure out how to do this is to have a hidden lookup table on the page which contains all the 
      task types and their IDs. So when the page loads, we read that table and build two maps: one for ID?Name and one for Name?ID.
@@ -806,7 +806,7 @@ function validateGenerateForm() {
   const dueDateValue = $('.gen-due-date input').val();
   if (dueDateValue === '') {
     $('.gen-due-date input').addClass('parsley-error');
-    $('.gen-due-date input').parent().append("<ul id='empty-due-date-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Value Is Required.</li></ul>");
+    $('.gen-due-date input').parent().append("<ul id='empty-due-date-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>Value Is Required.</li></ul>");
     returnVal = false;
   }
 

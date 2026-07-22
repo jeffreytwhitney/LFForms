@@ -1,5 +1,5 @@
 ﻿
-
+let should_print_report = false;
 $(document).ready(function () {
 
   $('.Submit').hide();
@@ -9,8 +9,7 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
-  $.fn.bootstrapBtn = bootstrapButton;
+  $.fn.bootstrapBtn = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
 
   $('#q0').append("<div class='hidden' id='popUpDiv'></div>");
   const eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
@@ -21,7 +20,7 @@ $(document).ready(function () {
     if (e.data === "printme" || e.message === "printme") {
       function show_print() {
         $("#print-iframe").get(0).contentWindow.print();
-      };
+      }
       window.setTimeout(show_print, 800); // 2 seconds
     }
   });
@@ -31,7 +30,7 @@ $(document).ready(function () {
 
     generateTicketNumberColumn();
 
-    $('.cal-notes-col div').on("dblclick", function(e) {
+      $('.cal-notes-col div').on("dblclick", function() {
       const notes = $(this).find('input[type="text"]').val();
       $.dialog({
         escapeKey: true,
@@ -45,14 +44,14 @@ $(document).ready(function () {
   });
 
 
-  $(document).on('lookupcomplete', function (e) {
+  $(document).on('lookupcomplete', function () {
 
     if ($('.pg input').val() === '999') {
       $('.pg input').val(1).trigger("change");
     }
 
     if (($('.ed input').val() === '') || ($('.ed input').val() === null)) {
-      const curdate = moment().format("MM/DD/YYYY");
+      const curdate = moment(fdmax).format("MM/DD/YYYY");
       $('.ed input').val(curdate).trigger("change");
     }
 
@@ -92,13 +91,11 @@ function appendPagination() {
     }
     if ((current_page > 1) && (row_count < 25)) {
       $('.cal-table table').parent().append("<div id='cal-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);'>&laquo;</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);'>&lsaquo;</a></li><li><a class='page-link next isDisabled'>&rsaquo;</a></li></ul></div>")
-      return;
     }
   }
   else {
     $('#cal-table-pagination').remove();
     $('.cal-table table').parent().append("<div id='cal-table-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled' href='javascript:void(0);'>&laquo;</a></li><li><a class='page-link prev isDisabled' href='javascript:void(0);'>&lsaquo;</a></li><li><a class='page-link next isDisabled'>&rsaquo;</a></li></ul></div>")
-    return;
   }
 }
 
@@ -106,7 +103,7 @@ function appendPagination() {
 function callNextPage() {
   $('.cal-table').hide();
   $('.ticket-detail-link').remove();
-  current_page = Number($('.pg input').val());
+  let current_page = Number($('.pg input').val());
   $('.pg input').val(current_page + 1).trigger("change");
 }
 
@@ -114,7 +111,7 @@ function callNextPage() {
 function callPrevPage() {
   $('.cal-table').hide();
   $('.ticket-detail-link').remove();
-  current_page = Number($('.pg input').val());
+  let current_page = Number($('.pg input').val());
   if (current_page === 1) {
     return;
   }
@@ -130,7 +127,7 @@ function filterTable() {
 
   const startDateFilterValue = $('#txtFilter_StartDate').val();
   const endDateFilterVal = $('#txtFilter_EndDate').val();
-  const curdate = moment().format("MM/DD/YYYY");
+  const curdate = moment(fdmax).format("MM/DD/YYYY");
 
 
   if ((startDateFilterValue !== null) && (startDateFilterValue !== '')) {
@@ -191,8 +188,7 @@ function generateTicketNumberColumn() {
 
 
 function getTableRowCount() {
-  const row_count = $('.cal-table table tbody tr').length;
-  return row_count;
+  return $('.cal-table table tbody tr').length;
 }
 
 
@@ -205,7 +201,7 @@ function popUpIframe(src, title, height, width) {
   //var iframe_height = height - 100;
 
   $("#popupIFrame").remove();
-  $("#popUpDiv").html(`<div height='${height}' width='${width}'><iframe id='popupIFrame' name='myname' src='${src}' height='${height}' width='${width}'/></div>`);
+  $("#popUpDiv").html(`<div style='height:${height}px; width:${width}px;'><iframe id='popupIFrame' name='myname' src='${src}' height='${height}' width='${width}'/></div>`);
   $("#popupIFrame").dialog({
     title: title,
     height: height,
@@ -270,7 +266,7 @@ function printReport() {
 
 
   loadiFrame(report_url);
-  should_print_report === false;
+  should_print_report = false;
 }
 
 

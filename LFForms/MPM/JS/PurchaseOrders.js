@@ -847,7 +847,7 @@ function loadStatusMap() {
 function popupIFrame(src, title, height, width) {
 
   $("#popupIFrame").remove();
-  $("#popUpDiv").html(`<div height='${height}' width='${width}'><iframe id='popupIFrame' name='myname' src='${src}' height='${height}' width='${width}'/></div>`);
+  $("#popUpDiv").html(`<div style='height:${height}px; width:${width}px;'><iframe id='popupIFrame' name='myname' src='${src}' height='${height}' width='${width}'/></div>`);
   $("#popupIFrame").dialog({
     title: title,
     height: height,
@@ -909,13 +909,13 @@ function printReport() {
   let min_Date;
   if ($('.fdmin input').val().length > 0) {
 
-    min_Date = moment($('.fdmin input').val()).format("YYYY-M-D");
+    min_Date = moment(fdmax).format("YYYY-M-D");
     report_url = report_url + "&fdmin=" + min_Date;
   }
 
   let max_Date;
   if ($('.fdmax input').val().length > 0) {
-    max_Date = moment($('.fdmax input').val()).format("YYYY-M-D");
+    max_Date = moment(fdmax).format("YYYY-M-D");
     report_url = report_url + "&fdmax=" + max_Date;
   }
 

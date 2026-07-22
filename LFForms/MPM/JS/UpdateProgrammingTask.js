@@ -158,7 +158,6 @@ User experience notes
  * 7: Not Scheduled
  */
 const status_NotStarted = 1;
-const status_Started = 2;
 const status_Waiting = 3;
 const status_Completed = 4;
 const status_Cancelled = 5;
@@ -179,8 +178,7 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
 
   // Resolve Bootstrap v jQuery UI button name collision.
-  const bootstrapButton = $.fn.button.noConflict();
-  $.fn.bootstrapBtn = bootstrapButton;
+  $.fn.bootstrapBtn = $.fn.button.noConflict();
 
   // Wire submit button and apply jQuery UI look.
   $('.Submit').addClass('ui-button ui-corner-all ui-widget');
@@ -203,22 +201,22 @@ $(document).ready(function () {
     if (e.data === "printme" || e.message === "printme") {
       function show_print() {
         $("#print-iframe").get(0).contentWindow.print();
-      };
+      }
       window.setTimeout(show_print, 800);
     }
   });
 
   // Keep page title in sync with task name.
-  $(document).on('change', '.task-name input', function (e) {
+  $(document).on('change', '.task-name input', function () {
     const task_name = $(this).val();
     $(document).prop('title', `Edit Task ${task_name}`);
   });
 
   // Default "date to add" to today.
-  $('.date-to-add input').val(moment().format('MM/DD/YYYY'));
+  $('.date-to-add input').val(moment(fdmax).format('MM/DD/YYYY'));
 
   // Quick view of long project description in a dialog on double-click.
-  $(document).on('dblclick', '.project-description textarea', function (e) {
+  $(document).on('dblclick', '.project-description textarea', function () {
     const ticketDetail = $(this).val();
 
     $.dialog({
@@ -268,7 +266,7 @@ $(document).ready(function () {
   };
 
   // Data loaded and lookups ready: augment UI and set initial state.
-  $(document).on('lookupcomplete', function (e) {
+  $(document).on('lookupcomplete', function () {
     if (isMetrologyUser()) {
       if (!$('#pester-qe').length) {
         $('.quality-engineer-name input').parent().append("<div id='pester-qe' class='table-button ui-button' onclick='callPesterQE()'><span title='Pester QE' class='ui-button-icon ui-icon ui-icon-mail-closed'/></div>");
@@ -292,8 +290,7 @@ $(document).ready(function () {
   });
 
   // Form fully initialized (custom host event).
-  $(document).on("onloadlookupfinished", function (e) {
-    const task_name = $('.task-name input').val();
+  $(document).on("onloadlookupfinished", function () {
     $('.closeme input').val(1);
     $('#q0').append("<div class='hidden-text' id='popUpDiv'></div>");
     $('.btn-wrapper').append("<div id='add-note' class='ui-button ui-corner-all ui-widget' onclick='callAddNote()'><span class='ui-button-icon ui-icon ui-icon-document'></span>Add Note</div>");
@@ -488,7 +485,7 @@ function callShowScheduleFilePath(index) {
       '</form>',
     buttons: {
       close: function () {
-        close
+        close()
       },
     },
   });
@@ -503,7 +500,6 @@ function callShowScheduleFilePath(index) {
  */
 function callViewNotes() {
   const task_id = $('.tid input').val();
-  const qe_name = $('.quality-engineer-name input').val();
   popupIFrame(`http://rmslf/Forms/MPM-ViewTaskNotes?tid=${task_id}`, `Notes`, 800, 1000, false);
 }
 
@@ -535,9 +531,9 @@ function checkExistingTaskIDs() {
   const existing_task_ids = $('.existing-task-id select option');
   const task_id = $('.tid input').val();
   let returnVal = false;
-  existing_task_ids.each(function (index) {
-    option_value = Number($(this).val());
-    if (option_value === NaN) {
+  existing_task_ids.each(function () {
+    let option_value = Number($(this).val());
+    if (isNaN(option_value)) {
       return returnVal;
     }
     if ((option_value !== 0) && (option_value !== task_id)) {
@@ -653,7 +649,7 @@ function generateManualCheckBox() {
 function generateTotalTrackedHoursMessage() {
   $('#existing-time-msg').remove();
   let totalHours = parseFloat($('.tracked-hours input').val());
-  let totalHoursMessage = "";
+  let totalHoursMessage;
   if (isNaN(totalHours)) {
     totalHours = 0;
   }
@@ -744,7 +740,7 @@ function lockFormCompleteCancelled() {
 function popupIFrame(src, title, height, width, cancelSubmit) {
 
   $("#popupIFrame").remove();
-  $("#popUpDiv").html(`<div height='${height}' width='${width}'><iframe id='popupIFrame' name='myname' src='${src}' height='${height}' width='${width}'/></div>`);
+  $("#popUpDiv").html(`<div style='height:${height}px; width:${width}px;'><iframe id='popupIFrame' name='myname' src='${src}' height='${height}' width='${width}'/></div>`);
   $("#popupIFrame").dialog({
     title: title,
     height: height,
@@ -752,7 +748,7 @@ function popupIFrame(src, title, height, width, cancelSubmit) {
     autoOpen: false,
     resizable: true,
     modal: true,
-    close: function (event, ui) {
+    close: function () {
       if (cancelSubmit) {
         return false;
       }
@@ -941,7 +937,6 @@ function submitForm(e) {
 
       e.preventDefault();
       callCancelTask();
-      return;
     }
   }
 
@@ -1000,27 +995,27 @@ function validateForm() {
 
   if (checkExistingTaskIDs()) {
     task_name_field.addClass('parsley-error');
-    task_name_field.parent().append("<ul id='taskname-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>A task with this Name, Type, and Op already exist in this project.</li></ul>");
+    task_name_field.parent().append("<ul id='taskname-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>A task with this Name, Type, and Op already exist in this project.</li></ul>");
     opnumber_field.addClass('parsley-error');
-    opnumber_field.parent().append("<ul id='operation-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>A task with this Name, Type, and Op already exist in this project.</li></ul>");
+    opnumber_field.parent().append("<ul id='operation-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>A task with this Name, Type, and Op already exist in this project.</li></ul>");
     return_val = false;
   }
 
   if ((new_status_val === status_NotStarted) && (tracked_hours_val > 0)) {
     status_field.addClass('parsley-error');
-    status_field.parent().append("<ul id='status-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>You can't set a task to 'Not Started' if there are hours assigned to it.</li></ul>");
+    status_field.parent().append("<ul id='status-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>You can't set a task to 'Not Started' if there are hours assigned to it.</li></ul>");
     return_val = false;
   }
 
   if (((existing_assignee_val !== null) && (existing_assignee_val.length > 0)) && ((new_assignee_val === null) || (new_assignee_val.length === 0))) {
     assignee_field.addClass('parsley-error');
-    assignee_field.parent().append("<ul id='status-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>You can't unassign a task once it's been assigned to someone.</li></ul>");
+    assignee_field.parent().append("<ul id='status-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>You can't unassign a task once it's been assigned to someone.</li></ul>");
     return_val = false;
   }
 
   if (((new_status_val !== status_NotStarted) && (new_status_val !== status_Cancelled) && (new_status_val !== status_NotSched)) && ((new_assignee_val === null) || (new_assignee_val === 0))) {
     assignee_field.addClass('parsley-error');
-    assignee_field.parent().append("<ul id='status-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>You can't have a task status other than 'Not Started' if it's not assigned to someone.</li></ul>");
+    assignee_field.parent().append("<ul id='status-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>You can't have a task status other than 'Not Started' if it's not assigned to someone.</li></ul>");
     return_val = false;
   }
 

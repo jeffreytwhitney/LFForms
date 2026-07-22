@@ -121,7 +121,7 @@ $(document).ready(function () {
 
   // Set browser tab title for clarity.
   $(document).prop('title', 'Add Purchase Order');
-  $('.Submit').on("click", function (e) {
+  $('.Submit').on("click", function () {
     submitForm();
   });
   // Load third-party assets required by the page.
@@ -132,12 +132,7 @@ $(document).ready(function () {
   $('head').append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
   $('head').append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
 
-  /**
-   * Resolve Bootstrap `button` plugin conflicts to ensure modal close buttons render/function correctly.
-   * Stores original Bootstrap button plugin under `$.fn.bootstrapBtn`.
-   */
-  const bootstrapButton = $.fn.button.noConflict();
-  $.fn.bootstrapBtn = bootstrapButton;
+  $.fn.bootstrapBtn = $.fn.button.noConflict();
 
   // If the host has requested this dialog to close (flag value == 1), instruct parent to close and refresh.
   if ($('.closeme input').val() === '1') {
@@ -172,7 +167,7 @@ $(document).ready(function () {
    * @listens change on ".line-item-type-id-col input"
    * @param {jQuery.Event} e
    */
-  $(document).on('change', '.line-item-type-id-col input', function (e) {
+  $(document).on('change', '.line-item-type-id-col input', function () {
     const row = $(this).closest('tr');
     if (Number($(this).val()) > 1) {
       row.find('.quantity-col input').val(1).prop('readonly', true);
@@ -181,7 +176,7 @@ $(document).ready(function () {
     }
   });
 
-  $(document).on('change', '.quantity-col input', function (e) {
+  $(document).on('change', '.quantity-col input', function () {
     const row = $(this).closest('tr');
     const quantity = Number($(this).val().replace(',', ''));
     const perUnitCost = Number(row.find('.per-unit-cost-col input').val().replace(',', ''));
@@ -190,7 +185,7 @@ $(document).ready(function () {
     row.find('.cost-col input').val(formattedTotalCost);
   });
 
-  $(document).on('change', '.per-unit-cost-col input', function (e) {
+  $(document).on('change', '.per-unit-cost-col input', function () {
     const row = $(this).closest('tr');
     const quantity = Number(row.find('.quantity-col input').val().replace(',', ''));
     const perUnitCost = Number($(this).val().replace(',', ''));
@@ -207,7 +202,7 @@ $(document).ready(function () {
    * @event lookupcomplete
    * @param {jQuery.Event} e
    */
-  $(document).on('lookupcomplete', function (e) {
+  $(document).on('lookupcomplete', function () {
     if (!isMetrologyUser()) {
       $('.Submit').hide();
     }
@@ -225,7 +220,7 @@ $(document).ready(function () {
    * @event onloadlookupfinished
    * @param {jQuery.Event} e
    */
-  $(document).on('onloadlookupfinished', function (e) {
+  $(document).on('onloadlookupfinished', function () {
     $('.closeme input').val(1);
     $('.network-user-name input').trigger('change');
 

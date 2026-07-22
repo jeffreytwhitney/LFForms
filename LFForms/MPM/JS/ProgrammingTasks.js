@@ -599,7 +599,7 @@ function colorCodeRows() {
     const status_id = Number($(status_ids[index]).val());
     const tasklist_row = tasklist_rows[index];
     const dueDateString = $(tasklist_row).find('.tasklist-duedate-col input[type="text"]').val();
-    const dueDate = moment(dueDateString, "M/D/YYYY").toDate();
+    const dueDate = moment(fdmax).toDate();
 
     const dateStartedString = $(tasklist_row).find('.tasklist-datestarted-col input[type="text"]').val();
 

@@ -29,7 +29,7 @@ $(document).ready(function () {
 
   });
 
-  $(document).on('lookupcomplete', function (e) {
+  $(document).on('lookupcomplete', function () {
     if ($('.pg input').val() === '999') {
       $('.pg input').val(1).trigger("change");
     }
@@ -118,7 +118,7 @@ function callGoBack() {
 function callNextPage() {
   $('.gage-request-table').hide();
   $('.request-detail-link').remove();
-  current_page = Number($('.pg input').val());
+  let current_page = Number($('.pg input').val());
   $('.pg input').val(current_page + 1).trigger("change");
 }
 
@@ -126,7 +126,7 @@ function callNextPage() {
 function callPrevPage() {
   $('.gage-request-table').hide();
   $('.request-detail-link').remove();
-  current_page = Number($('.pg input').val());
+  let current_page = Number($('.pg input').val());
   if (current_page === 1) {
     return;
   }
@@ -205,7 +205,7 @@ function generateFilterRow() {
     $("#txtFilter_JobNumber").on("dblclick", function () { $("#txtFilter_JobNumber").val(null).trigger("change"); });
 
     if ($('#chkIncludeInActive').length === 0) {
-      chkIncludeCompleted = '<div class="choice include-choice" id="divIncludeInactive"><input name="chkIncludeInActive" id="chkIncludeInActive" type="checkbox"><label class="form-option-label" for="chkIncludeInActive">Show Completed</label></div>'
+      let chkIncludeCompleted = '<div class="choice include-choice" id="divIncludeInactive"><input name="chkIncludeInActive" id="chkIncludeInActive" type="checkbox"><label class="form-option-label" for="chkIncludeInActive">Show Completed</label></div>'
       $(chkIncludeCompleted).insertBefore('.gage-request-table table');
     }
 
@@ -242,13 +242,13 @@ function generateFilterRow() {
 
 function generateGoBackButtons() {
   const $goback_buttons = $(".gobackbutton");
-  $goback_buttons.each(function (index) {
+  $goback_buttons.each(function () {
     $(this).parent().append("<div id='go-back' class='ui-button ui-corner-all ui-widget' onclick='callGoBack()'><span class='ui-icon ui-icon-arrowreturnthick-1-w'></span>Go Back</div><div id='return-ticket' class='ui-button ui-corner-all ui-widget' onclick='callReturnTicket()'><span class='ui-icon ui-icon-check'></span>Return Ticket</div>");
   });
   $(".gobackbutton").remove();
 
   const $gobackactivate_buttons = $(".goback_activate");
-  $gobackactivate_buttons.each(function (index) {
+  $gobackactivate_buttons.each(function () {
     $(this).parent().append("<div id='go-back' class='ui-button ui-corner-all ui-widget' onclick='callGoBack()'><span class='ui-icon ui-icon-arrowreturnthick-1-w'></span>Go Back</div>");
   });
   $(".goback_activate").remove();
@@ -263,7 +263,7 @@ function generateMachineList() {
   if (detailTicketID !== '') {
 
     $('[id^="Field152"]').each(function (index, element) {
-      machineName = $(element).val();
+      let machineName = $(element).val();
       if (machineName !== '') {
         if (machineList.length > 0) {
           machineList += ', ' + machineName;
@@ -280,7 +280,7 @@ function generateMachineList() {
   if (activateTicketID !== '') {
 
     $('[id^="Field131"]').each(function (index, element) {
-      machineName = $(element).val();
+      let machineName = $(element).val();
       if (machineName !== '') {
         if (machineList.length > 0) {
           machineList += ', ' + machineName;
@@ -311,8 +311,7 @@ function generateRequestNumberColumn() {
 
 
 function getTicketRowCount() {
-  const row_count = $('.gage-request-table table tbody tr').length;
-  return row_count;
+  return $('.gage-request-table table tbody tr').length;
 }
 
 
@@ -328,9 +327,9 @@ function loadCellLeaderMap() {
     if (cellLeader_rows.length === 0) {
       return;
     }
-    cellLeader_rows.each(function (index) {
-      cellLeaderID = Number($(this).find('.cellleader-lookup-table-id input').val());
-      cellLeaderName = $(this).find('.cellleader-lookup-table-name input').val();
+    cellLeader_rows.each(function () {
+      let cellLeaderID = Number($(this).find('.cellleader-lookup-table-id input').val());
+      let cellLeaderName = $(this).find('.cellleader-lookup-table-name input').val();
       cellLeaderMap.set(cellLeaderID, cellLeaderName);
       cellLeaderNameMap.set(cellLeaderName, cellLeaderID);
     });
@@ -344,9 +343,9 @@ function loadDepartmentMap() {
     if (department_rows.length === 0) {
       return;
     }
-    department_rows.each(function (index) {
-      departmentID = Number($(this).find('.department-lookup-table-id input').val());
-      departmentName = $(this).find('.department-lookup-table-name input').val();
+    department_rows.each(function () {
+      let departmentID = Number($(this).find('.department-lookup-table-id input').val());
+      let departmentName = $(this).find('.department-lookup-table-name input').val();
       departmentMap.set(departmentID, departmentName);
       departmentNameMap.set(departmentName, departmentID);
     });

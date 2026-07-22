@@ -55,7 +55,7 @@
  */
 
 $(document).ready(function () {
-  // Capture current LF user name (not used elsewhere in this script; available for diagnostics/auditing).
+  // Capture current LF username (not used elsewhere in this script; available for diagnostics/auditing).
   const lfUserName = $('.lf-user-name input').val();
 
   // Hide Submit controls on this form/page.
@@ -74,8 +74,7 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
 
   // Resolve Bootstrap/jQuery UI button plugin naming conflict, if Bootstrap is present.
-  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
-  $.fn.bootstrapBtn = bootstrapButton;
+  $.fn.bootstrapBtn = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
 
   /**
    * When a lookup finishes, rebuild the relevant checklist.
@@ -101,7 +100,7 @@ $(document).ready(function () {
    *   </tr>
    * </table>
    */
-  $(document).on("onloadlookupfinished", function (e) {
+  $(document).on("onloadlookupfinished", function () {
     if ($('#probe-tip-table-div table').length === 0) {
       $('#probe-tip-table-div').append('<table class="probe-tip-table"><tr><td class="probe-table-cell"><fieldset class="probe-checkboxes"><legend>Probes</legend></td><td class="tip-table-cell"><fieldset class="tip-checkboxes"><legend>Tip Angles</legend></td></tr></table>');
     }
@@ -110,14 +109,14 @@ $(document).ready(function () {
   /**
    * Update selected Probes immediately on checkbox changes.
    */
-  $(document).on('change', '.probe-chkbox', function (e) {
+  $(document).on('change', '.probe-chkbox', function () {
     generateSelectedProbeList();
   });
 
   /**
    * Update selected Tip Angles immediately on checkbox changes.
    */
-  $(document).on('change', '.tip-chkbox', function (e) {
+  $(document).on('change', '.tip-chkbox', function () {
     generateSelectedTipAngles();
   });
 

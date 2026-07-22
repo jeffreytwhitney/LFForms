@@ -87,8 +87,7 @@ $(document).ready(function () {
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
-  $.fn.bootstrapBtn = bootstrapButton;
+  $.fn.bootstrapBtn = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
   const lfUserName = $('.lf-user-name input').val();
   $('.network-user-name input').val(lfUserName.toUpperCase().slice(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
 
@@ -96,7 +95,7 @@ $(document).ready(function () {
    * Fired when lookup data is loaded.
    * If the user is not an admin, disable admin-only anchors.
    */
-  $(document).on('lookupcomplete', function (e) {
+  $(document).on('lookupcomplete', function () {
     if (!isAdmin()) {
       $(".is-admin").removeClass('disabledAnchor').addClass('disabledAnchor');
     }
@@ -113,10 +112,5 @@ $(document).ready(function () {
  */
 function isAdmin() {
   const isAdmin = Number($('.user-isadmin input').val());
-  if (isAdmin === 1) {
-    return true;
-  }
-  else {
-    return false;
-  }
+  return isAdmin === 1;
 }

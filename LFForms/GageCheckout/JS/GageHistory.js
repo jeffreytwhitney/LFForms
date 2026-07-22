@@ -9,7 +9,7 @@ $(document).ready(function() {
   
   
   
-  $(document).on("onloadlookupfinished", function(e) {
+  $(document).on("onloadlookupfinished", function() {
     
     $('.ticket-history-table table tbody tr').addClass("ticket-history-row");
     generateTicketDetailButtons();
@@ -74,7 +74,7 @@ function tabifyFormSections(){
 
 function generateGoBackButtons() {
   const $goback_buttons = $(".gobackbutton");
-  $goback_buttons.each(function(index) {
+  $goback_buttons.each(function() {
     $(this).replaceWith("<input class='return' type='button' value='Go Back' onclick='goBack()' />");
   });
 }
@@ -82,7 +82,7 @@ function generateGoBackButtons() {
 
 function generateTicketDetailButtons() {
   const $detail_buttons = $(".details-button-col input[type=text]");
-  $detail_buttons.each(function(index) {
+  $detail_buttons.each(function() {
     const $ticket_id = $(this).val();
     const $ticket_type_id = $(this).closest('.ticket-history-row').find('.ticket-type-id-col input[type=text]').val();
     $(this).parent().append(`<input class='return' type='button' value='Details' onclick='callDetails(${$ticket_id}, ${$ticket_type_id})' />`);
@@ -248,7 +248,7 @@ function filterTicketHistoryRows() {
   const createEndDateFilter = Date.parse($('#txtTicketFilter_CreateEndDate').val());
 
   const gage_rows = $(".ticket-history-row");
-  gage_rows.each(function(index) {
+  gage_rows.each(function() {
 
     if (ticketNumberFilter !== '') {
       const row_ticketNumber = $(this).find('.ticket-number-col input[type=text]').val().toLowerCase();
@@ -342,7 +342,6 @@ function filterTicketHistoryRows() {
       const row_EndDate = Date.parse($(this).find('.creation-date-col input[type=text]').val());
       if (createEndDateFilter <= row_EndDate) {
         $(this).hide();
-        return;
       }
     }
     

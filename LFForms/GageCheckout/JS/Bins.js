@@ -297,7 +297,7 @@ function popUpIframe(src, title, height, width) {
   //var iframe_height = height - 100;
 
   $("#popupIFrame").remove();
-  $("#popUpDiv").html(`<div height='${height}' width='${width}'><iframe id='popupIFrame' name='myname' src='${src}' height='${height}' width='${width}'/></div>`);
+  $("#popUpDiv").html(`<div style='height:${height}px; width:${width}px;'><iframe id='popupIFrame' name='myname' src='${src}' height='${height}' width='${width}'/></div>`);
   $("#popupIFrame").dialog({
     title: title,
     height: height,
@@ -453,7 +453,7 @@ function validateForm(e) {
 
   if (existingBinNameID.length > 0) {
     binNameField.parent().find('#preexisting-bin-error').remove();
-    binNameField.parent().append("<ul id='preexisting-bin-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>There is already a bin with this name.</li></ul>");
+    binNameField.parent().append("<ul id='preexisting-bin-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>There is already a bin with this name.</li></ul>");
     binNameField.addClass('parsley-error');
     isValid = false;
   }

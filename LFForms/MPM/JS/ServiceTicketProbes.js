@@ -21,7 +21,7 @@ Permissions: Metrology Admins only.
    User Permissions:
       There is a user permission model in place to restrict which updates a user can make.
       This is separate from LFF security, which can, (but in practice usually does not), limit who 
-      can even access a particular form. For our purposes, this is not particularly useful for our needs because we we want
+      can even access a particular form. For our purposes, this is not particularly useful for our needs because we want
       all users to be able to view the forms. What we want instead is to limit their ability to do certain things
       inside the application. 
       There are several user types which are defined in the database users table, (tblUsers) each with their own
@@ -65,19 +65,19 @@ Permissions: Metrology Admins only.
                           Laserfiche has lookup rules applied to certain fields, so that when a field is changed, 
                           it triggers a lookup to fill in other fields.
                           The fields themselves can either be changed by the user directly, or indirectly. 
-                          An example of an direct change would be when the user chooses a Site from the dropdown. 
+                          An example of a direct change would be when the user chooses a Site from the dropdown.
           
     
       Now this gets a bit tricky because the lookupcomplete event can fire multiple times, and we only want to do certain
       things once, so we need to put logic in there so that it's not doing expensive things again and again.
       There is a way of asking what the TriggerID of the lookup is. (A laserfiche function). But I found this 
-      to be kind of a pain to use because you have to know the TriggerID of the lookup that you want to respond to 
+      to be kind of a pain to use because you have to know the TriggerID of the lookup that you want to respond to,
       and it's just an integer. Also, if you ever change anything in the form, you don't know if the trigger id 
       has changed or not. So I found it easier to just put logic in the function that I want to run
       to make sure that it doesn't, say iterate through a table or something getting values again and 
       again when we only need it to do it once.
     
-      For an example of what I'm talking about, we're setting the user name field in code and causing a lookup, 
+      For an example of what I'm talking about, we're setting the username field in code and causing a lookup,
       (see 'User Permissions' above). Because we're setting the field in code and causing a lookup, 
       the onloadlookupfinished event has already fired. Therefore, any logic that 
       relies on user fields being populated won't work if you call them from the onloadlookupfinished event. 
@@ -88,10 +88,10 @@ Permissions: Metrology Admins only.
       but you want to minimize it as much as possible.
 
       Daisy-Chaining Lookups:
-        A side-effect of the way lookups work is how they sometimes daisy-chain. Let me explain with an example:
+        A side effect of the way lookups work is how they sometimes daisy-chain. Let me explain with an example:
         In our example, we have four fields: LFUserName, NetworkUserName, SiteID, DepartmentLookupTable.
         At the beginning the only field which has anything in it is LFUserName, because LF has filled it in for us.
-        We take that value, keeping only the username portion an dput that in NetworkUserName. 
+        We take that value, keeping only the username portion and put that in NetworkUserName.
         This causes a lookup for all the user related fields, including SiteID. Once the SiteID is set, this in turn
         causes another lookup to pull in all the departments related to that site. The Departments Lookup cannot be 
         loaded until we know which site we're talking about. Sometimes this daisy-chaining can get 3 and 
@@ -100,7 +100,7 @@ Permissions: Metrology Admins only.
         It sort of is what it is. This is what happens when you have to make an application with a non-application framework.
 
  On DOM ready this script:
-  - Normalizes the current user name into a network-style account and assigns it to `.network-user-name`.
+  - Normalizes the current username into a network-style account and assigns it to `.network-user-name`.
   - Hides the `.Submit` action until an add/edit flow is initiated (and user is admin for edit).
   - Sets the document title to "Service Ticket Probes".
   - Loads required UI libraries (via CDN) and resolves Bootstrap's `button` plugin conflict.
@@ -139,7 +139,7 @@ Permissions: Metrology Admins only.
 const machineTypeMap = new Map();
 const  machineTypeNameMap = new Map();
 $(document).ready(function () {
-  // Normalize the current user name into a network-style account (substring after the last '\', uppercased)
+  // Normalize the current username into a network-style account (substring after the last '\', uppercased)
   const lfUserName = $('.lf-user-name input').val();
   $('.network-user-name input').val(lfUserName.toUpperCase().slice(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
 
@@ -157,8 +157,7 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
 
   // Resolve Bootstrap button plugin conflict (restore previous $.fn.button and alias to $.fn.bootstrapBtn)
-  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
-  $.fn.bootstrapBtn = bootstrapButton;
+  $.fn.bootstrapBtn = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
 
   $('.Submit').on("click", function (e) { submitForm(e); });
 
@@ -191,11 +190,11 @@ $(document).ready(function () {
     $.cookie('site_name', sitename, { expires: 365, path: '/' });
   });
 
-  $(document).on('change', '[id^="Field45"]', function (e) {
+  $(document).on('change', '[id^="Field45"]', function () {
     generateMachineTypeIDList('add');
   });
 
-  $(document).on('change', '[id^="Field49"]', function (e) {
+  $(document).on('change', '[id^="Field49"]', function () {
     generateMachineTypeIDList('edit');
     const machineTypeID = $(this).val();
     const machineTypeName = machineTypeMap.get(Number(machineTypeID));
@@ -204,7 +203,7 @@ $(document).ready(function () {
 
   });
 
-  $(document).on('change', '[id^="Field50"]', function (e) {
+  $(document).on('change', '[id^="Field50"]', function () {
     const machineTypeName = $(this).val();
     if (machineTypeName === "") {
       return;
@@ -219,7 +218,7 @@ $(document).ready(function () {
 
 
   // After data lookup completes, inject row buttons and admin-only "Add" button; replace Go Back placeholders
-  $(document).on('lookupcomplete', function (e) {
+  $(document).on('lookupcomplete', function () {
     generateTableButtons(".edit-button-col", "ui-icon-pencil", "Edit Probe", "callEditProbe");
     generateGoBackButtons();
     loadMachineTypeMap();
@@ -232,7 +231,7 @@ $(document).ready(function () {
   });
 
   // On initial load completion, propagate user change and restore site from cookie
-  $(document).on("onloadlookupfinished", function (e) {
+  $(document).on("onloadlookupfinished", function () {
     $('.network-user-name input').trigger("change");
     const sitename = $.cookie('site_name');
     if (sitename !== null) {
@@ -300,7 +299,7 @@ function callGoBack() {
  */
 function generateGoBackButtons() {
   const $goback_buttons = $(".gobackbutton");
-  $goback_buttons.each(function (index) {
+  $goback_buttons.each(function () {
     $(this).parent().append("<div id='go-back' class='ui-button ui-corner-all ui-widget' onclick='callGoBack()'><span class='ui-icon ui-icon-arrowreturnthick-1-w'></span>Go Back</div>");
   });
   $(".gobackbutton").remove();
@@ -314,8 +313,8 @@ function generateGoBackButtons() {
  */
 function generateMachineTypeIDList(add_or_edit) {
   let machineTypeIDList = "";
-  let selector = "";
-  let machine_ids_selector = "";
+  let selector;
+  let machine_ids_selector;
 
   if (add_or_edit === 'edit') {
     selector = '[id^="Field49"]';
@@ -380,10 +379,8 @@ function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFu
  * @returns {boolean} True if `.user-isadmin input` value is `'1'`; otherwise false.
  */
 function isAdminUser() {
-  if ($('.user-isadmin input').val() === '1') {
-    return true;
-  }
-  return false;
+  return $('.user-isadmin input').val() === '1';
+
 }
 
 
@@ -397,9 +394,9 @@ function loadMachineTypeMap() {
     if (machineType_rows.length === 0) {
       return;
     }
-    machineType_rows.each(function (index) {
-      machineTypeID = Number($(this).find('.machine-type-lookup-id input').val());
-      machineTypeName = $(this).find('.machine-type-lookup-name input').val();
+      machineType_rows.each(function () {
+        let machineTypeID = Number($(this).find('.machine-type-lookup-id input').val());
+        let machineTypeName = $(this).find('.machine-type-lookup-name input').val();
       machineTypeMap.set(machineTypeID, machineTypeName);
       machineTypeNameMap.set(machineTypeName, machineTypeID);
     });
@@ -409,11 +406,10 @@ function loadMachineTypeMap() {
 
 
 function submitForm(e) {
-  editID = Number($('.edit-id input').val());
+  let editID = Number($('.edit-id input').val());
   if (editID > 0) {
     if (!validateEdit()) {
       e.preventDefault();
-      return;
     }
   }
 }
@@ -430,7 +426,7 @@ function validateEdit() {
 
   if ((isOrdered === 1) && (currentQuantity > originalQuantity)) {
     $(`.edit-probe-is-ordered input[type='radio']`).parent().addClass('parsley-error');
-    $(`.edit-probe-is-ordered`).append("<ul id='is-ordered-value-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>Is Ordered cannot be 'Yes' when the Current Quantity is greater than its original value.</li></ul>");
+    $(`.edit-probe-is-ordered`).append("<ul id='is-ordered-value-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>Is Ordered cannot be 'Yes' when the Current Quantity is greater than its original value.</li></ul>");
     is_valid = false;
   }
 

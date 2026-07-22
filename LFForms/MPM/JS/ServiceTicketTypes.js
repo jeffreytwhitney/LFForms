@@ -141,8 +141,7 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
 
   // Resolve Bootstrap's button plugin conflict with jQuery UI by aliasing it to `bootstrapBtn`.
-  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
-  $.fn.bootstrapBtn = bootstrapButton;
+  $.fn.bootstrapBtn = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
 
   /**
    * Keep hidden "is active" value synced with the radio selection UI (radio -> hidden).
@@ -166,7 +165,7 @@ $(document).ready(function () {
    * - Generate "Go Back" buttons from placeholders.
    * - Add "Add Service Ticket Type" button for admins.
    */
-  $(document).on('lookupcomplete', function (e) {
+  $(document).on('lookupcomplete', function () {
     generateTableButtons(".edit-button-col", "ui-icon-pencil", "Edit TicketType", "callEditTicketType");
     generateGoBackButtons();
 
@@ -182,7 +181,7 @@ $(document).ready(function () {
    * Trigger change on network user after overall onload+lookup sequence,
    * ensuring downstream bindings react to the populated value.
    */
-  $(document).on("onloadlookupfinished", function (e) {
+  $(document).on("onloadlookupfinished", function () {
     $('.network-user-name input').trigger("change");
   });
 
@@ -237,7 +236,7 @@ function callGoBack() {
  */
 function generateGoBackButtons() {
   const $goback_buttons = $(".gobackbutton");
-  $goback_buttons.each(function (index) {
+  $goback_buttons.each(function () {
     $(this).parent().append("<div id='go-back' class='ui-button ui-corner-all ui-widget' onclick='callGoBack()'><span class='ui-icon ui-icon-arrowreturnthick-1-w'></span>Go Back</div>");
   });
   $(".gobackbutton").remove();

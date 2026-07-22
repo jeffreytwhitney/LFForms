@@ -150,8 +150,7 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
 
   // Resolve Bootstrap/jQuery UI button name collision if Bootstrap is present.
-  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
-  $.fn.bootstrapBtn = bootstrapButton;
+  $.fn.bootstrapBtn = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
 
   // Keep ".edit-Machine-is-active" radios in sync when the bound value field changes.
   $(document).on('change', '.edit-is-active-value input', function () {
@@ -161,8 +160,8 @@ $(document).ready(function () {
   });
 
 
-  $(document).on('change', '.edit-machine-type-id input', function (e) {
-    
+  $(document).on('change', '.edit-machine-type-id input', function () {
+
     const machineTypeID = $(this).val();
     const machineTypeName = machineTypeMap.get(Number(machineTypeID));
     const machineTypeNameField = $('.edit-machine-type-name select');
@@ -179,7 +178,7 @@ $(document).ready(function () {
   });
 
   // After lookup results are rendered, add per-row Edit buttons and a global Add button (admins only). Also generate Go Back buttons.
-  $(document).on('lookupcomplete', function (e) {
+  $(document).on('lookupcomplete', function () {
     generateTableButtons(".edit-button-col", "ui-icon-pencil", "Edit Machine", "callEditMachine");
     generateGoBackButtons();
     loadMachineTypeMap();
@@ -192,7 +191,7 @@ $(document).ready(function () {
   });
 
   // On initial load, restore the last selected site and ensure the normalized username is propagated.
-  $(document).on("onloadlookupfinished", function (e) {
+  $(document).on("onloadlookupfinished", function () {
     $('.network-user-name input').trigger("change");
     const sitename = $.cookie('site_name');
     if (sitename !== null) {
@@ -251,7 +250,7 @@ function callGoBack() {
  */
 function generateGoBackButtons() {
   const $goback_buttons = $(".gobackbutton");
-  $goback_buttons.each(function (index) {
+  $goback_buttons.each(function () {
     $(this).parent().append("<div id='go-back' class='ui-button ui-corner-all ui-widget' onclick='callGoBack()'><span class='ui-icon ui-icon-arrowreturnthick-1-w'></span>Go Back</div>");
   });
   $(".gobackbutton").remove();
@@ -289,10 +288,8 @@ function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFu
  * @returns {boolean} True if current user is admin; otherwise false.
  */
 function isAdminUser() {
-  if ($('.user-isadmin input').val() === '1') {
-    return true;
-  }
-  return false;
+  return $('.user-isadmin input').val() === '1';
+
 }
 
 
@@ -306,9 +303,9 @@ function loadMachineTypeMap() {
     if (machineType_rows.length === 0) {
       return;
     }
-    machineType_rows.each(function (index) {
-      machineTypeID = Number($(this).find('.machine-type-lookup-id input').val());
-      machineTypeName = $(this).find('.machine-type-lookup-name input').val();
+      machineType_rows.each(function () {
+        let machineTypeID = Number($(this).find('.machine-type-lookup-id input').val());
+        let machineTypeName = $(this).find('.machine-type-lookup-name input').val();
       machineTypeMap.set(machineTypeID, machineTypeName);
       machineTypeNameMap.set(machineTypeName, machineTypeID);
     });

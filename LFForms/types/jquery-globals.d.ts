@@ -1,8 +1,8 @@
 /// <reference types="jquery" />
 
 declare global {
-  const $: JQueryStatic;
-  const jQuery: JQueryStatic;
+  const $: JQueryStaticWithDatepicker;
+  const jQuery: JQueryStaticWithDatepicker;
 }
 
 export {};

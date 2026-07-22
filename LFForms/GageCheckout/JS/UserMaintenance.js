@@ -32,7 +32,7 @@ $(document).ready(
 function changeNumericToYesNo() {
 
   const isactive = $("[id^='Field76']");
-  isactive.each(function (index) {
+  isactive.each(function () {
     const isactive_value = $(this).val();
     if (isactive_value === '1') {
       $(this).val('Yes');
@@ -44,7 +44,7 @@ function changeNumericToYesNo() {
 
 
   const isadmin = $("[id^='Field77']");
-  isadmin.each(function (index) {
+  isadmin.each(function () {
     const isadmin = $(this).val();
     if (isadmin === '1') {
       $(this).val('Yes');
@@ -100,7 +100,7 @@ function generateAddButton() {
   const add_buttons = $(".addbutton");
   const is_admin = checkPermissions();
 
-  add_buttons.each(function (index) {
+  add_buttons.each(function () {
     if (is_admin) {
       $(this).replaceWith("<input class='return' style='visibilty:visible' type='button' value='Add User' onclick='callAddUser()' />");
     }
@@ -115,7 +115,7 @@ function generateAddButton() {
 function generateEditButtons() {
   const is_admin = checkPermissions();
   const edit_buttons = $(".edit-button input[type=text]");
-  edit_buttons.each(function (index) {
+  edit_buttons.each(function () {
     const btn_value = $(this).val();
     if (is_admin) {
       $(this).parent().append("<input class='edit' type='button' value='Edit' onclick='callEditUser(" + btn_value + ")' />");
@@ -127,7 +127,7 @@ function generateEditButtons() {
 
 function generateGoBackButtons() {
   const $goback_buttons = $(".gobackbutton");
-  $goback_buttons.each(function (index) {
+  $goback_buttons.each(function () {
     $(this).replaceWith("<input class='return' type='button' value='Go Back' onclick='goBack()' />");
   });
 }

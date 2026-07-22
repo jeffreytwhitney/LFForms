@@ -138,11 +138,10 @@ $(document).ready(function () {
 
   // Resolve Bootstrap's $.fn.button conflict if Bootstrap is present.
   // Restores original $.fn.button and re-exports as $.fn.bootstrapBtn.
-  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
-  $.fn.bootstrapBtn = bootstrapButton;
+  $.fn.bootstrapBtn = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
 
   // When the data lookup completes, add per-row edit buttons and a global "Add Site" button (admins only).
-  $(document).on('lookupcomplete', function (e) {
+  $(document).on('lookupcomplete', function () {
     // Add edit buttons to rows that have a hidden id text input in the ".edit-button-col".
     generateTableButtons(".edit-button-col", "ui-icon-pencil", "Edit Site", "callEditSite");
 
@@ -159,7 +158,7 @@ $(document).ready(function () {
   });
 
   // Ensure the normalized network user name triggers any bound change handlers after initial load.
-  $(document).on("onloadlookupfinished", function (e) {
+  $(document).on("onloadlookupfinished", function () {
     $('.network-user-name input').trigger("change");
   });
 
@@ -218,7 +217,7 @@ function callGoBack() {
  */
 function generateGoBackButtons() {
   const $goback_buttons = $(".gobackbutton");
-  $goback_buttons.each(function (index) {
+  $goback_buttons.each(function () {
     $(this).parent().append("<div id='go-back' class='ui-button ui-corner-all ui-widget' onclick='callGoBack()'><span class='ui-icon ui-icon-arrowreturnthick-1-w'></span>Go Back</div>");
   });
   $(".gobackbutton").remove();

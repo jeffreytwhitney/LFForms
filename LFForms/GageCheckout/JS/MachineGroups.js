@@ -12,8 +12,7 @@
  * @requires jQuery Cookie (v1.4.1) - Loaded dynamically from CDN
  * @requires jQuery Confirm (v3.3.2) - Loaded dynamically from CDN
  * @requires jQuery UI (v1.13.3) - Loaded dynamically from CDN
- * @requires Bootstrap - For button components
- * 
+ *
  * @description
  * Key Features:
  * - Add/Edit machine groups with department associations
@@ -72,8 +71,7 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
 
   // Resolve Bootstrap/jQuery UI button conflict
-  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
-  $.fn.bootstrapBtn = bootstrapButton;
+  $.fn.bootstrapBtn = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
 
 
   $('.Submit').on("click", function (e) { validateForm(e); });
@@ -99,7 +97,7 @@ $(document).ready(function () {
    * Event handler for 'lookupcomplete' - Fired when all lookup operations complete.
    * Loads reference data and transforms field values for display.
    */
-  $(document).on('lookupcomplete', function (e) {
+  $(document).on('lookupcomplete', function () {
     loadDepartmentMap();                // Populate department ID/name mappings
     changeNumericToYesNo('Field36');    // Convert active status from 0/1 to Yes/No
     $('.machinegroup-table').show();
@@ -186,7 +184,7 @@ function callEditMachineGroup(machinegroup_id) {
  */
 function changeNumericToYesNo(selector) {
   const isactive = $(`[id^='${selector}']`);  // Find all fields starting with selector
-  isactive.each(function (index) {
+  isactive.each(function () {
     const isactive_value = $(this).val();
     if ((isactive_value === '1') || (isactive_value === 'Yes')) {
       $(this).val('Yes');
@@ -274,7 +272,7 @@ function generateAddButton() {
   const add_buttons = $(".addbutton");
   const is_admin = checkPermissions();
 
-  add_buttons.each(function (index) {
+  add_buttons.each(function () {
     if (is_admin) {
       // Replace placeholder with functional button
       $(this).replaceWith("<input class='return' style='visibilty:visible' type='button' value='Add Machine Group' onclick='callAddMachineGroup()' />");
@@ -321,7 +319,7 @@ function generateEditButtons() {
   $('.table-button').remove();  // Clean up existing buttons
   const edit_buttons = $(".edit-button input[type=text]");
 
-  edit_buttons.each(function (index) {
+  edit_buttons.each(function () {
     const btn_value = $(this).val();  // Machine group ID
     if (is_admin) {
       // Append edit button with machine group ID
@@ -353,7 +351,7 @@ function generateEditButtons() {
  */
 function generateGoBackButtons() {
   const $goback_buttons = $(".gobackbutton");
-  $goback_buttons.each(function (index) {
+  $goback_buttons.each(function () {
     // Replace placeholder with functional Go Back button
     $(this).replaceWith("<input class='return' type='button' value='Go Back' onclick='goBack()' />");
   });
@@ -423,9 +421,9 @@ function loadDepartmentMap() {
     }
 
     // Extract and map department data
-    department_rows.each(function (index) {
-      departmentID = Number($(this).find('.department-lookup-table-id input').val());
-      departmentName = $(this).find('.department-lookup-table-name input').val();
+      department_rows.each(function () {
+      let departmentID = Number($(this).find('.department-lookup-table-id input').val());
+      let departmentName = $(this).find('.department-lookup-table-name input').val();
       departmentMap.set(departmentID, departmentName);        // ID → Name
       departmentNameMap.set(departmentName, departmentID);    // Name → ID
     });

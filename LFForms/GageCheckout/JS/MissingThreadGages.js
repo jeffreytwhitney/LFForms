@@ -12,7 +12,7 @@ $(document).ready(
 
     });
 
-    $(document).on("lookupcomplete", function (e) {
+    $(document).on("lookupcomplete", function () {
       $('.thread-nominal').remove();
       const missingThreadDetailId = $('.missing-thread-detail-id input').val();
       
@@ -42,11 +42,11 @@ $(document).ready(
 
 function generateRecallButtons() {
   const $recall_buttons = $(".recall-button input[type=text]");
-  $recall_buttons.each(function (index) {
+  $recall_buttons.each(function () {
     const $btn_value = $(this).val();
     $(this).parent().append("<input class='return' type='button' value='Recall' onclick='callRecall(" + $btn_value + ")' />");
   });
-};
+}
 
 
 function checkPermissions() {
@@ -65,7 +65,7 @@ function checkPermissions() {
 
   return return_val
 
-};
+}
 
 
 function callRecall(ticket_id) {
@@ -77,12 +77,12 @@ function callRecall(ticket_id) {
   else {
     alert("Sorry, you do not have permissions to do this.");
   }
-};
+}
 
 
 function generateGoBackButtons() {
   const $goback_buttons = $(".gobackbutton");
-  $goback_buttons.each(function (index) {
+  $goback_buttons.each(function () {
     $(this).replaceWith("<input class='return' type='button' value='Go Back' onclick='goBack()' />");
   });
 }

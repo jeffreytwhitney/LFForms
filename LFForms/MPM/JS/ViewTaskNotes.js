@@ -50,8 +50,6 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
 
   // Resolve potential Bootstrap button plugin conflicts and expose the original under a new name.
-  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
-  $.fn.bootstrapBtn = bootstrapButton;
 
   // Hide any legacy/duplicate submit controls on this view.
   $('.Submit').hide();

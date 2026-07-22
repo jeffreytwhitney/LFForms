@@ -7,8 +7,7 @@ $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-  const bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
-  $.fn.bootstrapBtn = bootstrapButton;
+  $.fn.bootstrapBtn = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
   $('.Submit').hide();
   $(document).prop('title', 'Gage Calibration');
   $('#q0').append("<div class='hidden' id='print_output'></div>");
@@ -18,7 +17,7 @@ $(document).ready(function () {
     $('#q3').hide();
   }
 
-  $('.Submit').on("click", function (e) {
+  $('.Submit').on("click", function () {
     if ($('.tid input').val().length > 0) {
       $('.closeme input').val(1);
     }
@@ -47,14 +46,8 @@ $(document).ready(function () {
       $('.Submit').hide();
     }
 
-    if (Number($('.ticket-type-id input').val()) === 1) {
-      generatePinAllGoodButton();
-    }
-    else if (Number($('.ticket-type-id input').val()) === 2) {
-      formatThreadGageTable();
-      generateThreadAllGoodButton();
-      threadGageFormatted = true;
-    }
+    generatePinAllGoodButton();
+
   });
 
   $(".pin-table-notes textarea").on("change", function (e) {
@@ -106,7 +99,7 @@ $(document).ready(function () {
   $('.ticket-number input').on('keypress', function () {
     const input = $(this);
     setTimeout(function () {
-      const val = input.val().replace(/^\*+|\*+$/g, '');
+      const val = String(input.val()).replace(/^\*+|\*+$/g, '');
       input.val(val);
     }, 0);
   });
@@ -118,19 +111,10 @@ $(document).ready(function () {
 function callPinAllGood() {
   
   const threadGageRows = $('.pin-table tbody tr');
-  threadGageRows.each(function (index) {
+  threadGageRows.each(function () {
     const adjustedRadioField = $(this).find('.pin-table-result fieldset span.choice').eq(0).find('input[type="radio"]');
     $(adjustedRadioField).prop("checked", true);
 
-  });
-}
-
-
-function callThreadAllGood() {
-  const threadGageRows = $('.thread-gage-table tbody tr');
-  threadGageRows.each(function (index) {
-    const adjustedRadioField = $(this).find('.plug-thread-cal-result-col fieldset span.choice').eq(0).find('input[type="radio"]');
-    $(adjustedRadioField).prop("checked", true).trigger("change");
   });
 }
 
@@ -139,53 +123,6 @@ function generatePinAllGoodButton() {
   $('.all-good-pin-button').remove();
   const btn_html = `<div class='pin-allgood-button ui-button all-good-pin-button' onclick='callPinAllGood()'><span title='All Good' class='ui-button-icon ui-icon ui-icon-check'></span> Mark All as 'Pass'</div>`
   $('.pin-table .cf-section-header').append(btn_html);
-}
-
-
-function generateThreadAllGoodButton() {
-  $('.thread-allgood-button').remove();
-  const btn_html = `<div class='thread-allgood-button ui-button all-good-thread-button' onclick='callThreadAllGood()'><span title='All Good' class='ui-button-icon ui-icon ui-icon-check'></span> Mark All as 'Pass'</div>`
-
-  $('.thread-gage-table .cf-section-header').append(btn_html);
-}
-
-
-function formatThreadGageTable() {
-  $('.thread-nominal').remove();
-
-  const threadGageRows = $('.thread-gage-table tbody tr');
-  const threadTypeIDs = $('.thread-type-id-col input[type="text"]');
-  const goDiameterCols = $('.go-pitch-diameter-col input[type="text"]');
-  const noGoDiameterCols = $('.nogo-pitch-diameter-col input[type="text"]');
-  const majorDiameterCols = $('.major-diameter-col input[type="text"]');
-  const nominalGoDiameterCols = $('.nominal-go-pitch-diameter-col input[type="text"]');
-  const nominalNoGoDiameterCols = $('.nominal-nogo-pitch-diameter-col input[type="text"]');
-  const nominalMajorDiameterCols = $('.nominal-major-diameter-col input[type="text"]');
-
-  threadGageRows.each(function (index) {
-    const adjustedRadioField = $(this).find('.plug-thread-cal-result-col fieldset span.choice').eq(1);
-
-    const threadTypeIDValue = Number($(threadTypeIDs[index]).val());
-    const goDiameterField = goDiameterCols[index];
-    
-    const noGoDiameterField = noGoDiameterCols[index];
-    const majorDiameterField = majorDiameterCols[index];
-    const nominalGoDiameterValue = nominalGoDiameterCols[index].value;
-    const nominalNoGoDiameterValue = nominalNoGoDiameterCols[index].value;
-    const nominalMajorDiameterValue = nominalMajorDiameterCols[index].value;
-    if (threadTypeIDValue === 1) {
-      $(adjustedRadioField).removeClass("hidden").addClass("hidden");
-      $(goDiameterField).parent().append(`<span class='thread-nominal'>${nominalGoDiameterValue}</span>`);
-      $(noGoDiameterField).parent().append(`<span class='thread-nominal'>${nominalNoGoDiameterValue}</span>`);
-      $(majorDiameterField).parent().append(`<span class='thread-nominal'>${nominalMajorDiameterValue}</span>`);
-    }
-    else {
-      $(goDiameterField).val(0).removeClass("hidden").addClass("hidden");
-      $(noGoDiameterField).val(0).removeClass("hidden").addClass("hidden");
-      $(majorDiameterField).val(0).removeClass("hidden").addClass("hidden");
-    }
-
-  });
 }
 
 
@@ -217,7 +154,7 @@ function print_receipt() {
   if (should_print_receipt === true) {
     if (receipt_url !== "") {
       loadiFrame(receipt_url);
-      should_print_receipt === false;
+      should_print_receipt = false;
       $('#Field37').val(0).trigger("change");
     }
   }
@@ -252,7 +189,7 @@ function set_print_event() {
 
 function stripAsterisks(selector) {
   const $input = $(selector);
-  let val = $input.val();
+  let val = String($input.val());
   val = val.replace(/^\*+|\*+$/g, '');
   $input.val(val);
 }

@@ -42,7 +42,7 @@ $(document).ready(function () {
   });
 
   /* Finalize UI after on-load lookup work finishes */
-  $(document).on("onloadlookupfinished", function (e) {
+  $(document).on("onloadlookupfinished", function () {
     $('.closeme input').val(1);
   });
 

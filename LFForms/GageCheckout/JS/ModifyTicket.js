@@ -380,7 +380,7 @@ function generateFilterRow() {
     $('#txtFilter_TicketNumber').on('keypress', function () {
       const input = $(this);
       setTimeout(function () {
-        const val = input.val().replace(/^\*+|\*+$/g, '');
+        const val = String(input.val()).replace(/^\*+|\*+$/g, '');
         input.val(val);
       }, 0);
     });
@@ -849,7 +849,7 @@ function sortTable(newSortOrdinal) {
 function stripAsterisks(selector) {
   const $input = $(selector);
   let val = $input.val();
-  val = val.replace(/^\*+|\*+$/g, '');
+  val = String(val).replace(/^\*+|\*+$/g, '');
   $input.val(val);
 }
 

@@ -313,7 +313,7 @@ function popUpIframe(src, title, height, width) {
   //var iframe_height = height - 100;
 
   $("#popupIFrame").remove();
-  $("#popUpDiv").html(`<div height='${height}' width='${width}'><iframe id='popupIFrame' name='myname' src='${src}' height='${height}' width='${width}'/></div>`);
+  $("#popUpDiv").html(`<div style='height:${height}px; width:${width}px;'><iframe id='popupIFrame' name='myname' src='${src}' height='${height}' width='${width}'/></div>`);
   $("#popupIFrame").dialog({
     title: title,
     height: height,
@@ -432,7 +432,7 @@ function validateForm(e) {
 
   if (existingthreadNameID.length > 0) {
     threadNameField.parent().find('#preexisting-thread-error').remove();
-    threadNameField.parent().append("<ul id='preexisting-thread-error' role='alert' class='parsley-errors-list filled'><li class='parsley-required'>There is already a thread with this name.</li></ul>");
+    threadNameField.parent().append("<ul id='preexisting-thread-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>There is already a thread with this name.</li></ul>");
     threadNameField.addClass('parsley-error');
     isValid = false;
   }
