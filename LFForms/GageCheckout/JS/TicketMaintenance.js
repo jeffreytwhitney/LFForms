@@ -298,6 +298,7 @@ function filterTicketTable() {
   const ticketNumberFilterValue = $('#txtFilter_TicketNumber').val();
   const partNumberFilterValue = $('#txtFilter_PartNumber').val();
   const jobNameFilterValue = $('#txtFilter_JobNumber').val();
+  const machineNumberFilterValue = $('#txtFilter_MachineNumber').val();
   const gageDiameterFilterValue = Number($('#txtFilter_GageDiameter').val());
 
   const departmentFilterVal = $('#cboFilter_Department').val();
@@ -309,6 +310,7 @@ function filterTicketTable() {
   $('.ftname input').val(ticketNumberFilterValue);
   $('.fjnbr input').val(jobNameFilterValue);
   $('.fpnum input').val(partNumberFilterValue);
+  $('.fmname input').val(machineNumberFilterValue);
   $('.fsid input').val(statusFilterVal);
   $('.fpdia input').val(gageDiameterFilterValue);
 
@@ -397,7 +399,7 @@ function generateFilterRow() {
 
   if ($('#filterRow').length === 0) {
 
-    const filter_row = "<TR id='filterRow'><TH/><TH/><TH/><TH/><TH><input type='text' id='txtFilter_TicketNumber'></TH><TH><select id='cboFilter_Status'/></TH><TH><select id='cboFilter_Department'/></TH><TH/><TH><select id='cboFilter_MachineGroup'/></TH><TH><select id='cboFilter_Operator'/></TH><TH><select id='cboFilter_CellLeader'/></TH><TH><input type='text' id='txtFilter_PartNumber'></TH><TH><input type='text' id='txtFilter_JobNumber'></TH><TH/><TH/><TH/><TH/><TH><input type='text' id='txtFilter_GageDiameter'></TH><TH/><TH/>"
+    const filter_row = "<TR id='filterRow'><TH/><TH/><TH/><TH/><TH><input type='text' id='txtFilter_TicketNumber'></TH><TH><select id='cboFilter_Status'/></TH><TH><select id='cboFilter_Department'/></TH><TH><input type='text' id='txtFilter_MachineNumber'></TH><TH><select id='cboFilter_MachineGroup'/></TH><TH><select id='cboFilter_Operator'/></TH><TH><select id='cboFilter_CellLeader'/></TH><TH><input type='text' id='txtFilter_PartNumber'></TH><TH><input type='text' id='txtFilter_JobNumber'></TH><TH/><TH/><TH/><TH/><TH><input type='text' id='txtFilter_GageDiameter'></TH><TH/><TH/>"
     $('.ticket-table table thead').append(filter_row);
     $("#txtFilter_TicketNumber").on("change", function () {
       filterTicketTable();
@@ -406,6 +408,9 @@ function generateFilterRow() {
       filterTicketTable();
     });
     $("#txtFilter_JobNumber").on("change", function () {
+      filterTicketTable();
+    });
+    $("#txtFilter_MachineNumber").on("change", function () {
       filterTicketTable();
     });
 
@@ -440,6 +445,9 @@ function generateFilterRow() {
     });
     $("#txtFilter_JobNumber").on("dblclick", function () {
       $("#txtFilter_JobNumber").val(null).trigger("change");
+    });
+    $("#txtFilter_MachineNumber").on("dblclick", function () {
+      $("#txtFilter_MachineNumber").val(null).trigger("change");
     });
 
     $("#txtFilter_GageDiameter").on("dblclick", function () {
@@ -759,6 +767,7 @@ function reApplyFilterValues() {
   const ticketNumberFilterValue = $('.ftname input').val();
   const jobNumberFilterValue = $('.fjnbr input').val();
   const partNumberFilterValue = $('.fpnum input').val();
+  const machineNumberFilterValue = $('.fmname input').val();
   const ticketTypeFilterVal = Number($('.fttid input').val());
   const departmentFilterVal = Number($('.fdid input').val());
   const machineGroupFilterVal = Number($('.fmgid input').val());
@@ -779,6 +788,10 @@ function reApplyFilterValues() {
 
   if ((partNumberFilterValue !== null) && (partNumberFilterValue.length > 0)) {
     $('#txtFilter_PartNumber').val(partNumberFilterValue);
+  }
+
+  if ((machineNumberFilterValue !== null) && (machineNumberFilterValue.length > 0)) {
+    $('#txtFilter_MachineNumber').val(machineNumberFilterValue);
   }
 
   if (!isNaN(gageDiameterFilterVal) && (gageDiameterFilterVal > 0)) {
@@ -815,6 +828,7 @@ function refreshPage() {
   const ticketNumberFilterValue = $('.ftname input').val();
   const jobNumberFilterValue = $('.fjnbr input').val();
   const partNumberFilterValue = $('.fpnum input').val();
+  const machineNumberFilterValue = $('.fmname input').val();
   const ticketTypeFilterVal = Number($('.fttid input').val());
   const departmentFilterVal = Number($('.fdid input').val());
   const machineGroupFilterVal = Number($('.fmgid input').val());
@@ -851,6 +865,10 @@ function refreshPage() {
 
   if ((partNumberFilterValue !== null) && (partNumberFilterValue.length > 0)) {
     queryParams.set('fpnum', partNumberFilterValue);
+  }
+
+  if ((machineNumberFilterValue !== null) && (machineNumberFilterValue.length > 0)) {
+    queryParams.set('fmname', machineNumberFilterValue);
   }
 
   if (!isNaN(departmentFilterVal) && (departmentFilterVal > 0)) {
