@@ -1,9 +1,17 @@
+let should_print_receipt = false
 $(document).ready(function () {
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
   $(document).prop('title', 'Gage Administration MainForm');
   $('.Submit').hide();
   $('#q0').append("<div class='hidden' id='popUpDiv'></div>");
+
+  const eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
+  const printEvent = window[eventMethod];
+  const messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
+  printEvent(messageEvent, function (e) {
+    $("#print-iframe").get(0).contentWindow.print();
+  });
 
   $(document).on("onloadlookupfinished", function () {
     console.log('Is Anonymous', isUserAnonymous());
@@ -59,7 +67,7 @@ function isUserAnonymous() {
 
 
 function generateAppliationLinks() {
-
+  const siteID = $('.site-id input').val();
   const hasPermissions = checkPermissions();
   const isAdmin = isUserAdmin();
   const isAnonymous = isUserAnonymous();
@@ -71,7 +79,7 @@ function generateAppliationLinks() {
       anonymousOnly: true
     },
     {label: 'Tickets', title: 'Gage Administration', href: 'http://rmslf/Forms/GageTicketAdministration'},
-    {label: 'Calibration', title: 'Gage Calibration', href: 'http://rmslf/Forms/GageCalibration'},
+
     {
       label: 'Gage Request Maintenance',
       title: 'Gage Request Maintenance',
@@ -81,6 +89,7 @@ function generateAppliationLinks() {
     {label: 'Ticket History', title: 'Ticket History', href: 'http://rmslf/Forms/RMS-GAGE-TicketHistory'},
     {label: 'Bin History', title: 'Ticket History', href: 'http://rmslf/Forms/RMS-GAGE-BinHistory'},
     {label: 'Thread Gages', title: 'Thread Gages', href: 'http://rmslf/Forms/RMS-GAGE-ThreadGages'},
+    {label: 'Overdue Tickets', title: 'Overdue Tickets', href: `http://rmslf/Forms/RMS-GAGE-OverDueTicketsReport?site-id=${siteID}`},
   ];
 
   const secondColumnLinks = [
@@ -132,6 +141,7 @@ function generateAppliationLinks() {
 
 }
 
+
 function isUserAdmin() {
   let return_val = true;
   const is_admin_user = Number($(".user-isadmin input").val());
@@ -144,6 +154,30 @@ function isUserAdmin() {
     return_val = false;
   }
   return return_val;
+}
+
+
+function print_report() {
+
+  const siteID = $('.site-id input').val();
+  if (siteID.length === 0) {
+    return;
+  }
+
+  const domain = document.location.hostname;
+  const report_url_root = document.location.protocol + "//" + domain + "/Forms/";
+  let receipt_url = '';
+  receipt_url = report_url_root + "PinGageReceipt?guid=" + ticketGuid;
+
+
+
+  if (should_print_receipt === true) {
+    if (receipt_url !== "") {
+      loadiFrame(receipt_url);
+      should_print_receipt = false;
+      $('.print-ticket-id input').val(null).trigger("change");
+    }
+  }
 }
 
 

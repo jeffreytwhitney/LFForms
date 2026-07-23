@@ -44,7 +44,14 @@ $(document).ready(function () {
     generateMachineList();
   });
 
-
+  $('.stage-ticket fieldset input[type="radio"]').on("change", function () {
+    if ($('.stage-ticket fieldset input[type="radio"]:checked').val() === '1') {
+      $('#Field171-1').parent().append('<span class="stage-warning"><span class="slow-blink">Are you sure?</span> Stageing a ticket means the pins will not be used yet.</span>')
+    }
+    else {
+      $('.stage-warning').remove();
+    }
+  });
 
   $(document).on('change', '.pin-table-pin-type select', function (e) {
     if ($(e.currentTarget).val() === 'BIN') {
@@ -55,27 +62,6 @@ $(document).ready(function () {
       $(e.currentTarget).closest('tr').find('.pin-table-diameter input').removeClass("ui-state-disabled");
       $(e.currentTarget).closest('tr').find('.pin-table-number-of-pins input').removeClass("ui-state-disabled");
     }
-  });
-
-  $('.ticket-type-radio fieldset input[type="radio"]').on("change", function () {
-    $('.pin-table-bin-number input').removeClass('parsley-error');
-    $('.thread-gage-name input').removeClass('parsley-error');
-    $('#bad-pin-name-error').remove();
-    $('#preexisting-bin-error').remove();
-    $('#bad-thread-gage-error').remove();
-    $('#preexisting-thread-gage-error').remove();
-    $('#missing-thread-gage-error').remove();
-    $('.pin-table-bin-number input').val('');
-    $('.thread-gage-table-name input').val('');
-    $('.existing-missing-thread-ticket-number input').val('');
-  });
-
-  $('.existing-missing-thread-ticket-number input').on("change", function () {
-    validateForm();
-  });
-
-  $('.thread-gage-table-existing-ticket-id input').on("change", function () {
-    validateForm();
   });
 
   $(document).on('change', '#Field162', function () {

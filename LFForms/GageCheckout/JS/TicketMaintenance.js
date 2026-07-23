@@ -126,6 +126,16 @@ $(document).ready(function () {
   $(document).on('click', '.cf-collection-delete', function () {
     generateMachineList();
   });
+
+  $(document).on('keypress', '#txtFilter_TicketNumber', function () {
+    const input = $(this);
+    setTimeout(function () {
+      const val = String(input.val()).replace(/^\*+|\*+$/g, '');
+      input.val(val);
+    }, 0);
+  });
+
+
 });
 
 
@@ -356,6 +366,24 @@ function generateActivateButtons() {
 }
 
 
+function generateCalibrateButtons() {
+  const calibrate_textboxes = $(".ticket-table-calibrate-button input[type=text]");
+  const ticket_ids = $(".ticket-id-col input[type=text]");
+  const ticket_status_ids = $(".ticket-status-id-col input[type=text]");
+  calibrate_textboxes.each(function (index) {
+    const ticket_id = ticket_ids[index].value;
+    const ticket_status_id = Number(ticket_status_ids[index].value);
+    if (ticket_status_id > 1) {
+      const has_button = $(this).parent().find('.cal-button').length;
+      if (has_button === 0) {
+        const btn_html = `<div class='table-button ui-button cal-button' onclick='callCalibrate(${ticket_id})'><span title='Calibrate Ticket' class='ui-button-icon ui-icon ui-icon-wrench'/></div>`
+        $(this).parent().append(btn_html);
+      }
+    }
+  });
+}
+
+
 function generateGoBackButtons() {
   const gobackactivate_buttons = $(".goback_activate");
   gobackactivate_buttons.each(function () {
@@ -463,7 +491,7 @@ function generateFilterRow() {
 function generateFormButtons() {
 
   generateTableButtons(".ticket-table-return-button", "return-button", "ui-icon-arrowreturn-1-w", "Check In Ticket", "callReturn");
-  generateTableButtons(".ticket-table-calibrate-button", "cal-button", "ui-icon-wrench", "Calibrate Ticket Gages", "callCalibrate");
+  generateCalibrateButtons();
   generatePrintButtons();
   generateTicketNumberColumn();
   generateActivateButtons();
