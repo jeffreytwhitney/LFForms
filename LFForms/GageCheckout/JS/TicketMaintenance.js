@@ -907,7 +907,8 @@ function refreshPage() {
     queryParams.set('sortdirection', sortDirection.toString());
   }
 
-  const queryString = queryParams.toString();
+  // Keep spaces encoded as %20 (instead of '+') for downstream parsing compatibility.
+  const queryString = queryParams.toString().replace(/\+/g, '%20');
   window.location = (queryString.length > 0) ? `${current_url}?${queryString}` : current_url;
 }
 
