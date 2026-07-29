@@ -90,6 +90,7 @@ function generateAppliationLinks() {
     {label: 'Bin History', title: 'Ticket History', href: 'http://rmslf/Forms/RMS-GAGE-BinHistory'},
     {label: 'Thread Gages', title: 'Thread Gages', href: 'http://rmslf/Forms/RMS-GAGE-ThreadGages'},
     {label: 'Overdue Tickets', title: 'Overdue Tickets', href: `http://rmslf/Forms/RMS-GAGE-OverDueTicketsReport?site-id=${siteID}`},
+    {label: 'Thread Member Inventory', title: 'Thread Member Inventory', href: 'http://rmslf/Forms/RMS-Gage-ThreadMemberInventory'},
   ];
 
   const secondColumnLinks = [
