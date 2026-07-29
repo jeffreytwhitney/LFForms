@@ -287,7 +287,7 @@ function submitForm() {
 
 
 function updateThreadMemberOnHand(threadMemberID){
-  let updated_onhand = Number($('.update-thread-member-id input').val());
+  let updated_onhand = Number($('.update-thread-member-onhand input').val());
   let table_rows = $('.thread-member-table table tbody tr')
   table_rows.each(function () {
     let row_id = $(this).find('.edit-id-col input[type=text]').val();
