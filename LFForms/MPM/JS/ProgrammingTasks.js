@@ -362,11 +362,14 @@ const taskStatusMap = new Map();
 const taskStatusNameMap = new Map();
 const initiatorMap = new Map();
 const initiatorNameMap = new Map();
+const filterCookieOptions = {expires: 365, path: '/'};
+
+let savedFilterDefaultsRestored = false;
 
 
 $(function () {
   $('.Submit').hide();
-  const lfUserNameRaw = $('.lf-username input').val();
+  const lfUserNameRaw = $('.lf-user-name input').val();
   const lfUserName = (typeof lfUserNameRaw === 'string') ? lfUserNameRaw.trim() : '';
   if ((lfUserName !== '') && (lfUserName !== 'Anonymous User')) {
     $('.network-user-name input').val(lfUserName.toUpperCase().slice(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
@@ -405,8 +408,24 @@ $(function () {
 
   $(document).on('change', '.site-name select', function () {
     const sitename = $('.site-name select').val();
-    $.cookie('site_name', sitename, {expires: 365, path: '/'});
+    if (typeof $.cookie === 'function') {
+      $.cookie('site_name', sitename, filterCookieOptions);
+    }
   });
+
+  $(document).on('change', '.faid input', function () {
+    let assigneeFilterID = $('.faid input').val();
+    if (assigneeFilterID === '-1'){
+      assigneeFilterID = '';
+    }
+    persistFilterCookie('assignee_id', assigneeFilterID, {treatZeroAsBlank: true});
+  });
+
+  $(document).on('change', '.fexw input', function () {
+    const excludeWaitingFilter = $('.fexw input').val();
+    persistFilterCookie('exclude_waiting', excludeWaitingFilter);
+  });
+
 
   $(document).on('click', '.project-link', function (event) {
     event.preventDefault();
@@ -441,6 +460,7 @@ $(function () {
     generateTaskListColumnFields();
     generateFilterRow(); // See "Filtering and Sorting" above.
     reApplyFilterValues(); // See "Page Refresh Quirks" above.
+
     appendPagination(); // See "Pagination" above.
     lockRows();
     $('.tasklist-table').show();
@@ -453,6 +473,8 @@ $(function () {
     $(".tasklist-filter-checks input").on("change", function () {
       filterTable();
     });
+
+    restoreSavedFilterDefaults();
 
     //See "Page Refresh Quirks" above.
     if ($('.tasklist-page input').val() === '999') {
@@ -473,10 +495,6 @@ $(function () {
 });
 
 
-/**
- * Append simple pagination controls based on current page and row count.
- * Relies on '.tasklist-page input' value and current table rows.
- */
 function appendPagination() {
 
   const current_page = Number($('.tasklist-page input').val());
@@ -507,10 +525,6 @@ function appendPagination() {
 }
 
 
-/**
- * Open "Add Note" dialog for a given task.
- * @param {number} task_id
- */
 function callAddNote(task_id) {
   const user_type_id = Number($(".user-type-id input").val());
   if (user_type_id !== 0) {
@@ -523,10 +537,6 @@ function callAddNote(task_id) {
 }
 
 
-/**
- * Open "Add Time" dialog for a given task (metrology only).
- * @param {number} task_id
- */
 function callAddTime(task_id) {
   const user_type_id = Number($(".user-type-id input").val());
 
@@ -537,12 +547,14 @@ function callAddTime(task_id) {
 }
 
 
-/**
- * Open 1Factory search in a new tab using the task name.
- * I wish I could figure out how to open 1Factory and forward to the search page if you have to
- * log in to 1Factory, but I can't figure it out.
- * @param {string} task_name
- */
+function callNextPage() {
+  $('.tasklist-table').hide();
+  removeAppendedFields();
+  const current_page = Number($('.tasklist-page input').val());
+  $('.tasklist-page input').val(current_page + 1).trigger("change");
+}
+
+
 function callOpenOneFactory(task_name) {
   let decodedTaskName = task_name ?? '';
   try {
@@ -555,16 +567,6 @@ function callOpenOneFactory(task_name) {
 }
 
 
-/** Advance to next page and reload list. */
-function callNextPage() {
-  $('.tasklist-table').hide();
-  removeAppendedFields();
-  const current_page = Number($('.tasklist-page input').val());
-  $('.tasklist-page input').val(current_page + 1).trigger("change");
-}
-
-
-/** Go to previous page if possible and reload list. */
 function callPrevPage() {
   $('.tasklist-table').hide();
   removeAppendedFields();
@@ -576,13 +578,6 @@ function callPrevPage() {
 }
 
 
-/**
- * Apply CSS classes to rows based on status and dates for quick visual scanning.
- * - Overdue: due date <= today
- * - Started: started recently or long-running (> 30 days)
- * - Waiting: status waiting
- * - Completed/Canceled rows are ignored here (handled elsewhere)
- */
 function colorCodeRows() {
   const status_ids = $('.tasklist-status-id-col input[type="text"]');
   const tasklist_rows = $(".tasklist-table table tbody tr");
@@ -600,7 +595,8 @@ function colorCodeRows() {
   status_ids.each(function (index) {
     const status_id = Number($(status_ids[index]).val());
     const tasklist_row = tasklist_rows[index];
-    const dueDate = moment(fdmax).toDate();
+    const dueDateString = $(tasklist_row).find('.tasklist-duedate-col input[type="text"]').val();
+    const dueDate = (dueDateString && dueDateString.length > 0) ? new Date(dueDateString) : new Date(NaN);
 
     const dateStartedString = $(tasklist_row).find('.tasklist-datestarted-col input[type="text"]').val();
 
@@ -635,10 +631,6 @@ function colorCodeRows() {
 }
 
 
-/**
- * Push filter UI values into their backing hidden fields and refresh the list.
- * Reads values from the filter row controls.
- */
 function filterTable() {
   $('.tasklist-assignee-cbo-col select').off();
   $('.tasklist-duedate-col input[type="text"]').off();
@@ -661,9 +653,9 @@ function filterTable() {
   }
 
   if ($("#Field206-2").is(":checked")) {
-    $('.fexw input').val(1);
+    setHiddenFilterValue('.fexw input', 1);
   } else {
-    $('.fexw input').val(0);
+    setHiddenFilterValue('.fexw input', 0);
   }
 
   if ($("#Field206-3").is(":checked")) {
@@ -703,9 +695,9 @@ function filterTable() {
 
   if ((assigneeFilterVal !== null) && (assigneeFilterVal.length > 0)) {
     const assigneeID = assigneeNameMap.get(assigneeFilterVal);
-    $('.faid input').val(assigneeID);
+    setHiddenFilterValue('.faid input', assigneeID);
   } else {
-    $('.faid input').val(0);
+    setHiddenFilterValue('.faid input', 0);
   }
 
   if ((departmentFilterVal !== null) && (departmentFilterVal.length > 0)) {
@@ -729,10 +721,6 @@ function filterTable() {
 }
 
 
-/**
- * Create the filter header row and wire change/dblclick reset handlers.
- * Populates filter dropdowns from corresponding hidden lookup combos.
- */
 function generateFilterRow() {
 
   if ($('#filterRow').length === 0) {
@@ -830,30 +818,6 @@ function generateFilterRow() {
 }
 
 
-/**
- * Build per-row action buttons/checkboxes and enhance columns, then lock/color rows.
- * Safe to call on each refresh after table content changes.
- */
-function generateTaskListColumnFields() {
-  removeAppendedFields();
-  if ($('.tasklist-table table tbody tr').length > 0) {
-
-    generateTableButtons(".tasklist-note-col", "ui-icon-document", "Add Note", "callAddNote", true);
-    generateTableButtons(".tasklist-time-col", "ui-icon-clock", "Add Time", "callAddTime", true);
-    generateTableButtons(".tasklist-1f-col", "ui-icon-extlink", "Open 1Factory", "callOpenOneFactory", false);
-    generateTableCheckBox(".tasklist-mandate-col", "mandate-chk");
-    generateProjectColumn();
-    generateTaskColumn();
-    lockCompletedRows();
-    colorCodeRows();
-  }
-}
-
-
-/**
- * Append project and ticket links to their respective columns.
- * Links open project/ticket details via modal iframe.
- */
 function generateProjectColumn() {
   const project_names = $('.tasklist-project-name-col input[type="text"]');
   const project_ids = $('.tasklist-project-id-col input[type="text"]');
@@ -882,14 +846,6 @@ function generateProjectColumn() {
 }
 
 
-/**
- * Render a button-like div with an icon for each row in a given column.
- * @param {string} buttonSelector - Column selector (e.g., ".tasklist-note-col")
- * @param {string} buttonClass - jQuery UI icon CSS class to apply (e.g., "ui-icon-clock")
- * @param {string} buttonTitle - Tooltip for the icon/button
- * @param {string} buttonFunction - Global function name to call on click
- * @param {boolean} isArgNumeric - Whether the argument value is numeric (no quotes)
- */
 function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFunction, isArgNumeric) {
   let btn_html;
   const selectionString = buttonSelector + " input[type=text]";
@@ -912,11 +868,6 @@ function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFu
 }
 
 
-/**
- * Render a disabled checkbox reflecting 0/1 state for a given hidden column.
- * @param {string} selector - Column selector
- * @param {string} checkboxClass - CSS class to apply to the appended checkbox
- */
 function generateTableCheckBox(selector, checkboxClass) {
   const selectionString = selector + " input[type=text]";
   const checkboxes = $(selectionString);
@@ -939,10 +890,6 @@ function generateTableCheckBox(selector, checkboxClass) {
 }
 
 
-/**
- * Append a clickable task link to the task name column for each row.
- * Opens task details in a modal iframe.
- */
 function generateTaskColumn() {
   const task_names = $('.tasklist-task-name-col input[type="text"]');
   const task_ids = $('.tasklist-task-id-col input[type="text"]');
@@ -960,18 +907,22 @@ function generateTaskColumn() {
 }
 
 
-/** @returns {number} Count of task rows in the table body. */
-function getTaskListRowCount() {
-  return $('.tasklist-table table tbody tr').length;
+function generateTaskListColumnFields() {
+  removeAppendedFields();
+  if ($('.tasklist-table table tbody tr').length > 0) {
+
+    generateTableButtons(".tasklist-note-col", "ui-icon-document", "Add Note", "callAddNote", true);
+    generateTableButtons(".tasklist-time-col", "ui-icon-clock", "Add Time", "callAddTime", true);
+    generateTableButtons(".tasklist-1f-col", "ui-icon-extlink", "Open 1Factory", "callOpenOneFactory", false);
+    generateTableCheckBox(".tasklist-mandate-col", "mandate-chk");
+    generateProjectColumn();
+    generateTaskColumn();
+    lockCompletedRows();
+    colorCodeRows();
+  }
 }
 
 
-/**
- * Find a column value in the row corresponding to a specific task id.
- * @param {number} task_id
- * @param {string} column_name - jQuery selector (scoped within row)
- * @returns {string|undefined} The value from the column input
- */
 function getColumnValueByTaskID(task_id, column_name) {
 
   const tasklist_rows = $(".tasklist-table table tbody tr");
@@ -989,13 +940,27 @@ function getColumnValueByTaskID(task_id, column_name) {
 }
 
 
+function getTaskListRowCount() {
+  return $('.tasklist-table table tbody tr').length;
+}
 
 
+function hasQueryStringValue(queryParamName) {
+  return new URLSearchParams(window.location.search).has(queryParamName);
+}
 
-/**
- * Populate assignee lookup maps (id->name and name->id) from hidden lookup table.
- * Adds a special 'Unassigned' entry (-1).
- */
+
+function isBlankFilterValue(value) {
+  return (value === null) || (value === undefined) || (`${value}`.trim() === '');
+}
+
+
+function isMetrologyProgrammer() {
+  const userTypeId = Number($('.user-type-id input').val());
+  return userTypeId === 1 ;
+}
+
+
 function loadAssigneeMap() {
   const assignee_rows = $('.assignee-lookup-table table tbody tr');
   if (assignee_rows.length === 0) {
@@ -1015,7 +980,6 @@ function loadAssigneeMap() {
 }
 
 
-/** Populate department lookup maps (id<->name). */
 function loadDepartmentMap() {
   const department_rows = $('.department-lookup-table table tbody tr');
   if (department_rows.length === 0) {
@@ -1033,7 +997,6 @@ function loadDepartmentMap() {
 }
 
 
-/** Populate initiator lookup maps (id<->name). */
 function loadInitiatorMap() {
   const initiator_rows = $('.initiator-lookup-table table tbody tr');
   if (initiator_rows.length === 0) {
@@ -1051,7 +1014,6 @@ function loadInitiatorMap() {
 }
 
 
-/** Populate task status lookup maps (id<->name). */
 function loadStatusMap() {
   const status_rows = $('.status-lookup-table table tbody tr');
   if (status_rows.length === 0) {
@@ -1069,7 +1031,6 @@ function loadStatusMap() {
 }
 
 
-/** Populate task type lookup maps (id<->name). */
 function loadTaskTypeMap() {
   const tasktype_rows = $('.tasktype-lookup-table table tbody tr');
   if (tasktype_rows.length === 0) {
@@ -1087,10 +1048,6 @@ function loadTaskTypeMap() {
 }
 
 
-/**
- * Visually lock completed/cancelled rows and disable time logging button when
- * the "include completed" filter is active.
- */
 function lockCompletedRows() {
   const status_ids = $('.tasklist-status-id-col input[type="text"]');
   const tasklist_rows = $(".tasklist-table table tbody tr");
@@ -1116,12 +1073,6 @@ function lockCompletedRows() {
 }
 
 
-/**
- * Apply per-user permission logic to enable/disable action buttons in each row.
- * - Admin (user_type_id 1): full access
- * - Department manager (user_type_id 3): time disabled; notes limited to own department
- * - Others: both actions disabled
- */
 function lockRows() {
   const tasklist_rows = $(".tasklist-table table tbody tr");
   const user_type_id = Number($(".user-type-id input").val());
@@ -1148,14 +1099,29 @@ function lockRows() {
 }
 
 
-/**
- * Open a jQuery UI dialog that hosts an iframe.
- * @param {string} src - Iframe URL
- * @param {string} title - Dialog title
- * @param {number} height - Dialog height (px)
- * @param {number} width - Dialog width (px)
+function persistFilterCookie(cookieName, value, options) {
+  if (typeof $.cookie !== 'function') {
+    return;
+  }
 
- */
+  if (!isMetrologyProgrammer()){
+    $.cookie(cookieName, '', {expires: -1, path: filterCookieOptions.path});
+    return;
+  }
+
+  const treatZeroAsBlank = options?.treatZeroAsBlank === true;
+  const numericValue = Number(value);
+  const isUnset = isBlankFilterValue(value) || (treatZeroAsBlank && !Number.isNaN(numericValue) && (numericValue === 0));
+
+  if (isUnset) {
+    $.cookie(cookieName, '', {expires: -1, path: filterCookieOptions.path});
+    return;
+  }
+
+  $.cookie(cookieName, `${value}`, filterCookieOptions);
+}
+
+
 function popUpIframe(src, title, height, width) {
   //var iframe_height = height - 100;
 
@@ -1183,19 +1149,15 @@ function popUpIframe(src, title, height, width) {
 }
 
 
-/**
- * Reapply filter values from hidden fields to the filter row controls.
- * See "Page Refresh Quirks" for full explanation.
- */
 function reApplyFilterValues() {
   if ($('#filterRow').length === 0) {
     return;
   }
 
-  const includeNotScheduled = Number($('.fincns input').val());
-  const includeCompleted = Number($('.finccom input').val());
-  const excludeWaiting = Number($('.fexw input').val());
-  const excludeSameDay = Number($('.fexsd input').val());
+  let includeNotScheduled = Number($('.fincns input').val());
+  let includeCompleted = Number($('.finccom input').val());
+  let excludeWaiting = Number($('.fexw input').val());
+  let excludeSameDay = Number($('.fexsd input').val());
 
   if (includeNotScheduled === 1) {
     $('#Field206-0').prop('checked', true);
@@ -1233,12 +1195,9 @@ function reApplyFilterValues() {
   const initiatorFilterVal = Number($('.finitid input').val());
 
   if (initiatorFilterVal > 0) {
-
     const initiatorName = initiatorMap.get(initiatorFilterVal);
-
     $('#cboFilter_Initiator').val(initiatorName);
   } else {
-
     $("#cboFilter_Initiator").val($("#cboFilter_Initiator option:first").val());
   }
 
@@ -1276,10 +1235,6 @@ function reApplyFilterValues() {
 }
 
 
-/**
- * Build a new URL with current filter values as query string parameters and navigate to it.
- * See "Page Refresh Quirks" for full explanation.
- */
 function refreshPage() {
 
   const taskNameFilter = $('.ftname input').val();
@@ -1321,7 +1276,7 @@ function refreshPage() {
     queryParams.set('fincns', include_NotSched.toString());
   }
 
-  if ((exclude_Waiting !== null) && (!isNaN(exclude_Waiting)) && (exclude_Waiting > 0)) {
+  if ((exclude_Waiting !== null) && (!isNaN(exclude_Waiting)) && (exclude_Waiting >= 0)) {
     queryParams.set('fexw', exclude_Waiting.toString());
   }
 
@@ -1333,7 +1288,7 @@ function refreshPage() {
     queryParams.set('finccom', include_Complete.toString());
   }
 
-  if ((assigneeIDFilter !== null) && (!isNaN(assigneeIDFilter)) && (assigneeIDFilter > 0)) {
+  if ((assigneeIDFilter !== null) && (!isNaN(assigneeIDFilter)) && (assigneeIDFilter >= -1)) {
     queryParams.set('faid', assigneeIDFilter.toString());
   }
 
@@ -1366,7 +1321,6 @@ function refreshPage() {
 }
 
 
-// Remove appended buttons/links/checkboxes so they don't accumulate on refresh.
 function removeAppendedFields() {
   $('#tasklist-pagination').remove();
   $('.table-button').remove();
@@ -1377,7 +1331,6 @@ function removeAppendedFields() {
 }
 
 
-// Reset to page 1 and refresh the list.
 function resetPageNumber() {
   $('.tasklist-table').hide();
   removeAppendedFields();
@@ -1385,7 +1338,64 @@ function resetPageNumber() {
 }
 
 
-// Open project/ticket details in a modal iframe.
+function restoreSavedFilterDefaults() {
+  if (savedFilterDefaultsRestored || (typeof $.cookie !== 'function')) {
+    return;
+  }
+
+  const assigneeFilterField = $('.faid input');
+  const excludeWaitingField = $('.fexw input');
+  const savedAssigneeID = $.cookie('assignee_id');
+  const savedExcludeWaiting = $.cookie('exclude_waiting');
+  const currentAssigneeID = Number(assigneeFilterField.val());
+  const currentExcludeWaiting = Number(excludeWaitingField.val());
+
+  if (!hasQueryStringValue('faid') && ((isBlankFilterValue(assigneeFilterField.val())) || (currentAssigneeID === 0)) && !isBlankFilterValue(savedAssigneeID)) {
+    assigneeFilterField.val(savedAssigneeID);
+  }
+
+  if (!hasQueryStringValue('fexw') && ((isBlankFilterValue(excludeWaitingField.val())) || (currentExcludeWaiting === 0)) && !isBlankFilterValue(savedExcludeWaiting)) {
+    excludeWaitingField.val(savedExcludeWaiting);
+  }
+
+  savedFilterDefaultsRestored = true;
+}
+
+
+function setHiddenFilterValue(selector, value) {
+  const field = $(selector);
+  const nextValue = `${value}`;
+
+  if (`${field.val()}` !== nextValue) {
+    field.val(nextValue).trigger('change');
+    return;
+  }
+
+  field.val(nextValue);
+}
+
+
+function setSortIcon(sortOrdinal, sortDirection) {
+  const sortSelectors = {
+    0: '#q236',
+    1: '#q88',
+    2: '#q83',
+    3: '#q84',
+    4: '#q234',
+    5: '#q87',
+    6: '#q235',
+    7: '#q102',
+    8: '#q221',
+    9: '#q241'
+  };
+
+  $('.sort-icon').remove();
+  const selector = sortSelectors[sortOrdinal] ?? '#q236';
+  const iconClass = (sortDirection === 1) ? 'ui-icon-triangle-1-s' : 'ui-icon-triangle-1-n';
+  $(`${selector} .cf-col-label`).append(`<span class="ui-icon ${iconClass} sort-icon"></span>`);
+}
+
+
 function showProjectDetails(ticket_id) {
   let widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
@@ -1393,7 +1403,6 @@ function showProjectDetails(ticket_id) {
 }
 
 
-// Open task details in a modal iframe.
 function showTaskDetails(task_id) {
   let widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
@@ -1401,7 +1410,6 @@ function showTaskDetails(task_id) {
 }
 
 
-// Sort the table by a given column, toggling direction if already sorted by that column.
 function sortTable(newSortOrdinal) {
 
   removeAppendedFields();
@@ -1427,28 +1435,6 @@ function sortTable(newSortOrdinal) {
 }
 
 
-function setSortIcon(sortOrdinal, sortDirection) {
-  const sortSelectors = {
-    0: '#q236',
-    1: '#q88',
-    2: '#q83',
-    3: '#q84',
-    4: '#q234',
-    5: '#q87',
-    6: '#q235',
-    7: '#q102',
-    8: '#q221',
-    9: '#q241'
-  };
-
-  $('.sort-icon').remove();
-  const selector = sortSelectors[sortOrdinal] ?? '#q236';
-  const iconClass = (sortDirection === 1) ? 'ui-icon-triangle-1-s' : 'ui-icon-triangle-1-n';
-  $(`${selector} .cf-col-label`).append(`<span class="ui-icon ${iconClass} sort-icon"></span>`);
-}
-
-
-// Wire up click handlers on column headers to enable sorting.
 function wireUpSortFields() {
 
   $('#q236').off('click').on('click', function () {
