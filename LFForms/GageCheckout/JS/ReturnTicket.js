@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(function () {
   $(document).on("onloadlookupfinished", function () {
 
     const ticket_id = $(".tid input").val();

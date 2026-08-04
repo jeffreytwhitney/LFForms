@@ -39,7 +39,7 @@ Notes and caveats:
 - Handlers are delegated to document, so dynamically added notes are supported.
  */
 
-$(document).ready(function () {
+$(function () {
   // Load runtime script dependencies (fire-and-forget).
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js');
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');

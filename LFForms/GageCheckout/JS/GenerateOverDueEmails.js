@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(function () {
   $(document).on('onloadlookupfinished', function () {
 
     const site_id = $(".site-id input").val();
@@ -16,4 +16,4 @@ $(document).ready(function () {
 function submitForm() {
   $('.closeme input').val(1);
   $("#form1").trigger("submit");
-};
+}

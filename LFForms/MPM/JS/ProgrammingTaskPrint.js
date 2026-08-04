@@ -27,7 +27,7 @@
  - Parent window listening for the "printme" postMessage to trigger printing
  */
 
-$(document).ready(function () {
+$(function () {
   // Hide submission controls to prevent accidental changes in print view.
   $('.Submit').hide();
 

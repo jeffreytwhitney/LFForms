@@ -54,33 +54,24 @@
  - Variables probe_length and tipangle_length are currently unused (kept if needed for future logic/diagnostics).
  */
 
-$(document).ready(function () {
-  // Capture current LF username (not used elsewhere in this script; available for diagnostics/auditing).
-  const lfUserName = $('.lf-user-name input').val();
-
-  // Hide Submit controls on this form/page.
+$(function () {
   $('.Submit').hide();
 
-  // Set page title for clarity.
-  $(document).prop('title', 'Probe and Tip Angles');
+  $.when(
+    $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js'),
+    $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js')
+  ).done(function () {
 
-  // Lazily load optional dependencies (non-blocking).
-  $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js');
-  $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
+    $(document).prop('title', 'Probe and Tip Angles');
+    $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
+    $.fn.bootstrapBtn = $.fn.button.noConflict();
 
-  // Add styles needed by other widgets used across the app/site (present but not directly referenced in this file).
-  $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
+  }).fail(function () {
+    console.error('Failed to load required scripts');
+  });
 
-  // Resolve Bootstrap/jQuery UI button plugin naming conflict, if Bootstrap is present.
-  $.fn.bootstrapBtn = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
-
-  /**
-   * When a lookup finishes, rebuild the relevant checklist.
-   * Expects: e.triggerId === "Field2" for Probes, "Field3" for Tip Angles.
-   * @param {JQuery.Event & {triggerId?: string}} e
-   */
   $(document).on('lookupcomplete', function (e) {
     if (e.triggerId === 'Field2') {
       refreshProbes();
@@ -90,32 +81,16 @@ $(document).ready(function () {
     }
   });
 
-  /**
-   * Ensure the checklist table exists after initial lookup load.
-   * The table structure:
-   * <table class="probe-tip-table">
-   *   <tr>
-   *     <td class="probe-table-cell"><fieldset class="probe-checkboxes"><legend>Probes</legend></fieldset></td>
-   *     <td class="tip-table-cell"><fieldset class="tip-checkboxes"><legend>Tip Angles</legend></fieldset></td>
-   *   </tr>
-   * </table>
-   */
   $(document).on("onloadlookupfinished", function () {
     if ($('#probe-tip-table-div table').length === 0) {
       $('#probe-tip-table-div').append('<table class="probe-tip-table"><tr><td class="probe-table-cell"><fieldset class="probe-checkboxes"><legend>Probes</legend></td><td class="tip-table-cell"><fieldset class="tip-checkboxes"><legend>Tip Angles</legend></td></tr></table>');
     }
   });
 
-  /**
-   * Update selected Probes immediately on checkbox changes.
-   */
   $(document).on('change', '.probe-chkbox', function () {
     generateSelectedProbeList();
   });
 
-  /**
-   * Update selected Tip Angles immediately on checkbox changes.
-   */
   $(document).on('change', '.tip-chkbox', function () {
     generateSelectedTipAngles();
   });
@@ -130,9 +105,6 @@ $(document).ready(function () {
  * - Writes no values to outputs here; selection writing occurs on change via generateSelectedProbeList().
  */
 function refreshProbes() {
-  // Kept for potential diagnostics/future use.
-  const probe_length = $('.probe-table table tbody tr').length;
-
   let probe_divs_html = '';
 
   // Clear outputs and prior UI before rebuilding.
@@ -162,9 +134,6 @@ function refreshProbes() {
  * - Appends a checkbox + label for each non-empty value found.
  */
 function refreshTipAngles() {
-  // Kept for potential diagnostics/future use.
-  const tipangle_length = $('.tipangle-table table tbody tr').length;
-
   let tipangle_divs_html = '';
 
   // Clear current Tip selections/UI before rebuilding.
@@ -194,8 +163,7 @@ function generateSelectedProbeList() {
   let selectedProbeList = '';
 
   $('.probe-chkbox').each(function (index, element) {
-    // Using implicit global 'probeCheckBox' from original code; kept to avoid changing behavior.
-    probeCheckBox = $(element);
+    let probeCheckBox = $(element);
 
     if ($(probeCheckBox).is(':checked')) {
       if (selectedProbeList.length === 0) {
@@ -219,8 +187,7 @@ function generateSelectedTipAngles() {
   let selectedTipList = '';
 
   $('.tip-chkbox').each(function (index, element) {
-    // Using implicit global 'tipCheckBox' from original code; kept to avoid changing behavior.
-    tipCheckBox = $(element);
+    let tipCheckBox = $(element);
 
     if ($(tipCheckBox).is(':checked')) {
       if (selectedTipList.length === 0) {

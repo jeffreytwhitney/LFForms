@@ -25,7 +25,7 @@ Key Concepts:
    User Permissions:
       There is a user permission model in place to restrict which updates a user can make.
       This is separate from LFF security, which can, (but in practice usually does not), limit who 
-      can even access a particular form. For our purposes, this is not particularly useful for our needs because we we want
+      can even access a particular form. For our purposes, this is not particularly useful for our needs because we want
       all users to be able to view the forms. What we want instead is to limit their ability to do certain things
       inside the application. 
       There are several user types which are defined in the database users table, (tblUsers) each with their own
@@ -68,17 +68,17 @@ Key Concepts:
           - lookupcomplete: This event fires each time a lookup completes after the onloadlookupfinished event has been called. 
                             Laserfiche has lookup rules applied to certain fields, so that when a field is changed, it triggers a lookup to fill in other fields.
                             The fields themselves can either be changed by the user directly, or indirectly. 
-                            An example of an direct change would be when the user chooses a Site from the dropdown. 
+                            An example of a direct change would be when the user chooses a Site from the dropdown. 
           
     
-      Now this gets a bit tricky because the lookupcomplete event can fire multiple times, and we only want to do certain things once, so we need
+      Now this gets a bit tricky because the lookupcomplete event can fire multiple times, and we only want to do certain things once. Therefore, we need
       to put logic in there so that it's not doing expensive things again and again.
       There is a way of asking what the TriggerID of the lookup is. (A laserfiche function). But I found this to be kind of a pain to use because
-      you have to know the TriggerID of the lookup that you want to respond to and it's just an integer. Also, if you ever change anything 
-      in the form, you don't know if the trigger id has changed or not. So I found it easier to just put logic in the function that I want to run
-      to make sure that it doesn't, say iterate through a table or something getting values again and again when we only need it to do it once.
+      you have to know the TriggerID of the lookup that you want to respond to, and it's just an integer. Also, if you ever change anything 
+      in the form, you don't know if the trigger id has changed or not. So, I found it easier to just put logic in the function.
+      
     
-      For an example of what I'm talking about, we're setting the user name field in code and causing a lookup, (see 'User Permissions' above).
+      For an example of what I'm talking about, we're setting the username field in code and causing a lookup, (see 'User Permissions' above).
       Because we're setting the field in code and causing a lookup, the onloadlookupfinished event has already fired. Therefore, any logic that 
       relies on user fields being populated won't work if you call them from the onloadlookupfinished event. Instead, we have to call them from 
       the lookupcomplete event. The unfortunate side effect of this is that the lookupcomplete event can fire multiple times, 
@@ -87,10 +87,10 @@ Key Concepts:
       but you want to minimize it as much as possible.
 
       Daisy-Chaining Lookups:
-        A side-effect of the way lookups work is how they sometimes daisy-chain. Let me explain with an example:
+        A side effect of the way lookups work is how they sometimes daisy-chain. Let me explain with an example:
         In our example, we have four fields: LFUserName, NetworkUserName, SiteID, DepartmentLookupTable.
         At the beginning the only field which has anything in it is LFUserName, because LF has filled it in for us.
-        We take that value, keeping only the username portion an dput that in NetworkUserName. 
+        We take that value, keeping only the username portion and put that in NetworkUserName. 
         This causes a lookup for all the user related fields, including SiteID. Once the SiteID is set, this in turn
         causes another lookup to pull in all the departments related to that site. The Department Lookup cannot be loaded until 
         we know which site we're talking about. Sometimes this daisy-chaining can get 3 and sometimes even 4 levels deep because of all the relationships between
@@ -100,7 +100,7 @@ Key Concepts:
       Mapping:
        There are several differnent lookup tables on the form which are used to populate dropdowns, nearly all of which are for filtering.
        Task types are stored both as ID?Name and Name?ID because LFF only stores the display value in the select, for example, the TaskType
-       select shows the names of the task types, but we are storing the TaskTypeID in a the database, so we need to have a way to 
+       select shows the names of the task types, but we are storing the TaskTypeID in the database, so we need to have a way to 
        figure out what the TaskTypeID is so that we can set the value of the hidden field that the workflow is going to use to 
        set the value in the task table. So we need to be able to look up the ID by name when the user selects a task type.
        The only way I've been able to figure out how to do this is to have a hidden lookup table on the page which contains all the 
@@ -129,24 +129,31 @@ Dependencies:
 const cellLeadMap = new Map();      // Maps OwnerID -> OwnerName
 const cellLeadNameMap = new Map();  // Maps OwnerName -> OwnerID
 
-$(document).ready(function () {
+$(function () {
   // Normalize and copy LF username into the network user field (USER portion of DOMAIN\USER).
   const lfUserName = $('.lf-user-name input').val();
   $('.network-user-name input').val(lfUserName.toUpperCase().slice(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
 
   // Initial page setup.
   $('.Submit').hide();
-  $(document).prop('title', 'Schedule Maintenance');
+
 
   // Load external scripts and styles needed by this page.
-  $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js');
-  $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
-  $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
+  $.when(
+    $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js'),
+    $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js')
+  ).done(function () {
+    $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
+    $(document).prop('title', 'Schedule Maintenance');
 
-  // Resolve Bootstrap button plugin conflict with jQuery UI.
-  $.fn.bootstrapBtn = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
+    // Resolve Bootstrap button plugin conflict with jQuery UI.
+    $.fn.bootstrapBtn = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
+  }).fail(function () {
+    console.error('Failed to load required scripts');
+  });
+
 
   // Keep hidden "is active" value and radio group in sync (Edit section).
   $(document).on('change', '.edit-is-active-value input', function () {
@@ -319,10 +326,8 @@ function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFu
  * @returns {boolean} True if user is admin; otherwise, false.
  */
 function isAdminUser() {
-  if ($('.user-isadmin input').val() === '1') {
-    return true;
-  }
-  return false;
+  return $('.user-isadmin input').val() === '1';
+
 }
 
 

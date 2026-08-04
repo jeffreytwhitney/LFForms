@@ -46,28 +46,36 @@
   - Hides `.task-table` during page changes to reduce flicker.
  */
 
-$(document).ready(function () {
+$(function () {
   // Hide submit buttons in this context; the page uses programmatic navigation.
   $('.Submit').hide();
 
-  // Set document title for clarity.
-  $(document).prop('title', 'Search Schedule/Machine Name by Task Name');
-
-  // Load runtime dependencies (cookies, dialogs) and CSS themes.
-  $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js');
-  $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
-  $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-
-  // Avoid Bootstrap/jQuery UI plugin conflicts; re-alias Bootstrap's button plugin.
-  $.fn.bootstrapBtn = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
-
-  // Normalize and populate the network username (strip domain, uppercase).
-  const lfUserName = $('.lf-user-name input').val();
-  if (lfUserName !== 'Anonymous User') {
+  const lfUserNameRaw = $('.lf-user-name input').val();
+  const lfUserName = (typeof lfUserNameRaw === 'string') ? lfUserNameRaw.trim() : '';
+  if ((lfUserName !== '') && (lfUserName !== 'Anonymous User')) {
     $('.network-user-name input').val(lfUserName.toUpperCase().slice(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
   }
+
+
+  // Load runtime dependencies (cookies, dialogs) and CSS themes.
+  $.when(
+    $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js'),
+    $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js')
+  ).done(function () {
+    $(document).prop('title', 'Search Schedule/Machine Name by Task Name');
+    $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
+
+    // Avoid Bootstrap/jQuery UI plugin conflicts only when Bootstrap's button plugin is present.
+    if ($.fn && $.fn.button && (typeof $.fn.button.noConflict === 'function')) {
+      $.fn.bootstrapBtn = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
+    }
+  }).fail(function () {
+    console.error('Failed to load required scripts');
+  });
+
+
 
   // Handle post-lookup UI work: pagination, page normalization, cookie-based site restore, reveal table.
   $(document).on('lookupcomplete', function () {
@@ -81,8 +89,8 @@ $(document).ready(function () {
 
     // If site is not set, attempt to restore from cookie.
     if ($('.site-name input').val() === '') {
-      const sitename = $.cookie('site_name');
-      if (sitename !== null) {
+      const sitename = (typeof $.cookie === 'function') ? $.cookie('site_name') : null;
+      if ((typeof sitename === 'string') && (sitename.trim() !== '') && (sitename !== 'undefined')) {
         $('.site-name input').val(sitename).trigger("change");
         // Trigger a change on site id input to drive any dependent lookups.
         $('.site-id input').trigger("change");
@@ -109,36 +117,36 @@ $(document).ready(function () {
 function appendPagination() {
 
   const current_page = Number($('.pg input').val());
+
+  // Clear any previously injected pagination UI before deciding whether to render.
+  $('#user-pagination').remove();
+
   if (current_page === 999) { return; }
 
   const row_count = getTableRowCount();
+  if (row_count <= 0) { return; }
 
-  if (row_count > 0) {
-    // Clear any previously injected pagination UI.
-    $('#user-pagination').remove();
+  // Case: first page and fewer than a full page of rows -> no next page.
+  if ((current_page === 1) && (row_count < 25)) {
+    $('.task-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>&laquo;</a></li><li><a class='page-link prev isDisabled'>&lsaquo;</a></li><li><a class='page-link next isDisabled'>&rsaquo;</a></li></ul></div>");
+    return;
+  }
 
-    // Case: first page and fewer than a full page of rows -> no next page.
-    if ((current_page === 1) && (row_count < 25)) {
-      $('.task-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>&laquo;</a></li><li><a class='page-link prev isDisabled'>&lsaquo;</a></li><li><a class='page-link next isDisabled'>&rsaquo;</a></li></ul></div>");
-      return;
-    }
+  // Case: first page and exactly a full page of rows -> next page enabled.
+  if ((current_page === 1) && (row_count === 25)) {
+    $('.task-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>&laquo;</a></li><li><a class='page-link prev isDisabled'>&lsaquo;</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>&rsaquo;</a></li></ul></div>")
+    return;
+  }
 
-    // Case: first page and exactly a full page of rows -> next page enabled.
-    if ((current_page === 1) && (row_count === 25)) {
-      $('.task-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>&laquo;</a></li><li><a class='page-link prev isDisabled'>&lsaquo;</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>&rsaquo;</a></li></ul></div>")
-      return;
-    }
+  // Case: middle pages and full page of rows -> next and prev enabled.
+  if ((current_page > 1) && (row_count === 25)) {
+    $('.task-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);'>&laquo;</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);'>&lsaquo;</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>&rsaquo;</a></li></ul></div>")
+    return;
+  }
 
-    // Case: middle pages and full page of rows -> next and prev enabled.
-    if ((current_page > 1) && (row_count === 25)) {
-      $('.task-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);'>&laquo;</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);'>&lsaquo;</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>&rsaquo;</a></li></ul></div>")
-      return;
-    }
-
-    // Case: last page (fewer than a full page of rows) -> prev enabled, next disabled.
-    if ((current_page > 1) && (row_count < 25)) {
-      $('.task-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);'>&laquo;</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);'>&lsaquo;</a></li><li><a class='page-link next isDisabled'>&rsaquo;</a></li></ul></div>")
-    }
+  // Case: last page (fewer than a full page of rows) -> prev enabled, next disabled.
+  if ((current_page > 1) && (row_count < 25)) {
+    $('.task-table table').parent().append("<div id='user-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);'>&laquo;</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);'>&lsaquo;</a></li><li><a class='page-link next isDisabled'>&rsaquo;</a></li></ul></div>")
   }
 }
 

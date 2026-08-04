@@ -1,14 +1,28 @@
 const statusMap = new Map();
 const statusNameMap = new Map();
-$(document).ready(function () {
+$(function () {
 
-  $(document).prop('title', 'Edit Purchase Order');
-  $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js');
-  $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
-  $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-   // return $.fn.button to previously assigned value so that popup close button displays correctly.
-  $.fn.bootstrapBtn = $.fn.button.noConflict();
+
+  const lfUserNameRaw = $('.lf-user-name input').val();
+  const lfUserName = (typeof lfUserNameRaw === 'string') ? lfUserNameRaw.trim() : '';
+  if ((lfUserName !== '') && (lfUserName !== 'Anonymous User')) {
+    $('.network-user-name input').val(lfUserName.toUpperCase().slice(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
+  }
+
+  $.when(
+    $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js'),
+    $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js')
+  ).done(function () {
+
+    $(document).prop('title', 'Edit Purchase Order');
+    $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
+    $.fn.bootstrapBtn = $.fn.button.noConflict();
+
+  }).fail(function () {
+    console.error('Failed to load required scripts');
+  });
+
 
   if ($('.closeme input').val() === '1') {
     console.log("EditPurchaseOrder - Form submitted, closing dialog and refreshing parent.");
@@ -18,9 +32,7 @@ $(document).ready(function () {
   }
 
   $('.Submit').on('click', function (e) { submitForm(e); });
-  $('.network-user-name input').val($('.lf-user-name input').val().toUpperCase().slice($('.lf-user-name input').val().lastIndexOf('\\') + 1)).trigger("change");
 
-  // Listen for messages from child iframes to close dialogs and optionally refresh
   window.onmessage = function (event) {
     if (event.data === "CloseDialog") {
       $("#popupIFrame").dialog("destroy");
@@ -32,7 +44,6 @@ $(document).ready(function () {
       window.location = window.location.href;
     }
   };
-
 
   $(document).on('lookupcomplete', function () {
     const poid = Number($('.poid input').val());

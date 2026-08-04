@@ -1,24 +1,27 @@
-$(document).ready(function () {
-  /* Page bootstrap: set title, load assets, wire submit, compute user display name */
-  $(document).prop('title', 'Task Maintenance');
-  $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
-  $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
+$(function () {
+
+  const lfUserNameRaw = $('.lf-username input').val();
+  const lfUserName = (typeof lfUserNameRaw === 'string') ? lfUserNameRaw.trim() : '';
+  if ((lfUserName !== '') && (lfUserName !== 'Anonymous User')) {
+    $('.network-user-name input').val(lfUserName.toUpperCase().slice(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
+  }
+
+
+  $.when(
+    $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js')
+  ).done(function () {
+    $(document).prop('title', 'Task Maintenance');
+    $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
+    $.fn.bootstrapBtn = $.fn.button.noConflict();
+
+  }).fail(function () {
+    console.error('Failed to load required scripts');
+  });
+
   $('.Submit').hide();
 
-
-  /* Avoid Bootstrap/jQuery UI plugin name conflicts */
-   // return $.fn.button to previously assigned value
-  $.fn.bootstrapBtn = $.fn.button.noConflict();
-
-  /* Compute DOMAIN\user -> USER and push into .network-user-name. See 'User Permissions' above */
-  const username = $('.lf-username input').val() || '';
-  $('.network-user-name input')
-    .val(username.toUpperCase().slice(username.lastIndexOf('\\') + 1))
-    .trigger('change');
-
-  /* If host requests dialog close, notify parent See 'Dialog Looping Mechanism' above */
   if ($('.closeme input').val() === '1') {
     window.parent.postMessage('CloseDialogWithRefresh', '*');
   }
@@ -36,12 +39,10 @@ $(document).ready(function () {
     showHideSubmit();
   });
 
-
   $(document).on('lookupcomplete', function (e) {
 
   });
 
-  /* Finalize UI after on-load lookup work finishes */
   $(document).on("onloadlookupfinished", function () {
     $('.closeme input').val(1);
   });

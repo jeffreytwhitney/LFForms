@@ -73,7 +73,7 @@ Permissions: Metrology Admins only.
       There is a way of asking what the TriggerID of the lookup is. (A laserfiche function). But I found this 
       to be kind of a pain to use because you have to know the TriggerID of the lookup that you want to respond to,
       and it's just an integer. Also, if you ever change anything in the form, you don't know if the trigger id 
-      has changed or not. So I found it easier to just put logic in the function that I want to run
+      has changed or not. So, I found it easier to just put logic in the function.
       to make sure that it doesn't, say iterate through a table or something getting values again and 
       again when we only need it to do it once.
     
@@ -138,7 +138,7 @@ Permissions: Metrology Admins only.
  */
 const machineTypeMap = new Map();
 const  machineTypeNameMap = new Map();
-$(document).ready(function () {
+$(function () {
   // Normalize the current username into a network-style account (substring after the last '\', uppercased)
   const lfUserName = $('.lf-user-name input').val();
   $('.network-user-name input').val(lfUserName.toUpperCase().slice(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
@@ -146,18 +146,21 @@ $(document).ready(function () {
   // Hide submit until an action (add/edit) is initiated
   $('.Submit').hide();
 
-  // Set page title
-  $(document).prop('title', 'Service Ticket Probes');
-
   // Dynamically load UI helpers and styles
-  $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js');
-  $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
-  $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
+  $.when(
+    $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js'),
+    $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js')
+  ).done(function () {
+    $(document).prop('title', 'Service Ticket Probes');
+    $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
+    $.fn.bootstrapBtn = $.fn.button.noConflict();
 
-  // Resolve Bootstrap button plugin conflict (restore previous $.fn.button and alias to $.fn.bootstrapBtn)
-  $.fn.bootstrapBtn = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
+  }).fail(function () {
+    console.error('Failed to load required scripts');
+  });
+
 
   $('.Submit').on("click", function (e) { submitForm(e); });
 

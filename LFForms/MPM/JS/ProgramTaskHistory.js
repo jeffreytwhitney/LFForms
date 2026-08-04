@@ -21,7 +21,7 @@
  Dependencies: jQuery
  */
 
-$(document).ready(function () {
+$(function () {
   // Set page title and hide submit controls when the DOM is ready.
   $(document).prop('title', 'Programming Task History');
   $('.Submit').hide();

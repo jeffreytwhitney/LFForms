@@ -29,7 +29,7 @@ KEY CONCEPTS:
    User Permissions:
       There is a user permission model in place to restrict which updates a user can make.
       This is separate from LFF security, which can, (but in practice usually does not), limit who 
-      can even access a particular form. For our purposes, this is not particularly useful for our needs because we we want
+      can even access a particular form. For our purposes, this is not particularly useful for our needs because we want
       all users to be able to view the forms. What we want instead is to limit their ability to do certain things
       inside the application. 
       There are several user types that are defined in the database users table, (tblUsers) each with their own
@@ -69,48 +69,43 @@ Key behaviors
 - Hides the default Submit button on load.
 - Sets the document title to "Admin Main Form".
 - Loads jquery-confirm and stylesheets.
-- Copies the user name from `#Field2` into `#Field3`, stripping the domain (text after the last backslash).
+- Copies the username from `#Field2` into `#Field3`, stripping the domain (text after the last backslash).
 - On lookup completion:
   - If `#Field6` is not "1" (not admin), adds the `disabledAnchor` class to `.is-admin` elements to prevent admin actions.
 
 */
 
-$(document).ready(function () {
-  /**
-   * Entry point: initialize Admin Main Form UI and wire events.
-   * - Hide Submit, set page title, load assets, and resolve Bootstrap/jQuery UI button conflict.
-   * - Normalize username in `#Field3` from `#Field2` by removing the domain prefix.
-   * - Register handlers for lookup lifecycle events.
-   */
+$(function () {
   $('.Submit').hide();
-  $(document).prop('title', 'Admin Main Form');
-  $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
-  $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-  $.fn.bootstrapBtn = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
-  const lfUserName = $('.lf-user-name input').val();
-  $('.network-user-name input').val(lfUserName.toUpperCase().slice(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
+  const lfUserNameRaw = $('.lf-user-name input').val();
+  const lfUserName = (typeof lfUserNameRaw === 'string') ? lfUserNameRaw.trim() : '';
+  if ((lfUserName !== '') && (lfUserName !== 'Anonymous User')) {
+    $('.network-user-name input').val(lfUserName.toUpperCase().slice(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
+  }
 
-  /**
-   * Fired when lookup data is loaded.
-   * If the user is not an admin, disable admin-only anchors.
-   */
+
+  $.when(
+    $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js')
+  ).done(function () {
+
+    $(document).prop('title', 'Admin Main Form');
+    $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
+    $.fn.bootstrapBtn = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
+
+  }).fail(function () {
+    console.error('Failed to load required scripts');
+  });
+
   $(document).on('lookupcomplete', function () {
     if (!isAdmin()) {
       $(".is-admin").removeClass('disabledAnchor').addClass('disabledAnchor');
     }
   });
 
-
 });
 
 
-/**
- * Returns whether the current user is an administrator.
- * Reads the value from `.user-isadmin input` (expects 1 for true).
- * @returns {boolean} True if admin; otherwise false.
- */
 function isAdmin() {
-  const isAdmin = Number($('.user-isadmin input').val());
-  return isAdmin === 1;
+  return Number($('.user-isadmin input').val()) === 1;
 }

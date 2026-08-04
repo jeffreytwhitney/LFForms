@@ -79,11 +79,11 @@
                           An example of a direct change would be when the user chooses a Site from the dropdown.
           
     
-      Now this gets a bit tricky. The lookupcomplete event can fire multiple times, and we only want to do certain things once, so we need
+      Now this gets a bit tricky. The lookupcomplete event can fire multiple times, and we only want to do certain things once. Therefore, we need
       to put logic in there so that it's not doing expensive things again and again.
       There is a way of asking what the TriggerID of the lookup is. (A laserfiche function). But I found this to be kind of a pain to use because
       you have to know the TriggerID of the lookup that you want to respond to, and it's just an integer. Also, if you ever change anything
-      in the form, you don't know if the trigger id has changed or not. So I found it easier to just put logic in the function that I want to run
+      in the form, you don't know if the trigger id has changed or not. So, I found it easier to just put logic in the function.
       to make sure that it doesn't, say, iterate through a table or something getting values again and again when we only need it to do it once.
     
       For an example of what I'm talking about, we're setting the username field in code and causing a lookup (see 'User Permissions' above).
@@ -207,7 +207,7 @@
    itself when it closes this form.
  */
 
-$(document).ready(function () {
+$(function () {
 
   //If there is no task ID, disable the Submit button.
   if (($('.task-id input').val() === null) || ($('.task-id input').val().length === 0)) {

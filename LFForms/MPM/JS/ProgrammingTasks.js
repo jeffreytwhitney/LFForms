@@ -29,7 +29,7 @@
  - On 'onloadlookupfinished':
  - Prepares a container for popup iframes.
  - Wires filter change events, normalizes default page, restores site from cookie,
- triggers user name propagation, and shows the table.
+ triggers username propagation, and shows the table.
 
  KEY CONCEPTS:
  Dialog/Popup Mechanism:
@@ -48,7 +48,7 @@
  User Permissions:
  There is a user permission model in place to restrict which updates a user can make.
  This is separate from LFF security, which can, (but in practice usually does not), limit who
- can even access a particular form. For our purposes, this is not particularly useful for our needs because we we want
+ can even access a particular form. For our purposes, this is not particularly useful for our needs because we want
  all users to be able to view the forms. What we want instead is to limit their ability to do certain things
  inside the application.
  There are several user types which are defined in the database users table, (tblUsers) each with their own
@@ -91,16 +91,16 @@
  - lookupcomplete: This event fires each time a lookup completes after the onloadlookupfinished event has been called.
  Laserfiche has lookup rules applied to certain fields, so that when a field is changed, it triggers a lookup to fill in other fields.
  The fields themselves can either be changed by the user directly, or indirectly.
- An example of an direct change would be when the user chooses a Site from the dropdown.
+ An example of a direct change would be when the user chooses a Site from the dropdown.
 
- Now this gets a bit tricky because the lookupcomplete event can fire multiple times, and we only want to do certain things once, so we need
+ Now this gets a bit tricky because the lookupcomplete event can fire multiple times, and we only want to do certain things once. Therefore, we need
  to put logic in there so that it's not doing expensive things again and again.
  There is a way of asking what the TriggerID of the lookup is. (A laserfiche function). But I found this to be kind of a pain to use because
- you have to know the TriggerID of the lookup that you want to respond to and it's just an integer. Also, if you ever change anything
- in the form, you don't know if the trigger id has changed or not. So I found it easier to just put logic in the function that I want to run
- to make sure that it doesn't, say iterate through a table or something getting values again and again when we only need it to do it once.
+ you have to know the TriggerID of the lookup that you want to respond to, and it's just an integer. Also, if you ever change anything
+ in the form, you don't know if the trigger id has changed or not. So, I found it easier to just put logic in the function.
+ 
 
- For an example of what I'm talking about, we're setting the user name field in code and causing a lookup, (see 'User Permissions' above).
+ For an example of what I'm talking about, we're setting the username field in code and causing a lookup, (see 'User Permissions' above).
  Because we're setting the field in code and causing a lookup, the onloadlookupfinished event has already fired. Therefore, any logic that
  relies on user fields being populated won't work if you call them from the onloadlookupfinished event. Instead, we have to call them from
  the lookupcomplete event. The unfortunate side effect of this is that the lookupcomplete event can fire multiple times,
@@ -109,10 +109,10 @@
  but you want to minimize it as much as possible.
 
  Daisy-Chaining Lookups:
- A side-effect of the way lookups work is how they sometimes daisy-chain. Let me explain with an example:
+ A side effect of the way lookups work is how they sometimes daisy-chain. Let me explain with an example:
  In our example, we have four fields: LFUserName, NetworkUserName, SiteID, DepartmentLookupTable.
  At the beginning the only field which has anything in it is LFUserName, because LF has filled it in for us.
- We take that value, keeping only the username portion an dput that in NetworkUserName.
+ We take that value, keeping only the username portion and put that in NetworkUserName.
  This causes a lookup for all the user related fields, including SiteID. Once the SiteID is set, this in turn
  causes another lookup to pull in all the departments related to that site. The Department Lookup cannot be loaded until
  we know which site we're talking about. Sometimes this daisy-chaining can get 3 and sometimes even 4 levels deep because of all the relationships between
@@ -120,8 +120,8 @@
  It sort of is what it is. This is what happens when you have to make an application with a non-application framework.
 
  Page Refresh Quirks:
- There are two ways that the page can be programmatically refreshed. One is via the filter/sort/pagination mechanism described below,
- and the second is when our page receives a message from a popup that the information on the page has changed and should be refreshed,
+ There are two ways that the page can be programmatically refreshed. One is via the filter/sort/pagination mechanism described below.
+ The second is when our page receives a message from a popup that the information on the page has changed and should be refreshed,
  such as when the user changes the state of a row that is being displayed. You'd think this would be a rather straight-forward affair,
  but as I will explain to you, it's quite complex.
 
@@ -132,7 +132,7 @@
  This presents us with a problem, because we have muddled with the table quite a lot, adding links and buttons dynamically using jQuery.
  For example, let's say we have a page of results that has a button in the first column. We put that button there. What was there
  natively, (what was put there by LFF), is a hidden text box with the ID for the record. We can use that to create a button on the fly
- and assign a javascript onclick to call a function sending the id of the record as an argument. But now LFF has just refreshed the data
+ and assign a js onclick to call a function sending the id of the record as an argument. But now LFF has just refreshed the data
  in the table, so if the hidden text box used to have an ID of 1, the button we made would have called someFunctionToDoSomething(1).
  But now, because of the page refreshing, the first row has a different record in it, with an ID of 2.
  Unfortunately, we still have that button sitting there which will call someFunctionToDoSomething(1) with the wrong argument.
@@ -254,7 +254,7 @@
  This gets us part of the way there, but we also need to have a way for the user to set these fields.
  This is done via a filter row which is added to the task list table. The filter row contains a text box for the task name filter,
  and dropdowns for the task type, status, and assignee filters. There is also a checkbox to include completed tasks.
- The change of any of these controls triggers the filterTable() function which reads the values from the controls and sets the
+ The change in any of these controls triggers the filterTable() function which reads the values from the controls and sets the
  hidden fields accordingly. Values from select controls are mapped from name to ID using the lookup maps.
  Sorting is handled via clickable column headers. Clicking a header sets the sort field and toggles the sort direction.
  If you click on a sort field that is already the current sort field, it toggles the direction.
@@ -263,7 +263,7 @@
  Pagination is related to filtering but serves a different pupose. (In actuality, it's really just another form of filtering,
  but instead of limiting rows by name or id, it's filtering which page of results to display.)
 
- There are a couple things regarding pagination that you should know about.
+ There are a few things regarding pagination that you should know about.
  To begin with, pagination is necessary on this page because there might be hundreds or thousands of rows being returned from the database.
  This is a problem because the web page will time out formatting them all.
  This was a pretty big hurdle to overcome at first. Luckily, LFF allows fields to be filled via stored procedure calls, which take
@@ -274,7 +274,7 @@
 
  Quirk with LFF Events:
  Originally I had the table of results load as soon as the page loaded. It seemed obvious: other than the page, which should of
- course be defaulted to 1, there are no filters as yet. The problem occured because of the fact that I'm adding the filtering in
+ course be defaulted to 1, there are no filters as yet. The problem occured because I'm adding the filtering in
  by hand. The way filtering works, is that there are a bunch of hidden lookup tables for stuff like Department. I grab all the
  Department Name values out of the lookup table and put them into the filter value. But I can only add the filter row once the rows are all
  there. Therein lies the rub: LFF Lookups.
@@ -286,7 +286,7 @@
  Now, Departments and the table rows both rely on one thing: Site. Which Site are we looking at, Coon Rapids or Anoka?
  Ok so each of those things can only be looked up once we know which site we're talking about. Good enough.
  But now comes it issue of LFF Lookup Order. All the data lookups that LFF uses take place in the order you specify.
- So if you have Department first and the main table data second, that should mean than the department lookup data is there before
+ So if you have Department first and the main table data second, which should mean than the department lookup data is there before
  we go get the main table data. And this is usually true, emphasis on usually.
 
  I ran into an issue, (and perhaps it's because the main table's data is being fed by a stored procedure instead of a simple query or table),
@@ -322,7 +322,7 @@
  Mapping:
  There are several differnent lookup tables on the form which are used to populate dropdowns, nearly all of which are for filtering.
  Task types are stored both as ID?Name and Name?ID because LFF only stores the display value in the select, for example, the TaskType
- select shows the names of the task types, but we are storing the TaskTypeID in a the database, so we need to have a way to
+ select shows the names of the task types, but we are storing the TaskTypeID in the database, so we need to have a way to
  figure out what the TaskTypeID is so that we can set the value of the hidden field that the workflow is going to use to
  set the value in the task table. So we need to be able to look up the ID by name when the user selects a task type.
  The only way I've been able to figure out how to do this is to have a hidden lookup table on the page which contains all the
@@ -347,12 +347,10 @@
  * - Popup host: '#popUpDiv'
  */
 
-const status_NotStarted = 1;
 const status_Started = 2;
 const status_Waiting = 3;
 const status_Completed = 4;
 const status_Cancelled = 5;
-const status_NotSched = 7;
 
 const assigneeMap = new Map();
 const assigneeNameMap = new Map();
@@ -366,23 +364,31 @@ const initiatorMap = new Map();
 const initiatorNameMap = new Map();
 
 
-$(document).ready(function () {
+$(function () {
   $('.Submit').hide();
-  $(document).prop('title', 'Task Maintenance');
-  $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js');
-  $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
-  $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-  $.fn.bootstrapBtn = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
-
-  // Normalize and capture the current user into a hidden field.
-  const lfUserName = $('.lf-username input').val();
-  if (lfUserName !== 'Anonymous User') {
+  const lfUserNameRaw = $('.lf-username input').val();
+  const lfUserName = (typeof lfUserNameRaw === 'string') ? lfUserNameRaw.trim() : '';
+  if ((lfUserName !== '') && (lfUserName !== 'Anonymous User')) {
     $('.network-user-name input').val(lfUserName.toUpperCase().slice(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
   }
 
-  // Support closing or closing-with-refresh from child iframes via postMessage. See "Dialog/Popup Mechanism" above.
+  $.when(
+    $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js'),
+    $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js')
+  ).done(function () {
+
+    $(document).prop('title', 'Task Maintenance');
+    $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
+    $.fn.bootstrapBtn = $.fn.button.noConflict();
+
+  }).fail(function () {
+    console.error('Failed to load required scripts');
+  });
+
+
+
   window.onmessage = function (event) {
     if (event.data === "CloseDialog") {
 
@@ -397,13 +403,11 @@ $(document).ready(function () {
     }
   };
 
-  // Persist selected site to a cookie.
   $(document).on('change', '.site-name select', function () {
     const sitename = $('.site-name select').val();
     $.cookie('site_name', sitename, {expires: 365, path: '/'});
   });
 
-  // Wire dynamic row links through delegated click handlers instead of inline onclick.
   $(document).on('click', '.project-link', function (event) {
     event.preventDefault();
     const projectId = Number($(this).data('project-id'));
@@ -420,7 +424,6 @@ $(document).ready(function () {
     }
   });
 
-  // When lookup tables are available, finish wiring the grid.
   $(document).on('lookupcomplete', function () {
     //See "Mapping"
     loadAssigneeMap();
@@ -443,7 +446,6 @@ $(document).ready(function () {
     $('.tasklist-table').show();
   });
 
-  // Final page activation after load.
   $(document).on("onloadlookupfinished", function () {
     // Host element for modal iframe dialogs.    // Host element for modal iframe dialogs.
     $('#q0').append("<div class='hidden-text' id='popUpDiv'></div>");
@@ -513,7 +515,7 @@ function callAddNote(task_id) {
   const user_type_id = Number($(".user-type-id input").val());
   if (user_type_id !== 0) {
     const task_name = getColumnValueByTaskID(task_id, '.tasklist-task-name-col input[type="text"]');
-    popUpIframe(`http://rmslf/Forms/MPMAddNote?TaskID=${task_id}&nt=1`, `Add Note for task '${task_name}'`, 400, 650, false, task_id);
+    popUpIframe(`http://rmslf/Forms/MPMAddNote?TaskID=${task_id}&nt=1`, `Add Note for task '${task_name}'`, 400, 650);
   } else {
     $.alert({title: 'Nope!', content: 'Sorry, you do not have permissions to do this.'});
   }
@@ -530,7 +532,7 @@ function callAddTime(task_id) {
 
   if (user_type_id === 1) {
     const task_name = getColumnValueByTaskID(task_id, '.tasklist-task-name-col input[type="text"]');
-    popUpIframe(`http://rmslf/Forms/MPMAddTaskTime?tid=${task_id}`, `Add Time to task '${task_name}'`, 300, 800, false, task_id);
+    popUpIframe(`http://rmslf/Forms/MPMAddTaskTime?tid=${task_id}`, `Add Time to task '${task_name}'`, 300, 800);
   }
 }
 
@@ -598,7 +600,6 @@ function colorCodeRows() {
   status_ids.each(function (index) {
     const status_id = Number($(status_ids[index]).val());
     const tasklist_row = tasklist_rows[index];
-    const dueDateString = $(tasklist_row).find('.tasklist-duedate-col input[type="text"]').val();
     const dueDate = moment(fdmax).toDate();
 
     const dateStartedString = $(tasklist_row).find('.tasklist-datestarted-col input[type="text"]').val();
@@ -1153,10 +1154,9 @@ function lockRows() {
  * @param {string} title - Dialog title
  * @param {number} height - Dialog height (px)
  * @param {number} width - Dialog width (px)
- * @param {boolean} dorefresh - Whether to refresh certain fields on close
- * @param {number} task_id - Task ID for refresh callbacks
+
  */
-function popUpIframe(src, title, height, width, dorefresh, task_id) {
+function popUpIframe(src, title, height, width) {
   //var iframe_height = height - 100;
 
   $("#popupIFrame").remove();
@@ -1169,12 +1169,7 @@ function popUpIframe(src, title, height, width, dorefresh, task_id) {
     resizable: true,
     modal: true,
     position: {my: "left top", at: "left top", of: window},
-    close: function () {
-      if (dorefresh) {
-        resetAssignee(task_id);
-        resetTaskStatus(task_id);
-      }
-    }
+
   });
 
 
@@ -1394,7 +1389,7 @@ function resetPageNumber() {
 function showProjectDetails(ticket_id) {
   let widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
-  popUpIframe(`http://rmslf/Forms/MPM-EditProgrammingTicket?tid=${ticket_id}`, 'Ticket Details', widowHeight, 1500, false, ticket_id);
+  popUpIframe(`http://rmslf/Forms/MPM-EditProgrammingTicket?tid=${ticket_id}`, 'Ticket Details', widowHeight, 1500);
 }
 
 
@@ -1402,7 +1397,7 @@ function showProjectDetails(ticket_id) {
 function showTaskDetails(task_id) {
   let widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
-  popUpIframe(`http://rmslf/Forms/MPM-EditProgrammingTask?tid=${task_id}`, 'Task Details', widowHeight, 1100, false, task_id);
+  popUpIframe(`http://rmslf/Forms/MPM-EditProgrammingTask?tid=${task_id}`, 'Task Details', widowHeight, 1100);
 }
 
 

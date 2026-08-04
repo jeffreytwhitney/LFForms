@@ -39,15 +39,15 @@
      Therefore, it will then send a message to its parent, (namely, this form), informing it that the server-side 
      data has changed. When this form receives such a message, it closes the popup dialog, and then it calls a function refreshes the page.
 
-     Just keep in mind that this page is also a popup, so when this page submits, it also sets its own closeme field to 1, 
-     so that when it comes back from the server, it will also send a message to its parent to refresh. That will cause the parent form
+     Just keep in mind that this page is also a popup. So, when this page submits, it also sets its own closeme field to 1,
+     so that when it comes back from the server, it will also send a message to its parent. That will cause the parent form
      to refresh and close the popup dialog that is hosting this page. This is a bit convoluted, but it works, and it's the only way it will
      work because of the limitations of LaserFiche Forms.
      
     User Permissions:
       There is a user permission model in place to restrict which updates a user can make.
       This is separate from LFF security, which can, (but in practice usually does not), limit who 
-      can even access a particular form. For our purposes, this is not particularly useful for our needs because we we want
+      can even access a particular form. For our purposes, this is not particularly useful for our needs because we want
       all users to be able to view the forms. What we want instead is to limit their ability to do certain things
       inside the application. 
       There are several user types which are defined in the database users table, (tblUsers) each with their own
@@ -125,12 +125,12 @@
                             An example of a direct change would be when the user chooses a Site from the dropdown.
           
     
-      Now this gets a bit tricky because the lookupcomplete event can fire multiple times, and we only want to do certain things once, so we need
+      Now this gets a bit tricky because the lookupcomplete event can fire multiple times, and we only want to do certain things once. Therefore, we need
       to put logic in there so that it's not doing expensive things again and again.
       There is a way of asking what the TriggerID of the lookup is. (A laserfiche function). But I found this to be kind of a pain to use because
       you have to know the TriggerID of the lookup that you want to respond to, and it's just an integer. Also, if you ever change anything
-      in the form, you don't know if the trigger id has changed or not. So I found it easier to just put logic in the function that I want to run
-      to make sure that it doesn't, say iterate through a table or something getting values again and again when we only need it to do it once.
+      in the form, you don't know if the trigger id has changed or not. So, I found it easier to just put logic in the function.
+      
     
       For an example of what I'm talking about, we're setting the username field in code and causing a lookup, (see 'User Permissions' above).
       Because we're setting the field in code and causing a lookup, the onloadlookupfinished event has already fired. Therefore, any logic that 
@@ -191,13 +191,26 @@ const taskStatusMap = new Map();
 const taskStatusNameMap = new Map();
 
 
-$(document).ready(function () {
-  $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
-  $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-  $.fn.bootstrapBtn = $.fn.button.noConflict();
+$(function () {
 
-  // Window message print hook
+  const lfUserNameRaw = $('.lf-user-name input').val();
+  const lfUserName = (typeof lfUserNameRaw === 'string') ? lfUserNameRaw.trim() : '';
+  if ((lfUserName !== '') && (lfUserName !== 'Anonymous User')) {
+    $('.network-user-name input').val(lfUserName.toUpperCase().slice(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
+  }
+
+
+  $.when(
+    $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js')
+  ).done(function () {
+    $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
+    $.fn.bootstrapBtn = $.fn.button.noConflict();
+  }).fail(function () {
+    console.error('Failed to load required scripts');
+  });
+
+
   const eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
   const printEvent = window[eventMethod];
   const messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
@@ -214,45 +227,31 @@ $(document).ready(function () {
   $('.Submit').addClass('ui-button ui-corner-all ui-widget');
   $('.Submit').on("click", function (e) { submitForm(e); });
 
-  // Normalize network username from domain\user
-  const lfUserName = $('.lf-user-name input').val();
-  if (lfUserName !== "") {
-    let networkUserName = lfUserName.toUpperCase();
-    networkUserName = networkUserName.slice(networkUserName.lastIndexOf('\\') + 1);
-    $('.network-user-name input').val(networkUserName).trigger("change");
-  }
-
-  // Reflect ticket number in document title
   $(document).on('change', '.ticket-number input', function () {
     const ticket_name = $(this).val();
     $(document).prop('title', `Edit Ticket ${ticket_name}`);
   });
 
-  // Close/refresh integration for dialog hosting
   if ($('.closeme input').val() === '1') {
     $('#form1').hide();
     window.parent.postMessage('CloseDialogWithRefresh', '*');
   }
 
-  // Keep hidden QE/ME ID fields in sync with selected names
   $(document).on('change', '.quality-engineer-combo select', function () {
     const qeName = $('.quality-engineer-combo select').val();
     const qeID = qualEngineerNameMap.get(qeName);
     $('.qeid input').val(qeID);
   });
 
-  // Keep radio group "Requires Models" in sync with hidden value.
   $(document).on('change', '.edit-requires-model-value input', function () {
     const requiresModel = $('.edit-requires-model-value input').val();
     $(`.edit-requires-model-choice input[type='radio'][value='${requiresModel}']`).prop("checked", true);
   });
 
-  // Mirror radio "Requires Models" selection back to the hidden field.
   $(document).on('change', ".edit-requires-model-choice input[type='radio']", function () {
     const requiresModel = $(this).val();
     $('.edit-requires-model-value input').val(requiresModel);
   });
-
 
   $(document).on('change', '.manufacturing-engineer-combo select', function () {
     const meName = $('.manufacturing-engineer-combo select').val();
@@ -265,9 +264,14 @@ $(document).ready(function () {
     }
   });
 
+  $(document).on('click', '.task-link', function (event) {
+    event.preventDefault();
+    const taskId = Number($(this).data('task-id'));
+    if (!Number.isNaN(taskId)) {
+      callShowDetails(taskId);
+    }
+  });
 
-
-  // Dialog close from child iframes should refresh this form
   window.onmessage = function (event) {
 
     if (event.data === "CloseDialogWithRefresh") {
@@ -277,7 +281,6 @@ $(document).ready(function () {
     }
   };
 
-  // After lookups populate, load maps, set default selections, and build UI
   $(document).on('lookupcomplete', function () {
     loadMfgEngineerMap();
     loadQualEngineerMap();
@@ -345,7 +348,6 @@ $(document).ready(function () {
     $('.tasklist-table').show();
   });
 
-  // Finalize initial UI once all lookups are done
   $(document).on("onloadlookupfinished", function () {
     $('.closeme input').val(1);
     $('#q0').append("<div class='hidden-text' id='popUpDiv'></div>");
@@ -597,7 +599,7 @@ function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFu
 
 
     if (disabled === true) {
-      btn_html = `<div class='table-button ui-button ui-state-disabled' onclick='javascript:void(0);'><span title='${buttonTitle}' class='ui-button-icon ui-icon ui-state-disabled ${buttonClass}'/></div>`
+      btn_html = `<div class='table-button ui-button ui-state-disabled' onclick='void(0);'><span title='${buttonTitle}' class='ui-button-icon ui-icon ui-state-disabled ${buttonClass}'/></div>`
     }
     else {
       btn_html = `<div class='table-button ui-button' onclick='${buttonFunction}(${btn_value})'><span title='${buttonTitle}' class='ui-button-icon ui-icon ${buttonClass}'/></div>`
@@ -646,7 +648,7 @@ function generateTaskColumn() {
     if (!has_link) {
       const task_id = $(task_ids[index]).val();
       const task_name = $(this).val();
-      const task_link = $("<a>", { text: task_name.slice(0, 30), class: 'task-link', href: `javascript:void(0);`, onclick: `callShowDetails(${task_id})` });
+      const task_link = $("<a>", { text: task_name.slice(0, 30), class: 'task-link', href: 'javascript:void(0);', 'data-task-id': task_id });
       $(this).parent().append(task_link);
     }
   });

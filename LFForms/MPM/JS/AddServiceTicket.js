@@ -81,11 +81,11 @@
                           An example of a direct change would be when the user chooses a Site from the dropdown.
           
     
-      Now this gets a bit tricky. The lookupcomplete event can fire multiple times, and we only want to do certain things once, so we need
+      Now this gets a bit tricky. The lookupcomplete event can fire multiple times, and we only want to do certain things once. Therefore, we need
       to put logic in there so that it's not doing expensive things again and again.
       There is a way of asking what the TriggerID of the lookup is. (A laserfiche function). But I found this to be kind of a pain to use because
       you have to know the TriggerID of the lookup that you want to respond to, and it's just an integer. Also, if you ever change anything
-      in the form, you don't know if the trigger id has changed or not. So I found it easier to just put logic in the function that I want to run
+      in the form, you don't know if the trigger id has changed or not. So, I found it easier to just put logic in the function.
       to make sure that it doesn't, say, iterate through a table or something getting values again and again when we only need it to do it once.
     
       For an example of what I'm talking about, we're setting the username field in code and causing a lookup (see 'User Permissions' above).
@@ -131,26 +131,29 @@
  - No server calls here; all logic is client-side field orchestration.
  */
 
-$(document).ready(function () {
-  // Page title and submit wiring
-  $(document).prop('title', 'Add Service Ticket');
+$(function () {
+
   $('.Submit').on('click', function (e) { submitForm(e); });
 
   // Dependencies and styles
-  $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js');
-  $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
-  $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-
-  // Resolve Bootstrap/jQuery UI button plugin conflicts
+  $.when(
+    $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js'),
+    $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js')
+  ).done(function () {
+    $(document).prop('title', 'Add Service Ticket');
+    $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
     $.fn.bootstrapBtn = $.fn.button.noConflict();
-  
-  // If flagged, instruct the parent to close the dialog and refresh. (See Dialog Looping Mechanism above.)
+
+  }).fail(function () {
+    console.error('Failed to load required scripts');
+  });
+
+
   if ($('.closeme input').val() === '1') {
     window.parent.postMessage('CloseDialogWithRefresh', '*');
   }
 
-  // Route department email based on contact user type
   $(document).on('change', '.contact-user-type-id input', function () {
     const userTypeID = Number($('.contact-user-type-id input').val());
     const cellLeadEmail = $('.cell-lead-email-address input').val();
@@ -187,7 +190,6 @@ $(document).ready(function () {
     }
   });
 
-  // Initial load finalization
   $(document).on("onloadlookupfinished", function () {
     $('.closeme input').val(1);
     getSiteNameFromCookie();

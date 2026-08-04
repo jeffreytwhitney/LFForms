@@ -70,11 +70,11 @@ Key Concepts:
                             An example of a direct change would be when the user chooses a Site from the dropdown.
           
     
-      Now this gets a bit tricky. The lookupcomplete event can fire multiple times, and we only want to do certain things once, so we need
+      Now this gets a bit tricky. The lookupcomplete event can fire multiple times, and we only want to do certain things once. Therefore, we need
       to put logic in there so that it's not doing expensive things again and again.
       There is a way of asking what the TriggerID of the lookup is. (A laserfiche function). But I found this to be kind of a pain to use because
       you have to know the TriggerID of the lookup that you want to respond to, and it's just an integer. Also, if you ever change anything
-      in the form, you don't know if the trigger id has changed or not. So I found it easier to just put logic in the function that I want to run
+      in the form, you don't know if the trigger id has changed or not. So, I found it easier to just put logic in the function.
       to make sure that it doesn't, say, iterate through a table or something getting values again and again when we only need it to do it once.
     
       For an example of what I'm talking about, we're setting the username field in code and causing a lookup (see 'User Permissions' above).
@@ -120,30 +120,32 @@ Key Concepts:
  - All dynamic buttons use jQuery UI icon classes.
  */
 
-$(document).ready(function () {
-  // Derive and set the network username (uppercase sans domain) See 'User Permissions' above
-  const lfUserName = $('.lf-user-name input').val();
-  $('.network-user-name input').val(lfUserName.toUpperCase().slice(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
+$(function () {
+  const lfUserNameRaw = $('.lf-user-name input').val();
+  const lfUserName = (typeof lfUserNameRaw === 'string') ? lfUserNameRaw.trim() : '';
+  if ((lfUserName !== '') && (lfUserName !== 'Anonymous User')) {
+    $('.network-user-name input').val(lfUserName.toUpperCase().slice(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
+  }
 
-  // Hide submit button by default; shown only for allowed actions/roles
   $('.Submit').hide();
   $('.Submit').on("click", function (e) { submitForm(e); });
 
-  // Set document title for the maintenance page
-  $(document).prop('title', 'Department Maintenance');
 
-  // Load dependencies (cookie, confirm dialog CSS/JS, jQuery UI theme, pagination CSS)
-  $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js');
-  $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
-  $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
+  $.when(
+    $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js'),
+    $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js')
+  ).done(function () {
 
-  // Resolve Bootstrap/jQuery UI button plugin conflict
-   // return $.fn.button to previously assigned value
+    $(document).prop('title', 'Department Maintenance');
+    $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
     $.fn.bootstrapBtn = $.fn.button.noConflict();
 
-  // When the text "parent name" field changes, mirror it to the select (edit mode)
+  }).fail(function () {
+    console.error('Failed to load required scripts');
+  });
+
   $(document).on('change', '.edit-db-parent-name input', function () {
     const editParentName = $('.edit-db-parent-name input').val();
     if (editParentName.length > 0) {
@@ -151,13 +153,11 @@ $(document).ready(function () {
     }
   });
 
-  // Persist selected site in a cookie
   $(document).on('change', '.site-name select', function () {
     const sitename = $('.site-name select').val();
     $.cookie('site_name', sitename, { expires: 365, path: '/' });
   });
 
-  // After department table loads, render row-level edit buttons and add the "Add Department" button for admins
   $(document).on('lookupcomplete', function () {
     generateTableButtons(".edit-button-col", "ui-icon-pencil", "Edit Department", "callEditDepartment");
     if (isAdminUser()) {
@@ -168,7 +168,6 @@ $(document).ready(function () {
     }
   });
 
-  // On full load completion, ensure Go Back buttons exist, fire username change, and restore site from cookie
   $(document).on("onloadlookupfinished", function () {
     generateGoBackButtons();
     $('.network-user-name input').trigger("change");
@@ -181,13 +180,6 @@ $(document).ready(function () {
 });
 
 
-/**
- * Hides the Department table and shows the Add Department panel.
- * - Checks the appropriate radio option and sets `.add-department-id` to 1.
- *   This signals the workflow that this is an Add operation. The workflow is a big egg sorter that calls different 
- *   stored procedues based on whether this is an Add or Edit operation.
- * - Shows the Submit button.
- */
 function callAddDepartment() {
   $(`.action-choice input[type='radio'][value='1']`).prop("checked", true);
   $('.add-department-id input').val(1).trigger("change");
@@ -195,15 +187,6 @@ function callAddDepartment() {
 }
 
 
-/**
- * Initiates "Edit Department" mode for the given department ID. 
- * This is called from the dynamically generated buttons that are created in the generateTableButtons() function.
- * - Checks the appropriate radio option and sets `.edit-department-id`.
- *    This signals the workflow that this is an Edit operation. The workflow is a big egg sorter that calls different 
- *    stored procedues based on whether this is an Add or Edit operation.
- * - Shows the Submit button only for admin users.
- * @param {number} departmentID The department row ID to edit.
- */
 function callEditDepartment(departmentID) {
   $(`.action-choice input[type='radio'][value='2']`).prop("checked", true);
   $('.edit-department-id input').val(departmentID).trigger("change");
@@ -213,12 +196,6 @@ function callEditDepartment(departmentID) {
 }
 
 
-/**
- * Returns to the list (no add/edit), hides the Submit button.
- * - Resets `.add-department-id` and `.edit-department-id` to 0.
- *   This hides the add/edit panels and shows the department table.
- *   This is done by the use of LaserFiche Field Rules, which show/hide panels based on these values.
- */
 function callGoBack() {
   $(".add-department-id input").val(0).trigger("change");
   $(".edit-department-id input").val(0).trigger("change");
@@ -226,11 +203,6 @@ function callGoBack() {
 }
 
 
-/**
- * Converts placeholder `.go backbitten` elements to functional "Go Back" buttons.
- * Removes the placeholder after injecting the real button.
- * This is done because there is no way to add a button in the LF Forms designer.
- */
 function generateGoBackButtons() {
   const $goback_buttons = $(".gobackbutton");
   $goback_buttons.each(function () {
@@ -240,15 +212,6 @@ function generateGoBackButtons() {
 }
 
 
-/**
- * Creates table action buttons in the specified column.
- * - Reads a value from an adjacent hidden/text input to pass to the click handler.
- * - Ensures only one button per row per `buttonClass`.
- * @param {string} buttonSelector  CSS selector for the column containing the hidden/text value.
- * @param {string} buttonClass     jQuery UI icon class for the button.
- * @param {string} buttonTitle     Tooltip/title for the button.
- * @param {string} buttonFunction  Function name to invoke with the row value.
- */
 function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFunction) {
   const selectionString = buttonSelector + " input[type=text]";
   const buttons = $(selectionString);
@@ -264,23 +227,12 @@ function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFu
 }
 
 
-/**
- * Determines whether the current user is an administrator.
- * @returns {boolean} True if `.user-isadmin` equals '1'; otherwise false.
- */
 function isAdminUser() {
   return $('.user-isadmin input').val() === '1';
 
 }
 
 
-/**
- * Normalizes parent IDs to 0 when empty before submitting.
- * Keeps server-side model binding predictable.
- * The reason I have to do this is that the Workflow doesn't handle null integer values very well.
- * This keeps it from erroring out when the parent ID is null.
- * The stored procedure expects a 0 when there is no parent department.
- */
 function submitForm() {
   const editParentID = Number($('.edit-parent-id input').val());
   const addParentID = Number($('.add-parent-id input').val());

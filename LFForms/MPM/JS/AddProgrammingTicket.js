@@ -31,7 +31,7 @@ Key Concepts:
    User Permissions:
       There is a user permission model in place to restrict which updates a user can make.
       This is separate from LFF security, which can, (but in practice usually does not), limit who 
-      can even access a particular form. For our purposes, this is not particularly useful for our needs because we we want
+      can even access a particular form. For our purposes, this is not particularly useful for our needs because we want
       all users to be able to view the forms. What we want instead is to limit their ability to do certain things
       inside the application. 
       There are several user types that are defined in the database users table, (tblUsers) each with their own
@@ -77,11 +77,11 @@ Key Concepts:
                           An example of and direct change would be when the user chooses a Site from the dropdown.
           
     
-      Now this gets a bit tricky. The lookupcomplete event can fire multiple times, and we only want to do certain things once, so we need
+      Now this gets a bit tricky. The lookupcomplete event can fire multiple times, and we only want to do certain things once. Therefore, we need
       to put logic in there so that it's not doing expensive things again and again.
       There is a way of asking what the TriggerID of the lookup is. (A laserfiche function). But I found this to be kind of a pain to use because
       you have to know the TriggerID of the lookup that you want to respond to, and it's just an integer. Also, if you ever change anything
-      in the form, you don't know if the trigger id has changed or not. So I found it easier to just put logic in the function that I want to run
+      in the form, you don't know if the trigger id has changed or not. So, I found it easier to just put logic in the function.
       to make sure that it doesn't, say, iterate through a table or something getting values again and again when we only need it to do it once.
     
       For an example of what I'm talking about, we're setting the username field in code and causing a lookup (see 'User Permissions' above).
@@ -105,7 +105,7 @@ Key Concepts:
 
     Mapping:
      Task types are stored both as ID?Name and Name?ID because LFF only stores the display value in the select, for example, the TaskType
-     select shows the names of the task types, but we are storing the TaskTypeID in a the database, so we need to have a way to
+     select shows the names of the task types, but we are storing the TaskTypeID in the database, so we need to have a way to
      figure out what the TaskTypeID is so that we can set the value of the hidden field that the workflow is going to use to
      set the value in the task table. So we need to be able to look up the ID by name when the user selects a task type.
      The only way I've been able to figure out how to do this is to have a hidden lookup table on the page which contains all the 
@@ -182,7 +182,7 @@ Key DOM Structure (expected selectors)
 
   On onloadlookupfinished:
     Set .closeme input to 1, add hidden #popUpDiv.
-    Trigger network user name change.
+    Trigger network username change.
     Add "Go Back" and "GenerateTasks" buttons, wire up due date error clearing.
   On #q28 click: refresh row numbers and buttons (helps after dynamic table refreshes).
 
@@ -191,41 +191,39 @@ Key DOM Structure (expected selectors)
 const taskTypeMap = new Map();
 const taskTypeByNameMap = new Map();
 
-/*Document ready handler
-  Description: Initializes the page, loads UI assets, binds event handlers, and performs role-based defaulting.
-  Side effects:
-    Sets document title.
-    Loads jquery-confirm JS and relevant CSS files (jQuery UI theme, pagination CSS, confirm CSS).
-    Resolves Bootstrap/jQuery UI button conflict with $.fn.button.noConflict().
-    If .closeme input equals 1, posts CloseDialogWithRefresh to the parent window.
-    Binds .Submit click ? submitForm.
-    Uppercases user-related inputs:
-      Copies network username from .lf-username to .network-user-name uppercased, without a domain.
-      Uppercases .task-name-col input on keyup.
-      Uppercases .manf-rev input on change.
-*/
-$(document).ready(function () {
+$(function () {
 
-  $(document).prop('title', 'Add Programming Ticket');
-  $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
-  $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-  // return $.fn.button to previously assigned value so that popup close button displays correctly.
-  $.fn.bootstrapBtn = $.fn.button.noConflict();
+  const lfUserNameRaw = $('.lf-username input').val();
+  const lfUserName = (typeof lfUserNameRaw === 'string') ? lfUserNameRaw.trim() : '';
+  if ((lfUserName !== '') && (lfUserName !== 'Anonymous User')) {
+    $('.network-user-name input').val(lfUserName.toUpperCase().slice(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
+  }
+
+  $.when(
+    $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js')
+  ).done(function () {
+    $(document).prop('title', 'Add Programming Ticket');
+    $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
+    $.fn.bootstrapBtn = $.fn.button.noConflict();
+  }).fail(function () {
+    console.error('Failed to load required scripts');
+  });
+
 
   if ($('.closeme input').val() === '1') {
     window.parent.postMessage('CloseDialogWithRefresh', '*');
   }
 
-
   $('.Submit').on("click", function (e) {
     submitForm(e);
   });
-  $('.network-user-name input').val($('.lf-username input').val().toUpperCase().substring($('.lf-username input').val().lastIndexOf('\\') + 1)).trigger("change");
+
   $('.task-name-col input').on("keyup", function () {
     this.value = this.value.toLocaleUpperCase();
   });
+
   $('.manf-rev input').on("change", function () {
     $('.manf-rev input').val($('.manf-rev input').val().toUpperCase());
   });
@@ -239,11 +237,6 @@ $(document).ready(function () {
     $(this).closest('tr').find('.task-type-id-col input').val(taskID);
   });
 
-  /**
-   * Calls loadTaskTypeMap().
-   For userTypeID === 3, defaults and disables .department select and .quality-engineer select when empty.
-   Calls generateTaskRowNumbers() and generateTableButtons(".clone-col", "ui-icon-newwin", "Clone Task", "cloneRow").
-   */
   $(document).on('lookupcomplete', function () {
     loadTaskTypeMap();
 
@@ -272,13 +265,6 @@ $(document).ready(function () {
 
   });
 
-  /**
-   * Sets .closeme input to 1.
-   Injects a hidden #popUpDiv.
-   Triggers .network-user-name input change.
-   Calls generateGoBackButtons(), createShowGenerateButton(), and createExecuteTaskGenerationButton().
-   Wires due date change to clear parsley errors.
-   */
   $(document).on("onloadlookupfinished", function () {
     $('.closeme input').val(1);
     $('#q0').append("<div class='hidden-text' id='popUpDiv'></div>");
@@ -294,10 +280,6 @@ $(document).ready(function () {
     });
   });
 
-  /**
-   * When the "Add" link gets clicked, LFF adds a row in the LFF code. I'm not privy to that code so I have to respond
-   * instead to the click of that link. This re-runs row numbering and re-does the table buttons.
-   */
   $(document).on('click', '#q28', function () {
     generateTaskRowNumbers();
     generateTableButtons(".clone-col", "ui-icon-newwin", "Clone Task", "cloneRow");
@@ -364,7 +346,7 @@ function callShowGenerateTasks() {
 
 
 /*
- Sets the value of .show-generate-tasks input to null and triggers change. 
+ Sets the value of .show-generate-tasks input to null and triggers change.
  This hides the task generation panel and shows the main form again.
  This works because there is a LFF rule bound to that field which shows and hides stuff.
 */

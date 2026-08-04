@@ -1,7 +1,13 @@
 let should_print_receipt = false
-$(document).ready(function () {
+$(function () {
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-  $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
+  $.when(
+    $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js')
+  ).done(function () {
+    
+  }).fail(function () {
+    console.error('Failed to load required scripts');
+  });
   $(document).prop('title', 'Gage Administration MainForm');
   $('.Submit').hide();
   $('#q0').append("<div class='hidden' id='popUpDiv'></div>");
@@ -9,7 +15,7 @@ $(document).ready(function () {
   const eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
   const printEvent = window[eventMethod];
   const messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
-  printEvent(messageEvent, function (e) {
+  printEvent(messageEvent, function () {
     $("#print-iframe").get(0).contentWindow.print();
   });
 
@@ -17,7 +23,6 @@ $(document).ready(function () {
     console.log('Is Anonymous', isUserAnonymous());
     generateAppliationLinks();
   });
-
 
 });
 
@@ -167,8 +172,7 @@ function print_report() {
 
   const domain = document.location.hostname;
   const report_url_root = document.location.protocol + "//" + domain + "/Forms/";
-  let receipt_url = '';
-  receipt_url = report_url_root + "PinGageReceipt?guid=" + ticketGuid;
+  let receipt_url = report_url_root + "PinGageReceipt?guid=" + ticketGuid;
 
 
 

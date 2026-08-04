@@ -80,11 +80,11 @@ Date:     10/24/2025
                             An example of a direct change would be when the user chooses a Site from the dropdown.
 
 
-      Now this gets a bit tricky. The lookupcomplete event can fire multiple times, and we only want to do certain things once, so we need
+      Now this gets a bit tricky. The lookupcomplete event can fire multiple times, and we only want to do certain things once. Therefore, we need
       to put logic in there so that it's not doing expensive things again and again.
       There is a way of asking what the TriggerID of the lookup is. (A laserfiche function). But I found this to be kind of a pain to use because
       you have to know the TriggerID of the lookup that you want to respond to, and it's just an integer. Also, if you ever change anything
-      in the form, you don't know if the trigger id has changed or not. So I found it easier to just put logic in the function that I want to run
+      in the form, you don't know if the trigger id has changed or not. So, I found it easier to just put logic in the function.
       to make sure that it doesn't, say, iterate through a table or something getting values again and again when we only need it to do it once.
 
       For an example of what I'm talking about, we're setting the username field in code and causing a lookup (see 'User Permissions' above).
@@ -343,24 +343,30 @@ const statusMap = new Map();
 const statusNameMap = new Map();
 
 
-$(document).ready(function () {
+$(function () {
   $('.Submit').hide();
-  $(document).prop('title', 'Purchase Orders');
-  $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js');
-  $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
-  $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-  $.fn.bootstrapBtn = $.fn.button.noConflict();
 
-  // Normalize and capture the current user into a hidden field.
-  const lfUserName = $('.lf-user-name input').val();
-  if (lfUserName !== 'Anonymous User') {
-    $('.network-user-name input').val(lfUserName.toUpperCase().substring(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
+  const lfUserNameRaw = $('.lf-user-name input').val();
+  const lfUserName = (typeof lfUserNameRaw === 'string') ? lfUserNameRaw.trim() : '';
+  if ((lfUserName !== '') && (lfUserName !== 'Anonymous User')) {
+    $('.network-user-name input').val(lfUserName.toUpperCase().slice(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
   }
 
+  $.when(
+    $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js'),
+    $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js')
+  ).done(function () {
 
-  // Listen for messages from child iframes to close dialogs and optionally refresh
+    $(document).prop('title', 'Purchase Orders');
+    $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
+    $.fn.bootstrapBtn = $.fn.button.noConflict();
+
+  }).fail(function () {
+    console.error('Failed to load required scripts');
+  });
+
   window.onmessage = function (event) {
     if (event.data === "CloseDialog") {
       $("#popupIFrame").dialog("destroy");
@@ -373,7 +379,6 @@ $(document).ready(function () {
     }
   };
 
-
   const eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
   const printEvent = window[eventMethod];
   const messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
@@ -385,7 +390,6 @@ $(document).ready(function () {
     }
   });
 
-  // Persist selected site to a cookie.
   $(document).on('change', '.site-name select', function () {
     $('.purchase-order-table').hide();
     $('.table-button').remove();
@@ -393,10 +397,8 @@ $(document).ready(function () {
     $.cookie('site_name', sitename, { expires: 365, path: '/' });
   });
 
-  // Include Inactive checkbox toggles filter and reloads page 1.
   $(document).on('change', '#chkIncludeInActive', function () { filterTable(); });
 
-  // Quick view of description in a dialog on double-click.
   $(document).on('dblclick', '.description-col div', function () {
     const description = $(this).find('input').val();
 
@@ -411,7 +413,6 @@ $(document).ready(function () {
     });
   });
 
-  // Quick view of long error in a dialog on double-click.
   $(document).on('dblclick', '.po-name-col div', function () {
     const poName = $(this).find('input').val();
 
@@ -426,7 +427,6 @@ $(document).ready(function () {
     });
   });
 
-  // When lookup tables are available, finish wiring the grid.
   $(document).on('lookupcomplete', function () {
     loadRequesterMap();
     loadStatusMap();
@@ -452,7 +452,6 @@ $(document).ready(function () {
 
   });
 
-  // Final page activation after load.
   $(document).on("onloadlookupfinished", function () {
     // Host element for modal iframe dialogs.    
     $('#q0').append("<div class='hidden-text' id='popUpDiv'></div>");
@@ -560,7 +559,7 @@ function callEditPurchaseOrder(poID) {
 function callNextPage() {
   $('.purchase-order-table').hide();
   $('.table-button').remove();
-  current_page = Number($('.pg input').val());
+  let current_page = Number($('.pg input').val());
   $('.pg input').val(current_page + 1).trigger("change");
 }
 
@@ -569,7 +568,7 @@ function callNextPage() {
 function callPrevPage() {
   $('.purchase-order-table').hide();
   $('.table-button').remove();
-  current_page = Number($('.pg input').val());
+  let current_page = Number($('.pg input').val());
   if (current_page === 1) {
     return;
   }

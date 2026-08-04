@@ -72,12 +72,12 @@ KEY CONCEPTS:
                           An example of a direct change would be when the user chooses a Site from the dropdown.
           
     
-      Now this gets a bit tricky because the lookupcomplete event can fire multiple times, and we only want to do certain things once, so we need
+      Now this gets a bit tricky because the lookupcomplete event can fire multiple times, and we only want to do certain things once. Therefore, we need
       to put logic in there so that it's not doing expensive things again and again.
       There is a way of asking what the TriggerID of the lookup is. (A laserfiche function). But I found this to be kind of a pain to use because
       you have to know the TriggerID of the lookup that you want to respond to, and it's just an integer. Also, if you ever change anything
-      in the form, you don't know if the trigger id has changed or not. So I found it easier to just put logic in the function that I want to run
-      to make sure that it doesn't, say iterate through a table or something getting values again and again when we only need it to do it once.
+      in the form, you don't know if the trigger id has changed or not. So, I found it easier to just put logic in the function.
+      
     
       For an example of what I'm talking about, we're setting the username field in code and causing a lookup, (see 'User Permissions' above).
       Because we're setting the field in code and causing a lookup, the onloadlookupfinished event has already fired. Therefore, any logic that 
@@ -113,63 +113,43 @@ Permissions: (See 'User Permissions' below for more detail)
   - Admin Metrology users (user-type-id == 1, isAdmin == 1):               Full permissions.
 
 Events listened for:
-  - document.ready
   - lookupcomplete (populate status combos and load history)
   - onloadlookupfinished (post-load initialization)
   - change on .purchase-status-cbo select and .service-status-cbo select
  */
 
-/**
- * Purchase/Service line item lifecycle statuses.
- * @enum {number}
- * @readonly
- */
 const Status = Object.freeze({ None: 0, Scheduled: 1, Received: 2, Completed: 3, Cancelled: 4, PartialReceived: 5 });
-
-/**
- * Types of line items supported by the form.
- * @enum {number}
- * @readonly
- */
 const LineItemType = Object.freeze({ None: 0, Purchase: 1, Service: 2, Calibration: 3 });
-
-/**
- * Map of status id -> status name loaded from the page's lookup table.
- * @type {Map<number, string>}
- */
 const statusMap = new Map();
-
-/**
- * Map of status name -> status id loaded from the page's lookup table.
- * @type {Map<string, number>}
- */
 const statusNameMap = new Map();
 
-$(document).ready(function () {
-  // Page chrome and third-party script/style setup.
-  $(document).prop('title', 'Edit Purchase Order Line Item');
-  $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js');
-  $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
-  $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
+$(function () {
 
+  const lfUserNameRaw = $('.lf-user-name input').val();
+  const lfUserName = (typeof lfUserNameRaw === 'string') ? lfUserNameRaw.trim() : '';
+  if ((lfUserName !== '') && (lfUserName !== 'Anonymous User')) {
+    $('.network-user-name input').val(lfUserName.toUpperCase().slice(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
+  }
 
- // return $.fn.button to previously assigned value so that popup close button displays correctly.
-  $.fn.bootstrapBtn = $.fn.button.noConflict();
+  $.when(
+    $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js'),
+    $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js')
+  ).done(function () {
+    $(document).prop('title', 'Edit Purchase Order Line Item');
+    $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
+    $.fn.bootstrapBtn = $.fn.button.noConflict();
+  }).fail(function () {
+    console.error('Failed to load required scripts');
+  });
 
-  // If upstream logic requests the dialog to close, notify parent and stop initialization.
   if ($('.closeme input').val() === '1') {
     window.parent.postMessage('CloseDialogWithRefresh', '*');
     $('.Submit').hide();
     return;
   }
 
-  // Wire up submit button to centralized submit handler.
   $('.Submit').on("click", function (e) { submitForm(e); });
-
-  // Populate a normalized network username (uppercase, sans domain).
-  $('.network-user-name input')
-    .val($('.lf-user-name input').val().toUpperCase().slice($('.lf-user-name input').val().lastIndexOf('\\') + 1)).trigger("change");
 
   // Mark required fields with asterisk for visual cue (in addition to validation).
   $('<span class="cf-required">*</span>').insertAfter('.service-date span span');
@@ -194,15 +174,6 @@ $(document).ready(function () {
     $('.cost-amount input').val(formattedTotalCost);
   });
 
-
-
-  /**
-   * Fired after data lookups populate hidden fields (IDs, status, etc.).
-   * - Shows/hides submit permission based on admin status and line item presence.
-   * - Locks the form once the item is Received or beyond.
-   * - Otherwise, loads status lookup maps and syncs the status combo.
-   * - Injects the line item history iframe when an item exists.
-   */
   $(document).on('lookupcomplete', function () {
     const lineItemId = Number($('.liid input').val());
     const statusid = Number($('.current-status-id input').val());
@@ -234,13 +205,6 @@ $(document).ready(function () {
     }
   });
 
-  /**
-   * Fired after the page and lookups finish loading.
-   * - Sets a sentinel for close behavior.
-   * - Initializes a hidden div used by modal/popups.
-   * - Finalizes network user name normalization.
-   * - Backfills PO number when none has been assigned.
-   */
   $(document).on("onloadlookupfinished", function () {
     $('.closeme input').val(1);
     $('#q0').append("<div class='hidden-text' id='popUpDiv'></div>");
@@ -250,17 +214,11 @@ $(document).ready(function () {
     } 
   });
 
-  /**
-   * Keep hidden 'new-status-id' in sync when the Purchase status combobox changes.
-   */
   $(document).on('change', '.purchase-status-cbo select', function () {
     const selectedStatusID = Number($(this).val());
     $('.new-status-id input').val(selectedStatusID).trigger("change");
   });
 
-  /**
-   * Keep hidden 'new-status-id' in sync when the Service status combobox changes.
-   */
   $(document).on('change', '.service-status-cbo select', function () {
     const selectedStatusID = Number($(this).val());
     $('.new-status-id input').val(selectedStatusID).trigger("change");
@@ -290,7 +248,6 @@ function addThousandsSeparator(numStr) {
  * Prompts the user for a required cancellation reason and submits the form.
  * Writes the reason into `.new-note textarea` before submission.
  * - Opens a jQuery UI dialog with a multiline text area.
- * - Requires non-empty input; shows a confirm alert if missing.
  * - Writes the note into `.cancellation-reason textarea` and submits the form.
  * @returns {void}
  */
@@ -397,7 +354,7 @@ function resetErrorFields() {
   $('#quantity-error').remove();
   $('#cost-amount-error').remove();
   $('#status-unset-error').remove();
-  '#service-date-required-error' // Selector kept consistent with others below.
+
   $('#service-date-required-error').remove(); 
 
   // Remove error highlighting classes.
@@ -468,7 +425,6 @@ function submitForm(e) {
     $('.quantity input').val(0);
   }
 
-  // If cancelling, collect a reason via modal dialog before allowing submit.
   if (statusID === Status.Cancelled) {
     e.preventDefault();
     cancelLineItem();
@@ -492,7 +448,7 @@ function validateForm() {
   const purchaseStatusField = $('.purchase-status-cbo select');
   const serviceStatusField = $('.service-status-cbo select');
   const serviceDateField = $('.service-date input');
-  const serviceDateValue = serviceDateField.val().trim();
+  const serviceDateValue = serviceDateField.val().toString().trim();
   const quantityField = $('.quantity input');
   const costAmountField = $('.cost-amount input');
   const quantityValue = Number(quantityField.val());

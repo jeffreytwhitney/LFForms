@@ -1,6 +1,6 @@
 
 
-$(document).ready(function () {
+$(function () {
 
   $('.Submit').hide();
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
@@ -13,7 +13,7 @@ $(document).ready(function () {
   });
 
 
-  $(document).on('lookupcomplete', function (e) {
+  $(document).on('lookupcomplete', function () {
 
     if (($('.ed input').val() === '') || ($('.ed input').val() === null)) {
       const curdate = moment(fdmax).format("MM/DD/YYYY");
@@ -55,8 +55,7 @@ function generateFilterText() {
 
 
 function getTableRowCount() {
-  const row_count = $('.cal-table table tbody tr').length;
-  return row_count;
+  return $('.cal-table table tbody tr').length;
 }
 
 

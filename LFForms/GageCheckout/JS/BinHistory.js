@@ -1,4 +1,4 @@
-﻿$(document).ready(function () {
+﻿$(function () {
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $('.Submit').hide();
   $(document).prop('title', 'Bin History');

@@ -1,4 +1,4 @@
-﻿$(document).ready(function () {
+﻿$(function () {
 
   //See 'User Permissions' in the documentation above for an explanation of this.
   $('.network-user-name input').val($('.lf-user-name input').val().toUpperCase().substring($('.lf-user-name input').val().lastIndexOf('\\') + 1)).trigger("change");

@@ -30,7 +30,7 @@ KEY CONCEPTS:
    USER PERMISSIONS:
       There is a user permission model in place to restrict which updates a user can make.
       This is separate from LFF security, which can, (but in practice usually does not), limit who 
-      can even access a particular form. For our purposes, this is not particularly useful for our needs because we we want
+      can even access a particular form. For our purposes, this is not particularly useful for our needs because we want
       all users to be able to view the forms. What we want instead is to limit their ability to do certain things
       inside the application. 
       There are several user types which are defined in the database users table, (tblUsers) each with their own
@@ -73,17 +73,17 @@ KEY CONCEPTS:
         - lookupcomplete: This event fires each time a lookup completes after the onloadlookupfinished event has been called. 
                           Laserfiche has lookup rules applied to certain fields, so that when a field is changed, it triggers a lookup to fill in other fields.
                           The fields themselves can either be changed by the user directly, or indirectly. 
-                          An example of an direct change would be when the user chooses a Site from the dropdown. 
+                          An example of a direct change would be when the user chooses a Site from the dropdown. 
           
     
-      Now this gets a bit tricky because the lookupcomplete event can fire multiple times, and we only want to do certain things once, so we need
+      Now this gets a bit tricky because the lookupcomplete event can fire multiple times, and we only want to do certain things once. Therefore, we need
       to put logic in there so that it's not doing expensive things again and again.
       There is a way of asking what the TriggerID of the lookup is. (A laserfiche function). But I found this to be kind of a pain to use because
-      you have to know the TriggerID of the lookup that you want to respond to and it's just an integer. Also, if you ever change anything 
-      in the form, you don't know if the trigger id has changed or not. So I found it easier to just put logic in the function that I want to run
-      to make sure that it doesn't, say iterate through a table or something getting values again and again when we only need it to do it once.
+      you have to know the TriggerID of the lookup that you want to respond to, and it's just an integer. Also, if you ever change anything 
+      in the form, you don't know if the trigger id has changed or not. So, I found it easier to just put logic in the function.
+      
     
-      For an example of what I'm talking about, we're setting the user name field in code and causing a lookup, (see 'User Permissions' above).
+      For an example of what I'm talking about, we're setting the username field in code and causing a lookup, (see 'User Permissions' above).
       Because we're setting the field in code and causing a lookup, the onloadlookupfinished event has already fired. Therefore, any logic that 
       relies on user fields being populated won't work if you call them from the onloadlookupfinished event. Instead, we have to call them from 
       the lookupcomplete event. The unfortunate side effect of this is that the lookupcomplete event can fire multiple times, 
@@ -92,10 +92,10 @@ KEY CONCEPTS:
       but you want to minimize it as much as possible.
 
       Daisy-Chaining Lookups:
-        A side-effect of the way lookups work is how they sometimes daisy-chain. Let me explain with an example:
+        A side effect of the way lookups work is how they sometimes daisy-chain. Let me explain with an example:
         In our example, we have four fields: LFUserName, NetworkUserName, SiteID, DepartmentLookupTable.
         At the beginning the only field which has anything in it is LFUserName, because LF has filled it in for us.
-        We take that value, keeping only the username portion an dput that in NetworkUserName. 
+        We take that value, keeping only the username portion and put that in NetworkUserName. 
         This causes a lookup for all the user related fields, including SiteID. Once the SiteID is set, this in turn
         causes another lookup to pull in all the departments related to that site. The Department Lookup cannot be loaded until 
         we know which site we're talking about. Sometimes this daisy-chaining can get 3 and sometimes even 4 levels deep because of all the relationships between
@@ -159,18 +159,27 @@ const LineItemType = Object.freeze({
   Calibration: 3
 });
 
-$(document).ready(function () {
-  // Set dialog/page title.
-  $(document).prop('title', 'Add Line Item');
+$(function () {
 
-  // Load external libraries' JS/CSS used by the hosting page/dialog.
-  $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
-  $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
+  const lfUserNameRaw = $('.lf-user-name input').val();
+  const lfUserName = (typeof lfUserNameRaw === 'string') ? lfUserNameRaw.trim() : '';
+  if ((lfUserName !== '') && (lfUserName !== 'Anonymous User')) {
+    $('.network-user-name input').val(lfUserName.toUpperCase().slice(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
+  }
 
-  // Resolve Bootstrap's $.fn.button conflict so jQuery Confirm dialog buttons render and close correctly.
-  $.fn.bootstrapBtn = $.fn.button.noConflict(); // return $.fn.button to previously assigned value so that popup close button displays correctly.
+  $.when(
+    $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js')
+  ).done(function () {
+
+    $(document).prop('title', 'Add Line Item');
+    $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
+    $.fn.bootstrapBtn = $.fn.button.noConflict(); // return $.fn.button to previously assigned value so that popup close button displays correctly.
+
+  }).fail(function () {
+    console.error('Failed to load required scripts');
+  });
 
   // Wire up Submit button.
   $('.Submit').on("click", function (e) { submitForm(e); });
@@ -180,11 +189,6 @@ $(document).ready(function () {
     window.parent.postMessage('CloseDialogWithRefresh', '*');
   }
 
-  // Populate the "network username" as the uppercase username (strip DOMAIN\).
-  $('.network-user-name input')
-    .val($('.lf-user-name input').val().toUpperCase().slice($('.lf-user-name input').val().lastIndexOf('\\') + 1)).trigger("change");
-
-  // Add required asterisks to key labels (visual only).
   $('<span class="cf-required">*</span>').insertAfter('.quantity span span');
 
   $(document).on('change', '.quantity input', function () {
@@ -204,10 +208,6 @@ $(document).ready(function () {
     $('.cost-amount input').val(formattedTotalCost);
   });
 
-
-
-  // Toggle submit availability after lookups complete.
-  // Hide for non-admins or when PO has not been created (no POID).
   $(document).on('lookupcomplete', function () {
     if ((!isMetrologyUser()) || ($('.poid input').val() === '')) {
       $('.Submit').hide();
@@ -216,11 +216,6 @@ $(document).ready(function () {
     }
   });
 
-
-  // Initialization after onload lookups:
-  // - ensure dialog can be closed by host
-  // - propagate user name mapping
-  // - show placeholder PO number for new POs
   $(document).on("onloadlookupfinished", function () {
     $('.closeme input').val(1);
     $('.network-user-name input').trigger("change");
@@ -255,10 +250,8 @@ function addThousandsSeparator(numStr) {
  * @returns {boolean} True when the current user is an admin user; otherwise, false.
  */
 function isAdminUser() {
-  if ($('.user-isadmin input').val() === '1') {
-    return true;
-  }
-  return false;
+  return $('.user-isadmin input').val() === '1';
+
 }
 
 

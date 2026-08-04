@@ -87,11 +87,11 @@
                             An example of a direct change would be when the user chooses a Site from the dropdown.
           
     
-      Now this gets a bit tricky. The lookupcomplete event can fire multiple times, and we only want to do certain things once, so we need
+      Now this gets a bit tricky. The lookupcomplete event can fire multiple times, and we only want to do certain things once. Therefore, we need
       to put logic in there so that it's not doing expensive things again and again.
       There is a way of asking what the TriggerID of the lookup is. (A laserfiche function). But I found this to be kind of a pain to use because
       you have to know the TriggerID of the lookup that you want to respond to, and it's just an integer. Also, if you ever change anything
-      in the form, you don't know if the trigger id has changed or not. So I found it easier to just put logic in the function that I want to run
+      in the form, you don't know if the trigger id has changed or not. So, I found it easier to just put logic in the function.
       to make sure that it doesn't, say, iterate through a table or something getting values again and again when we only need it to do it once.
     
       For an example of what I'm talking about, we're setting the username field in code and causing a lookup (see 'User Permissions' above).
@@ -301,28 +301,37 @@ const initiatorNameMap = new Map();       // Map<string, string|number> initiato
 const qualityEngineerMap = new Map();     // Map<number, string> qeID -> qeName
 const qualityEngineerNameMap = new Map(); // Map<string, number> qeName -> qeID
 
-$(document).ready(function () {
-  // Initial UI setup
+$(function () {
   $('.Submit').hide();
-  $(document).prop('title', 'Programming Tickets');
 
-  // Load client-side dependencies
-  $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js');
-  $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
-  $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-
-  // Prevent Bootstrap/jQuery UI naming conflicts if Bootstrap is present
-  $.fn.bootstrapBtn = $.fn.button.noConflict();
-
-  // Sync the LF Forms username into the network username field
-  const lfUserName = $('.lf-user-name input').val();
-  if (lfUserName !== 'Anonymous User') {
+  const lfUserNameRaw = $('.lf-user-name input').val();
+  const lfUserName = (typeof lfUserNameRaw === 'string') ? lfUserNameRaw.trim() : '';
+  if ((lfUserName !== '') && (lfUserName !== 'Anonymous User')) {
     $('.network-user-name input').val(lfUserName.toUpperCase().slice(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
   }
 
-  // Listen for messages from child iframes to close dialogs and optionally refresh
+  $.when(
+    $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js'),
+    $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js')
+  ).done(function () {
+    $(document).prop('title', 'Programming Tickets');
+    $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
+    $.fn.bootstrapBtn = $.fn.button.noConflict();
+  }).fail(function () {
+    console.error('Failed to load required scripts');
+  });
+
+
+  $(document).on('click', '.project-link', function (event) {
+    event.preventDefault();
+    const ticketId = Number($(this).data('ticket-id'));
+    if (!Number.isNaN(ticketId)) {
+      callShowDetails(ticketId);
+    }
+  });
+
   window.onmessage = function (event) {
     if (event.data === "CloseDialog") {
       $("#popupIFrame").dialog("destroy");
@@ -335,13 +344,11 @@ $(document).ready(function () {
     }
   };
 
-  // Persist selected site in a cookie for recall on subsequent loads
   $(document).on('change', '.site-name select', function () {
     const sitename = $('.site-name select').val();
     $.cookie('site_name', sitename, { expires: 365, path: '/' });
   });
 
-  // Show long "Details" text in a quick modal on double-click (Field56 appears to be details)
   $(document).on('dblclick', '[id^="Field56"]', function () {
     const ticketDetail = $(this).val();
     const ticketNumber = $(this).closest('tr').find('.projectlist-ticket-number-col input[type="text"]').val();
@@ -353,7 +360,6 @@ $(document).ready(function () {
     });
   });
 
-  // Fired after server-driven lookup completes and the grid is ready
   $(document).on('lookupcomplete', function () {
     $('.projectlist-table').hide();
 
@@ -399,7 +405,6 @@ $(document).ready(function () {
     $('.projectlist-table').show();
   });
 
-  // Restore previously selected site (from cookie) once all onload lookups have completed
   $(document).on("onloadlookupfinished", function () {
     const sitename = $.cookie('site_name');
     if (sitename !== null) {
@@ -632,7 +637,7 @@ function generateTicketNumberColumn() {
   ticket_numbers.each(function (index) {
     const ticket_id = $(ticket_ids[index]).val();
     const ticket_number = $(this).val();
-    const project_link = $("<a>", { text: ticket_number, class: 'project-link', href: `javascript:void(0);`, onclick: `callShowDetails(${ticket_id})` });
+    const project_link = $("<a>", { text: ticket_number, class: 'project-link', href: 'javascript:void(0);', 'data-ticket-id': ticket_id });
     if ($(this).parent().find('.project-link').length === 0) {
       $(this).parent().append(project_link);
     }

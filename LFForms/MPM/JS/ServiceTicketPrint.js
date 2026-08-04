@@ -44,7 +44,7 @@
    this can render as markup. Use text escaping if HTML should not be interpreted.
  */
 
-$(document).ready(function () {
+$(function () {
   // Set the browser tab title to clarify we're in an editable print context.
   $(document).prop('title', 'Edit Service Ticket');
 

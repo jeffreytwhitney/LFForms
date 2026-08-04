@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(function () {
 
   function getLocalForm() {
     // Resolve the form from this iframe document only.

@@ -2,7 +2,7 @@ const departmentMap = new Map();
 const departmentNameMap = new Map();
 
 
-$(document).ready(function () {
+$(function () {
   $('.Submit').hide();
   $('.Submit').on("click", function (e) { validateForm(e); });
   $(document).prop('title', 'Cell Leader Maintenance');
