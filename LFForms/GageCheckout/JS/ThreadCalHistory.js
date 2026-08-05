@@ -60,7 +60,7 @@ $(function () {
     }
 
     if (($('.ed input').val() === '') || ($('.ed input').val() === null)) {
-      const curdate = moment(fdmax).format("MM/DD/YYYY");
+      const curdate = moment().format("MM/DD/YYYY");
       $('.ed input').val(curdate).trigger("change");
     }
 
@@ -136,7 +136,7 @@ function filterTable() {
 
   const startDateFilterValue = $('#txtFilter_StartDate').val();
   const endDateFilterVal = $('#txtFilter_EndDate').val();
-  const curdate = moment(fdmax).format("MM/DD/YYYY");
+  const curdate = moment().format("MM/DD/YYYY");
 
 
   if ((startDateFilterValue !== null) && (startDateFilterValue !== '')) {
@@ -210,8 +210,7 @@ function printReport() {
 
 
   should_print_report = true;
-  const domain = document.location.hostname;
-  const report_url_root = "http://" + domain + "/Forms/";
+  const report_url_root = `${window.location.origin}/Forms/`;
   let report_url = "";
 
   const thread_gage_id = $('.gid input').val();
@@ -266,7 +265,7 @@ function removeAppendedFields() {
 function showDetails(ticket_id) {
   let widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
-  popUpIframe(`http://rmslf/Forms/RMS-GAGE-TicketDetails?tid=${ticket_id}&ro=1`, 'Ticket Details', widowHeight, 1200);
+  popUpIframe(`${window.location.origin}/Forms//RMS-GAGE-TicketDetails?tid=${ticket_id}&ro=1`, 'Ticket Details', widowHeight, 1200);
 }
 
 

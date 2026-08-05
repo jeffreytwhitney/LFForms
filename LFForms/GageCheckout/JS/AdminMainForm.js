@@ -1,16 +1,16 @@
-let should_print_receipt = false
 $(function () {
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
+
   $.when(
     $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js')
   ).done(function () {
-    
+    $(document).prop('title', 'Gage Administration MainForm');
+    $('#q0').append("<div class='hidden' id='popUpDiv'></div>");
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
   }).fail(function () {
     console.error('Failed to load required scripts');
   });
-  $(document).prop('title', 'Gage Administration MainForm');
+
   $('.Submit').hide();
-  $('#q0').append("<div class='hidden' id='popUpDiv'></div>");
 
   const eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
   const printEvent = window[eventMethod];
@@ -94,7 +94,7 @@ function generateAppliationLinks() {
     {label: 'Ticket History', title: 'Ticket History', href: 'http://rmslf/Forms/RMS-GAGE-TicketHistory'},
     {label: 'Bin History', title: 'Ticket History', href: 'http://rmslf/Forms/RMS-GAGE-BinHistory'},
     {label: 'Thread Gages', title: 'Thread Gages', href: 'http://rmslf/Forms/RMS-GAGE-ThreadGages'},
-    {label: 'Overdue Tickets', title: 'Overdue Tickets', href: `http://rmslf/Forms/RMS-GAGE-OverDueTicketsReport?site-id=${siteID}`},
+    {label: 'Overdue Tickets', title: 'Overdue Tickets', href: `${window.location.origin}/Forms//RMS-GAGE-OverDueTicketsReport?site-id=${siteID}`},
     {label: 'Thread Member Inventory', title: 'Thread Member Inventory', href: 'http://rmslf/Forms/RMS-Gage-ThreadMemberInventory'},
   ];
 
@@ -160,29 +160,6 @@ function isUserAdmin() {
     return_val = false;
   }
   return return_val;
-}
-
-
-function print_report() {
-
-  const siteID = $('.site-id input').val();
-  if (siteID.length === 0) {
-    return;
-  }
-
-  const domain = document.location.hostname;
-  const report_url_root = document.location.protocol + "//" + domain + "/Forms/";
-  let receipt_url = report_url_root + "PinGageReceipt?guid=" + ticketGuid;
-
-
-
-  if (should_print_receipt === true) {
-    if (receipt_url !== "") {
-      loadiFrame(receipt_url);
-      should_print_receipt = false;
-      $('.print-ticket-id input').val(null).trigger("change");
-    }
-  }
 }
 
 

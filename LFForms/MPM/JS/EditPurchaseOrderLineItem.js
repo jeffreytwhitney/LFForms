@@ -399,7 +399,7 @@ function setStatusComboValue() {
  * Handles the submit button click:
  * - Validates inputs.
  * - Normalizes quantity for Service items when left empty/zero.
- * - For Cancelled status, requires a cancellation reason before submitting.
+ * - For Canceled status, requires a cancellation reason before submitting.
  * @param {Event} e The click or submit event.
  * @returns {void}
  */

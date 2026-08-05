@@ -190,9 +190,9 @@ function callCalibrate(ticket_id, calForReturn = 0) {
     let widowHeight = $(window).height();
     widowHeight = widowHeight - 50;
     if (calForReturn === 0) {
-      popUpIframe(`http://rmslf/Forms/GageCalibration?tid=${ticket_id}`, 'Calibrate Ticket', widowHeight, 1200);
+      popUpIframe(`${window.location.origin}/Forms//GageCalibration?tid=${ticket_id}`, 'Calibrate Ticket', widowHeight, 1200);
     } else {
-      popUpIframe(`http://rmslf/Forms/GageCalibration?tid=${ticket_id}&CalForReturn=1`, 'Calibrate Ticket', widowHeight, 1200);
+      popUpIframe(`${window.location.origin}/Forms//GageCalibration?tid=${ticket_id}&CalForReturn=1`, 'Calibrate Ticket', widowHeight, 1200);
     }
   } else {
     alert("Sorry, you do not have permissions to do this.");
@@ -284,7 +284,7 @@ function executeIFrameUpdate(ticket_id) {
   if (typeof ticket_id === 'undefined') {
     return;
   }
-  const execute_url = `http://rmslf/Forms/RMS-GAGE-ReturnTicket?tid=${ticket_id}`;
+  const execute_url = `${window.location.origin}/Forms//RMS-GAGE-ReturnTicket?tid=${ticket_id}`;
 
   $("#popupIFrame").remove();
   $("#popUpDiv").html(`<iframe id='popupIFrame' name='myname' src='${execute_url}'/>`);
@@ -535,12 +535,16 @@ function generateMachineList() {
 function generatePrintButtons() {
   const print_buttons = $(".ticket-table-print-button input[type=text]");
   const ticket_ids = $(".ticket-id-col input[type=text]");
+  const ticket_status_ids = $(".ticket-status-id-col input[type=text]");
   print_buttons.each(function (index) {
     const ticket_id = ticket_ids[index].value;
+    const ticket_status_id = Number(ticket_status_ids[index].value);
     const has_button = $(this).parent().find('.print-button').length;
-    if (has_button === 0) {
-      const btn_html = `<div class='table-button ui-button print-button' onclick='callPrint(${ticket_id})'><span title='Print Ticket Receipt' class='ui-button-icon ui-icon ui-icon-print'/></div>`
-      $(this).parent().append(btn_html);
+    if (ticket_status_id < 3) {
+      if (has_button === 0) {
+        const btn_html = `<div class='table-button ui-button print-button' onclick='callPrint(${ticket_id})'><span title='Print Ticket Receipt' class='ui-button-icon ui-icon ui-icon-print'/></div>`
+        $(this).parent().append(btn_html);
+      }
     }
   });
 }
@@ -947,7 +951,7 @@ function resetPageNumber() {
 function showDetails(ticket_id) {
   let widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
-  popUpIframe(`http://rmslf/Forms/RMS-GAGE-TicketDetails?tid=${ticket_id}`, 'Ticket Details', widowHeight, 1200);
+  popUpIframe(`${window.location.origin}/Forms//RMS-GAGE-TicketDetails?tid=${ticket_id}`, 'Ticket Details', widowHeight, 1200);
 }
 
 

@@ -1,17 +1,16 @@
 let should_print_receipt = true;
 $(function () {
-  $(document).prop('title', 'Gage Checkout');
+
   $.when(
     $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js')
   ).done(function () {
-    
+    $('#q0').append("<div class='hidden' id='print_output'></div>");
+    $(document).prop('title', 'Gage Checkout');
   }).fail(function () {
     console.error('Failed to load required scripts');
   });
 
   $('.Submit').on("click", function (e) { validateForm(e); });
-
-  $('#q0').append("<div class='hidden' id='print_output'></div>");
 
   const eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
   const printEvent = window[eventMethod];
@@ -104,11 +103,8 @@ function loadiFrame(src) {
 
 function print_receipt() {
 
-  const domain = document.location.hostname;
-  const receipt_url_root = "http://" + domain + "/Forms/";
+  const receipt_url_root = `${window.location.origin}/Forms/`;
   let receipt_url = "";
-
-
 
   if ($('.print-ticket-type-id input').val() === 1) {
     receipt_url = receipt_url_root + "PinGageReceipt?guid=" + $('.print-ticket-id input').val();

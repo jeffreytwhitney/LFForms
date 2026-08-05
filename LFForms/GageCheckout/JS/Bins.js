@@ -3,22 +3,22 @@
     $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js'),
     $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js')
   ).done(function () {
-    
+    $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
+    $(document).prop('title', 'Bin Maintenance');
+    $.fn.bootstrapBtn = $.fn.button.noConflict();
   }).fail(function () {
-    console.error('Failed to load required scripts');
+    console.error('Failed to load required scripts - Bin Maintenance');
   });
 
-  $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-   // return $.fn.button to previously assigned value
-  $.fn.bootstrapBtn = $.fn.button.noConflict();
+
 
 
   $('.Submit').on("click", function (e) { validateForm(e); });
   $('.Submit').hide();
 
-  $(document).prop('title', 'Bin Maintenance');
+
   $('#myElement').removeAttr('style');
   $('#q2').prepend("<fieldset id='Field999' class='radio-checkbox-fieldset filter-checkboxes'><span class='choice'><input name='Field999' id='Field999-0' type='checkbox' value='IncludeInactiveBins'><label class='form-option-label' for='Field999-0'>Include Inactive Bins</label></span></fieldset>");
 
@@ -45,7 +45,7 @@
     //This is the callback from the IFrame.
     //If the event data says "Close Dialog", it destroys the dialog, (so that the close function won't fire).
     //If it says "CloseDialogWithRefresh", it destroys the dialog and refreshes the form.
-    //I don't refresh if you add a note, for example. But if you do anything that will show up on the page, (adding time, cloning a task, etc)
+    //I don't refresh if you add a note, for example. But if you do anything that will show up on the page, (adding time, cloning a task, etc.)
     //then I do a refresh.
     if (event.data === "CloseDialog") {
       $("#popupIFrame").dialog("destroy");
@@ -410,7 +410,7 @@ function resetValidationErrors() {
 function showDetails(ticket_id) {
   let widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
-  popUpIframe(`http://rmslf/Forms/RMS-GAGE-TicketDetails?tid=${ticket_id}`, 'Ticket Details', widowHeight, 1200);
+  popUpIframe(`${window.location.origin}/Forms//RMS-GAGE-TicketDetails?tid=${ticket_id}`, 'Ticket Details', widowHeight, 1200);
 }
 
 

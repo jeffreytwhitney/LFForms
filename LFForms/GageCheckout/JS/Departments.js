@@ -1,24 +1,20 @@
 $(function () {
+  $('.Submit').hide();
   $.when(
     $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js'),
     $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js')
   ).done(function () {
-    
+    $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
+    $.fn.bootstrapBtn = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
+    $(document).prop('title', 'Department Maintenance');
   }).fail(function () {
     console.error('Failed to load required scripts');
   });
-  $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-  $.fn.bootstrapBtn = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
-
-
-  $('.Submit').on("click", function (e) { validateForm(e); });
-  $('.Submit').hide();
-
-  $(document).prop('title', 'Department Maintenance');
 
   wireUpChangeEvents();
 
+  $('.Submit').on("click", function (e) { validateForm(e); });
   
   $(document).on("onloadlookupfinished", function () {
     generateAddButton();
@@ -27,7 +23,6 @@ $(function () {
     $('#q0').append("<div class='hidden-text' id='popUpDiv'></div>");
     $('.department-table').show();
   });
-
 
   $(document).on('lookupcomplete', function () {
 

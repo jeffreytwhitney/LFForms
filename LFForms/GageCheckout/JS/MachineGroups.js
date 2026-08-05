@@ -32,58 +32,26 @@
  * - User information fields (.user-employee-number, .user-isactive)
  */
 
-/**
- * Global map storing department ID to department name mappings.
- * Populated by loadDepartmentMap() function.
- * @type {Map<number, string>}
- * @example departmentMap.get(5) // Returns "Engineering"
- */
 const departmentMap = new Map();
-
-/**
- * Global map storing department name to department ID mappings.
- * Reverse lookup of departmentMap for efficient bidirectional conversion.
- * Populated by loadDepartmentMap() function.
- * @type {Map<string, number>}
- * @example departmentNameMap.get("Engineering") // Returns 5
- */
 const departmentNameMap = new Map();
 
-/**
- * Document ready handler - Initializes the Machine Group Maintenance interface.
- * 
- * Initialization sequence:
- * 1. Loads external dependencies (jQuery Cookie, jQuery Confirm)
- * 2. Injects required CSS stylesheets
- * 3. Resolves Bootstrap/jQuery UI button conflicts
- * 4. Sets up form submission handlers
- * 5. Configures page title
- * 6. Wires up change event handlers for form synchronization
- * 7. Registers custom event listeners
- */
 $(function () {
-  // Load external JavaScript dependencies from CDN
+  $('.Submit').hide();
+
   $.when(
     $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js'),
     $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js')
   ).done(function () {
-    
+    $(document).prop('title', 'Machine Group Maintenance');
+    $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
+    $.fn.bootstrapBtn = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
+
   }).fail(function () {
     console.error('Failed to load required scripts');
   });
 
-  // Inject required CSS stylesheets
-  $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-
-  // Resolve Bootstrap/jQuery UI button conflict
-  $.fn.bootstrapBtn = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
-
-
   $('.Submit').on("click", function (e) { validateForm(e); });
-  $('.Submit').hide();
-
-  $(document).prop('title', 'Machine Group Maintenance');
 
   wireUpChangeEvents();
 
@@ -329,7 +297,7 @@ function generateEditButtons() {
     const btn_value = $(this).val();  // Machine group ID
     if (is_admin) {
       // Append edit button with machine group ID
-      $(this).parent().append("<input class='table-button' type='button' value='Edit' onclick='callEditMachineGroup(" + btn_value + ")' />");
+      $(this).parent().append(`<input class='table-button' type='button' value='Edit' onclick='callEditMachineGroup(${btn_value})' />`);
     }
   });
 }

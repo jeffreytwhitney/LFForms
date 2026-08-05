@@ -114,7 +114,7 @@
           .sd: Sort direction (ASC or DESC)
 
         Sort column mappings:
-          #q21    ->    User Name (default)
+          #q21    ->    UserName (default)
           #q22    ->    User Type
           #q23    ->    Department
 
@@ -153,7 +153,7 @@
         Now, Departments and the table rows both rely on one thing: Site. Which Site are we looking at, Coon Rapids or Anoka?
         Ok so each of those things can only be looked up once we know which site we're talking about. Good enough. 
         But now comes it issue of LFF Lookup Order. All the data lookups that LFF uses take place in the order you specify. 
-        So if you have Department first and the main table data second, that should mean than the department lookup data is there before 
+        So if you have Department first and the main table data second, which should mean than the department lookup data is there before
         we go get the main table data. And this is usually true, emphasis on usually. 
         
         I ran into an issue, (and perhaps it's because the main table's data is being fed by a stored procedure instead of a simple query or table),
@@ -222,7 +222,7 @@
  - Sorting only toggles indicators/hidden inputs; server or external components react to changes.
  
  Conventions in this file:
- - Functions are side-effect oriented; most trigger DOM updates and set hidden inputs, then call .trigger("change").
+ - Functions are side effect oriented; most trigger DOM updates and set hidden inputs, then call .trigger("change").
  - Uses <span> with jQuery UI icon classes for action buttons in table cells.
  */
 
@@ -237,7 +237,7 @@ const userTypeMap = new Map();
 const userTypeNameMap = new Map();
 
 $(function () {
-  // Normalize Network User Name based on LF user name. Store uppercase simple username portion.
+  // Normalize Network UserName based on LF username. Store uppercase simple username portion.
   const lfUserName = $('.lf-user-name input').val();
   $('.network-user-name input').val(lfUserName.toUpperCase().slice(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
 
@@ -245,7 +245,7 @@ $(function () {
   $('.Submit').hide();
   $(document).prop('title', 'User Maintenance');
 
-  // Runtime script/styles injection (cookies, confirm dialogs, UI theme, pagination css).
+  // Runtime script/styles injection (cookies, confirm dialogs, UI theme, pagination CSS).
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js');
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
@@ -308,7 +308,7 @@ $(function () {
       // If 999 sentinel slips through, reset to page 1.
       $('.pg input').val(1).trigger("change");
     }
-    // Normalize network user name on load.
+    // Normalize network username on load.
     $('.network-user-name input').trigger("change");
 
     // Restore site selection from cookie if present.
@@ -735,7 +735,7 @@ function wireUpSortFields() {
 
   $('#q21 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
 
-  $('#q21').on('click', function () { sortTable(0, '#q21'); });   //User Name (default)
+  $('#q21').on('click', function () { sortTable(0, '#q21'); });   //UserName (default)
   $('#q22').on('click', function () { sortTable(1, '#q22'); });   //User Type
   $('#q23').on('click', function () { sortTable(2, '#q23'); });   //Department
 

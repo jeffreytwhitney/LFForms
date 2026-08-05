@@ -104,7 +104,7 @@ External Dependencies (loaded dynamically):
 Expected Markup (selected elements/classes):
 - .lf-user-name input                Source of the domain\username value.
 - .network-user-name input           Destination for uppercase SAM account name (part after '\').
-- .Submit                            Submit button area to show/hide based on context/admin.
+- .Submit                            button area to show/hide based on context/admin.
 - .user-isadmin input                "1" if current user is admin; otherwise not "1".
 - .tasktype-table table              Grid hosting Task Type rows.
 - .edit-button-col input[type=text]  Hidden text input holding row identifier used to build action buttons.
@@ -122,7 +122,7 @@ Expected Markup (selected elements/classes):
  */
 
 $(function () {
-  // Normalize the displayed network user name to a SAM-style uppercase username (portion after '\').
+  // Normalize the displayed network username to a SAM-style uppercase username (portion after '\').
   const lfUserName = $('.lf-user-name input').val();
   $('.network-user-name input').val(lfUserName.toUpperCase().slice(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
 
@@ -199,7 +199,7 @@ $(function () {
     }
   });
 
-  // Normalize the displayed user name once initial data load completes.
+  // Normalize the displayed username once initial data load completes.
   $(document).on("onloadlookupfinished", function () {
     $('.network-user-name input').trigger("change");
   });
@@ -270,7 +270,7 @@ function generateGoBackButtons() {
  * A button is added only if one with the same icon class is not already present.
  *
  * Example:
- *   generateTableButtons(".edit-button-col", "ui-icon-pencil", "Edit TaskType", "callEditTaskType");
+ *   generateTableButtons(""".edit-button-col", "ui-icon-pencil", "Edit TaskType", "callEditTaskType");
  *
  * @param {string} buttonSelector - CSS selector for the container holding a text input with the row id.
  * @param {string} buttonClass - jQuery UI icon class to display on the button (e.g., "ui-icon-pencil").

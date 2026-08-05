@@ -71,8 +71,8 @@ Key Concepts:
       Now this gets a bit tricky because the lookupcomplete event can fire multiple times, and we only want to do certain
       things once, so we need to put logic in there so that it's not doing expensive things again and again.
       There is a way of asking what the TriggerID of the lookup is. (A laserfiche function). But I found this 
-      to be kind of a pain to use because you have to know the TriggerID of the lookup that you want to respond to 
-      and it's just an integer. Also, if you ever change anything in the form, you don't know if the trigger id 
+      to be kind of a pain to use because you have to know the TriggerID of the lookup that you want to respond to.
+      Also, if you ever change anything in the form, you don't know if the trigger id
       has changed or not. So, I found it easier to just put logic in the function.
       to make sure that it doesn't, say iterate through a table or something getting values again and 
       again when we only need it to do it once.
@@ -125,11 +125,12 @@ Key Concepts:
  */
 
 $(function () {
-  // Hide default Submit button on load and set the page title.
   $('.Submit').hide();
+  const lfUserName = $('.lf-user-name input').val();
+  if (lfUserName !== 'Anonymous User') {
+    $('.network-user-name input').val(lfUserName.toUpperCase().slice(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
+  }
 
-
-  // Load optional libraries used by this and related pages.
   $.when(
     $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js'),
     $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js')
@@ -145,14 +146,6 @@ $(function () {
     console.error('Failed to load required scripts');
   });
 
-
-  // Populate ".network-user-name" from LF username when available (maps DOMAIN\user -> USER).
-  const lfUserName = $('.lf-user-name input').val();
-  if (lfUserName !== 'Anonymous User') {
-    $('.network-user-name input').val(lfUserName.toUpperCase().slice(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
-  }
-
-  //See Dialog Looping Mechanism above for explanation
   window.onmessage = function (event) {
     if (event.data === "CloseDialog") {
       $("#popupIFrame").dialog("destroy");
@@ -160,13 +153,11 @@ $(function () {
     }
   };
 
-  // Persist selected site to a cookie so it is restored on next visit.
   $(document).on('change', '.site-name select', function () {
     const sitename = $('.site-name select').val();
     $.cookie('site_name', sitename, { expires: 365, path: '/' });
   });
 
-  // After lookup completes, finalize UI: action buttons, pagination, add Metrology-only actions, reveal table.
   $(document).on('lookupcomplete', function () {
     generateTableButtons(".edit-button-col", "ui-icon-pencil", "Edit User", "callShowDetails");
     appendPagination();
@@ -187,7 +178,6 @@ $(function () {
     
   });
 
-  // On initial load completion, restore UI state (cookie, paging), wire "Go Back" buttons, ensure defaults.
   $(document).on("onloadlookupfinished", function () {
 
     // Hidden popup div placeholder used by other flows.
@@ -220,7 +210,7 @@ $(function () {
  * Behavior:
  * - Determines the current page from ".pg input" and the row count from the runs table.
  * - Inserts a #user-pagination control with previous/next links.
- * - Disables links appropriately when at bounds or when fewer than a page of rows exist.
+ * - Disables links appropriately when at bounds or when fewer than a single page exists.
  * - Assumes a fixed page size of 25 rows.
  *
  * Edge cases:
@@ -270,10 +260,11 @@ function callShowDetails(runID) {
   $('.rid input').val(runID).trigger("change");
 }
 
+
 function callForceComplete(){
   let run_id = $('.rid input').val();
   let employee_number = $('.employee-number input').val();
-  let src = `http://rmslf/Forms/RMS-MPM-ForceCompleteScheduleRun?rid=${run_id}&enbr=${employee_number}`;
+  let src = `${window.location.origin}/Forms//RMS-MPM-ForceCompleteScheduleRun?rid=${run_id}&enbr=${employee_number}`;
   $("#popUpDiv").html("<iframe id='print-iframe' name='print-iframe' src='" + src + "' />");
 }
 
@@ -371,6 +362,7 @@ function isMetrologyUser() {
   return userTypeId === 1 || userTypeId === 2;
 }
 
+
 function shouldAddForceCompleteButton() {
 
   if (!isMetrologyUser()){
@@ -385,10 +377,6 @@ function shouldAddForceCompleteButton() {
 }
 
 
-
-/**
- * Resets paging back to the first page and hides the table to allow rebind.
- */
 function resetPageNumber() {
   $('.schedule-runs-table').hide();
   $('.pg input').val(1).trigger("change");

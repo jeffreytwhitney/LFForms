@@ -529,7 +529,7 @@ function callAddNote(task_id) {
   const user_type_id = Number($(".user-type-id input").val());
   if (user_type_id !== 0) {
     const task_name = getColumnValueByTaskID(task_id, '.tasklist-task-name-col input[type="text"]');
-    popUpIframe(`http://rmslf/Forms/MPMAddNote?TaskID=${task_id}&nt=1`, `Add Note for task '${task_name}'`, 400, 650);
+    popUpIframe(`${window.location.origin}/Forms//MPMAddNote?TaskID=${task_id}&nt=1`, `Add Note for task '${task_name}'`, 400, 650);
   } else {
     $.alert({title: 'Nope!', content: 'Sorry, you do not have permissions to do this.'});
   }
@@ -542,7 +542,7 @@ function callAddTime(task_id) {
 
   if (user_type_id === 1) {
     const task_name = getColumnValueByTaskID(task_id, '.tasklist-task-name-col input[type="text"]');
-    popUpIframe(`http://rmslf/Forms/MPMAddTaskTime?tid=${task_id}`, `Add Time to task '${task_name}'`, 300, 800);
+    popUpIframe(`${window.location.origin}/Forms//MPMAddTaskTime?tid=${task_id}`, `Add Time to task '${task_name}'`, 300, 800);
   }
 }
 
@@ -1399,14 +1399,14 @@ function setSortIcon(sortOrdinal, sortDirection) {
 function showProjectDetails(ticket_id) {
   let widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
-  popUpIframe(`http://rmslf/Forms/MPM-EditProgrammingTicket?tid=${ticket_id}`, 'Ticket Details', widowHeight, 1500);
+  popUpIframe(`${window.location.origin}/Forms//MPM-EditProgrammingTicket?tid=${ticket_id}`, 'Ticket Details', widowHeight, 1500);
 }
 
 
 function showTaskDetails(task_id) {
   let widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
-  popUpIframe(`http://rmslf/Forms/MPM-EditProgrammingTask?tid=${task_id}`, 'Task Details', widowHeight, 1100);
+  popUpIframe(`${window.location.origin}/Forms//MPM-EditProgrammingTask?tid=${task_id}`, 'Task Details', widowHeight, 1100);
 }
 
 

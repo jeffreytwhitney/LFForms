@@ -11,23 +11,21 @@ let should_print_receipt = true;
 
 $(function () {
   $('.Submit').hide();
-  $(document).prop('title', 'Modify Ticket');
-  $('.Submit').on("click", function (e) { validateForm(e); });
+
   $.when(
     $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js'),
     $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js')
   ).done(function () {
-    
+    $(document).prop('title', 'Modify Ticket');
+    $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
+    $.fn.bootstrapBtn = $.fn.button.noConflict();
+    $('#q0').append("<div class='hidden' id='popUpDiv'></div>");
+
   }).fail(function () {
     console.error('Failed to load required scripts');
   });
-  $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-   // return $.fn.button to previously assigned value
-  $.fn.bootstrapBtn = $.fn.button.noConflict();
-
-  $('#q0').append("<div class='hidden' id='popUpDiv'></div>");
 
   const eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
   const printEvent = window[eventMethod];
@@ -39,6 +37,8 @@ $(function () {
       $('.print-ticket-id input').val(null);
     }
   });
+
+  $('.Submit').on("click", function (e) { validateForm(e); });
 
   $(document).on("onloadlookupfinished", function () {
     const sitename = $.cookie('site_name');
@@ -121,6 +121,13 @@ $(function () {
     generateMachineList();
   });
 
+  $(document).on('click', '.ticket-detail-link', function (event) {
+    event.preventDefault();
+    const ticketID = Number($(this).data('ticket-id'));
+    if (!Number.isNaN(ticketID)) {
+      showDetails(ticketID);
+    }
+  });
 
   $(document).on('change', '.cr-activate-employee-name input', function () {
     const crActivateEmployeeNumberValue = $('.cr-activate-employee-number input').val();
@@ -257,7 +264,6 @@ function callReturnTicket() {
   $.confirm({
     title: 'Are you sure?',
     content: 'Are you sure you wish to return this ticket in? It cannot be undone.',
-
     buttons: {
       ok: {
         text: "OK",
@@ -541,7 +547,10 @@ function generateTicketNumberColumn() {
   ticket_numbers.each(function (index) {
     const ticket_id = $(ticket_ids[index]).val();
     const ticket_number = $(this).val();
-    const ticket_number_link = $("<a>", { text: ticket_number, class: 'ticket-detail-link', href: 'javascript:void(0);', onclick: `showDetails(${ticket_id})` });
+    const ticket_number_link = $("<a>", { text: ticket_number,
+                                          class: 'ticket-detail-link',
+                                          href: 'javascript:void(0);',
+                                          'data-ticket-id': ticket_id });
     $(this).parent().append(ticket_number_link);
   });
 
@@ -719,10 +728,9 @@ function resetValidationErrors() {
 }
 
 
-
 function showDetails(ticket_id) {
   $('.modify-action input').val(2)
-  $('.details-modifier-employee-number input').focus();
+  $('.details-modifier-employee-number input')[0].focus();
   $(".details-ticket-id input").val(ticket_id).trigger("change");
   $('.Submit').show();
 }

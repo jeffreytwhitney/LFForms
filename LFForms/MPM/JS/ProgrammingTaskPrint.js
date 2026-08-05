@@ -46,7 +46,7 @@ $(function () {
     // If a valid task ID exists, embed the Task History for context in the printout.
     const taskID = $('.tid input').val();
     if ((taskID !== '') && (taskID !== '0')) {
-      $('#task-history').append(`<iframe id='task-history-iframe' name='task-history-iframe' src='http://rmslf/Forms/MPM-ProgamTaskHistory?tid=${taskID}' height='500' width='100%'/>`);
+      $('#task-history').append(`<iframe id='task-history-iframe' name='task-history-iframe' src='${window.location.origin}/Forms/MPM-ProgamTaskHistory?tid=${taskID}' height='500' width='100%'/>`);
     }
 
     // Signal the parent window to trigger print (the parent should handle this message).

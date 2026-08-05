@@ -12,7 +12,7 @@ $(function () {
 
     if (employee_number.length > 0 && threadMemberID.length > 0 && siteID > 0) {
       $('.tmid input').val(threadMemberID);
-      const form = document.forms.form1 || $('form[name="form1"]').get(0);
+      const form = document.getElementById('form1') || document.querySelector('form[name="form1"]');
       if (form && typeof form.submit === 'function') {
         form.submit();
         return;

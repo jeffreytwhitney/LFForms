@@ -7,17 +7,16 @@ $(function () {
     $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js'),
     $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js')
   ).done(function () {
-    
+    $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
+    $.fn.bootstrapBtn = $.fn.button.noConflict();
+    $('#q0').append("<div class='hidden' id='popUpDiv'></div>");
+
   }).fail(function () {
     console.error('Failed to load required scripts');
   });
 
-  $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-  $.fn.bootstrapBtn = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
-
-  $('#q0').append("<div class='hidden' id='popUpDiv'></div>");
   const eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
   const printEvent = window[eventMethod];
   const messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
@@ -57,7 +56,7 @@ $(function () {
     }
 
     if (($('.ed input').val() === '') || ($('.ed input').val() === null)) {
-      const curdate = moment(fdmax).format("MM/DD/YYYY");
+      const curdate = moment().format("MM/DD/YYYY");
       $('.ed input').val(curdate).trigger("change");
     }
 
@@ -133,7 +132,7 @@ function filterTable() {
 
   const startDateFilterValue = $('#txtFilter_StartDate').val();
   const endDateFilterVal = $('#txtFilter_EndDate').val();
-  const curdate = moment(fdmax).format("MM/DD/YYYY");
+  const curdate = moment().format("MM/DD/YYYY");
 
 
   if ((startDateFilterValue !== null) && (startDateFilterValue !== '')) {
@@ -229,8 +228,7 @@ function popUpIframe(src, title, height, width) {
 function printReport() {
 
   should_print_report = true;
-  const domain = document.location.hostname;
-  const report_url_root = "http://" + domain + "/Forms/";
+  const report_url_root = `${window.location.origin}/Forms/`;
   let report_url = "";
 
   const bin_gage_id = $('.bid input').val();
@@ -285,7 +283,7 @@ function removeAppendedFields() {
 function showDetails(ticket_id) {
   let widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
-  popUpIframe(`http://rmslf/Forms/RMS-GAGE-TicketDetails?tid=${ticket_id}&ro=1`, 'Ticket Details', widowHeight, 1200);
+  popUpIframe(`${window.location.origin}/Forms//RMS-GAGE-TicketDetails?tid=${ticket_id}&ro=1`, 'Ticket Details', widowHeight, 1200);
 }
 
 

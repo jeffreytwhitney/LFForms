@@ -19,7 +19,7 @@ Main responsibilities:
 - Render and wire a filter row (Task Name, Task Type, Assignee).
 - Enable select-all and per-row selection; maintain selected IDs and count.
 - Provide sortable headers by writing sort state and updating icons.
-- Validate before submission and enforce dialog notes for Cancelled/Waiting.
+- Validate before submission and enforce dialog notes for Canceled/Waiting.
 - Submit the form with appropriate hidden-field values.
 
 KEY CONCEPTS:
@@ -743,7 +743,7 @@ function wireUpSortFields() {
  * Handles form submission:
  * - Validates via `validateForm()`.
  * - Normalizes empty update fields to 0.
- * - Routes to note dialogs for Cancelled/Completed/Waiting; otherwise submits.
+ * - Routes to note dialogs for Canceled/Completed/Waiting; otherwise submits.
  * @param {Event} e - Click/submit event; may be prevented.
  */
 function submitForm(e) {

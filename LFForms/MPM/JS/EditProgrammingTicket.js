@@ -391,7 +391,7 @@ function addTask() {
   const ticketID = $('.tid input').val();
   let widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
-  popUpIframe(`http://rmslf/Forms/MPM-AddProgrammingTask?pid=${ticketID}`, 'Add Task', widowHeight, 1300);
+  popUpIframe(`${window.location.origin}/Forms//MPM-AddProgrammingTask?pid=${ticketID}`, 'Add Task', widowHeight, 1300);
 }
 
 /**
@@ -401,7 +401,7 @@ function addTask() {
 function callAddTime(task_id) {
   if (checkPermissions() === true) {
     const task_name = getColumnValueByTaskID(task_id, '.tasklist-task-name-col input[type="text"]');
-    popUpIframe(`http://rmslf/Forms/MPMAddTaskTime?tid=${task_id}`, `Add Time to task '${task_name}'`, 300, 800);
+    popUpIframe(`${window.location.origin}/Forms//MPMAddTaskTime?tid=${task_id}`, `Add Time to task '${task_name}'`, 300, 800);
   }
 }
 
@@ -427,7 +427,7 @@ function callCloneTask(task_id) {
   }
 
   const task_name = getColumnValueByTaskID(task_id, '.tasklist-task-name-col input[type="text"]');
-  popUpIframe(`http://rmslf/Forms/MPMCloneTask?tid=${task_id}`, `Clone task '${task_name}'`, 300, 750);
+  popUpIframe(`${window.location.origin}/Forms//MPMCloneTask?tid=${task_id}`, `Clone task '${task_name}'`, 300, 750);
 }
 
 /**
@@ -438,7 +438,7 @@ function callGroupEdit() {
   const ticketNumber = $('.ticket-number input').val();
   let widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
-  popUpIframe(`http://rmslf/Forms/MPM-TaskGroupEdit?tid=${ticketId}`, `Group Edit Ticket '${ticketNumber}'`, widowHeight, 1300);
+  popUpIframe(`${window.location.origin}/Forms//MPM-TaskGroupEdit?tid=${ticketId}`, `Group Edit Ticket '${ticketNumber}'`, widowHeight, 1300);
 }
 
 /**
@@ -448,7 +448,7 @@ function callGroupEdit() {
 function callShowDetails(task_id) {
   let widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
-  popUpIframe(`http://rmslf/Forms/MPM-EditProgrammingTask?tid=${task_id}`, 'Task Details', widowHeight, 1300);
+  popUpIframe(`${window.location.origin}/Forms//MPM-EditProgrammingTask?tid=${task_id}`, 'Task Details', widowHeight, 1300);
 }
 
 /**
@@ -854,7 +854,7 @@ function popUpIframe(src, title, height, width) {
 function printTicket() {
 
   const taskID = $('.tid input').val();
-  const report_url = `http://rmslf/Forms/MPM-ProgrammingTicketPrint?tid=${taskID}`
+  const report_url = `${window.location.origin}/Forms//MPM-ProgrammingTicketPrint?tid=${taskID}`
   loadiFrame(report_url);
 }
 

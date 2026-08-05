@@ -195,7 +195,7 @@ $(function () {
 
   // After lookups complete, finalize header and ensure iframes are loaded.
   // I had to put it in the lookupcomplete event because there was a weird timing issue
-  // which caused the Schedule Update info not to show sometimes. Same with the user name/admin link.
+  // which caused the Schedule Update info not to show sometimes. Same with the username/admin link.
   // It would show sometimes, and not other. Seemingly at random. Putting it in the lookupcomplete event
   // seems to have fixed it, though I also have the genereateTitleInfo call whenever you switch tabs or 
   // double-click on a tab to reload it. Between these three, it seems like the issue has been resolved. 
@@ -206,16 +206,6 @@ $(function () {
   });
 
 });
-
-/**
- * Returns whether the current user is an administrator.
- * Reads the value from `.user-isadmin input` (expects 1 for true).
- * @returns {boolean} True if admin; otherwise false.
- */
-function isAdmin() {
-  const isAdmin = Number($('.user-isadmin input').val());
-  return isAdmin === 1;
-}
 
 /**
  * Determines whether the current user is classified as a "Metrology" user.
@@ -348,10 +338,10 @@ function searchScheduleByTaskName() {
   let searchURL
 
   if (searchTaskName === '') {
-    searchURL = `http://rmslf/Forms/MPM-SearchScheduleByTaskName`;
+    searchURL = `${window.location.origin}/Forms//MPM-SearchScheduleByTaskName`;
   }
   else {
-    searchURL = `http://rmslf/Forms/MPM-SearchScheduleByTaskName?tname=${encodeURIComponent(searchTaskName)}`;
+    searchURL = `${window.location.origin}/Forms//MPM-SearchScheduleByTaskName?tname=${encodeURIComponent(searchTaskName)}`;
   }
 
   window.open(searchURL, '_blank');
@@ -367,9 +357,9 @@ function searchScheduleByTaskName() {
  */
 function tabifyFormSections() {
   $('#q0').children().wrapAll('<div id="ticket-tabs"></div>');
+  // noinspection HtmlUnknownAnchorTarget -- #q1/#q2/#q3/#q23 are LFF-generated div IDs, present at runtime.
   $('#ticket-tabs').prepend('<ul id="ticket-tab"><li><a href="#q1"><span>Service Tickets</span></a></li><li><a href="#q2"><span>Programming Tasks</span></a></li><li><a href="#q3"><span>Programming Tickets</span></a></li><li><a href="#q23"><span>Purchase Orders</span></a></li></ul>');
   $('#ticket-tabs').tabs();
-
   $("#ticket-tabs").on("tabsactivate", function (event, ui) {
     const tab = ui.newTab.index();
     if (tab === 0) {

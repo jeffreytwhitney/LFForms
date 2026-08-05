@@ -1,11 +1,24 @@
 /// <reference types="jquery" />
 
 declare global {
+  namespace JQuery {
+    // Laserfiche emits custom metadata on lookupcomplete events.
+    interface Event {
+      triggerId?: string;
+    }
+
+    interface TriggeredEvent {
+      triggerId?: string;
+    }
+  }
+
   interface JQuery {
     dialog(options?: any): JQuery;
     dialog(methodName: string, ...args: any[]): JQuery;
     datepicker(options?: any): JQuery;
     datepicker(methodName: string, ...args: any[]): JQuery;
+    tabs(options?: any): JQuery;
+    tabs(methodName: string, ...args: any[]): JQuery;
     button: JQueryButton;
   }
 
@@ -24,6 +37,7 @@ declare global {
   };
 
   function moment(fdmax: any | jQuery | string | number | string[]): any;
+  function moment(): any;
 }
 
 export {};

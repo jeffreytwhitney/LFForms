@@ -528,7 +528,7 @@ function callAddNote() {
   }
 
 
-  popupIFrame(`http://rmslf/Forms/MPM-AddPurchaseOrderNote?poid=${po_id}&nt=1`, popupTitle, 400, 650);
+  popupIFrame(`${window.location.origin}/Forms/MPM-AddPurchaseOrderNote?poid=${po_id}&nt=1`, popupTitle, 400, 650);
 }
 
 
@@ -539,7 +539,7 @@ function callAddPurchaseOrder() {
   let widowHeight = $(window).height();
   const siteid = $('.site-id input').val();
   widowHeight = widowHeight - 50;
-  popupIFrame(`http://rmslf/Forms/MPM-AddPurchaseOrder?siteid=${siteid}`, 'Add Purchase Order', widowHeight, 1500);
+  popupIFrame(`${window.location.origin}/Forms/MPM-AddPurchaseOrder?siteid=${siteid}`, 'Add Purchase Order', widowHeight, 1500);
 }
 
 
@@ -551,7 +551,7 @@ function callAddPurchaseOrder() {
 function callEditPurchaseOrder(poID) {
   let widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
-  popupIFrame(`http://rmslf/Forms/MPM-EditPurchaseOrder?poid=${poID}`, 'Edit Purchase Order', widowHeight, 1500);
+  popupIFrame(`${window.location.origin}/Forms/MPM-EditPurchaseOrder?poid=${poID}`, 'Edit Purchase Order', widowHeight, 1500);
 }
 
 
@@ -876,8 +876,7 @@ function popupIFrame(src, title, height, width) {
  */
 function printReport() {
 
-  const domain = document.location.hostname;
-  const url_root = "http://" + domain + "/Forms/";
+  const url_root = `${window.location.origin}/Forms/`;
   let report_url;
   const site_id = $('.site-id input').val();
   const finccom = Number($('.finccom input').val());
@@ -907,14 +906,13 @@ function printReport() {
 
   let min_Date;
   if ($('.fdmin input').val().length > 0) {
-
-    min_Date = moment(fdmax).format("YYYY-M-D");
+    min_Date = moment($('.fdmin input').val()).format("YYYY-M-D");
     report_url = report_url + "&fdmin=" + min_Date;
   }
 
   let max_Date;
   if ($('.fdmax input').val().length > 0) {
-    max_Date = moment(fdmax).format("YYYY-M-D");
+    max_Date = moment($('.fdmax input').val()).format("YYYY-M-D");
     report_url = report_url + "&fdmax=" + max_Date;
   }
 

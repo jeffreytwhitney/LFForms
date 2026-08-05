@@ -313,7 +313,7 @@ $(function () {
 function callAddNote() {
   const task_id = $('.tid input').val();
   const task_name = $('.task-name input').val();
-  popupIFrame(`http://rmslf/Forms/MPMAddNote?TaskID=${task_id}&nt=1`, `Add Note for task '${task_name}'`, 400, 650, false);
+  popupIFrame(`${window.location.origin}/Forms//MPMAddNote?TaskID=${task_id}&nt=1`, `Add Note for task '${task_name}'`, 400, 650, false);
 }
 
 
@@ -403,7 +403,7 @@ function callPesterAssignee() {
   const task_id = $('.tid input').val();
   const task_name = $('.task-name input').val();
   const assignee_name = $('.assigned-to select').val();
-  popupIFrame(`http://rmslf/Forms/MPMAddNote?TaskID=${task_id}&nt=3`, `Pester '${assignee_name}' regarding task '${task_name}'`, 400, 650, false);
+  popupIFrame(`${window.location.origin}/Forms//MPMAddNote?TaskID=${task_id}&nt=3`, `Pester '${assignee_name}' regarding task '${task_name}'`, 400, 650, false);
 }
 
 
@@ -416,7 +416,7 @@ function callPesterQE() {
   const task_id = $('.tid input').val();
   const task_name = $('.task-name input').val();
   const qe_name = $('.quality-engineer-name input').val();
-  popupIFrame(`http://rmslf/Forms/MPMAddNote?TaskID=${task_id}&nt=2`, `Pester '${qe_name}' regarding task '${task_name}'`, 400, 650, false);
+  popupIFrame(`${window.location.origin}/Forms//MPMAddNote?TaskID=${task_id}&nt=2`, `Pester '${qe_name}' regarding task '${task_name}'`, 400, 650, false);
 }
 
 
@@ -500,7 +500,7 @@ function callShowScheduleFilePath(index) {
  */
 function callViewNotes() {
   const task_id = $('.tid input').val();
-  popupIFrame(`http://rmslf/Forms/MPM-ViewTaskNotes?tid=${task_id}`, `Notes`, 800, 1000, false);
+  popupIFrame(`${window.location.origin}/Forms//MPM-ViewTaskNotes?tid=${task_id}`, `Notes`, 800, 1000, false);
 }
 
 
@@ -768,7 +768,7 @@ function popupIFrame(src, title, height, width, cancelSubmit) {
 function printTask() {
 
   const taskID = $('.tid input').val();
-  const report_url = `http://rmslf/Forms/MPM-ProgrammingTaskPrint?tid=${taskID}`
+  const report_url = `${window.location.origin}/Forms//MPM-ProgrammingTaskPrint?tid=${taskID}`
   loadiFrame(report_url);
 }
 

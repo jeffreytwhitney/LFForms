@@ -1,20 +1,22 @@
 $(function () {
   $('.Submit').hide();
-  $(document).prop('title', 'Gage Requests');
-  $('.Submit').on("click", function (e) { submitForm(e); });
+
+
   $.when(
     $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js'),
     $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js')
   ).done(function () {
-    
+    $(document).prop('title', 'Gage Requests');
+    $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
+    $.fn.bootstrapBtn = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
   }).fail(function () {
     console.error('Failed to load required scripts');
   });
-  $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-  $.fn.bootstrapBtn = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
 
+
+  $('.Submit').on("click", function (e) { submitForm(e); });
 
   $(document).on("onloadlookupfinished", function () {
     const sitename = $.cookie('site_name');
@@ -63,13 +65,11 @@ function callAddGage() {
   $('.Submit').show();
 }
 
+
 function callGoBack() {
   $('.add-id input').val(0).trigger("change");
   $('.Submit').hide();
 }
-
-
-
 
 
 function generateGoBackButtons() {
@@ -80,19 +80,6 @@ function generateGoBackButtons() {
   $(".gobackbutton").remove();
 }
 
-
-function generateTicketNumberColumn() {
-  $('.ticket-detail-link').remove();
-  const ticket_numbers = $('.ticket-table-ticket-number input[type="text"]');
-  const ticket_ids = $('.ticket-table-id input[type="text"]');
-  ticket_numbers.each(function (index) {
-    const ticket_id = $(ticket_ids[index]).val();
-    const ticket_number = $(this).val();
-    const ticket_number_link = $("<a>", { text: ticket_number, class: 'ticket-detail-link', href: 'javascript:void(0);', onclick: `showDetails(${ticket_id})` });
-    $(this).parent().append(ticket_number_link);
-  });
-
-}
 
 function submitForm() {
   const siteID = $('.site-id input').val();

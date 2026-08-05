@@ -16,7 +16,7 @@ $(function () {
 
   $(document).on('lookupcomplete', function () {
     if (($('.ed input').val() === '') || ($('.ed input').val() === null)) {
-      const curdate = moment(fdmax).format("MM/DD/YYYY");
+      const curdate = moment().format("MM/DD/YYYY");
       $('.ed input').val(curdate).trigger("change");
     }
 

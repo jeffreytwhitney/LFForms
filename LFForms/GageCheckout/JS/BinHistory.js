@@ -41,7 +41,7 @@ function fillIFrames() {
 
 
 function tabifyFormSections() {
-  $('#q5').next().andSelf().wrapAll('<div id="history-tabs"></div>');
+  $('#q5').next().addBack().wrapAll('<div id="history-tabs"></div>');
   $('#history-tabs').prepend('<ul id="ticket-history-tab"><li><a href="#q5"><span>Bin Ticket History</span></a></li><li><a href="#q6"><span>Bin Calibration History</span></a></li></ul>');
   $('#history-tabs').tabs();
 

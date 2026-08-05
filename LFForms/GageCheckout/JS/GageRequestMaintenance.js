@@ -3,26 +3,23 @@ const departmentNameMap = new Map();
 const cellLeaderMap = new Map();
 const cellLeaderNameMap = new Map();
 
-
-
-
 $(function () {
   $('.Submit').hide();
-  $(document).prop('title', 'Gage Request Maintenance');
-  $('.Submit').on("click", function (e) { validateForm(e); });
+
   $.when(
     $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js'),
     $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js')
   ).done(function () {
-    
+    $(document).prop('title', 'Gage Request Maintenance');
+    $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
+    $.fn.bootstrapBtn = $.fn.button.noConflict();
   }).fail(function () {
     console.error('Failed to load required scripts');
   });
-  $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-   // return $.fn.button to previously assigned value
-  $.fn.bootstrapBtn = $.fn.button.noConflict();
+
+
 
 
 
@@ -68,6 +65,8 @@ $(function () {
 
   });
 
+  $('.Submit').on("click", function (e) { validateForm(e); });
+
   $(document).on('change', '.site-name select', function () {
     const sitename = $('.site-name select').val();
     $.cookie('site_name', sitename, { expires: 365, path: '/' });
@@ -81,8 +80,15 @@ $(function () {
     $('.new-status-id input').val($(this).val());
   });
 
-  // Include Inactive checkbox toggles filter and reloads page 1.
   $(document).on('change', '#chkIncludeInActive', function () { filterTable(); });
+
+  $(document).on('click', '.request-detail-link', function (event) {
+    event.preventDefault();
+    const requestID = Number($(this).data('request-id'));
+    if (!Number.isNaN(requestID)) {
+      showDetails(requestID);
+    }
+  });
 
 });
 
@@ -168,7 +174,7 @@ function filterTable() {
     $('.finccom input').val(0);
   }
 
-  if ((departmentFilterVal !== 0) && (departmentFilterVal.length > 0)) {
+  if ((departmentFilterVal !== null) && (departmentFilterVal.length > 0)) {
     const taskDepartmentID = departmentNameMap.get(departmentFilterVal);
     $('.fdid input').val(taskDepartmentID);
   }
@@ -176,7 +182,7 @@ function filterTable() {
     $('.fdid input').val(0);
   }
 
-  if ((cellLeaderFilterVal !== 0) && (cellLeaderFilterVal.length > 0)) {
+  if ((cellLeaderFilterVal !== null) && (cellLeaderFilterVal.length > 0)) {
     const cellLeaderID = cellLeaderNameMap.get(cellLeaderFilterVal);
     $('.fclid input').val(cellLeaderID);
   }
@@ -220,24 +226,24 @@ function generateFilterRow() {
 
 
 
-  if (($(".status-lookup-cbo select option").length > 0) && ($('#cboFilter_Status option' === 0))) {
+  if (($(".status-lookup-cbo select option").length > 0) && ($('#cboFilter_Status option').length === 0)) {
     $("#cboFilter_Status").html($(".status-lookup-cbo select").html());
   }
 
-  if (($(".department-lookup-cbo select option").length > 0) && ($('#cboFilter_Department option' === 0))) {
+  if (($(".department-lookup-cbo select option").length > 0) && ($('#cboFilter_Department option').length === 0)) {
     $("#cboFilter_Department").html($(".department-lookup-cbo select").html());
   }
 
-  if (($(".machine-group-lookup-cbo select option").length > 0) && ($('#cboFilter_MachineGroup option' === 0))) {
+  if (($(".machine-group-lookup-cbo select option").length > 0) && ($('#cboFilter_MachineGroup option').length === 0)) {
     $("#cboFilter_MachineGroup").html($(".machine-group-lookup-cbo select").html());
   }
 
-  if (($(".operator-lookup-cbo select option").length > 0) && ($('#cboFilter_Operator option' === 0))) {
+  if (($(".operator-lookup-cbo select option").length > 0) && ($('#cboFilter_Operator option').length === 0)) {
     $("#cboFilter_Operator").html($(".operator-lookup-cbo select").html());
     $("#cboFilter_Operator").find('option:eq(0)').prop('selected', true);
   }
 
-  if (($(".cell-leader-lookup-cbo select option").length > 0) && ($('#cboFilter_CellLeader option' === 0))) {
+  if (($(".cell-leader-lookup-cbo select option").length > 0) && ($('#cboFilter_CellLeader option').length === 0)) {
     $("#cboFilter_CellLeader").html($(".cell-leader-lookup-cbo select").html());
     $("#cboFilter_CellLeader").find('option:eq(0)').prop('selected', true);
   }
@@ -261,47 +267,6 @@ function generateGoBackButtons() {
 }
 
 
-function generateMachineList() {
-  const detailTicketID = $('.details-request-id input').val();
-  const activateTicketID = $('.activate-ticket-id input').val();
-  let machineList = '';
-
-  if (detailTicketID !== '') {
-
-    $('[id^="Field152"]').each(function (index, element) {
-      let machineName = $(element).val();
-      if (machineName !== '') {
-        if (machineList.length > 0) {
-          machineList += ', ' + machineName;
-        }
-        else {
-          machineList = machineName;
-        }
-      }
-    });
-
-    $('.machine-name-list input').val(machineList);
-  }
-
-  if (activateTicketID !== '') {
-
-    $('[id^="Field131"]').each(function (index, element) {
-      let machineName = $(element).val();
-      if (machineName !== '') {
-        if (machineList.length > 0) {
-          machineList += ', ' + machineName;
-        }
-        else {
-          machineList = machineName;
-        }
-      }
-    });
-
-    $('.activate-machine-list input').val(machineList);
-  }
-}
-
-
 function generateRequestNumberColumn() {
   $('.request-detail-link').remove();
   const request_numbers = $('.request-number-col input[type="text"]');
@@ -309,7 +274,10 @@ function generateRequestNumberColumn() {
   request_numbers.each(function (index) {
     const request_id = $(request_ids[index]).val();
     const request_number = $(this).val();
-    const request_number_link = $("<a>", { text: request_number, class: 'request-detail-link', href: 'javascript:void(0);', onclick: `showDetails(${request_id})` });
+    const request_number_link = $("<a>", { text: request_number,
+      class: 'request-detail-link',
+      href: 'javascript:void(0);',
+      'data-request-id': request_id});
     $(this).parent().append(request_number_link);
   });
 

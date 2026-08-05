@@ -169,7 +169,7 @@ $(function () {
   }
 
   $(document).on("onloadlookupfinished", function () {
-    $('.date-to-add input').val(moment(fdmax).format("l"));
+    $('.date-to-add input').val(moment(new Date()).format("l"));
   });
 
   $(document).on('lookupcomplete', function () {

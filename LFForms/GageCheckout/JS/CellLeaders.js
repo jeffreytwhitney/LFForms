@@ -20,8 +20,6 @@ $(function () {
     $('.edit-cellleader-department-combo select').val(department_name);
   });
 
-
-
   $(document).on("onloadlookupfinished", function () {
 
     generateEditButtons();

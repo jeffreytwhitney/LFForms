@@ -34,7 +34,7 @@
    Extensibility
   - Add print-specific styles for `.textarea-div`.
   - Implement logic in the `lookupcomplete` handler if needed.
-  - If this runs outside of a parent container that listens for `"printme"`, you can fall back to `window.print()`.
+  - If this runs outside a parent container that listens for `"printme"`, you can fall back to `window.print()`.
  */
 
 $(function () {

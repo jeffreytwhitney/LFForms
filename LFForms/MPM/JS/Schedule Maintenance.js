@@ -14,7 +14,7 @@ Permissions: Must be Metrology User to view. Only Admins can add/edit schedules.
 Overview:
 - On DOM ready:
   - Sets the document title.
-  - Normalizes and copies the current LF user name into the network user field.
+  - Normalizes and copies the current LF username into the network user field.
   - Hides Submit controls.
   - Loads required external scripts and styles (jQuery Cookie, jQuery Confirm, jQuery UI theme, SimplePagination CSS).
   - Resolves Bootstrap/jQuery UI button plugin naming conflict via noConflict.

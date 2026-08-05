@@ -6,7 +6,7 @@ $(function () {
   // Initial UI setup.
   $('.Submit').hide();
 
-  // Runtime script/styles injection (cookies, confirm dialogs, UI theme, pagination css).
+  // Runtime script/styles injection (cookies, confirm dialogs, UI theme, pagination CSS).
   $.when(
     $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js'),
     $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js')
@@ -39,7 +39,7 @@ $(function () {
   $(document).on("onloadlookupfinished", function () {
 
     generateGoBackButtons();
-    // Normalize network user name on load.
+    // Normalize network username on load.
     $('.network-user-name input').trigger("change");
 
   });
@@ -125,8 +125,6 @@ function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFu
     }
   });
 }
-
-
 
 
 /**

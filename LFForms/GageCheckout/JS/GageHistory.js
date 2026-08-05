@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(function () {
   $('.Submit').hide();
   $('#q28').hide();
   $('#q70').hide();
@@ -148,7 +148,7 @@ function fillComboBoxWithUniqueValues(comboBoxSelector, rowSelector) {
 	
 	
 function sortComboBox(selector) {
-  selector_options = `${selector} option`;
+  let selector_options = `${selector} option`;
   const options = $(selector_options);
   const arr = options.map(function(_, o) {
     return {
@@ -330,7 +330,7 @@ function filterTicketHistoryRows() {
       }
     }
         
-    if (createStartDateFilter !== '') {
+    if (!Number.isNaN(createStartDateFilter)) {
       const row_StartDate = Date.parse($(this).find('.creation-date-col input[type=text]').val());
       if (createStartDateFilter >= row_StartDate) {
         $(this).hide();
@@ -338,7 +338,7 @@ function filterTicketHistoryRows() {
       }
     }
     
-    if (createEndDateFilter !== '') {
+    if (!Number.isNaN(createEndDateFilter)) {
       const row_EndDate = Date.parse($(this).find('.creation-date-col input[type=text]').val());
       if (createEndDateFilter <= row_EndDate) {
         $(this).hide();

@@ -2,22 +2,24 @@ let should_print_receipt = true;
 
 
 $(function () {
+  $('.Submit').hide();
+
   $.when(
     $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js'),
     $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js')
   ).done(function () {
-    
-  }).fail(function () {
-    console.error('Failed to load required scripts');
-  });
+    $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
 
-  $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-  $.fn.bootstrapBtn = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
-  $('.Submit').hide();
-  $(document).prop('title', 'Gage Calibration');
-  $('#q0').append("<div class='hidden' id='print_output'></div>");
+    $.fn.bootstrapBtn = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
+
+    $(document).prop('title', 'Gage Calibration');
+    $('#q0').append("<div class='hidden' id='print_output'></div>");
+
+  }).fail(function () {
+    console.error('Failed to load required scripts - Gage Calibration');
+  });
 
   if ($('.closeme input').val() === 1) {
     $('#q2').hide();
@@ -34,10 +36,7 @@ $(function () {
     $('.print-ticket-id input').val($('.guid input').val());
   });
 
-  set_print_event();
-
   $(document).on("lookupcomplete", function (e) {
-
     if (e.triggerId === 'Field37') {
       if ($('#Field37').val()) {
         if ($('#Field37').val() !== "0") {
@@ -102,7 +101,6 @@ $(function () {
     }
   });
 
-
   $('.ticket-number input').on('keypress', function () {
     const input = $(this);
     setTimeout(function () {
@@ -111,7 +109,7 @@ $(function () {
     }, 0);
   });
 
-
+  set_print_event();
 });
 
 
@@ -145,11 +143,8 @@ function print_receipt() {
     return;
   }
 
-  const domain = document.location.hostname;
-  const receipt_url_root = "http://" + domain + "/Forms/";
+  const receipt_url_root = `${window.location.origin}/Forms/`;
   let receipt_url = "";
-
-
 
   if ($('#Field34').val() === 1) {
     receipt_url = receipt_url_root + "PinGageReceipt?guid=" + $('#Field37').val();
@@ -194,9 +189,4 @@ function set_print_event() {
   });
 }
 
-function stripAsterisks(selector) {
-  const $input = $(selector);
-  let val = String($input.val());
-  val = val.replace(/^\*+|\*+$/g, '');
-  $input.val(val);
-}
+

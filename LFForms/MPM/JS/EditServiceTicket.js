@@ -351,7 +351,7 @@ function addNote() {
   let ticket_id = $('.tid input').val();
   let ticket_number = $('.ticket-number input').val();
   let user_id = getUserID();
-  popupIFrame(`http://rmslf/Forms/MPM-AddServiceTicketNote?tid=${ticket_id}&uid=${user_id}`, `Add Note for task '${ticket_number}'`, 400, 650, false);
+  popupIFrame(`${window.location.origin}/Forms//MPM-AddServiceTicketNote?tid=${ticket_id}&uid=${user_id}`, `Add Note for task '${ticket_number}'`, 400, 650, false);
 }
 
 
@@ -366,7 +366,7 @@ function addPurchaseOrder() {
   let ticket_number = $('.ticket-number input').val();
   let widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
-  popupIFrame(`http://rmslf/Forms/MPM-AddPurchaseOrder?sid=${ticket_id}&siteid=${siteid}`, `Add Purchase Order for Service Ticket '${ticket_number}'`, widowHeight, 1200, false);
+  popupIFrame(`${window.location.origin}/Forms//MPM-AddPurchaseOrder?sid=${ticket_id}&siteid=${siteid}`, `Add Purchase Order for Service Ticket '${ticket_number}'`, widowHeight, 1200, false);
 }
 
 
@@ -379,7 +379,7 @@ function callPesterAssignee() {
   let ticket_number = $('.ticket-number input').val();
   let assignee_name = $('.assignee-combo select').val();
 
-  popupIFrame(`http://rmslf/Forms/MPM-PesterServiceTicketAssignee?tid=${ticket_id}`, `Pester '${assignee_name}' regarding service ticket '${ticket_number}'`, 400, 750, false);
+  popupIFrame(`${window.location.origin}/Forms//MPM-PesterServiceTicketAssignee?tid=${ticket_id}`, `Pester '${assignee_name}' regarding service ticket '${ticket_number}'`, 400, 750, false);
 }
 
 
@@ -529,7 +529,7 @@ function linkPurchaseOrder() {
   let ticket_number = $('.ticket-number input').val();
   let widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
-  popupIFrame(`http://rmslf/Forms/MPM-LinkPurchaseOrder?sid=${ticket_id}`, `Link Existing Purchase Order to Service Ticket '${ticket_number}'`, widowHeight, 1200, false);
+  popupIFrame(`${window.location.origin}/Forms//MPM-LinkPurchaseOrder?sid=${ticket_id}`, `Link Existing Purchase Order to Service Ticket '${ticket_number}'`, widowHeight, 1200, false);
 }
 
 
@@ -580,7 +580,7 @@ function popupIFrame(src, title, height, width) {
 function printTicket() {
 
   let ticketID = $('.tid input').val();
-  let report_url = `http://rmslf/Forms/MPM-ServiceTicketPrint?tid=${ticketID}`
+  let report_url = `${window.location.origin}/Forms//MPM-ServiceTicketPrint?tid=${ticketID}`
   loadiFrame(report_url);
 }
 

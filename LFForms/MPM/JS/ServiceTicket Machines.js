@@ -11,7 +11,7 @@
    Client-side behaviors for the "Service Ticket Machines" Laserfiche Forms view.
    This form is for editing Service Ticket Machines.
    (When the user is filling out a service ticket, when they choose "Machine Down"
-   it give them a list of Machine's to choose from. This form edits that list.)
+   it gives them a list of Machine's to choose from. This form edits that list.)
 
 Permissions: Metrology Admins only.
  
@@ -75,9 +75,9 @@ Permissions: Metrology Admins only.
           
     
       Now this gets a bit tricky because the lookupcomplete event can fire multiple times, and we only want to do certain
-      things once, so we need to put logic in there so that it's not doing expensive things again and again.
+      things once. So, we need to put logic in there so that it's not doing expensive things again and again.
       There is a way of asking what the TriggerID of the lookup is. (A laserfiche function). But I found this 
-      to be kind of a pain to use because you have to know the TriggerID of the lookup that you want to respond to 
+      to be kind of a pain to use because you have to know the TriggerID of the lookup that you want to respond to,
       and it's just an integer. Also, if you ever change anything in the form, you don't know if the trigger id 
       has changed or not. So, I found it easier to just put logic in the function.
       to make sure that it doesn't, say iterate through a table or something getting values again and 

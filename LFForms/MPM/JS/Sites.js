@@ -157,7 +157,7 @@ $(function () {
     }
   });
 
-  // Ensure the normalized network user name triggers any bound change handlers after initial load.
+  // Ensure the normalized network username triggers any bound change handlers after initial load.
   $(document).on("onloadlookupfinished", function () {
     $('.network-user-name input').trigger("change");
   });

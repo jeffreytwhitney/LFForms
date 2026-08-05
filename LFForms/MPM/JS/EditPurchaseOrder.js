@@ -95,8 +95,8 @@ $(function () {
       $('#notes-history-iframe').remove();
 
       if (poid !== 0) {
-        $('#purchase-order-history').append(`<iframe id='purchase-order-iframe' name='purchase-order-iframe' src='http://rmslf/Forms/MPM-PurchaseOrderHistory?poid=${poid}' height='400' width='100%'/>`);
-        $('#notes-history').append(`<iframe id='notes-history-iframe' name='notes-history-iframe' src='http://rmslf/Forms/MPM-PurchaseOrderNotes?poid=${poid}' height='400' width='100%'/>`);
+        $('#purchase-order-history').append(`<iframe id='purchase-order-iframe' name='purchase-order-iframe' src='${window.location.origin}/Forms/MPM-PurchaseOrderHistory?poid=${poid}' height='400' width='100%'/>`);
+        $('#notes-history').append(`<iframe id='notes-history-iframe' name='notes-history-iframe' src='${window.location.origin}/Forms/MPM-PurchaseOrderNotes?poid=${poid}' height='400' width='100%'/>`);
       }
     }
   });
@@ -122,7 +122,7 @@ function callAddNote() {
   }
 
 
-  popupIFrame(`http://rmslf/Forms/MPM-AddPurchaseOrderNote?poid=${po_id}&nt=1`, popupTitle, 400, 650, true);
+  popupIFrame(`${window.location.origin}/Forms//MPM-AddPurchaseOrderNote?poid=${po_id}&nt=1`, popupTitle, 400, 650, true);
 }
 
 
@@ -133,7 +133,7 @@ function callAddLineItem() {
   let widowHeight = $(window).height();
   const poid = $('.poid input').val();
   widowHeight = widowHeight - 50;
-  popupIFrame(`http://rmslf/Forms/MPM-AddPurchaseOrderLineItem?poid=${poid}`, 'Add Line Item', widowHeight, 1200, false);
+  popupIFrame(`${window.location.origin}/Forms//MPM-AddPurchaseOrderLineItem?poid=${poid}`, 'Add Line Item', widowHeight, 1200, false);
 }
 
 
@@ -144,7 +144,7 @@ function callAddLineItem() {
 function callEditLineItem(liID) {
   let widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
-  popupIFrame(`http://rmslf/Forms/MPM-EditPurchaseOrderLineItem?liid=${liID}`, 'Edit Line Item', widowHeight, 1200, false);
+  popupIFrame(`${window.location.origin}/Forms//MPM-EditPurchaseOrderLineItem?liid=${liID}`, 'Edit Line Item', widowHeight, 1200, false);
 }
 
 

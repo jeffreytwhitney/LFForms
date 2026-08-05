@@ -115,8 +115,8 @@ Key Concepts:
 
 
 Dependencies
-  jQuery
-  jQuery UI (Smoothness theme)
+  -jQuery
+  -jQuery UI (Smoothness theme)
   jquery-confirm (CSS/JS)
   simplePagination.css (CSS)
   Relies on Parsley-style CSS classes for error styling (e.g., parsley-error).

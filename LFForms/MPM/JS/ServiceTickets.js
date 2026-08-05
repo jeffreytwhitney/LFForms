@@ -407,7 +407,7 @@ $(function () {
 function addTicket() {
   let widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
-  popUpIframe(`http://rmslf/Forms/RMS-MPM-AddServiceTicket`, 'Add Service Ticket', widowHeight, 1500);
+  popUpIframe(`${window.location.origin}/Forms//RMS-MPM-AddServiceTicket`, 'Add Service Ticket', widowHeight, 1500);
 }
 
 
@@ -484,7 +484,7 @@ function callPrevPage() {
 function editTicket(ticketID) {
   let widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
-  popUpIframe(`http://rmslf/Forms/MPM-EditServiceTicket?tid=${ticketID}`, 'Edit Service Ticket', widowHeight, 1500);
+  popUpIframe(`${window.location.origin}/Forms//MPM-EditServiceTicket?tid=${ticketID}`, 'Edit Service Ticket', widowHeight, 1500);
 }
 
 

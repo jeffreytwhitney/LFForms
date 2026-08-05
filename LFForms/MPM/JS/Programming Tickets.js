@@ -456,7 +456,7 @@ function appendPagination() {
 function addTicket() {
   let widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
-  popUpIframe(`http://rmslf/Forms/RMS-MPM-AddProgrammingTicket`, 'Add Programming Ticket', widowHeight, 1500);
+  popUpIframe(`${window.location.origin}/Forms//RMS-MPM-AddProgrammingTicket`, 'Add Programming Ticket', widowHeight, 1500);
 }
 
 /**
@@ -490,7 +490,7 @@ function callPrevPage() {
 function callShowDetails(ticket_id) {
   let widowHeight = $(window).height();
   widowHeight = widowHeight - 50;
-  popUpIframe(`http://rmslf/Forms/MPM-EditProgrammingTicket?tid=${ticket_id}`, 'Ticket Details', widowHeight, 1500);
+  popUpIframe(`${window.location.origin}/Forms//MPM-EditProgrammingTicket?tid=${ticket_id}`, 'Ticket Details', widowHeight, 1500);
 }
 
 /**
