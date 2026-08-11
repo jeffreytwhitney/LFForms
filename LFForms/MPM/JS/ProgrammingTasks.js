@@ -443,6 +443,14 @@ $(function () {
     }
   });
 
+  $(document).on('dblclick', '#cf-formtitle', function (event) {
+    if ($(event.target).closest('.cf-pagination').length > 0) {
+      return;
+    }
+    console.log('ProgrammingTasks title double-clicked');
+    generateTaskListPopup();
+  });
+
   $(document).on('lookupcomplete', function () {
     //See "Mapping"
     loadAssigneeMap();
@@ -815,6 +823,44 @@ function generateFilterRow() {
   if (($(".department-lookup-combo select option").length > 1) && ($("#cboFilter_Department option").length === 0)) {
     $("#cboFilter_Department").html($(".department-lookup-combo select").html());
   }
+}
+
+
+function generateTaskListPopup(){
+  console.log('generateTaskListPopup called');
+  const tasklist_rows = $(".tasklist-table table tbody tr");
+  let task_names = '';
+  tasklist_rows.each(function () {
+    let task_name = $(this).find('.tasklist-task-name-col input').val();
+    if (task_names.length === 0){
+      task_names = task_name;
+    }
+    else{
+      task_names = task_names + "\r\n" + task_name;
+    }
+  });
+
+  $('#q0').append(`<div id="taskListDialog" title="Task List" style="display:none;"><textarea id="feedbackText" style="width: 400px;height:300px;"></textarea></div>`)
+  $('#feedbackText').val(task_names)
+  $("#taskListDialog").dialog({
+    autoOpen: false,
+    modal: true,
+    width: 450,
+    buttons: {
+      "Close": function () {
+        $(this).dialog("close");
+        $("#taskListDialog").remove();
+      }
+    },
+    open: function () {
+      const feedbackText = document.getElementById('feedbackText');
+      if ((feedbackText !== null) && (feedbackText instanceof HTMLTextAreaElement)) {
+        feedbackText.focus();
+        feedbackText.select();
+      }
+    }
+  });
+  $("#taskListDialog").dialog("open");
 }
 
 
