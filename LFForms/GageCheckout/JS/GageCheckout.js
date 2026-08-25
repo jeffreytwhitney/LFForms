@@ -18,6 +18,7 @@ $(function () {
   printEvent(messageEvent, function (e) {
 
     if (e.data === "printme" || e.message === "printme") {
+      console.log("printme");
       $("#myiframe").get(0).contentWindow.print();
       $('.print-ticket-id input').val(null);
     }
@@ -106,13 +107,8 @@ function print_receipt() {
   const receipt_url_root = `${window.location.origin}/Forms/`;
   let receipt_url = "";
 
-  if ($('.print-ticket-type-id input').val() === 1) {
-    receipt_url = receipt_url_root + "PinGageReceipt?guid=" + $('.print-ticket-id input').val();
-  }
-  if ($('.print-ticket-type-id input').val() === 2) {
-    receipt_url = receipt_url_root + "ThreadReceipt?guid=" + $('.print-ticket-id input').val();
-  }
-
+  receipt_url = receipt_url_root + "PinGageReceipt?guid=" + $('.print-ticket-id input').val();
+  console.log(receipt_url);
   if (should_print_receipt === true) {
     if (receipt_url !== "") {
       loadiFrame(receipt_url);

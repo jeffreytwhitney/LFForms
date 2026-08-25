@@ -237,48 +237,6 @@ function callPrint(ticket_id) {
 }
 
 
-function callReturnTicket() {
-
-  const siteID = Number($('.site-id input').val());
-  const crEmployeeNumber = String($('.cr-employee-number input').val() || '').trim();
-  const anokaEmployeeNumber = String($('.anoka-employee-number input').val() || '').trim();
-  if (siteID === 1) {
-    if (crEmployeeNumber.length === 0) {
-      $.alert({
-        title: 'Enter Your Employee Number!',
-        content: 'You have to enter your employee number before you can return this ticket.',
-      });
-      return;
-    }
-  }
-  if (siteID === 2) {
-    if (anokaEmployeeNumber.length === 0) {
-      $.alert({
-        title: 'Enter Your Employee Number!',
-        content: 'You have to enter your employee number before you can return this ticket.',
-      });
-      return;
-    }
-  }
-
-  $.confirm({
-    title: 'Are you sure?',
-    content: 'Are you sure you wish to return this ticket in? It cannot be undone.',
-    buttons: {
-      ok: {
-        text: "OK",
-        keys: ['enter'],
-        action: function () {
-          $('.modify-action input').val(1);
-          $('.print-ticket-id input').val(null).trigger("change");
-          $('#form1').trigger("submit");
-        }
-      },
-    }
-  });
-}
-
-
 function buildMachineList(selector) {
   const machineNames = [];
 
@@ -456,7 +414,7 @@ function generateFilterRow() {
 function generateGoBackButtons() {
   const $goback_buttons = $(".gobackbutton");
   $goback_buttons.each(function () {
-    $(this).parent().append("<div class='go-back-button ui-button ui-corner-all ui-widget' onclick='callGoBack()'><span class='ui-icon ui-icon-arrowreturnthick-1-w'></span>Go Back</div><div class='return-ticket-button ui-button ui-corner-all ui-widget' onclick='callReturnTicket()'><span class='ui-icon ui-icon-check'></span>Return Ticket</div>");
+    $(this).parent().append("<div class='go-back-button ui-button ui-corner-all ui-widget' onclick='callGoBack()'><span class='ui-icon ui-icon-arrowreturnthick-1-w'></span>Go Back</div>");
   });
   $(".gobackbutton").remove();
 
@@ -730,7 +688,6 @@ function resetValidationErrors() {
 
 function showDetails(ticket_id) {
   $('.modify-action input').val(2)
-  $('.details-modifier-employee-number input')[0].focus();
   $(".details-ticket-id input").val(ticket_id).trigger("change");
   $('.Submit').show();
 }
@@ -890,7 +847,7 @@ function validateForm(e) {
 
     if (newPartNumber === originalPartNumber) {
       $('.clone-part-number input').addClass('parsley-error');
-      $('.clone-part-number input').parent().append('<ul class="parsley-errors-list filled bad-clone-part-number"><li class="parsley-required">Cannot clone a ticket with the same part number. If just changing job number, edit the ticket instead.</li></ul>');
+      $('.clone-part-number input').parent().append('<ul class="parsley-errors-list filled bad-clone-part-number"><li class="parsley-required">Cannot clone a ticket with the same part number. If just changing the job number, edit the ticket instead.</li></ul>');
       e.preventDefault();
       return;
     }
