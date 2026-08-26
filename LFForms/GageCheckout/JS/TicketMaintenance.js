@@ -8,7 +8,6 @@ const cellLeaderNameMap = new Map();
 let should_print_receipt = true;
 
 
-
 $(function () {
 
   $('.Submit').hide();
@@ -19,7 +18,7 @@ $(function () {
     $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js'),
     $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js')
   ).done(function () {
-    
+
   }).fail(function () {
     console.error('Failed to load required scripts');
   });
@@ -52,14 +51,10 @@ $(function () {
     //If it says "CloseDialogWithRefresh", it destroys the dialog and refreshes the form.
     //I don't refresh if you add a note, for example. But if you do anything that will show up on the page, (adding time, cloning a task, etc)
     //then I do a refresh.
-    if (event.data === "CloseDialog") {
-      $("#popupIFrame").dialog("destroy");
-      $("#popupIFrame").remove();
-    }
-    if (event.data === "CloseDialogWithRefresh") {
-      $("#popupIFrame").dialog("destroy");
-      $("#popupIFrame").remove();
+    $("#popupIFrame").dialog("destroy");
+    $("#popupIFrame").remove();
 
+    if (event.data === "CloseDialogWithRefresh") {
       const returnTicketID = Number($('.return-ticket-id input').val());
       if (returnTicketID > 0) {
         executeIFrameUpdate(returnTicketID);
@@ -69,6 +64,10 @@ $(function () {
         refreshPage();
       }
     }
+    if (event.data === "RefreshAfterMissing") {
+      refreshPage();
+    }
+
   };
 
   $(document).on("onloadlookupfinished", function () {
@@ -321,7 +320,6 @@ function filterTicketTable() {
   $('.fpdia input').val(gageDiameterFilterValue);
 
 
-
   if ((departmentFilterVal !== 0) && (departmentFilterVal.length > 0)) {
     const taskDepartmentID = departmentNameMap.get(departmentFilterVal);
     $('.fdid input').val(taskDepartmentID);
@@ -425,7 +423,6 @@ function generateFilterRow() {
     });
 
 
-
     $("#cboFilter_Department").on("change", function () {
       filterTicketTable();
     });
@@ -486,7 +483,7 @@ function generateFilterRow() {
     $("#cboFilter_Status").html($(".status-lookup-cbo select").html());
   }
 
-  if (($(".machine-group-lookup-cbo select option").length > 0) && ($('#cboFilter_MachineGroup option').length < 2 )) {
+  if (($(".machine-group-lookup-cbo select option").length > 0) && ($('#cboFilter_MachineGroup option').length < 2)) {
     $("#cboFilter_MachineGroup").html($(".machine-group-lookup-cbo select").html());
   }
 
@@ -644,10 +641,13 @@ function generateTitleInfo() {
     const lfUserName = $('.user-name input').val();
     if (lfUserName === 'Anonymous User') {
       $('.user-name-display input').val('User :Anonymous');
-      const login_link = $("<a>", { text: 'Log In', class: 'login-link', href: 'http://rmslf/Forms/account/login?returnUrl=%2fForms%2fGageTicketAdministration' });
+      const login_link = $("<a>", {
+        text: 'Log In',
+        class: 'login-link',
+        href: 'http://rmslf/Forms/account/login?returnUrl=%2fForms%2fGageTicketAdministration'
+      });
       $('.user-name-display').append(login_link);
-    }
-    else {
+    } else {
       const userName = $('.user-name-hidden input').val()
       if (userName !== '') {
         const userText = `User: ${userName}`
