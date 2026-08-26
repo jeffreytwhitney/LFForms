@@ -51,8 +51,21 @@ $(function () {
     //If it says "CloseDialogWithRefresh", it destroys the dialog and refreshes the form.
     //I don't refresh if you add a note, for example. But if you do anything that will show up on the page, (adding time, cloning a task, etc)
     //then I do a refresh.
-    $("#popupIFrame").dialog("destroy");
-    $("#popupIFrame").remove();
+    const shouldClosePopup =
+      event.data === "Close Dialog" ||
+      event.data === "CloseDialog" ||
+      event.data === "CloseDialogWithRefresh" ;
+
+    if (shouldClosePopup) {
+      const popupIFrame = $("#popupIFrame");
+      if (popupIFrame.length > 0) {
+        const dialogInstance = popupIFrame.dialog("instance");
+        if (dialogInstance) {
+          popupIFrame.dialog("destroy");
+        }
+        popupIFrame.remove();
+      }
+    }
 
     if (event.data === "CloseDialogWithRefresh") {
       const returnTicketID = Number($('.return-ticket-id input').val());
@@ -234,6 +247,35 @@ function callPrint(ticket_id) {
 }
 
 
+function callSetMissing(ticket_id) {
+  if (typeof ticket_id === 'undefined') {
+    return;
+  }
+
+  const confirmDialogId = 'set-missing-confirm-dialog';
+  $(`#${confirmDialogId}`).remove();
+
+  $("#popUpDiv").append(`<div id='${confirmDialogId}' title='Confirm Set Missing'><p>Are you sure you want to set this ticket as missing?</p></div>`);
+
+  $(`#${confirmDialogId}`).dialog({
+    modal: true,
+    resizable: false,
+    width: 420,
+    buttons: {
+      Yes: function () {
+        const execute_url = `${window.location.origin}/Forms//RMS-GAGE-SetTicketAsMissing?tid=${ticket_id}`;
+        $("#popupIFrame").remove();
+        $("#popUpDiv").html(`<iframe id='popupIFrame' name='myname' src='${execute_url}'/>`);
+        $(this).dialog("destroy").remove();
+      },
+      No: function () {
+        $(this).dialog("destroy").remove();
+      }
+    }
+  });
+}
+
+
 function callReturn(ticket_id) {
   callCalibrate(ticket_id, 1);
 }
@@ -375,17 +417,13 @@ function generateActivateButtons() {
 function generateCalibrateButtons() {
   const calibrate_textboxes = $(".ticket-table-calibrate-button input[type=text]");
   const ticket_ids = $(".ticket-id-col input[type=text]");
-  const ticket_status_ids = $(".ticket-status-id-col input[type=text]");
   calibrate_textboxes.each(function (index) {
     const ticket_id = ticket_ids[index].value;
-    const ticket_status_id = Number(ticket_status_ids[index].value);
-    if (ticket_status_id > 1) {
       const has_button = $(this).parent().find('.cal-button').length;
       if (has_button === 0) {
         const btn_html = `<div class='table-button ui-button cal-button' onclick='callCalibrate(${ticket_id})'><span title='Calibrate Ticket' class='ui-button-icon ui-icon ui-icon-wrench'/></div>`
         $(this).parent().append(btn_html);
       }
-    }
   });
 }
 
@@ -403,7 +441,7 @@ function generateFilterRow() {
 
   if ($('#filterRow').length === 0) {
 
-    const filter_row = "<TR id='filterRow'><TH/><TH/><TH/><TH/><TH><input type='text' id='txtFilter_TicketNumber'></TH><TH><select id='cboFilter_Status'/></TH><TH><select id='cboFilter_Department'/></TH><TH><input type='text' id='txtFilter_MachineNumber'></TH><TH><select id='cboFilter_MachineGroup'/></TH><TH><select id='cboFilter_Operator'/></TH><TH><select id='cboFilter_CellLeader'/></TH><TH><input type='text' id='txtFilter_PartNumber'></TH><TH><input type='text' id='txtFilter_JobNumber'></TH><TH/><TH/><TH/><TH/><TH><input type='text' id='txtFilter_GageDiameter'></TH><TH/><TH/>"
+    const filter_row = "<TR id='filterRow'><TH/><TH/><TH/><TH/><TH/><TH><input type='text' id='txtFilter_TicketNumber'></TH><TH><select id='cboFilter_Status'/></TH><TH><select id='cboFilter_Department'/></TH><TH><input type='text' id='txtFilter_MachineNumber'></TH><TH><select id='cboFilter_MachineGroup'/></TH><TH><select id='cboFilter_Operator'/></TH><TH><select id='cboFilter_CellLeader'/></TH><TH><input type='text' id='txtFilter_PartNumber'></TH><TH><input type='text' id='txtFilter_JobNumber'></TH><TH/><TH/><TH/><TH/><TH><input type='text' id='txtFilter_GageDiameter'></TH><TH/><TH/>"
     $('.ticket-table table thead').append(filter_row);
     $("#txtFilter_TicketNumber").on("change", function () {
       filterTicketTable();
@@ -500,9 +538,11 @@ function generateFilterRow() {
 
 
 function generateFormButtons() {
-
-  generateTableButtons(".ticket-table-return-button", "return-button", "ui-icon-arrowreturn-1-w", "Check In Ticket", "callReturn");
-  generateCalibrateButtons();
+  if (checkPermissions()) {
+    generateTableButtons(".ticket-table-return-button", "return-button", "ui-icon-arrowreturn-1-w", "Check In Ticket", "callReturn");
+    generateTableButtons(".ticket-table-missing-button", "missing-button", "ui-icon-help", "Set Ticket As Missing", "callSetMissing");
+    generateCalibrateButtons();
+  }
   generatePrintButtons();
   generateTicketNumberColumn();
   generateActivateButtons();
