@@ -814,6 +814,8 @@ function reApplyFilterValues() {
     return;
   }
 
+  const sortFieldOrdinal = Number($('.sfo input').val());
+  const sortDirection = Number($('.sd input').val());
   const ticketNumberFilterValue = $('.ftname input').val();
   const jobNumberFilterValue = $('.fjnbr input').val();
   const partNumberFilterValue = $('.fpnum input').val();
@@ -870,6 +872,14 @@ function reApplyFilterValues() {
     const cellLeaderName = cellLeaderMap.get(cellLeaderFilterVal);
     $("#cboFilter_CellLeader").val(cellLeaderName);
   }
+
+  if (sortDirection > 0) {
+    $('.sd input').val(sortDirection);
+  }
+
+  if (!isNaN(sortFieldOrdinal) && !isNaN(sortDirection)) {
+    setSortIcon(sortFieldOrdinal, sortDirection);
+  }
 }
 
 
@@ -886,8 +896,8 @@ function refreshPage() {
   const cellLeaderFilterVal = Number($('.fclid input').val());
   const gageDiameterFilterVal = Number($('.fpdia input').val());
   const statusFilterVal = Number($('.fsid input').val());
-  const sortFieldOrdinal = Number($('.sort-field-ordinal input').val());
-  const sortDirection = Number($('.sort-direction input').val());
+  const sortFieldOrdinal = Number($('.sfo input').val());
+  const sortDirection = Number($('.sd input').val());
 
 
   const page_number = Number($('.pg input').val());
@@ -950,11 +960,11 @@ function refreshPage() {
   }
 
   if (Number.isInteger(sortFieldOrdinal) && (sortFieldOrdinal >= 0)) {
-    queryParams.set('sortfield', sortFieldOrdinal.toString());
+    queryParams.set('sfo', sortFieldOrdinal.toString());
   }
 
   if (Number.isInteger(sortDirection) && (sortDirection >= 0)) {
-    queryParams.set('sortdirection', sortDirection.toString());
+    queryParams.set('sd', sortDirection.toString());
   }
 
   // Keep spaces encoded as %20 (instead of '+') for downstream parsing compatibility.
@@ -999,20 +1009,20 @@ function sortTable(newSortOrdinal, selector) {
   $('.ticket-table').hide();
   removeAppendedFields();
 
-  const currentSortOrdinal = Number($('.sort-field-ordinal input').val());
-  let sortDirection = Number($('.sort-direction input').val());
+  const currentSortOrdinal = Number($('.sfo input').val());
+  let sortDirection = Number($('.sd input').val());
 
   if (newSortOrdinal === currentSortOrdinal) {
     if (sortDirection === 0) {
       sortDirection = 1
-      $('.sort-direction input').val(1).trigger("change");
+      $('.sd input').val(1).trigger("change");
     } else {
       sortDirection = 0;
-      $('.sort-direction input').val(0).trigger("change");
+      $('.sd input').val(0).trigger("change");
     }
   } else {
-    $('.sort-field-ordinal input').val(newSortOrdinal);
-    $('.sort-direction input').val(0).trigger("change");
+    $('.sfo input').val(newSortOrdinal);
+    $('.sd input').val(0).trigger("change");
     sortDirection = 0;
   }
 
@@ -1111,5 +1121,5 @@ function wireUpSortFields() {
     sortTable(12, '#q125');
   });
 
-  setSortIcon(Number($('.sort-field-ordinal input').val()), Number($('.sort-direction input').val()));
+  setSortIcon(Number($('.sfo input').val()), Number($('.sd input').val()));
 }
