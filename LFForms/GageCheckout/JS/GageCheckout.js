@@ -1,5 +1,19 @@
 let should_print_receipt = true;
 $(function () {
+  const refreshTimeoutMs = 60000;
+  let lastActivityAt = Date.now();
+  let isTyping = false;
+
+  function scheduleInactivityRefresh() {
+    setTimeout(function () {
+      const isInactive = (Date.now() - lastActivityAt) >= refreshTimeoutMs;
+      if (isInactive && !isTyping) {
+        window.location.reload();
+        return;
+      }
+      scheduleInactivityRefresh();
+    }, refreshTimeoutMs);
+  }
 
   $.when(
     $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js')
@@ -75,6 +89,20 @@ $(function () {
     $.cookie('site_name', sitename, { expires: 365, path: '/' });
   });
 
+  $(document).on('keydown click scroll touchstart', function () {
+    lastActivityAt = Date.now();
+  });
+
+  $(document).on('keydown', 'input, textarea, [contenteditable="true"]', function () {
+    isTyping = true;
+    lastActivityAt = Date.now();
+  });
+
+  $(document).on('blur', 'input, textarea, [contenteditable="true"]', function () {
+    isTyping = false;
+  });
+
+  scheduleInactivityRefresh();
 
 });
 

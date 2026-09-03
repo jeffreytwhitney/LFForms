@@ -368,6 +368,24 @@ let savedFilterDefaultsRestored = false;
 
 
 $(function () {
+
+  const refreshTimeoutMs = 60000;
+  let lastActivityAt = Date.now();
+  let isTyping = false;
+
+  function scheduleInactivityRefresh() {
+    setTimeout(function () {
+      const isInactive = (Date.now() - lastActivityAt) >= refreshTimeoutMs;
+      if (isInactive && !isTyping) {
+        refreshPage();
+        return;
+      }
+      scheduleInactivityRefresh();
+    }, refreshTimeoutMs);
+  }
+
+
+
   $('.Submit').hide();
   const lfUserNameRaw = $('.lf-user-name input').val();
   const lfUserName = (typeof lfUserNameRaw === 'string') ? lfUserNameRaw.trim() : '';
@@ -450,6 +468,21 @@ $(function () {
     console.log('ProgrammingTasks title double-clicked');
     generateTaskListPopup();
   });
+
+  $(document).on('keydown click scroll touchstart', function () {
+    lastActivityAt = Date.now();
+  });
+
+  $(document).on('keydown', 'input, textarea, [contenteditable="true"]', function () {
+    isTyping = true;
+    lastActivityAt = Date.now();
+  });
+
+  $(document).on('blur', 'input, textarea, [contenteditable="true"]', function () {
+    isTyping = false;
+  });
+
+  scheduleInactivityRefresh();
 
   $(document).on('lookupcomplete', function () {
     //See "Mapping"
@@ -1391,10 +1424,14 @@ function restoreSavedFilterDefaults() {
 
   const assigneeFilterField = $('.faid input');
   const excludeWaitingField = $('.fexw input');
+  const sortFieldOrdinalField = $('.sort-field-ordinal input');
+  const sortDirectionField = $('.sort-direction input');
   const savedAssigneeID = $.cookie('assignee_id');
   const savedExcludeWaiting = $.cookie('exclude_waiting');
   const currentAssigneeID = Number(assigneeFilterField.val());
   const currentExcludeWaiting = Number(excludeWaitingField.val());
+  const currentSortFieldOrdinal = Number(sortFieldOrdinalField.val());
+  const currentSortDirection = Number(sortDirectionField.val());
 
   if (!hasQueryStringValue('faid') && ((isBlankFilterValue(assigneeFilterField.val())) || (currentAssigneeID === 0)) && !isBlankFilterValue(savedAssigneeID)) {
     assigneeFilterField.val(savedAssigneeID);
@@ -1402,6 +1439,16 @@ function restoreSavedFilterDefaults() {
 
   if (!hasQueryStringValue('fexw') && ((isBlankFilterValue(excludeWaitingField.val())) || (currentExcludeWaiting === 0)) && !isBlankFilterValue(savedExcludeWaiting)) {
     excludeWaitingField.val(savedExcludeWaiting);
+  }
+
+  const querySortField = new URLSearchParams(window.location.search).get('sortfield');
+  if (!isBlankFilterValue(querySortField) && ((isBlankFilterValue(sortFieldOrdinalField.val())) || (currentSortFieldOrdinal === 0))) {
+    sortFieldOrdinalField.val(querySortField);
+  }
+
+  const querySortDirection = new URLSearchParams(window.location.search).get('sortdirection');
+  if (!isBlankFilterValue(querySortDirection) && ((isBlankFilterValue(sortDirectionField.val())) || (currentSortDirection === 0))) {
+    sortDirectionField.val(querySortDirection);
   }
 
   savedFilterDefaultsRestored = true;
