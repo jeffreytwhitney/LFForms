@@ -99,7 +99,7 @@ function appendPagination() {
 
 
 function callNextPage() {
-  $('.tasklist-table').hide();
+  $('.ticket-table').hide();
   removeAppendedFields();
   let current_page = Number($('.pg input').val());
   $('.pg input').val(current_page + 1).trigger("change");
@@ -107,7 +107,7 @@ function callNextPage() {
 
 
 function callPrevPage() {
-  $('.tasklist-table').hide();
+  $('.ticket-table').hide();
   removeAppendedFields();
   let current_page = Number($('.pg input').val());
   if (current_page === 1) {
@@ -143,10 +143,8 @@ function filterTicketTable() {
   }
 
   const ticketNumberFilterValue = $('#txtFilter_TicketNumber').val();
-  const ticketTypeFilterVal = $('#cboFilter_TicketType').val();
   const departmentFilterVal = $('#cboFilter_Department').val();
   const machineGroupFilterVal = $('#cboFilter_MachineGroup').val();
-  const operatorFilterVal = $('#cboFilter_Operator').val();
   const cellLeaderFilterVal = $('#cboFilter_CellLeader').val();
 
   $('.ftname input').val(ticketNumberFilterValue);
@@ -161,12 +159,7 @@ function filterTicketTable() {
   }
 
 
-  if (ticketTypeFilterVal !== null) {
-    $('.fttid input').val(ticketTypeFilterVal);
-  }
-  else {
-    $('.fttid input').val(0);
-  }
+  $('.fttid input').val(0);
 
   if (departmentFilterVal !== null)  {
     const taskDepartmentID = departmentNameMap.get(departmentFilterVal);
@@ -184,12 +177,7 @@ function filterTicketTable() {
     $('.fmgid input').val(null);
   }
 
-  if (operatorFilterVal !== null) {
-    $('.fopname input').val(operatorFilterVal);
-  }
-  else {
-    $('.fopname input').val(null);
-  }
+  $('.fopname input').val(null);
 
   if (cellLeaderFilterVal !== null) {
     const cellLeaderID = cellLeaderNameMap.get(cellLeaderFilterVal);
@@ -210,42 +198,29 @@ function generateFilterRow() {
 
   if ($('#filterRow').length === 0) {
 
-    const filter_row = "<TR id='filterRow'><TH><input type='text' id='txtFilter_TicketNumber'></TH><TH/><TH><select id='cboFilter_TicketType'/></TH><TH><select id='cboFilter_Department'/></TH><TH/><TH><select id='cboFilter_MachineGroup'/></TH><TH><select id='cboFilter_Operator'/></TH><TH><select id='cboFilter_CellLeader'/></TH><TH/><TH/><TH/><TH/><TH/><TH/><TH/><TH/>"
+    const filter_row = "<TR id='filterRow'><TH><input type='text' id='txtFilter_TicketNumber'></TH><TH/><TH/><TH><select id='cboFilter_Department'/></TH><TH/><TH><select id='cboFilter_MachineGroup'/></TH><TH/><TH><select id='cboFilter_CellLeader'/></TH><TH/><TH/><TH/><TH/><TH/><TH/><TH/><TH/>"
     $('.ticket-table table thead').append(filter_row);
     $("#txtFilter_TicketNumber").on("change", function () { filterTicketTable(); });
-    $("#cboFilter_TicketType").on("change", function () { filterTicketTable(); });
     $("#cboFilter_Department").on("change", function () { filterTicketTable(); });
     $("#cboFilter_MachineGroup").on("change", function () { filterTicketTable(); });
-    $("#cboFilter_Operator").on("change", function () { filterTicketTable(); });
     $("#cboFilter_CellLeader").on("change", function () { filterTicketTable(); });
 
 
     $("#txtFilter_TicketNumber").on("dblclick", function () { $("#txtFilter_TicketNumber").val(null).trigger("change"); });
-    $("#cboFilter_TicketType").on("dblclick", function () { $("#cboFilter_TicketType").val(null).trigger("change"); });
     $("#cboFilter_Department").on("dblclick", function () { $("#cboFilter_Department").val(null).trigger("change"); });
     $("#cboFilter_MachineGroup").on("dblclick", function () { $("#cboFilter_MachineGroup").val(null).trigger("change"); });
-    $("#cboFilter_Operator").on("dblclick", function () { $("#cboFilter_Operator").val(null).trigger("change"); });
     $("#cboFilter_CellLeader").on("dblclick", function () { $("#cboFilter_CellLeader").val(null).trigger("change"); });
   }
 
-  if (($(".ticket-type-lookup-cbo select option").length > 0) && ($('#cboFilter_TicketType option') === 0)) {
-    $("#cboFilter_TicketType").html($(".ticket-type-lookup-cbo select").html());
-  }
-
-  if (($(".department-lookup-cbo select option").length > 0) && ($('#cboFilter_Department option') === 0)) {
+  if (($(".department-lookup-cbo select option").length > 0) && ($('#cboFilter_Department option').length < 2)) {
     $("#cboFilter_Department").html($(".department-lookup-cbo select").html());
   }
 
-  if (($(".machine-group-lookup-cbo select option").length > 0) && ($('#cboFilter_MachineGroup option') === 0)) {
+  if (($(".machine-group-lookup-cbo select option").length > 0) && ($('#cboFilter_MachineGroup option').length < 2)) {
     $("#cboFilter_MachineGroup").html($(".machine-group-lookup-cbo select").html());
   }
 
-  if (($(".operator-lookup-cbo select option").length > 0) && ($('#cboFilter_Operator option') === 0)) {
-    $("#cboFilter_Operator").html($(".operator-lookup-cbo select").html());
-    $("#cboFilter_Operator").find('option:eq(0)').prop('selected', true);
-  }
-
-  if (($(".cell-leader-lookup-cbo select option").length > 0) && ($('#cboFilter_CellLeader option') === 0)) {
+  if (($(".cell-leader-lookup-cbo select option").length > 0) && ($('#cboFilter_CellLeader option').length < 2)) {
     $("#cboFilter_CellLeader").html($(".cell-leader-lookup-cbo select").html());
     $("#cboFilter_CellLeader").find('option:eq(0)').prop('selected', true);
   }
@@ -253,7 +228,7 @@ function generateFilterRow() {
 
 
 function generateTicketNumberColumn() {
-  $('.ticket-link').remove();
+  $('.ticket-detail-link').remove();
   const ticket_numbers = $('.ticket-number-col input[type="text"]');
   const ticket_ids = $('.ticket-id-col input[type="text"]');
   ticket_numbers.each(function (index) {
@@ -357,10 +332,8 @@ function reApplyFilterValues() {
   }
 
   const ticketNumberFilterValue = $('.ftname input').val();
-  const ticketTypeFilterVal = $('.fttid input').val();
   const departmentFilterVal = Number($('.fdid input').val());
   const machineGroupFilterVal = Number($('.fmgid input').val());
-  const operatorFilterVal = $('.fopname input').val();
   const cellLeaderFilterVal = Number($('.fclid input').val());
   const includeClosedTicketsVal = Number($('.fincret input').val());
 
@@ -377,10 +350,6 @@ function reApplyFilterValues() {
     $('#txtFilter_TicketNumber').val(ticketNumberFilterValue);
   }
 
-  if (ticketTypeFilterVal !== 0) {
-    $("#cboFilter_TicketType").val(ticketTypeFilterVal);
-  }
-
   if (departmentFilterVal !== 0) {
     const departmentName = departmentMap.get(departmentFilterVal);
     $('#cboFilter_Department').val(departmentName);
@@ -391,10 +360,6 @@ function reApplyFilterValues() {
     $('#cboFilter_MachineGroup').val(machineGroupName);
   }
 
-  if ((operatorFilterVal !== null) && (operatorFilterVal.length > 0)) {
-    $("#cboFilter_Operator").val(operatorFilterVal);
-  }
-
   if (cellLeaderFilterVal !== 0) {
     const cellLeaderName = cellLeaderMap.get(cellLeaderFilterVal);
     $("#cboFilter_CellLeader").val(cellLeaderName);
@@ -403,8 +368,8 @@ function reApplyFilterValues() {
 
 
 function removeAppendedFields() {
-  $('#tasklist-pagination').remove();
-  $('.ticket-link').remove();
+  $('#ticket-table-pagination').remove();
+  $('.ticket-detail-link').remove();
 }
 
 
@@ -420,5 +385,3 @@ function showDetails(ticket_id) {
   widowHeight = widowHeight - 50;
   popUpIframe(`${window.location.origin}/Forms//RMS-GAGE-TicketDetails?tid=${ticket_id}&ro=1`, 'Ticket Details', widowHeight, 1200);
 }
-
-
