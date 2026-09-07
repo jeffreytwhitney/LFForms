@@ -20,10 +20,16 @@
    all users to be able to view the forms. What we want instead is to limit their ability to do certain things
    inside the application.
    There are three "levels" of users in the system.
-     Operators/Cell Leads
+     Operators/Cell Leads:
        The first level is the Operator/Cell Lead.
        Operators and Cell Leads are not logged in to LFF at all, and they do not have LFF accounts. As such, they
-       cannot be validated in the traditional sense (there is no password to validate against). Therefore, they are
+       cannot be validated in the traditional sense (there is no password to validate against). Therefore, they are validated
+       in a "on your honor" kind of way. We do look them up by their employee number against the profit key database, so
+       that goes some of the way towards limiting anyone from spoofing another user. (Though why anyone would do that is a valid question.)
+       We do keep a list of cell leads in a lookup table by department, but that's only because we don't want the operator
+       to put in a bogus cell lead. 
+     Calibration Techs:  
+       These people all have LFF accounts, as well as 
        
 
 
