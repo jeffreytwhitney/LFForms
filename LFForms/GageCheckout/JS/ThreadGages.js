@@ -11,7 +11,6 @@
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-   // return $.fn.button to previously assigned value
   $.fn.bootstrapBtn = $.fn.button.noConflict();
 
 
@@ -22,25 +21,19 @@
   $('#myElement').removeAttr('style');
   $('#q10').prepend("<fieldset id='Field999' class='radio-checkbox-fieldset filter-checkboxes'><span class='choice'><input name='Field999' id='Field999-0' type='checkbox' value='IncludeInactivethreads'><label class='form-option-label' for='Field999-0'>Show InActive threads</label></span></fieldset>");
 
-  //This is in the Edit Thread section. If the user changes the value in the text box, it updates the combo box.
   $('.edit-thread-isactive-value input').on("change", function () {
     $('.edit-thread-isactive-combo select').val(Number($('.edit-thread-isactive-value input').val()));
   });
-  //This is in the Edit Thread section. If the user changes the value in the combo box, it updates the text box.
   $('.edit-thread-isactive-combo select').on("change", function () {
     $('.edit-thread-isactive-value input').val(Number($('.edit-thread-isactive-combo select').val()));
   });
 
-  //This is in the Edit Thread section. If the user changes the value in the Thread Type text box, it updates the combo box.
   $('.edit-thread-type-combo select').on("change", function () {
     $('.edit-thread-type-id input').val(Number($('.edit-thread-type-combo select').val()));
   });
-  //This is in the Edit Thread section. If the user changes the value in the Thread Type combo box, it updates the text box.
   $('.edit-thread-type-id input').on("change", function () {
     $('.edit-thread-type-combo select').val(Number($('.edit-thread-type-id input').val()));
   });
-
-  //If the thread is checked out to a ticket, disable the isactive combo box.
   $('.existing-ticket-id input').on("change", function () {
     if ($('.existing-ticket-id input').val().length > 0) {
       $('.edit-thread-isactive-combo select').removeClass("ui-state-disabled").addClass("ui-state-disabled");
@@ -49,13 +42,10 @@
       $('.edit-thread-isactive-combo select').removeClass("ui-state-disabled");
     }
   });
-
-  //This is in the Add Thread section. If the user changes the value in the Thread Type text box, it updates the combo box.
   $('.add-thread-type-combo select').on("change", function () {
     $('.add-thread-type-id input').val(Number($('.add-thread-type-combo select').val()));
   });
 
-  //This is in the Add Thread section. If there is a thread with the same name, disable the Submit button.
   $('.existing-thread-name-id input').on("change", function () {
     validateForm();
   });

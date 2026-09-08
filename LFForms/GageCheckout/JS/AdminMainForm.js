@@ -9,8 +9,11 @@
  ## Overview
  
  This script controls the Gage Administration Main Form landing page.
- It dynamically builds navigation links, enforces access rules for authenticated/authorized users,
- and shows disabled links with a permission alert when access is restricted.
+ If the user is not authenticated (see User Permissions below), it will make all the links
+ just pop up an error message. If they are authenticated, then it will make the links actually go somewhere.
+ There are two exceptions to this. The first is the Login link which will only show if the user is not logged in to
+ LFF. The other is the Users link which requires you to be an Admin.
+
 
  KEY CONCEPTS:
  User Permissions:
@@ -24,25 +27,22 @@
        The first level is the Operator/Cell Lead.
        Operators and Cell Leads are not logged in to LFF at all, and they do not have LFF accounts. As such, they
        cannot be validated in the traditional sense (there is no password to validate against). Therefore, they are validated
-       in a "on your honor" kind of way. We do look them up by their employee number against the profit key database, so
-       that goes some of the way towards limiting anyone from spoofing another user. (Though why anyone would do that is a valid question.)
+       in an "on your honor" kind of way. We do look them up by their employee number against the profit key database, so
+       that goes some of the way towards limiting anyone from spoofing another user. (Though why anyone would do that, I can't imagine.)
        We do keep a list of cell leads in a lookup table by department, but that's only because we don't want the operator
-       to put in a bogus cell lead. 
+       to put in a bogus cell lead or misspell the cell lead's name. This also allows us to reassign open tickets
+       to another cell lead if a cell lead goes inactive.
      Calibration Techs:  
-       These people all have LFF accounts, as well as 
-       
+       These people all have LFF accounts, as well as records in the tlkpUser table. They have permissions to use forms that
+       everyone else does not.
+     Cal Tech Admins: The only thing that Admins can do that regular cal techs cannot is add/edit users.
 
-
-
-
- How authentication is performed:
- When the user first loads the form, LFF fills in the .lf-user-name field with CRETEX\username.
- (Predicated on the fact that the user has a LFF account and is logged in to LFF).
- Because of the expense, Cell Leads have not been given LFF accounts, so the .lf-user-name field will be set to "Anonymous User" for them.
- In any case, if the user is logged in to LFF, it sets the .lf-user-name to CRETEX\username, but we only want the username portion,
- so we copy just the username portion (trimming off the "CRETEX\" part) into the .network-user-name field,
- which is what gets posted back to the server.
- This will be matched against the user database table to determine the user's ID, user type, and department, etc.
+   How authentication is performed:
+   When the user first loads the form, LFF fills in the .lf-user-name field with CRETEX\username.
+   (Predicated on the fact that the user has a LFF account and is logged in to LFF).
+   Because of the expense, Cell Leads have not been given LFF accounts, so the .lf-user-name field will be set to "Anonymous User" for them.
+   In any case, if the user is logged in to LFF, it sets the .lf-user-name to CRETEX\username.
+    This will be matched against the user database table to determine the user's ID, employee number, and whether they are an admin.
 
  LaserFiche Events:
  There are two key LaserFiche events used in this script:
@@ -53,7 +53,6 @@
  Laserfiche has lookup rules applied to certain fields, so that when a field is changed, it triggers a lookup to fill in other fields.
  The user can either change the fields themselves directly, or indirectly.
  An example of a direct change would be when the user chooses a Site from the dropdown.
-
 
  Now this gets a bit tricky. The lookupcomplete event can fire multiple times, and we only want to do certain things once. Therefore, we need
  to put logic in there so that it's not doing expensive things again and again.
@@ -80,6 +79,7 @@
  we know which site we're talking about. Sometimes this daisy-chaining can get 3 and sometimes even 4 levels deep because of all the relationships between
  various fields on a form. This causes the form to be slower than it otherwise would have been, but there's not a lot we can do about it.
  It sort of is what it is. This is what happens when you have to make an application with a non-application framework.
+
  ### Link Rendering
  
  `generateApplicationLinks()` creates two columns of links:
@@ -121,7 +121,6 @@
  ## Events
  
  - `onloadlookupfinished`: Triggers link generation after lookup data is available.
- - `message`: Triggers printing behavior for the embedded iframe.
  */
 $(function () {
 

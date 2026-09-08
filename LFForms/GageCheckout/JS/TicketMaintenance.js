@@ -65,7 +65,6 @@ $(function () {
     if (event.data === "CloseDialogWithRefresh") {
       const returnTicketID = Number($('.return-ticket-id input').val());
       if (returnTicketID > 0) {
-        executeIFrameUpdate(returnTicketID);
         removeRow(returnTicketID);
         $('.return-ticket-id input').val(0);
       } else {
@@ -328,18 +327,6 @@ function colorCodeRows() {
     }
 
   });
-}
-
-
-function executeIFrameUpdate(ticket_id) {
-
-  if (typeof ticket_id === 'undefined') {
-    return;
-  }
-  const execute_url = `${window.location.origin}/Forms//RMS-GAGE-ReturnTicket?tid=${ticket_id}`;
-
-  $("#popupIFrame").remove();
-  $("#popUpDiv").html(`<iframe id='popupIFrame' name='myname' src='${execute_url}'/>`);
 }
 
 
