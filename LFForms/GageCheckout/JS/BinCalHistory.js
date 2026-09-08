@@ -90,13 +90,27 @@
 
  Ticket Detail Links:
    `generateTicketNumberColumn()` converts ticket number text fields into clickable links that open
-   a read-only ticket details dialog (`showDetails()`).
+   a read-only ticket details dialog (`showDetails()`). We have to do this because LFF does not have link fields (or
+   button fields, nor a bunch of other useful things). Because of this shortcoming, I have had to go to inordinate
+   lengths to make what I need. There is a column in the "cal-table" table named "ticket-number-col". There in a text box
+   in each cell in this column. The text box holds the ID of the ticket. What I do is iterate through each text box,
+   grabbing the id. Then I append a html link right next to the hidden text box that calls the showDetails function, sending it
+   the id that it got from the text box as the argument. So, for example, if the text box has a value of 99, I will end
+   up creating a link that looks something like this: <a onclick: 'showDetails(99)'>P-10099</a>
+   The tricky part is that every time we change which page of data we're looking at I have to change all the links.
+   I have to hide the table, delete all the old links because they point to the wrong tickets now, and then recreate
+   them so that they point at the right tickets. If you see this as a bit of a pain in the butt, then you have a
+   descent grasp of the fundamentals.
 
  Report Printing:
-   `printReport()` builds a report URL for `RMS-GAGE-BinCalHistory-Print` using:
-   - Required: bin gage id (`bid`)
-   - Optional: start date (`std`) and end date (`ed`)
-   If optional dates are present but invalid, it shows a jquery-confirm alert and stops.
+   Generating a printable report involves a bit of trickery. The way it works is that at the very beginning of the page
+   render, we add a hidden iFrame to the bottom of the page. The next thing we do is to set up an event listener for
+   a message event. The message event is expecting data = "printme". If it gets this message with the correct data,
+   it knows that the page inside the iframe is ready to print, so we then grab the contents of the iframe and call the
+   print function.
+   Then, when we want to print something, we navigate the iframe to the BinCalHistoryPrint page, sending it the same
+   filter values that are set on this page. When that page is done rendering, it simply calls parent.postMessage("printme", "*")
+   which triggers the print function in this, the parent window.
 
  ## Dependencies
 
