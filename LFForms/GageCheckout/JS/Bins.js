@@ -1,4 +1,80 @@
-﻿$(function () {
+﻿/**
+ # Bins.js Documentation
+
+ Author:  Jeffrey Whitney
+          jtwhitney@machine.com
+          651-319-7982
+ Date:    9/9/2026
+
+ ## Overview
+
+ This script controls the Bin Maintenance form behavior.
+ It initializes UI dependencies, manages add/edit workflows, enforces permission-based actions,
+ applies filtering and pagination to the bin table, and opens ticket/bin details in dialogs.
+
+ KEY CONCEPTS:
+ LaserFiche Events:
+ There are two key LaserFiche events used in this script:
+ - onloadlookupfinished: Runs once after initial independent lookups finish. This is used to
+ build static UI shell elements (buttons, popup host, filter controls) and apply persisted filters.
+ - lookupcomplete: Runs each time a lookup completes after initial load. This is used to rebuild
+ lookup-driven table affordances (edit/detail links, yes/no normalization, pagination) whenever table data changes.
+
+ Lookup Chaining and Re-Entrancy:
+ Several actions trigger hidden field updates and then `.trigger("change")`, which in turn trigger lookup rules.
+ Because of this, `lookupcomplete` can fire multiple times in quick succession. The script therefore re-generates
+ dynamic table controls each pass so the DOM stays aligned with the current lookup result set.
+
+ Permissions Model:
+ `checkPermissions()` controls whether privileged controls are rendered (for example Add/Edit actions).
+ The current user must be active and have a populated employee number; otherwise admin-like controls are removed.
+
+ Add/Edit Flow:
+ The page supports two submission modes selected via radio state and hidden IDs:
+ - Add mode: `callAddBin()` sets add mode, primes add ID, and reveals submit.
+ - Edit mode: `callEditBin(bin_id)` sets edit mode for a specific row and reveals submit.
+ `validateForm()` enforces required-field and duplicate-name checks before allowing submit.
+
+ Filtering and Pagination:
+ Filtering writes UI values into hidden lookup argument fields (`fbinname`, `fpn`, `fnote`, `incinactive`)
+ and resets page number to 1, which causes a fresh lookup.
+ Pagination is implemented as previous/next controls with a hidden `pg` field and 25-row page assumptions.
+ The table is hidden while page/filter transitions run and shown again after lookup-render work completes.
+
+ Dialog / iFrame Messaging:
+ Detail and maintenance dialogs are opened using a popup iFrame.
+ `window.onmessage` listens for child-frame messages:
+ - `CloseDialog`: close popup only
+ - `CloseDialogWithRefresh`: close popup and refresh page state
+ This keeps parent and child pages loosely coupled while still allowing refresh when edits affect visible rows.
+
+ ## Dependencies
+
+ - [jQuery](https://jquery.com/)
+ - [jQuery UI](https://jqueryui.com/)
+ - [jquery-cookie](https://github.com/carhartl/jquery-cookie)
+ - [jquery-confirm](https://craftpip.github.io/jquery-confirm/)
+ - [simplePagination.js](https://flaviusmatis.github.io/simplePagination.js/)
+
+ ## Usage
+
+ This script expects these fields/elements to exist:
+ - `.pg input` (page number)
+ - `.bin-table` and nested table structure
+ - `.existing-bin-name-id input` and `.existing-ticket-id input`
+ - `.edit-bin-isactive-value input` and `.edit-bin-isactive-combo select`
+ - `.fbinname input`, `.fpn input`, `.fnote input`, `.incinactive input`
+ - `.add-bin-*` and `.edit-bin-*` fields used by add/edit flows
+ - `#q0` (popup host insertion point)
+ - `#q2` (filter UI insertion point)
+
+ ## Events
+
+ - `onloadlookupfinished`: Builds primary UI controls, binds filter/input handlers, restores filters, shows table.
+ - `lookupcomplete`: Rebuilds edit/detail affordances, normalizes display values, updates pagination, shows table.
+ - `window.onmessage`: Handles popup-close and popup-close-with-refresh messages from child iFrames.
+ */
+$(function () {
   $.when(
     $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js'),
     $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js')

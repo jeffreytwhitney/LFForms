@@ -394,19 +394,42 @@ function filterTicketTable() {
 }
 
 
+// Ensures the button inside `container` matching `buttonClass` reflects `btn_html`.
+// If no button exists yet, it is appended. If one exists but its markup (and therefore
+// its onclick/ticket-id) no longer matches what this row currently calls for, it is
+// replaced in place. This prevents stale buttons from continuing to reference a ticket
+// id from a previous render pass (e.g. when lookupcomplete fires multiple times while
+// the table data is still being refreshed).
+function syncButton(container, buttonClass, btn_html) {
+  const existing_button = container.find(`.${buttonClass}`);
+  if (existing_button.length === 0) {
+    container.append(btn_html);
+  } else if (existing_button.get(0).outerHTML !== btn_html) {
+    existing_button.replaceWith(btn_html);
+  }
+}
+
+
+// Removes the button matching `buttonClass` from `container` if it exists. Used when a
+// row no longer qualifies for a button it may have previously had (e.g. ticket status
+// changed) so a stale, incorrectly-targeted button isn't left behind.
+function removeButtonIfExists(container, buttonClass) {
+  container.find(`.${buttonClass}`).remove();
+}
+
+
 function generateActivateButtons() {
   const activate_textboxes = $(".activate-ticket-button input[type=text]");
-  const ticket_ids = $(".ticket-id-col input[type=text]");
-  const ticket_status_ids = $(".ticket-status-id-col input[type=text]");
-  activate_textboxes.each(function (index) {
-    const ticket_id = ticket_ids[index].value;
-    const ticket_status_id = ticket_status_ids[index].value;
+  activate_textboxes.each(function () {
+    const row = $(this).closest('tr');
+    const ticket_id = row.find('.ticket-id-col input[type=text]').val();
+    const ticket_status_id = row.find('.ticket-status-id-col input[type=text]').val();
+    const parent = $(this).parent();
     if (ticket_status_id === '1') {
-      const has_button = $(this).parent().find('.activate-button').length;
-      if (has_button === 0) {
-        const btn_html = `<div class='table-button ui-button activate-button' onclick='callActivate(${ticket_id})'><span title='Activate Staged Ticket' class='ui-button-icon ui-icon ui-icon-power'/></div>`
-        $(this).parent().append(btn_html);
-      }
+      const btn_html = `<div class='table-button ui-button activate-button' onclick='callActivate(${ticket_id})'><span title='Activate Staged Ticket' class='ui-button-icon ui-icon ui-icon-power'/></div>`
+      syncButton(parent, 'activate-button', btn_html);
+    } else {
+      removeButtonIfExists(parent, 'activate-button');
     }
   });
 }
@@ -414,17 +437,16 @@ function generateActivateButtons() {
 
 function generateCalibrateButtons() {
   const calibrate_textboxes = $(".ticket-table-calibrate-button input[type=text]");
-  const ticket_ids = $(".ticket-id-col input[type=text]");
-  const ticket_status_ids = $(".ticket-status-id-col input[type=text]");
-  calibrate_textboxes.each(function (index) {
-    const ticket_id = ticket_ids[index].value;
-    const ticket_status_id = ticket_status_ids[index].value;
+  calibrate_textboxes.each(function () {
+    const row = $(this).closest('tr');
+    const ticket_id = row.find('.ticket-id-col input[type=text]').val();
+    const ticket_status_id = row.find('.ticket-status-id-col input[type=text]').val();
+    const parent = $(this).parent();
     if (ticket_status_id < 3) {
-      const has_button = $(this).parent().find('.cal-button').length;
-      if (has_button === 0) {
-        const btn_html = `<div class='table-button ui-button cal-button' onclick='callCalibrate(${ticket_id})'><span title='Calibrate Ticket' class='ui-button-icon ui-icon ui-icon-wrench'/></div>`
-        $(this).parent().append(btn_html);
-      }
+      const btn_html = `<div class='table-button ui-button cal-button' onclick='callCalibrate(${ticket_id})'><span title='Calibrate Ticket' class='ui-button-icon ui-icon ui-icon-wrench'/></div>`
+      syncButton(parent, 'cal-button', btn_html);
+    } else {
+      removeButtonIfExists(parent, 'cal-button');
     }
   });
 }
@@ -573,17 +595,16 @@ function generateMachineList() {
 
 function generatePrintButtons() {
   const print_buttons = $(".ticket-table-print-button input[type=text]");
-  const ticket_ids = $(".ticket-id-col input[type=text]");
-  const ticket_status_ids = $(".ticket-status-id-col input[type=text]");
-  print_buttons.each(function (index) {
-    const ticket_id = ticket_ids[index].value;
-    const ticket_status_id = Number(ticket_status_ids[index].value);
-    const has_button = $(this).parent().find('.print-button').length;
+  print_buttons.each(function () {
+    const row = $(this).closest('tr');
+    const ticket_id = row.find('.ticket-id-col input[type=text]').val();
+    const ticket_status_id = Number(row.find('.ticket-status-id-col input[type=text]').val());
+    const parent = $(this).parent();
     if (ticket_status_id < 3) {
-      if (has_button === 0) {
-        const btn_html = `<div class='table-button ui-button print-button' onclick='callPrint(${ticket_id})'><span title='Print Ticket Receipt' class='ui-button-icon ui-icon ui-icon-print'/></div>`
-        $(this).parent().append(btn_html);
-      }
+      const btn_html = `<div class='table-button ui-button print-button' onclick='callPrint(${ticket_id})'><span title='Print Ticket Receipt' class='ui-button-icon ui-icon ui-icon-print'/></div>`
+      syncButton(parent, 'print-button', btn_html);
+    } else {
+      removeButtonIfExists(parent, 'print-button');
     }
   });
 }
@@ -602,31 +623,20 @@ function generateTableButtons(buttonSelector, buttonClass, buttonImageClass, but
       btn_html = `<div class='table-button ui-button ${buttonClass}' onclick='${buttonFunction}(${btn_value})'><span title='${buttonTitle}' class='ui-button-icon ui-icon ${buttonImageClass}'/></div>`
     }
 
-    const has_button = $(this).parent().find(`.${buttonClass}`).length;
-    if (has_button === 0) {
-      $(this).parent().append(btn_html);
-    }
+    syncButton($(this).parent(), buttonClass, btn_html);
   });
 }
 
 
 function generateTicketNumberColumn() {
-  $('.ticket-link').remove();
   const ticket_numbers = $('.ticket-number-col input[type="text"]');
-  const ticket_ids = $('.ticket-id-col input[type="text"]');
-  ticket_numbers.each(function (index) {
-    const ticket_id = $(ticket_ids[index]).val();
+  ticket_numbers.each(function () {
+    const row = $(this).closest('tr');
+    const ticket_id = row.find('.ticket-id-col input[type="text"]').val();
     const ticket_number = $(this).val();
-    const ticket_number_link = $("<a>", {
-      text: ticket_number,
-      class: 'ticket-link',
-      href: 'javascript:void(0);',
-      onclick: `showDetails(${ticket_id})`
-    });
-    const has_link = $(this).parent().find('.ticket-link').length;
-    if (has_link === 0) {
-      $(this).parent().append(ticket_number_link);
-    }
+    const ticket_number_text = $('<div>').text(ticket_number).html();
+    const link_html = `<a class='ticket-link' href='javascript:void(0);' onclick='showDetails(${ticket_id})'>${ticket_number_text}</a>`;
+    syncButton($(this).parent(), 'ticket-link', link_html);
   });
 
 }
@@ -649,13 +659,12 @@ function generateVersionLink() {
 function getTicketGuidByTicketID(ticket_id) {
   let ticket_guid;
   const ticket_ids = $(".ticket-id-col input[type=text]");
-  const ticket_guids = $(".ticket-table-print-button input[type=text]");
 
-  ticket_ids.each(function (index) {
+  ticket_ids.each(function () {
     const row_ticket_id = Number($(this).val());
-    const row_ticket_guid = ticket_guids[index].value;
     if (row_ticket_id === Number(ticket_id)) {
-      ticket_guid = row_ticket_guid;
+      ticket_guid = $(this).closest('tr').find('.ticket-table-print-button input[type=text]').val();
+      return false;
     }
   });
   return ticket_guid;
@@ -670,13 +679,12 @@ function getTicketRowCount() {
 function getTicketTypeIDByTicketID(ticket_id) {
   let ticket_type_id;
   const ticket_ids = $(".ticket-id-col input[type=text]");
-  const ticket_type_ids = $(".ticket-type-id-col input[type=text]");
 
-  ticket_ids.each(function (index) {
+  ticket_ids.each(function () {
     const row_ticket_id = Number($(this).val());
-    const row_ticket_type_id = ticket_type_ids[index].value;
     if (row_ticket_id === Number(ticket_id)) {
-      ticket_type_id = row_ticket_type_id;
+      ticket_type_id = $(this).closest('tr').find('.ticket-type-id-col input[type=text]').val();
+      return false;
     }
   });
   return ticket_type_id;
@@ -923,9 +931,9 @@ function refreshPage() {
     queryParams.set('pg', page_number.toString());
   }
 
-  if ((ticketNumberFilterValue !== null) && (ticketNumberFilterValue.length > 0)) {
-    queryParams.set('ftname', ticketNumberFilterValue);
-  }
+  // if ((ticketNumberFilterValue !== null) && (ticketNumberFilterValue.length > 0)) {
+  //   queryParams.set('ftname', ticketNumberFilterValue);
+  // }
 
   if ((jobNumberFilterValue !== null) && (jobNumberFilterValue.length > 0)) {
     queryParams.set('fjnbr', jobNumberFilterValue);
