@@ -1,18 +1,18 @@
 let should_print_receipt = true;
 
-
 $(function () {
 
-  
+
   $(document).prop('title', 'Ticket Details');
-  $('.Submit').on("click", function (e) { validateForm(e);  });
+  $('.Submit').on("click", function (e) {
+    validateForm(e);
+  });
   $.when(
     $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js'),
     $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js')
-  ).done(function () {
-    
-  }).fail(function () {
-    console.error('Failed to load required scripts');
+  ).done(function () {})
+    .fail(function () {console.error('Failed to load required scripts'); })
+    .then(function () {
   });
 
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
@@ -36,7 +36,7 @@ $(function () {
       }
     }
   });
-  
+
   $(document).on("onloadlookupfinished", function () {
 
 
@@ -48,12 +48,10 @@ $(function () {
     if (readonly !== 1) {
       if (isActiveUser() === true) {
         $('.Submit').show();
-      }
-      else {
+      } else {
         $('.Submit').hide();
       }
-    }
-    else {
+    } else {
       $('.Submit').hide();
     }
 
@@ -73,8 +71,7 @@ $(function () {
     if (ticketType === 1) {
       generatePinCalibrationLinkColumn();
       colorCodePinRows();
-    }
-    else if (ticketType === 2) {
+    } else if (ticketType === 2) {
       generateThreadCalibrationLinkColumn();
       setDailyCalValues();
       colorCodeThreadRows();
@@ -85,8 +82,7 @@ $(function () {
     if ($(e.currentTarget).val() === 'BIN') {
       $(e.currentTarget).closest('tr').find('.add-pins-bins-table-diameter input').val(0).addClass("ui-state-disabled");
       $(e.currentTarget).closest('tr').find('.add-pins-bins-table-number-of-pins input').val(1).addClass("ui-state-disabled");
-    }
-    else {
+    } else {
       $(e.currentTarget).closest('tr').find('.add-pins-bins-table-diameter input').val(null).removeClass("ui-state-disabled");
       $(e.currentTarget).closest('tr').find('.add-pins-bins-table-number-of-pins input').removeClass("ui-state-disabled");
     }
@@ -104,11 +100,11 @@ $(function () {
     generateMachineList();
   });
 
-  });
+});
 
 
 function colorCodePinRows() {
-  
+
   const pin_history_rows = $(".pin-history-table table tbody tr");
   const pin_history_event_types = $('.pin-history-event-type input[type="text"]');
 
@@ -116,7 +112,7 @@ function colorCodePinRows() {
 
 
   pin_history_event_types.each(function (index) {
-    
+
     const pin_history_row = pin_history_rows[index];
     const pin_history_event_type = $(this).val();
 
@@ -143,7 +139,7 @@ function colorCodeThreadRows() {
     const thread_history_row = thread_history_rows[index];
     const thread_history_event_type = $(thread_history_event_types[index]).val();
 
-    if (status === 'Missing')  {
+    if (status === 'Missing') {
       $(thread_history_row).addClass('colorMissing');
       return;
     }
@@ -177,8 +173,7 @@ function generateMachineList() {
     if (machineName !== '') {
       if (machineList.length > 0) {
         machineList += ', ' + machineName;
-      }
-      else {
+      } else {
         machineList = machineName;
       }
     }
@@ -193,14 +188,19 @@ function generatePinCalibrationLinkColumn() {
   const event_type_names = $('.pin-history-event-type input[type="text"]');
   const event_type_ids = $('.pin-history-table-event-id input[type="text"]');
   const calibration_ids = $('.pin-history-table-calibration-id input[type="text"]');
-  
+
   event_type_names.each(function (index) {
     const event_type_id = $(event_type_ids[index]).val();
     const calibration_id = $(calibration_ids[index]).val();
 
     if (event_type_id === 3) {
-      const calibration_div = $("<div>", { class: 'calibration-detail-div' });
-      const calibration_link = $("<a>", { text: "Calibrated", class: 'calibration-detail-link', href: 'javascript:void(0);', onclick: `showPinCalibrationHistory(${calibration_id})` });
+      const calibration_div = $("<div>", {class: 'calibration-detail-div'});
+      const calibration_link = $("<a>", {
+        text: "Calibrated",
+        class: 'calibration-detail-link',
+        href: 'javascript:void(0);',
+        onclick: `showPinCalibrationHistory(${calibration_id})`
+      });
       calibration_div.append(calibration_link);
       $(this).parent().append(calibration_div);
       if (!$(this).hasClass('hidden')) {
@@ -223,8 +223,13 @@ function generateThreadCalibrationLinkColumn() {
     const calibration_id = $(calibration_ids[index]).val();
 
     if (event_type_id === 3) {
-      const calibration_div = $("<div>", { class: 'calibration-detail-div' });
-      const calibration_link = $("<a>", { text: "Calibrated", class: 'calibration-detail-link', href: 'javascript:void(0);', onclick: `showThreadCalibrationHistory(${calibration_id})` });
+      const calibration_div = $("<div>", {class: 'calibration-detail-div'});
+      const calibration_link = $("<a>", {
+        text: "Calibrated",
+        class: 'calibration-detail-link',
+        href: 'javascript:void(0);',
+        onclick: `showThreadCalibrationHistory(${calibration_id})`
+      });
       calibration_div.append(calibration_link);
       $(this).parent().append(calibration_div);
       if (!$(this).hasClass('hidden')) {
@@ -274,7 +279,6 @@ function print_receipt() {
   const domain = document.location.hostname;
   const receipt_url_root = "http://" + domain + "/Forms/";
   let receipt_url = "";
-
 
 
   if ($('.print-ticket-type-id input').val() === 1) {
@@ -366,7 +370,7 @@ function submitForm(e) {
   if (ticketType === 1) {
     if (pinRows.length > 0) {
       pinRows.each(function () {
-        
+
         const pinTypeValue = Number($(this).find('.add-pins-bins-table-pin-type-id input').val());
         const newBinID = $(this).find('.add-pins-bins-table-new-bin-id input');
         const numberOfPins = $(this).find('.add-pins-bins-table-new-bin-number input');
@@ -375,8 +379,7 @@ function submitForm(e) {
         if (pinTypeValue === 5) {
           numberOfPins.val(1);
           pinDiameter.val(0);
-        }
-        else {
+        } else {
           newBinID.val(0);
         }
       });
@@ -387,10 +390,10 @@ function submitForm(e) {
 
 
 function validateForm(e) {
-  
+
   let isValid = true;
   resetValidationErrors();
-  
+
 
   const pinRows = $('.add-pins-bins-table table tbody tr');
 
@@ -418,8 +421,7 @@ function validateForm(e) {
   if (isValid === true) {
     $('.closeme input').val(1);
     $('.print-ticket-id input').val($('.guid input').val());
-  }
-  else {
+  } else {
     e.preventDefault();
   }
 

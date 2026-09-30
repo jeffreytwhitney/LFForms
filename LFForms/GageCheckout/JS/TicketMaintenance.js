@@ -18,19 +18,16 @@ $(function () {
     $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js'),
     $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js')
   ).done(function () {
+    $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
+    $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
+    $(document).prop('title', 'Gage Maintenance');
+    $('#q0').append("<div class='hidden' id='popUpDiv'></div>");
+  })
+    .fail(function () {console.error('Failed to load required scripts');  })
+    .then(function () {});
 
-  }).fail(function () {
-    console.error('Failed to load required scripts');
-  });
-  $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
-  $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
-  // return $.fn.button to previously assigned value
   $.fn.bootstrapBtn = $.fn.button.noConflict();
-
-  $(document).prop('title', 'Gage Maintenance');
-  $('#q0').append("<div class='hidden' id='popUpDiv'></div>");
-
 
   const eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
   const printEvent = window[eventMethod];
@@ -342,7 +339,6 @@ function filterTicketTable() {
 
   const ticketNumberFilterValue = $('#txtFilter_TicketNumber').val();
   const partNumberFilterValue = $('#txtFilter_PartNumber').val();
-  const jobNameFilterValue = $('#txtFilter_JobNumber').val();
   const machineNumberFilterValue = $('#txtFilter_MachineNumber').val();
   const gageDiameterFilterValue = Number($('#txtFilter_GageDiameter').val());
 
@@ -353,7 +349,6 @@ function filterTicketTable() {
   const statusFilterVal = $('#cboFilter_Status').val();
 
   $('.ftname input').val(ticketNumberFilterValue);
-  $('.fjnbr input').val(jobNameFilterValue);
   $('.fpnum input').val(partNumberFilterValue);
   $('.fmname input').val(machineNumberFilterValue);
   $('.fsid input').val(statusFilterVal);
@@ -465,15 +460,12 @@ function generateFilterRow() {
 
   if ($('#filterRow').length === 0) {
 
-    const filter_row = "<TR id='filterRow'><TH/><TH/><TH/><TH/><TH/><TH><input type='text' id='txtFilter_TicketNumber'></TH><TH><select id='cboFilter_Status'/></TH><TH><select id='cboFilter_Department'/></TH><TH><input type='text' id='txtFilter_MachineNumber'></TH><TH><select id='cboFilter_MachineGroup'/></TH><TH><select id='cboFilter_Operator'/></TH><TH><select id='cboFilter_CellLeader'/></TH><TH><input type='text' id='txtFilter_PartNumber'></TH><TH><input type='text' id='txtFilter_JobNumber'></TH><TH/><TH/><TH/><TH/><TH><input type='text' id='txtFilter_GageDiameter'></TH><TH/><TH/>"
+    const filter_row = "<TR id='filterRow'><TH/><TH/><TH/><TH/><TH/><TH><input type='text' id='txtFilter_TicketNumber'></TH><TH><select id='cboFilter_Status'/></TH><TH><select id='cboFilter_Department'/></TH><TH><input type='text' id='txtFilter_MachineNumber'></TH><TH><select id='cboFilter_MachineGroup'/></TH><TH><select id='cboFilter_Operator'/></TH><TH><select id='cboFilter_CellLeader'/></TH><TH><input type='text' id='txtFilter_PartNumber'></TH><TH/><TH/><TH/><TH/><TH><input type='text' id='txtFilter_GageDiameter'></TH><TH/><TH/>"
     $('.ticket-table table thead').append(filter_row);
     $("#txtFilter_TicketNumber").on("change", function () {
       filterTicketTable();
     });
     $("#txtFilter_PartNumber").on("change", function () {
-      filterTicketTable();
-    });
-    $("#txtFilter_JobNumber").on("change", function () {
       filterTicketTable();
     });
     $("#txtFilter_MachineNumber").on("change", function () {
@@ -508,9 +500,7 @@ function generateFilterRow() {
     $("#txtFilter_PartNumber").on("dblclick", function () {
       $("#txtFilter_PartNumber").val(null).trigger("change");
     });
-    $("#txtFilter_JobNumber").on("dblclick", function () {
-      $("#txtFilter_JobNumber").val(null).trigger("change");
-    });
+
     $("#txtFilter_MachineNumber").on("dblclick", function () {
       $("#txtFilter_MachineNumber").val(null).trigger("change");
     });
@@ -833,7 +823,6 @@ function reApplyFilterValues() {
   const sortFieldOrdinal = Number($('.sfo input').val());
   const sortDirection = Number($('.sd input').val());
   const ticketNumberFilterValue = $('.ftname input').val();
-  const jobNumberFilterValue = $('.fjnbr input').val();
   const partNumberFilterValue = $('.fpnum input').val();
   const machineNumberFilterValue = $('.fmname input').val();
   const ticketTypeFilterVal = Number($('.fttid input').val());
@@ -848,10 +837,6 @@ function reApplyFilterValues() {
 
   if ((ticketNumberFilterValue !== null) && (ticketNumberFilterValue.length > 0)) {
     $('#txtFilter_TicketNumber').val(ticketNumberFilterValue);
-  }
-
-  if ((jobNumberFilterValue !== null) && (jobNumberFilterValue.length > 0)) {
-    $('#txtFilter_JobNumber').val(jobNumberFilterValue);
   }
 
   if ((partNumberFilterValue !== null) && (partNumberFilterValue.length > 0)) {
@@ -901,8 +886,7 @@ function reApplyFilterValues() {
 
 function refreshPage() {
 
-  const ticketNumberFilterValue = $('.ftname input').val();
-  const jobNumberFilterValue = $('.fjnbr input').val();
+  //const ticketNumberFilterValue = $('.ftname input').val();
   const partNumberFilterValue = $('.fpnum input').val();
   const machineNumberFilterValue = $('.fmname input').val();
   const ticketTypeFilterVal = Number($('.fttid input').val());
@@ -934,10 +918,6 @@ function refreshPage() {
   // if ((ticketNumberFilterValue !== null) && (ticketNumberFilterValue.length > 0)) {
   //   queryParams.set('ftname', ticketNumberFilterValue);
   // }
-
-  if ((jobNumberFilterValue !== null) && (jobNumberFilterValue.length > 0)) {
-    queryParams.set('fjnbr', jobNumberFilterValue);
-  }
 
   if ((partNumberFilterValue !== null) && (partNumberFilterValue.length > 0)) {
     queryParams.set('fpnum', partNumberFilterValue);
@@ -1050,17 +1030,16 @@ function setSortIcon(sortOrdinal, sortDirection, selector) {
   const sortSelectors = {
     0: '#q124',
     1: '#q115',
-    2: '#q116',
+    2: '#q252',
     3: '#q119',
     4: '#q117',
     5: '#q120',
     6: '#q121',
     7: '#q122',
     8: '#q162',
-    9: '#q163',
-    10: '#q166',
-    11: '#q123',
-    12: '#q125'
+    9: '#q166',
+    10: '#q123',
+    11: '#q125'
   };
 
   $('.sort-icon').remove();
@@ -1103,8 +1082,8 @@ function wireUpSortFields() {
   $('#q115').off('click').on('click', function () {
     sortTable(1, '#q115');
   });
-  $('#q116').off('click').on('click', function () {
-    sortTable(2, '#q116');
+  $('#q252').off('click').on('click', function () {
+    sortTable(2, '#q252');
   });
   $('#q119').off('click').on('click', function () {
     sortTable(3, '#q119');
@@ -1124,17 +1103,14 @@ function wireUpSortFields() {
   $('#q162').off('click').on('click', function () {
     sortTable(8, '#q162');
   });
-  $('#q163').off('click').on('click', function () {
-    sortTable(9, '#q163');
-  });
   $('#q166').off('click').on('click', function () {
-    sortTable(10, '#q166');
+    sortTable(9, '#q166');
   });
   $('#q123').off('click').on('click', function () {
-    sortTable(11, '#q123');
+    sortTable(10, '#q123');
   });
   $('#q125').off('click').on('click', function () {
-    sortTable(12, '#q125');
+    sortTable(11, '#q125');
   });
 
   setSortIcon(Number($('.sfo input').val()), Number($('.sd input').val()));

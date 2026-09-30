@@ -23,9 +23,8 @@ $(function () {
     $.fn.bootstrapBtn = $.fn.button.noConflict();
     $('#q0').append("<div class='hidden' id='popUpDiv'></div>");
 
-  }).fail(function () {
-    console.error('Failed to load required scripts');
-  });
+  }).fail(function () {console.error('Failed to load required scripts');})
+    .then(function () {});
 
   const eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
   const printEvent = window[eventMethod];
@@ -282,12 +281,11 @@ function filterTicketTable() {
   const cellLeaderFilterVal = String($('#cboFilter_CellLeader').val() || '');
   const statusFilterVal = $('#cboFilter_Status').val();
   const partNumberFilterValue = $('#txtFilter_PartNumber').val();
-  const jobNumberFilterValue = $('#txtFilter_JobNumber').val();
+
   const machineNameFilterValue = $('#txtFilter_MachineName').val();
 
   $('.ftname input').val(ticketNumberFilterValue);
   $('.fpnum input').val(partNumberFilterValue);
-  $('.fjnum input').val(jobNumberFilterValue);
   $('.fmachname input').val(machineNameFilterValue);
   $('.fsid input').val(statusFilterVal);
 
@@ -336,7 +334,7 @@ function generateFilterRow() {
 
   if ($('#filterRow').length === 0) {
 
-    const filter_row = "<TR id='filterRow'><TH/><TH/><TH/><TH/><TH><input type='text' id='txtFilter_TicketNumber'></TH><TH><select id='cboFilter_Status'/></TH><TH><select id='cboFilter_Department'/></TH><TH><input type='text' id='txtFilter_MachineName'></TH><TH><select id='cboFilter_MachineGroup'/></TH><TH><select id='cboFilter_Operator'/></TH><TH><select id='cboFilter_CellLeader'/></TH><TH><input type='text' id='txtFilter_PartNumber'></TH><TH><input type='text' id='txtFilter_JobNumber'></TH><TH/><TH/><TH/><TH/>"
+    const filter_row = "<TR id='filterRow'><TH/><TH/><TH/><TH/><TH><input type='text' id='txtFilter_TicketNumber'></TH><TH><select id='cboFilter_Status'/></TH><TH><select id='cboFilter_Department'/></TH><TH><input type='text' id='txtFilter_MachineName'></TH><TH><select id='cboFilter_MachineGroup'/></TH><TH><select id='cboFilter_Operator'/></TH><TH><select id='cboFilter_CellLeader'/></TH><TH><input type='text' id='txtFilter_PartNumber'></TH><TH/><TH/><TH/><TH/>"
     $('.ticket-table table thead').append(filter_row);
 
 
@@ -363,7 +361,6 @@ function generateFilterRow() {
     $("#cboFilter_Status").on("change", function () { filterTicketTable(); });
 
     $("#txtFilter_PartNumber").on("change", function () { filterTicketTable(); });
-    $("#txtFilter_JobNumber").on("change", function () { filterTicketTable(); });
 
 
 
@@ -375,7 +372,7 @@ function generateFilterRow() {
     $("#cboFilter_CellLeader").on("dblclick", function () { $("#cboFilter_CellLeader").val(null).trigger("change"); });
 
     $("#txtFilter_PartNumber").on("dblclick", function () { $("#txtFilter_PartNumber").val(null).trigger("change"); });
-    $("#txtFilter_JobNumber").on("dblclick", function () { $("#txtFilter_JobNumber").val(null).trigger("change"); });
+
 
     $("#cboFilter_Status").on("dblclick", function () { $("#cboFilter_Status").val(null).trigger("change"); });
 
@@ -626,11 +623,11 @@ function reApplyFilterValues() {
   const cellLeaderFilterVal = Number($('.fclid input').val());
   const statusFilterVal = $('.fsid input').val();
   const partNumberFilterValue = $('.fpnum input').val();
-  const jobNumberFilterValue = $('.fjnum input').val();
+
   const machineNameFilterValue = $('.fmachname input').val();
 
   $('#txtFilter_PartNumber').val(partNumberFilterValue);
-  $('#txtFilter_JobNumber').val(jobNumberFilterValue);
+
   $('#txtFilter_MachineName').val(machineNameFilterValue);
 
   $('#cboFilter_Status').val(statusFilterVal);
@@ -693,7 +690,7 @@ function showDetails(ticket_id) {
 }
 
 
-function sortTable(newSortOrdinal) {
+function sortTable(newSortOrdinal, columnSelector) {
   $('.projectlist-table').hide();
   removeAppendedFields();
   $('.sort-icon').remove();
@@ -702,14 +699,8 @@ function sortTable(newSortOrdinal) {
   let sortDirection = Number($('.sort-direction input').val());
 
   if (newSortOrdinal === currentSortOrdinal) {
-    if (sortDirection === 0) {
-      sortDirection = 1
-      $('.sort-direction input').val(1).trigger("change");
-    }
-    else {
-      sortDirection = 0;
-      $('.sort-direction input').val(0).trigger("change");
-    }
+    sortDirection = sortDirection === 0 ? 1 : 0;
+    $('.sort-direction input').val(sortDirection).trigger("change");
   }
   else {
     $('.sort-field-ordinal input').val(newSortOrdinal);
@@ -717,103 +708,8 @@ function sortTable(newSortOrdinal) {
     sortDirection = 0;
   }
 
-  if (newSortOrdinal === 0) {
-    if (sortDirection === 0) {
-      $('#q30 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
-    }
-    else {
-      $('#q30 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
-    }
-  }
-  if (newSortOrdinal === 1) {
-
-    if (sortDirection === 0) {
-      $('#q33 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
-    }
-    else {
-      $('#q33 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
-    }
-  }
-  if (newSortOrdinal === 2) {
-    if (sortDirection === 0) {
-      $('#q34 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
-    }
-    else {
-      $('#q34 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
-    }
-  }
-  if (newSortOrdinal === 3) {
-    if (sortDirection === 0) {
-      $('#q36 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
-    }
-    else {
-      $('#q36 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
-    }
-  }
-  if (newSortOrdinal === 4) {
-    if (sortDirection === 0) {
-      $('#q35 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
-    }
-    else {
-      $('#q35 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
-    }
-  }
-  if (newSortOrdinal === 5) {
-    if (sortDirection === 0) {
-      $('#q37 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
-    }
-    else {
-      $('#q37 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
-    }
-  }
-  if (newSortOrdinal === 6) {
-    if (sortDirection === 0) {
-      $('#q38 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
-    }
-    else {
-      $('#q38 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
-    }
-  }
-  if (newSortOrdinal === 7) {
-    if (sortDirection === 0) {
-      $('#q39 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
-    }
-    else {
-      $('#q39 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
-    }
-  }
-  if (newSortOrdinal === 8) {
-    if (sortDirection === 0) {
-      $('#q40 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
-    }
-    else {
-      $('#q40 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
-    }
-  }
-  if (newSortOrdinal === 9) {
-    if (sortDirection === 0) {
-      $('#q41 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
-    }
-    else {
-      $('#q41 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
-    }
-  }
-  if (newSortOrdinal === 10) {
-    if (sortDirection === 0) {
-      $('#q42 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
-    }
-    else {
-      $('#q42 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
-    }
-  }
-  if (newSortOrdinal === 11) {
-    if (sortDirection === 0) {
-      $('#q44 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
-    }
-    else {
-      $('#q44 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-s sort-icon"></span>');
-    }
-  }
+  const sortIconClass = sortDirection === 0 ? 'ui-icon-triangle-1-n' : 'ui-icon-triangle-1-s';
+  $(columnSelector + ' .cf-col-label').append('<span class="ui-icon ' + sortIconClass + ' sort-icon"></span>');
 }
 
 
@@ -847,7 +743,7 @@ function validateForm(e) {
 
     if (newPartNumber === originalPartNumber) {
       $('.clone-part-number input').addClass('parsley-error');
-      $('.clone-part-number input').parent().append('<ul class="parsley-errors-list filled bad-clone-part-number"><li class="parsley-required">Cannot clone a ticket with the same part number. If just changing the job number, edit the ticket instead.</li></ul>');
+      $('.clone-part-number input').parent().append('<ul class="parsley-errors-list filled bad-clone-part-number"><li class="parsley-required">Cannot clone a ticket with the same part number.</li></ul>');
       e.preventDefault();
       return;
     }
@@ -917,16 +813,15 @@ function validateForm(e) {
 function wireUpSortFields() {
 
   $('#q30 .cf-col-label').append('<span class="ui-icon ui-icon-triangle-1-n sort-icon"></span>');
-  $('#q30').on('click', function () { sortTable(0); });
-  $('#q33').on('click', function () { sortTable(1); });
-  $('#q34').on('click', function () { sortTable(2); });
-  $('#q36').on('click', function () { sortTable(3); });
-  $('#q35').on('click', function () { sortTable(4); });
-  $('#q37').on('click', function () { sortTable(5); });
-  $('#q38').on('click', function () { sortTable(6); });
-  $('#q39').on('click', function () { sortTable(7); });
-  $('#q40').on('click', function () { sortTable(8); });
-  $('#q41').on('click', function () { sortTable(9); });
-  $('#q42').on('click', function () { sortTable(10); });
-  $('#q44').on('click', function () { sortTable(11); });
+  $('#q30').on('click', function () { sortTable(0, '#q30'); });
+  $('#q119').on('click', function () { sortTable(1, '#q119'); });
+  $('#q34').on('click', function () { sortTable(2, '#q34'); });
+  $('#q36').on('click', function () { sortTable(3, '#q36'); });
+  $('#q35').on('click', function () { sortTable(4, '#q35'); });
+  $('#q37').on('click', function () { sortTable(5, '#q37'); });
+  $('#q38').on('click', function () { sortTable(6, '#q38'); });
+  $('#q39').on('click', function () { sortTable(7, '#q39'); });
+  $('#q41').on('click', function () { sortTable(8, '#q41'); });
+  $('#q42').on('click', function () { sortTable(9, '#q42'); });
+  $('#q44').on('click', function () { sortTable(10, '#q44'); });
 }
