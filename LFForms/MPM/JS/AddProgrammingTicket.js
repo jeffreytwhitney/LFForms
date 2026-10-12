@@ -1,4 +1,4 @@
-﻿/*# AddProgrammingTicket.js - Documentation
+/*# AddProgrammingTicket.js - Documentation
 
  Author:  Jeffrey Whitney
           jtwhitney@machine.com
@@ -191,6 +191,16 @@ Key DOM Structure (expected selectors)
 const taskTypeMap = new Map();
 const taskTypeByNameMap = new Map();
 
+const TASK_ROW_FIELDS = {
+  taskName: '.task-name-col input',
+  drawingNumber: '.drawing-number-col input',
+  taskType: '.task-type-col select',
+  taskTypeId: '.task-type-id-col input',
+  dueDate: '.due-date-col input',
+  opNumber: '.op-number-col input',
+  revNumber: '.rev-number-col input'
+};
+
 $(function () {
 
   const lfUserNameRaw = $('.lf-username input').val();
@@ -260,9 +270,7 @@ $(function () {
         }
       }
     }
-    generateTaskRowNumbers();
-    generateTableButtons(".clone-col", "ui-icon-newwin", "Clone Task", "cloneRow");
-
+    refreshCloneButtons();
   });
 
   $(document).on("onloadlookupfinished", function () {
@@ -270,8 +278,8 @@ $(function () {
     $('#q0').append("<div class='hidden-text' id='popUpDiv'></div>");
     $('.network-user-name input').trigger("change");
     generateGoBackButtons();
-    createShowGenerateButton();
-    createExecuteTaskGenerationButton();
+    replaceWithButton('#show-generate-tasks', 'callShowGenerateTasks()');
+    replaceWithButton('.execute-task-generation', 'generateTasks()');
     $('.gen-due-date input').on('change', function () {
       if ($('.gen-due-date input').val() !== '') {
         $('#empty-due-date-error').remove();
@@ -280,25 +288,9 @@ $(function () {
     });
   });
 
-  $(document).on('click', '#q28', function () {
-    generateTaskRowNumbers();
-    generateTableButtons(".clone-col", "ui-icon-newwin", "Clone Task", "cloneRow");
-  });
+  $(document).on('click', '#q28', refreshCloneButtons);
 
 });
-
-
-/**
- - Description: Replaces any `.execute-task-generation` placeholder with an `<input type="button">` labeled "GenerateTasks" that calls `generateTasks()`.
- LFF doesn't provide buttons, so we have to create our own.
- - Side effects: DOM replacement.
- */
-function createExecuteTaskGenerationButton() {
-  const add_buttons = $(".execute-task-generation");
-  add_buttons.each(function () {
-    $(this).replaceWith("<input class='return' style='visibilty:visible' type='button' value='GenerateTasks' onclick='generateTasks()' />");
-  });
-}
 
 
 /**
@@ -311,32 +303,17 @@ function createExecuteTaskGenerationButton() {
  - Sets `.show-generate-tasks input` to `1` and triggers change. This is actually what shows and hides stuff because there is a LFF rule bound to that field.
  */
 function callShowGenerateTasks() {
-
   $('.Submit').hide();
-  $('.gen-drawing-number input').val('');
 
   $('.task-types-to-generate-table .cf-table-delete:visible').trigger('click');
   $('.op-numbers-table .cf-table-delete:visible').trigger('click');
 
-  $('.task-types-to-generate-table tbody tr').each(function (index) {
-    if (index > 0) {
-      const deleteLink = $(this).find('.cf-table-delete');
-      deleteLink.trigger('click');
-    }
-  });
-
-  $('.op-numbers-table tbody tr').each(function (index) {
-    if (index > 0) {
-      const deleteLink = $(this).find('.cf-table-delete');
-      deleteLink.trigger('click');
-    }
-  });
+  $('.task-types-to-generate-table tbody tr:gt(0) .cf-table-delete').trigger('click');
+  $('.op-numbers-table tbody tr:gt(0) .cf-table-delete').trigger('click');
 
   $('.op-number-to-generate input').val('');
   $('.task-types-to-generate-table-name input').val('');
 
-
-  $('.gen-drawing-number input').val('');
   $('.gen-due-date input').val('');
   $('.gen-rev-number input').val('');
   $('.part-numbers-to-generate textarea').text('');
@@ -371,103 +348,93 @@ function cloneRow(cloneRowID) {
     return Number($(this).find(".clone-col input").val()) === cloneRowID;
   });
 
-  if (isLastRowEmpty() === false) {
+  const newTaskRow = getEmptyTaskRow();
+  $.each(TASK_ROW_FIELDS, function (_, selector) {
+    newTaskRow.find(selector).val(rowToClone.find(selector).val());
+  });
+}
+
+
+/**
+ * Description: Returns the last task row, first adding a new row (via the LFF-generated .cf-table-add-row link) if it isn't empty.
+ */
+function getEmptyTaskRow() {
+  if (!isLastRowEmpty()) {
     $('.tasklist-table').find('.cf-table-add-row').trigger("click");
   }
-  const newTaskRow = $('.tasklist-table table tbody tr:last-child');
-
-  newTaskRow.find('.task-name-col input').val(rowToClone.find('.task-name-col input').val());
-  newTaskRow.find('.drawing-number-col input').val(rowToClone.find('.drawing-number-col input').val());
-  newTaskRow.find('.task-type-col select').val(rowToClone.find('.task-type-col select').val());
-  newTaskRow.find('.task-type-id-col input').val(rowToClone.find('.task-type-id-col input').val());
-  newTaskRow.find('.due-date-col input').val(rowToClone.find('.due-date-col input').val());
-  newTaskRow.find('.op-number-col input').val(rowToClone.find('.op-number-col input').val());
-  newTaskRow.find('.rev-number-col input').val(rowToClone.find('.rev-number-col input').val());
+  return $('.tasklist-table table tbody tr:last-child');
 }
 
 
 /**
- * Description: Replaces   #show-generate-tasks   placeholder with a "GenerateTasks" button that calls callShowGenerateTasks()  .
- Side effects: DOM replacement.
+ * Description: Replaces each element matching `selector` with a "GenerateTasks" button whose onclick runs `onclick`.
  */
-function createShowGenerateButton() {
-  const add_buttons = $("#show-generate-tasks");
-  add_buttons.each(function () {
-    $(this).replaceWith("<input class='return' style='visibilty:visible' type='button' value='GenerateTasks' onclick='callShowGenerateTasks()' />");
-  });
-
+function replaceWithButton(selector, onclick) {
+  $(selector).replaceWith(`<input class='return' style='visibility:visible' type='button' value='GenerateTasks' onclick='${onclick}' />`);
 }
 
 
 /**
- Signature:   checkForDuplicateRows(): boolean
- Description: Detects duplicate task rows (same task name, task type, op number, rev number) among valid rows.
- Returns: true if any duplicates are found; otherwise false  .
+ * Description: Renumbers the task rows and (re)adds the clone buttons.
+ */
+function refreshCloneButtons() {
+  generateTaskRowNumbers();
+  generateTableButtons(".clone-col", "ui-icon-newwin", "Clone Task", "cloneRow");
+}
+
+
+/**
+ Signature:   validateTaskRows(): boolean
+ Description: Validates the task rows that have a task name, task type and op number filled in (incomplete rows are skipped).
+ Returns: true if any row has an error; otherwise false.
  Behavior:
  Clears previous parsley error classes and .error-message contents.
- For each pair of rows considered valid by isRowValid, flags duplicates by:
- Writing "Duplicate Row" into both rows'   .error-message input  .
- Adding   parsley-error   to both rows' relevant inputs.
+ Rows whose due date is invalid or earlier than tomorrow get "Due Date > Current Date" and parsley-error on the due date input.
+ Remaining rows sharing task name, task type, op number and rev number get "Duplicate Row" and parsley-error on those inputs.
  */
-function checkForDuplicateRows() {
-  $('.task-name-col input').removeClass('parsley-error');
-  $('.task-type-col select').removeClass('parsley-error');
-  $('.op-number-col input').removeClass('parsley-error');
-  $('.rev-number-col input').removeClass('parsley-error');
-  $('.error-message input').removeClass('parsley-error');
+function validateTaskRows() {
+  const duplicateFields = '.task-name-col input, .task-type-col select, .op-number-col input, .rev-number-col input, .error-message input';
+  $(`${duplicateFields}, .due-date-col input`).removeClass('parsley-error');
   $('.error-message input').val('');
 
-  let returnVal = false;
+  let hasErrors = false;
+  const rowsByKey = new Map();
 
-  const taskRows = $('.tasklist-table tbody tr');
-  const rowCount = taskRows.length;
-  taskRows.each(function (index) {
-    const currentTaskName = $(this).find('.task-name-col input');
-    const currentTaskType = $(this).find('.task-type-col select');
-    const currentOpNumber = $(this).find('.op-number-col input');
-    const currentRevNumber = $(this).find('.rev-number-col input');
-    const currentErrorMessage = $(this).find('.error-message input');
-    const errorMessageValue = $(this).find('.error-message input').val();
-    if (isRowValid(index) === false) {
+  $('.tasklist-table tbody tr').each(function () {
+    const $row = $(this);
+    const taskName = $row.find('.task-name-col input').val();
+    const taskType = $row.find('.task-type-col select').val();
+    const opNumber = $row.find('.op-number-col input').val();
+    if (!taskName || !taskType || !opNumber) {
+      return;
     }
-    if (errorMessageValue.length === 0) {
-      for (let i = index + 1; i < rowCount; i++) {
-        if (isRowValid(i) === false) {
-          return;
-        }
-        const rowToCheck = $(taskRows[i]);
-        const chkErrorMessage = $(rowToCheck).find('.error-message input');
-        const chkErrorMessageValue = $(chkErrorMessage).val();
-        if (chkErrorMessageValue.length === 0) {
-          const chkTaskName = $(rowToCheck).find('.task-name-col input');
-          const chkTaskType = $(rowToCheck).find('.task-type-col select');
-          const chkOpNumber = $(rowToCheck).find('.op-number-col input');
-          const chkRevNumber = $(rowToCheck).find('.rev-number-col input');
-          if ((currentTaskName.val() === chkTaskName.val())
-            && (currentTaskType.val() === chkTaskType.val())
-            && (currentOpNumber.val() === chkOpNumber.val())
-            && (currentRevNumber.val() === chkRevNumber.val())) {
-            $(currentErrorMessage).val('Duplicate Row');
-            $(currentTaskName).addClass('parsley-error');
-            $(currentTaskType).addClass('parsley-error');
-            $(currentOpNumber).addClass('parsley-error');
-            $(currentRevNumber).addClass('parsley-error');
-            $(currentErrorMessage).addClass('parsley-error');
-            $(chkTaskName).addClass('parsley-error');
-            $(chkTaskType).addClass('parsley-error');
-            $(chkOpNumber).addClass('parsley-error');
-            $(chkRevNumber).addClass('parsley-error');
-            $(chkErrorMessage).addClass('parsley-error');
-            $(chkErrorMessage).val('Duplicate Row');
-            returnVal = true;
-          }
-        }
-      }
+
+    if (!isValidDueDate(moment($row.find('.due-date-col input').val()))) {
+      $row.find('.due-date-col input, .error-message input').addClass('parsley-error');
+      $row.find('.error-message input').val('Due Date > Current Date');
+      hasErrors = true;
+      return;
     }
+
+    const key = JSON.stringify([taskName, taskType, opNumber, $row.find('.rev-number-col input').val()]);
+    if (!rowsByKey.has(key)) {
+      rowsByKey.set(key, []);
+    }
+    rowsByKey.get(key).push($row);
   });
-  return returnVal;
-}
 
+  rowsByKey.forEach(function (rows) {
+    if (rows.length < 2) {
+      return;
+    }
+    hasErrors = true;
+    rows.forEach(function ($row) {
+      $row.find(duplicateFields).addClass('parsley-error');
+      $row.find('.error-message input').val('Duplicate Row');
+    });
+  });
+  return hasErrors;
+}
 
 /**
  * Description: Builds a semicolon-separated list of CC emails from .cc-email-col input in the CC Table and writes it to .cc-email-address-list input.
@@ -550,7 +517,7 @@ function generateTaskRowNumbers() {
  */
 function generateTasks() {
   const isGenerateFormValid = validateGenerateForm();
-  if (isGenerateFormValid === false) {
+  if (!isGenerateFormValid) {
     return;
   }
   const partNumberText = $(".part-numbers-to-generate textarea").val();
@@ -558,50 +525,31 @@ function generateTasks() {
   const dueDateValue = $('.gen-due-date input').val();
   const revNumberValue = $('.gen-rev-number input').val();
 
-  const partNumbers = partNumberText.split(/\r?\n/);
-  const taskTypes = $('.task-types-to-generate-table-name input');
+  const partNumbers = partNumberText.split(/\r?\n/).map(part => part.trim()).filter(part => part.length > 0);
+  const taskTypeNames = $('.task-types-to-generate-table-name input');
   const taskTypeIDs = $('.task-types-to-generate-table-id input');
   const opNumbers = $('.op-number-to-generate input');
-  $(partNumbers).each(function (i) {
-    const partNumberValue = partNumbers[i].trim();
-    if (partNumberValue.length === 0) {
-      return;
-    }
-    $(taskTypes).each(function (j) {
+
+  partNumbers.forEach(function (partNumberValue) {
+    taskTypeNames.each(function (j) {
       const taskTypeValue = $(this).val();
       const taskTypeIDValue = $(taskTypeIDs[j]).val();
-      $(opNumbers).each(function () {
-        const opNumberValue = $(this).val();
+      opNumbers.each(function () {
+        const newTaskRow = getEmptyTaskRow();
+        const setField = (field, value) => newTaskRow.find(TASK_ROW_FIELDS[field]).val(value);
 
-        if (isLastRowEmpty() === false) {
-          $('.tasklist-table').find('.cf-table-add-row').trigger("click");
-        }
-        const newTaskRow = $('.tasklist-table table tbody tr:last-child');
-        const taskNameField = $(newTaskRow).find('.task-name-col input');
-        const drawingNumberField = $(newTaskRow).find('.drawing-number-col input');
-        const taskTypeField = $(newTaskRow).find('.task-type-col select');
-        const dueDateField = $(newTaskRow).find('.due-date-col input');
-        const opNumberField = $(newTaskRow).find('.op-number-col input');
-        const revNumberField = $(newTaskRow).find('.rev-number-col input');
-        const taskTypeIDField = $(newTaskRow).find('.task-type-id-col input');
-
-        taskNameField.val(partNumberValue);
+        setField('taskName', partNumberValue);
         if (drawingNumberValue !== '') {
-          drawingNumberField.val(drawingNumberValue);
+          setField('drawingNumber', drawingNumberValue);
         }
-        taskTypeField.val(taskTypeValue);
-        taskTypeIDField.val(taskTypeIDValue);
-        dueDateField.val(dueDateValue);
-        opNumberField.val(opNumberValue);
-        revNumberField.val(revNumberValue);
-
+        setField('taskType', taskTypeValue);
+        setField('taskTypeId', taskTypeIDValue);
+        setField('dueDate', dueDateValue);
+        setField('opNumber', $(this).val());
+        setField('revNumber', revNumberValue);
       });
-
-
     });
-
-  });
-  callGoBack();
+  });  callGoBack();
 }
 
 
@@ -613,17 +561,9 @@ function generateTasks() {
  Returns: Count of inputs whose value length > 0.
  */
 function getRowCountOfTableWithValidValues(selector) {
-  const taskTypes = $(`${selector} input`);
-  if (taskTypes.length === 0) {
-    return 0;
-  }
-  let count = 0;
-  taskTypes.each(function () {
-    if ($(this).val().length > 0) {
-      count++;
-    }
-  });
-  return count;
+  return $(`${selector} input`).filter(function () {
+    return $(this).val().length > 0;
+  }).length;
 }
 
 
@@ -635,48 +575,19 @@ function getRowCountOfTableWithValidValues(selector) {
  */
 function isLastRowEmpty() {
   const lastTaskRow = $('.tasklist-table table tbody tr:last-child');
-  const taskNameValue = $(lastTaskRow).find('.task-name-col input').val();
-  const drawingNumberValue = $(lastTaskRow).find('.drawing-number-col input').val();
-  const taskTypeValue = $(lastTaskRow).find('.task-type-col select').val();
-  const taskTypeIDValue = $(lastTaskRow).find('.task-type-id-col input').val();
-  const dueDateValue = $(lastTaskRow).find('.due-date-col input').val();
-  const opNumberValue = $(lastTaskRow).find('.op-number-col input').val();
-
-  return (taskNameValue === '') && (drawingNumberValue === '') && (taskTypeValue === '') && (taskTypeIDValue === '') && (dueDateValue === '') && (opNumberValue === '');
-
+  return Object.keys(TASK_ROW_FIELDS)
+    .filter(field => field !== 'revNumber')
+    .every(field => lastTaskRow.find(TASK_ROW_FIELDS[field]).val() === '');
 }
 
 
 /**
- Signature:   isRowValid(rowIndex: number): boolean
- Description: Validates whether the row has non-empty values for:
- Task name, task type, due date, and op number.
- Parameters:
- rowIndex  : Intended row index.
- Returns:   true if all required fields are present; otherwise false  .
+ * Description: Returns true if the given moment is a valid date that is tomorrow or later.
  */
-function isRowValid(rowIndex) {
-  let returnVal = true;
-
-  const taskNameValue = $(`.tasklist-table tbody tr:nth-child(${rowIndex}) .task-name-col input`).val();
-  const taskTypeValue = $(`.tasklist-table tbody tr:nth-child(${rowIndex}) .task-type-col select`).val();
-  const dueDateValue = $(`.tasklist-table tbody tr:nth-child(${rowIndex}) .due-date-col input`).val();
-  const opNumberValue = $(`.tasklist-table tbody tr:nth-child(${rowIndex}) .op-number-col input`).val();
-  if (taskNameValue === '') {
-    returnVal = false;
-  }
-  if (taskTypeValue === '') {
-    returnVal = false;
-  }
-  if (dueDateValue === '') {
-    returnVal = false;
-  }
-  if (opNumberValue === '') {
-    returnVal = false;
-  }
-  return returnVal;
+function isValidDueDate(dueDate) {
+  const earliestDueDate = moment().add(1, 'day').startOf('day');
+  return dueDate.isValid() && !dueDate.isBefore(earliestDueDate, 'day');
 }
-
 
 /**
  Description: Populates taskTypeMap and taskTypeByNameMap from .task-type-lookup-table (id/name inputs) on first run.
@@ -685,11 +596,11 @@ function isRowValid(rowIndex) {
  taskTypeMap.set(id, name)
  taskTypeByNameMap.set(name, id)
  Notes:
- Checks emptiness with taskTypeMap.keys.length
+ Checks emptiness with taskTypeMap.size
  */
 function loadTaskTypeMap() {
 
-  if (taskTypeMap.keys.length === 0) {
+  if (taskTypeMap.size === 0) {
     const tasktype_rows = $('.task-type-lookup-table table tbody tr');
     if (tasktype_rows.length === 0) {
       return;
@@ -707,7 +618,7 @@ function loadTaskTypeMap() {
 /**
  - Description: Final client-side submission handler.
  - Behavior:
- - If `checkForDuplicateRows()` returns `true`, prevents submission.
+ - If `validateTaskRows()` returns `true`, prevents submission.
  - Calls `fillCCList()` to aggregate CC addresses. This is the list of people who will get email notifications about the ticket.
  - Ensures `.ticket-me-id input` has a value; sets to `0` if blank. (ME stands for Manufacturing Engineer,
  and this field is used to assign the ticket to a specific ME.) The reason for this is that the Workflow requires a value in this field.
@@ -716,12 +627,12 @@ function loadTaskTypeMap() {
  */
 function submitForm(e) {
 
-  if (checkForDuplicateRows() === true) {
+  if (validateTaskRows()) {
     e.preventDefault();
     return;
   }
 
-  if (validateForm() === false) {
+  if (!validateForm()) {
     e.preventDefault();
     return;
   }
@@ -784,11 +695,10 @@ function validateGenerateForm() {
     returnVal = false;
   }
 
-
-  const dueDateValue = $('.gen-due-date input').val();
-  if (dueDateValue === '') {
+  const dueDateValue = moment($('.gen-due-date input').val());
+  if (!isValidDueDate(dueDateValue)) {
     $('.gen-due-date input').addClass('parsley-error');
-    $('.gen-due-date input').parent().append("<ul id='empty-due-date-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>Value Is Required.</li></ul>");
+    $('.gen-due-date input').parent().append("<ul id='empty-due-date-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>Due Date > Current Date</li></ul>");
     returnVal = false;
   }
 

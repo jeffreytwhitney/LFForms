@@ -175,6 +175,20 @@ $(function () {
     validateForm();
   });
 
+  $('.due-date input').on('change', function () {
+
+    const due_date_field = $('.due-date input');
+    if (due_date_field.val() !== '') {
+      const dueDate = moment(due_date_field.val());
+      if (!isValidDueDate(dueDate)) {
+        $('#duedate-error').remove();
+        due_date_field.addClass('parsley-error');
+        due_date_field.parent().append("<ul id='duedate-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>Due Date > Current Date</li></ul>");
+      }
+    }
+
+  });
+
   // After lookups complete, enforce permission-driven UI state; ensure department ID triggers downstream logic if missing email.
   $(document).on('lookupcomplete', function () {
     setFormFieldEnableState();
@@ -209,13 +223,16 @@ function checkPermissions() {
     return_val = false;
   }
 
+  if (isMetrologyUser()){
+    return_val = true;
+  }
+
   if (!isMetrologyUser()) {
     if (user_department_id !== ticket_department_id) {
       return_val = false;
     }
   }
-
-  return return_val
+  return return_val;
 }
 
 
@@ -229,37 +246,46 @@ function isMetrologyUser() {
   return userTypeId === 1 || userTypeId === 2;
 }
 
+function isValidDueDate(dueDate) {
+  const earliestDueDate = moment().add(1, 'day').startOf('day');
+  return !(!dueDate.isValid() || dueDate.isBefore(earliestDueDate, 'day'));
+}
+
+
 
 /**
  * Clears all client-side validation artifacts:
- *  - Removes error lists for operation, task name, and task type.
+ *  - Removes error lists for operation, task name, task type, and due date.
  *  - Removes 'parsley-error' class from related inputs.
  */
 function resetErrorFields() {
   const task_name = $('.task-name input');
   const task_type = $('.task-type select');
   const task_operation = $('.op-number input');
+  const due_date = $('.due-date input');
 
   $('#operation-error').remove();
   $('#taskname-error').remove();
   $('#tasktype-error').remove();
+  $('#duedate-error').remove();
 
   task_name.removeClass('parsley-error');
   task_type.removeClass('parsley-error');
   task_operation.removeClass('parsley-error');
+  due_date.removeClass('parsley-error');
 }
-
 
 /**
  * Applies permission logic to determine whether the Submit button should be disabled.
  * Only executes when a user-type-id value is present (non-zero, non-empty).
  */
 function setFormFieldEnableState() {
-  if (($('.user-type-id input').val() !== 0) && ($('.user-type-id input').val() !== '')) {
-    const has_permission = checkPermissions();
-    if (!has_permission) {
-      $('.Submit').addClass("ui-state-disabled");
-    }
+  const has_permission = checkPermissions();
+  if (!has_permission) {
+    $('.Submit').addClass("ui-state-disabled");
+  }
+  else {
+    $('.Submit').removeClass("ui-state-disabled");
   }
 }
 
@@ -301,6 +327,8 @@ function validateForm() {
   const task_type_field = $('.task-type select');
   const opnumber_field = $('.op-number input');
   const existingTaskID = $('.existing-task-id input').val();
+  const due_date_field = $('.due-date input');
+
 
   if (existingTaskID !== '') {
     
@@ -315,6 +343,13 @@ function validateForm() {
   }
   else {
     $('.Submit').removeClass("ui-state-disabled");
+  }
+
+  const dueDate = moment(due_date_field.val());
+  if (!isValidDueDate(dueDate)) {
+    due_date_field.addClass('parsley-error');
+    due_date_field.parent().append("<ul id='duedate-error' aria-live='assertive' aria-atomic='true' class='parsley-errors-list filled'><li class='parsley-required'>Due Date > Current Date</li></ul>");
+    return_val = false;
   }
 
   return return_val;
