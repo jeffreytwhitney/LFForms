@@ -115,7 +115,15 @@ $(function () {
       $('.edit-bin-isactive-combo select').removeClass("ui-state-disabled");
     }
   });
-  
+
+  $(document).on('change', '.edit-location-name input', function (e) {
+    if ($('.edit-location-name input').val() !== '')  {
+      $('.edit-location-cbo select').val($('.edit-location-name input').val()).trigger("change");
+    }
+  });
+
+
+
 
   window.onmessage = function (event) {
     //This is the callback from the IFrame.
@@ -316,7 +324,7 @@ function generateFilterRow() {
 
   if ($('#filterRow').length === 0) {
 
-    const filter_row = "<TR id='filterRow'><TH/><TH><input type='text' id='txtFilterBinName'></TH><TH/><TH><input type='text' id='txtFilterPartNumber'></TH><TH><input type='text' id='txtFilterNote'></TH><TH/><TH/><TH/>"
+    const filter_row = "<TR id='filterRow'><TH/><TH><input type='text' id='txtFilterBinName'></TH><TH/><TH/><TH><input type='text' id='txtFilterPartNumber'></TH><TH><input type='text' id='txtFilterNote'></TH><TH/><TH/><TH/>"
     $('.bin-table table thead').append(filter_row);
     $("#txtFilterBinName").on("change", function () { filterBinTable(); });
     $("#txtFilterPartNumber").on("change", function () { filterBinTable(); });

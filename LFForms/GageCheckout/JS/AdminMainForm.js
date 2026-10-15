@@ -220,6 +220,7 @@ function generateApplicationLinks() {
     {label: 'Machine Groups', title: 'Machine Groups', href: 'http://rmslf/Forms/RMS-GAGE-MachineGroups'},
     {label: 'Departments', title: 'Departments', href: 'http://rmslf/Forms/RMS-GAGE-Departments'},
     {label: 'Pin Bins', title: 'Pin Bins', href: 'http://rmslf/Forms/RMS-GAGE-Bins'},
+    {label: 'Bin Locations', title: 'Bin Locations', href: 'http://rmslf/Forms/RMS-GAGE-BinLocationMaintenance'},
     {label: 'Pin Types', title: 'Pin Types', href: 'http://rmslf/Forms/RMS-GAGE-PinTypes'},
     {
       label: 'Production Machines',
