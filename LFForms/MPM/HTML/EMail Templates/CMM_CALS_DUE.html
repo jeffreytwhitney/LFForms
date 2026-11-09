@@ -1,0 +1,28 @@
+<p><strong>CMM's Due For Cal</strong></p>
+<p>There are [CountOfCMMsDueForCal] CMM's that have not been calibrated in the last 48 Hours.</p>
+<br>
+<style>
+  table, th, tr td {
+    border: 1px solid black;
+    text-align: left;
+    font-size: 14px;
+  }
+</style>
+<table>
+  <thead>
+  <tr>
+    <th style="width:100px;">CMM</th>
+    <th style="width:350px;">Description</th>
+    <th style="width:150px;">Last Result Date</th>
+    <th style="width:100px;">Days Since Cal</th>
+  </tr>
+  </thead>
+  <tbody>[CalRows]</tbody>
+</table>
+<br>
+<BR><span style="font-size:6px;">EID:{{CMMCALDUE}} SITE:{{[SITECODE]}}</span>
+
+
+------This is the row--------------
+<tr><td>[CMM]</td><td>[Description]</td><td>[LastResultDate]</td><td>[DaysSinceCal]</td></tr>
+------------------------------------

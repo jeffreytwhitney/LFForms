@@ -350,6 +350,10 @@ function loadIFrames() {
     $('#purchase-order-div').append(`<iframe id="frm-purchase-orders" src="http://rmslf/Forms/MPM-PurchaseOrders"></iframe>`);
   }
 
+  if ($('#frm-periodic-maintenance').length === 0) {
+    $('#periodic-maintenance-div').append(`<iframe id="frm-periodic-maintenance" src="http://rmslf/Forms/RMS-MPM-PeriodicMaintenance"></iframe>`);
+  }
+
 }
 
 /**
@@ -381,7 +385,7 @@ function searchScheduleByTaskName() {
 function tabifyFormSections() {
   $('#q0').children().wrapAll('<div id="ticket-tabs"></div>');
   // noinspection HtmlUnknownAnchorTarget -- #q1/#q2/#q3/#q23 are LFF-generated div IDs, present at runtime.
-  $('#ticket-tabs').prepend('<ul id="ticket-tab"><li><a href="#q1"><span>Service Tickets</span></a></li><li><a href="#q2"><span>Programming Tasks</span></a></li><li><a href="#q3"><span>Programming Tickets</span></a></li><li><a href="#q23"><span>Purchase Orders</span></a></li></ul>');
+  $('#ticket-tabs').prepend('<ul id="ticket-tab"><li><a href="#q1"><span>Service Tickets</span></a></li><li><a href="#q2"><span>Tasks</span></a></li><li><a href="#q3"><span>Tickets</span></a></li><li><a href="#q23"><span>PO\'s</span></a></li><li><a href="#q28"><span>PM\'s</span></a></li></ul>');
   $('#ticket-tabs').tabs();
   $("#ticket-tabs").on("tabsactivate", function (event, ui) {
     const tab = ui.newTab.index();
@@ -404,6 +408,11 @@ function tabifyFormSections() {
       const iframePurchaseOrders = $('#frm-purchase-orders');
       if (iframePurchaseOrders.length) {
         iframePurchaseOrders.attr('src', iframePurchaseOrders.attr('src'));
+      }
+    } else if (tab === 4) {
+      const iframePeriodicMaintenance = $('#frm-periodic-maintenance');
+      if (iframePeriodicMaintenance.length) {
+        iframePeriodicMaintenance.attr('src', iframePeriodicMaintenance.attr('src'));
       }
     }
   });

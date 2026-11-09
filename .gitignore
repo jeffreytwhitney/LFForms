@@ -362,3 +362,13 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 *.bkp
+/.idea/.gitignore
+/.idea/dataSources.xml
+/.idea/db-forest-config.xml
+/.idea/encodings.xml
+/.idea/jsLibraryMappings.xml
+/.idea/LFForms.iml
+/.idea/modules.xml
+/.idea/inspectionProfiles/Project_Default.xml
+/LFForms/MPM/SQL/Stored Procedures/spCTBACKLOG_Update.sql
+/.idea/vcs.xml
