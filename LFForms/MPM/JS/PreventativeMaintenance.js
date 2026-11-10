@@ -2,56 +2,57 @@ const assigneeMap = new Map();
 const assigneeNameMap = new Map();
 const machineTypeMap = new Map();
 const machineTypeNameMap = new Map();
-let networkUserLookupStarted = false;
-
 
 
 $(function () {
 
-  // Initial UI setup.
   $('.Submit').hide();
-  $(document).prop('title', 'Periodic Maintenance');
-
-  // Runtime script/styles injection (cookies, confirm dialogs, UI theme, pagination CSS).
+  $(document).prop('title', 'Preventative Maintenance');
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js');
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
 
-  // Avoid Bootstrap/jQuery UI .button() conflicts.
-  $.fn.bootstrapBtn = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
+  $('.Submit').on("click", function (e) {
+    submitForm(e);
+  });
 
-  // Submit gate: defer to validateAdd/validateEdit based on action.
-  $('.Submit').on("click", function (e) { submitForm(e); });
+  $(document).on("change", ".edit-assignee-name-dbval input", function () {
+    $('.edit-assignee-combo select').val($(this).val()).trigger("change");
+  })
 
-  // Include Completed checkbox toggles filter and reloads page 1.
-  $(document).on('change', '#chkIncludeCompleted', function () { filterTable(); });
+  $(document).on("change", ".edit-pm-is-completed-dbval input", function () {
+    const value = $(this).val();
+    const isCompleted = value === "1";
+    const $completionRadios = $('input[name="Field51"][type="radio"]');
 
+    $completionRadios
+      .prop('checked', false)
+      .filter('[value="' + value + '"]')
+      .prop('checked', true);
+    $completionRadios.prop('disabled', isCompleted);
 
-  // Register immediately so the one-time event is not missed while waiting for DOM ready.
+    if (isCompleted) {
+      $('.Submit').hide();
+      $('.edit-assignee-combo select').prop('disabled', true);
+      $('.edit-notes').prop('disabled', true);
+    }
+
+  })
+
   $(document).on("onloadlookupfinished", function () {
     console.log('onloadlookupfinished');
-    //generateGoBackButtons();
     if ($('.pg input').val() === '999') {
       $('.pg input').val(1).trigger("change");
     }
-    // Normalize network username on load.
-    if (!networkUserLookupStarted) {
-      networkUserLookupStarted = true;
-      $('.network-user-name input').trigger("change");
-    }
-    $('.pm-table').show();
+    const lfUserName = $('.lf-user-name input').val();
+    $('.network-user-name input').val(lfUserName.toUpperCase().slice(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
+    generateGoBackButtons();
+
   });
 
-
-  // Hook when lookup data (departments/user types) is available.
   $(document).on('lookupcomplete', function () {
-    if ($('.site-id input').val() === '' && !networkUserLookupStarted) {
-      networkUserLookupStarted = true;
-      console.log('Setting network user name.');
-      $('.network-user-name input').trigger("change");
-    }
     loadAssigneeMap();
     loadMachineTypeMap();
     generateTableButtons(".edit-button-col", "ui-icon-pencil", "Edit PM", "callEditPM");
@@ -59,6 +60,10 @@ $(function () {
     generateFilterRow();
     $('.pm-table').show();
   });
+
+  $(document).on('change', '#chkShowCompleted', function (e) {
+    filterTable();
+  })
 
 
 });
@@ -94,6 +99,22 @@ function appendPagination() {
 }
 
 
+function callEditPM(pmid) {
+  if (!isMetrologyUser()){
+    return;
+  }
+  $('.edit-pm-id input').val(pmid).trigger("change");
+  $('.Submit').show();
+
+}
+
+
+function callGoBack() {
+  $(".edit-pm-id input").val(0).trigger("change");
+  $('.Submit').hide();
+}
+
+
 function callNextPage() {
   $('.pm-table').hide();
   $('.table-button').remove();
@@ -113,8 +134,99 @@ function callPrevPage() {
 }
 
 
-function generateFilterRow() {
+function filterTable() {
+  if ($('#filterRow').length === 0) {
+    return;
+  }
 
+  if ($("#chkShowCompleted").is(":checked")) {
+    $('.finccom input').val(1);
+  } else {
+    $('.finccom input').val(0);
+  }
+
+  const machineNameFilterVal = $('#cboFilter_MachineName').val();
+  const machineTypeFilterVal = $('#cboFilter_MachineType').val();
+  const assigneeFilterVal = $('#cboFilter_Assignee').val();
+
+  if ((machineNameFilterVal !== null) && (machineNameFilterVal.length > 0)) {
+    $('.fmname input').val(machineNameFilterVal);
+  } else {
+    $('.fmname input').val('');
+  }
+
+  if ((machineTypeFilterVal !== null) && (machineTypeFilterVal.length > 0)) {
+    const machineTypeID = machineTypeNameMap.get(machineTypeFilterVal);
+    $('.mtid input').val(machineTypeID);
+  } else {
+    $('.mtid input').val(0);
+  }
+
+  if ((assigneeFilterVal !== null) && (assigneeFilterVal.length > 0)) {
+    const assigneeID = assigneeNameMap.get(assigneeFilterVal);
+    $('.faid input').val(assigneeID);
+  } else {
+    $('.faid input').val(0);
+  }
+
+  $('.pm-table').hide();
+  $('.table-button').remove();
+  $('.pg input').val(1).trigger("change");
+}
+
+
+function generateFilterRow() {
+  if ($('#filterRow').length === 0) {
+    const filter_row = "<TR id='filterRow'><TH/><TH><select id='cboFilter_MachineName'/></TH><TH/><TH><select id='cboFilter_MachineType'/></TH><TH><select id='cboFilter_Assignee'/></TH><TH/><TH/><TH/><TH/><TH/></TR>"
+    $('.pm-table table thead').append(filter_row);
+
+    $("#cboFilter_MachineName").on("change", function () {
+      filterTable();
+    });
+    $("#cboFilter_MachineType").on("change", function () {
+      filterTable();
+    });
+    $("#cboFilter_Assignee").on("change", function () {
+      filterTable();
+    });
+
+
+    $("#cboFilter_MachineName").on("dblclick", function () {
+      $("#cboFilter_MachineName").val(0).trigger("change");
+    });
+    $("#cboFilter_MachineType").on("dblclick", function () {
+      $("#cboFilter_MachineType").val(0).trigger("change");
+    });
+    $("#cboFilter_Assignee").on("dblclick", function () {
+      $("#cboFilter_Assignee").val(0).trigger("change");
+    });
+    //wireUpSortFields();
+    const show_completed_chkbox = '<div class="choice include-choice"><input name="chkShowCompleted" id="chkShowCompleted" type="checkbox"><label class="form-option-label" for="chkShowCompleted">Show Completed</label></div>'
+    if ($('#chkShowCompleted').length === 0) {
+      $(show_completed_chkbox).insertBefore('.pm-table table');
+    }
+  }
+
+
+  // Populate filter dropdowns once lookup combos are loaded.
+  if (($(".machine-name-lookup-combo select option").length > 1) && ($("#cboFilter_MachineName option").length === 0)) {
+    $("#cboFilter_MachineName").html($(".machine-name-lookup-combo select").html());
+  }
+  if (($(".machine-type-lookup-combo select option").length > 1) && ($("#cboFilter_MachineType option").length === 0)) {
+    $("#cboFilter_MachineType").html($(".machine-type-lookup-combo select").html());
+  }
+  if (($(".assignee-lookup-combo select option").length > 1) && ($("#cboFilter_Assignee option").length === 0)) {
+    $("#cboFilter_Assignee").html($(".assignee-lookup-combo select").html());
+  }
+}
+
+
+function generateGoBackButtons() {
+  const $goback_buttons = $(".gobackbutton");
+  $goback_buttons.each(function () {
+    $(this).parent().append("<div id='go-back' class='ui-button ui-corner-all ui-widget' onclick='callGoBack()'><span class='ui-icon ui-icon-arrowreturnthick-1-w'></span>Go Back</div>");
+  });
+  $(".gobackbutton").remove();
 }
 
 
@@ -140,14 +252,9 @@ function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFu
 }
 
 
-function filterTable() {
-
-}
-
-
-function isMetrologyProgrammer() {
+function isMetrologyUser() {
   const userTypeId = Number($('.user-type-id input').val());
-  return userTypeId === 1 ;
+  return userTypeId === 1 || userTypeId === 2;
 }
 
 
@@ -222,6 +329,7 @@ function sortTable(newSortOrdinal) {
 function submitForm(e) {
 
 }
+
 
 function wireUpSortFields() {
 

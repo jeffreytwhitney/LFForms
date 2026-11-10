@@ -179,6 +179,12 @@ $(function () {
       if (iframePurchaseOrders.length) {
         iframePurchaseOrders.attr('src', iframePurchaseOrders.attr('src'));
       }
+    }else if (tabID === 'ui-id-5') {
+
+      const iframePreventativeMaintenance = $('#frm-preventative-maintenance');
+      if (iframePreventativeMaintenance.length) {
+        iframePreventativeMaintenance.attr('src', iframePreventativeMaintenance.attr('src'));
+      }
     }
     //This is here to handle odd situations where the Schedule Update info doesn't show up.
     generateTitleInfo();
@@ -187,12 +193,6 @@ $(function () {
   // Build tabs and initialize UI.
   tabifyFormSections();
 
-  // After lookups complete, finalize header and ensure iframes are loaded.
-  // I had to put it in the lookupcomplete event because there was a weird timing issue
-  // which caused the Schedule Update info not to show sometimes. Same with the username/admin link.
-  // It would show sometimes, and not other. Seemingly at random. Putting it in the lookupcomplete event
-  // seems to have fixed it, though I also have the genereateTitleInfo call whenever you switch tabs or 
-  // double-click on a tab to reload it. Between these three, it seems like the issue has been resolved. 
   $(document).on('lookupcomplete', function () {
 
     generateTitleInfo();
@@ -350,8 +350,8 @@ function loadIFrames() {
     $('#purchase-order-div').append(`<iframe id="frm-purchase-orders" src="http://rmslf/Forms/MPM-PurchaseOrders"></iframe>`);
   }
 
-  if ($('#frm-periodic-maintenance').length === 0) {
-    $('#periodic-maintenance-div').append(`<iframe id="frm-periodic-maintenance" src="http://rmslf/Forms/RMS-MPM-PeriodicMaintenance"></iframe>`);
+  if ($('#frm-preventative-maintenance').length === 0) {
+    $('#preventative-maintenance-div').append(`<iframe id="frm-preventative-maintenance" src="http://rmslf/Forms/RMS-MPM-PreventativeMaintenance"></iframe>`);
   }
 
 }
@@ -410,9 +410,9 @@ function tabifyFormSections() {
         iframePurchaseOrders.attr('src', iframePurchaseOrders.attr('src'));
       }
     } else if (tab === 4) {
-      const iframePeriodicMaintenance = $('#frm-periodic-maintenance');
-      if (iframePeriodicMaintenance.length) {
-        iframePeriodicMaintenance.attr('src', iframePeriodicMaintenance.attr('src'));
+      const iframePreventativeMaintenance = $('#frm-preventative-maintenance');
+      if (iframePreventativeMaintenance.length) {
+        iframePreventativeMaintenance.attr('src', iframePreventativeMaintenance.attr('src'));
       }
     }
   });
