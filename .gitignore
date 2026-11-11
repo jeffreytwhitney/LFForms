@@ -372,3 +372,4 @@ FodyWeavers.xsd
 /.idea/inspectionProfiles/Project_Default.xml
 /LFForms/MPM/SQL/Stored Procedures/spCTBACKLOG_Update.sql
 /.idea/vcs.xml
+/.idea/sqldialects.xml

@@ -1,5 +1,5 @@
 /**
- Service Ticket Machines
+ Metrology Machines
 
   Author:   Jeffrey Whitney
             jtwhitney@machine.com
@@ -8,10 +8,9 @@
 
  
  Purpose:
-   Client-side behaviors for the "Service Ticket Machines" Laserfiche Forms view.
-   This form is for editing Service Ticket Machines.
-   (When the user is filling out a service ticket, when they choose "Machine Down"
-   it gives them a list of Machine's to choose from. This form edits that list.)
+   Client-side behaviors for the "Metrology Machines" Laserfiche Forms view.
+   This form is for editing Metrology Machines.
+
 
 Permissions: Metrology Admins only.
  
@@ -22,6 +21,7 @@ Permissions: Metrology Admins only.
  - Persist the selected site across sessions using the 'site_name' cookie.
  - Generate action buttons (Edit Machine, Add Machine, Go Back) once lookup data is rendered.
  - Keep radio groups in sync with their corresponding hidden/text value fields.
+ - Calculate the initial PM due date as the month's last weekday in MM/DD/YYYY format.
 
  KEY CONCEPTS:
    User Permissions:
@@ -131,20 +131,19 @@ Permissions: Metrology Admins only.
  */
 const machineTypeMap = new Map();
 const machineTypeNameMap = new Map();
+const show_inactive_chkbox = '<div class="choice include-choice" id="chkShowInactiveDiv"><input name="chkShowInactive" id="chkShowInactive" type="checkbox"><label class="form-option-label" for="chkShowInactive">Show Inactive Machines</label></div>';
+
 $(function () {
-  // Normalize logged-in user: extract USERNAME from DOMAIN\USERNAME, uppercase it, and sync the bound field.
   const lfUserName = $('.lf-user-name input').val();
   $('.network-user-name input').val(lfUserName.toUpperCase().slice(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
 
-  // Hide submit until an action is chosen and permitted.
   $('.Submit').hide();
 
-  // Lazy-load optional libraries and CSS used by downstream UI interactions.
   $.when(
     $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js'),
     $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js')
   ).done(function () {
-    $(document).prop('title', 'Service Ticket Machines');
+    $(document).prop('title', 'Metrology Machines');
     $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
     $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
     $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
@@ -155,13 +154,11 @@ $(function () {
   });
 
 
-  // Keep ".edit-Machine-is-active" radios in sync when the bound value field changes.
   $(document).on('change', '.edit-is-active-value input', function () {
     const isActive = $('.edit-is-active-value input').val();
     console.log(`Setting edit-machine-is-active radio to ${isActive}`);
     $(`.edit-machine-is-active input[type='radio'][value='${isActive}']`).prop("checked", true);
   });
-
 
   $(document).on('change', '.edit-machine-type-id input', function () {
 
@@ -172,60 +169,113 @@ $(function () {
 
   });
 
-
-
-  // Persist selected site to cookie to maintain user preference across sessions.
   $(document).on('change', '.site-name select', function () {
     const sitename = $('.site-name select').val();
     $.cookie('site_name', sitename, { expires: 365, path: '/' });
   });
 
-  // After lookup results are rendered, add per-row Edit buttons and a global Add button (admins only). Also generate Go Back buttons.
+  $(document).on('change', '#chkShowInactiveDiv', function () {
+    filterTable();
+  });
+
+  $(document).on('change', '.initial-pm-month select, .initial-pm-year select', calculateInitialPMDueDate);
+
   $(document).on('lookupcomplete', function () {
     generateTableButtons(".edit-button-col", "ui-icon-pencil", "Edit Machine", "callEditMachine");
     generateGoBackButtons();
     loadMachineTypeMap();
+
     if (isAdminUser()) {
       if ($('.add-button').length === 0) {
-        const add_button = '<div class="ui-button add-button" onclick="callAddMachine()"><span title="Add Machine" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Machine</div>';
+        const add_button = `<div class="ui-button add-button" onclick="callAddMachine()"><span title="Add Machine" class="ui-button-icon ui-icon ui-icon-plusthick"></span>Add Machine</div>${show_inactive_chkbox}`;
         $(add_button).insertBefore('.machine-table table');
       }
     }
+
+    appendPagination();
+    generateFilterRow();
+    $('.machine-table').show();
+
   });
 
-  // On initial load, restore the last selected site and ensure the normalized username is propagated.
   $(document).on("onloadlookupfinished", function () {
-    $('.network-user-name input').trigger("change");
+    calculateInitialPMDueDate();
     const sitename = $.cookie('site_name');
     if (sitename !== null) {
       $('.site-name select').val(sitename).trigger("change");
     }
+    if ($('.pg input').val() === '999') {
+      $('.pg input').val(1).trigger("change");
+    }
+    $('.network-user-name input').trigger("change");
   });
 
 });
 
 
-/**
- * Enter "Add Machine" mode.
- * - Selects the "Add" action.
- * - Sets a non-zero add ID (1) to trigger related business rules.
- * - Reveals the Submit button.
- */
-function callAddMachine() {
-  $(`.action-choice input[type='radio'][value='1']`).prop("checked", true);
-  $('.add-id input').val(1).trigger("change");
-  $('.Submit').show();
+function calculateInitialPMDueDate() {
+  const month = Number($('.initial-pm-month select').val());
+  const year = Number($('.initial-pm-year select').val());
+  const initial_pm_due_date_field = $('.initial-pm-due-date input');
+
+  if (!month || !year) {
+    initial_pm_due_date_field.val('').trigger("change");
+    return;
+  }
+
+  const dueDate = new Date(year, month, 0);
+  const dayOfWeek = dueDate.getDay();
+  if (dayOfWeek === 0) {
+    dueDate.setDate(dueDate.getDate() - 2);
+  } else if (dayOfWeek === 6) {
+    dueDate.setDate(dueDate.getDate() - 1);
+  }
+
+  const formattedMonth = String(dueDate.getMonth() + 1).padStart(2, '0');
+  const formattedDay = String(dueDate.getDate()).padStart(2, '0');
+  initial_pm_due_date_field.val(`${formattedMonth}/${formattedDay}/${dueDate.getFullYear()}`).trigger("change");
 }
 
 
-/**
- * Enter "Edit Machine" mode for a given Machine ID.
- * - Selects the "Edit" action.
- * - Sets the target edit ID.
- * - Reveals the Submit button only for admin users.
- *
- * @param {number|string} MachineID - Identifier of the Machine row to edit.
- */
+function appendPagination() {
+
+  const current_page = Number($('.pg input').val());
+  if (current_page === 999) {
+    return;
+  }
+
+  const row_count = $('.machine-table tbody tr').length;
+
+  if (row_count > 0) {
+    $('#machine-pagination').remove();
+    if ((current_page === 1) && (row_count < 25)) {
+      $('.machine-table table').parent().append("<div id='machine-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>&laquo;</a></li><li><a class='page-link prev isDisabled'>&lsaquo;</a></li><li><a class='page-link next isDisabled'>&rsaquo;</a></li></ul></div>");
+      return;
+    }
+    if ((current_page === 1) && (row_count === 25)) {
+      $('.machine-table table').parent().append("<div id='machine-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev isDisabled'>&laquo;</a></li><li><a class='page-link prev isDisabled'>&lsaquo;</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>&rsaquo;</a></li></ul></div>")
+      return;
+    }
+    if ((current_page > 1) && (row_count === 25)) {
+      $('.machine-table table').parent().append("<div id='machine-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);'>&laquo;</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);'>&lsaquo;</a></li><li><a class='page-link next' onclick='callNextPage();' href='javascript:void(0);'>&rsaquo;</a></li></ul></div>")
+      return;
+    }
+    if ((current_page > 1) && (row_count < 25)) {
+      $('.machine-table table').parent().append("<div id='machine-pagination' class='pagination light-theme simple-pagination'><ul><li><a class='page-link prev' onclick='resetPageNumber();' href='javascript:void(0);'>&laquo;</a></li><li><a class='page-link prev' onclick='callPrevPage();' href='javascript:void(0);'>&lsaquo;</a></li><li><a class='page-link next isDisabled'>&rsaquo;</a></li></ul></div>")
+    }
+  }
+}
+
+
+function callAddMachine() {
+  $(`.action-choice input[type='radio'][value='1']`).prop("checked", true);
+  $('.add-id input').val(1).trigger("change");
+  if (isAdminUser()) {
+    $('.Submit').show();
+  }
+}
+
+
 function callEditMachine(MachineID) {
   $(`.action-choice input[type='radio'][value='2']`).prop("checked", true);
   $('.edit-id input').val(MachineID).trigger("change");
@@ -235,11 +285,6 @@ function callEditMachine(MachineID) {
 }
 
 
-/**
- * Exit Add/Edit mode and return to neutral state.
- * - Clears both add and edit IDs.
- * - Hides the Submit button.
- */
 function callGoBack() {
   $(".add-id input").val(0).trigger("change");
   $(".edit-id input").val(0).trigger("change");
@@ -247,10 +292,77 @@ function callGoBack() {
 }
 
 
-/**
- * Replace all '.gobackbutton' placeholders with standardized "Go Back" UI buttons.
- * This ensures consistent look-and-feel and single-click behavior.
- */
+function callNextPage() {
+  $('.machine-table').hide();
+  $('.table-button').remove();
+  const current_page = Number($('.pg input').val());
+  $('.pg input').val(current_page + 1).trigger("change");
+}
+
+
+function callPrevPage() {
+  $('.machine-table').hide();
+  $('.table-button').remove();
+  const current_page = Number($('.pg input').val());
+  if (current_page === 1) {
+    return;
+  }
+  $('.pg input').val(current_page - 1).trigger("change");
+}
+
+
+function filterTable() {
+  if ($('#filterRow').length === 0) {
+    return;
+  }
+
+  if ($("#chkShowCompleted").is(":checked")) {
+    $('.finc-inactive input').val(1);
+  } else {
+    $('.finc-inactive input').val(0);
+  }
+
+  const machineTypeFilterVal = $('#cboFilter_MachineType').val();
+
+
+  if ((machineTypeFilterVal !== null) && (machineTypeFilterVal.length > 0)) {
+    const machineTypeID = machineTypeNameMap.get(machineTypeFilterVal);
+    $('.fmtid input').val(machineTypeID);
+  } else {
+    $('.fmtid input').val(0);
+  }
+
+  $('.machine-table').hide();
+  $('.table-button').remove();
+  $('.pg input').val(1).trigger("change");
+}
+
+
+function generateFilterRow() {
+  if ($('#filterRow').length === 0) {
+    const filter_row = "<TR id='filterRow'><TH/><TH/><TH/><TH/><TH><select id='cboFilter_MachineType'/></TH><TH/><TH/><TH/><TH/><TH/></TR>"
+    $('.machine-table table thead').append(filter_row);
+
+
+    $("#cboFilter_MachineType").on("change", function () {
+      filterTable();
+    });
+
+    $("#cboFilter_MachineType").on("dblclick", function () {
+      $("#cboFilter_MachineType").val(0).trigger("change");
+    });
+
+    wireUpSortFields();
+  }
+
+  // Populate filter dropdowns once lookup combos are loaded.
+  if (($(".machine-type-lookup-combo select option").length > 1) && ($("#cboFilter_MachineType option").length === 0)) {
+    $("#cboFilter_MachineType").html($(".machine-type-lookup-combo select").html());
+  }
+
+}
+
+
 function generateGoBackButtons() {
   const $goback_buttons = $(".gobackbutton");
   $goback_buttons.each(function () {
@@ -260,14 +372,6 @@ function generateGoBackButtons() {
 }
 
 
-/**
- * Generate inline action buttons within a table column based on existing placeholder values.
- *
- * @param {string} buttonSelector - Selector for the column/inputs used as anchors (e.g., ".edit-button-col").
- * @param {string} buttonClass - jQuery UI icon class (e.g., "ui-icon-pencil") used for the button.
- * @param {string} buttonTitle - Tooltip/title for the action button.
- * @param {string} buttonFunction - Global function name to invoke on click, receives the placeholder value.
- */
 function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFunction) {
   const selectionString = buttonSelector + " input[type=text]";
   const buttons = $(selectionString);
@@ -283,22 +387,12 @@ function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFu
 }
 
 
-/**
- * Indicates whether the current user is an administrator.
- * Reads a DOM-bound flag ('.user-isadmin input') where '1' means admin.
- * Note: This is a client-side hint; enforce permissions on the server.
- *
- * @returns {boolean} True if current user is admin; otherwise false.
- */
 function isAdminUser() {
   return $('.user-isadmin input').val() === '1';
 
 }
 
 
-/**
-* Populate machine type lookup maps (id->name and name->id) from hidden lookup table.
-*/
 function loadMachineTypeMap() {
 
   if (machineTypeMap.keys.length === 0) {
@@ -313,4 +407,62 @@ function loadMachineTypeMap() {
       machineTypeNameMap.set(machineTypeName, machineTypeID);
     });
   }
+}
+
+
+function resetPageNumber() {
+  $('.machine-table').hide();
+  $('.table-button').remove();
+  $('.pg input').val(1).trigger("change");
+}
+
+
+function setSortIcon(sortOrdinal, sortDirection) {
+  const sortSelectors = {
+    0: '#q18',
+    1: '#q34',
+    2: '#q48',
+    3: '#q49'
+  };
+
+  $('.sort-icon').remove();
+  const selector = sortSelectors[sortOrdinal] ?? '#q18';
+  const iconClass = (sortDirection === 1) ? 'ui-icon-triangle-1-s' : 'ui-icon-triangle-1-n';
+  $(`${selector} .cf-col-label`).append(`<span class="ui-icon ${iconClass} sort-icon"></span>`);
+}
+
+
+function sortTable(newSortOrdinal) {
+
+  $('.table-button').remove();
+
+  const currentSortOrdinal = Number($('.sfo input').val());
+  let sortDirection = Number($('.sd input').val());
+
+  if (newSortOrdinal === currentSortOrdinal) {
+    if (sortDirection === 0) {
+      sortDirection = 1;
+      $('.sd input').val(1).trigger("change");
+    } else {
+      sortDirection = 0;
+      $('.sd input').val(0).trigger("change");
+    }
+  } else {
+    $('.sfo input').val(newSortOrdinal);
+    $('.sd input').val(0).trigger("change");
+    sortDirection = 0;
+  }
+
+  setSortIcon(newSortOrdinal, sortDirection);
+}
+
+
+function wireUpSortFields() {
+
+  $('#q18').off('click').on('click', function () { sortTable(0); });   // Machine Name
+  $('#q34').off('click').on('click', function () { sortTable(1); });     // Machine Type
+  $('#q48').off('click').on('click', function () { sortTable(2); });     // Location
+  $('#q49').off('click').on('click', function () { sortTable(3); });     // Machine Description
+
+  setSortIcon(Number($('.sfo input').val()), Number($('.sd input').val()));
 }

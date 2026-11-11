@@ -41,6 +41,10 @@ $(function () {
 
   })
 
+  $(document).on('change', '#chkShowCompleted', function (e) {
+    filterTable();
+  })
+
   $(document).on("onloadlookupfinished", function () {
     console.log('onloadlookupfinished');
     if ($('.pg input').val() === '999') {
@@ -60,11 +64,6 @@ $(function () {
     generateFilterRow();
     $('.pm-table').show();
   });
-
-  $(document).on('change', '#chkShowCompleted', function (e) {
-    filterTable();
-  })
-
 
 });
 
@@ -200,7 +199,7 @@ function generateFilterRow() {
     $("#cboFilter_Assignee").on("dblclick", function () {
       $("#cboFilter_Assignee").val(0).trigger("change");
     });
-    //wireUpSortFields();
+    wireUpSortFields();
     const show_completed_chkbox = '<div class="choice include-choice"><input name="chkShowCompleted" id="chkShowCompleted" type="checkbox"><label class="form-option-label" for="chkShowCompleted">Show Completed</label></div>'
     if ($('#chkShowCompleted').length === 0) {
       $(show_completed_chkbox).insertBefore('.pm-table table');
@@ -301,24 +300,39 @@ function resetPageNumber() {
 }
 
 
+function setSortIcon(sortOrdinal, sortDirection) {
+  const sortSelectors = {
+    0: '#q31',
+    1: '#q25',
+    2: '#q30',
+    3: '#q29'
+  };
+
+  $('.sort-icon').remove();
+  const selector = sortSelectors[sortOrdinal] ?? '#q31';
+  const iconClass = (sortDirection === 1) ? 'ui-icon-triangle-1-s' : 'ui-icon-triangle-1-n';
+  $(`${selector} .cf-col-label`).append(`<span class="ui-icon ${iconClass} sort-icon"></span>`);
+}
+
+
 function sortTable(newSortOrdinal) {
 
-  removeAppendedFields();
+  $('.table-button').remove();
 
-  const currentSortOrdinal = Number($('.sort-field-ordinal input').val());
-  let sortDirection = Number($('.sort-direction input').val());
+  const currentSortOrdinal = Number($('.sfo input').val());
+  let sortDirection = Number($('.sd input').val());
 
   if (newSortOrdinal === currentSortOrdinal) {
     if (sortDirection === 0) {
       sortDirection = 1;
-      $('.sort-direction input').val(1).trigger("change");
+      $('.sd input').val(1).trigger("change");
     } else {
       sortDirection = 0;
-      $('.sort-direction input').val(0).trigger("change");
+      $('.sd input').val(0).trigger("change");
     }
   } else {
-    $('.sort-field-ordinal input').val(newSortOrdinal);
-    $('.sort-direction input').val(0).trigger("change");
+    $('.sfo input').val(newSortOrdinal);
+    $('.sd input').val(0).trigger("change");
     sortDirection = 0;
   }
 
@@ -333,36 +347,19 @@ function submitForm(e) {
 
 function wireUpSortFields() {
 
-  $('#q236').off('click').on('click', function () {
+  $('#q31').off('click').on('click', function () {
     sortTable(0);
   });   // Due Date (default)
-  $('#q88').off('click').on('click', function () {
+  $('#q25').off('click').on('click', function () {
     sortTable(1);
-  });     // Ticket Number
-  $('#q83').off('click').on('click', function () {
+  });     // Machine Name
+  $('#q30').off('click').on('click', function () {
     sortTable(2);
-  });     // Ticket Name
-  $('#q84').off('click').on('click', function () {
+  });     // Assigned To
+  $('#q29').off('click').on('click', function () {
     sortTable(3);
-  });     // Task Name
-  $('#q234').off('click').on('click', function () {
-    sortTable(4);
-  });   // Status
-  $('#q87').off('click').on('click', function () {
-    sortTable(5);
-  });     // Task Type
-  $('#q235').off('click').on('click', function () {
-    sortTable(6);
-  });   // Assignee
-  $('#q102').off('click').on('click', function () {
-    sortTable(7);
-  });   // Department
-  $('#q221').off('click').on('click', function () {
-    sortTable(8);
-  });   // Submittor
-  $('#q241').off('click').on('click', function () {
-    sortTable(9);
-  });   // Create Date
+  });     // Machine Type
 
-  setSortIcon(Number($('.sort-field-ordinal input').val()), Number($('.sort-direction input').val()));
+
+  setSortIcon(Number($('.sfo input').val()), Number($('.sd input').val()));
 }
