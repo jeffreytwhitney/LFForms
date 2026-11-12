@@ -18,13 +18,13 @@ $(function () {
     console.error('Failed to load required scripts');
   });
 
-
   $(document).on('change', '.edit-is-active-value input', function () {
     const isActive = $('.edit-is-active-value input').val();
     console.log(`Setting edit-machine-is-active radio to ${isActive}`);
     $(`.edit-machine-is-active input[type='radio'][value='${isActive}']`).prop("checked", true);
   });
 
+  $('.Submit').on("click", function () { submitForm(); });
 
   $(document).on('lookupcomplete', function () {
     generateTableButtons(".edit-button-col", "ui-icon-pencil", "Edit Machine Type", "callEditMachineType");
@@ -46,8 +46,6 @@ $(function () {
 });
 
 
-
-
 function callAddMachineType() {
   $(`.action-choice input[type='radio'][value='1']`).prop("checked", true);
   $('.add-id input').val(1).trigger("change");
@@ -64,7 +62,6 @@ function callEditMachineType(MachineID) {
     $('.Submit').show();
   }
 }
-
 
 
 function callGoBack() {
@@ -98,9 +95,16 @@ function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFu
 }
 
 
-
 function isAdminUser() {
   return $('.user-isadmin input').val() === '1';
 
 }
 
+
+function submitForm() {
+  const serviceTypeID = $('.add-service-type-id input').val();
+  if (serviceTypeID === '') {
+    $('.add-service-type-id input').val(0);
+  }
+
+}
