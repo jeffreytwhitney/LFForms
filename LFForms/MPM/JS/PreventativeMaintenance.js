@@ -2,7 +2,7 @@ const assigneeMap = new Map();
 const assigneeNameMap = new Map();
 const machineTypeMap = new Map();
 const machineTypeNameMap = new Map();
-
+const show_completed_chkbox = '<div id="divShowCompleted" class="choice include-choice"><input name="chkShowCompleted" id="chkShowCompleted" type="checkbox"><label class="form-option-label" for="chkShowCompleted">Show Completed</label></div>'
 
 $(function () {
 
@@ -62,6 +62,19 @@ $(function () {
     generateTableButtons(".edit-button-col", "ui-icon-pencil", "Edit PM", "callEditPM");
     appendPagination();
     generateFilterRow();
+
+    if ($('#divShowCompleted').length === 0) {
+      $(show_completed_chkbox).insertBefore('.pm-table table');
+    }
+
+    if (isAdminUser()) {
+      if ($('#group-edit-button').length === 0) {
+        const group_edit_button = `<div id="group-edit-button" class="ui-button" onclick="callGroupEdit()"><span title="Group Edit" class="ui-button-icon ui-icon ui-icon-pencil"></span>Group Edit</div>`;
+        $(group_edit_button).insertBefore('#divShowCompleted');
+      }
+    }
+
+
     $('.pm-table').show();
   });
 
@@ -111,6 +124,11 @@ function callEditPM(pmid) {
 function callGoBack() {
   $(".edit-pm-id input").val(0).trigger("change");
   $('.Submit').hide();
+}
+
+
+function callGroupEdit() {
+  window.open('http://rmslf/Forms/RMS-MPM-PMGroupUpdate', '_blank');
 }
 
 
@@ -200,10 +218,6 @@ function generateFilterRow() {
       $("#cboFilter_Assignee").val(0).trigger("change");
     });
     wireUpSortFields();
-    const show_completed_chkbox = '<div class="choice include-choice"><input name="chkShowCompleted" id="chkShowCompleted" type="checkbox"><label class="form-option-label" for="chkShowCompleted">Show Completed</label></div>'
-    if ($('#chkShowCompleted').length === 0) {
-      $(show_completed_chkbox).insertBefore('.pm-table table');
-    }
   }
 
 
@@ -248,6 +262,11 @@ function generateTableButtons(buttonSelector, buttonClass, buttonTitle, buttonFu
       $(this).parent().append(btn_html);
     }
   });
+}
+
+
+function isAdminUser() {
+  return $('.user-isadmin input').val() === '1';
 }
 
 

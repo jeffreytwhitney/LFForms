@@ -119,28 +119,26 @@
  */
 
 $(function () {
-  // Normalize and display the current user's network/SAM account (uppercase, post-back safe).
   const lfUserName = $('.lf-user-name input').val();
   $('.network-user-name input').val(lfUserName.toUpperCase().slice(lfUserName.lastIndexOf('\\') + 1)).trigger("change");
 
-  // Hide the submit control by default; it will be shown on actionable states.
   $('.Submit').hide();
 
-  // Set the page title.
   $(document).prop('title', 'Site Maintenance');
 
-  // Load auxiliary libraries/styles used across the page.
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js');
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');
   $("head").append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/simplePagination.min.css">');
   $("head").append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">');
 
-  // Resolve Bootstrap's $.fn.button conflict if Bootstrap is present.
-  // Restores original $.fn.button and re-exports as $.fn.bootstrapBtn.
-  $.fn.bootstrapBtn = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
+  $.fn.bootstrapBtn = $.fn.button.noConflict();
 
-  // When the data lookup completes, add per-row edit buttons and a global "Add Site" button (admins only).
+  $(document).on('change', '.edit-default-pm-assignee-name input', function () {
+    const defaultPMAssigneeName = $('.edit-default-pm-assignee-name input').val();
+    $('.edit-default-pm-assignee-combo select').val(defaultPMAssigneeName).trigger("change");
+  });
+
   $(document).on('lookupcomplete', function () {
     // Add edit buttons to rows that have a hidden id text input in the ".edit-button-col".
     generateTableButtons(".edit-button-col", "ui-icon-pencil", "Edit Site", "callEditSite");
@@ -157,7 +155,6 @@ $(function () {
     }
   });
 
-  // Ensure the normalized network username triggers any bound change handlers after initial load.
   $(document).on("onloadlookupfinished", function () {
     $('.network-user-name input').trigger("change");
   });
