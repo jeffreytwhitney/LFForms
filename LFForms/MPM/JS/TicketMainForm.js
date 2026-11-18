@@ -115,12 +115,15 @@
  - `lookupcomplete` (triggers title generation and iframe loading)
  - `onloadlookupfinished` (reserved hook; currently no-op)
  - jQuery UI `tabsactivate` on `#ticket-tabs` (refreshes active iframe)
+ - `message` from the tab iframes (reports an anonymous session)
 
  Notes:
  - Double-clicking a tab header forces a reload of the corresponding iframe.
  - Anonymous users see a "Log In" link and iframes are loaded immediately.
  - Metrology users get an "Admin" link to the admin form.
  */
+
+let anonymousReportingFrameId = null;
 
 $(function () {
   // Ensure jQuery UI styles are available for tabs.
@@ -139,6 +142,8 @@ $(function () {
   // Base page setup.
   $('.Submit').hide();
   $(document).prop('title', 'Metrology Tickets');
+
+  window.addEventListener('message', handleTabUserStatus);
 
   // Normalize/display the current user and load iframes for anonymous users.
   const lfUserName = $('.lf-user-name input').val();
@@ -228,9 +233,65 @@ function generateCMMCalsDueMessage() {
 }
 
 
+function handleTabUserStatus(event) {
+  const isLegacyTasksMessage = event.data === 'mpm:programming-tasks:anonymous-user';
+  if (event.origin !== window.location.origin ||
+      (event.data !== 'mpm:ticket-tab:anonymous-user' && !isLegacyTasksMessage)) {
+    return;
+  }
+
+  const reportingFrame = Array.from(document.querySelectorAll('iframe[data-ticket-tab]'))
+    .find(frame => frame.contentWindow && frame.contentWindow === event.source);
+  if (!reportingFrame || (isLegacyTasksMessage && reportingFrame.id !== 'frm-programming-tasks')) {
+    return;
+  }
+
+  // The parent form's identity field can stay stale until the next page load.
+  anonymousReportingFrameId = reportingFrame.id;
+  showAnonymousTitleInfo();
+}
+
+function showAnonymousTitleInfo() {
+  const userDisplay = $('.user-name-display');
+  const userNameInput = userDisplay.find('input');
+  if (!userNameInput.length) {
+    return;
+  }
+
+  userNameInput.val('User: Anonymous');
+  userDisplay.find('.admin-link').remove();
+  if (!userDisplay.find('.login-link').length) {
+    userDisplay.append($('<a>', {
+      text: 'Log In',
+      class: 'login-link',
+      href: 'http://rmslf/Forms/account/login?returnUrl=%2fForms%2fMPM-TicketMainform'
+    }));
+  }
+
+  if (userNameInput.data('anonymousWarningShown')) {
+    return;
+  }
+  userNameInput.data('anonymousWarningShown', true);
+
+  const input = userNameInput[0];
+  const normalStyle = window.getComputedStyle(input);
+  const normalText = {color: normalStyle.color, fontWeight: normalStyle.fontWeight};
+  const warningText = {color: 'red', fontWeight: 'bold'};
+  userNameInput.css(warningText);
+
+  if (typeof input.animate === 'function' && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    input.animate([warningText, normalText, warningText], {
+      duration: 800,
+      iterations: 3,
+      easing: 'steps(2, end)'
+    });
+  }
+}
+
+
 /**
  * Generates and updates the user/title section and auxiliary actions if they don't exist.
- * - Shows "Log In" link for anonymous users and loads iframes.
+ * - Shows "Log In" and highlights the username for anonymous users, then loads iframes.
  * - Shows "Admin" link for Metrology users.
  * - Displays "User: <name>" derived from `.user-name-hidden`.
  * - Ensures the schedule search icon is present.
@@ -239,31 +300,22 @@ function generateCMMCalsDueMessage() {
  */
 function generateTitleInfo() {
 
-  if ($('.user-name-display input').val() === '') {
-    const lfUserName = $('.lf-user-name input').val();
-    if (lfUserName === 'Anonymous User') {
-      $('.user-name-display input').val('User :Anonymous');
-      const login_link = $("<a>", {
-        text: 'Log In',
-        class: 'login-link',
-        href: 'http://rmslf/Forms/account/login?returnUrl=%2fForms%2fMPM-TicketMainform'
-      });
-      $('.user-name-display').append(login_link);
-      loadIFrames();
-    } else {
-      const userName = $('.user-name-hidden input').val()
-      if (userName !== '') {
-        const userText = `User: ${userName}`
-        $('.user-name-display input').val(userText);
-        if (isMetrologyUser()) {
-          const admin_link = $("<a>", {
-            text: 'Admin',
-            class: 'admin-link',
-            href: 'http://rmslf/Forms/MPM-AdminMainform',
-            target: '_blank'
-          });
-          $('.user-name-display').append(admin_link);
-        }
+  if (anonymousReportingFrameId || $('.lf-user-name input').val() === 'Anonymous User') {
+    showAnonymousTitleInfo();
+    loadIFrames();
+  } else if ($('.user-name-display input').val() === '') {
+    const userName = $('.user-name-hidden input').val()
+    if (userName !== '') {
+      const userText = `User: ${userName}`
+      $('.user-name-display input').val(userText);
+      if (isMetrologyUser()) {
+        const admin_link = $("<a>", {
+          text: 'Admin',
+          class: 'admin-link',
+          href: 'http://rmslf/Forms/MPM-AdminMainform',
+          target: '_blank'
+        });
+        $('.user-name-display').append(admin_link);
       }
     }
   }
@@ -326,32 +378,27 @@ function generateLastRunMessage() {
 }
 
 /**
- * Ensures the three core iframes are present on the page; creates them if missing.
- * Iframes:
- * - `#frm-servicetickets` => Service Tickets
- * - `#frm-programming-tasks` => Programming Tasks
- * - `#frm-programming-tickets` => Programming Tickets
- * Side effects: Appends iframes to their respective container divs.
+ * Creates missing tab iframes and marks them as eligible to report user status.
  */
 function loadIFrames() {
   if ($('#frm-servicetickets').length === 0) {
-    $('#service-ticket-div').append(`<iframe id="frm-servicetickets" src="http://rmslf/Forms/RMS-MPM-ServiceTickets/"></iframe>`);
+    $('#service-ticket-div').append(`<iframe id="frm-servicetickets" data-ticket-tab src="http://rmslf/Forms/RMS-MPM-ServiceTickets/"></iframe>`);
   }
 
   if ($('#frm-programming-tasks').length === 0) {
-    $('#program-task-div').append(`<iframe id="frm-programming-tasks" src="http://rmslf/Forms/MPM-ProgrammingTasks/"></iframe>`);
+    $('#program-task-div').append(`<iframe id="frm-programming-tasks" data-ticket-tab src="http://rmslf/Forms/MPM-ProgrammingTasks/"></iframe>`);
   }
 
   if ($('#frm-programming-tickets').length === 0) {
-    $('#program-ticket-div').append(`<iframe id="frm-programming-tickets" src="http://rmslf/Forms/MPM-ProgrammingTickets"></iframe>`);
+    $('#program-ticket-div').append(`<iframe id="frm-programming-tickets" data-ticket-tab src="http://rmslf/Forms/MPM-ProgrammingTickets"></iframe>`);
   }
 
   if ($('#frm-purchase-orders').length === 0) {
-    $('#purchase-order-div').append(`<iframe id="frm-purchase-orders" src="http://rmslf/Forms/MPM-PurchaseOrders"></iframe>`);
+    $('#purchase-order-div').append(`<iframe id="frm-purchase-orders" data-ticket-tab src="http://rmslf/Forms/MPM-PurchaseOrders"></iframe>`);
   }
 
   if ($('#frm-preventative-maintenance').length === 0) {
-    $('#preventative-maintenance-div').append(`<iframe id="frm-preventative-maintenance" src="http://rmslf/Forms/RMS-MPM-PreventativeMaintenance"></iframe>`);
+    $('#preventative-maintenance-div').append(`<iframe id="frm-preventative-maintenance" data-ticket-tab src="http://rmslf/Forms/RMS-MPM-PreventativeMaintenance"></iframe>`);
   }
 
 }

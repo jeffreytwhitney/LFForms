@@ -7,6 +7,19 @@ const show_completed_chkbox = '<div id="divShowCompleted" class="choice include-
 $(function () {
 
   $('.Submit').hide();
+
+  if (window.parent !== window) {
+    const lookupEvents = 'onloadlookupfinished lookupcomplete';
+    const notifyParentIfAnonymous = function () {
+      if ($('.lf-user-name input').val() === 'Anonymous User') {
+        window.parent.postMessage('mpm:ticket-tab:anonymous-user', window.location.origin);
+        $(document).off(lookupEvents, notifyParentIfAnonymous);
+      }
+    };
+    $(document).on(lookupEvents, notifyParentIfAnonymous);
+    notifyParentIfAnonymous();
+  }
+
   $(document).prop('title', 'Preventative Maintenance');
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js');
   $.getScript('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js');

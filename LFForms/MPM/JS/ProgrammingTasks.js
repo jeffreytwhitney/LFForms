@@ -19,6 +19,7 @@
  - Hides submit controls, sets page title, loads required scripts/styles.
  - Normalizes Bootstrap button namespace conflict.
  - Copies the current network username into a hidden form field (if not anonymous).
+ - Reports an anonymous session to the parent ticket form when embedded.
  - Wires window message handlers to close/refresh popup dialogs.
  - Persists selected site in a cookie.
  - On 'lookupcomplete':
@@ -365,6 +366,17 @@ const initiatorNameMap = new Map();
 const filterCookieOptions = {expires: 365, path: '/'};
 
 let savedFilterDefaultsRestored = false;
+let anonymousUserReportedToParent = false;
+
+function notifyParentIfAnonymous() {
+  if (anonymousUserReportedToParent || window.parent === window ||
+      $('.lf-user-name input').val() !== 'Anonymous User') {
+    return;
+  }
+
+  window.parent.postMessage('mpm:ticket-tab:anonymous-user', window.location.origin);
+  anonymousUserReportedToParent = true;
+}
 
 
 $(function () {
@@ -387,6 +399,9 @@ $(function () {
 
 
   $('.Submit').hide();
+  $(document).on('onloadlookupfinished lookupcomplete', notifyParentIfAnonymous);
+  notifyParentIfAnonymous();
+
   const lfUserNameRaw = $('.lf-user-name input').val();
   const lfUserName = (typeof lfUserNameRaw === 'string') ? lfUserNameRaw.trim() : '';
   if ((lfUserName !== '') && (lfUserName !== 'Anonymous User')) {

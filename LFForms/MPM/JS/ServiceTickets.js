@@ -324,6 +324,18 @@ $(function () {
 
   $('.Submit').hide();
 
+  if (window.parent !== window) {
+    const lookupEvents = 'onloadlookupfinished lookupcomplete';
+    const notifyParentIfAnonymous = function () {
+      if ($('.lf-user-name input').val() === 'Anonymous User') {
+        window.parent.postMessage('mpm:ticket-tab:anonymous-user', window.location.origin);
+        $(document).off(lookupEvents, notifyParentIfAnonymous);
+      }
+    };
+    $(document).on(lookupEvents, notifyParentIfAnonymous);
+    notifyParentIfAnonymous();
+  }
+
   const lfUserNameRaw = $('.lf-user-name input').val();
   const lfUserName = (typeof lfUserNameRaw === 'string') ? lfUserNameRaw.trim() : '';
   if ((lfUserName !== '') && (lfUserName !== 'Anonymous User')) {
