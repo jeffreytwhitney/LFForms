@@ -21,6 +21,7 @@
  - Copies the current network username into a hidden form field (if not anonymous).
  - Reports an anonymous session to the parent ticket form when embedded.
  - Wires window message handlers to close/refresh popup dialogs.
+ - Pauses inactivity refresh while dialogs are open, restarting it when they close.
  - Persists selected site in a cookie.
  - On 'lookupcomplete':
  - Loads lookup Maps (assignees, status, departments, task types, initiators).
@@ -381,12 +382,14 @@ function notifyParentIfAnonymous() {
 
 $(function () {
 
-  const refreshTimeoutMs = 60000;
+  const refreshTimeoutMs = 300000;
   let lastActivityAt = Date.now();
   let isTyping = false;
+  let refreshTimer;
+  const openPopups = new Set();
 
   function scheduleInactivityRefresh() {
-    setTimeout(function () {
+    refreshTimer = setTimeout(function () {
       const isInactive = (Date.now() - lastActivityAt) >= refreshTimeoutMs;
       if (isInactive && !isTyping) {
         refreshPage();
@@ -395,6 +398,20 @@ $(function () {
       scheduleInactivityRefresh();
     }, refreshTimeoutMs);
   }
+
+  $(document).on('dialogopen inactivitypopupopen', function (event, popup) {
+    openPopups.add(event.type === 'dialogopen' ? event.target : popup);
+    clearTimeout(refreshTimer);
+  });
+
+  $(document).on('dialogclose inactivitypopupclose', function (event, popup) {
+    const closedPopup = event.type === 'dialogclose' ? event.target : popup;
+    if (!openPopups.delete(closedPopup) || openPopups.size > 0) {
+      return;
+    }
+    lastActivityAt = Date.now();
+    scheduleInactivityRefresh();
+  });
 
 
 
@@ -428,11 +445,13 @@ $(function () {
   window.onmessage = function (event) {
     if (event.data === "CloseDialog") {
 
+      $("#popupIFrame").dialog("close");
       $("#popupIFrame").dialog("destroy");
       $("#popupIFrame").remove();
     }
     if (event.data === "CloseDialogWithRefresh") {
 
+      $("#popupIFrame").dialog("close");
       $("#popupIFrame").dialog("destroy");
       $("#popupIFrame").remove();
       refreshPage();
@@ -587,7 +606,16 @@ function callAddNote(task_id) {
     const task_name = getColumnValueByTaskID(task_id, '.tasklist-task-name-col input[type="text"]');
     popUpIframe(`${window.location.origin}/Forms//MPMAddNote?TaskID=${task_id}&nt=1`, `Add Note for task '${task_name}'`, 400, 650);
   } else {
-    $.alert({title: 'Nope!', content: 'Sorry, you do not have permissions to do this.'});
+    $.alert({
+      title: 'Nope!',
+      content: 'Sorry, you do not have permissions to do this.',
+      onOpenBefore: function () {
+        $(document).trigger('inactivitypopupopen', [this]);
+      },
+      onClose: function () {
+        $(document).trigger('inactivitypopupclose', [this]);
+      }
+    });
   }
 
 }
@@ -1219,6 +1247,9 @@ function persistFilterCookie(cookieName, value, options) {
 function popUpIframe(src, title, height, width) {
   //var iframe_height = height - 100;
 
+  if ($("#popupIFrame").hasClass('ui-dialog-content')) {
+    $("#popupIFrame").dialog("close");
+  }
   $("#popupIFrame").remove();
   $("#popUpDiv").html(`<div><iframe id='popupIFrame' name='myname' src='${src}' height='${height}' width='${width}'/></div>`);
   $("#popupIFrame").dialog({
